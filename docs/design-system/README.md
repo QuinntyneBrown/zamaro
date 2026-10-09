@@ -163,4 +163,22 @@ Decisions kept from the mocks rather than normalised: a 20px phone margin (so ti
 
 ## Verification
 
-VERIFICATION_PLACEHOLDER
+Run on Friday 9 October 2026 from the repository root (scripts ship with the `extracting-design-systems` and `writing-html-mocks` skills in `.claude/skills/`):
+
+```sh
+python .claude/skills/extracting-design-systems/scripts/check_contrast.py docs/design-system/tokens/tokens.css
+#  -> 149 passed, 0 failed (light and dark)
+python .claude/skills/extracting-design-systems/scripts/check_design_system.py docs/design-system
+#  -> 73 pages (52 components, 8 patterns), 0 errors, 0 warnings
+python .claude/skills/extracting-design-systems/scripts/tokens_to_json.py docs/design-system/tokens/tokens.css
+#  -> 272 tokens written to tokens/tokens.json
+python .claude/skills/writing-html-mocks/scripts/check_mocks.py docs/mocks
+#  -> 2 screens, 8 mocks, 0 errors, 0 warnings (mocks now read the system CSS)
+```
+
+- Token coverage: each of the 207 custom properties in `tokens.css` appears with a live `data-token` value on exactly one foundation page.
+- Horizontal overflow: none on any of the 73 pages at 360px and 1280px, or on any of the 8 mocks at 360px (measured in headless Chromium).
+- Screenshots reviewed at 360 and 1280px in both themes: `index.html`, `foundations/color.html`, `components/button.html`, `components/ticket.html`, `components/dialog.html`, `components/text-field.html`, plus every other page at 1280px by the agents that wrote them. Fixes made from review: compact theme swatches and shadow tiles, wrapping long headings and inline code, phone padding in anatomy frames and examples, docs-chrome selectors that leaked into product specimens.
+- Mocks re-screenshotted at 360/768/1280 in both themes through the system CSS and compared with the originals: identical apart from the logged drift fixes (pressed “Saved” toggle, select chevrons, wording of the empty-state primary).
+- Known limit: the container has no condensed display font installed, so screenshots fall back to a plain sans and display type is wider than it will be with Bebas Neue; layouts were checked to survive that fallback.
+
