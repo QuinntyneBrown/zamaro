@@ -1,0 +1,56 @@
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+
+/** 24-unit stroke paths from docs/design-system/foundations/iconography.html. Add one when a screen needs it. */
+const ICONS = {
+  mic: 'M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8',
+} as const;
+
+export type IconName = keyof typeof ICONS;
+
+/** Decorative inline SVG icon. An icon-only control carries its own accessible name. */
+@Component({
+  selector: 'zm-icon',
+  template: `<svg
+    class="icon"
+    [class.icon--sm]="size() === 'sm'"
+    [class.icon--lg]="size() === 'lg'"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path [attr.d]="path()" />
+  </svg>`,
+  styles: `
+    :host {
+      display: contents;
+    }
+
+    .icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.25;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+    }
+
+    .icon--sm {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .icon--lg {
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Icon {
+  readonly name = input.required<IconName>();
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
+
+  protected readonly path = computed(() => ICONS[this.name()]);
+}

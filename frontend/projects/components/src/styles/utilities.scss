@@ -1,29 +1,63 @@
+// Layout primitives and shared contexts from docs/design-system/assets/components.css.
+
 .container {
   width: 100%;
-  max-width: var(--layout-container-max, 75rem);
+  max-width: var(--layout-container-max);
   margin-inline: auto;
-  padding-inline: var(--layout-gutter, var(--space-4));
+  padding-inline: var(--layout-margin);
 }
 
-.stack > * + * {
-  margin-block-start: var(--stack-gap, var(--space-4));
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
 .cluster {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--cluster-gap, var(--space-3));
+  gap: var(--space-2);
+}
+
+.section {
+  padding-block: var(--space-16);
+}
+
+@media (min-width: 62rem) {
+  .section {
+    padding-block: var(--space-20);
+  }
+}
+
+// The charcoal stage: links inherit the paper colour and turn yellow on hover; focus rings go yellow.
+.on-stage {
+  background: var(--color-bg-stage);
+  color: var(--color-fg-on-stage);
+
+  a:not(.btn) {
+    color: inherit;
+  }
+
+  a:not(.btn):hover {
+    background: none;
+    color: var(--color-accent-on-stage);
+  }
+
+  :focus-visible {
+    outline-color: var(--color-accent-on-stage);
+    box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-bg-stage);
+  }
 }
 
 .visually-hidden {
-  position: absolute;
+  position: absolute !important;
   width: 1px;
   height: 1px;
   margin: -1px;
   padding: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
 }

@@ -1,3 +1,5 @@
+// Base foundations from docs/design-system/assets/components.css ("Base", "Link").
+
 *,
 *::before,
 *::after {
@@ -6,14 +8,70 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--layout-topbar-height) + var(--space-4));
 }
 
 body {
   margin: 0;
-  background: var(--color-bg-canvas);
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font: var(--text-body);
   color: var(--color-fg-default);
-  font-family: var(--font-family-sans);
-  line-height: var(--line-height-normal);
+  background: var(--color-bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-poster);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font: var(--text-h1);
+}
+
+h2 {
+  font: var(--text-h2);
+}
+
+h3 {
+  font: var(--text-h3);
+}
+
+h4 {
+  font: var(--text-h4);
+}
+
+p {
+  max-width: var(--layout-measure);
+  text-wrap: pretty;
+}
+
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
 }
 
 img,
@@ -31,7 +89,37 @@ textarea {
   color: inherit;
 }
 
+a {
+  color: var(--color-fg-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+}
+
+a:hover {
+  color: var(--color-fg-link-hover);
+  background: var(--color-accent-subtle);
+  text-decoration-color: currentColor;
+}
+
+// Two-tone ring (L2-101.2): the outline is the outer ring; a spread shadow fills the offset gap.
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset);
+}
+
+// A region that receives focus programmatically (skip link target, route heading) shows no ring.
+[tabindex='-1']:focus:not(:focus-visible) {
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {

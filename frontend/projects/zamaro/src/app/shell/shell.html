@@ -1,0 +1,10 @@
+<zm-skip-link>{{ 'common.skipToContent' | transloco }}</zm-skip-link>
+<zm-top-bar brand="Zamaro" [navLabel]="'common.nav.label' | transloco" [links]="links()" />
+<main id="main" tabindex="-1">
+  <router-outlet />
+</main>
+<zm-footer
+  word="Zamaro"
+  [tagline]="'common.footer.tagline' | transloco"
+  [columns]="footerColumns()"
+/>

@@ -1,12 +1,21 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideI18n } from 'api';
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
-    provideClientHydration(),
+    provideRouter(routes, withInMemoryScrolling({ anchorScrolling: 'enabled' })),
+    provideHttpClient(withFetch()),
+    // GET responses made while rendering on the server are replayed in the browser, not re-fetched.
+    provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
+    provideI18n(),
   ],
 };

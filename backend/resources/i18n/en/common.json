@@ -1,6 +1,12 @@
 {
+  "footer.artists": "Artists",
+  "footer.churches": "Churches",
+  "footer.findWhosFree": "Find who’s free",
+  "footer.tagline": "Worship artists for churches around Toronto.",
+  "footer.whatArtistsEarn": "What artists earn",
   "nav.discover": "Discover",
   "nav.forArtists": "For artists",
   "nav.how": "How booking works",
-  "nav.label": "Primary"
+  "nav.label": "Primary",
+  "skipToContent": "Skip to content"
 }

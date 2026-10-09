@@ -9,4 +9,8 @@ export interface RouteState {
 
 // Every route in every state; the visual, a11y and perf suites all read this list.
 // Each slice appends its own routes.
-export const routes: RouteState[] = [];
+export const routes: RouteState[] = [
+  // Discover before a search: the poster asks for a date. The closest mock is the invalid state
+  // without its field errors; S5 adds the search form and the searched states.
+  { path: '/', app: 'zamaro', mock: 'discover/invalid.html' },
+];

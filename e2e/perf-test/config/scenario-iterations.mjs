@@ -3,4 +3,7 @@
 export const defaultIterations = 200;
 
 /** @type {Record<string, number>} */
-export const scenarioIterations = {};
+export const scenarioIterations = {
+  Footer: 100,
+  TopBar: 120,
+};
