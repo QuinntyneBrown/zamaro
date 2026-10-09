@@ -783,3 +783,11 @@ img, svg, video { display: block; max-width: 100%; }
 @keyframes scale-in { from { opacity: 0; scale: 0.96; } }
 @keyframes slide-in-left { from { translate: -100% 0; } }
 @media print { .topbar, .toast-region, .mock-bar, .skip-link, .dialog, .bulk-bar { display: none !important; } }
+
+/* ---------- Slice D: artist ---------------------------------------------
+   aria-selected belongs on the gridcell (role="gridcell"), not on the day
+   button, so the selection ring is driven from the cell. */
+.calendar__cell[aria-selected="true"] .calendar__day { position: relative; box-shadow: var(--shadow-focus); z-index: var(--z-raised); }
+.calendar__cell[aria-selected="true"] .calendar__day[data-status="requested"] { box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-fg-on-accent), var(--shadow-focus); }
+/* Rows in a two-column definition list keep dt and dd together at the top. */
+.definition__row { align-content: start; }

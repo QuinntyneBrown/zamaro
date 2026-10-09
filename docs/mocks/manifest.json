@@ -52,6 +52,185 @@
         "empty",
         "error"
       ]
+    },
+    {
+      "id": "dashboard",
+      "kind": "page",
+      "title": "Dashboard",
+      "route": "/artist",
+      "requirements": [
+        "L2-034",
+        "L2-056",
+        "L2-074",
+        "L2-096",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "forbidden"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "availability",
+      "kind": "page",
+      "title": "Availability",
+      "route": "/artist/availability",
+      "requirements": [
+        "L2-056",
+        "L2-057",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "selected"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "block-dates",
+      "kind": "dialog",
+      "title": "Block dates",
+      "opens_from": "availability",
+      "requirements": [
+        "L2-056",
+        "L2-057",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "availability-toast",
+      "kind": "notification",
+      "title": "Availability toast",
+      "opens_from": "availability",
+      "requirements": [
+        "L2-056",
+        "L2-057",
+        "L2-109"
+      ],
+      "states": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "with-action"
+      ],
+      "not_applicable": {
+        "stacked": "Calendar changes are saved one at a time; stacking is shown on request-toast."
+      }
+    },
+    {
+      "id": "requests",
+      "kind": "page",
+      "title": "Requests",
+      "route": "/artist/requests",
+      "requirements": [
+        "L2-030",
+        "L2-034",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "no-results"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "request-detail",
+      "kind": "page",
+      "title": "Request",
+      "route": "/artist/requests/:id",
+      "requirements": [
+        "L2-029",
+        "L2-030",
+        "L2-034",
+        "L2-045",
+        "L2-046",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error",
+        "accepted",
+        "declined",
+        "confirmed",
+        "done"
+      ],
+      "not_applicable": {
+        "empty": "A request always has a church, a date and a fee; there is nothing to be empty."
+      }
+    },
+    {
+      "id": "accept-request",
+      "kind": "dialog",
+      "title": "Accept request",
+      "opens_from": "request-detail",
+      "requirements": [
+        "L2-030",
+        "L2-034",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "decline-request",
+      "kind": "dialog",
+      "title": "Decline request",
+      "opens_from": "request-detail",
+      "requirements": [
+        "L2-030",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "request-toast",
+      "kind": "notification",
+      "title": "Request toast",
+      "opens_from": "requests",
+      "requirements": [
+        "L2-030",
+        "L2-034",
+        "L2-109"
+      ],
+      "states": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "with-action",
+        "stacked"
+      ],
+      "not_applicable": {}
     }
   ]
 }

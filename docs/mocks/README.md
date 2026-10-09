@@ -83,10 +83,29 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 
 ### Pages
 
-| Screen | default | loading | empty | error | Requirements |
+| Screen | default | loading | empty | error | forbidden | selected | no-results | accepted | declined | confirmed | done | Requirements |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) |  |  |  |  |  |  |  | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
+| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) |  |  |  |  |  |  |  | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Dashboard (`dashboard`) | [✅](pages/dashboard/default.html) | [✅](pages/dashboard/loading.html) | [✅](pages/dashboard/empty.html) | [✅](pages/dashboard/error.html) | [✅](pages/dashboard/forbidden.html) |  |  |  |  |  |  | `L2-034`, `L2-056`, `L2-074`, `L2-096`, `L2-105` |
+| Availability (`availability`) | [✅](pages/availability/default.html) | [✅](pages/availability/loading.html) | [✅](pages/availability/empty.html) | [✅](pages/availability/error.html) |  | [✅](pages/availability/selected.html) |  |  |  |  |  | `L2-056`, `L2-057`, `L2-105` |
+| Requests (`requests`) | [✅](pages/requests/default.html) | [✅](pages/requests/loading.html) | [✅](pages/requests/empty.html) | [✅](pages/requests/error.html) |  |  | [✅](pages/requests/no-results.html) |  |  |  |  | `L2-030`, `L2-034`, `L2-105` |
+| Request (`request-detail`) | [✅](pages/request-detail/default.html) | [✅](pages/request-detail/loading.html) | ➖ | [✅](pages/request-detail/error.html) |  |  |  | [✅](pages/request-detail/accepted.html) | [✅](pages/request-detail/declined.html) | [✅](pages/request-detail/confirmed.html) | [✅](pages/request-detail/done.html) | `L2-029`, `L2-030`, `L2-034`, `L2-045`, `L2-046`, `L2-105` |
+
+### Dialogs
+
+| Screen | default | busy | invalid | failed | Requirements |
 |---|---|---|---|---|---|
-| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
-| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Block dates (`block-dates`) | [✅](dialogs/block-dates/default.html) | [✅](dialogs/block-dates/busy.html) | [✅](dialogs/block-dates/invalid.html) | [✅](dialogs/block-dates/failed.html) | `L2-056`, `L2-057`, `L2-108` |
+| Accept request (`accept-request`) | [✅](dialogs/accept-request/default.html) | [✅](dialogs/accept-request/busy.html) | [✅](dialogs/accept-request/invalid.html) | [✅](dialogs/accept-request/failed.html) | `L2-030`, `L2-034`, `L2-108` |
+| Decline request (`decline-request`) | [✅](dialogs/decline-request/default.html) | [✅](dialogs/decline-request/busy.html) | [✅](dialogs/decline-request/invalid.html) | [✅](dialogs/decline-request/failed.html) | `L2-030`, `L2-108` |
+
+### Notifications
+
+| Screen | info | success | warning | danger | with-action | stacked | Requirements |
+|---|---|---|---|---|---|---|---|
+| Availability toast (`availability-toast`) | [✅](notifications/availability-toast/info.html) | [✅](notifications/availability-toast/success.html) | [✅](notifications/availability-toast/warning.html) | [✅](notifications/availability-toast/danger.html) | [✅](notifications/availability-toast/with-action.html) | ➖ | `L2-056`, `L2-057`, `L2-109` |
+| Request toast (`request-toast`) | [✅](notifications/request-toast/info.html) | [✅](notifications/request-toast/success.html) | [✅](notifications/request-toast/warning.html) | [✅](notifications/request-toast/danger.html) | [✅](notifications/request-toast/with-action.html) | [✅](notifications/request-toast/stacked.html) | `L2-030`, `L2-034`, `L2-109` |
 
 <!-- coverage:end -->
 

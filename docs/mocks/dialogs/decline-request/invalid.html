@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decline request · invalid — Zamaro mocks</title>
+<meta name="mock:kind" content="dialog">
+<meta name="mock:screen" content="decline-request">
+<meta name="mock:state" content="invalid">
+<meta name="mock:requirements" content="L2-030 L2-108">
+<meta name="description" content="Decline request with no reason chosen: summary at the top and an error on the reason group.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- The page underneath is inert while the dialog is open. -->
+<div inert aria-hidden="true">
+<header class="topbar topbar--artist">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../../pages/dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <span class="topbar__role">Artists</span>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
+    <a class="nav-link" href="../../pages/requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
+    <a class="nav-link" href="../../pages/availability/default.html">Availability</a>
+    <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
+  <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
+</header>
+<main id="main">
+  <div class="container">
+    <header class="page-head">
+      <div>
+        <p class="text-sm"><a href="../../pages/requests/default.html">Back to requests</a></p>
+        <h1 class="page-head__title" style="margin-top: var(--space-3);">Riverside Community Church</h1>
+        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · sent today</p>
+      </div>
+      <span class="stamp stamp--lg">New</span>
+    </header>
+    <div class="detail-layout" style="padding-top: 0;">
+      <div class="stack stack--lg">
+        <section class="stack" aria-labelledby="note-title">
+          <h2 id="note-title">Naomi’s note</h2>
+          <div class="message">
+            <p class="message__meta">Naomi Fraser · Riverside Community Church · Fri 9 Oct, 10:40 a.m.</p>
+            <blockquote><p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p></blockquote>
+          </div>
+        </section>
+        <section class="stack" aria-labelledby="event-title">
+          <h2 id="event-title">The event</h2>
+          <dl class="definition definition--two">
+            <div class="definition__row"><dt>Date</dt><dd>Saturday 14 November 2026</dd></div>
+            <div class="definition__row"><dt>Time</dt><dd>7:00 p.m. to 9:00 p.m.</dd></div>
+            <div class="definition__row"><dt>Kind of gathering</dt><dd>Worship night</dd></div>
+            <div class="definition__row"><dt>Expected crowd</dt><dd>About 250 people</dd></div>
+            <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington ON</dd></div>
+            <div class="definition__row"><dt>Distance</dt><dd>62 km from Brampton, about 45 min</dd></div>
+            <div class="definition__row"><dt>Sound</dt><dd>In-house PA and a five-piece band</dd></div>
+            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator. Phone and e-mail are shared once the deposit is paid.</dd></div>
+          </dl>
+        </section>
+        <section class="stack" aria-labelledby="weekend-title">
+          <h2 id="weekend-title">That weekend</h2>
+          <ul class="tour-dates" role="list">
+            <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">This request</span></span><span></span></li>
+            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m. · 18 km from Riverside</span></span><span class="stamp stamp--confirmed">Booked</span></li>
+          </ul>
+        </section>
+      </div>
+      <aside>
+        <section class="panel panel--raised" aria-labelledby="fee-title">
+          <div class="panel__head"><h2 id="fee-title" class="panel__title">Your fee</h2><span class="text-caption">Ref. ZAM-0114</span></div>
+          <dl class="receipt">
+            <div class="receipt__row"><dt>Fee offered</dt><dd>$650</dd></div>
+            <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
+            <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
+          </dl>
+          <p class="receipt__fine">You’ll be paid $598 after the event.</p>
+          <p><strong>Reply by Mon 12 Oct, 10:40 a.m.</strong> Requests expire after 72 hours.</p>
+          <div class="stack stack--sm">
+            <a class="btn btn--primary btn--lg btn--block" href="../../dialogs/accept-request/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>Accept</a>
+            <a class="btn btn--block" href="../../dialogs/decline-request/default.html">Decline</a>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</main>
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../../pages/discover/default.html">Find who’s free</a></li>
+        <li><a href="../../pages/discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../../pages/dashboard/default.html">Dashboard</a></li>
+        <li><a href="../../pages/availability/default.html">Availability</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Abigail Mensah</h2>
+      <ul>
+        <li>New Covenant Chapel</li>
+        <li><a href="../../pages/requests/default.html">Requests (3)</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</div>
+
+<div class="dialog dialog--danger" role="dialog" aria-modal="true" aria-labelledby="decline-title" aria-describedby="decline-desc" data-dismiss-on-escape>
+  <form class="dialog__panel" action="../../pages/request-detail/declined.html">
+    <div class="dialog__header">
+      <div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg></div>
+      <div style="flex: 1;">
+        <span class="dialog__kicker">Riverside Community Church · Sat 14 Nov</span>
+        <h2 class="dialog__title" id="decline-title">Decline this request</h2>
+        <p id="decline-desc" class="text-muted" style="margin-top: var(--space-1);">Naomi will see your reason and three other artists free on Sat 14 Nov. This can’t be undone.</p>
+      </div>
+      <button class="close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <div class="error-summary" role="alert" tabindex="-1">
+        <p class="error-summary__title">Choose a reason</p>
+        <ul>
+          <li><a href="#decline-free">Choose why you’re declining so Naomi knows</a></li>
+        </ul>
+      </div>
+      <fieldset class="fieldset" aria-describedby="decline-reason-error">
+        <legend>Why are you declining? <span class="optional">(required)</span></legend>
+        <p class="field__error" id="decline-reason-error">Choose a reason.</p>
+        <label class="choice"><input type="radio" name="reason" id="decline-free" value="free" aria-invalid="true"><span class="choice__text">I’m not free that day</span></label>
+        <label class="choice"><input type="radio" name="reason" id="decline-far" value="far" aria-invalid="true"><span class="choice__text">It’s too far to travel<small>Burlington is 62 km from Brampton</small></span></label>
+        <label class="choice"><input type="radio" name="reason" id="decline-fit" value="fit" aria-invalid="true"><span class="choice__text">It’s not the right fit<small>For example the style or the size of the event</small></span></label>
+        <label class="choice"><input type="radio" name="reason" id="decline-other" value="other" aria-invalid="true"><span class="choice__text">Another reason<small>Say more in the note</small></span></label>
+      </fieldset>
+      <div class="field">
+        <label class="field__label" for="decline-note">Note to Naomi <span class="optional">(optional)</span></label>
+        <textarea class="textarea" id="decline-note" name="note" rows="3" maxlength="500" aria-describedby="decline-note-help"></textarea>
+        <span class="field__help" id="decline-note-help">Up to 500 characters. Naomi sees this with your reason.</span>
+      </div>
+      <label class="choice"><input type="checkbox" name="suggest" id="decline-suggest"><span class="choice__text">Suggest a free date<small>We’ll offer Sat 7 Nov and Sat 28 Nov, your free Saturdays.</small></span></label>
+    </div>
+    <div class="dialog__footer">
+      <button class="btn" type="button">Cancel</button>
+      <button class="btn btn--danger" type="submit">Decline request</button>
+    </div>
+  </form>
+</div>
+
+<p class="mock-note" style="top: 6rem; right: 1rem;">Shown after Decline is pressed with no reason. Focus moves to the summary.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Decline request</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="busy.html">busy</a></li>
+    <li><a href="invalid.html" aria-current="page">invalid</a></li>
+    <li><a href="failed.html">failed</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>
