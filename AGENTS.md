@@ -20,8 +20,12 @@ Zamaro is a full-stack platform for booking Christian praise and worship artists
 This is the layout the repository grows into once the whole solution is built. Folders appear slice by
 slice as features land; create new code where this tree says it belongs. The three runtime containers
 from the detailed designs map to two applications: `backend/` builds the `zamaro-api` image, which runs
-as both the Zamaro API and the Zamaro Worker (Horizon and the scheduler), and `frontend/` builds the
-`zamaro-web` image (Angular with SSR). Subsystem names below match `docs/detailed-designs/`. If a change
+as both the Zamaro API and the Zamaro Worker (Horizon and the scheduler), and `frontend/` is an Angular
+workspace that builds the `zamaro-web` image. The workspace holds two applications (`zamaro` and
+`admin`), two libraries they share (`components` and `api`), and the `perf-test` scenario application.
+Keeping `admin` a separate application keeps administrator code out of the public bundle; the
+`administration/secure-admin-access` design describes `/admin` as a lazy route, so record the split in
+an ADR and update that design when the admin slice starts. Subsystem names below match `docs/detailed-designs/`. If a change
 needs a different layout, record the decision in `docs/adr/` and update this tree in the same change.
 
 ```text
@@ -79,38 +83,62 @@ zamaro/
 │   │   └── load/                  # load scenarios for the response-time budgets
 │   ├── composer.json
 │   └── Dockerfile                 # zamaro-api image (API and Worker)
-├── frontend/                      # Angular with SSR — Zamaro Web
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── core/              # app-wide singletons: auth, http interceptors, i18n, theme, SEO, errors
-│   │   │   ├── api/{subsystem}/   # per-service contract, injection token, and HTTP implementation
-│   │   │   ├── layout/            # shell, header, footer, navigation menu
-│   │   │   ├── shared/
-│   │   │   │   ├── ui/            # zm-* design-system components (button, ticket, stub, toast, ...)
-│   │   │   │   ├── dialogs/       # CDK Dialog components, one folder per docs/mocks/dialogs entry
-│   │   │   │   └── pipes/         # date, money, and distance formatting
-│   │   │   ├── pages/             # routed screens, one folder per docs/mocks/pages entry
-│   │   │   │   ├── discover/  artist/  book/  saved/  bookings/  booking-detail/
-│   │   │   │   ├── sign-in/  sign-up/  forgot-password/  reset-password/  account/
-│   │   │   │   ├── apply/  dashboard/  requests/  request-detail/  availability/
-│   │   │   │   ├── edit-profile/  earnings/
-│   │   │   │   ├── admin/         # applications, artists, bookings, reviews, audit entries
-│   │   │   │   └── not-found/  server-error/  offline/
-│   │   │   └── app.config.ts  app.config.server.ts  app.routes.ts
-│   │   ├── styles/                # global foundations: tokens, reset, utilities only
-│   │   ├── main.ts  main.server.ts  server.ts
-│   │   └── index.html
-│   ├── angular.json  package.json  eslint.config.js  .prettierrc
-│   └── Dockerfile                 # zamaro-web image
-└── e2e/                           # Playwright, Chromium only
+├── frontend/                      # Angular workspace — Zamaro Web; angular.json declares every project
+│   ├── angular.json  package.json  tsconfig.json  eslint.config.js  .prettierrc
+│   ├── projects/
+│   │   ├── zamaro/                # application: public site, booker and artist areas, with SSR
+│   │   │   ├── public/            # static files copied as-is (favicon, robots.txt)
+│   │   │   └── src/
+│   │   │       ├── app/
+│   │   │       │   ├── shell/     # header, footer, navigation menu, theme switch
+│   │   │       │   ├── pages/     # routed screens, one folder per docs/mocks/pages entry
+│   │   │       │   │   ├── discover/  artist/  book/  saved/  bookings/  booking-detail/
+│   │   │       │   │   ├── sign-in/  sign-up/  forgot-password/  reset-password/  account/
+│   │   │       │   │   ├── apply/  dashboard/  requests/  request-detail/  availability/
+│   │   │       │   │   ├── edit-profile/  earnings/
+│   │   │       │   │   └── not-found/  server-error/  offline/
+│   │   │       │   ├── dialogs/   # CDK Dialog components, one folder per docs/mocks/dialogs entry
+│   │   │       │   ├── shared/    # app-only helpers that are not components
+│   │   │       │   └── app.config.ts  app.config.server.ts  app.routes.ts   # composition root binds API tokens
+│   │   │       └── main.ts  main.server.ts  server.ts  index.html  styles.scss
+│   │   ├── admin/                 # application: administrator area under /admin
+│   │   │   ├── public/
+│   │   │   └── src/app/           # shell/, pages/ (applications, artists, bookings, reviews, audit log),
+│   │   │                          # dialogs/, app.config.ts, app.routes.ts
+│   │   ├── components/            # library: every zm-* component, shared by both applications
+│   │   │   └── src/
+│   │   │       ├── lib/{component}/   # one folder per component (button, ticket, stub, toast, rating, ...)
+│   │   │       ├── styles/        # global foundations: tokens, reset, utilities only
+│   │   │       └── public-api.ts
+│   │   ├── api/                   # library: HTTP access and the contracts pages depend on
+│   │   │   └── src/
+│   │   │       ├── lib/services/  # per subsystem: contract, injection token, HTTP implementation
+│   │   │       ├── lib/models/    # request and response types (models/admin/ for admin endpoints)
+│   │   │       ├── lib/auth/      # session, CSRF, interceptors, and route guards for both applications
+│   │   │       ├── lib/i18n/      # translation catalogues; date, money, and distance formatting
+│   │   │       ├── lib/testing/   # in-memory fakes of each contract
+│   │   │       └── public-api.ts
+│   │   └── perf-test/             # application: renders component scenarios many times under the profiler
+│   │       ├── README.md          # how to add a scenario, run it, and read the report
+│   │       └── src/
+│   │           ├── scenarios/     # one file per scenario; index.ts exports each
+│   │           ├── renderer.ts    # reads ?scenario=&iterations=&renderType=, measures the render
+│   │           └── main.ts
+│   └── Dockerfile                 # zamaro-web image: serves zamaro (SSR) and admin under /admin
+└── e2e/                           # Playwright, Chromium only; one Playwright project per application
     ├── playwright.config.ts
     ├── routes.manifest.ts         # every route in every state, shared by visual, a11y, and perf
     ├── pages/                     # page objects, one per screen; they own every selector
+    │   └── admin/                 # page objects for the admin application
     ├── fixtures/                  # seeded data and test helpers
     ├── specs/{subsystem}/         # acceptance tests for the L2 criteria; no selectors
     ├── visual/                    # visual parity with docs/mocks at every breakpoint, light and dark
     ├── a11y/                      # axe WCAG 2.2 AA checks per route and theme
-    ├── perf/                      # layout-shift and loading-state checks
+    ├── perf/                      # page-level layout-shift and loading-state checks
+    ├── perf-test/                 # component perf-test runner for frontend/projects/perf-test
+    │   ├── perf-test.mjs          # serves the build(s), profiles each scenario, writes the report
+    │   ├── config/                # iterations, render types, runs, thresholds, excluded scenarios
+    │   └── logfiles/              # perf-test.md, results.json, .cpuprofile files (git-ignored)
     └── package.json
 ```
 
@@ -135,7 +163,8 @@ Back end tests are integration tests against the API. Follow the existing test p
 - Keep component styles encapsulated and global styles limited to shared foundations and utilities.
 - **Read design tokens by role, never by value.** Use the CSS custom properties from the design system (`var(--color-fg-default)` for text, `--color-accent` for fills, `--color-border-strong` for borders, `--space-*` for spacing), never hex values or magic numbers. Component-scoped knobs keep the `--zm-` prefix.
 - **Declare each `ng-content` slot once.** A component that renders `<a>` or `<button>` by condition puts its slots in one `<ng-template>` and renders it with `ngTemplateOutlet` in both branches; slots repeated per `@if` branch project into one branch only. On the consumer side, a `@if` wrapping several `[slot=…]` nodes loses the slot (NG8011) — one `@if` per node.
-- API services have a contract and injection token; app pages depend on the token, not the concrete implementation.
+- Every reusable `zm-*` component lives in the `components` library; the applications import it and never copy it.
+- API services live in the `api` library with a contract and injection token; each application binds the tokens in its `app.config.ts`, and pages depend on the token, not the concrete implementation.
 - **No inline forms in pages.** Button-triggered editing always opens a CDK Dialog or navigates to a screen.
 - Use Angular CDK Dialog/Overlay for modal behavior; don't hand-roll modals.
 
@@ -180,3 +209,46 @@ Never add a test that asserts the shape of the codebase rather than its behavior
 no structure, layout, or naming tests; no banned-API scans; no traceability tests
 that parse the specifications. Those constraints belong to the compiler, the
 formatter, and review. A test suite exists to prove behavior.
+
+## Component perf tests - mandatory
+
+`frontend/projects/perf-test` and its runner in `e2e/perf-test/` measure what each
+`zm-*` component costs to render. They follow Fluent UI's `apps/perf-test` and the
+Saturdaze port of it: the scenario app renders a component many times in Chromium
+with the V8 CPU profiler running, and the runner compares the change against its
+base branch.
+
+- **Every component has a scenario.** A change that adds a component to the
+  `components` library MUST add `frontend/projects/perf-test/src/scenarios/<Name>.ts`
+  in the same change and export it from `src/scenarios/index.ts`. The scenario's
+  default export is a standalone component that renders one realistic instance,
+  using the cast and copy from `docs/mocks/README.md`.
+- **Composites have scenarios too.** The repeated, render-heavy compositions get
+  their own scenario: an artist ticket in the Discover results, the profile
+  setlist, the availability calendar month, the requests inbox row, and the
+  dark theme (`data-theme="dark"`) wrapper. Add one whenever a new composition repeats on a screen.
+- **Measure before you merge.** A change to a component's template, inputs,
+  styles, or change detection MUST run the perf test against the base branch and
+  read the report. Every row flagged **Possible regression** is either fixed or
+  explained in the pull request with what the profile shows.
+- **Keep scenarios honest.** Tune a scenario's iterations in
+  `e2e/perf-test/config/scenario-iterations.mjs` so it renders in roughly
+  100–300 ms. Never delete, exclude, or shrink a scenario to clear a flag.
+- **The pipeline runs it on every pull request** that touches `frontend/` or
+  `e2e/perf-test/`: it builds this branch and the base branch with
+  `NG_BUILD_MANGLE=0`, publishes the comparison table in the job summary, and
+  uploads the `.cpuprofile` files.
+
+Run it locally:
+
+```bash
+cd frontend
+NG_BUILD_MANGLE=0 npx ng build perf-test
+cd ../e2e
+npm run perf-test -- --baseline <base-branch dist>   # --scenarios Button,Ticket to narrow
+```
+
+These are measurements, not tests: they assert no behavior, so they do not count
+toward ATDD, and the "never write architecture tests" rule does not apply to them.
+They do not replace the page-level checks in `e2e/perf/` or the Lighthouse and
+bundle budgets in the pipeline.
