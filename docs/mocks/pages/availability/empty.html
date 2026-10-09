@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="availability">
 <meta name="mock:state" content="empty">
-<meta name="mock:requirements" content="L2-056 L2-057 L2-105">
-<meta name="description" content="Miriam’s calendar with nothing blocked or booked: every day free and one action to block dates.">
+<meta name="mock:requirements" content="L2-056 L2-057 L2-058 L2-105">
+<meta name="description" content="Miriam’s calendar with nothing set: every day Free, no weekly default, and one action to mark dates unavailable.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../dashboard/empty.html">Dashboard</a>
     <a class="nav-link" href="../requests/empty.html">Requests</a>
     <a class="nav-link" href="../availability/empty.html" aria-current="page">Availability</a>
+    <a class="nav-link" href="../earnings/empty.html">Earnings</a>
     <a class="nav-link" href="../artist/empty.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -36,16 +37,17 @@
     <header class="page-head">
       <div>
         <h1 class="page-head__title">Availability</h1>
-        <p class="page-head__sub">November 2026 · every date free · nothing booked yet</p>
+        <p class="page-head__sub">November 2026 · every date Free · nothing booked yet</p>
       </div>
     </header>
     <div class="page-body">
       <section class="empty empty--quiet" aria-labelledby="empty-title">
-        <h2 id="empty-title" class="empty__title">Nothing blocked yet</h2>
-        <p>Every date is open to churches until you block it. Block the days you can’t do before the first request comes in.</p>
-        <div><a class="btn btn--primary" href="../../dialogs/block-dates/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg>Block dates</a></div>
+        <h2 id="empty-title" class="empty__title">Every date is Free</h2>
+        <p>Churches can ask for any day until you mark it unavailable. Mark the days you can’t do before the first request comes in.</p>
+        <div><a class="btn btn--primary" href="../../dialogs/block-dates/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg>Mark dates unavailable</a></div>
       </section>
-    <section class="calendar" aria-label="Calendar">
+      <p class="cluster">Weekly default: <strong>none</strong> <a class="btn btn--sm" href="../../dialogs/weekly-default/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9h13l-3-3M20 15H7l3 3"/></svg>Set a weekly default</a></p>
+    <section class="calendar" aria-label="Calendar, next 18 months">
       <div class="calendar__head">
         <h2 id="cal-month" class="calendar__month">November 2026</h2>
         <div class="cluster" style="gap: var(--space-3) var(--space-6);">
@@ -53,12 +55,12 @@
             <button class="btn btn--icon" type="button" aria-label="Previous month, October 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
             <button class="btn btn--icon" type="button" aria-label="Next month, December 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
           </div>
-      <ul class="calendar__legend" aria-label="Legend">
-        <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
-        <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
-        <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
-        <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Blocked</li>
-      </ul>
+          <ul class="calendar__legend" aria-label="Legend">
+            <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
+            <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
+            <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
+            <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Unavailable</li>
+          </ul>
         </div>
       </div>
       <div class="calendar__grid" role="grid" aria-labelledby="cal-month" aria-multiselectable="true">
@@ -72,44 +74,44 @@
         <div class="calendar__weekday" role="columnheader"><span aria-hidden="true">Sat</span><span class="visually-hidden">Saturday</span></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="0" aria-label="Sun 1 Nov, free"><span class="calendar__num" aria-hidden="true">1</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 2 Nov, free"><span class="calendar__num" aria-hidden="true">2</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 3 Nov, free"><span class="calendar__num" aria-hidden="true">3</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 4 Nov, free"><span class="calendar__num" aria-hidden="true">4</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 5 Nov, free"><span class="calendar__num" aria-hidden="true">5</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 6 Nov, free"><span class="calendar__num" aria-hidden="true">6</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 7 Nov, free"><span class="calendar__num" aria-hidden="true">7</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 1 Nov, Free"><span class="calendar__num" aria-hidden="true">1</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 2 Nov, Free"><span class="calendar__num" aria-hidden="true">2</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="0" aria-label="Tue 3 Nov, Free"><span class="calendar__num" aria-hidden="true">3</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 4 Nov, Free"><span class="calendar__num" aria-hidden="true">4</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 5 Nov, Free"><span class="calendar__num" aria-hidden="true">5</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 6 Nov, Free"><span class="calendar__num" aria-hidden="true">6</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 7 Nov, Free"><span class="calendar__num" aria-hidden="true">7</span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 8 Nov, free"><span class="calendar__num" aria-hidden="true">8</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 9 Nov, free"><span class="calendar__num" aria-hidden="true">9</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 10 Nov, free"><span class="calendar__num" aria-hidden="true">10</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 11 Nov, free"><span class="calendar__num" aria-hidden="true">11</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 12 Nov, free"><span class="calendar__num" aria-hidden="true">12</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 13 Nov, free"><span class="calendar__num" aria-hidden="true">13</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 14 Nov, free"><span class="calendar__num" aria-hidden="true">14</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 8 Nov, Free"><span class="calendar__num" aria-hidden="true">8</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 9 Nov, Free"><span class="calendar__num" aria-hidden="true">9</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 10 Nov, Free"><span class="calendar__num" aria-hidden="true">10</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 11 Nov, Free"><span class="calendar__num" aria-hidden="true">11</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 12 Nov, Free"><span class="calendar__num" aria-hidden="true">12</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 13 Nov, Free"><span class="calendar__num" aria-hidden="true">13</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 14 Nov, Free"><span class="calendar__num" aria-hidden="true">14</span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 15 Nov, free"><span class="calendar__num" aria-hidden="true">15</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 16 Nov, free"><span class="calendar__num" aria-hidden="true">16</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 17 Nov, free"><span class="calendar__num" aria-hidden="true">17</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 18 Nov, free"><span class="calendar__num" aria-hidden="true">18</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 19 Nov, free"><span class="calendar__num" aria-hidden="true">19</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 20 Nov, free"><span class="calendar__num" aria-hidden="true">20</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 21 Nov, free"><span class="calendar__num" aria-hidden="true">21</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 15 Nov, Free"><span class="calendar__num" aria-hidden="true">15</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 16 Nov, Free"><span class="calendar__num" aria-hidden="true">16</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 18 Nov, Free"><span class="calendar__num" aria-hidden="true">18</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 19 Nov, Free"><span class="calendar__num" aria-hidden="true">19</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 20 Nov, Free"><span class="calendar__num" aria-hidden="true">20</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 21 Nov, Free"><span class="calendar__num" aria-hidden="true">21</span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 22 Nov, free"><span class="calendar__num" aria-hidden="true">22</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 23 Nov, free"><span class="calendar__num" aria-hidden="true">23</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 24 Nov, free"><span class="calendar__num" aria-hidden="true">24</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 25 Nov, free"><span class="calendar__num" aria-hidden="true">25</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 26 Nov, free"><span class="calendar__num" aria-hidden="true">26</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 27 Nov, free"><span class="calendar__num" aria-hidden="true">27</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 28 Nov, free"><span class="calendar__num" aria-hidden="true">28</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 22 Nov, Free"><span class="calendar__num" aria-hidden="true">22</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 23 Nov, Free"><span class="calendar__num" aria-hidden="true">23</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 24 Nov, Free"><span class="calendar__num" aria-hidden="true">24</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 25 Nov, Free"><span class="calendar__num" aria-hidden="true">25</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 26 Nov, Free"><span class="calendar__num" aria-hidden="true">26</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 27 Nov, Free"><span class="calendar__num" aria-hidden="true">27</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 28 Nov, Free"><span class="calendar__num" aria-hidden="true">28</span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 29 Nov, free"><span class="calendar__num" aria-hidden="true">29</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 30 Nov, free"><span class="calendar__num" aria-hidden="true">30</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 29 Nov, Free"><span class="calendar__num" aria-hidden="true">29</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 30 Nov, Free"><span class="calendar__num" aria-hidden="true">30</span></button></div>
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">1</span></span></div>
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">2</span></span></div>
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">3</span></span></div>
@@ -117,6 +119,7 @@
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">5</span></span></div>
       </div>
       </div>
+      <p class="text-caption">Your calendar runs 18 months ahead, October 2026 to March 2028.</p>
     </section>
     </div>
   </div>
@@ -141,6 +144,7 @@
       <ul>
         <li><a href="../dashboard/empty.html">Dashboard</a></li>
         <li><a href="../availability/empty.html">Availability</a></li>
+        <li><a href="../earnings/empty.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -153,7 +157,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 8rem; right: 1rem;">Empty artist states show Miriam Haile, approved Mon 5 Oct, instead of Abigail.</p>
+<p class="mock-note" style="top: 8rem; right: 1rem;">Empty artist states show Miriam Haile, approved Mon 5 Oct. A new artist’s dates all start Free (L2-056).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

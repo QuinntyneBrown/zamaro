@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="dialog">
 <meta name="mock:screen" content="accept-request">
 <meta name="mock:state" content="busy">
-<meta name="mock:requirements" content="L2-030 L2-034 L2-108">
-<meta name="description" content="Accept request while sending: fields read-only, Cancel disabled and the Accept button busy.">
+<meta name="mock:requirements" content="L2-030 L2-032 L2-034 L2-099 L2-108">
+<meta name="description" content="Accept request while sending: both buttons disabled and Accept busy.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -26,6 +26,7 @@
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../../pages/requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../../pages/availability/default.html">Availability</a>
+    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
     <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -38,50 +39,64 @@
       <div>
         <p class="text-sm"><a href="../../pages/requests/default.html">Back to requests</a></p>
         <h1 class="page-head__title" style="margin-top: var(--space-3);">Riverside Community Church</h1>
-        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · sent today</p>
+        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · requested today, 10:15 a.m.</p>
       </div>
-      <span class="stamp stamp--lg">New</span>
+      <span class="stamp stamp--lg stamp--requested">Requested</span>
     </header>
     <div class="detail-layout" style="padding-top: 0;">
       <div class="stack stack--lg">
-        <section class="stack" aria-labelledby="note-title">
-          <h2 id="note-title">Naomi’s note</h2>
-          <div class="message">
-            <p class="message__meta">Naomi Fraser · Riverside Community Church · Fri 9 Oct, 10:40 a.m.</p>
-            <blockquote><p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p></blockquote>
-          </div>
+        <section class="stack" aria-labelledby="thread-title">
+          <h2 id="thread-title">Messages</h2>
+          <ol class="stack" role="list" style="list-style: none; margin: 0; padding: 0;">
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:15 a.m.</p>
+              <p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p>
+            </li>
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:22 a.m.</p>
+              <p>If it’s easier to talk it through, call me on <span class="text-muted">[contact details shared after booking]</span> any afternoon.</p>
+            </li>
+          </ol>
+          <form class="stack stack--sm" action="#thread-title">
+            <div class="field">
+              <label class="field__label" for="msg-body">Message Naomi</label>
+              <textarea class="textarea" id="msg-body" name="body" rows="3" maxlength="2000" aria-describedby="msg-help"></textarea>
+              <span class="field__help" id="msg-help">Plain text, 1 to 2,000 characters. Phone numbers and e-mails stay hidden until the booking is Confirmed.</span>
+            </div>
+            <div><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
+          </form>
         </section>
         <section class="stack" aria-labelledby="event-title">
           <h2 id="event-title">The event</h2>
           <dl class="definition definition--two">
             <div class="definition__row"><dt>Date</dt><dd>Saturday 14 November 2026</dd></div>
-            <div class="definition__row"><dt>Time</dt><dd>7:00 p.m. to 9:00 p.m.</dd></div>
+            <div class="definition__row"><dt>Start time</dt><dd>7:00 p.m., ends about 9:00 p.m.</dd></div>
             <div class="definition__row"><dt>Kind of gathering</dt><dd>Worship night</dd></div>
             <div class="definition__row"><dt>Expected crowd</dt><dd>About 250 people</dd></div>
             <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington ON</dd></div>
-            <div class="definition__row"><dt>Distance</dt><dd>62 km from Brampton, about 45 min</dd></div>
+            <div class="definition__row"><dt>Distance</dt><dd>62 km, about 45 min from Brampton</dd></div>
             <div class="definition__row"><dt>Sound</dt><dd>In-house PA and a five-piece band</dd></div>
-            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator. Phone and e-mail are shared once the deposit is paid.</dd></div>
+            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator. The church’s phone is shared once the booking is Confirmed.</dd></div>
           </dl>
         </section>
         <section class="stack" aria-labelledby="weekend-title">
           <h2 id="weekend-title">That weekend</h2>
           <ul class="tour-dates" role="list">
             <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">This request</span></span><span></span></li>
-            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m. · 18 km from Riverside</span></span><span class="stamp stamp--confirmed">Booked</span></li>
+            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m.</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
           </ul>
         </section>
       </div>
       <aside>
         <section class="panel panel--raised" aria-labelledby="fee-title">
-          <div class="panel__head"><h2 id="fee-title" class="panel__title">Your fee</h2><span class="text-caption">Ref. ZAM-0114</span></div>
+          <div class="panel__head"><h2 id="fee-title" class="panel__title">Your fee</h2><span class="text-caption">ZAM-0114</span></div>
           <dl class="receipt">
-            <div class="receipt__row"><dt>Fee offered</dt><dd>$650</dd></div>
+            <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
             <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
             <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
           </dl>
           <p class="receipt__fine">You’ll be paid $598 after the event.</p>
-          <p><strong>Reply by Mon 12 Oct, 10:40 a.m.</strong> Requests expire after 72 hours.</p>
+          <p><strong>Reply by Mon 12 Oct, 10:15 a.m.</strong> · 2 days 19 hr left. Unanswered requests expire.</p>
           <div class="stack stack--sm">
             <a class="btn btn--primary btn--lg btn--block" href="../../dialogs/accept-request/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>Accept</a>
             <a class="btn btn--block" href="../../dialogs/decline-request/default.html">Decline</a>
@@ -110,6 +125,7 @@
       <ul>
         <li><a href="../../pages/dashboard/default.html">Dashboard</a></li>
         <li><a href="../../pages/availability/default.html">Availability</a></li>
+        <li><a href="../../pages/earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -128,38 +144,30 @@
     <div class="dialog__header">
       <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div>
       <div style="flex: 1;">
-        <span class="dialog__kicker">Riverside Community Church · Sat 14 Nov</span>
+        <span class="dialog__kicker">Riverside Community Church · ZAM-0114</span>
         <h2 class="dialog__title" id="accept-title">Accept this request</h2>
-        <p id="accept-desc" class="text-muted" style="margin-top: var(--space-1);">Riverside then has until Fri 16 Oct to pay the deposit. Sat 14 Nov is yours once they do.</p>
+        <p id="accept-desc" class="text-muted" style="margin-top: var(--space-1);">Worship night · Sat 14 Nov · 7:00 p.m. · Burlington</p>
       </div>
       <button class="close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="dialog__body">
-      <div class="field">
-        <label class="field__label" for="accept-fee">Your fee <span class="optional">(required)</span></label>
-        <input class="input" type="text" inputmode="decimal" id="accept-fee" name="fee" value="$650" required aria-describedby="accept-fee-help" readonly>
-        <span class="field__help" id="accept-fee-help">Riverside offered $650. If you change it, they see the new fee before paying.</span>
-      </div>
-      <dl class="receipt" aria-live="polite">
-        <div class="receipt__row"><dt>Your fee</dt><dd>$650</dd></div>
-        <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
-        <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
-      </dl>
-      <p class="receipt__fine" style="padding-top: 0;">You’ll be paid $598 after the event.</p>
-      <div class="field">
-        <label class="field__label" for="accept-note">Note to Naomi <span class="optional">(optional)</span></label>
-        <textarea class="textarea" id="accept-note" name="note" rows="3" aria-describedby="accept-note-help" readonly>Can’t wait. I’ll send my setlist a week before.</textarea>
-        <span class="field__help" id="accept-note-help">Phone numbers and e-mails are hidden until the deposit is paid.</span>
-      </div>
+          <dl class="receipt">
+            <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
+            <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
+            <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
+          </dl>
+          <p class="receipt__fine">You’ll be paid $598 after the event.</p>
+      <p>Riverside then has 48 hours, until <strong>Sun 11 Oct, 2:40 p.m.</strong>, to pay the $162.50 deposit. Sat 14 Nov is Booked once they do.</p>
+      <p class="text-caption">The price was locked at $650 when Riverside asked, so there’s nothing to change.</p>
     </div>
     <div class="dialog__footer">
       <button class="btn" type="button" disabled>Cancel</button>
-      <button class="btn btn--primary" type="submit" aria-busy="true">Accepting</button>
+      <button class="btn btn--primary" type="submit" aria-busy="true" disabled>Accepting</button>
     </div>
   </form>
 </div>
 
-<p class="mock-note" style="top: 6rem; right: 1rem;">Fields are read-only while the reply is sent; Cancel is disabled so it can’t half-send.</p>
+<p class="mock-note" style="top: 6rem; right: 1rem;">Both buttons are disabled while the reply is sent, so it can’t be sent twice (L2-108).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -168,8 +176,8 @@
   <ul class="mock-bar__states">
     <li><a href="default.html">default</a></li>
     <li><a href="busy.html" aria-current="page">busy</a></li>
-    <li><a href="invalid.html">invalid</a></li>
     <li><a href="failed.html">failed</a></li>
+    <li><a href="conflict.html">conflict</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

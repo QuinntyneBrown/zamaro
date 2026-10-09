@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="request-detail">
 <meta name="mock:state" content="declined">
-<meta name="mock:requirements" content="L2-029 L2-030 L2-034 L2-045 L2-046 L2-105">
-<meta name="description" content="Abigail declined: her reason, note and suggested dates are shown, and Sat 14 Nov is free again.">
+<meta name="mock:requirements" content="L2-029 L2-030 L2-034 L2-037 L2-039 L2-043 L2-045 L2-046 L2-105">
+<meta name="description" content="Abigail declined: her reason, suggested dates and the church being shown 3 similar artists; the thread stays open.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../availability/default.html">Availability</a>
+    <a class="nav-link" href="../earnings/default.html">Earnings</a>
     <a class="nav-link" href="../artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -43,31 +44,49 @@
     </header>
     <div class="detail-layout" style="padding-top: 0;">
       <div class="stack stack--lg">
-        <section class="stack" aria-labelledby="note-title">
-          <h2 id="note-title">Naomi’s note</h2>
-          <div class="message">
-            <p class="message__meta">Naomi Fraser · Riverside Community Church · Fri 9 Oct, 10:40 a.m.</p>
-            <blockquote><p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p></blockquote>
-          </div>
+        <section class="stack" aria-labelledby="thread-title">
+          <h2 id="thread-title">Messages</h2>
+          <ol class="stack" role="list" style="list-style: none; margin: 0; padding: 0;">
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:15 a.m.</p>
+              <p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p>
+            </li>
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:22 a.m.</p>
+              <p>If it’s easier to talk it through, call me on <span class="text-muted">[contact details shared after booking]</span> any afternoon.</p>
+            </li>
+            <li class="message">
+              <p class="message__meta">You · Fri 9 Oct, 2:05 p.m.</p>
+              <p>Thank you for thinking of me. I can’t make that Saturday, but I’d love to come another time.</p>
+            </li>
+          </ol>
+          <form class="stack stack--sm" action="#thread-title">
+            <div class="field">
+              <label class="field__label" for="msg-body">Message Naomi</label>
+              <textarea class="textarea" id="msg-body" name="body" rows="3" maxlength="2000" aria-describedby="msg-help"></textarea>
+              <span class="field__help" id="msg-help">Plain text, 1 to 2,000 characters. Phone numbers and e-mails stay hidden until the booking is Confirmed.</span>
+            </div>
+            <div><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
+          </form>
         </section>
         <section class="stack" aria-labelledby="event-title">
           <h2 id="event-title">The event</h2>
           <dl class="definition definition--two">
             <div class="definition__row"><dt>Date</dt><dd>Saturday 14 November 2026</dd></div>
-            <div class="definition__row"><dt>Time</dt><dd>7:00 p.m. to 9:00 p.m.</dd></div>
+            <div class="definition__row"><dt>Start time</dt><dd>7:00 p.m., ends about 9:00 p.m.</dd></div>
             <div class="definition__row"><dt>Kind of gathering</dt><dd>Worship night</dd></div>
             <div class="definition__row"><dt>Expected crowd</dt><dd>About 250 people</dd></div>
             <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington ON</dd></div>
-            <div class="definition__row"><dt>Distance</dt><dd>62 km from Brampton, about 45 min</dd></div>
+            <div class="definition__row"><dt>Distance</dt><dd>62 km, about 45 min from Brampton</dd></div>
             <div class="definition__row"><dt>Sound</dt><dd>In-house PA and a five-piece band</dd></div>
-            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator. Phone and e-mail are shared once the deposit is paid.</dd></div>
+            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator. The church’s phone is shared once the booking is Confirmed.</dd></div>
           </dl>
         </section>
         <section class="stack" aria-labelledby="weekend-title">
           <h2 id="weekend-title">That weekend</h2>
           <ul class="tour-dates" role="list">
             <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">Free again</span></span><span></span></li>
-            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m. · 18 km from Riverside</span></span><span class="stamp stamp--confirmed">Booked</span></li>
+            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m.</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
           </ul>
         </section>
       </div>
@@ -76,11 +95,9 @@
           <div class="panel__head"><h2 id="fee-title" class="panel__title">You declined</h2><span class="text-caption">Fri 9 Oct, 2:05 p.m.</span></div>
           <dl class="definition">
             <div class="definition__row"><dt>Reason</dt><dd>I’m not free that day</dd></div>
-            <div class="definition__row"><dt>Your note</dt><dd>Thank you for thinking of me. I’d love to come another Saturday.</dd></div>
             <div class="definition__row"><dt>Suggested instead</dt><dd>Sat 7 Nov and Sat 28 Nov</dd></div>
           </dl>
-          <p class="text-muted">Naomi was shown your reason and three other artists free on Sat 14 Nov.</p>
-          <a class="btn btn--block" href="../requests/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>Back to requests</a>
+          <p class="text-muted">Naomi was told with your reason and shown 3 similar artists free on Sat 14 Nov. Nothing was charged.</p>
         </section>
       </aside>
     </div>
@@ -106,6 +123,7 @@
       <ul>
         <li><a href="../dashboard/default.html">Dashboard</a></li>
         <li><a href="../availability/default.html">Availability</a></li>
+        <li><a href="../earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -130,7 +148,8 @@
     <li><a href="accepted.html">accepted</a></li>
     <li><a href="declined.html" aria-current="page">declined</a></li>
     <li><a href="confirmed.html">confirmed</a></li>
-    <li><a href="done.html">done</a></li>
+    <li><a href="completed.html">completed</a></li>
+    <li><a href="expired.html">expired</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

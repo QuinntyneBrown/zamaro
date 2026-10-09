@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="notification">
 <meta name="mock:screen" content="request-toast">
 <meta name="mock:state" content="stacked">
-<meta name="mock:requirements" content="L2-030 L2-034 L2-109">
-<meta name="description" content="Three toasts stacked newest first: request accepted, reply-by reminder and a new request.">
+<meta name="mock:requirements" content="L2-030 L2-034 L2-037 L2-109">
+<meta name="description" content="Three toasts stacked newest first: request accepted on top, then the reply-by reminder and the new request.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../../pages/requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../../pages/availability/default.html">Availability</a>
+    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
     <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -36,7 +37,7 @@
     <header class="page-head">
       <div>
         <h1 class="page-head__title">Requests</h1>
-        <p class="page-head__sub">3 new · 4 accepted · answer within 72 hours</p>
+        <p class="page-head__sub">3 new · answer within 72 hours</p>
       </div>
       <form class="field" role="search" action="no-results.html" style="min-width: min(100%, 18rem);">
         <label class="field__label" for="req-search">Search requests</label>
@@ -45,56 +46,72 @@
     </header>
     <div class="page-body">
       <div class="tabs" role="tablist" aria-label="Request status">
-        <button class="tab" type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New <span class="badge badge--count" aria-label="3 new">3</span></button><button class="tab" type="button" role="tab" id="tab-accepted" aria-selected="false" aria-controls="panel-accepted" tabindex="-1">Accepted</button><button class="tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past</button>
+        <button class="tab" type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New <span class="badge badge--count" aria-label="3 new">3</span></button><button class="tab" type="button" role="tab" id="tab-accepted" aria-selected="false" aria-controls="panel-accepted" tabindex="-1">Accepted</button><button class="tab" type="button" role="tab" id="tab-confirmed" aria-selected="false" aria-controls="panel-confirmed" tabindex="-1">Confirmed</button><button class="tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past</button>
       </div>
       <div role="tabpanel" id="panel-new" aria-labelledby="tab-new">
         <h2 class="visually-hidden">New requests, soonest deadline first</h2>
         <ul class="booking-list" role="list">
-          <li class="booking-list__row">
-            <p class="booking-list__date"><small>Sat</small>5 Dec</p>
-            <h3 class="booking-list__who"><a href="../../pages/request-detail/default.html">Harvest Point Church</a></h3>
-            <p class="booking-list__meta">Christmas concert · 7:00 p.m. · Milton, 31 km<br>$800 offered · you get $736</p>
-            <div class="booking-list__status"><span class="stamp">New</span><span class="text-caption"><strong>Reply by tomorrow, 3:15 p.m.</strong></span></div>
-          </li>
-          <li class="booking-list__row">
-            <p class="booking-list__date"><small>Sun</small>22 Nov</p>
-            <h3 class="booking-list__who"><a href="../../pages/request-detail/default.html">St. Brendan’s Anglican</a></h3>
-            <p class="booking-list__meta">Sunday service · 10:30 a.m. · Oshawa, 94 km<br>$650 offered · you get $598</p>
-            <div class="booking-list__status"><span class="stamp">New</span><span class="text-caption">Reply by Sun 11 Oct, 9:00 a.m.</span></div>
-          </li>
-          <li class="booking-list__row">
-            <p class="booking-list__date"><small>Sat</small>14 Nov</p>
-            <h3 class="booking-list__who"><a href="../../pages/request-detail/default.html">Riverside Community Church</a></h3>
-            <p class="booking-list__meta">Worship night · 7:00 p.m. · Burlington, 62 km<br>$650 offered · you get $598</p>
-            <div class="booking-list__status"><span class="stamp">New</span><span class="text-caption">Reply by Mon 12 Oct, 10:40 a.m.</span></div>
-          </li>
+      <li class="booking-list__row">
+        <p class="booking-list__date"><small>Sat</small>5 Dec</p>
+        <h3 class="booking-list__who"><a href="../../pages/request-detail/default.html">Harvest Point Church</a></h3>
+        <p class="booking-list__meta">Christmas concert · 7:00 p.m. · Milton, 31 km<br>$800 quoted · you get $736<br><q>We need a soloist for three carols and one of your own songs. Could you also…</q></p>
+        <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption"><strong>1 day left</strong> · reply by Sat 10 Oct, 3:15 p.m.</span></div>
+      </li>
+      <li class="booking-list__row">
+        <p class="booking-list__date"><small>Sun</small>22 Nov</p>
+        <h3 class="booking-list__who"><a href="../../pages/request-detail/default.html">St. Brendan’s Anglican</a></h3>
+        <p class="booking-list__meta">Sunday service · 10:30 a.m. · Oshawa, 94 km<br>$650 quoted · you get $598<br><q>Janet here again. The congregation still talks about September. Would you lead…</q></p>
+        <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption">1 day 18 hr left · reply by Sun 11 Oct, 9:00 a.m.</span></div>
+      </li>
+      <li class="booking-list__row">
+        <p class="booking-list__date"><small>Sat</small>14 Nov</p>
+        <h3 class="booking-list__who"><a href="../../pages/request-detail/default.html">Riverside Community Church</a></h3>
+        <p class="booking-list__meta">Worship night · 7:00 p.m. · Burlington, 62 km<br>$650 quoted · you get $598<br><q>We’re planning our first worship night since the renovation, about 250 people…</q></p>
+        <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption">2 days 19 hr left · reply by Mon 12 Oct, 10:15 a.m.</span></div>
+      </li>
         </ul>
       </div>
       <div role="tabpanel" id="panel-accepted" aria-labelledby="tab-accepted" hidden>
-        <h2 class="visually-hidden">Accepted requests</h2>
+        <h2 class="visually-hidden">Accepted, waiting for the church’s deposit</h2>
+        <p class="text-muted">Nothing is waiting for a deposit. Churches have 48 hours to pay after you accept.</p>
+      </div>
+      <div role="tabpanel" id="panel-confirmed" aria-labelledby="tab-confirmed" hidden>
+        <h2 class="visually-hidden">Confirmed bookings</h2>
         <ul class="booking-list" role="list">
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sun</small>18 Oct</p>
             <h3 class="booking-list__who"><a href="../../pages/request-detail/confirmed.html">Living Waters Fellowship</a></h3>
-            <p class="booking-list__meta">Sunday service · 10:30 a.m. · Brampton, 6 km<br>$650 · you get $598</p>
+            <p class="booking-list__meta">Sunday service, Brampton<br>$650 · you get $598 after the event</p>
             <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sun</small>1 Nov</p>
             <h3 class="booking-list__who"><a href="../../pages/request-detail/confirmed.html">Harvest Point Church</a></h3>
-            <p class="booking-list__meta">Sunday service · 10:00 a.m. · Milton, 31 km<br>$650 · you get $598</p>
+            <p class="booking-list__meta">Sunday service, Milton<br>$650 · you get $598 after the event</p>
             <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sun</small>15 Nov</p>
             <h3 class="booking-list__who"><a href="../../pages/request-detail/confirmed.html">Lakeshore Alliance Church</a></h3>
-            <p class="booking-list__meta">Sunday service · 10:30 a.m. · Oakville, 48 km<br>$650 · you get $598</p>
+            <p class="booking-list__meta">Sunday service, Oakville<br>$650 · you get $598 after the event</p>
             <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sat</small>21 Nov</p>
             <h3 class="booking-list__who"><a href="../../pages/request-detail/confirmed.html">Kingdom Life Centre</a></h3>
-            <p class="booking-list__meta">Women’s conference · 2:00 p.m. · Mississauga, 22 km<br>$900 · you get $828</p>
+            <p class="booking-list__meta">Women’s conference, Mississauga<br>$900 · you get $828 after the event</p>
+            <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span></div>
+          </li>
+          <li class="booking-list__row">
+            <p class="booking-list__date"><small>Sun</small>13 Dec</p>
+            <h3 class="booking-list__who"><a href="../../pages/request-detail/confirmed.html">Living Waters Fellowship</a></h3>
+            <p class="booking-list__meta">Carol service, Brampton<br>$650 · you get $598 after the event</p>
+            <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span></div>
+          </li>
+          <li class="booking-list__row">
+            <p class="booking-list__date"><small>Sun</small>20 Dec</p>
+            <h3 class="booking-list__who"><a href="../../pages/request-detail/confirmed.html">Lakeshore Alliance Church</a></h3>
+            <p class="booking-list__meta">Christmas Sunday, Oakville<br>$650 · you get $598 after the event</p>
             <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span></div>
           </li>
         </ul>
@@ -105,14 +122,14 @@
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sun</small>29 Nov</p>
             <h3 class="booking-list__who"><a href="../../pages/request-detail/declined.html">Trinity Lutheran</a></h3>
-            <p class="booking-list__meta">Sunday service · Kitchener, 130 km<br>Declined: too far to travel</p>
+            <p class="booking-list__meta">Sunday service · Kitchener, 130 km<br>You declined: too far to travel</p>
             <div class="booking-list__status"><span class="stamp stamp--declined">Declined</span></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sun</small>13 Sep</p>
-            <h3 class="booking-list__who"><a href="../../pages/request-detail/done.html">St. Brendan’s Anglican</a></h3>
-            <p class="booking-list__meta">Sunday service · Oshawa, 94 km<br>$650 · you got $598</p>
-            <div class="booking-list__status"><span class="stamp stamp--done">Done</span></div>
+            <h3 class="booking-list__who"><a href="../../pages/request-detail/completed.html">St. Brendan’s Anglican</a></h3>
+            <p class="booking-list__meta">Sunday service · Oshawa, 94 km<br>$650 · you were paid $598 on Tue 15 Sep</p>
+            <div class="booking-list__status"><span class="stamp stamp--completed">Completed</span></div>
           </li>
         </ul>
       </div>
@@ -139,6 +156,7 @@
       <ul>
         <li><a href="../../pages/dashboard/default.html">Dashboard</a></li>
         <li><a href="../../pages/availability/default.html">Availability</a></li>
+        <li><a href="../../pages/earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -151,14 +169,14 @@
   </div>
 </footer>
 
-<p class="mock-note" style="bottom: 16rem; right: 1rem;">At most three show at once, newest on top; older ones wait in a queue.</p>
+<p class="mock-note" style="bottom: 16rem; right: 1rem;">At most three show at once, newest on top; older ones wait in a queue (L2-109).</p>
 <div class="toast-region" role="status" aria-live="polite">
   <div class="toast toast--success">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
     <div class="toast__body">
-      <p class="toast__kind">Sent</p>
+      <p class="toast__kind">Saved</p>
       <p class="toast__title">Request accepted</p>
-      <p class="toast__text">Riverside has until Fri 16 Oct to pay the deposit. We’ll e-mail you when they do.</p>
+      <p class="toast__text">The church has until Sun 11 Oct, 2:40 p.m. to pay the deposit.</p>
     </div>
     <button class="close" type="button" aria-label="Dismiss notification"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <span class="toast__progress" aria-hidden="true"></span>
@@ -169,7 +187,7 @@
     <div class="toast__body">
       <p class="toast__kind">Heads up</p>
       <p class="toast__title">Reply by Mon 12 Oct</p>
-      <p class="toast__text">Requests expire after 72 hours. Riverside’s closes Mon 12 Oct at 10:40 a.m.</p>
+      <p class="toast__text">Requests expire 72 hours after they’re sent. Riverside’s closes Mon 12 Oct at 10:15 a.m.</p>
       <div class="toast__actions"><a class="toast__action" href="../../pages/request-detail/default.html">Reply now</a></div>
     </div>
     <button class="close" type="button" aria-label="Dismiss notification"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
@@ -180,8 +198,8 @@
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></svg>
     <div class="toast__body">
       <p class="toast__kind">New request</p>
-      <p class="toast__title">Riverside wants Sat 14 Nov</p>
-      <p class="toast__text">Worship night in Burlington, $650 offered. Reply by Mon 12 Oct.</p>
+      <p class="toast__title">Riverside asked for Sat 14 Nov</p>
+      <p class="toast__text">Worship night in Burlington, $650 quoted. Reply by Mon 12 Oct, 10:15 a.m.</p>
       <div class="toast__actions"><a class="toast__action" href="../../pages/request-detail/default.html">View</a></div>
     </div>
     <button class="close" type="button" aria-label="Dismiss notification"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>

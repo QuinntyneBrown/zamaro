@@ -60,6 +60,7 @@
       "route": "/artist",
       "requirements": [
         "L2-034",
+        "L2-039",
         "L2-056",
         "L2-074",
         "L2-096",
@@ -78,10 +79,11 @@
       "id": "availability",
       "kind": "page",
       "title": "Availability",
-      "route": "/artist/availability",
+      "route": "/artist/calendar",
       "requirements": [
         "L2-056",
         "L2-057",
+        "L2-058",
         "L2-105"
       ],
       "states": [
@@ -96,20 +98,41 @@
     {
       "id": "block-dates",
       "kind": "dialog",
-      "title": "Block dates",
+      "title": "Mark dates unavailable",
       "opens_from": "availability",
       "requirements": [
         "L2-056",
         "L2-057",
+        "L2-099",
         "L2-108"
       ],
       "states": [
         "default",
         "busy",
         "invalid",
-        "failed"
+        "failed",
+        "warning"
       ],
       "not_applicable": {}
+    },
+    {
+      "id": "weekly-default",
+      "kind": "dialog",
+      "title": "Weekly default",
+      "opens_from": "availability",
+      "requirements": [
+        "L2-056",
+        "L2-099",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "failed"
+      ],
+      "not_applicable": {
+        "invalid": "Any combination of weekdays is valid, including none, so there is nothing to reject."
+      }
     },
     {
       "id": "availability-toast",
@@ -138,6 +161,7 @@
       "title": "Requests",
       "route": "/artist/requests",
       "requirements": [
+        "L2-029",
         "L2-030",
         "L2-034",
         "L2-105"
@@ -160,6 +184,9 @@
         "L2-029",
         "L2-030",
         "L2-034",
+        "L2-037",
+        "L2-039",
+        "L2-043",
         "L2-045",
         "L2-046",
         "L2-105"
@@ -171,10 +198,11 @@
         "accepted",
         "declined",
         "confirmed",
-        "done"
+        "completed",
+        "expired"
       ],
       "not_applicable": {
-        "empty": "A request always has a church, a date and a fee; there is nothing to be empty."
+        "empty": "A request always has a church, a date, a price and a first message; there is nothing to be empty."
       }
     },
     {
@@ -184,16 +212,20 @@
       "opens_from": "request-detail",
       "requirements": [
         "L2-030",
+        "L2-032",
         "L2-034",
+        "L2-099",
         "L2-108"
       ],
       "states": [
         "default",
         "busy",
-        "invalid",
-        "failed"
+        "failed",
+        "conflict"
       ],
-      "not_applicable": {}
+      "not_applicable": {
+        "invalid": "Accepting has no inputs; the price was locked when the church asked."
+      }
     },
     {
       "id": "decline-request",
@@ -202,6 +234,7 @@
       "opens_from": "request-detail",
       "requirements": [
         "L2-030",
+        "L2-099",
         "L2-108"
       ],
       "states": [
@@ -220,6 +253,7 @@
       "requirements": [
         "L2-030",
         "L2-034",
+        "L2-037",
         "L2-109"
       ],
       "states": [
@@ -229,6 +263,24 @@
         "danger",
         "with-action",
         "stacked"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "earnings",
+      "kind": "page",
+      "title": "Earnings",
+      "route": "/artist/earnings",
+      "requirements": [
+        "L2-039",
+        "L2-105",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error"
       ],
       "not_applicable": {}
     }

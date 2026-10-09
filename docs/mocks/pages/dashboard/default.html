@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="dashboard">
 <meta name="mock:state" content="default">
-<meta name="mock:requirements" content="L2-034 L2-056 L2-074 L2-096 L2-105">
-<meta name="description" content="Abigail’s dashboard: the numbers that matter, the three requests waiting for a reply, and her next confirmed dates.">
+<meta name="mock:requirements" content="L2-034 L2-039 L2-056 L2-074 L2-096 L2-105">
+<meta name="description" content="Abigail’s dashboard: the numbers that matter, the three Requested bookings waiting for a reply, her next confirmed dates and a link to Earnings.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../dashboard/default.html" aria-current="page">Dashboard</a>
     <a class="nav-link" href="../requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../availability/default.html">Availability</a>
+    <a class="nav-link" href="../earnings/default.html">Earnings</a>
     <a class="nav-link" href="../artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -45,7 +46,7 @@
         <li class="stat stat--accent">
           <span class="stat__label">Awaiting reply</span>
           <span class="stat__value">3</span>
-          <span class="stat__hint">First one due tomorrow, 3:15 p.m.</span>
+          <span class="stat__hint">First one due Sat 10 Oct, 3:15 p.m.</span>
         </li>
         <li class="stat">
           <span class="stat__label">Confirmed dates</span>
@@ -71,20 +72,20 @@
       <li class="booking-list__row">
         <p class="booking-list__date"><small>Sat</small>5 Dec</p>
         <h3 class="booking-list__who"><a href="../request-detail/default.html">Harvest Point Church</a></h3>
-        <p class="booking-list__meta">Christmas concert · 7:00 p.m. · Milton, 31 km<br>$800 offered · you get $736</p>
-        <div class="booking-list__status"><span class="stamp">New</span><span class="text-caption"><strong>Reply by tomorrow, 3:15 p.m.</strong></span></div>
+        <p class="booking-list__meta">Christmas concert · 7:00 p.m. · Milton, 31 km<br>$800 quoted · you get $736<br><q>We need a soloist for three carols and one of your own songs. Could you also…</q></p>
+        <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption"><strong>1 day left</strong> · reply by Sat 10 Oct, 3:15 p.m.</span></div>
       </li>
       <li class="booking-list__row">
         <p class="booking-list__date"><small>Sun</small>22 Nov</p>
         <h3 class="booking-list__who"><a href="../request-detail/default.html">St. Brendan’s Anglican</a></h3>
-        <p class="booking-list__meta">Sunday service · 10:30 a.m. · Oshawa, 94 km<br>$650 offered · you get $598</p>
-        <div class="booking-list__status"><span class="stamp">New</span><span class="text-caption">Reply by Sun 11 Oct, 9:00 a.m.</span></div>
+        <p class="booking-list__meta">Sunday service · 10:30 a.m. · Oshawa, 94 km<br>$650 quoted · you get $598<br><q>Janet here again. The congregation still talks about September. Would you lead…</q></p>
+        <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption">1 day 18 hr left · reply by Sun 11 Oct, 9:00 a.m.</span></div>
       </li>
       <li class="booking-list__row">
         <p class="booking-list__date"><small>Sat</small>14 Nov</p>
         <h3 class="booking-list__who"><a href="../request-detail/default.html">Riverside Community Church</a></h3>
-        <p class="booking-list__meta">Worship night · 7:00 p.m. · Burlington, 62 km<br>$650 offered · you get $598</p>
-        <div class="booking-list__status"><span class="stamp">New</span><span class="text-caption">Reply by Mon 12 Oct, 10:40 a.m.</span></div>
+        <p class="booking-list__meta">Worship night · 7:00 p.m. · Burlington, 62 km<br>$650 quoted · you get $598<br><q>We’re planning our first worship night since the renovation, about 250 people…</q></p>
+        <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption">2 days 19 hr left · reply by Mon 12 Oct, 10:15 a.m.</span></div>
       </li>
           </ul>
         </section>
@@ -97,7 +98,7 @@
           <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance Church</strong><br><span class="tour-dates__note">Sunday service, Oakville</span></span><span></span></li>
           <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span></span></li>
           </ul>
-          <p class="text-caption">Two more confirmed dates in December.</p>
+          <p class="text-caption">Two more confirmed dates in December. Fees and payouts are on <a href="../earnings/default.html">Earnings</a>.</p>
         </section>
       </aside>
       </div>
@@ -124,6 +125,7 @@
       <ul>
         <li><a href="../dashboard/default.html">Dashboard</a></li>
         <li><a href="../availability/default.html">Availability</a></li>
+        <li><a href="../earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -136,7 +138,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 24rem; right: 1rem;">Requests are ordered by reply-by time. Every row opens Riverside’s request in this mock.</p>
+<p class="mock-note" style="top: 24rem; right: 1rem;">Requests are ordered by reply-by time. Every row opens Riverside’s request in this mock. No money totals here; they live on Earnings.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

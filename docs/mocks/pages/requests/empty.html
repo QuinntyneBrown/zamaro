@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="requests">
 <meta name="mock:state" content="empty">
-<meta name="mock:requirements" content="L2-030 L2-034 L2-105">
-<meta name="description" content="Miriam has no requests yet: the tabs show zero and one action points to her availability.">
+<meta name="mock:requirements" content="L2-029 L2-030 L2-034 L2-105">
+<meta name="description" content="Miriam has no requests yet: the New tab is empty and one action points to her availability.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../dashboard/empty.html">Dashboard</a>
     <a class="nav-link" href="../requests/empty.html" aria-current="page">Requests</a>
     <a class="nav-link" href="../availability/empty.html">Availability</a>
+    <a class="nav-link" href="../earnings/empty.html">Earnings</a>
     <a class="nav-link" href="../artist/empty.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -36,22 +37,23 @@
     <header class="page-head">
       <div>
         <h1 class="page-head__title">Requests</h1>
-        <p class="page-head__sub">0 new · 0 accepted · nothing yet</p>
+        <p class="page-head__sub">0 new · nothing yet</p>
       </div>
     </header>
     <div class="page-body">
       <div class="tabs" role="tablist" aria-label="Request status">
-        <button class="tab" type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New</button><button class="tab" type="button" role="tab" id="tab-accepted" aria-selected="false" aria-controls="panel-accepted" tabindex="-1">Accepted</button><button class="tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past</button>
+        <button class="tab" type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New</button><button class="tab" type="button" role="tab" id="tab-accepted" aria-selected="false" aria-controls="panel-accepted" tabindex="-1">Accepted</button><button class="tab" type="button" role="tab" id="tab-confirmed" aria-selected="false" aria-controls="panel-confirmed" tabindex="-1">Confirmed</button><button class="tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past</button>
       </div>
       <div role="tabpanel" id="panel-new" aria-labelledby="tab-new">
         <section class="empty" aria-labelledby="empty-title">
           <p class="empty__stamp" aria-hidden="true">Nothing yet</p>
           <h2 id="empty-title" class="empty__title">No requests yet</h2>
-          <p>When a church asks for one of your free dates, it lands here and we e-mail you. Requests expire after 72 hours, so a clear calendar helps.</p>
+          <p>When a church asks for one of your Free dates, it lands here and we e-mail you. You have 72 hours to reply, so keep your calendar current.</p>
           <div><a class="btn btn--primary" href="../availability/empty.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Check your availability</a></div>
         </section>
       </div>
       <div role="tabpanel" id="panel-accepted" aria-labelledby="tab-accepted" hidden></div>
+      <div role="tabpanel" id="panel-confirmed" aria-labelledby="tab-confirmed" hidden></div>
       <div role="tabpanel" id="panel-past" aria-labelledby="tab-past" hidden></div>
     </div>
   </div>
@@ -76,6 +78,7 @@
       <ul>
         <li><a href="../dashboard/empty.html">Dashboard</a></li>
         <li><a href="../availability/empty.html">Availability</a></li>
+        <li><a href="../earnings/empty.html">Earnings</a></li>
       </ul>
     </div>
     <div>

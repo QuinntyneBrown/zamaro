@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Accept request · default — Zamaro mocks</title>
+<title>Accept request · conflict — Zamaro mocks</title>
 <meta name="mock:kind" content="dialog">
 <meta name="mock:screen" content="accept-request">
-<meta name="mock:state" content="default">
+<meta name="mock:state" content="conflict">
 <meta name="mock:requirements" content="L2-030 L2-032 L2-034 L2-099 L2-108">
-<meta name="description" content="Accept Riverside’s request: the locked $650 price, the $598 payout and the 48-hour deposit deadline.">
+<meta name="description" content="Accepting Living Waters’ request for Sat 21 Nov is refused: “You’re already booked on Sat 21 Nov.”">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -38,8 +38,8 @@
     <header class="page-head">
       <div>
         <p class="text-sm"><a href="../../pages/requests/default.html">Back to requests</a></p>
-        <h1 class="page-head__title" style="margin-top: var(--space-3);">Riverside Community Church</h1>
-        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · requested today, 10:15 a.m.</p>
+        <h1 class="page-head__title" style="margin-top: var(--space-3);">Living Waters Fellowship</h1>
+        <p class="page-head__sub">Youth night · Sat 21 Nov · 6:30 p.m. · requested today, 1:50 p.m.</p>
       </div>
       <span class="stamp stamp--lg stamp--requested">Requested</span>
     </header>
@@ -49,17 +49,13 @@
           <h2 id="thread-title">Messages</h2>
           <ol class="stack" role="list" style="list-style: none; margin: 0; padding: 0;">
             <li class="message">
-              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:15 a.m.</p>
-              <p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p>
-            </li>
-            <li class="message">
-              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:22 a.m.</p>
-              <p>If it’s easier to talk it through, call me on <span class="text-muted">[contact details shared after booking]</span> any afternoon.</p>
+              <p class="message__meta">Pastor Femi Adebayo · Fri 9 Oct, 1:50 p.m.</p>
+              <p>Our youth are hosting a night of worship for the whole city. Could you lead the last half hour? They loved you in May.</p>
             </li>
           </ol>
           <form class="stack stack--sm" action="#thread-title">
             <div class="field">
-              <label class="field__label" for="msg-body">Message Naomi</label>
+              <label class="field__label" for="msg-body">Message Pastor Femi</label>
               <textarea class="textarea" id="msg-body" name="body" rows="3" maxlength="2000" aria-describedby="msg-help"></textarea>
               <span class="field__help" id="msg-help">Plain text, 1 to 2,000 characters. Phone numbers and e-mails stay hidden until the booking is Confirmed.</span>
             </div>
@@ -69,34 +65,34 @@
         <section class="stack" aria-labelledby="event-title">
           <h2 id="event-title">The event</h2>
           <dl class="definition definition--two">
-            <div class="definition__row"><dt>Date</dt><dd>Saturday 14 November 2026</dd></div>
-            <div class="definition__row"><dt>Start time</dt><dd>7:00 p.m., ends about 9:00 p.m.</dd></div>
-            <div class="definition__row"><dt>Kind of gathering</dt><dd>Worship night</dd></div>
-            <div class="definition__row"><dt>Expected crowd</dt><dd>About 250 people</dd></div>
-            <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington ON</dd></div>
-            <div class="definition__row"><dt>Distance</dt><dd>62 km, about 45 min from Brampton</dd></div>
-            <div class="definition__row"><dt>Sound</dt><dd>In-house PA and a five-piece band</dd></div>
-            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator. The church’s phone is shared once the booking is Confirmed.</dd></div>
+            <div class="definition__row"><dt>Date</dt><dd>Saturday 21 November 2026</dd></div>
+            <div class="definition__row"><dt>Start time</dt><dd>6:30 p.m., ends about 8:30 p.m.</dd></div>
+            <div class="definition__row"><dt>Kind of gathering</dt><dd>Youth night</dd></div>
+            <div class="definition__row"><dt>Expected crowd</dt><dd>About 120 young people</dd></div>
+            <div class="definition__row"><dt>Church</dt><dd>Living Waters Fellowship, Brampton ON</dd></div>
+            <div class="definition__row"><dt>Distance</dt><dd>6 km, about 10 min from Brampton</dd></div>
+            <div class="definition__row"><dt>Sound</dt><dd>Youth band with keys and drums</dd></div>
+            <div class="definition__row"><dt>Contact</dt><dd>Pastor Femi Adebayo, lead pastor. The church’s phone is shared once the booking is Confirmed.</dd></div>
           </dl>
         </section>
         <section class="stack" aria-labelledby="weekend-title">
           <h2 id="weekend-title">That weekend</h2>
           <ul class="tour-dates" role="list">
-            <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">This request</span></span><span></span></li>
-            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m.</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
+            <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre, Mississauga</strong><br><span class="tour-dates__note">Women’s conference, 2:00 p.m.</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
+            <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Living Waters, Brampton</strong><br><span class="tour-dates__note">This request</span></span><span></span></li>
           </ul>
         </section>
       </div>
       <aside>
         <section class="panel panel--raised" aria-labelledby="fee-title">
-          <div class="panel__head"><h2 id="fee-title" class="panel__title">Your fee</h2><span class="text-caption">ZAM-0114</span></div>
+          <div class="panel__head"><h2 id="fee-title" class="panel__title">Your fee</h2><span class="text-caption">ZAM-0121</span></div>
           <dl class="receipt">
             <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
             <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
             <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
           </dl>
           <p class="receipt__fine">You’ll be paid $598 after the event.</p>
-          <p><strong>Reply by Mon 12 Oct, 10:15 a.m.</strong> · 2 days 19 hr left. Unanswered requests expire.</p>
+          <p><strong>Reply by Mon 12 Oct, 1:50 p.m.</strong> · 2 days 23 hr left. Unanswered requests expire.</p>
           <div class="stack stack--sm">
             <a class="btn btn--primary btn--lg btn--block" href="../../dialogs/accept-request/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>Accept</a>
             <a class="btn btn--block" href="../../dialogs/decline-request/default.html">Decline</a>
@@ -139,45 +135,39 @@
 </footer>
 </div>
 
-<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="accept-title" aria-describedby="accept-desc" data-dismiss-on-escape>
-  <form class="dialog__panel" action="../../pages/request-detail/accepted.html">
+<div class="dialog dialog--danger" role="dialog" aria-modal="true" aria-labelledby="accept-title" aria-describedby="accept-desc" data-dismiss-on-escape>
+  <form class="dialog__panel" action="../../pages/requests/default.html">
     <div class="dialog__header">
-      <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div>
+      <div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg></div>
       <div style="flex: 1;">
-        <span class="dialog__kicker">Riverside Community Church · ZAM-0114</span>
-        <h2 class="dialog__title" id="accept-title">Accept this request</h2>
-        <p id="accept-desc" class="text-muted" style="margin-top: var(--space-1);">Worship night · Sat 14 Nov · 7:00 p.m. · Burlington</p>
+        <span class="dialog__kicker">Living Waters Fellowship · Sat 21 Nov</span>
+        <h2 class="dialog__title" id="accept-title">You’re already booked on Sat 21 Nov</h2>
+        <p id="accept-desc" class="text-muted" style="margin-top: var(--space-1);">This request can’t be accepted.</p>
       </div>
       <button class="close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="dialog__body">
-          <dl class="receipt">
-            <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
-            <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
-            <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
-          </dl>
-          <p class="receipt__fine">You’ll be paid $598 after the event.</p>
-      <p>Riverside then has 48 hours, until <strong>Sun 11 Oct, 2:40 p.m.</strong>, to pay the $162.50 deposit. Sat 14 Nov is Booked once they do.</p>
-      <p class="text-caption">The price was locked at $650 when Riverside asked, so there’s nothing to change.</p>
+      <p>Kingdom Life Centre’s booking for Sat 21 Nov was confirmed while this request was open. You can only have one Confirmed booking a day.</p>
+      <p class="text-muted">Living Waters’ request becomes Declined with the reason “Booked by another church”, and Pastor Femi is shown 3 similar artists free that day.</p>
     </div>
     <div class="dialog__footer">
-      <button class="btn" type="button" autofocus>Cancel</button>
-      <button class="btn btn--primary" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>Accept request</button>
+      <a class="btn" href="../../pages/requests/default.html">Back to requests</a>
+      <button class="btn btn--primary" type="button" autofocus>Close</button>
     </div>
   </form>
 </div>
 
-<p class="mock-note" style="top: 6rem; right: 1rem;">Under 640 px the dialog fills the screen with Close in view. Focus is trapped inside, Escape closes it and focus returns to the button that opened it. Focus starts on Cancel.</p>
+<p class="mock-note" style="top: 6rem; right: 1rem;">Shown for a request on Sat 21 Nov that was open when Kingdom Life Centre’s deposit confirmed the same date (L2-030, L2-032).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Accept request</span>
   <ul class="mock-bar__states">
-    <li><a href="default.html" aria-current="page">default</a></li>
+    <li><a href="default.html">default</a></li>
     <li><a href="busy.html">busy</a></li>
     <li><a href="failed.html">failed</a></li>
-    <li><a href="conflict.html">conflict</a></li>
+    <li><a href="conflict.html" aria-current="page">conflict</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

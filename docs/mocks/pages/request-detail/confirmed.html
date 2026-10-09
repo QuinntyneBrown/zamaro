@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="request-detail">
 <meta name="mock:state" content="confirmed">
-<meta name="mock:requirements" content="L2-029 L2-030 L2-034 L2-045 L2-046 L2-105">
-<meta name="description" content="Riverside paid the deposit: the date is booked, contact details are now shown and the timeline moves to the event.">
+<meta name="mock:requirements" content="L2-029 L2-030 L2-034 L2-037 L2-039 L2-043 L2-045 L2-046 L2-105">
+<meta name="description" content="Riverside paid the deposit: the date is Booked, the church’s phone is shown, contact details in messages are no longer hidden, and Cancel booking is offered.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../availability/default.html">Availability</a>
+    <a class="nav-link" href="../earnings/default.html">Earnings</a>
     <a class="nav-link" href="../artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -37,59 +38,87 @@
       <div>
         <p class="text-sm"><a href="../requests/default.html">Back to requests</a></p>
         <h1 class="page-head__title" style="margin-top: var(--space-3);">Riverside Community Church</h1>
-        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · confirmed Mon 12 Oct</p>
+        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · confirmed Sat 10 Oct</p>
       </div>
       <span class="stamp stamp--lg stamp--confirmed">Confirmed</span>
     </header>
     <div class="detail-layout" style="padding-top: 0;">
       <div class="stack stack--lg">
-        <section class="stack" aria-labelledby="note-title">
-          <h2 id="note-title">Naomi’s note</h2>
-          <div class="message">
-            <p class="message__meta">Naomi Fraser · Riverside Community Church · Fri 9 Oct, 10:40 a.m.</p>
-            <blockquote><p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p></blockquote>
-          </div>
+        <section class="stack" aria-labelledby="thread-title">
+          <h2 id="thread-title">Messages</h2>
+          <ol class="stack" role="list" style="list-style: none; margin: 0; padding: 0;">
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:15 a.m.</p>
+              <p>We’re planning our first worship night since the renovation, about 250 people. Could you lead a 45-minute set and close with “Goodness of God”? Our band is happy to back you.</p>
+            </li>
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Fri 9 Oct, 10:22 a.m.</p>
+              <p>If it’s easier to talk it through, call me on <span class="text-muted">[contact details shared after booking]</span> any afternoon.</p>
+            </li>
+            <li class="message">
+              <p class="message__meta">You · Fri 9 Oct, 2:40 p.m.</p>
+              <p>Thank you, Naomi. I’d love to lead this. I’ll send a setlist the week before.</p>
+            </li>
+            <li class="message">
+              <p class="message__meta">Naomi Fraser · Sat 10 Oct, 9:20 a.m.</p>
+              <p>Deposit’s paid! Our sound tech Joel will call you the week before for a line check: 905-555-0177.</p>
+            </li>
+          </ol>
+          <form class="stack stack--sm" action="#thread-title">
+            <div class="field">
+              <label class="field__label" for="msg-body">Message Naomi</label>
+              <textarea class="textarea" id="msg-body" name="body" rows="3" maxlength="2000" aria-describedby="msg-help"></textarea>
+              <span class="field__help" id="msg-help">Plain text, 1 to 2,000 characters.</span>
+            </div>
+            <div><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
+          </form>
         </section>
         <section class="stack" aria-labelledby="event-title">
           <h2 id="event-title">The event</h2>
           <dl class="definition definition--two">
             <div class="definition__row"><dt>Date</dt><dd>Saturday 14 November 2026</dd></div>
-            <div class="definition__row"><dt>Time</dt><dd>7:00 p.m. to 9:00 p.m.</dd></div>
+            <div class="definition__row"><dt>Start time</dt><dd>7:00 p.m., ends about 9:00 p.m.</dd></div>
             <div class="definition__row"><dt>Kind of gathering</dt><dd>Worship night</dd></div>
             <div class="definition__row"><dt>Expected crowd</dt><dd>About 250 people</dd></div>
             <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington ON</dd></div>
-            <div class="definition__row"><dt>Distance</dt><dd>62 km from Brampton, about 45 min</dd></div>
+            <div class="definition__row"><dt>Distance</dt><dd>62 km, about 45 min from Brampton</dd></div>
             <div class="definition__row"><dt>Sound</dt><dd>In-house PA and a five-piece band</dd></div>
-            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser · <a href="tel:+19055550142">905-555-0142</a> · <a href="mailto:naomi.fraser@riversidecc.ca">naomi.fraser@riversidecc.ca</a></dd></div>
+            <div class="definition__row"><dt>Contact</dt><dd>Naomi Fraser, worship coordinator · church phone <a href="tel:+19055550142">905-555-0142</a></dd></div>
           </dl>
         </section>
         <section class="stack" aria-labelledby="weekend-title">
           <h2 id="weekend-title">That weekend</h2>
           <ul class="tour-dates" role="list">
             <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">Booked</span></span><span></span></li>
-            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m. · 18 km from Riverside</span></span><span class="stamp stamp--confirmed">Booked</span></li>
+            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m.</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
           </ul>
         </section>
       </div>
       <aside>
         <section class="panel panel--raised" aria-labelledby="fee-title">
-          <div class="panel__head"><h2 id="fee-title" class="panel__title">You’re booked</h2><span class="text-caption">Ref. ZAM-0114</span></div>
-          <p>Riverside paid the deposit on Mon 12 Oct. Sat 14 Nov is locked on your calendar.</p>
+          <div class="panel__head"><h2 id="fee-title" class="panel__title">You’re booked</h2><span class="text-caption">ZAM-0114</span></div>
+          <p>Riverside paid the deposit on Sat 10 Oct. Zamaro holds it until the event, and Sat 14 Nov is Booked on your calendar.</p>
+          <p><strong>Riverside’s phone:</strong> <a href="tel:+19055550142">905-555-0142</a></p>
           <ol class="timeline">
-            <li data-state="done"><div><p class="timeline__title">Request sent</p><p class="timeline__meta">Fri 9 Oct, 10:40 a.m.</p></div></li>
-            <li data-state="done"><div><p class="timeline__title">You accepted</p><p class="timeline__meta">Fri 9 Oct</p></div></li>
-            <li data-state="done"><div><p class="timeline__title">Deposit paid</p><p class="timeline__meta">$162.50 · Mon 12 Oct</p></div></li>
+            <li data-state="done"><div><p class="timeline__title">Request sent</p><p class="timeline__meta">Fri 9 Oct, 10:15 a.m.</p></div></li>
+            <li data-state="done"><div><p class="timeline__title">You accepted</p><p class="timeline__meta">Fri 9 Oct, 2:40 p.m.</p></div></li>
+            <li data-state="done"><div><p class="timeline__title">Deposit $162.50</p><p class="timeline__meta">Paid Sat 10 Oct · held by Zamaro</p></div></li>
             <li aria-current="step"><div><p class="timeline__title">Worship night</p><p class="timeline__meta">Sat 14 Nov, 7:00 p.m.</p></div></li>
-            <li><div><p class="timeline__title">Balance collected</p><p class="timeline__meta">$487.50 · after the event</p></div></li>
+            <li><div><p class="timeline__title">Balance $487.50</p><p class="timeline__meta">Charged Mon 16 Nov, 48 hours after the event</p></div></li>
+            <li><div><p class="timeline__title">Payout $598</p><p class="timeline__meta">Within 2 business days of the balance</p></div></li>
           </ol>
           <dl class="receipt">
-            <div class="receipt__row"><dt>Fee offered</dt><dd>$650</dd></div>
+            <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
             <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
-            <div class="receipt__row"><dt>Deposit paid Mon 12 Oct</dt><dd>$162.50</dd></div>
+            <div class="receipt__row"><dt>Deposit paid Sat 10 Oct</dt><dd>$162.50</dd></div>
             <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
           </dl>
-          <p class="receipt__fine">The $487.50 balance is collected from Riverside after the event; you’re paid $598.</p>
-          <a class="btn btn--block" href="../availability/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>See your calendar</a>
+          <p class="receipt__fine">You’ll be paid $598 after the event.</p>
+          <div class="stack stack--sm">
+            <a class="btn btn--block" href="../availability/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>See your calendar</a>
+            <button class="btn btn--block" type="button">Cancel booking</button>
+          </div>
+          <p class="text-caption">If you cancel, you give a reason, Riverside is refunded in full and shown 3 similar artists free that day.</p>
         </section>
       </aside>
     </div>
@@ -115,6 +144,7 @@
       <ul>
         <li><a href="../dashboard/default.html">Dashboard</a></li>
         <li><a href="../availability/default.html">Availability</a></li>
+        <li><a href="../earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -127,7 +157,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 34rem; right: 1rem;">Phone and e-mail appear only once the booking is confirmed (L2-046).</p>
+<p class="mock-note" style="top: 40rem; right: 1rem;">Cancel booking opens the artist cancellation dialog with a required reason (L2-043).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -140,7 +170,8 @@
     <li><a href="accepted.html">accepted</a></li>
     <li><a href="declined.html">declined</a></li>
     <li><a href="confirmed.html" aria-current="page">confirmed</a></li>
-    <li><a href="done.html">done</a></li>
+    <li><a href="completed.html">completed</a></li>
+    <li><a href="expired.html">expired</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

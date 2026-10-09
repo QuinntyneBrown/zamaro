@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Block dates · invalid — Zamaro mocks</title>
+<title>Mark dates unavailable · invalid — Zamaro mocks</title>
 <meta name="mock:kind" content="dialog">
 <meta name="mock:screen" content="block-dates">
 <meta name="mock:state" content="invalid">
-<meta name="mock:requirements" content="L2-056 L2-057 L2-108">
-<meta name="description" content="Block dates with the end date before the start date: summary at the top and an inline error on End date.">
+<meta name="mock:requirements" content="L2-056 L2-057 L2-099 L2-108">
+<meta name="description" content="Mark dates unavailable with the end date before the start date: summary at the top and an inline error on End date.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -26,6 +26,7 @@
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../../pages/availability/default.html" aria-current="page">Availability</a>
+    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
     <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -39,11 +40,15 @@
         <h1 class="page-head__title">Availability</h1>
         <p class="page-head__sub">November 2026 · 3 booked · 2 requested · 2 free Saturdays</p>
       </div>
-      <a class="btn btn--primary" href="../../dialogs/block-dates/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg>Block dates</a>
+      <div class="cluster">
+        <a class="btn btn--primary" href="../../dialogs/block-dates/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg>Mark dates unavailable</a>
+        <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5a14 14 0 0 1 14 14M5 11a8 8 0 0 1 8 8M6 18.5v.5"/></svg>Subscribe in your calendar</button>
+      </div>
     </header>
     <div class="page-body">
-      <p class="text-muted">Select free days to block them. Churches only find you on free days; booked dates are locked.</p>
-    <section class="calendar" aria-label="Calendar">
+      <p class="text-muted">Select Free days to mark them unavailable. Churches only find you on Free days; Booked days can’t be changed here.</p>
+      <p class="cluster">Weekly default: <strong>Unavailable every Monday</strong> <a class="btn btn--sm" href="../../dialogs/weekly-default/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9h13l-3-3M20 15H7l3 3"/></svg>Change weekly default</a></p>
+    <section class="calendar" aria-label="Calendar, next 18 months">
       <div class="calendar__head">
         <h2 id="cal-month" class="calendar__month">November 2026</h2>
         <div class="cluster" style="gap: var(--space-3) var(--space-6);">
@@ -51,12 +56,12 @@
             <button class="btn btn--icon" type="button" aria-label="Previous month, October 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
             <button class="btn btn--icon" type="button" aria-label="Next month, December 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
           </div>
-      <ul class="calendar__legend" aria-label="Legend">
-        <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
-        <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
-        <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
-        <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Blocked</li>
-      </ul>
+          <ul class="calendar__legend" aria-label="Legend">
+            <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
+            <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
+            <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
+            <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Unavailable</li>
+          </ul>
         </div>
       </div>
       <div class="calendar__grid" role="grid" aria-labelledby="cal-month" aria-multiselectable="true">
@@ -70,44 +75,44 @@
         <div class="calendar__weekday" role="columnheader"><span aria-hidden="true">Sat</span><span class="visually-hidden">Saturday</span></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="0" aria-label="Sun 1 Nov, booked, Harvest Point Church"><span class="calendar__num" aria-hidden="true">1</span><span class="calendar__event">Harvest Point</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 2 Nov, free"><span class="calendar__num" aria-hidden="true">2</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 3 Nov, free"><span class="calendar__num" aria-hidden="true">3</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 4 Nov, free"><span class="calendar__num" aria-hidden="true">4</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 5 Nov, free"><span class="calendar__num" aria-hidden="true">5</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 6 Nov, free"><span class="calendar__num" aria-hidden="true">6</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 7 Nov, free"><span class="calendar__num" aria-hidden="true">7</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-label="Sun 1 Nov, Booked, Harvest Point Church. Booked dates can’t be changed" aria-disabled="true"><span class="calendar__num" aria-hidden="true">1</span><span class="calendar__event">Harvest Point</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 2 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">2</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="0" aria-label="Tue 3 Nov, Free"><span class="calendar__num" aria-hidden="true">3</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 4 Nov, Free"><span class="calendar__num" aria-hidden="true">4</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 5 Nov, Free"><span class="calendar__num" aria-hidden="true">5</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 6 Nov, Free"><span class="calendar__num" aria-hidden="true">6</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 7 Nov, Free"><span class="calendar__num" aria-hidden="true">7</span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 8 Nov, free"><span class="calendar__num" aria-hidden="true">8</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 9 Nov, free"><span class="calendar__num" aria-hidden="true">9</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 10 Nov, free"><span class="calendar__num" aria-hidden="true">10</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 11 Nov, free"><span class="calendar__num" aria-hidden="true">11</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 12 Nov, free"><span class="calendar__num" aria-hidden="true">12</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 13 Nov, free"><span class="calendar__num" aria-hidden="true">13</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="requested" tabindex="-1" aria-label="Sat 14 Nov, requested by Riverside Community Church"><span class="calendar__num" aria-hidden="true">14</span><span class="calendar__event">Riverside</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 8 Nov, Free"><span class="calendar__num" aria-hidden="true">8</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 9 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">9</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 10 Nov, Free"><span class="calendar__num" aria-hidden="true">10</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 11 Nov, Free"><span class="calendar__num" aria-hidden="true">11</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 12 Nov, Free"><span class="calendar__num" aria-hidden="true">12</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 13 Nov, Free"><span class="calendar__num" aria-hidden="true">13</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="requested" tabindex="-1" aria-label="Sat 14 Nov, Requested · 1, Riverside Community Church"><span class="calendar__num" aria-hidden="true">14</span><span class="calendar__event">Requested · 1</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-label="Sun 15 Nov, booked, Lakeshore Alliance Church"><span class="calendar__num" aria-hidden="true">15</span><span class="calendar__event">Lakeshore</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 16 Nov, free"><span class="calendar__num" aria-hidden="true">16</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 17 Nov, free"><span class="calendar__num" aria-hidden="true">17</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 18 Nov, free"><span class="calendar__num" aria-hidden="true">18</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 19 Nov, free"><span class="calendar__num" aria-hidden="true">19</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 20 Nov, free"><span class="calendar__num" aria-hidden="true">20</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-label="Sat 21 Nov, booked, Kingdom Life Centre"><span class="calendar__num" aria-hidden="true">21</span><span class="calendar__event">Kingdom Life</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-label="Sun 15 Nov, Booked, Lakeshore Alliance Church. Booked dates can’t be changed" aria-disabled="true"><span class="calendar__num" aria-hidden="true">15</span><span class="calendar__event">Lakeshore</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 16 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">16</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 18 Nov, Free"><span class="calendar__num" aria-hidden="true">18</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 19 Nov, Free"><span class="calendar__num" aria-hidden="true">19</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 20 Nov, Free"><span class="calendar__num" aria-hidden="true">20</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-label="Sat 21 Nov, Booked, Kingdom Life Centre. Booked dates can’t be changed" aria-disabled="true"><span class="calendar__num" aria-hidden="true">21</span><span class="calendar__event">Kingdom Life</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="requested" tabindex="-1" aria-label="Sun 22 Nov, requested by St. Brendan’s Anglican"><span class="calendar__num" aria-hidden="true">22</span><span class="calendar__event">St. Brendan’s</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 23 Nov, free"><span class="calendar__num" aria-hidden="true">23</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 24 Nov, free"><span class="calendar__num" aria-hidden="true">24</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 25 Nov, free"><span class="calendar__num" aria-hidden="true">25</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 26 Nov, free"><span class="calendar__num" aria-hidden="true">26</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 27 Nov, free"><span class="calendar__num" aria-hidden="true">27</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 28 Nov, free"><span class="calendar__num" aria-hidden="true">28</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="requested" tabindex="-1" aria-label="Sun 22 Nov, Requested · 1, St. Brendan’s Anglican"><span class="calendar__num" aria-hidden="true">22</span><span class="calendar__event">Requested · 1</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 23 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">23</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 24 Nov, Free"><span class="calendar__num" aria-hidden="true">24</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 25 Nov, Free"><span class="calendar__num" aria-hidden="true">25</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 26 Nov, Free"><span class="calendar__num" aria-hidden="true">26</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 27 Nov, Free"><span class="calendar__num" aria-hidden="true">27</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 28 Nov, Free"><span class="calendar__num" aria-hidden="true">28</span></button></div>
       </div>
       <div class="calendar__row" role="row">
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 29 Nov, free"><span class="calendar__num" aria-hidden="true">29</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Mon 30 Nov, free"><span class="calendar__num" aria-hidden="true">30</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sun 29 Nov, Free"><span class="calendar__num" aria-hidden="true">29</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 30 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">30</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">1</span></span></div>
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">2</span></span></div>
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">3</span></span></div>
@@ -115,15 +120,16 @@
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">5</span></span></div>
       </div>
       </div>
+      <p class="text-caption">Your calendar runs 18 months ahead, October 2026 to March 2028.</p>
     </section>
       <section class="stack" aria-labelledby="month-title">
         <h2 id="month-title">In November</h2>
         <ul class="tour-dates" role="list">
-        <li><span class="tour-dates__day"><small>Sun</small>1 Nov</span><span><strong>Harvest Point Church</strong><br><span class="tour-dates__note">Sunday service, Milton</span></span><span class="stamp stamp--confirmed">Booked</span></li>
-        <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong><a href="../../pages/request-detail/default.html">Riverside Community Church</a></strong><br><span class="tour-dates__note">Worship night · reply by Mon 12 Oct</span></span><span class="stamp">Requested</span></li>
-        <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance Church</strong><br><span class="tour-dates__note">Sunday service, Oakville</span></span><span class="stamp stamp--confirmed">Booked</span></li>
-        <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span class="stamp stamp--confirmed">Booked</span></li>
-        <li><span class="tour-dates__day"><small>Sun</small>22 Nov</span><span><strong><a href="../../pages/request-detail/default.html">St. Brendan’s Anglican</a></strong><br><span class="tour-dates__note">Sunday service · reply by Sun 11 Oct</span></span><span class="stamp">Requested</span></li>
+        <li><span class="tour-dates__day"><small>Sun</small>1 Nov</span><span><strong>Harvest Point Church</strong><br><span class="tour-dates__note">Sunday service, Milton</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
+        <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong><a href="../../pages/request-detail/default.html">Riverside Community Church</a></strong><br><span class="tour-dates__note">Requested · 1 · Worship night · reply by Mon 12 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
+        <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance Church</strong><br><span class="tour-dates__note">Sunday service, Oakville</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
+        <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
+        <li><span class="tour-dates__day"><small>Sun</small>22 Nov</span><span><strong><a href="../../pages/request-detail/default.html">St. Brendan’s Anglican</a></strong><br><span class="tour-dates__note">Requested · 1 · Sunday service · reply by Sun 11 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
         </ul>
       </section>
     </div>
@@ -148,6 +154,7 @@
       <ul>
         <li><a href="../../pages/dashboard/default.html">Dashboard</a></li>
         <li><a href="../../pages/availability/default.html">Availability</a></li>
+        <li><a href="../../pages/earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
@@ -167,8 +174,8 @@
       <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg></div>
       <div style="flex: 1;">
         <span class="dialog__kicker">Availability · November 2026</span>
-        <h2 class="dialog__title" id="block-title">Block dates</h2>
-        <p id="block-desc" class="text-muted" style="margin-top: var(--space-1);">Churches won’t see you on these days. Booked dates stay booked.</p>
+        <h2 class="dialog__title" id="block-title">Mark dates unavailable</h2>
+        <p id="block-desc" class="text-muted" style="margin-top: var(--space-1);">Churches won’t find you on these days. Booked days stay booked.</p>
       </div>
       <button class="close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
@@ -182,38 +189,39 @@
       <div class="form-grid">
         <div class="field">
           <label class="field__label" for="block-start">Start date <span class="optional">(required)</span></label>
-          <input class="input" type="date" id="block-start" name="block-start" value="2026-11-27" min="2026-10-09" required>
+          <input class="input" type="date" id="block-start" name="block-start" value="2026-11-27" min="2026-10-09" max="2028-03-31" required>
         </div>
         <div class="field">
           <label class="field__label" for="block-end">End date <span class="optional">(required)</span></label>
-          <input class="input" type="date" id="block-end" name="block-end" value="2026-11-26" min="2026-10-09" aria-describedby="block-end-error" aria-invalid="true" required>
+          <input class="input" type="date" id="block-end" name="block-end" value="2026-11-26" min="2026-10-09" max="2028-03-31" aria-describedby="block-end-error" aria-invalid="true" required>
           <p class="field__error" id="block-end-error">Choose Fri 27 Nov or later.</p>
         </div>
         <div class="field field--full">
-          <label class="field__label" for="block-reason">Reason <span class="optional">(optional)</span></label>
-          <input class="input" type="text" id="block-reason" name="block-reason" value="Studio" aria-describedby="block-reason-help">
-          <span class="field__help" id="block-reason-help">Only you see this. Churches just see that you’re not free.</span>
+          <label class="field__label" for="block-note">Note <span class="optional">(optional)</span></label>
+          <input class="input" type="text" id="block-note" name="block-note" value="Studio" aria-describedby="block-note-help">
+          <span class="field__help" id="block-note-help">Only you see this. Churches just see that you’re not free.</span>
         </div>
       </div>
     </div>
     <div class="dialog__footer">
       <button class="btn" type="button">Cancel</button>
-      <button class="btn btn--primary" type="submit">Block 2 days</button>
+      <button class="btn btn--primary" type="submit">Mark 2 days unavailable</button>
     </div>
   </form>
 </div>
 
-<p class="mock-note" style="top: 6rem; right: 1rem;">Errors show after Block is pressed. Focus moves to the summary; each link jumps to its field.</p>
+<p class="mock-note" style="top: 6rem; right: 1rem;">Errors show after Save is pressed. Focus moves to the summary; each link jumps to its field.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
-  <span class="mock-bar__screen">Block dates</span>
+  <span class="mock-bar__screen">Mark dates unavailable</span>
   <ul class="mock-bar__states">
     <li><a href="default.html">default</a></li>
     <li><a href="busy.html">busy</a></li>
     <li><a href="invalid.html" aria-current="page">invalid</a></li>
     <li><a href="failed.html">failed</a></li>
+    <li><a href="warning.html">warning</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

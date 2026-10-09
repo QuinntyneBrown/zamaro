@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="availability">
 <meta name="mock:state" content="loading">
-<meta name="mock:requirements" content="L2-056 L2-057 L2-105">
+<meta name="mock:requirements" content="L2-056 L2-057 L2-058 L2-105">
 <meta name="description" content="Calendar loading: the month grid keeps its seven columns and five weeks while day numbers shimmer.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -24,6 +24,7 @@
     <a class="nav-link" href="../dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../availability/default.html" aria-current="page">Availability</a>
+    <a class="nav-link" href="../earnings/default.html">Earnings</a>
     <a class="nav-link" href="../artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
@@ -36,12 +37,13 @@
     <header class="page-head">
       <div>
         <h1 class="page-head__title">Availability</h1>
-        <p class="page-head__sub" role="status"><span class="visually-hidden">Loading your calendar</span><span class="skeleton skeleton--text" style="width: 20rem; max-width: 100%;" aria-hidden="true"></span></p>
+        <p class="page-head__sub" role="status"><span class="visually-hidden">Loading your calendar</span><span class="skeleton skeleton--text" style="width: 18rem; max-width: 100%;" aria-hidden="true"></span></p>
       </div>
-      <span class="skeleton" style="width: 10rem; height: 2.75rem;" aria-hidden="true"></span>
+      <span class="skeleton" style="width: 14rem; height: 2.75rem;" aria-hidden="true"></span>
     </header>
     <div class="page-body">
-    <section class="calendar" aria-label="Calendar">
+      <span class="skeleton skeleton--text" style="width: 22rem; max-width: 100%;" aria-hidden="true"></span>
+    <section class="calendar" aria-label="Calendar, next 18 months">
       <div class="calendar__head">
         <h2 id="cal-month" class="calendar__month">November 2026</h2>
         <div class="cluster" style="gap: var(--space-3) var(--space-6);">
@@ -49,12 +51,12 @@
             <button class="btn btn--icon" type="button" aria-label="Previous month, October 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
             <button class="btn btn--icon" type="button" aria-label="Next month, December 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
           </div>
-      <ul class="calendar__legend" aria-label="Legend">
-        <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
-        <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
-        <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
-        <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Blocked</li>
-      </ul>
+          <ul class="calendar__legend" aria-label="Legend">
+            <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
+            <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
+            <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
+            <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Unavailable</li>
+          </ul>
         </div>
       </div>
       <div class="calendar__grid" aria-hidden="true">
@@ -113,6 +115,7 @@
         <div class="calendar__cell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">5</span></span></div>
       </div>
       </div>
+      <p class="text-caption">Your calendar runs 18 months ahead, October 2026 to March 2028.</p>
     </section>
     </div>
   </div>
@@ -137,6 +140,7 @@
       <ul>
         <li><a href="../dashboard/default.html">Dashboard</a></li>
         <li><a href="../availability/default.html">Availability</a></li>
+        <li><a href="../earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>

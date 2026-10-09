@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Request · default — Zamaro mocks</title>
+<title>Request · expired — Zamaro mocks</title>
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="request-detail">
-<meta name="mock:state" content="default">
+<meta name="mock:state" content="expired">
 <meta name="mock:requirements" content="L2-029 L2-030 L2-034 L2-037 L2-039 L2-043 L2-045 L2-046 L2-105">
-<meta name="description" content="Riverside’s Requested booking for Sat 14 Nov: the message thread with a composer, event details, and the fee panel with Accept and Decline.">
+<meta name="description" content="Abigail did not reply by Mon 12 Oct, 10:15 a.m.: the request is Expired, nothing was charged and the date is Free again.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -38,9 +38,9 @@
       <div>
         <p class="text-sm"><a href="../requests/default.html">Back to requests</a></p>
         <h1 class="page-head__title" style="margin-top: var(--space-3);">Riverside Community Church</h1>
-        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · requested today, 10:15 a.m.</p>
+        <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · expired Mon 12 Oct</p>
       </div>
-      <span class="stamp stamp--lg stamp--requested">Requested</span>
+      <span class="stamp stamp--lg stamp--expired">Expired</span>
     </header>
     <div class="detail-layout" style="padding-top: 0;">
       <div class="stack stack--lg">
@@ -81,25 +81,17 @@
         <section class="stack" aria-labelledby="weekend-title">
           <h2 id="weekend-title">That weekend</h2>
           <ul class="tour-dates" role="list">
-            <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">This request</span></span><span></span></li>
+            <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong>Riverside, Burlington</strong><br><span class="tour-dates__note">Free again</span></span><span></span></li>
             <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance, Oakville</strong><br><span class="tour-dates__note">Sunday service, 10:30 a.m.</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
           </ul>
         </section>
       </div>
       <aside>
         <section class="panel panel--raised" aria-labelledby="fee-title">
-          <div class="panel__head"><h2 id="fee-title" class="panel__title">Your fee</h2><span class="text-caption">ZAM-0114</span></div>
-          <dl class="receipt">
-            <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
-            <div class="receipt__row"><dt>Zamaro 8%</dt><dd>−$52</dd></div>
-            <div class="receipt__row receipt__total"><dt>You receive</dt><dd>$598</dd></div>
-          </dl>
-          <p class="receipt__fine">You’ll be paid $598 after the event.</p>
-          <p><strong>Reply by Mon 12 Oct, 10:15 a.m.</strong> · 2 days 19 hr left. Unanswered requests expire.</p>
-          <div class="stack stack--sm">
-            <a class="btn btn--primary btn--lg btn--block" href="../../dialogs/accept-request/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>Accept</a>
-            <a class="btn btn--block" href="../../dialogs/decline-request/default.html">Decline</a>
-          </div>
+          <div class="panel__head"><h2 id="fee-title" class="panel__title">Request expired</h2><span class="text-caption">ZAM-0114</span></div>
+          <p>There was no reply by Mon 12 Oct, 10:15 a.m. Riverside was told and shown other artists free on Sat 14 Nov. Nothing was charged.</p>
+          <p class="text-muted">Sat 14 Nov is Free on your calendar.</p>
+          <a class="btn btn--block" href="../requests/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>Back to requests</a>
         </section>
       </aside>
     </div>
@@ -138,22 +130,20 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 30rem; right: 1rem;">Before Confirmed, e-mails and phone numbers in messages show as “[contact details shared after booking]”; the sender sees a note why (L2-046).</p>
-<p class="mock-note" style="top: 52rem; right: 1rem;">Accept and Decline open dialogs. Unanswered requests expire at the reply-by time (L2-030).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
   <span class="mock-bar__screen">Request</span>
   <ul class="mock-bar__states">
-    <li><a href="default.html" aria-current="page">default</a></li>
+    <li><a href="default.html">default</a></li>
     <li><a href="loading.html">loading</a></li>
     <li><a href="error.html">error</a></li>
     <li><a href="accepted.html">accepted</a></li>
     <li><a href="declined.html">declined</a></li>
     <li><a href="confirmed.html">confirmed</a></li>
     <li><a href="completed.html">completed</a></li>
-    <li><a href="expired.html">expired</a></li>
+    <li><a href="expired.html" aria-current="page">expired</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

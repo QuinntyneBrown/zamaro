@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Availability · default — Zamaro mocks</title>
-<meta name="mock:kind" content="page">
-<meta name="mock:screen" content="availability">
-<meta name="mock:state" content="default">
-<meta name="mock:requirements" content="L2-056 L2-057 L2-058 L2-105">
-<meta name="description" content="Abigail’s November 2026 calendar: Free, Requested with counts, Booked and Unavailable days, a weekly default, and the calendar feed.">
+<title>Mark dates unavailable · warning — Zamaro mocks</title>
+<meta name="mock:kind" content="dialog">
+<meta name="mock:screen" content="block-dates">
+<meta name="mock:state" content="warning">
+<meta name="mock:requirements" content="L2-056 L2-057 L2-099 L2-108">
+<meta name="description" content="The range includes Sun 22 Nov, which St. Brendan’s asked about: a danger confirm says their request will be declined.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -16,22 +16,23 @@
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
+<!-- The page underneath is inert while the dialog is open. -->
+<div inert aria-hidden="true">
 <header class="topbar topbar--artist">
   <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-  <a class="topbar__brand" href="../dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <a class="topbar__brand" href="../../pages/dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
   <span class="topbar__role">Artists</span>
   <nav class="topbar__nav" aria-label="Primary">
-    <a class="nav-link" href="../dashboard/default.html">Dashboard</a>
-    <a class="nav-link" href="../requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
-    <a class="nav-link" href="../availability/default.html" aria-current="page">Availability</a>
-    <a class="nav-link" href="../earnings/default.html">Earnings</a>
-    <a class="nav-link" href="../artist/default.html">Profile</a>
+    <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
+    <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
+    <a class="nav-link" href="../../pages/availability/default.html" aria-current="page">Availability</a>
+    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
+    <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
-  <a class="nav-link topbar__link" href="../artist/default.html">View public profile</a>
+  <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
   <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
 </header>
-
 <main id="main">
   <div class="container">
     <header class="page-head">
@@ -105,8 +106,8 @@
         <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 23 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">23</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
         <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Tue 24 Nov, Free"><span class="calendar__num" aria-hidden="true">24</span></button></div>
         <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 25 Nov, Free"><span class="calendar__num" aria-hidden="true">25</span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Thu 26 Nov, Unavailable, studio"><span class="calendar__num" aria-hidden="true">26</span><span class="calendar__event">Studio</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
-        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Fri 27 Nov, Unavailable, studio"><span class="calendar__num" aria-hidden="true">27</span><span class="calendar__event">Studio</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 26 Nov, Free"><span class="calendar__num" aria-hidden="true">26</span></button></div>
+        <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 27 Nov, Free"><span class="calendar__num" aria-hidden="true">27</span></button></div>
         <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 28 Nov, Free"><span class="calendar__num" aria-hidden="true">28</span></button></div>
       </div>
       <div class="calendar__row" role="row">
@@ -125,17 +126,15 @@
         <h2 id="month-title">In November</h2>
         <ul class="tour-dates" role="list">
         <li><span class="tour-dates__day"><small>Sun</small>1 Nov</span><span><strong>Harvest Point Church</strong><br><span class="tour-dates__note">Sunday service, Milton</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
-        <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong><a href="../request-detail/default.html">Riverside Community Church</a></strong><br><span class="tour-dates__note">Requested · 1 · Worship night · reply by Mon 12 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
+        <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong><a href="../../pages/request-detail/default.html">Riverside Community Church</a></strong><br><span class="tour-dates__note">Requested · 1 · Worship night · reply by Mon 12 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
         <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance Church</strong><br><span class="tour-dates__note">Sunday service, Oakville</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
         <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
-        <li><span class="tour-dates__day"><small>Sun</small>22 Nov</span><span><strong><a href="../request-detail/default.html">St. Brendan’s Anglican</a></strong><br><span class="tour-dates__note">Requested · 1 · Sunday service · reply by Sun 11 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
-        <li><span class="tour-dates__day"><small>Thu</small>26 Nov</span><span><strong>Studio</strong><br><span class="tour-dates__note">Through Fri 27 Nov</span></span><span class="badge">Unavailable</span></li>
+        <li><span class="tour-dates__day"><small>Sun</small>22 Nov</span><span><strong><a href="../../pages/request-detail/default.html">St. Brendan’s Anglican</a></strong><br><span class="tour-dates__note">Requested · 1 · Sunday service · reply by Sun 11 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
         </ul>
       </section>
     </div>
   </div>
 </main>
-
 <footer class="footer on-stage">
   <div class="container footer__grid">
     <div class="stack">
@@ -145,42 +144,82 @@
     <div>
       <h2>Churches</h2>
       <ul>
-        <li><a href="../discover/default.html">Find who’s free</a></li>
-        <li><a href="../discover/default.html#how">How booking works</a></li>
+        <li><a href="../../pages/discover/default.html">Find who’s free</a></li>
+        <li><a href="../../pages/discover/default.html#how">How booking works</a></li>
         <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
       </ul>
     </div>
     <div>
       <h2>Artists</h2>
       <ul>
-        <li><a href="../dashboard/default.html">Dashboard</a></li>
-        <li><a href="../availability/default.html">Availability</a></li>
-        <li><a href="../earnings/default.html">Earnings</a></li>
+        <li><a href="../../pages/dashboard/default.html">Dashboard</a></li>
+        <li><a href="../../pages/availability/default.html">Availability</a></li>
+        <li><a href="../../pages/earnings/default.html">Earnings</a></li>
       </ul>
     </div>
     <div>
       <h2>Abigail Mensah</h2>
       <ul>
         <li>New Covenant Chapel</li>
-        <li><a href="../requests/default.html">Requests (3)</a></li>
+        <li><a href="../../pages/requests/default.html">Requests (3)</a></li>
       </ul>
     </div>
   </div>
 </footer>
+</div>
 
-<p class="mock-note" style="top: 30rem; right: 1rem;">Arrow keys move between days; Space selects. Booked days are aria-disabled. Under 768 px each day shows a dot instead of its label.</p>
-<p class="mock-note" style="top: 8rem; right: 1rem;">Subscribe gives a secret iCalendar link of Confirmed bookings (L2-058); regenerating it retires the old link.</p>
+<div class="dialog dialog--danger" role="dialog" aria-modal="true" aria-labelledby="block-title" aria-describedby="block-desc" data-dismiss-on-escape>
+  <form class="dialog__panel" action="../../notifications/availability-toast/success.html">
+    <div class="dialog__header">
+      <div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg></div>
+      <div style="flex: 1;">
+        <span class="dialog__kicker">Availability · November 2026</span>
+        <h2 class="dialog__title" id="block-title">Mark dates unavailable</h2>
+        <p id="block-desc" class="text-muted" style="margin-top: var(--space-1);">Churches won’t find you on these days. Booked days stay booked.</p>
+      </div>
+      <button class="close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <div class="error-summary" role="alert">
+        <p class="error-summary__title">1 church has asked about this date. They’ll be told you’re not available.</p>
+        <p>St. Brendan’s Anglican asked for Sun 22 Nov. If you continue, their request becomes Declined and they’re shown 3 similar artists free that day.</p>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field__label" for="block-start">Start date <span class="optional">(required)</span></label>
+          <input class="input" type="date" id="block-start" name="block-start" value="2026-11-22" min="2026-10-09" max="2028-03-31" required>
+        </div>
+        <div class="field">
+          <label class="field__label" for="block-end">End date <span class="optional">(required)</span></label>
+          <input class="input" type="date" id="block-end" name="block-end" value="2026-11-24" min="2026-10-09" max="2028-03-31" required>
+        </div>
+        <div class="field field--full">
+          <label class="field__label" for="block-note">Note <span class="optional">(optional)</span></label>
+          <input class="input" type="text" id="block-note" name="block-note" value="Family visiting" aria-describedby="block-note-help">
+          <span class="field__help" id="block-note-help">Only you see this. Churches just see that you’re not free.</span>
+        </div>
+      </div>
+      <p class="text-caption">3 days: Sun 22 to Tue 24 Nov. Mon 23 Nov is already Unavailable from your weekly default.</p>
+    </div>
+    <div class="dialog__footer">
+      <button class="btn" type="button" autofocus>Keep Sun 22 Nov open</button>
+      <button class="btn btn--danger" type="submit">Mark unavailable and decline</button>
+    </div>
+  </form>
+</div>
+
+<p class="mock-note" style="top: 6rem; right: 1rem;">Shown when the range covers a date with Requested or Accepted bookings (L2-057). Focus starts on the safe button.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
   <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
-  <span class="mock-bar__screen">Availability</span>
+  <span class="mock-bar__screen">Mark dates unavailable</span>
   <ul class="mock-bar__states">
-    <li><a href="default.html" aria-current="page">default</a></li>
-    <li><a href="loading.html">loading</a></li>
-    <li><a href="empty.html">empty</a></li>
-    <li><a href="error.html">error</a></li>
-    <li><a href="selected.html">selected</a></li>
+    <li><a href="default.html">default</a></li>
+    <li><a href="busy.html">busy</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="failed.html">failed</a></li>
+    <li><a href="warning.html" aria-current="page">warning</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
