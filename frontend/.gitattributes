@@ -1,0 +1,2 @@
+# Prettier expects LF; keep Windows checkouts LF too (core.autocrlf would make every file differ).
+* text=auto eol=lf
