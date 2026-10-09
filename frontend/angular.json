@@ -30,7 +30,11 @@
                 "input": "projects/zamaro/public"
               }
             ],
-            "styles": ["projects/zamaro/src/styles.scss"],
+            "styles": [
+              "projects/components/src/styles/tokens.css",
+              "projects/components/src/styles/index.scss",
+              "projects/zamaro/src/styles.scss"
+            ],
             "server": "projects/zamaro/src/main.server.ts",
             "outputMode": "server",
             "security": {
@@ -107,7 +111,11 @@
                 "input": "projects/admin/public"
               }
             ],
-            "styles": ["projects/admin/src/styles.scss"]
+            "styles": [
+              "projects/components/src/styles/tokens.css",
+              "projects/components/src/styles/index.scss",
+              "projects/admin/src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {
@@ -176,7 +184,11 @@
                 "input": "projects/perf-test/public"
               }
             ],
-            "styles": ["projects/perf-test/src/styles.scss"]
+            "styles": [
+              "projects/components/src/styles/tokens.css",
+              "projects/components/src/styles/index.scss",
+              "projects/perf-test/src/styles.scss"
+            ]
           },
           "configurations": {
             "production": {

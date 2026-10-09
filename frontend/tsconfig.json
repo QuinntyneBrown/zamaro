@@ -4,8 +4,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "api": ["./dist/api"],
-      "components": ["./dist/components"]
+      "api": ["./projects/api/src/public-api.ts"],
+      "components": ["./projects/components/src/public-api.ts"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
