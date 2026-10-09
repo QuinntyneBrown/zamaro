@@ -968,3 +968,11 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 .error-poster .strike { text-decoration: line-through; text-decoration-thickness: 0.08em; text-decoration-color: var(--color-danger-solid); }
 .on-stage .error-poster .strike { text-decoration-color: var(--color-accent-on-stage); }
 .error-code { font: var(--text-overline); letter-spacing: var(--letter-spacing-stamp); text-transform: uppercase; color: var(--color-fg-on-stage-muted); }
+
+/* ---------- Additions found while documenting -------------------------- */
+.check__box > .icon { grid-area: 1 / 1; }
+.table-wrap { position: relative; }
+.on-stage .stars { color: var(--color-accent-on-stage); }
+.on-stage .rating__count { color: var(--color-fg-on-stage-muted); }
+.on-stage .badge--booked { --badge-fg: var(--color-fg-on-stage-muted); }
+.tour-dates__day { white-space: nowrap; }

@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Description list — Zamaro design system</title>
+<meta name="description" content="Description lists pair labels with values for one record, such as a booking summary: vertical, horizontal and ticket-stub variants.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>Description list</h1>
+      <p class="ds-lead">A description list pairs a label with a value for one record. It is how a booking summary reads: artist, date, gathering, church, fee, deposit.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;dl&gt;</code></span><span class="ds-pill">Class <code>.dl</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a description list for the facts of a single record: the booking Naomi is about to send, the request an artist is reading, the receipt after a deposit. Each pair is a term (<code>&lt;dt&gt;</code>) and its value (<code>&lt;dd&gt;</code>).</p>
+      <ul>
+        <li><b>Vertical</b> (<code>.dl</code>) stacks the label over the value. Use it in narrow places: the booking stub, a card, a dialog.</li>
+        <li><b>Horizontal</b> (<code>.dl--horizontal</code>) puts labels in a column on the left with a rule under each row. Use it for a full summary or receipt.</li>
+        <li><b>Stub</b> (<code>.dl--stub</code>) sets values in the mono ticket-stub face, uppercase. Use it on the booking stub and receipts, where the summary should read like a printed ticket.</li>
+        <li>Use a <a href="table.html">table</a> to compare several records, and a <a href="list.html">list</a> when items have no labels.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <dl class="dl dl--horizontal" style="width: 100%;">
+            <div><dt>Artist</dt><dd>Abigail Mensah</dd></div>
+            <div><dt>Date</dt><dd>Sat 14 Nov 2026</dd></div>
+            <div><dt>Fee</dt><dd>$650</dd></div>
+          </dl>
+          <span class="ds-callout" style="left: 4%; top: 22%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 40%; top: 22%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 92%; top: 44%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 92%; top: 82%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Term</b><small><code>&lt;dt&gt;</code>: mono overline, 12px, uppercase, stamp tracking, muted.</small></div></li>
+          <li><div><b>Value</b><small><code>&lt;dd&gt;</code>: body text, 16px, full strength. In <code>.dl--stub</code>, mono 14px uppercase.</small></div></li>
+          <li><div><b>Group</b><small>A <code>&lt;div&gt;</code> around each pair; it carries the layout and the row rule.</small></div></li>
+          <li><div><b>Row rule (horizontal)</b><small>Hairline in <code>--color-border-default</code> under each pair, 12px above and below.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>All three variants hold the same booking summary. Choose by the space available and how formal the moment is.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: start;">
+          <dl class="dl" style="flex: 1 1 12rem;">
+            <div><dt>Artist</dt><dd>Abigail Mensah</dd></div>
+            <div><dt>Date</dt><dd>Sat 14 Nov 2026</dd></div>
+            <div><dt>Gathering</dt><dd>Sunday service</dd></div>
+            <div><dt>Church</dt><dd>Riverside Community Church, Burlington</dd></div>
+            <div><dt>Fee</dt><dd>$650</dd></div>
+            <div><dt>Deposit 25%</dt><dd>$162.50, due when Abigail accepts</dd></div>
+          </dl>
+          <dl class="dl dl--horizontal" style="flex: 2 1 20rem;">
+            <div><dt>Artist</dt><dd>Abigail Mensah</dd></div>
+            <div><dt>Date</dt><dd>Sat 14 Nov 2026</dd></div>
+            <div><dt>Gathering</dt><dd>Sunday service</dd></div>
+            <div><dt>Church</dt><dd>Riverside Community Church, Burlington</dd></div>
+            <div><dt>Fee</dt><dd>$650</dd></div>
+            <div><dt>Deposit 25%</dt><dd>$162.50, due when Abigail accepts</dd></div>
+          </dl>
+        </div>
+        <div class="ds-example__caption"><span>Vertical (left) for the stub and cards; horizontal (right) for a full summary or receipt.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dl class="dl dl--horizontal"&gt;
+  &lt;div&gt;&lt;dt&gt;Artist&lt;/dt&gt;&lt;dd&gt;Abigail Mensah&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Date&lt;/dt&gt;&lt;dd&gt;Sat 14 Nov 2026&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Gathering&lt;/dt&gt;&lt;dd&gt;Sunday service&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Church&lt;/dt&gt;&lt;dd&gt;Riverside Community Church, Burlington&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Fee&lt;/dt&gt;&lt;dd&gt;$650&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Deposit 25%&lt;/dt&gt;&lt;dd&gt;$162.50, due when Abigail accepts&lt;/dd&gt;&lt;/div&gt;
+&lt;/dl&gt;</code></pre></details>
+      </div>
+
+      <h3>Stub</h3>
+      <p>On the booking stub the summary is printed like a ticket: mono values, uppercase, under the perforated head with the booking code.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+          <div class="stub" style="width: min(100%, 24rem);">
+            <div class="stub__head"><p class="stub__title">Your booking</p><span class="stub__code">No. ZAM-0114</span></div>
+            <dl class="dl dl--stub">
+              <div><dt>Artist</dt><dd>Abigail Mensah</dd></div>
+              <div><dt>Date</dt><dd>Sat 14 Nov 2026</dd></div>
+              <div><dt>Gathering</dt><dd>Sunday service</dd></div>
+              <div><dt>Church</dt><dd>Riverside Community Church, Burlington</dd></div>
+              <div><dt>Fee</dt><dd>$650</dd></div>
+              <div><dt>Deposit 25%</dt><dd>$162.50</dd></div>
+            </dl>
+            <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>.dl.dl--stub</code> inside <code>.stub</code>. Combine with <code>.dl--horizontal</code> on a wide receipt.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="stub"&gt;
+  &lt;div class="stub__head"&gt;&lt;p class="stub__title"&gt;Your booking&lt;/p&gt;&lt;span class="stub__code"&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;
+  &lt;dl class="dl dl--stub"&gt;
+    &lt;div&gt;&lt;dt&gt;Artist&lt;/dt&gt;&lt;dd&gt;Abigail Mensah&lt;/dd&gt;&lt;/div&gt;
+    …
+    &lt;div&gt;&lt;dt&gt;Deposit 25%&lt;/dt&gt;&lt;dd&gt;$162.50&lt;/dd&gt;&lt;/div&gt;
+  &lt;/dl&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Description lists have one size. Use the stub variant for a smaller, mono value."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Description lists have one size. Use the stub variant for a smaller, mono value.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>A description list is not interactive, so it has no hover or focus. It has content states: loading, a value that is not known yet, and a value that just changed.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Loading</th><th scope="col">Not set</th><th scope="col">Changed</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Vertical</th>
+            <td><dl class="dl"><div><dt>Fee</dt><dd>$650</dd></div></dl></td>
+            <td><dl class="dl" aria-busy="true"><div><dt>Fee</dt><dd><span class="skeleton skeleton--short" style="width: 4rem;" role="img" aria-label="Loading"></span></dd></div></dl></td>
+            <td><dl class="dl"><div><dt>Deposit</dt><dd class="text-muted">When accepted</dd></div></dl></td>
+            <td><dl class="dl"><div><dt>Date</dt><dd><span class="mark">Sun 15 Nov</span></dd></div></dl></td></tr>
+          <tr><th scope="row">Stub</th>
+            <td><dl class="dl dl--stub"><div><dt>Fee</dt><dd>$650</dd></div></dl></td>
+            <td><dl class="dl dl--stub" aria-busy="true"><div><dt>Fee</dt><dd><span class="skeleton skeleton--short" style="width: 4rem;" role="img" aria-label="Loading"></span></dd></div></dl></td>
+            <td><dl class="dl dl--stub"><div><dt>Deposit</dt><dd class="text-muted">When accepted</dd></div></dl></td>
+            <td><dl class="dl dl--stub"><div><dt>Date</dt><dd><span class="mark">Sun 15 Nov</span></dd></div></dl></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li>The horizontal variant has the same states; it is left out of the matrix only for width.</li>
+        <li><b>Loading</b> keeps the real terms and puts a <code>.skeleton</code> where each value goes, so the layout does not jump.</li>
+        <li><b>Not set</b> says when the value will exist, in muted text. Never leave a <code>&lt;dd&gt;</code> empty or write “N/A”.</li>
+        <li><b>Changed</b> marks a value the person just edited, or one the artist changed, with the yellow <code>.mark</code> highlighter until the summary is confirmed. Say what changed in text too (“Abigail moved this to Sun 15 Nov”).</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><dl class="dl dl--horizontal"><div><dt>Artist</dt><dd>Abigail Mensah</dd></div><div><dt>Date</dt><dd>Sat 14 Nov 2026</dd></div><div><dt>Fee</dt><dd>$650</dd></div><div><dt>Deposit 25%</dt><dd class="text-muted">$162.50 when Abigail accepts</dd></div></dl></div>
+        <div data-theme="dark"><dl class="dl dl--horizontal"><div><dt>Artist</dt><dd>Abigail Mensah</dd></div><div><dt>Date</dt><dd>Sat 14 Nov 2026</dd></div><div><dt>Fee</dt><dd>$650</dd></div><div><dt>Deposit 25%</dt><dd class="text-muted">$162.50 when Abigail accepts</dd></div></dl></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The vertical list works at every width; values wrap under their term.</li>
+        <li>The horizontal list keeps two columns down to 360px: the term column is at least 8rem (128px) and takes a third of the width; the value takes the rest and wraps. Keep terms to two words so they do not wrap.</li>
+        <li>In the booking stub, which is narrow on desktop (the sidebar) and full width on phones, always use the vertical stub variant.</li>
+        <li>For a long summary on wide screens, two vertical lists side by side read better than one long horizontal list; place them in a <code>.form__row</code> or <code>.grid</code>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The description list has no component tokens. Terms read <code>--color-fg-muted</code> in <code>--text-overline</code>; values read <code>--color-fg-default</code> in <code>--text-body</code> (or <code>--text-stub</code> for the stub variant); horizontal rows are ruled with <code>--color-border-default</code>. On the dark stage the same tokens resolve to paper on charcoal; nothing else changes. Inside the booking stub it follows the stub’s surface (<code>--color-bg-surface</code>), so it turns charcoal with the stub in the dark theme.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;dl&gt;</code>. Each <code>&lt;dt&gt;</code>/<code>&lt;dd&gt;</code> pair is wrapped in a <code>&lt;div&gt;</code>, which HTML allows as the only wrapper. There is no APG pattern: screen readers announce a description list and, in most cases, the number of terms. Never fake one with a two-column table or with bold <code>&lt;span&gt;</code>s.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skips the list; only links or buttons inside a value (for example “Change date”) receive focus.</td></tr>
+        <tr><td>Screen reader list keys</td><td>Move by list and by item, reading each term and value together.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The list itself never takes focus. If a value has an edit link, put it at the end of that <code>&lt;dd&gt;</code> and name it with the term: “Change date”.</p>
+      <h3>Labelling</h3>
+      <p>Introduce the list with a heading (“Your booking”), and put both in a <code>&lt;section aria-labelledby&gt;</code> when the summary is a region of its own. Don’t put <code>aria-label</code> on the <code>&lt;dl&gt;</code> itself: it has no role that takes a name. Terms are the labels, so they must be visible text, not icons. When a value is loading, give its skeleton <code>role="img"</code> and <code>aria-label="Loading"</code>, and set <code>aria-busy="true"</code> on the list. A changed value is announced through the page’s status region, not by the highlighter alone.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Term on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Term on page</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Value on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Changed value on highlighter</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: term on surface</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: value on canvas</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+      </div>
+      <p>Terms are 12px, so they need the full 4.5:1; the muted token clears it on every surface. Row rules are decorative.</p>
+      <h3>Motion</h3>
+      <p>None. Loading skeletons stop shimmering under <code>prefers-reduced-motion</code>.</p>
+      <h3>Touch</h3>
+      <p>Nothing to tap unless a value holds a link; such links follow the 24px minimum and sit at least 8px from the next one.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Terms are one or two nouns in sentence case: “Artist”, “Date”, “Gathering”, “Church”, “Fee”, “Deposit 25%”. CSS uppercases them.</li>
+        <li>Put the rule in the term when it explains the value: “Deposit 25%” then “$162.50”.</li>
+        <li>Values are complete: “Sat 14 Nov 2026”, “Riverside Community Church, Burlington”, “$650”. Add the year in summaries and receipts.</li>
+        <li>Order the pairs the way people check a booking: who, when, what, where, how much.</li>
+        <li>A value that does not exist yet says when it will: “When Abigail accepts”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><dl class="dl dl--horizontal"><div><dt>Fee</dt><dd>$650</dd></div><div><dt>Deposit 25%</dt><dd>$162.50</dd></div></dl></div><figcaption>A real <code>&lt;dl&gt;</code>: each value is announced with its term.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><p><b>Fee:</b> $650 <b>Deposit:</b> $162.50</p></div><figcaption>Bold labels in a sentence. The pairs are lost to screen readers and the eye can’t scan them.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><dl class="dl"><div><dt>Deposit due</dt><dd class="text-muted">When Abigail accepts</dd></div></dl></div><figcaption>Say when a missing value will exist.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><dl class="dl"><div><dt>Deposit due</dt><dd>N/A</dd></div></dl></div><figcaption>“N/A” reads as an error and tells Naomi nothing.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Term colour</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Value colour</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Row rule (horizontal)</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Changed highlight</td><td><code>--color-accent</code> / <code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Term font</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--text-overline"></span></td></tr>
+          <tr><td>Value font / stub</td><td><code>--text-body</code> / <code>--text-stub</code></td><td colspan="2"><span data-token="--text-body"></span> / <span data-token="--text-stub"></span></td></tr>
+          <tr><td>Pair gap / term-value gap</td><td><code>--space-3</code> / <code>--space-0-5</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-0-5"></span></td></tr>
+          <tr><td>Horizontal column gap</td><td><code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section aria-labelledby="summary-title"&gt;
+&lt;h3 id="summary-title"&gt;Your booking&lt;/h3&gt;
+&lt;dl class="dl dl--horizontal"&gt;
+  &lt;div&gt;&lt;dt&gt;Artist&lt;/dt&gt;&lt;dd&gt;Abigail Mensah&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Date&lt;/dt&gt;&lt;dd&gt;Sat 14 Nov 2026 &lt;a href="#date"&gt;Change date&lt;/a&gt;&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Fee&lt;/dt&gt;&lt;dd&gt;$650&lt;/dd&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;dt&gt;Deposit 25%&lt;/dt&gt;&lt;dd&gt;$162.50&lt;/dd&gt;&lt;/div&gt;
+&lt;/dl&gt;
+&lt;/section&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.dl</code></td><td>Vertical: term over value, 12px between pairs.</td></tr>
+        <tr><td><code>.dl--horizontal</code></td><td>Term column (min 8rem, one third) beside the value; hairline under each pair.</td></tr>
+        <tr><td><code>.dl--stub</code></td><td>Values in the mono stub face, uppercase.</td></tr>
+        <tr><td><code>&lt;div&gt;</code> around each pair</td><td>Required: the layout hangs on it.</td></tr>
+        <tr><td><code>aria-busy="true"</code> on <code>.dl</code></td><td>Loading; values are skeletons.</td></tr>
+        <tr><td><code>.mark</code> in a value</td><td>Changed value highlighter.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet as a <code>&lt;dl&gt;</code>; part of the core set. The product needs it for the booking review step, the request an artist receives and the deposit receipt. It grows out of:</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub (“Book Abigail”, No. ZAM-0114, from $650, the fine print) and the poster facts line (★ 4.9 · 38 churches · Brampton, ON · drives up to 120 km)</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the headliner’s meta line and the ticket stubs’ “From $1,800” price pairs</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The stub heading used <code>style="font: var(--text-h3)"</code>. It is now <code>.stub__title</code>, used in the stub example above.</li>
+        <li>Several display-font shorthands were inline (<code>var(--font-weight-regular) var(--font-size-2xl) / 1 var(--font-family-display)</code>). Prices and figures now use the role tokens <code>--text-figure</code> and <code>--text-figure-lg</code>.</li>
+        <li>The poster facts are a row of spans with no labels. In a booking summary the same facts become a <code>&lt;dl&gt;</code> so each value has its term.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>
