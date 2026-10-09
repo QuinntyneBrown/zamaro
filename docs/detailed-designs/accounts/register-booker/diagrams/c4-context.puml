@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Register as a booker
+
+Person(guest, "Guest", "Anyone not signed in")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(bot, "Bot challenge provider", "Privacy-respecting human check")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(guest, zamaro, "Registers and verifies email using", "HTTPS")
+Rel(zamaro, bot, "Verifies challenge token with", "HTTPS/JSON")
+Rel(zamaro, breach, "Checks password hash prefix against", "HTTPS")
+Rel(zamaro, email, "Sends verification and duplicate-signup emails via", "HTTPS/JSON")
+Rel(email, guest, "Delivers verification link to")
+@enduml

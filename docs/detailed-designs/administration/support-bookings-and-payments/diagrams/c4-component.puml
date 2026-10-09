@@ -16,10 +16,10 @@ Container_Boundary(api, "Zamaro API") {
   Component(audit, "RecordAuditEntry", "Action", "Appends audit entries")
 }
 Container_Boundary(worker, "Zamaro Worker") {
-  Component(charge, "ChargeBalance", "Queued job", "Owned by payments/collect-balance")
+  Component(charge, "ChargeBookingBalance", "Queued job", "Owned by payments/collect-balance")
   Component(notif, "HeldBookingResolvedNotification", "Queued notification", "Emails booker and artist")
 }
-ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, booking_holds")
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, problem_reports")
 
 Rel(web, bctrl, "Searches and opens bookings", "JSON/HTTPS")
 Rel(web, rctrl, "Issues refund", "JSON/HTTPS")
@@ -35,5 +35,5 @@ Rel(refund, db, "Locks payments, writes refund", "SQL")
 Rel(refund, gateway, "refund(payment, amount, key)")
 Rel(gateway, pay, "Calls", "HTTPS/JSON")
 Rel(refund, audit, "Records refund.issued")
-Rel(resolve, audit, "Records booking_hold.resolved")
+Rel(resolve, audit, "Records problem_report.resolved")
 @enduml

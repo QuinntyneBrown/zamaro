@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Manage account settings
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Changes email, password and sessions using", "HTTPS")
+Rel(artist, zamaro, "Changes email, password and sessions using", "HTTPS")
+Rel(zamaro, breach, "Checks new passwords against", "HTTPS")
+Rel(zamaro, email, "Sends change link and notice via", "HTTPS/JSON")
+@enduml

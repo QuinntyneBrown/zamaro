@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Save the church profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ChurchProfilePage" as page
+  participant "ChurchApi" as client
+  participant "AuthService" as auth
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ChurchController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SaveChurch" as action
+  participant "ServiceArea" as area
+  participant "DistanceService" as dist
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Geocoding provider" as geo
+  database "Zamaro database" as db
+end box
+
+actor -> page : Edit name, address, phone, optional fields, activate Save
+page -> page : Check name 2-120 and phone format, disable submit (L2-108)
+page -> client : save(form)
+client -> controller : PUT /api/v1/account/church
+controller -> controller : Booker role, validate SaveChurchRequest (L2-024)
+controller -> action : handle(booker, ChurchData)
+action -> geo : Geocode street address (L2-001)
+alt address not found
+  geo --> action : No match
+  action --> controller : 422 "We couldn't find that address..."
+  controller --> client : Problem details, nothing stored
+  page --> actor : Error on address field, every value kept (L2-001)
+else geocoded
+  geo --> action : Coordinates, city
+  action -> area : contains(point)
+  area -> dist : between(City Hall, point)
+  dist --> area : Road distance
+  alt more than 200 km
+    area --> action : false
+    action --> controller : 422 "Zamaro serves churches within 200 km of Toronto."
+    controller --> client : Problem details, nothing stored
+    page --> actor : Error on address field, every value kept (L2-001)
+  else inside service area
+    area --> action : true
+    action -> db : Upsert churches row, phone encrypted (L2-079)
+    note right of db : bookings keep their own address snapshot (L2-024)
+    action --> controller : Church
+    controller --> client : 200 ChurchResource
+    client --> auth : refresh() for header and Discover pre-fill
+    page --> actor : Saved toast, header lists church name (L2-024)
+  end
+end
+@enduml

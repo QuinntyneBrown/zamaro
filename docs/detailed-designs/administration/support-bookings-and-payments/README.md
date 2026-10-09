@@ -89,15 +89,15 @@ MFA-verified administrator (L2-066).
   `POST /api/v1/admin/bookings/{number}/hold/resolution`.
 - **`ResolveHeldBookingRequest`** — requires `resolution` from the
   `HoldResolution` enum, `amountCents` for a partial refund, and a `reason`.
-- **`ResolveHeldBooking`** — action that locks the `BookingHold` and rejects a
-  booking that is not held with 409. For `ReleaseBalance` it clears the hold and
-  dispatches `ChargeBalance`, which charges the balance and leads to the payout
+- **`ResolveHeldBooking`** — action that locks the booking and its open `ProblemReport` and rejects a
+  booking whose `held_at` is empty with 409. For `ReleaseBalance` it clears the hold and
+  dispatches `ChargeBookingBalance`, which charges the balance and leads to the payout
   (L2-038, L2-039). For `FullRefund` it calls `IssueRefund` for the refundable
   amount, cancels the pending balance charge and cancels the payout. For
   `PartialRefund` it calls `IssueRefund` for the entered amount; whether the balance
   is charged first and how the artist payout is reduced is `<TO SUPPLY>`. Each path
-  stamps `resolved_at`, `resolved_by` and `resolution`, records
-  `booking_hold.resolved`, and dispatches `HeldBookingResolved`.
+  stamps `resolved_at`, `resolved_by` and `resolution`, clears `bookings.held_at`, records
+  `problem_report.resolved`, and dispatches `HeldBookingResolved`.
 - **`PaymentGateway`** — interface in `App\Services\Payments\` with one adapter for
   the payment processor (vendor `<TO SUPPLY>`).
 
@@ -113,9 +113,10 @@ MFA-verified administrator (L2-066).
 - `bookings`, `booking_transitions`, `payments`, `refunds` (`id`, `booking_id`,
   `payment_id`, `amount_cents`, `reason`, `status`, `processor_refund_id`,
   `idempotency_key` unique, `issued_by`, `created_at`).
-- `booking_holds` — `id`, `booking_id`, `reported_by`, `reported_at`, `problem`,
-  `resolved_at`, `resolved_by`, `resolution`, `resolution_reason`. The
-  `payments/collect-balance` slice creates the row (L2-038).
+- `problem_reports` — `id`, `booking_id`, `reporter_id`, `description`,
+  `reported_at`, `resolved_at`, `resolved_by`, `resolution`, `resolution_reason`.
+  The `payments/collect-balance` slice creates the row and sets `bookings.held_at`
+  (L2-038); this slice fills the resolution columns and clears `bookings.held_at`.
 
 ## Requirements
 
@@ -154,7 +155,7 @@ three resolutions.
 ### Class structure
 
 A `Booking` has many `Payment` and `Refund` rows and at most one open
-`BookingHold`. `RefundableAmount` is computed from the payments and refunds, never
+`ProblemReport`. `RefundableAmount` is computed from the payments and refunds, never
 stored.
 
 ![Class diagram for supporting bookings and payments](diagrams/class-structure.png)

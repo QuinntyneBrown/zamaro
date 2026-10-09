@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — View saved artists
+
+Container(web, "Zamaro Web", "Angular", "SavedArtistsPage, SavedArtistsApi, SearchStore")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "SavedArtistController", "Laravel controller", "index: GET /api/v1/saved-artists")
+  Component(req, "ListSavedArtistsRequest", "FormRequest", "Optional ISO date")
+  Component(action, "ListSavedArtists", "Action", "Visible saved artists, newest first, with availability")
+  Component(avail, "AvailabilityService", "Domain service", "Applies the Free definition")
+  Component(res, "SavedArtistListResource", "API resource", "Cards, total and date")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "saved_artists, artists, rules, overrides, bookings")
+}
+Rel(web, ctrl, "Lists saved artists", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Joins saved_artists to visible artists", "SQL")
+Rel(action, avail, "freeArtistIds(ids, date)")
+Rel(avail, db, "Reads overrides, rules and Confirmed bookings", "SQL")
+Rel(ctrl, res, "Returns")
+@enduml

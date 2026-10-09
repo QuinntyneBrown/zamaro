@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Manage account settings
+
+Container(web, "Zamaro Web", "Angular", "AccountSettingsPage, AccountApi")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+Container_Boundary(api, "Zamaro API") {
+  Component(emailCtrl, "AccountEmailController", "Laravel controller", "PUT /api/v1/account/email, POST /confirm")
+  Component(reqEmail, "RequestEmailChange", "Action", "Pending email, link to new address, notice to old")
+  Component(confEmail, "ConfirmEmailChange", "Action", "Consumes link and swaps email")
+  Component(pwCtrl, "AccountPasswordController", "Laravel controller", "PUT /api/v1/account/password")
+  Component(changePw, "ChangePassword", "Action", "New hash and end other sessions")
+  Component(policy, "PasswordPolicy", "Validation rule", "12-128 characters, not breached")
+  Component(sessCtrl, "AccountSessionController", "Laravel controller", "GET and DELETE /api/v1/account/sessions")
+  Component(endSess, "EndSession", "Action", "Ends one session")
+  Component(registry, "SessionRegistry", "Service", "Indexes and ends a user's sessions")
+  Component(audit, "RecordAuditEntry", "Action", "Password and email change entries")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "users, email_change_tokens, user_sessions")
+  ComponentDb(cache, "Cache and queue", "Redis", "Session payloads and notification jobs")
+}
+Rel(web, emailCtrl, "Change email", "JSON/HTTPS")
+Rel(web, pwCtrl, "Change password", "JSON/HTTPS")
+Rel(web, sessCtrl, "List and end sessions", "JSON/HTTPS")
+Rel(emailCtrl, reqEmail, "Calls")
+Rel(emailCtrl, confEmail, "Calls")
+Rel(reqEmail, db, "Stores pending email and token hash", "SQL")
+Rel(reqEmail, cache, "Queues notifications")
+Rel(confEmail, db, "Updates email", "SQL")
+Rel(pwCtrl, policy, "Validates with")
+Rel(policy, breach, "Range query", "HTTPS")
+Rel(pwCtrl, changePw, "Calls")
+Rel(changePw, registry, "endAllExcept(current)")
+Rel(changePw, audit, "Records password change")
+Rel(sessCtrl, endSess, "Calls")
+Rel(endSess, registry, "end(id)")
+Rel(registry, cache, "Destroys payloads", "RESP")
+Rel(registry, db, "user_sessions", "SQL")
+Rel(audit, db, "Inserts audit_entries", "SQL")
+@enduml

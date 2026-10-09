@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Minimise public exposure
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Writes reviews whose attribution is public")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(crawlers, "Search engines and link previews", "Crawlers and social/messaging unfurlers")
+System_Ext(cdn, "CDN", "Serves web assets, images and video")
+
+Rel(guest, zamaro, "Reads profiles, reviews and search results from", "HTTPS")
+Rel(crawlers, zamaro, "Crawl and unfurl public pages from", "HTTPS")
+Rel(booker, zamaro, "Publishes reviews through", "HTTPS")
+Rel(zamaro, cdn, "Serves public media through")
+@enduml

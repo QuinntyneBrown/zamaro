@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Verify the email address
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VerifyEmailPage" as page
+  participant "AuthApi" as client
+  participant "AuthService" as auth
+  participant "BookingsApi" as bookings
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EmailVerificationController" as controller
+  participant "EnsureEmailIsVerified" as gate
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "VerifyEmail" as action
+  participant "ResendVerificationEmail" as resend
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Open verification link /verify-email?token
+page -> client : verifyEmail(token)
+client -> controller : POST /api/v1/email/verify
+controller -> action : handle(token)
+action -> db : Find token by SHA-256 hash
+alt token unused and issued less than 24 h ago
+  action -> db : Set email_verified_at, set used_at (L2-022)
+  action --> controller : User
+  controller --> client : 204
+  client --> auth : Refresh current user
+  page --> actor : Email verified, continue to returnUrl
+else token expired, used or unknown
+  action --> controller : Token not usable
+  controller --> client : 410 problem details
+  page --> actor : "This link has expired" with resend option (L2-022)
+  opt booker activates resend
+    page -> client : resendVerification(email)
+    client -> controller : POST /api/v1/email/verification-notification
+    controller -> resend : handle(email)
+    resend -> db : Revoke open tokens, insert new 24 h token
+    resend -> queue : Queue VerifyEmailNotification
+    controller --> client : 202 enumeration-safe message
+  end
+end
+
+== Later: unverified booker tries to send a booking request ==
+actor -> bookings : Submit booking stub
+bookings -> gate : POST booking request
+gate -> db : Read email_verified_at
+alt not verified
+  gate --> bookings : 403 problem type email-not-verified, no booking created (L2-022)
+  bookings --> actor : Ask to verify email first, with resend
+end
+@enduml

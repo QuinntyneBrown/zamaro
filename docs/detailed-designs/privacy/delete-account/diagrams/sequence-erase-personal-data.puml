@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Erase personal data
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ReviewResource" as review
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "EraseDueAccounts" as due
+  participant "EraseAccountPersonalData" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AccountEraser" as eraser
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+== Daily ==
+due -> db : Users with erase_after <= now and erased_at null
+loop each due account
+  due -> job : Dispatch
+end
+job -> eraser : erase(user)
+eraser -> db : BEGIN
+eraser -> db : Copy church city to reviews.reviewer_display_city,\nset booker_id null (L2-082)
+eraser -> db : Null name, email, phone on bookings, payments,\nrefunds, payouts; retain_until = created + 7 years (L2-082)
+eraser -> db : Delete church, saved artists, exports, preferences,\nsessions, MFA secrets, recovery codes
+opt artist account
+  eraser -> storage : Delete photos, videos, VSC documents
+  eraser -> db : Clear profile text, keep status Deleted
+end
+eraser -> db : Replace users.name and email with placeholders, set erased_at
+eraser -> db : COMMIT within 30 days of the request (L2-082)
+alt failure
+  job -> job : Retry with backoff up to 5 times, then alert (L2-092)
+end
+
+== Reviews after erasure ==
+actor -> page : Open the artist's profile
+page -> review : Reviews for the artist
+review -> db : Review with null booker_id
+review --> page : Reviewer "A church in {city}" (L2-082)
+page --> actor : Review shown without the deleted booker's name
+@enduml

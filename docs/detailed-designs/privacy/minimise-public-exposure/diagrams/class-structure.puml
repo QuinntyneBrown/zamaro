@@ -1,0 +1,96 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Minimise public exposure
+
+package "Zamaro Web (Angular)" {
+  class ArtistProfilePage {
+    +profile: Signal<PublicArtist>
+    +reviews: Signal<PublicReview[]>
+  }
+  class ReviewComponent {
+    +review: InputSignal<PublicReview>
+  }
+  class SeoService {
+    +applyProfile(profile: PublicArtist): void
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  abstract class JsonResource {
+    +toArray(request: Request): array
+  }
+  class PublicArtistResource {
+    +toArray(request: Request): array
+  }
+  class PublicReviewResource {
+    +toArray(request: Request): array
+  }
+  class ReviewAttribution <<value object>> {
+    +string reviewerName
+    +?string churchName
+    +string city
+    +string monthYear
+    +static forReview(review: Review): ReviewAttribution
+  }
+  class Artist <<Eloquent>> {
+    +string slug
+    +string displayName
+    +string baseCity
+    +float baseLatitude
+    +float baseLongitude
+    +?string hstNumber
+    +User user
+  }
+  class Review <<Eloquent>> {
+    +int stars
+    +string text
+    +?int bookerId
+    +?string reviewerDisplayCity
+    +CarbonImmutable createdAt
+  }
+  class Church <<Eloquent>> {
+    +string name
+    +string streetAddress
+    +string city
+    +string phone
+  }
+  class User <<Eloquent>> {
+    +string name
+    +string email
+  }
+  class PublicExposureTest <<test>> {
+    +seedSentinels(): Sentinels
+    +test_no_public_route_leaks_personal_data(): void
+    +test_private_routes_refuse_guests(): void
+  }
+  class ResourceFieldAllowlist <<test helper>> {
+    +assertKeys(resource: string, json: array): void
+  }
+}
+
+ArtistProfilePage *-- ReviewComponent
+ArtistProfilePage --> SeoService
+JsonResource <|-- PublicArtistResource
+JsonResource <|-- PublicReviewResource
+PublicArtistResource ..> Artist : narrows
+PublicReviewResource ..> Review : narrows
+PublicReviewResource --> ReviewAttribution
+ReviewAttribution ..> User : reads name
+ReviewAttribution ..> Church : reads name and city
+Review --> User : booker
+User "1" o-- "0..1" Church
+PublicExposureTest ..> ResourceFieldAllowlist
+PublicExposureTest ..> PublicArtistResource : verifies
+PublicExposureTest ..> PublicReviewResource : verifies
+@enduml

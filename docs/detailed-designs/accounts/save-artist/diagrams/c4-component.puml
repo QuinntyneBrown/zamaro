@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Save an artist
+
+Container(web, "Zamaro Web", "Angular", "SaveToggleComponent, SavedArtistsStore, SavedArtistsApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "SavedArtistController", "Laravel controller", "PUT, DELETE /api/v1/saved-artists/{artistId}; GET /ids")
+  Component(policy, "SavedArtistPolicy", "Policy", "Booker role only")
+  Component(save, "SaveArtist", "Action", "Checks artist visibility and the 200 limit, inserts row")
+  Component(unsave, "UnsaveArtist", "Action", "Deletes row")
+  Component(res, "SavedArtistStateResource", "API resource", "artistId, saved, savedCount")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "saved_artists, artists, users")
+}
+Rel(web, ctrl, "Save or unsave", "JSON/HTTPS")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, save, "Calls")
+Rel(ctrl, unsave, "Calls")
+Rel(save, db, "Locks user row, counts, inserts", "SQL")
+Rel(unsave, db, "Deletes", "SQL")
+Rel(ctrl, res, "Returns")
+@enduml

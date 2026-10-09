@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Add a church before the first request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingStubComponent" as stub
+  participant "ChurchRequiredDialogComponent" as dialog
+  participant "ChurchApi" as client
+  participant "BookingsApi" as bookings
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ChurchController" as controller
+  participant "BookingRequestController" as bookingCtrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SaveChurch" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> stub : Fill date, kind and message, activate send
+stub -> stub : currentUser().church is null
+stub -> dialog : Open with the request held in memory (L2-024)
+dialog --> actor : Ask for church name, address, phone, optional fields
+actor -> dialog : Complete and save
+dialog -> client : save(form)
+client -> controller : PUT /api/v1/account/church
+controller -> action : handle(booker, ChurchData)
+action -> db : Geocode, service-area check, insert church (L2-001)
+controller --> client : 200 ChurchResource
+client --> dialog : Church
+dialog --> stub : saved(church), dialog closes, focus returns
+stub -> bookings : Resume held request with church
+bookings -> bookingCtrl : POST booking request
+bookingCtrl -> db : Create booking with church address snapshot
+bookingCtrl --> bookings : 201
+stub --> actor : Request sent without re-entering details (L2-024)
+@enduml

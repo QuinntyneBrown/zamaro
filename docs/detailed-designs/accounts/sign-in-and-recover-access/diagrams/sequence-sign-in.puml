@@ -1,0 +1,87 @@
+@startuml
+title UML sequence behaviour — Sign in
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SignInPage" as page
+  participant "AuthService" as auth
+  participant "AuthApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SessionController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AttemptSignIn" as action
+  participant "SignInThrottle" as throttle
+  participant "StartSession" as start
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Enter email and password, activate Sign in
+page -> auth : signIn(email, password, returnUrl)
+auth -> client : GET /sanctum/csrf-cookie, then signIn()
+client -> controller : POST /api/v1/session
+controller -> action : handle(email, password, ip)
+action -> db : Find user by email
+action -> throttle : isLocked(user)
+throttle -> cache : Read block key
+alt account blocked
+  action -> cache : Queue AccountLockedNotification once per block (L2-072)
+  action -> audit : Failed sign-in, outcome locked (L2-069)
+  action --> controller : SignInResult Locked
+  controller --> client : 429 problem details
+  page --> actor : Sign-in blocked for 15 minutes
+else not blocked
+  action -> action : Hash::check, dummy hash when no user
+  alt wrong email or password
+    action -> throttle : recordFailure(user)
+    throttle -> cache : Increment 15-minute counter
+    opt fifth failure in 15 minutes
+      throttle -> cache : Set 15-minute block (L2-072)
+    end
+    action -> audit : Failed sign-in
+    controller --> client : 422 "Email or password is incorrect." (L2-023)
+    page --> actor : Same message whichever field was wrong
+  else correct, MFA enabled
+    action -> cache : Store pending two-factor marker in session
+    controller --> client : 200 two_factor_required
+    page --> actor : Navigate to TwoFactorChallengePage
+  else correct, no MFA
+    action -> throttle : clear(user)
+    action -> start : start(user)
+    start -> cache : Regenerate session ID (L2-073)
+    start -> db : Insert user_sessions row with device and city
+    action -> audit : Sign-in succeeded
+    controller --> client : 200 CurrentUserResource, session cookie
+    client --> auth : currentUser set
+    auth --> page : Navigate to returnUrl (L2-023)
+    page --> actor : Back on the page they were on
+  end
+end
+
+== Sign out ==
+actor -> auth : Activate Sign out
+auth -> client : signOut()
+client -> controller : DELETE /api/v1/session
+controller -> cache : Invalidate session, rotate CSRF token (L2-023)
+controller -> db : Delete user_sessions row
+controller --> client : 204
+auth --> actor : Header shows Sign in
+@enduml

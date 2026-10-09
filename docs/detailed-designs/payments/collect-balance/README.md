@@ -96,7 +96,7 @@ payment clears any pending retry.
 **Data**
 
 - `problem_reports` — `booking_id`, `reporter_id`, `description`, `reported_at`,
-  `resolved_at`, `resolution`.
+  `resolved_at`, `resolved_by`, `resolution`, `resolution_reason` (resolution columns filled by `administration/support-bookings-and-payments`).
 - `bookings.held_at` — set by a problem report, cleared by the administrator's
   resolution (L2-068).
 - `payments` — balance attempts with `attempt`, `next_retry_at` and `failure_code`.

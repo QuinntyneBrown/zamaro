@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Open the saved artists list
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SavedArtistsPage" as page
+  participant "SearchStore" as search
+  participant "SavedArtistsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SavedArtistController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ListSavedArtists" as action
+  participant "AvailabilityService" as avail
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /saved from the header
+page -> search : lastSearchDate()
+search --> page : Date or null
+page -> page : Show skeleton cards (L2-105)
+page -> client : list(date)
+client -> controller : GET /api/v1/saved-artists?date
+controller -> controller : Booker role, validate ListSavedArtistsRequest
+controller -> action : handle(booker, date)
+action -> db : saved_artists JOIN artists WHERE Approved and published\nORDER BY saved_at DESC (L2-027)
+db --> action : Visible saved artists, suspended omitted
+opt date present
+  action -> avail : freeArtistIds(ids, date) (L2-027)
+  avail -> db : Overrides, weekly rules, Confirmed bookings
+  avail --> action : Free IDs
+  action -> action : Mark each card Free or Booked
+end
+action --> controller : SavedArtistList with total of visible artists
+controller --> client : 200 SavedArtistListResource
+client --> page : List
+alt total is 0
+  page --> actor : "No saved artists yet" with "Find who's free" link to / (L2-027)
+else one or more
+  page --> actor : Ticket cards, newest save first, "Free {date}" or "Booked {date}" (L2-027)
+end
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Guest saves an artist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SaveToggleComponent" as toggle
+  participant "PendingIntentService" as intent
+  participant "SignInPage" as signin
+  participant "AuthService" as auth
+  participant "SavedArtistsStore" as store
+  participant "SavedArtistsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SessionController" as session
+  participant "SavedArtistController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SaveArtist" as save
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> toggle : Activate Save while signed out
+toggle -> intent : hold(save-artist, artistId, returnUrl)
+intent -> intent : Write to sessionStorage
+toggle -> signin : Navigate to /sign-in?returnUrl
+actor -> signin : Sign in, or follow Register and verify
+signin -> auth : signIn(...)
+auth -> session : POST /api/v1/session
+session --> auth : CurrentUserResource
+auth -> store : load() saved IDs
+auth -> intent : replay()
+intent --> auth : save-artist intent
+auth -> store : toggle(artistId, name)
+store -> client : save(artistId)
+client -> controller : PUT /api/v1/saved-artists/{artistId}
+controller -> save : handle(booker, artistId)
+save -> db : Check limit, insert row
+controller --> client : 200 SavedArtistStateResource
+auth --> actor : Return to the same page with the artist saved (L2-026)
+@enduml

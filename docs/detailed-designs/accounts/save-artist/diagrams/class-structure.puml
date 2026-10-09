@@ -1,0 +1,88 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Save an artist
+
+package "Zamaro Web (Angular)" {
+  class SaveToggleComponent {
+    +artistId: InputSignal<number>
+    +artistName: InputSignal<string>
+    +pressed: Signal<boolean>
+    +onActivate(): void
+  }
+  class SavedArtistsStore {
+    +savedIds: Signal<Set<number>>
+    +count: Signal<number>
+    +load(): void
+    +isSaved(artistId: number): boolean
+    +toggle(artistId: number, artistName: string): void
+  }
+  class SavedArtistsApi {
+    +save(artistId: number): Observable<SavedArtistState>
+    +unsave(artistId: number): Observable<SavedArtistState>
+    +ids(): Observable<number[]>
+  }
+  class SavedCountBadgeComponent {
+    +count: Signal<number>
+  }
+  class PendingIntentService {
+    +hold(intent: PendingIntent): void
+    +replay(): PendingIntent | null
+  }
+  class ToastService {
+    +success(text: string, action?: ToastAction): void
+    +error(text: string): void
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SavedArtistController {
+    +update(artist: int): SavedArtistStateResource
+    +destroy(artist: int): SavedArtistStateResource
+    +ids(): JsonResponse
+  }
+  class SaveArtist <<action>> {
+    +int limit = 200
+    +handle(booker: User, artistId: int): int
+  }
+  class UnsaveArtist <<action>> {
+    +handle(booker: User, artistId: int): int
+  }
+  class SavedArtist <<Eloquent>> {
+    +int userId
+    +int artistId
+    +CarbonImmutable createdAt
+  }
+  class User <<Eloquent>> {
+    +int id
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +string displayName
+    +ArtistStatus status
+  }
+}
+
+SaveToggleComponent --> SavedArtistsStore
+SavedCountBadgeComponent --> SavedArtistsStore
+SavedArtistsStore --> SavedArtistsApi
+SavedArtistsStore --> ToastService
+SaveToggleComponent ..> PendingIntentService : guest
+SavedArtistsApi ..> SavedArtistController : /api/v1/saved-artists
+SavedArtistController --> SaveArtist
+SavedArtistController --> UnsaveArtist
+SaveArtist ..> SavedArtist : inserts
+UnsaveArtist ..> SavedArtist : deletes
+User "1" *-- "0..200" SavedArtist
+SavedArtist "*" --> "1" Artist
+@enduml

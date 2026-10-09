@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Save an artist
+
+Person(booker, "Booker or guest", "Shortlisting artists")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "SaveToggleComponent, SavedArtistsStore, header Saved count")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/saved-artists endpoints")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "saved_artists, artists, users")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "PUT and DELETE /api/v1/saved-artists/{artistId}", "JSON/HTTPS")
+Rel(api, db, "Reads artist, writes saved_artists", "Eloquent / SQL")
+@enduml

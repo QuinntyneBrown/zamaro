@@ -1,0 +1,103 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Export personal data
+
+package "Zamaro Web (Angular)" {
+  class PrivacySectionComponent {
+    +latest: Signal<DataExportSummary | null>
+    +requestExport(): void
+  }
+  class DataExportDownloadPage {
+    +exportId: string
+    +state: Signal<'loading'|'redirecting'|'expired'>
+  }
+  class PrivacyApi {
+    +requestExport(): Observable<DataExportSummary>
+    +latestExport(): Observable<DataExportSummary | null>
+    +downloadUrl(id: string): Observable<string>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class DataExportController {
+    +store(): DataExportResource
+    +latest(): DataExportResource
+    +download(export: DataExport): JsonResponse
+  }
+  class RequestDataExport <<action>> {
+    +handle(user: User): DataExport
+  }
+  class BuildDataExport <<job>> {
+    +int tries = 5
+    +int dataExportId
+    +handle(exporter: PersonalDataExporter): void
+  }
+  class PersonalDataExporter {
+    +ExportSection[] sections
+    +build(user: User): array
+  }
+  interface ExportSection {
+    +key(): string
+    +export(user: User): array
+  }
+  class ProfileSection
+  class ChurchSection
+  class SavedArtistsSection
+  class BookingsSection
+  class MessagesSection
+  class ReviewsSection
+  class ConsentRecordsSection
+  class DataExport <<Eloquent>> {
+    +int userId
+    +DataExportStatus status
+    +?string storageKey
+    +CarbonImmutable requestedAt
+    +?CarbonImmutable readyAt
+    +?CarbonImmutable expiresAt
+    +isDownloadable(now: CarbonImmutable): bool
+  }
+  enum DataExportStatus {
+    Requested
+    Building
+    Ready
+    Expired
+    Failed
+  }
+  class PurgeExpiredDataExports <<command>> {
+    +handle(): int
+  }
+  class User <<Eloquent>> {
+    +int id
+  }
+}
+
+PrivacySectionComponent --> PrivacyApi
+DataExportDownloadPage --> PrivacyApi
+PrivacyApi ..> DataExportController : /api/v1/account/data-exports
+DataExportController --> RequestDataExport
+RequestDataExport ..> BuildDataExport : dispatches
+BuildDataExport --> PersonalDataExporter
+PersonalDataExporter "1" o-- "7" ExportSection
+ExportSection <|.. ProfileSection
+ExportSection <|.. ChurchSection
+ExportSection <|.. SavedArtistsSection
+ExportSection <|.. BookingsSection
+ExportSection <|.. MessagesSection
+ExportSection <|.. ReviewsSection
+ExportSection <|.. ConsentRecordsSection
+BuildDataExport ..> DataExport : updates
+PurgeExpiredDataExports ..> DataExport : expires
+User "1" *-- "0..*" DataExport
+DataExport --> DataExportStatus
+@enduml

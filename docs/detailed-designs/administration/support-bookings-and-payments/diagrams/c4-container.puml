@@ -10,7 +10,7 @@ System_Boundary(zamaro, "Zamaro") {
   Container(web, "Zamaro Web", "Angular with SSR", "Admin booking search and detail pages")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/admin booking, refund and hold endpoints")
   Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon", "Balance charge, notifications, receipts")
-  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, booking_holds, audit_entries")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, problem_reports, audit_entries")
   ContainerQueue(cache, "Cache and queue", "Redis", "Job queue")
 }
 Rel(admin, web, "Uses /admin/bookings", "HTTPS")

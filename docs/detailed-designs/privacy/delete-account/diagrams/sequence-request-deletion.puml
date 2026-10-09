@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Request account deletion
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "DeleteAccountDialogComponent" as dialog
+  participant "PrivacyApi" as client
+  participant "AuthService" as auth
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "AccountController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RequestAccountDeletion" as action
+  participant "SessionRegistry" as registry
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> dialog : Open "Delete my account", enter password, confirm
+dialog -> client : deleteAccount(password)
+client -> controller : DELETE /api/v1/account
+controller -> controller : Booker or Artist role, check current password
+alt wrong password
+  controller --> client : 422 on password
+  dialog --> actor : Inline error
+else password correct
+  controller -> action : handle(user)
+  action -> db : Confirmed bookings with event date >= today\nas booker or artist (L2-082)
+  alt one or more future Confirmed bookings
+    action --> controller : FutureConfirmedBookingsException
+    controller --> client : 409 future-confirmed-bookings with numbers and dates
+    dialog --> actor : Cancel or complete these bookings first, with links (L2-082)
+  else none
+    action -> db : Set disabled_at = now, erase_after <= now + 30 days (L2-082)
+    action -> db : Artist status Deleted; close open Requested and Accepted bookings
+    action -> registry : endAll(user)
+    registry -> cache : Destroy every session (L2-082)
+    action -> audit : Account deletion requested (L2-069)
+    controller --> client : 204
+    client --> auth : Clear currentUser
+    auth --> actor : Return to Discover with confirmation toast
+  end
+end
+
+== Later sign-in attempt ==
+actor -> client : Sign in with old credentials
+client -> controller : POST /api/v1/session
+controller --> client : 422 "Email or password is incorrect." (account disabled)
+@enduml

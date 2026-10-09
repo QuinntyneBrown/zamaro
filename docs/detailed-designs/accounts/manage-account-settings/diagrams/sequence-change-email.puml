@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Change the email address
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AccountSettingsPage" as page
+  participant "ConfirmEmailChangePage" as confirmPage
+  participant "AccountApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "AccountEmailController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RequestEmailChange" as request
+  participant "ConfirmEmailChange" as confirm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Enter new email and current password
+page -> client : requestEmailChange(newEmail, currentPassword)
+client -> controller : PUT /api/v1/account/email
+controller -> controller : Validate ChangeEmailRequest, check current password (L2-025)
+alt wrong current password
+  controller --> client : 422 on current password
+  page --> actor : Inline error, values kept
+else password correct
+  controller -> request : handle(user, newEmail)
+  opt new address not used by another account
+    request -> db : Store pending_email and token hash
+    request -> queue : Queue ConfirmNewEmailNotification to new address (L2-025)
+  end
+  request -> queue : Queue EmailChangeRequestedNotification to old address (L2-025)
+  controller --> client : 202
+  page --> actor : Link sent; email unchanged until verified
+end
+
+actor -> confirmPage : Open link from new inbox
+confirmPage -> client : confirmEmailChange(token)
+client -> controller : POST /api/v1/account/email/confirm
+controller -> confirm : handle(token)
+confirm -> db : Find unused, unexpired token
+alt token valid and address still free
+  confirm -> db : email = pending_email, set email_verified_at, mark token used (L2-025)
+  confirm -> db : Insert audit entry
+  controller --> client : 204
+  confirmPage --> actor : Email updated
+else token expired, used or address taken
+  controller --> client : 410 problem details
+  confirmPage --> actor : Link no longer valid, request again from settings
+end
+@enduml

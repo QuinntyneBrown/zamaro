@@ -1,0 +1,73 @@
+@startuml
+title UML sequence behaviour — Save and unsave an artist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SaveToggleComponent" as toggle
+  participant "SavedArtistsStore" as store
+  participant "SavedArtistsApi" as client
+  participant "ToastService" as toast
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SavedArtistController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SaveArtist" as save
+  participant "UnsaveArtist" as unsave
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> toggle : Activate Save on a card or profile
+toggle -> store : toggle(artistId, name)
+store -> store : Optimistic: add ID, count + 1, control reads "Saved" (L2-026)
+store -> client : save(artistId)
+client -> controller : PUT /api/v1/saved-artists/{artistId}
+controller -> controller : Booker role, else 404 (L2-074)
+controller -> save : handle(booker, artistId)
+save -> db : Artist Approved and published, else 404
+save -> db : Lock user row, count saved_artists
+alt already 200 saved
+  save --> controller : Limit reached
+  controller --> client : 422 saved-artist-limit
+  client --> store : Error
+  store -> store : Revert ID and count
+  store -> toast : "You can save up to 200 artists." (L2-026)
+else under limit
+  save -> db : Insert row ON CONFLICT DO NOTHING
+  save --> controller : savedCount
+  controller --> client : 200 SavedArtistStateResource
+  client --> store : Confirm count from server
+  store -> toast : "Saved {artist name}" with Undo, 5 s (L2-026, L2-109)
+else network or server failure
+  client --> store : Error
+  store -> store : Revert toggle and count
+  store -> toast : Error "Couldn't save {artist name}. Try again." until dismissed (L2-026)
+end
+
+== Unsave, or Undo from the toast ==
+actor -> toggle : Activate Saved toggle again
+toggle -> store : toggle(artistId, name)
+store -> store : Optimistic: remove ID, count - 1 (L2-026)
+store -> client : unsave(artistId)
+client -> controller : DELETE /api/v1/saved-artists/{artistId}
+controller -> unsave : handle(booker, artistId)
+unsave -> db : Delete row if present
+controller --> client : 200 SavedArtistStateResource
+client --> store : Confirm count
+toggle --> actor : Control reads "Save"
+@enduml

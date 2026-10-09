@@ -45,7 +45,7 @@ package "Zamaro API (Laravel)" {
     +handle(booking: Booking, amountCents: int, reason: string, admin: User): Refund
   }
   class ResolveHeldBooking <<action>> {
-    +handle(booking: Booking, resolution: HoldResolution, amountCents: ?int, reason: string, admin: User): BookingHold
+    +handle(booking: Booking, resolution: HoldResolution, amountCents: ?int, reason: string, admin: User): ProblemReport
   }
   interface PaymentGateway {
     +refund(payment: Payment, amountCents: int, idempotencyKey: string): ProcessorRefund
@@ -81,11 +81,12 @@ package "Zamaro API (Laravel)" {
     +string idempotencyKey
     +int issuedBy
   }
-  class BookingHold <<Eloquent>> {
+  class ProblemReport <<Eloquent>> {
     +int id
     +int bookingId
+    +int reporterId
+    +string description
     +CarbonImmutable reportedAt
-    +string problem
     +?CarbonImmutable resolvedAt
     +?int resolvedBy
     +?HoldResolution resolution
@@ -112,10 +113,10 @@ IssueRefund ..> RefundableAmount : checks
 IssueRefund --> PaymentGateway
 IssueRefund ..> Refund : creates
 ResolveHeldBooking --> IssueRefund
-ResolveHeldBooking ..> BookingHold : resolves
+ResolveHeldBooking ..> ProblemReport : resolves
 Booking "1" *-- "0..*" Payment
 Payment "1" *-- "0..*" Refund
-Booking "1" *-- "0..1" BookingHold
-BookingHold --> HoldResolution
+Booking "1" *-- "0..1" ProblemReport
+ProblemReport --> HoldResolution
 Refund --> RefundStatus
 @enduml

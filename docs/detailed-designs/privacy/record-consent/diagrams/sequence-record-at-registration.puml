@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Record consent at registration
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "RegisterFormComponent" as form
+  participant "ConsentApi" as consentApi
+  participant "AuthApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "LegalDocumentController" as docCtrl
+  participant "RegistrationController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RegisterBooker" as register
+  participant "LegalDocumentRegistry" as docs
+  participant "RecordConsent" as record
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+form -> consentApi : currentDocuments()
+consentApi -> docCtrl : GET /api/v1/legal-documents/current
+docCtrl -> docs : current(Terms), current(PrivacyPolicy)
+docCtrl --> consentApi : Versions and links
+form --> actor : Required terms-and-privacy checkbox,\nseparate unchecked marketing checkbox (L2-080)
+actor -> form : Tick terms, optionally tick marketing, submit
+form -> client : register(form, termsVersion, privacyVersion, marketingOptIn)
+client -> controller : POST /api/v1/register
+controller -> register : handle(RegistrationData)
+register -> docs : Confirm submitted versions are current
+alt a version changed since the form loaded
+  controller --> client : 409 stale version
+  form --> actor : Reload the updated terms and accept again
+else versions current
+  register -> db : Insert user (accounts/register-booker)
+  register -> record : Terms vN, PrivacyPolicy vM, MarketingEmail granted or not
+  record -> db : Insert 3 consent_records with recorded_at,\nsource registration, IP, user agent (L2-080)
+  register --> controller : RegistrationResult
+  controller --> client : 202
+  form --> actor : "Check your email to finish signing up"
+end
+@enduml

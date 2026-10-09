@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Delete an account
+
+Container(web, "Zamaro Web", "Angular", "DeleteAccountDialogComponent, PrivacyApi")
+ContainerDb(storage, "Object storage", "S3-compatible", "Media and documents")
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users, bookings, payments, reviews")
+ContainerDb(cache, "Cache and queue", "Redis", "Sessions and jobs")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "AccountController", "Laravel controller", "destroy: DELETE /api/v1/account")
+  Component(req, "DeleteAccountRequest", "FormRequest", "Checks current password")
+  Component(action, "RequestAccountDeletion", "Action", "Blocks on future Confirmed bookings, disables account")
+  Component(registry, "SessionRegistry", "Service", "Ends every session")
+  Component(audit, "RecordAuditEntry", "Action", "Records the deletion request")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(due, "EraseDueAccounts", "Scheduled command", "Finds accounts past erase_after")
+  Component(job, "EraseAccountPersonalData", "Queued job", "Idempotent, retried")
+  Component(eraser, "AccountEraser", "Service", "Applies the erasure plan")
+  Component(purge, "PurgeRetainedFinancialRecords", "Scheduled command", "Deletes records after 7 years")
+}
+Rel(web, ctrl, "Deletes account", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Reads future Confirmed bookings, sets disabled_at", "SQL")
+Rel(action, registry, "endAll(user)")
+Rel(registry, cache, "Destroys sessions", "RESP")
+Rel(action, audit, "Records")
+Rel(due, db, "Selects due accounts", "SQL")
+Rel(due, job, "Dispatches", "Redis queue")
+Rel(job, eraser, "erase(user)")
+Rel(eraser, db, "Deletes, pseudonymises, sets retain_until", "SQL")
+Rel(eraser, storage, "Deletes media", "S3 API")
+Rel(purge, db, "Deletes expired financial records", "SQL")
+@enduml

@@ -28,7 +28,7 @@ box "Backend — Zamaro Application and Domain" #ECFDF3
   participant "RecordAuditEntry" as audit
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
-  participant "ChargeBalance" as charge
+  participant "ChargeBookingBalance" as charge
   participant "HeldBookingResolvedNotification" as notif
 end box
 box "Backend — Zamaro Infrastructure" #FFF4E5
@@ -41,7 +41,7 @@ dialog -> client : resolveHold(number, body)
 client -> ctrl : POST /api/v1/admin/bookings/{number}/hold/resolution
 ctrl -> ctrl : Validate ResolveHeldBookingRequest
 ctrl -> action : handle(booking, resolution, amountCents, reason, admin)
-action -> db : Lock open booking_hold
+action -> db : Lock booking and open problem_report
 alt booking not held
   action --> ctrl : NotHeld
   ctrl --> client : 409 problem details
@@ -57,7 +57,7 @@ else held (L2-038)
     action -> refund : handle(booking, refundable amount, reason, admin)
     action -> db : Cancel pending balance charge and payout; resolve hold as FullRefund
   end
-  action -> audit : booking_hold.resolved with resolution (L2-069)
+  action -> audit : problem_report.resolved with resolution (L2-069)
   action -> notif : HeldBookingResolved
   notif -> email : Email booker and artist with the resolution (L2-068)
   ctrl --> client : 204 No Content

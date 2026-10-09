@@ -1,0 +1,100 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage account settings
+
+package "Zamaro Web (Angular)" {
+  class AccountSettingsPage {
+    +sessions: Signal<SignedInDevice[]>
+  }
+  class ChangeEmailFormComponent {
+    +submit(newEmail: string, currentPassword: string): void
+  }
+  class ChangePasswordFormComponent {
+    +submit(current: string, next: string): void
+  }
+  class SignedInDevicesComponent {
+    +devices: InputSignal<SignedInDevice[]>
+    +endSession(id: string): void
+  }
+  class AccountApi {
+    +requestEmailChange(newEmail: string, currentPassword: string): Observable<void>
+    +confirmEmailChange(token: string): Observable<void>
+    +changePassword(current: string, next: string): Observable<void>
+    +listSessions(): Observable<SignedInDevice[]>
+    +endSession(id: string): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class RequestEmailChange <<action>> {
+    +handle(user: User, newEmail: string): void
+  }
+  class ConfirmEmailChange <<action>> {
+    +handle(token: string): User
+  }
+  class ChangePassword <<action>> {
+    +handle(user: User, newPassword: string, currentSessionId: string): void
+  }
+  class EndSession <<action>> {
+    +handle(user: User, userSessionId: string): void
+  }
+  class SessionRegistry {
+    +endAllExcept(user: User, sessionId: string): void
+    +end(user: User, userSessionId: string): void
+    +list(user: User): Collection<UserSession>
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string email
+    +?string pendingEmail
+    +string password
+    +?CarbonImmutable emailVerifiedAt
+  }
+  class EmailChangeToken <<Eloquent>> {
+    +int userId
+    +string tokenHash
+    +string newEmail
+    +CarbonImmutable expiresAt
+    +?CarbonImmutable usedAt
+  }
+  class UserSession <<Eloquent>> {
+    +string id
+    +int userId
+    +string deviceLabel
+    +?string approximateCity
+    +CarbonImmutable lastActiveAt
+  }
+  class SessionResource {
+    +string id
+    +string deviceLabel
+    +?string approximateCity
+    +string lastActiveAt
+    +bool isCurrent
+  }
+}
+
+AccountSettingsPage *-- ChangeEmailFormComponent
+AccountSettingsPage *-- ChangePasswordFormComponent
+AccountSettingsPage *-- SignedInDevicesComponent
+AccountSettingsPage --> AccountApi
+RequestEmailChange ..> EmailChangeToken : issues
+ConfirmEmailChange ..> EmailChangeToken : consumes
+ConfirmEmailChange ..> User : updates email
+ChangePassword --> SessionRegistry
+EndSession --> SessionRegistry
+SessionRegistry ..> UserSession : manages
+User "1" *-- "0..*" EmailChangeToken
+User "1" *-- "0..*" UserSession
+SessionResource ..> UserSession : presents
+@enduml

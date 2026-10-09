@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Manage account settings
+
+Person(user, "Booker or artist", "Account holder")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "AccountSettingsPage, ConfirmEmailChangePage")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/account/email, /password, /sessions")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends notifications")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users, email_change_tokens, user_sessions, audit entries")
+  ContainerDb(cache, "Cache and queue", "Redis", "Session payloads and job queue")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Calls account endpoints", "JSON/HTTPS")
+Rel(api, db, "Reads and writes", "Eloquent / SQL")
+Rel(api, cache, "Destroys sessions and enqueues jobs", "RESP")
+Rel(api, breach, "Range query", "HTTPS")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, email, "Sends email", "HTTPS/JSON")
+@enduml

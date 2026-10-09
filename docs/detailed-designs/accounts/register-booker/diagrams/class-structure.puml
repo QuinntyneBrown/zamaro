@@ -1,0 +1,113 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Register as a booker
+
+package "Zamaro Web (Angular)" {
+  class RegisterPage {
+    +returnUrl: string | null
+    +onSubmit(form: RegistrationForm): void
+  }
+  class VerifyEmailPage {
+    +state: Signal<'verifying'|'verified'|'expired'>
+    +resend(): void
+  }
+  class AuthApi {
+    +register(form: RegistrationForm): Observable<void>
+    +verifyEmail(token: string): Observable<void>
+    +resendVerification(email: string): Observable<void>
+  }
+  class RegistrationForm <<interface>> {
+    +name: string
+    +email: string
+    +password: string
+    +acceptedTerms: boolean
+    +marketingOptIn: boolean
+    +challengeToken: string
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class RegistrationController {
+    +__invoke(request: RegisterBookerRequest): JsonResponse
+  }
+  class RegisterBookerRequest {
+    +rules(): array
+  }
+  class PasswordPolicy <<rule>> {
+    +int minLength = 12
+    +int maxLength = 128
+    +validate(attribute: string, value: string, fail: Closure): void
+  }
+  interface BreachedPasswordChecker {
+    +isBreached(password: string): bool
+  }
+  interface BotChallengeVerifier {
+    +verify(token: string, ip: string): bool
+  }
+  class RegisterBooker <<action>> {
+    +handle(data: RegistrationData): RegistrationResult
+  }
+  class VerifyEmail <<action>> {
+    +handle(token: string): User
+  }
+  class RegistrationResult <<value object>> {
+    +string message
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string name
+    +string email
+    +string password
+    +?CarbonImmutable emailVerifiedAt
+    +Role[] roles
+    +bool mfaEnabled
+    +hasVerifiedEmail(): bool
+  }
+  class EmailVerificationToken <<Eloquent>> {
+    +int userId
+    +string tokenHash
+    +CarbonImmutable expiresAt
+    +?CarbonImmutable usedAt
+    +isUsable(now: CarbonImmutable): bool
+  }
+  class ConsentRecord <<Eloquent>> {
+    +int userId
+    +ConsentKind kind
+    +?string documentVersion
+    +bool granted
+    +CarbonImmutable recordedAt
+  }
+  enum Role {
+    Booker
+    Artist
+    Administrator
+  }
+}
+
+RegisterPage --> AuthApi
+VerifyEmailPage --> AuthApi
+AuthApi ..> RegistrationForm : sends
+AuthApi ..> RegistrationController : POST /api/v1/register
+RegistrationController ..> RegisterBookerRequest : validates
+RegisterBookerRequest ..> PasswordPolicy : applies
+RegisterBookerRequest ..> BotChallengeVerifier : checks
+PasswordPolicy --> BreachedPasswordChecker
+RegistrationController --> RegisterBooker
+RegisterBooker ..> RegistrationResult : returns
+RegisterBooker ..> User : creates
+VerifyEmail ..> EmailVerificationToken : consumes
+User "1" *-- "0..*" EmailVerificationToken
+User "1" *-- "1..*" ConsentRecord
+User --> Role
+@enduml
