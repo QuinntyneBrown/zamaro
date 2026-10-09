@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System banner · persistent — Zamaro mocks</title>
+<meta name="mock:kind" content="notification">
+<meta name="mock:screen" content="system-banner">
+<meta name="mock:state" content="persistent">
+<meta name="mock:requirements" content="L2-022 L2-026 L2-090">
+<meta name="description" content="The verify-your-email warning with no close button: it stays until the email is verified.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../../pages/discover/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../../pages/discover/default.html" aria-current="page">Discover</a>
+    <a class="nav-link" href="../../pages/discover/default.html#how">How booking works</a>
+    <a class="nav-link" href="../../pages/discover/default.html#join">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+  </a>
+  <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+</header>
+<div class="banner banner--warning banner--persistent" role="status">
+  <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+  <p class="banner__text banner__text--fill"><strong>Verify your email</strong>We sent a link to naomi.fraser@riversidecc.ca. You need it to send requests. <button class="banner__action" type="button">Resend email</button></p>
+</div>
+
+<main id="main">
+  <section class="poster on-stage" aria-labelledby="hero-title">
+    <div class="container poster__grid">
+      <div class="stack">
+        <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+        <h1 id="hero-title" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h1>
+        <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+      </div>
+      <form class="booking-bar" aria-labelledby="find-title" action="../../pages/discover/default.html">
+        <h2 id="find-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+        <label class="field"><span class="field__label">Event date</span>
+          <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
+        <label class="field"><span class="field__label">Kind of gathering</span>
+          <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+        <label class="field"><span class="field__label">Church location</span>
+          <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
+        <label class="field"><span class="field__label">How far can they drive?</span>
+          <select class="select" name="radius"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+        <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+      </form>
+    </div>
+  </section>
+  <div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton ✦</span><span>Markham ✦</span><span>Ajax ✦</span><span>Oshawa ✦</span><span>Barrie ✦</span><span>Kitchener ✦</span><span>Niagara</span></div>
+
+  <section id="lineup" class="section" aria-labelledby="lineup-title">
+    <div class="container stack stack--lg">
+      <div class="section__head">
+        <div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><h2 id="lineup-title">The lineup</h2></div>
+        <label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span>
+          <select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
+      </div>
+      <fieldset class="filters">
+        <legend>Filter by style</legend>
+        <button class="chip" type="button" aria-pressed="false">Band</button><button class="chip" type="button" aria-pressed="false">Solo vocalist</button><button class="chip" type="button" aria-pressed="false">Gospel choir</button><button class="chip" type="button" aria-pressed="false">Acoustic</button><button class="chip" type="button" aria-pressed="false">Hymns</button><button class="chip" type="button" aria-pressed="false">Spanish</button><button class="chip" type="button" aria-pressed="false">Under $800</button>
+      </fieldset>
+      <article class="headliner" aria-labelledby="headliner-name">
+        <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+        <div class="stack">
+          <p class="overline">No. 01 · Most booked this autumn</p>
+          <h3 id="headliner-name" class="headliner__name"><a href="../../pages/artist/default.html">Abigail Mensah</a></h3>
+          <div class="headliner__meta"><span>Gospel &amp; contemporary vocalist</span><span>Brampton · 44 km</span><span>★ 4.9 (38 churches)</span><span>From $650</span></div>
+          <p>“She had the whole congregation singing in three-part harmony by the last verse.” <span class="text-muted">— Rev. Janet Clarke, Oshawa</span></p>
+          <div class="cluster">
+            <span class="badge badge--free">Free Sat 14 Nov</span>
+            <a class="btn btn--ink" href="../../pages/artist/default.html">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+            <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </div>
+      </article>
+      <ol class="lineup" role="list" aria-label="More artists free Saturday 14 November">
+        <li class="ticket">
+          <div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 02 · ★ 4.8</span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Hosanna Collective</a></h3>
+            <p class="ticket__meta">Five-piece band · Contemporary<br>Mississauga · 32 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$1,800</p>
+            <button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+        <li class="ticket">
+          <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 03 · ★ 4.7</span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Elijah Park</a></h3>
+            <p class="ticket__meta">Solo vocalist · Acoustic guitar<br>Markham · 74 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$350</p>
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+        <li class="ticket">
+          <div class="art ticket__art art--group art--tilt" role="img" aria-label="Grace Tabernacle Mass Choir in gold robes, three rows deep"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 04 · ★ 4.8</span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Grace Tabernacle Mass Choir</a></h3>
+            <p class="ticket__meta">30-voice gospel choir<br>Scarborough · 81 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$2,400</p>
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Grace Tabernacle Mass Choir to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+        <li class="ticket">
+          <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 05 · ★ 5.0</span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Luz Viva</a></h3>
+            <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$900</p>
+            <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+        <li class="ticket">
+          <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 06 · ★ 4.9</span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Daniel &amp; Ruth Okonkwo</a></h3>
+            <p class="ticket__meta">Duo · Hymns &amp; acoustic<br>Ajax · 97 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$700</p>
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+        <li class="ticket">
+          <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 07 · ★ 4.6</span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Marcus Bell Trio</a></h3>
+            <p class="ticket__meta">Piano trio · Gospel &amp; hymns<br>Hamilton · 14 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$950</p>
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <span id="saved"></span>
+  <section id="how" class="section" aria-labelledby="how-title">
+    <div class="container">
+      <div class="section__head">
+        <div><p class="overline section__kicker">Three songs and you’re done</p><h2 id="how-title">How booking works</h2></div>
+        <p class="text-muted">Cancel free up to 14 days before your event.</p>
+      </div>
+      <ol class="steps">
+        <li><div><h3>Pick your date</h3><p>You only see artists who are free that day and will drive to you.</p></div></li>
+        <li><div><h3>Send a request</h3><p>Tell them about your church and the songs you love. Nothing is charged yet.</p></div></li>
+        <li><div><h3>Lock it in</h3><p>When they accept, pay a 25% deposit. The rest is due after the event.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="join" class="section" aria-labelledby="join-title">
+    <div class="container">
+      <div class="band">
+        <div class="stack">
+          <p class="overline">For artists</p>
+          <h2 id="join-title">Lead worship? Get on the bill.</h2>
+          <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
+        </div>
+        <a class="btn btn--lg" href="../../pages/apply/default.html">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../../pages/discover/default.html">Find who’s free</a></li>
+        <li><a href="../../pages/bookings/default.html">Your bookings</a></li>
+        <li><a href="../../pages/discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../../pages/apply/default.html">Join the lineup</a></li>
+        <li><a href="../../pages/discover/default.html#how">What artists earn</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Naomi Fraser</h2>
+      <ul>
+        <li>Riverside Community Church</li>
+        <li><a href="../../pages/saved/default.html">Saved artists (3)</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 7rem; right: 1rem;">No close button: it stays on every page until the email is verified. Resend is the only action.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">System banner</span>
+  <ul class="mock-bar__states">
+    <li><a href="info.html">info</a></li>
+    <li><a href="success.html">success</a></li>
+    <li><a href="warning.html">warning</a></li>
+    <li><a href="danger.html">danger</a></li>
+    <li><a href="persistent.html" aria-current="page">persistent</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply as an artist · step-2 — Zamaro mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="apply">
+<meta name="mock:state" content="step-2">
+<meta name="mock:requirements" content="L2-039 L2-047 L2-052 L2-077 L2-108">
+<meta name="description" content="Step 2 of 4: styles, a 100 to 1,500 character bio and an uploaded live video.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../discover/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../discover/default.html">Discover</a>
+    <a class="nav-link" href="../discover/default.html#how">How booking works</a>
+    <a class="nav-link" href="default.html" aria-current="page">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <a class="nav-link" href="../sign-in/default.html">Sign in</a>
+</header>
+
+<main id="main" class="container">
+  <div class="page-head">
+    <div>
+      <p class="overline">For artists · Free to join</p>
+      <h1 class="page-head__title">Apply as an artist</h1>
+      <p class="page-head__sub">About 10 minutes · We reply within 3 business days</p>
+    </div>
+  </div>
+  <ol class="stepper" aria-label="Application steps">
+    <li class="stepper__step" data-state="done"><a href="default.html" aria-label="About you, done">About you</a></li>
+    <li class="stepper__step" aria-current="step">Your music</li>
+    <li class="stepper__step">Price and travel</li>
+    <li class="stepper__step">References and review</li>
+  </ol>
+  <div class="detail-layout">
+    <form class="form-stack" action="step-3.html" novalidate aria-labelledby="step-title">
+      <section class="form-section" aria-labelledby="step-title">
+        <h2 id="step-title" class="form-section__title">Your music</h2>
+        <p class="form-section__lead">This becomes your public profile. Write it for a pastor deciding who leads their people.</p>
+        <div class="form-grid">
+        <fieldset class="fieldset">
+          <legend>Styles <span class="optional">required, pick 1 to 4</span></legend>
+          <div class="cluster">
+        <label class="choice"><input type="checkbox" id="style-gospel" name="styles" checked><span class="choice__text"><span>Gospel</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-contemporary" name="styles" checked><span class="choice__text"><span>Contemporary</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-hymns" name="styles" checked><span class="choice__text"><span>Hymns</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-acoustic" name="styles"><span class="choice__text"><span>Acoustic</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-spanish" name="styles"><span class="choice__text"><span>Spanish</span></span></label>
+          </div>
+        </fieldset>
+        <div class="field field--full">
+          <label class="field__label" for="bio">Bio <span class="optional">required</span></label>
+          <textarea class="textarea" rows="6" id="bio" name="bio" required aria-describedby="bio-help">I’m a vocalist and keys player from Scarborough, and I’ve led Sunday worship at Cornerstone Baptist for six years. I lead from the piano, so I can carry a service on my own or slot in with your band. My sets mix the hymns your seniors love with newer songs your youth know, and I’m happy to send charts to your volunteers ahead of time.</textarea>
+          <span class="field__help" id="bio-help">100 to 1,500 characters. 336 so far.</span>
+        </div>
+        </div>
+      </section>
+      <section class="form-section" aria-labelledby="videos-title">
+        <h2 id="videos-title" class="form-section__title">Videos</h2>
+        <p class="form-section__lead">Churches book on what they can see. Upload at least one live video.</p>
+        <ul class="upload-list" role="list" aria-label="Uploaded videos">
+          <li class="upload-list__item">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+            <div class="upload-list__text"><strong>Way Maker, live at Cornerstone</strong><span>way-maker-cornerstone.mp4 · 214 MB · 6:12 · Uploaded</span></div>
+            <button class="btn btn--sm btn--ghost" type="button" aria-label="Remove Way Maker, live at Cornerstone">Remove</button>
+          </li>
+        </ul>
+        <div class="form-grid">
+        <div class="field field--full">
+          <label class="field__label" for="video-title">Title for your next video <span class="optional">optional</span></label>
+          <input class="input" type="text" id="video-title" name="video-title" aria-describedby="video-title-help">
+          <span class="field__help" id="video-title-help">5 to 100 characters, for example “Great Is Thy Faithfulness, acoustic”.</span>
+        </div>
+        <div class="field field--full">
+          <label class="field__label" for="video-file">Add a video <span class="optional">optional</span></label>
+          <input class="input" type="file" id="video-file" name="video-file" aria-describedby="video-file-help" accept="video/mp4,video/quicktime,video/webm">
+          <span class="field__help" id="video-file-help">MP4, MOV or WebM, up to 1 GB and 15 minutes. A full song, filmed during a real service if you can.</span>
+        </div>
+        </div>
+      </section>
+      <div class="form-actions form-actions--static">
+        <span class="form-actions__status"><span class="dot" aria-hidden="true"></span>Step 2 of 4 · Saved on this device</span>
+        <div class="form-actions__buttons"><a class="btn" href="default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg>Back</a><button class="btn btn--primary" type="submit">Continue</button></div>
+      </div>
+    </form>
+    <aside aria-labelledby="next-title">
+      <div class="panel">
+        <div class="panel__head"><h2 id="next-title" class="panel__title">After you apply</h2></div>
+        <ol class="timeline">
+          <li><div><p class="timeline__title">We check your references</p><p class="timeline__meta">Two short calls to people who’ve seen you lead.</p></div></li>
+          <li><div><p class="timeline__title">We review it</p><p class="timeline__meta">A real person replies within 3 business days.</p></div></li>
+          <li><div><p class="timeline__title">You set up payouts</p><p class="timeline__meta">Once approved, so churches can pay your deposit.</p></div></li>
+          <li><div><p class="timeline__title">Your profile goes live</p><p class="timeline__meta">Mark your free dates and you’re on the lineup.</p></div></li>
+        </ol>
+        <p class="stub__fine">Free to join. Zamaro keeps 8% when a church books you.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../discover/default.html">Find who’s free</a></li>
+        <li><a href="../bookings/default.html">Your bookings</a></li>
+        <li><a href="../discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../apply/default.html">Join the lineup</a></li>
+        <li><a href="../discover/default.html#how">What artists earn</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Your account</h2>
+      <ul>
+        <li><a href="../sign-in/default.html">Sign in</a></li>
+        <li><a href="../sign-up/default.html">Create an account</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 22rem; right: 1rem;">Uploads show percent, then Processing, then Live. Files over 50 MB resume after a dropped connection. Done steps in the stepper are links back.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Apply as an artist</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="step-2.html" aria-current="page">step-2</a></li>
+    <li><a href="step-3.html">step-3</a></li>
+    <li><a href="step-4.html">step-4</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="submitting.html">submitting</a></li>
+    <li><a href="success.html">success</a></li>
+    <li><a href="error.html">error</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

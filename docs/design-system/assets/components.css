@@ -836,6 +836,9 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 .footer a:hover { background: none; color: var(--color-accent-on-stage); }
 .footer__grid { display: grid; gap: var(--space-8); }
 .footer__word { font: var(--text-display); text-transform: uppercase; color: var(--color-accent-on-stage); }
+/* The wordmark scales with its column so it never runs into the link columns beside it. */
+.footer__grid > :first-child { container-type: inline-size; }
+.footer__word { font-size: min(var(--font-size-5xl), 26cqi); }
 .footer ul { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
 .footer h2 { font: var(--text-overline); letter-spacing: var(--letter-spacing-stamp); margin-bottom: var(--space-3); }
 @media (min-width: 48rem) { .footer__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .footer__grid > :first-child { grid-column: 1 / -1; } }
@@ -1252,3 +1255,66 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 @keyframes scale-in { from { opacity: 0; scale: 0.96; } }
 @keyframes slide-in-left { from { translate: -100% 0; } }
 @media print { .topbar, .toast-region, .mock-bar, .skip-link, .dialog, .bulk-bar { display: none !important; } }
+
+/* ---------- Slice A: booking ---------------------------------------------
+   Booking detail: under 64rem the payment panel (and its one primary action)
+   comes straight after the page head instead of after the messages. */
+@media (max-width: 63.99rem) { .detail-layout--aside-first > aside { order: -1; } }
+
+/* ---------- Slice B: entry ----------------------------------------------- */
+.auth-card__title { font: var(--text-h2); }
+.alert--compact { gap: var(--space-2) var(--space-3); padding: var(--space-4); }
+.alert--compact .alert__title { font: var(--text-h4); }
+button.banner__action { min-height: var(--target-min); padding: 0; border: 0; background: none; text-decoration: underline; text-underline-offset: 0.22em; cursor: pointer; }
+.error-page { display: grid; gap: var(--space-6); justify-items: start; padding-block: var(--space-16) var(--space-20); }
+.topbar__auth { white-space: nowrap; }
+.topbar__auth-long { display: none; }
+@media (min-width: 30rem) { .topbar__auth-short { display: none; } .topbar__auth-long { display: inline; } }
+.form-actions--static { position: static; }
+.banner__text--fill { flex: 1 1 0; min-width: 0; max-width: none; }
+.banner__text--fill .banner__action { margin-left: var(--space-2); }
+.upload-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.upload-list__item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--color-bg-surface-sunken); border: var(--border-width-thick) dashed var(--color-border-strong); }
+.upload-list__item .icon { color: var(--color-success-icon); }
+.upload-list__text { flex: 1; display: grid; min-width: 0; font: var(--text-body-sm); }
+.upload-list__text span { color: var(--color-fg-muted); overflow-wrap: anywhere; }
+.input[type="file"] { padding: var(--space-2); cursor: pointer; }
+
+/* ---------- Slice C: account ----------------------------------------------
+   Saved-ticket actions above the whole-ticket link, an editable setlist,
+   a focus ring for file-upload labels, and a quiet disabled danger button. */
+.ticket__actions { position: relative; z-index: var(--z-raised); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.setlist--edit li { grid-template-columns: 3rem minmax(0, 1fr); align-items: center; }
+.setlist__controls { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+.setlist__controls .select { width: auto; min-width: 9rem; }
+@media (min-width: 48rem) {
+  .setlist--edit { grid-template-columns: minmax(0, 1fr); }
+  .setlist--edit li { grid-template-columns: 3rem minmax(0, 1fr) auto; }
+  .setlist__controls { grid-column: auto; }
+}
+.upload:focus-within { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.btn--danger:disabled { background: var(--color-bg-subtle); }
+.device-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.device-list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: var(--space-3); border-bottom: var(--border-width-hairline) solid var(--color-border-default); }
+.device-list li > span:first-child { display: grid; gap: var(--space-0-5); font: var(--text-body-sm); }
+.device-list strong { font: var(--text-label); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide); }
+
+/* ---------- Slice D: artist ---------------------------------------------
+   aria-selected belongs on the gridcell (role="gridcell"), not on the day
+   button, so the selection ring is driven from the cell. */
+.calendar__cell[aria-selected="true"] .calendar__day { position: relative; box-shadow: var(--shadow-focus); z-index: var(--z-raised); }
+.calendar__cell[aria-selected="true"] .calendar__day[data-status="requested"] { box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-fg-on-accent), var(--shadow-focus); }
+/* Rows in a two-column definition list keep dt and dd together at the top. */
+.definition__row { align-content: start; }
+
+/* ---------- MVP kit: integration additions ------------------------------
+   Statuses follow L2-029: Requested, Accepted, Confirmed, Completed,
+   Declined, Withdrawn, Expired, Cancelled. */
+.stamp--requested { color: var(--color-fg-default); }
+.stamp--completed { color: var(--color-fg-muted); }
+.stamp--withdrawn { color: var(--color-fg-muted); }
+/* A dialog's form wraps header, body and footer; the dialog still lays them out. */
+.dialog__form { display: contents; }
+.toast__text { font: var(--text-body-sm); }
+/* List wrapper for .menu__item rows inside .dialog--menu and .dialog--drawer */
+.menu-list { list-style: none; margin: 0; padding: 0; display: grid; }
