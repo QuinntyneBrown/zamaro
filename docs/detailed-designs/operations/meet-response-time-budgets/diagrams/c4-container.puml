@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Meet response-time budgets
+
+Person(guest, "Guest or booker", "Reads an artist profile")
+Person(artist, "Artist", "Edits their profile")
+System_Ext(cdn, "CDN", "Shared cache in front of Zamaro Web and the API")
+System_Ext(metrics, "Metrics and alerting service", "Server-time histograms and p95 queries")
+System_Ext(ci, "CI/CD pipeline", "Load-testing tool <TO SUPPLY>")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Artist profile page and artist workspace")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Profile reads, searches and writes under /api/v1")
+  Container(worker, "Zamaro Worker", "Laravel queue workers (Horizon)", "Runs CDN purge jobs")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, bookings, reviews")
+  ContainerDb(cache, "Cache and queue", "Redis", "Assembled profile payloads and queues")
+}
+Rel(guest, web, "Opens /artists/{slug}", "HTTPS")
+Rel(artist, web, "Saves /artist/profile", "HTTPS")
+Rel(web, cdn, "Requests /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(cdn, api, "Forwards misses and expired entries", "JSON/HTTPS")
+Rel(web, api, "Sends authenticated reads and writes", "JSON/HTTPS")
+Rel(api, db, "Reads and writes", "SQL")
+Rel(api, cache, "Reads and forgets profile payloads; queues purge jobs", "RESP")
+Rel(worker, cache, "Takes purge jobs from", "RESP")
+Rel(worker, cdn, "Purges profile paths", "HTTPS")
+Rel(api, metrics, "Emits server-time samples", "<TO SUPPLY>")
+Rel(ci, api, "Runs the load test against a performance environment", "HTTPS")
+@enduml

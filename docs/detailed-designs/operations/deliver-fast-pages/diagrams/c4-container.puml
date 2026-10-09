@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Deliver fast pages
+
+Person(guest, "Guest or booker", "Opens Discover or an artist profile")
+System_Ext(cdn, "CDN", "Edge cache for HTML, hashed assets, image and video renditions")
+System_Ext(rum, "Real-user monitoring service", "28-day p75 of LCP, INP, CLS")
+System_Ext(ci, "CI/CD pipeline", "Bundle budget check and Lighthouse CI")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR on Node.js", "Server-renders public pages; lazy route chunks")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Profile and search data with media descriptors")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "AVIF and WebP renditions, video segments, built assets")
+}
+Rel(guest, cdn, "Requests pages, scripts, images, video", "HTTPS")
+Rel(cdn, web, "Fetches server-rendered HTML", "HTTPS")
+Rel(web, api, "Reads page data during SSR", "JSON/HTTPS")
+Rel(cdn, storage, "Fetches media and assets from origin", "HTTPS")
+Rel(guest, rum, "Sends web-vitals beacons", "HTTPS")
+Rel(ci, web, "Builds and gzips bundles; runs Lighthouse against a preview", "HTTPS")
+@enduml

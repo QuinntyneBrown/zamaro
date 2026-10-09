@@ -1,0 +1,104 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Apply API conventions
+
+package "Zamaro Web (Angular)" {
+  class "CursorPage<T>" as CursorPageTs <<interface>> {
+    +data: T[]
+    +meta: CursorMeta
+  }
+  class CursorMeta <<interface>> {
+    +perPage: number
+    +nextCursor: string | null
+    +prevCursor: string | null
+  }
+  class ApiProblem <<interface>> {
+    +type: string
+    +title: string
+    +status: number
+    +detail: string
+    +requestId: string
+    +errors?: Record<string, string[]>
+  }
+  class ApiProblemInterceptor <<HttpInterceptorFn>> {
+    +intercept(req: HttpRequest, next: HttpHandlerFn): Observable<HttpEvent>
+  }
+  class FormErrorMapper {
+    +apply(form: FormGroup, problem: ApiProblem): void
+  }
+  class BookingsApi {
+    +list(tab: 'upcoming'|'past', cursor?: string): Observable<CursorPage<BookingSummary>>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ForceJsonResponse <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class EnsureJsonRequest <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class ProblemDetails <<value object>> {
+    +string type
+    +string title
+    +int status
+    +string detail
+    +string requestId
+    +?array errors
+    +toResponse(): JsonResponse
+  }
+  class ProblemDetailsRenderer {
+    -types: ProblemType[]
+    +render(e: Throwable, request: Request): JsonResponse
+  }
+  enum ProblemType {
+    ValidationFailed
+    Unauthenticated
+    NotFound
+    Forbidden
+    Conflict
+    TooManyRequests
+    UnsupportedMediaType
+    ServerError
+    +uri(): string
+    +status(): int
+  }
+  class CursorPaginatedResource {
+    +toArray(request: Request): array
+    +paginationInformation(request, paginated, default): array
+  }
+  class BookingsController {
+    +index(request: ListBookingsRequest): CursorPaginatedResource
+  }
+  class ListBookingsRequest {
+    +rules(): array
+    +perPage(): int
+  }
+  class AssertsOpenApiContract <<test trait>> {
+    +assertMatchesContract(response: TestResponse): void
+  }
+}
+
+BookingsApi ..> CursorPageTs : returns
+CursorPageTs *-- CursorMeta
+ApiProblemInterceptor ..> ApiProblem : parses
+FormErrorMapper ..> ApiProblem : reads errors
+BookingsApi ..> BookingsController : GET /api/v1/bookings
+BookingsController ..> ListBookingsRequest : validates
+BookingsController ..> CursorPaginatedResource : returns
+ProblemDetailsRenderer ..> ProblemDetails : builds
+ProblemDetailsRenderer --> ProblemType
+ProblemDetails ..> ApiProblem : serialised as
+CursorPaginatedResource ..> CursorPageTs : serialised as
+@enduml

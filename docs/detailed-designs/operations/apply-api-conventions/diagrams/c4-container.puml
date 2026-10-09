@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Apply API conventions
+
+Person(booker, "Booker", "Uses the bookings and account pages")
+System_Ext(ci, "CI/CD pipeline", "OpenAPI generation and contract tests")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Typed *Api clients, problem-details handling, cursor paging")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "REST under /api/v1: JSON, cursor pagination, RFC 9457 errors")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Indexed sort keys for cursors")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "Calls /api/v1", "application/json; errors as application/problem+json")
+Rel(api, db, "Keyset queries", "SQL")
+Rel(ci, api, "Generates openapi.json and validates test responses against it")
+@enduml

@@ -1,0 +1,125 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Run background jobs
+
+package "Zamaro Web (Angular)" {
+  class BookingDetailPage {
+    +booking: Signal<Booking | null>
+  }
+}
+
+package "Zamaro Worker (Laravel)" {
+  abstract class DueWorkCommand <<artisan command>> {
+    #dueQuery(now: CarbonImmutable): Builder
+    #jobFor(booking: Booking): ShouldQueue
+    +handle(): int
+  }
+  class ExpireBookingRequestsCommand {
+    signature = "bookings:expire-requests"
+  }
+  class ExpireUnpaidDepositsCommand {
+    signature = "bookings:expire-deposits"
+  }
+  class CompleteBookingsCommand {
+    signature = "bookings:complete"
+  }
+  class ChargeBalancesCommand {
+    signature = "payments:charge-balances"
+  }
+  class SendPayoutsCommand {
+    signature = "payouts:send"
+  }
+  class SendRemindersCommand {
+    signature = "reminders:send"
+  }
+  interface ShouldBeUnique {
+    +uniqueId(): string
+  }
+  class RetriesWithBackoff <<trait>> {
+    +int tries = 6
+    +backoff(): array
+  }
+  class ExpireBookingRequest <<job>> {
+    +int bookingId
+    +uniqueId(): string
+    +handle(machine: BookingStateMachine): void
+  }
+  class ChargeBalance <<job>> {
+    +int bookingId
+    +int attempt
+    +handle(gateway: PaymentGateway): void
+  }
+  class SendEventReminder <<job>> {
+    +int bookingId
+    +ReminderKind kind
+    +handle(): void
+  }
+  class BookingStateMachine {
+    +can(booking: Booking, to: BookingStatus): bool
+    +transition(booking: Booking, to: BookingStatus, reason: string): BookingTransition
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +BookingStatus status
+    +CarbonImmutable respondBy
+    +CarbonImmutable depositDueBy
+    +CarbonImmutable eventDate
+  }
+  class BookingReminder <<Eloquent>> {
+    +int bookingId
+    +ReminderKind kind
+    +CarbonImmutable sentAt
+  }
+  enum ReminderKind {
+    EventInSevenDays
+    EventInOneDay
+    ReviewPrompt
+    ReviewReminder
+  }
+  class ReportFailedJob <<listener>> {
+    +handle(event: JobFailed): void
+  }
+  interface OnCallAlerter {
+    +raise(alert: Alert): void
+  }
+  interface PaymentGateway {
+    +charge(request: ChargeRequest, idempotencyKey: string): Payment
+    +payout(request: PayoutRequest, idempotencyKey: string): Payout
+  }
+}
+
+DueWorkCommand <|-- ExpireBookingRequestsCommand
+DueWorkCommand <|-- ExpireUnpaidDepositsCommand
+DueWorkCommand <|-- CompleteBookingsCommand
+DueWorkCommand <|-- ChargeBalancesCommand
+DueWorkCommand <|-- SendPayoutsCommand
+DueWorkCommand <|-- SendRemindersCommand
+ExpireBookingRequestsCommand ..> ExpireBookingRequest : dispatches
+ChargeBalancesCommand ..> ChargeBalance : dispatches
+SendRemindersCommand ..> SendEventReminder : dispatches
+ExpireBookingRequest ..|> ShouldBeUnique
+ChargeBalance ..|> ShouldBeUnique
+SendEventReminder ..|> ShouldBeUnique
+ExpireBookingRequest ..> RetriesWithBackoff : uses
+ChargeBalance ..> RetriesWithBackoff : uses
+SendEventReminder ..> RetriesWithBackoff : uses
+ExpireBookingRequest --> BookingStateMachine
+BookingStateMachine --> Booking : transitions
+ChargeBalance --> PaymentGateway
+SendEventReminder --> BookingReminder : inserts once
+BookingReminder --> ReminderKind
+Booking "1" o-- "*" BookingReminder
+ReportFailedJob --> OnCallAlerter
+BookingDetailPage ..> Booking : shows status via API
+@enduml

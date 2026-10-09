@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Backups and the quarterly restore drill
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "On-call person" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Zamaro Web in the\nfresh environment" as web
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Zamaro API in the\nfresh environment" as api
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Production database" as db
+  database "Backup storage\n(Canadian region, AES-256)" as backup
+  participant "Hosting platform" as hosting
+  database "Restored database" as restored
+end box
+
+== Continuous backup ==
+db -> backup : Daily base backup (schedule <TO SUPPLY>)
+loop continuously
+  db -> backup : Archive WAL segments, at most every <TO SUPPLY> minutes (<= 15, L2-091)
+end
+backup -> backup : Expire base backups and WAL older than 14 days (L2-091)
+
+== Quarterly restore drill ==
+actor -> hosting : Start drill; pick a target time within the last 14 days
+hosting -> backup : Fetch nearest base backup and WAL to the target time
+backup --> hosting : Files
+hosting -> restored : Restore and replay WAL to the target time (L2-091)
+actor -> api : Deploy current release pointing at the restored database
+api -> restored : php artisan migrate:status matches the release
+api --> actor : /health/ready returns 200
+actor -> web : Smoke test /, /artists/{slug}, a booking detail
+web -> api : Page data
+api -> restored : Queries
+restored --> api : Rows
+api --> web : Data
+web --> actor : Pages render with data from the target time
+actor -> actor : Record start, target time, completion, duration and outcome\nin RestoreDrillRecord (location <TO SUPPLY>); target 4 hours (L2-091)
+actor -> hosting : Tear down the fresh environment
+@enduml

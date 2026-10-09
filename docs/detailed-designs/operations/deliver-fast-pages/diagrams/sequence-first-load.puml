@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — First load of an artist profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SSR server" as ssr
+  participant "ArtistProfilePage" as page
+  participant "MediaImageComponent" as img
+  participant "WebVitalsReporter" as vitals
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as controller
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CDN" as cdn
+  database "Object storage" as storage
+  participant "Real-user monitoring service" as rum
+end box
+
+actor -> cdn : GET /artists/{slug} on a phone
+alt public HTML cached at the edge
+  cdn --> actor : Server-rendered HTML
+else miss
+  cdn -> ssr : GET /artists/{slug}
+  ssr -> controller : GET /api/v1/artists/{slug}
+  controller --> ssr : Profile with MediaImageData and VideoStreamData
+  ssr -> ssr : Render full content (L2-112), embed transfer state,\npreload hero image with fetchpriority high
+  ssr --> cdn : HTML with critical CSS
+  cdn --> actor : HTML
+end
+actor -> cdn : Initial JavaScript and CSS (hashed, immutable)
+note right of actor : Initial JavaScript <= 250 KB gzipped;\nartist and admin chunks never requested (L2-087)
+cdn --> actor : Bundles
+actor -> page : Hydrate using transfer state, no second API call
+page -> img : Hero photo with priority
+img -> cdn : AVIF from srcset at the rendered width (L2-088)
+cdn -> storage : Fetch rendition on first request
+storage --> cdn : AVIF bytes
+cdn --> img : AVIF rendition
+img --> actor : Hero painted inside reserved width and height
+page -> page : @defer gallery, videos and reviews until near the viewport
+loop each gallery image entering the viewport
+  img -> cdn : Lazy-loaded WebP or AVIF rendition (L2-088)
+  cdn --> img : Rendition
+end
+vitals -> vitals : Observe LCP, INP and CLS for route /artists/:slug
+vitals -> rum : sendBeacon samples with release and route template
+note right of rum : 28-day p75 targets: LCP <= 2.5 s,\nINP <= 200 ms, CLS <= 0.1 (L2-086)
+@enduml

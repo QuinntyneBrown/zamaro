@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Deliver fast pages
+
+Person(guest, "Guest or booker", "Browser on a phone")
+System_Ext(cdn, "CDN", "Assets, images, video")
+System_Ext(rum, "Real-user monitoring service", "Core Web Vitals")
+System_Ext(ci, "CI/CD pipeline", "Runs build checks")
+Container(api, "Zamaro API", "Laravel", "ArtistProfileResource with MediaImageData")
+Container_Boundary(web, "Zamaro Web") {
+  Component(ssr, "SSR server", "Angular SSR (Node.js)", "Renders public routes with hydration and transfer cache")
+  Component(routes, "App routes", "Angular router", "Lazy chunks; canMatch role guards on /artist and /admin")
+  Component(preload, "RoleAwarePreloadingStrategy", "PreloadingStrategy", "Preloads only routes the current role can match")
+  Component(img, "MediaImageComponent", "Standalone component", "picture with AVIF and WebP srcset, width, height, lazy or priority")
+  Component(player, "VideoPlayerComponent", "Standalone component, @defer", "Poster first; streaming player loaded on demand")
+  Component(vitals, "WebVitalsReporter", "Service", "Captures LCP, INP and CLS per route template")
+  Component(budget, "check-bundle-budgets", "Node build script", "Fails the build above 250 KB initial or 150 KB per chunk gzipped")
+}
+Rel(guest, cdn, "Requests", "HTTPS")
+Rel(cdn, ssr, "Fetches HTML on miss", "HTTPS")
+Rel(ssr, api, "Reads page data", "JSON/HTTPS")
+Rel(ssr, routes, "Renders")
+Rel(routes, preload, "Uses")
+Rel(routes, img, "Profile and lineup pages use")
+Rel(routes, player, "Profile page uses")
+Rel(img, cdn, "Loads renditions from")
+Rel(player, cdn, "Streams manifests and segments from")
+Rel(vitals, rum, "Sends beacons to", "sendBeacon")
+Rel(ci, budget, "Runs after ng build")
+@enduml

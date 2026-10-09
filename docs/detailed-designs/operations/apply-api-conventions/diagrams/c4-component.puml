@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Apply API conventions
+
+Container(web, "Zamaro Web", "Angular", "BookingsApi, ApiProblemInterceptor, FormErrorMapper")
+System_Ext(ci, "CI/CD pipeline", "Runs generation and contract tests")
+Container_Boundary(api, "Zamaro API") {
+  Component(routing, "API routing", "bootstrap/app.php, routes/api.php", "apiPrefix api/v1; every route under /api/v1")
+  Component(json, "ForceJsonResponse + EnsureJsonRequest", "Middleware", "Accept JSON; reject non-JSON bodies with 415")
+  Component(ctrl, "BookingsController, ChurchController", "Laravel controllers", "Representative list and write endpoints")
+  Component(form, "FormRequests", "Validation", "Per-field rules")
+  Component(page, "CursorPage + CursorPaginatedResource", "Pagination support", "cursorPaginate with a unique ordered key")
+  Component(problem, "ProblemDetailsRenderer", "Exception rendering", "Maps exceptions to RFC 9457 bodies")
+  Component(openapi, "OpenAPI generator", "Build-time tool <TO SUPPLY>", "Builds openapi.json (3.1) from routes, requests and resources")
+  Component(contract, "AssertsOpenApiContract", "Test trait", "Validates every feature-test response against openapi.json")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "Bookings, churches")
+}
+Rel(web, routing, "GET and PUT /api/v1/...", "JSON/HTTPS")
+Rel(routing, json, "Applies")
+Rel(json, ctrl, "Passes to")
+Rel(ctrl, form, "Validates with")
+Rel(ctrl, page, "Pages lists with")
+Rel(page, db, "Keyset query", "SQL")
+Rel(form, problem, "ValidationException rendered by")
+Rel(ci, openapi, "Runs")
+Rel(ci, contract, "Runs feature tests with")
+Rel(contract, openapi, "Reads openapi.json from")
+@enduml

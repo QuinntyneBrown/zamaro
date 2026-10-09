@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Monitor health and errors
+
+Container(web, "Zamaro Web", "Angular", "RequestIdTracker, ErrorTrackingErrorHandler, error pages")
+System_Ext(errors, "Error tracking service", "Exceptions")
+System_Ext(logs, "Log management service", "JSON logs")
+System_Ext(metrics, "Metrics and alerting service", "Alert rules and paging")
+System_Ext(lb, "Hosting platform", "Load balancer")
+Container_Boundary(api, "Zamaro API and Worker") {
+  Component(rid, "AssignRequestId", "Global middleware", "Accepts or creates X-Request-Id; adds it to Context")
+  Component(reqlog, "LogRequest", "Terminable middleware", "One JSON line per request")
+  Component(fmt, "JsonLogFormatter + RedactSensitiveFields", "Monolog formatter and processor", "Structured, redacted log lines (L2-079)")
+  Component(handler, "Exception handler", "bootstrap/app.php withExceptions", "Reports to ErrorReporter; renders problem details with requestId")
+  Component(reporter, "ErrorReporter", "Interface + adapter", "Sends exceptions with request ID and release")
+  Component(health, "HealthController", "Laravel controller", "/health/live and /health/ready")
+  Component(ready, "ReadinessChecker", "Service", "DatabaseCheck, CacheCheck, QueueCheck")
+  Component(lag, "MeasureQueueLag", "Scheduled command", "Oldest pending job age per queue")
+  Component(webhook, "PaymentWebhookFailureTracker", "Service", "Counts consecutive webhook processing failures")
+  Component(alerter, "OnCallAlerter", "Interface + adapter", "Raises an alert directly")
+  ComponentDb(redis, "Cache and queue", "Redis", "Queues and counters")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "System of record")
+}
+Rel(web, rid, "Calls /api/v1 with X-Request-Id", "JSON/HTTPS")
+Rel(rid, reqlog, "Passes to")
+Rel(reqlog, fmt, "Writes through")
+Rel(fmt, logs, "stdout shipped to")
+Rel(handler, reporter, "Reports to")
+Rel(reporter, errors, "Sends to", "HTTPS")
+Rel(lb, health, "Probes", "HTTP")
+Rel(health, ready, "Runs")
+Rel(ready, db, "SELECT 1", "SQL")
+Rel(ready, redis, "PING cache and queue connections", "RESP")
+Rel(lag, redis, "Reads oldest job timestamps", "RESP")
+Rel(lag, metrics, "Emits queue_lag_seconds")
+Rel(rid, metrics, "Emits request counts by status class")
+Rel(webhook, alerter, "Raises at 3 in a row")
+Rel(alerter, metrics, "Creates alert in")
+@enduml

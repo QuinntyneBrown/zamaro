@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Start video playback within 2 seconds
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "VideoPlayerComponent" as player
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as controller
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CDN" as cdn
+  database "Object storage" as storage
+end box
+
+actor -> page : Open /artists/{slug}
+page -> controller : GET /api/v1/artists/{slug}
+controller --> page : VideoStreamData for Live videos only (L2-014):\nmanifestUrl, posterUrl, captionsUrl
+page -> player : Render "Watch {pronoun} lead" when the section nears the viewport
+player -> cdn : Poster frame image
+cdn --> player : Poster
+player -> player : Prefetch player library on idle; preconnect to media host
+actor -> player : Activate play
+player -> player : Load streaming player if not yet loaded\n(native playback where the browser supports the format)
+player -> cdn : GET manifest
+alt manifest and first segments cached at the edge
+  cdn --> player : Manifest
+else miss
+  cdn -> storage : Fetch manifest and segments
+  storage --> cdn : Files
+  cdn --> player : Manifest
+end
+player -> player : Pick starting rendition from estimated bandwidth (360p, 720p or 1080p, L2-052)
+player -> cdn : First segment
+cdn --> player : Segment
+player --> actor : Playback starts within 2 s on 10 Mbps, with sound only after the click (L2-088, L2-014)
+loop while playing
+  player -> cdn : Next segments, switching rendition as bandwidth changes
+  cdn --> player : Segments
+end
+@enduml

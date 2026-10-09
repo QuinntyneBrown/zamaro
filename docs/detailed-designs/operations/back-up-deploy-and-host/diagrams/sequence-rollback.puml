@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Roll back a bad release within 15 minutes
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "On-call person" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Zamaro Web\n(SSR instances)" as web
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Zamaro API\n(instances)" as api
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Zamaro Worker" as worker
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CI/CD pipeline" as ci
+  participant "Hosting platform\nload balancer" as lb
+  database "Zamaro database" as db
+  participant "CDN" as cdn
+end box
+
+actor -> ci : Trigger rollback (or automatic after a failed smoke test)
+ci -> ci : Read previous ReleaseManifest
+note right of db : Schema stays as is: the previous release\nworks against it (L2-094 criterion 2)
+loop each API and Web instance
+  ci -> api : Start instance from previous image digest
+  lb -> api : GET /health/ready
+  api --> lb : 200
+  lb -> lb : Shift traffic, drain the bad instance
+  ci -> web : Same step for SSR instances
+end
+web -> cdn : Pages reference previous release asset prefix, still on the CDN
+ci -> worker : horizon:terminate; workers restart on previous image
+ci -> web : Smoke test /, /artists/{slug}, booking API
+web --> ci : Pass
+ci --> actor : Previous release serving; elapsed time recorded,\ntarget 15 minutes or less (L2-094)
+@enduml

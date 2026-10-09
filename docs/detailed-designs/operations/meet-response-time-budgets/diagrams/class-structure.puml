@@ -1,0 +1,114 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Meet response-time budgets
+
+package "Zamaro Web (Angular)" {
+  class ArtistProfilePage {
+    +profile: Signal<ArtistProfile | null>
+    +load(slug: string, date?: string): void
+  }
+  class ArtistsApi {
+    +getProfile(slug: string, date?: string): Observable<ArtistProfile>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  enum RequestClass {
+    ProfileRead
+    Search
+    Write
+    PaymentWrite
+    Other
+    +budgetMs(): ?int
+  }
+  enum CachePolicy {
+    PublicShared
+    PrivateNoStore
+    +headerValue(): string
+  }
+  class RecordServerTiming <<middleware>> {
+    -metrics: MetricsRecorder
+    +handle(request: Request, next: Closure, class: string): Response
+  }
+  class SetCachePolicy <<middleware>> {
+    +handle(request: Request, next: Closure, policy: string): Response
+  }
+  class HandleConditionalGet <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+    -etagFor(body: string): string
+  }
+  interface MetricsRecorder {
+    +timing(name: string, ms: float, tags: array): void
+    +increment(name: string, tags: array): void
+  }
+  class ArtistProfileController {
+    +show(slug: string, request: ShowArtistProfileRequest): ArtistProfileResource
+  }
+  class GetArtistProfile <<action>> {
+    +handle(slug: string, fromDate: ?CarbonImmutable): ArtistProfileData
+  }
+  class ArtistProfileCache {
+    -ttlSeconds: int
+    +remember(artistId: int, loader: Closure): ArtistProfileData
+    +forget(artistId: int): void
+  }
+  class ArtistProfileData <<value object>> {
+    +Artist artist
+    +array photos
+    +array liveVideos
+    +array setlist
+    +?float rating
+    +int reviewCount
+    +array upcomingDates
+  }
+  class UpdateArtistProfile <<action>> {
+    +handle(artist: Artist, data: array): Artist
+  }
+  class ArtistProfileChanged <<event>> {
+    +int artistId
+    +string slug
+    +?string previousSlug
+  }
+  class InvalidateArtistProfileCache <<listener>> {
+    +handle(event: ArtistProfileChanged): void
+  }
+  class PurgeCdnPaths <<job>> {
+    +array paths
+    +handle(purger: CdnPurger): void
+  }
+  interface CdnPurger {
+    +purge(paths: array): void
+  }
+  class PerformanceDatasetSeeder <<seeder>> {
+    +int artists = 5000
+    +int bookers = 20000
+    +int bookings = 200000
+    +run(): void
+  }
+}
+
+ArtistProfilePage --> ArtistsApi
+ArtistsApi ..> ArtistProfileController : GET /api/v1/artists/{slug}
+RecordServerTiming --> MetricsRecorder
+RecordServerTiming ..> RequestClass : tags with
+SetCachePolicy ..> CachePolicy : applies
+ArtistProfileController --> GetArtistProfile
+GetArtistProfile --> ArtistProfileCache
+GetArtistProfile ..> ArtistProfileData : returns
+UpdateArtistProfile ..> ArtistProfileChanged : raises
+InvalidateArtistProfileCache ..> ArtistProfileChanged : handles
+InvalidateArtistProfileCache --> ArtistProfileCache : forgets
+InvalidateArtistProfileCache ..> PurgeCdnPaths : dispatches
+PurgeCdnPaths --> CdnPurger
+@enduml
