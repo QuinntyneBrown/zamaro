@@ -19,6 +19,9 @@ from its first release.
   `docs/design-system/`.
 - Agent guidance in `AGENTS.md` and the skills in `.claude/skills/` and
   `.agents/skills/`.
+- Empty Angular 22 workspace in `frontend/` with the `zamaro` (SSR), `admin` and
+  `perf-test` applications and the `components` and `api` libraries, angular-eslint,
+  Prettier, and a husky pre-commit hook that fixes staged frontend files.
 - README, MIT license, contributing guide, code of conduct, security policy, support
   guide, changelog and GitHub issue and pull request templates.
 

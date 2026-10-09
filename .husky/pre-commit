@@ -1,0 +1,2 @@
+# Fix staged frontend files: ESLint --fix, then Prettier. See frontend/package.json "lint-staged".
+cd frontend && npx --no-install lint-staged
