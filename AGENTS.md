@@ -60,6 +60,7 @@ zamaro/
 │   │   ├── Policies/              # ownership and role authorisation
 │   │   ├── Notifications/         # transactional email
 │   │   ├── Console/Commands/      # artisan commands (i18n:check, ...)
+│   │   ├── Support/               # cross-cutting code with no subsystem (Problems/ for RFC 9457)
 │   │   └── Http/
 │   │       ├── Controllers/Api/V1/{Subsystem}/   # thin: validate, call an action, return a resource
 │   │       ├── Controllers/Health/               # /health/live, /health/ready
@@ -78,6 +79,7 @@ zamaro/
 │   ├── routes/
 │   │   ├── api.php                # /api/v1, authenticated by default
 │   │   ├── api_public.php         # intentional anonymous routes
+│   │   ├── health.php             # /health/live and /health/ready, outside /api/v1 (ADR-0005)
 │   │   └── console.php            # scheduled commands
 │   ├── tests/
 │   │   ├── Feature/{Subsystem}/   # integration tests against the API

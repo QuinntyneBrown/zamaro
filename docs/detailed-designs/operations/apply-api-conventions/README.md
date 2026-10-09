@@ -37,19 +37,21 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
 
 **Routes and media types (L2-095 criterion 1)**
 
-- **API routing** — `bootstrap/app.php` registers `routes/api.php` with
-  `apiPrefix: 'api/v1'`, so every API route is under `/api/v1`. Operational endpoints
+- **API routing** — `bootstrap/app.php` registers `routes/api.php` (signed-in routes) with
+  `apiPrefix: 'api/v1'` and loads `routes/api_public.php` (intentionally anonymous routes)
+  under the same prefix, so every API route is under `/api/v1` (ADR-0005). Operational endpoints
   (`/health/live`, `/health/ready`) and web routes such as `/sitemap.xml` sit outside the
   REST API. A future breaking change introduces `/api/v2` alongside `/api/v1`; the
   deprecation period is `<TO SUPPLY>`.
-- **`ForceJsonResponse`** — middleware that sets `Accept: application/json` on every API
-  request, so Laravel renders all responses, including framework exceptions, as JSON.
+- **API-only rendering** — the backend serves no web pages, so `withExceptions()` renders
+  every exception as problem details whatever the `Accept` header; no `ForceJsonResponse`
+  middleware is needed (ADR-0005).
 - **`EnsureJsonRequest`** — middleware that rejects a body-carrying request whose
   `Content-Type` is not `application/json` with 415. Upload endpoints that receive file
   chunks are the named exception (L2-051, L2-052).
 - **JSON shape** — resources return `{ "data": ... }`. Dates are ISO 8601, money is
-  integer cents with a currency code, and distances are whole kilometres. Property
-  casing is `<TO SUPPLY>`; the diagrams use camelCase.
+  integer cents with a currency code, and distances are whole kilometres. Properties
+  are camelCase (ADR-0005).
 
 **Cursor pagination (L2-095 criterion 1)**
 
@@ -76,7 +78,9 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
   `requestId` extension member and, for 422 only, `errors`: an object keyed by field
   path whose values are arrays of messages.
 - **`ProblemType`** — enum of problem types. Each has a stable URI under a
-  Zamaro-owned base (`<TO SUPPLY>`), a status and a title.
+  Zamaro-owned base, `config('zamaro.problems.base_uri')`, which defaults to
+  `{APP_URL}/problems` (ADR-0005), a status and a title. An HTTP error with no Zamaro
+  meaning (for example 405) uses `about:blank` with the HTTP reason phrase as its title.
 
 | Exception | Status | Problem type |
 |-----------|--------|--------------|

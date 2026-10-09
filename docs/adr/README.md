@@ -13,3 +13,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0002](0002-compose-dev-environment-and-vendor-ports.md) | Docker Compose dev environment; outside vendors behind ports with fakes | Accepted |
 | [0003](0003-design-tokens-copied-into-components-library.md) | Design tokens are copied into the components library | Accepted |
 | [0004](0004-stay-on-laravel-11-with-ignored-advisories.md) | Stay on Laravel 11 and ignore its seven blocking advisories by ID | Accepted |
+| [0005](0005-api-skeleton-route-files-support-and-problem-types.md) | API skeleton: route files, `app/Support`, problem types and health responses | Accepted |
