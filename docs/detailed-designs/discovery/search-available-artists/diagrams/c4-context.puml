@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Search available artists
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+System_Ext(cdn, "CDN", "Serves web assets and artist images")
+
+Rel(guest, zamaro, "Searches for free artists using", "HTTPS")
+Rel(booker, zamaro, "Searches from their church location using", "HTTPS")
+Rel(zamaro, routing, "Requests driving distances from", "HTTPS/JSON")
+Rel(zamaro, cdn, "Serves card images through")
+@enduml

@@ -1,0 +1,121 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Search available artists
+
+package "Zamaro Web (Angular)" {
+  class DiscoverPage {
+    +store: SearchStore
+    +onSubmit(form: SearchForm): void
+    +onShowMore(): void
+  }
+  class SearchStore {
+    +criteria: Signal<SearchCriteria>
+    +lineup: Signal<Lineup | null>
+    +status: Signal<'idle'|'loading'|'loaded'|'error'>
+    +search(criteria: SearchCriteria): void
+    +loadNextPage(): void
+  }
+  class SearchApi {
+    +search(criteria: SearchCriteria, cursor?: string): Observable<Lineup>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SearchController {
+    +__invoke(request: SearchArtistsRequest): LineupResource
+  }
+  class SearchArtistsRequest {
+    +rules(): array
+    +toCriteria(): SearchCriteria
+  }
+  class SearchCriteria <<value object>> {
+    +CarbonImmutable eventDate
+    +GatheringKind kind
+    +float latitude
+    +float longitude
+    +int radiusKm
+    +?string cursor
+  }
+  class SearchAvailableArtists <<action>> {
+    +handle(criteria: SearchCriteria): Lineup
+  }
+  class AvailabilityService {
+    +isFree(artist: Artist, date: CarbonImmutable): bool
+    +freeArtistIds(ids: array, date: CarbonImmutable): array
+    +hasCurrentVsc(artist: Artist, date: CarbonImmutable): bool
+  }
+  class DistanceService {
+    +between(from: Coordinates, to: Coordinates): Distance
+  }
+  interface RoutingProvider {
+    +drivingDistance(from: Coordinates, to: Coordinates): Distance
+  }
+  class Distance <<value object>> {
+    +int km
+    +int driveMinutes
+    +bool approximate
+    +label(): string
+  }
+  class Lineup <<value object>> {
+    +LineupCard[] cards
+    +int total
+    +?string nextCursor
+  }
+  class LineupCard <<value object>> {
+    +int position
+    +Artist artist
+    +Distance distance
+    +?float rating
+    +int reviewCount
+    +int fromPriceCents
+    +?Review headlinerQuote
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +string slug
+    +string displayName
+    +string actType
+    +string baseCity
+    +float baseLatitude
+    +float baseLongitude
+    +int maxDriveKm
+    +int fromPriceCents
+    +ArtistStatus status
+  }
+  enum GatheringKind {
+    SundayService
+    WorshipNight
+    YouthEvent
+    ConferenceOrRetreat
+    Wedding
+    FuneralOrMemorial
+  }
+}
+
+DiscoverPage --> SearchStore
+SearchStore --> SearchApi
+SearchApi ..> SearchController : GET /api/v1/search
+SearchController ..> SearchArtistsRequest : validates
+SearchArtistsRequest ..> SearchCriteria : creates
+SearchController --> SearchAvailableArtists
+SearchAvailableArtists --> AvailabilityService
+SearchAvailableArtists --> DistanceService
+DistanceService --> RoutingProvider
+DistanceService ..> Distance : returns
+SearchAvailableArtists ..> Lineup : builds
+Lineup "1" *-- "0..24" LineupCard
+LineupCard --> Artist
+LineupCard --> Distance
+SearchCriteria --> GatheringKind
+@enduml

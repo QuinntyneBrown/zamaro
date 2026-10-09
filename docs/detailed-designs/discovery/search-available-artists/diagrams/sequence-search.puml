@@ -1,0 +1,76 @@
+@startuml
+title UML sequence behaviour — Search available artists
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "DiscoverPage" as page
+  participant "SearchStore" as store
+  participant "SearchApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SearchController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SearchAvailableArtists" as action
+  participant "AvailabilityService" as avail
+  participant "DistanceService" as dist
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+  participant "Routing provider" as routing
+end box
+
+actor -> page : Activate "Show the lineup"
+page -> page : Validate date window and required fields (L2-004)
+alt invalid input
+  page --> actor : Inline errors, focus first invalid field, no search
+else valid input
+  page -> store : search(criteria)
+  store -> store : Set status loading, aria-busy after 300 ms (L2-105)
+  store -> client : search(criteria)
+  client -> controller : GET /api/v1/search?date&kind&lat&lng&radius
+  controller -> controller : Rate-limit and validate SearchArtistsRequest (L2-004, L2-077)
+  controller -> action : handle(SearchCriteria)
+  action -> db : Approved, published, not suspended artists in bounding box of radius
+  db --> action : Candidate artists
+  action -> avail : freeArtistIds(candidates, date) (L2-005)
+  avail -> db : Overrides, weekly rules, Confirmed bookings, VSC for Youth events
+  db --> avail : Blocking dates
+  avail --> action : Free artist IDs
+  loop each free candidate
+    action -> dist : between(artist base, church location) (L2-002)
+    dist -> cache : Get pair rounded to 4 decimals
+    alt cache miss
+      dist -> routing : Driving distance (2 s timeout)
+      alt provider unavailable
+        dist -> dist : Straight line x 1.3, mark "about", emit warning metric
+      else success
+        routing --> dist : Metres and seconds
+        dist -> cache : Store for 30 days
+      end
+    end
+    dist --> action : Distance (km, minutes)
+  end
+  action -> action : Keep distance <= radius and <= artist max drive (L2-003)
+  action -> action : Sort Closest first, take first 24, mark headliner (L2-006, L2-010)
+  action --> controller : Lineup
+  controller --> client : 200 LineupResource
+  client --> store : Lineup
+  store --> page : Render poster date, summary line and ticket cards
+  page --> actor : Lineup shown without page reload (L2-004)
+end
+@enduml

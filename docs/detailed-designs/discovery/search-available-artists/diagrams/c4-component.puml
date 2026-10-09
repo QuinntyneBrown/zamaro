@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Search available artists
+
+Container(web, "Zamaro Web", "Angular", "DiscoverPage, SearchStore, SearchApi")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "SearchController", "Laravel controller", "Exposes GET /api/v1/search")
+  Component(req, "SearchArtistsRequest", "FormRequest", "Validates date window, kind, location, radius, page")
+  Component(action, "SearchAvailableArtists", "Action", "Selects free, travel-matching artists and builds the lineup")
+  Component(avail, "AvailabilityService", "Domain service", "Applies the Free definition and VSC rule")
+  Component(dist, "DistanceService", "Domain service", "Road distance with cache and straight-line fallback")
+  Component(router, "RoutingProvider", "Interface + adapter", "Calls the routing provider")
+  Component(res, "LineupResource", "API resource", "Serialises result cards and the summary line")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "Artists, rules, overrides, bookings, reviews")
+  ComponentDb(cache, "Cache and queue", "Redis", "Distance cache entries for 30 days")
+}
+Rel(web, ctrl, "GET /api/v1/search", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Pre-filters approved, published artists inside a bounding box", "SQL")
+Rel(action, avail, "Filters to artists free on the date")
+Rel(avail, db, "Reads overrides, rules and Confirmed bookings", "SQL")
+Rel(action, dist, "Measures each candidate's distance")
+Rel(dist, cache, "Reads and writes", "RESP")
+Rel(dist, router, "Requests uncached pairs")
+Rel(router, routing, "Calls", "HTTPS/JSON")
+Rel(ctrl, res, "Returns")
+@enduml

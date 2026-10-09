@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Search available artists
+
+Person(booker, "Booker or guest", "Plans a church event")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Discover page, search form and lineup")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Search endpoint under /api/v1")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, availability, bookings, reviews")
+  ContainerDb(cache, "Cache and queue", "Redis", "Distance cache and rate-limit counters")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/search", "JSON/HTTPS")
+Rel(api, db, "Queries candidate artists", "Eloquent / SQL")
+Rel(api, cache, "Reads and writes cached distances", "RESP")
+Rel(api, routing, "Requests uncached distances", "HTTPS/JSON, 2 s timeout")
+@enduml
