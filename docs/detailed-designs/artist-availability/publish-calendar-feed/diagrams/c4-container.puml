@@ -6,7 +6,7 @@ title Containers — Publish a calendar feed
 Person(artist, "Artist", "Approved worship artist")
 System_Ext(calapp, "Calendar application", "Subscribes to iCalendar URLs")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Calendar feed panel on /artist/calendar")
+  Container(web, "Zamaro Web", "Angular with SSR", "Calendar feed dialog opened from /artist/calendar")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Feed management and feed endpoints under /api/v1")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "calendar_feeds, bookings")
   ContainerDb(cache, "Cache and queue", "Redis", "Rate-limit counters")

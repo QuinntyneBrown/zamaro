@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Upload videos
 
-Container(web, "Zamaro Web", "Angular", "VideosManagerPage, ArtistVideosStore, ArtistVideosApi, ChunkedUploader")
+Container(web, "Zamaro Web", "Angular", "VideosSectionComponent, VideoUploadDialogComponent, ArtistVideosStore, ArtistVideosApi, ChunkedUploader")
 System_Ext(scanner, "Malware scanner", "Scans every upload")
 System_Ext(vps, "Video processing service", "Transcodes")
 Container_Boundary(api, "Zamaro API and Worker") {

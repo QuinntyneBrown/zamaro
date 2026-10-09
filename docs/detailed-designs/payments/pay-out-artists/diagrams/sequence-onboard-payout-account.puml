@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "PayoutSetupPage" as page
+  participant "EarningsPage" as page
   participant "PayoutsApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -32,7 +32,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "Payment processor" as processor
 end box
 
-actor -> page : Open /artist/payouts after approval
+actor -> page : Open /artist/earnings after approval
 page --> actor : "Set up payouts" required before the profile is published (L2-039)
 actor -> page : Activate "Set up payouts"
 page -> client : onboardingLink()
@@ -48,7 +48,7 @@ gateway --> start : Hosted onboarding URL
 controller --> client : 200 {url}
 page --> actor : Redirect to processor onboarding
 actor -> processor : Identity and bank details (never sent to Zamaro)
-processor --> actor : Redirect to /artist/payouts?return=1
+processor --> actor : Redirect to /artist/earnings?return=1
 page -> client : accountStatus()
 client -> controller : GET /api/v1/artist/payout-account
 controller -> sync : handle(accountId)

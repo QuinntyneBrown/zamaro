@@ -53,6 +53,7 @@ action -> policy : forArtist(booking)
 policy --> action : refund = every amount paid (L2-043)
 action -> sm : transition(booking, Cancelled, artist, reason)
 sm -> db : Conditional update and history row with reason
+action -> db : INSERT reason as a thread message marked as the cancellation (SendBookingMessage)
 action -> db : INSERT pending Refund per succeeded payment
 action -> db : Count artist cancellations in last 12 months
 action -> db : COMMIT

@@ -45,6 +45,6 @@ actor -> auth : Next page load
 auth -> me : GET /api/v1/me
 me --> auth : emailUndeliverable = true
 auth --> banner : currentUser updated
-banner --> actor : Banner asking to update the address, linking to /account/settings (L2-065)
+banner --> actor : Banner asking to update the address, linking to /account#email (L2-065)
 note over banner, db : Verifying a new address (L2-025) clears email_undeliverable_at
 @enduml

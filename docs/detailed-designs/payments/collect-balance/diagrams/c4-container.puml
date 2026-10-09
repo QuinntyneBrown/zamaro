@@ -8,7 +8,7 @@ Person(admin, "Administrator", "Member of the Zamaro team")
 System_Ext(processor, "Payment processor", "Off-session charges")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "BookingDetailPage, report-a-problem dialog, PayBalancePage")
+  Container(web, "Zamaro Web", "Angular with SSR", "BookingDetailPage with report-a-problem and pay-balance dialogs")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Problem reports and balance payment endpoints")
   Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Finds due balances, charges and retries")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Bookings, payments, problem reports, holds")

@@ -44,14 +44,14 @@ topbar --> actor : Brand, menu button, Saved count and initials visible (L2-099)
 shell --> actor : One-column reflow, no horizontal scroll, 44 px targets (L2-096)
 actor -> topbar : Activate menu button
 topbar -> drawer : Open, aria-expanded = true
-drawer --> actor : Discover, How booking works, For artists
+drawer --> actor : Discover, How booking works, For artists, Dark theme toggle
 actor -> drawer : Choose a link
 drawer -> drawer : Close on NavigationEnd, return focus to menu button
 opt a dialog opens on the new page
   actor -> dialogs : Activate a control that opens a dialog
   dialogs -> bp : viewportClass()
   bp --> dialogs : xs
-  dialogs -> dialogs : Apply dialog--fullscreen panel class (L2-099)
+  dialogs -> dialogs : Open the design-system dialog, full screen at XS (L2-099)
   dialogs --> actor : Dialog fills the screen, close button pinned at the top
 end
 @enduml

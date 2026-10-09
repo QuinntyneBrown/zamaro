@@ -3,14 +3,14 @@
 LAYOUT_WITH_LEGEND()
 title Components — Protect secrets and data
 
-Container(web, "Zamaro Web", "Angular", "ChurchProfileFormComponent, AccountApi, ErrorTrackingService")
+Container(web, "Zamaro Web", "Angular", "ChurchFormComponent, ChurchApi, ErrorTrackingService")
 System_Ext(secrets, "Secrets manager", "Vendor <TO SUPPLY>")
 System_Ext(errors, "Error tracking service", "Redacted exceptions")
 Container_Boundary(api, "Zamaro API") {
   Component(safety, "ProductionSafetyServiceProvider", "Service provider", "Refuses to boot with APP_DEBUG true or a missing secret")
   Component(logreq, "LogRequest", "Laravel middleware", "One JSON line per request, no bodies or headers")
   Component(ctrl, "ChurchController", "Laravel controller", "PUT /api/v1/account/church")
-  Component(action, "UpdateChurch", "Action", "Saves the Church in a transaction")
+  Component(action, "SaveChurch", "Action", "Saves the Church in a transaction")
   Component(cast, "EncryptedField", "Eloquent cast", "Encrypts phone on write, decrypts on read")
   Component(enc, "FieldEncrypter", "Service", "AES-256-GCM with versioned field key")
   Component(redact, "RedactSensitiveData", "Monolog processor", "Redacts secrets, tokens, bodies; last 4 for payment IDs")

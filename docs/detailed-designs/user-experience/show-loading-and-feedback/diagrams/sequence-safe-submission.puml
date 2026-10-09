@@ -37,7 +37,7 @@ actor -> form : Activate "Send request"
 form -> submitter : submit(value)
 submitter -> keys : keyFor(submission)
 keys --> submitter : key K (new uuid)
-submitter -> form : busy = true, button disabled, "Sending request…" (L2-108)
+submitter -> form : busy = true, button aria-busy + aria-disabled, "Sending request…" (L2-108)
 actor -> form : Activate again while pending
 form -> submitter : submit(value)
 submitter -> submitter : exhaustMap drops second submission (L2-108)

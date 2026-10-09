@@ -31,7 +31,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Cache and queue" as cache
 end box
 
-actor -> page : Enter new slug, activate Save
+actor -> page : Enter new slug, activate "Save changes" in the editor
 page -> client : change(slug)
 client -> controller : PUT /api/v1/artist/profile/address
 controller -> controller : EnsureArtistRole; validate ChangeProfileAddressRequest format (L2-075)
@@ -42,7 +42,7 @@ alt changed fewer than 30 days ago
   action --> controller : SlugChangeTooSoon(nextChangeOn)
   controller --> client : 422, slug error with the next change date (L2-055)
   client --> page : Error
-  page --> actor : Inline error naming the date it can next be changed
+  page --> actor : "You can change your address again from {date}." on the slug field
 else 30 days or more, or never changed
   action -> registry : isTaken(slug)
   registry -> db : Search slug_histories.slug (current and retired)
@@ -63,7 +63,7 @@ else 30 days or more, or never changed
     action --> controller : Artist
     controller --> client : 200 ProfileAddressResource with nextChangeOn
     client --> page : ProfileAddress
-    page --> actor : New address shown with next change date
+    page --> actor : New address; field read-only until the next change date
   end
 end
 @enduml

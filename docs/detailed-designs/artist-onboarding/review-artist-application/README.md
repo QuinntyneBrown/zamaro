@@ -47,20 +47,21 @@ that sends decision emails. Every endpoint sits behind the administrator guard
   screen of L2-067. It shows every applicant detail: name, email, act type, base city,
   styles, bio, "From" price, maximum driving distance and submission time. It embeds
   the application videos and shows the decision actions.
-- **`ReferenceVerificationComponent`** — lists both references with name, church,
-  phone and email, and a "Verified" checkbox for each. Ticking a box saves at once and
-  shows who verified it and when.
+- **`ReferenceVerificationComponent`** — lists both references with name, church
+  and phone or email (L2-047), and a "Verified" checkbox for each. Ticking a box
+  saves at once and shows who verified it and when.
 - **`VscDocumentComponent`** — shared with
   `artist-onboarding/verify-vulnerable-sector-check`. It shows the applicant's latest
   Vulnerable Sector Check with issue date and status, and opens the document through a
   5-minute signed URL. When none exists it reads "No Vulnerable Sector Check
   uploaded".
 - **`ApplicationDecisionComponent`** — Approve and Reject buttons. Approve stays
-  disabled, with a visible explanation, until both references are verified. The
-  explanation copy is `<TO SUPPLY>`.
+  disabled, with the visible explanation "Verify both references before you
+  approve.", until both references are verified. After approval the panel shows who
+  approved and when, and that the profile stays hidden until payout setup.
 - **`RejectApplicationDialogComponent`** — design-system dialog with a required
-  reason select and an optional note. It traps focus and returns focus to Reject on
-  close (L2-101).
+  reason select, an optional note of up to 1,000 characters with a counter, and
+  Reject application. It traps focus and returns focus to Reject on close (L2-101).
 - **`ApplicationReviewStore`** — signal-based store holding the application, a
   computed `canApprove` signal and the decision status.
 - **`AdminApplicationsApi`** — typed client for the admin application endpoints.
@@ -69,9 +70,11 @@ The admin area is a lazy route so its code is never downloaded on Discover (L2-0
 
 **Backend (Zamaro API)**
 
-- **`EnsureAdministrator`** — middleware on `/api/v1/admin/*`. It returns 404 to
-  anyone without the Administrator role and requires a TOTP-verified session that
-  ends after 30 minutes idle (L2-066).
+- **`EnsureAdministrator`**, **`EnsureMfaVerified`** and **`EnforceAdminIdleTimeout`**
+  — the middleware stack on `/api/v1/admin/*`, designed in
+  `administration/secure-admin-access`. It returns 404 to anyone without the
+  Administrator role or without a TOTP-verified session, and ends the session after
+  30 minutes idle (L2-066).
 - **`AdminArtistApplicationsController`** — exposes:
   - `GET /api/v1/admin/artist-applications?status=Submitted&cursor=` — the queue
   - `GET /api/v1/admin/artist-applications/{application}` — the review screen data
@@ -86,21 +89,24 @@ The admin area is a lazy route so its code is never downloaded on Discover (L2-0
   audit entry.
 - **`ApproveArtistApplication`** — action that runs inside `DB::transaction` with the
   application row locked. It returns 409 unless the status is Submitted. It returns
-  422 unless both references are verified; the message copy is `<TO SUPPLY>`. It then
-  resolves the applicant's `User` (the rule for applicants without an account is
-  `<TO SUPPLY>`, as in `artist-onboarding/apply-as-artist`) and grants the `Artist`
-  role. It creates an `Artist` from the application with status `Approved`,
-  `payoutReady` false and `publishedAt` null, assigns a slug and a ticket number such
-  as `ZAM-0114`, and moves the application videos to the artist. It sets the
-  application to `Approved` with `decided_at` and `decided_by`. It records the
-  approval and the role change as audit entries. After commit it dispatches
-  `ArtistApplicationApproved`.
+  422 unless both references are verified, with the review screen's copy "Verify
+  both references before you approve." as the problem detail. It then resolves the
+  applicant's `User` (the rule for applicants without an account is `<TO SUPPLY>`,
+  as in `artist-onboarding/apply-as-artist`) and grants the `Artist` role. It
+  creates an `Artist` from the application with status `Approved`, `payoutReady`
+  false and `publishedAt` null, assigns a slug and a ticket number such as
+  `ACT-0027` (artist numbers use `ACT-`; booking numbers use `ZAM-`), and moves the
+  application videos to the artist. It sets the application to `Approved` with
+  `decided_at` and `decided_by`. It records the approval and the role change as
+  audit entries. After commit it dispatches `ArtistApplicationApproved`.
 - **`RejectArtistApplication`** — action that locks the application, requires status
   Submitted, and stores `Rejected` with the reason, the note, `decided_at` and
   `decided_by`. It records an audit entry and dispatches `ArtistApplicationRejected`.
 - **`RejectArtistApplicationRequest`** — FormRequest that requires `reason` from the
-  `ApplicationRejectionReason` enum and accepts an optional `note`. The reason list and
-  the maximum note length are `<TO SUPPLY>`.
+  `ApplicationRejectionReason` enum and accepts an optional `note` of up to 1,000
+  characters. The reasons are the fixed list in L2-048: References could not be
+  confirmed; Videos don't show you leading worship; Outside the Zamaro service area;
+  Application incomplete or inaccurate; Other.
 - **`SendApplicationDecisionEmail`** — queued listener that sends
   `ApplicationApprovedNotification` (next steps, including the payout setup link of
   L2-039) or `ApplicationRejectedNotification` (reason and note) within 2 minutes
@@ -114,6 +120,18 @@ The admin area is a lazy route so its code is never downloaded on Discover (L2-0
   (`discovery/search-available-artists`) and the public profile route use it, so an
   approved artist without payout setup is neither listed nor reachable by slug
   (L2-048). The payout onboarding slice sets `payoutReady` and `publishedAt`.
+
+**Mock screens** — the queue is
+[`pages/admin-applications`](../../../mocks/pages/admin-applications/default.html) in
+states default, loading, [`empty`](../../../mocks/pages/admin-applications/empty.html)
+and error. The review screen is
+[`pages/admin-application`](../../../mocks/pages/admin-application/default.html) in
+states default (Tobi Adeyemi, A-0219, no reference verified, Approve disabled),
+[`verified`](../../../mocks/pages/admin-application/verified.html),
+[`approved`](../../../mocks/pages/admin-application/approved.html), loading and error.
+The rejection dialog is
+[`dialogs/reject-application`](../../../mocks/dialogs/reject-application/default.html)
+in states default, busy, invalid and failed.
 
 **Data**
 
@@ -132,7 +150,7 @@ slice covers criterion 1; criteria 2 and 3 are designed in
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-048` | `L1-010` | **Application review.**<br>Acceptance criteria:<br>1. Given a Submitted application, when an administrator approves it, then both references must be marked verified first, the account gains the Artist role and the artist is emailed next steps (payout setup, L2-039).<br>2. Given a Submitted application, when an administrator rejects it, then a reason from a fixed list plus an optional note is required and the applicant is emailed it.<br>3. Given an approved artist without completed payout setup, when anyone searches or opens their slug, then the artist is not shown. |
+| `L2-048` | `L1-010` | **Application review.**<br>Acceptance criteria:<br>1. Given a Submitted application, when an administrator approves it, then both references must be marked verified first, the account gains the Artist role and the artist is emailed next steps (payout setup, L2-039).<br>2. Given a Submitted application, when an administrator rejects it, then a reason from a fixed list (References could not be confirmed; Videos don't show you leading worship; Outside the Zamaro service area; Application incomplete or inaccurate; Other) is required, an optional note of up to 1,000 characters may be added, and the applicant is emailed both.<br>3. Given an approved artist without completed payout setup, when anyone searches or opens their slug, then the artist is not shown. |
 | `L2-067` | `L1-015` | **Artist management.**<br>Acceptance criteria:<br>1. Given an administrator, when they open an application, then they see all applicant details, references with verification checkboxes, the VSC document if uploaded, and Approve and Reject actions.<br>2. Given an administrator suspends an artist with a required reason, when it is saved, then the profile returns 404, the artist disappears from search, their Requested and Accepted bookings become Declined, and their Confirmed bookings are listed for the administrator to resolve.<br>3. Given a suspended artist, when an administrator reinstates them, then their profile and search visibility return. |
 
 ## Diagrams

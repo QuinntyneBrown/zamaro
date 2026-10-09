@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -44,13 +45,13 @@
         <div><p class="overline section__kicker">Sat 14 Nov · within 120 km of Burlington</p><h2 id="similar-title">Free that night instead</h2></div>
         <a class="btn" href="../discover/default.html">See the full lineup <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
       </div>
-      <ol class="lineup" role="list" aria-label="Similar artists free Saturday 14 November">
+      <ol class="lineup" role="list" aria-label="Similar artists free Saturday 14 November 2026">
         <li class="ticket">
           <div class="art ticket__art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
           <div class="ticket__body">
-            <span class="ticket__no">No. 01 · <span aria-hidden="true">★ 4.9</span><span class="visually-hidden">Rated 4.9 out of 5</span></span>
+            <span class="ticket__no">No. 01 · <span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span>
             <h3 class="ticket__name"><a href="../artist/default.html">Abigail Mensah</a></h3>
-            <p class="ticket__meta">Gospel &amp; contemporary vocalist<br>Brampton · 44 km from you</p>
+            <p class="ticket__meta">Solo vocalist · Hymns<br>Brampton · 44 km from you</p>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$650</p>
@@ -60,25 +61,13 @@
         <li class="ticket">
           <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
           <div class="ticket__body">
-            <span class="ticket__no">No. 02 · <span aria-hidden="true">★ 4.7</span><span class="visually-hidden">Rated 4.7 out of 5</span></span>
+            <span class="ticket__no">No. 02 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
             <h3 class="ticket__name"><a href="../artist/default.html">Elijah Park</a></h3>
-            <p class="ticket__meta">Solo vocalist · Acoustic guitar<br>Markham · 74 km from you</p>
+            <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$350</p>
             <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-          </div>
-        </li>
-        <li class="ticket">
-          <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
-          <div class="ticket__body">
-            <span class="ticket__no">No. 03 · <span aria-hidden="true">★ 4.9</span><span class="visually-hidden">Rated 4.9 out of 5</span></span>
-            <h3 class="ticket__name"><a href="../artist/default.html">Daniel &amp; Ruth Okonkwo</a></h3>
-            <p class="ticket__meta">Duo · Hymns &amp; acoustic<br>Ajax · 97 km from you</p>
-          </div>
-          <div class="ticket__stub">
-            <p class="ticket__price"><small>From</small>$700</p>
-            <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
           </div>
         </li>
       </ol>
@@ -118,7 +107,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 12rem; right: 1rem;">Same 404 for a removed, suspended or never-existing artist; no name or profile content leaks. Up to 3 suggestions share the primary style, nearest first, free on the carried-forward date.</p>
+<p class="mock-note" style="top: 12rem; right: 1rem;">Same 404 for a removed, suspended or never-existing artist; no name or profile content leaks. Up to 3 suggestions share the missing artist’s primary style (here, solo vocalist), nearest first, free on the carried-forward date; only two match here.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

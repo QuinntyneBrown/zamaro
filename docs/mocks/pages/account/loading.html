@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="account">
 <meta name="mock:state" content="loading">
-<meta name="mock:requirements" content="L2-024 L2-025 L2-065 L2-072 L2-080 L2-081 L2-082 L2-105 L2-108">
+<meta name="mock:requirements" content="L2-001 L2-024 L2-025 L2-065 L2-072 L2-080 L2-081 L2-082 L2-105 L2-108">
 <meta name="description" content="Account settings loading: the section nav stays, each section appears as skeleton fields.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -36,7 +37,7 @@
     <div class="page-head">
       <div>
         <h1 class="page-head__title">Account settings</h1>
-        <p class="page-head__sub"><span class="skeleton skeleton--text" style="width: min(18rem, 100%);"></span></p>
+        <p class="page-head__sub"><span class="skeleton skeleton--text skeleton--medium"></span></p>
       </div>
     </div>
     <div class="page-body">
@@ -45,22 +46,24 @@
       <nav class="settings-nav" aria-label="Settings sections">
         <a href="#profile" aria-current="true">Profile</a>
         <a href="#church">Church</a>
-        <a href="#email">E-mail</a>
+        <a href="#email">Email</a>
         <a href="#password">Password</a>
-        <a href="#preferences">E-mail preferences</a>
+        <a href="#preferences">Email preferences</a>
+        <a href="#two-step">Two-step sign-in</a>
         <a href="#devices">Signed-in devices</a>
         <a href="#data">Your data</a>
         <a href="#delete">Delete account</a>
       </nav>
       <div class="form-stack">
-        <section class="form-section" id="profile" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="church" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="email" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="password" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="preferences" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="devices" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="data" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
-        <section class="form-section" id="delete" aria-hidden="true"><span class="skeleton skeleton--title" style="width: 30%;"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton" style="height: 2.75rem;"></span></span></div></section>
+        <section class="form-section" id="profile" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="church" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="email" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="password" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="preferences" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="two-step" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="devices" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="data" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
+        <section class="form-section" id="delete" aria-hidden="true"><span class="skeleton skeleton--title skeleton--short"></span><div class="form-grid"><span class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--control"></span></span></div></section>
       </div>
     </div>
     </div>
@@ -112,6 +115,12 @@
     <li><a href="invalid.html">invalid</a></li>
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html">success</a></li>
+    <li><a href="failed.html">failed</a></li>
+    <li><a href="out-of-area.html">out-of-area</a></li>
+    <li><a href="export-requested.html">export-requested</a></li>
+    <li><a href="export-ready.html">export-ready</a></li>
+    <li><a href="artist.html">artist</a></li>
+    <li><a href="two-step-on.html">two-step-on</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

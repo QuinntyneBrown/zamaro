@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bookings support · default — Zamaro mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="admin-bookings">
+<meta name="mock:state" content="default">
+<meta name="mock:requirements" content="L2-066 L2-068 L2-105 L2-110">
+<meta name="description" content="Support search for “Riverside”: 6 bookings with number, artist, church, event date, status, paid and refunded.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar topbar--workspace">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../admin-applications/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <span class="topbar__role">Admin</span>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../admin-applications/default.html">Applications <span class="badge badge--count">3<span class="visually-hidden"> waiting</span></span></a>
+    <a class="nav-link" href="../admin-artists/default.html">Artists</a>
+    <a class="nav-link" href="../admin-bookings/default.html" aria-current="page">Bookings <span class="badge badge--count">1<span class="visually-hidden"> held</span></span></a>
+    <a class="nav-link" href="../admin-reviews/default.html">Reviews <span class="badge badge--count">2<span class="visually-hidden"> reported</span></span></a>
+    <a class="nav-link" href="../admin-audit/default.html">Audit log</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+  <button class="avatar" type="button" aria-label="Account menu for Priya Nair" aria-expanded="false">PN</button>
+</header>
+
+<main id="main">
+  <div class="container">
+    <header class="page-head">
+      <div>
+        <p class="overline">Admin · Booking and payment support</p>
+        <h1 class="page-head__title">Bookings</h1>
+        <p class="page-head__sub">Find a booking, check what was paid and return money where the rules allow.</p>
+      </div>
+    </header>
+    <div class="page-body">
+      <form class="form-grid" role="search" action="no-results.html" aria-label="Search bookings">
+        <div class="field">
+          <label class="field__label" for="booking-search">Search bookings</label>
+          <input class="input" type="search" id="booking-search" name="q" value="Riverside" autocomplete="off" aria-describedby="booking-search-help">
+          <span class="field__help" id="booking-search-help">Booking number, artist, church or the booker’s email</span>
+        </div>
+        <label class="check" style="align-self: center;">
+          <input type="checkbox" name="held">
+          <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+          <span class="check__text">Held only<span class="check__desc">Completed bookings with a reported problem</span></span>
+        </label>
+      </form>
+      <div class="table-wrap">
+        <table class="table">
+          <caption>6 bookings match “Riverside”, latest event first</caption>
+          <thead><tr><th scope="col">Booking</th><th scope="col">Artist</th><th scope="col">Church</th><th scope="col" aria-sort="descending">Event date</th><th scope="col">Status</th><th scope="col" class="table__num">Paid</th><th scope="col" class="table__num">Refunded</th></tr></thead>
+          <tbody>
+          <tr><th scope="row"><a href="../admin-booking/default.html">ZAM-0088</a></th><td>Luz Viva</td><td>Riverside Community Church</td><td>Sat 5 Dec 2026</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td><td class="table__num">$0</td><td class="table__num">$0</td></tr>
+          <tr><th scope="row"><a href="../admin-booking/default.html">ZAM-0114</a></th><td>Abigail Mensah</td><td>Riverside Community Church</td><td>Sat 14 Nov 2026</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td><td class="table__num">$0</td><td class="table__num">$0</td></tr>
+          <tr><th scope="row"><a href="../admin-booking/default.html">ZAM-0097</a></th><td>Marcus Bell Trio</td><td>Riverside Community Church</td><td>Sun 25 Oct 2026</td><td><span class="stamp stamp--flat stamp--confirmed">Confirmed</span></td><td class="table__num">$237.50</td><td class="table__num">$0</td></tr>
+          <tr><th scope="row"><a href="../admin-booking/default.html">ZAM-0080</a></th><td>Elijah Park</td><td>Riverside Community Church</td><td>Sat 3 Oct 2026</td><td><span class="stamp stamp--flat stamp--withdrawn">Withdrawn</span></td><td class="table__num">$0</td><td class="table__num">$0</td></tr>
+          <tr><th scope="row"><a href="../admin-booking/default.html">ZAM-0075</a></th><td>Grace Tabernacle Mass Choir</td><td>Riverside Community Church</td><td>Sun 20 Sep 2026</td><td><span class="stamp stamp--flat stamp--declined">Declined</span></td><td class="table__num">$0</td><td class="table__num">$0</td></tr>
+          <tr><th scope="row"><a href="../admin-booking/default.html">ZAM-0061</a></th><td>Abigail Mensah</td><td>Riverside Community Church</td><td>Sun 14 Jun 2026</td><td><span class="stamp stamp--flat stamp--completed">Completed</span></td><td class="table__num">$650</td><td class="table__num">$0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Admin</h2>
+      <ul>
+        <li><a href="../admin-applications/default.html">Applications</a></li>
+        <li><a href="../admin-artists/default.html">Artists</a></li>
+        <li><a href="../admin-bookings/default.html">Bookings</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Records</h2>
+      <ul>
+        <li><a href="../admin-reviews/default.html">Reported reviews</a></li>
+        <li><a href="../admin-audit/default.html">Audit log</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Priya Nair</h2>
+      <ul>
+        <li>Zamaro team</li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 16rem; right: 1rem;">Numbers and emails match exactly, artist and church names by prefix. ZAM-0097 opens the booking detail; other rows open it too in this mock.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Bookings support</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html" aria-current="page">default</a></li>
+    <li><a href="held.html">held</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="error.html">error</a></li>
+    <li><a href="no-results.html">no-results</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

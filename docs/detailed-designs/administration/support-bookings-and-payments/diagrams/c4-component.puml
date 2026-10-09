@@ -35,5 +35,5 @@ Rel(refund, db, "Locks payments, writes refund", "SQL")
 Rel(refund, gateway, "refund(payment, amount, key)")
 Rel(gateway, pay, "Calls", "HTTPS/JSON")
 Rel(refund, audit, "Records refund.issued")
-Rel(resolve, audit, "Records problem_report.resolved")
+Rel(resolve, audit, "Records booking_hold.resolved")
 @enduml

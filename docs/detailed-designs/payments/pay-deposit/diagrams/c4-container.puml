@@ -6,7 +6,7 @@ title Containers — Pay the deposit
 Person(booker, "Booker", "Signed-in church representative")
 System_Ext(processor, "Payment processor", "Hosted card fields, 3-D Secure, saved cards")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "PayDepositPage, payment summary and hosted card fields")
+  Container(web, "Zamaro Web", "Angular with SSR", "Pay deposit dialog on /bookings/:number, payment summary and hosted card fields")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Deposit endpoints under /api/v1/bookings/{number}")
   Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Deposit expiry and notification jobs")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Bookings, payments, transitions; one Confirmed booking per artist and date")

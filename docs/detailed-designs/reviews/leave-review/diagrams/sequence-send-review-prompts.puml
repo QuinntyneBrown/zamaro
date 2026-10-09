@@ -47,5 +47,5 @@ end
 notif -> email : Send plain-text and HTML email with /bookings/{number}#review (L2-063)
 email --> notif : Accepted
 email -> actor : Email delivered
-actor -> page : Follow link to the review form
+actor -> page : Follow link to the booking (#review opens the review dialog)
 @enduml

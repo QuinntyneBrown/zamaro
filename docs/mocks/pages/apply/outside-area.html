@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply as an artist · outside-area — Zamaro mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="apply">
+<meta name="mock:state" content="outside-area">
+<meta name="mock:requirements" content="L2-001 L2-039 L2-047 L2-052 L2-077 L2-108">
+<meta name="description" content="Sent with a base city outside the service area: the form returns to step 1 with the summary and the base city marked, every answer kept.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../discover/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../discover/default.html">Discover</a>
+    <a class="nav-link" href="../discover/default.html#how">How booking works</a>
+    <a class="nav-link" href="default.html" aria-current="page">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+  <a class="nav-link" href="../sign-in/default.html">Sign in</a>
+</header>
+
+<main id="main" class="container">
+  <div class="page-head">
+    <div>
+      <p class="overline">For artists · Free to join</p>
+      <h1 class="page-head__title">Apply as an artist</h1>
+      <p class="page-head__sub">About 10 minutes · We reply within 3 business days</p>
+    </div>
+  </div>
+  <ol class="stepper" aria-label="Application steps">
+    <li class="stepper__step" aria-current="step" data-state="invalid">About you</li>
+    <li class="stepper__step" data-state="done"><a href="step-2.html" aria-label="Your music, done">Your music</a></li>
+    <li class="stepper__step" data-state="done"><a href="step-3.html" aria-label="Price and travel, done">Price and travel</a></li>
+    <li class="stepper__step" data-state="done"><a href="step-4.html" aria-label="References and review, done">References and review</a></li>
+  </ol>
+  <div class="detail-layout">
+    <form class="form-stack" action="step-4.html" novalidate aria-labelledby="step-title">
+      <div class="error-summary" role="alert" tabindex="-1" aria-labelledby="summary-title">
+        <h2 id="summary-title" class="error-summary__title">Fix 1 thing to continue</h2>
+        <ul><li><a href="#base-city">Zamaro serves churches within 200 km of Toronto.</a></li></ul>
+      </div>
+      <section class="form-section" aria-labelledby="step-title">
+        <h2 id="step-title" class="form-section__title">About you</h2>
+        <p class="form-section__lead">Churches see your name, act type and city. Your email stays private.</p>
+        <div class="form-grid">
+        <div class="field">
+          <label class="field__label" for="full-name">Full name <span class="field__required">(required)</span></label>
+          <input class="input" type="text" id="full-name" name="full-name" value="Tobi Adeyemi" autocomplete="name" required aria-describedby="full-name-help">
+          <span class="field__help" id="full-name-help">Or your act’s name, as churches will see it.</span>
+        </div>
+        <div class="field">
+          <label class="field__label" for="email">Email <span class="field__required">(required)</span></label>
+          <input class="input" type="email" id="email" name="email" value="tobi@tobiadeyemi.ca" autocomplete="email" required aria-describedby="email-help">
+          <span class="field__help" id="email-help">Private. We send your confirmation here.</span>
+        </div>
+        <div class="field field--full">
+          <label class="field__label" for="base-city">Base city <span class="field__required">(required)</span></label>
+          <input class="input" type="text" id="base-city" name="base-city" value="Kingston, ON" autocomplete="address-level2" required aria-describedby="base-city-error base-city-help" aria-invalid="true">
+          <span class="field__error" id="base-city-error">Zamaro serves churches within 200 km of Toronto.</span>
+          <span class="field__help" id="base-city-help">Churches see distances from here.</span>
+        </div>
+        <fieldset class="fieldset">
+          <legend>Act type <span class="field__required">(required)</span></legend>
+          <div class="cluster">
+        <label class="choice"><input type="radio" id="solo" name="act" value="solo" checked><span class="choice__text"><span>Solo</span></span></label>
+        <label class="choice"><input type="radio" id="duo" name="act" value="duo"><span class="choice__text"><span>Duo</span></span></label>
+        <label class="choice"><input type="radio" id="band" name="act" value="band"><span class="choice__text"><span>Band</span></span></label>
+        <label class="choice"><input type="radio" id="choir" name="act" value="choir"><span class="choice__text"><span>Choir</span></span></label>
+          </div>
+        </fieldset>
+        </div>
+      </section>
+      <div class="form-actions form-actions--static">
+        <span class="form-actions__status form-actions__status--danger"><span class="dot" aria-hidden="true"></span>Not sent · 1 thing to fix</span>
+        <div class="form-actions__buttons"><button class="btn btn--primary" type="submit">Continue</button></div>
+      </div>
+    </form>
+    <aside aria-labelledby="next-title">
+      <div class="panel">
+        <div class="panel__head"><h2 id="next-title" class="panel__title">After you apply</h2></div>
+        <ol class="timeline">
+          <li><div><p class="timeline__title">We check your references</p><p class="timeline__meta">Two short calls to people who’ve seen you lead.</p></div></li>
+          <li><div><p class="timeline__title">We review it</p><p class="timeline__meta">A real person replies within 3 business days.</p></div></li>
+          <li><div><p class="timeline__title">You set up payouts</p><p class="timeline__meta">Once approved, so churches can pay your deposit.</p></div></li>
+          <li><div><p class="timeline__title">Your profile goes live</p><p class="timeline__meta">Mark your free dates and you’re on the lineup.</p></div></li>
+        </ol>
+        <p class="stub__fine">Free to join. Zamaro keeps 8% when a church books you.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../discover/default.html">Find who’s free</a></li>
+        <li><a href="../bookings/default.html">Your bookings</a></li>
+        <li><a href="../discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../apply/default.html">Join the lineup</a></li>
+        <li><a href="../discover/default.html#how">What artists earn</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Your account</h2>
+      <ul>
+        <li><a href="../sign-in/default.html">Sign in</a></li>
+        <li><a href="../sign-up/default.html">Create an account</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 22rem; right: 1rem;">Shown as if Tobi had typed Kingston, ON, about 260 km from Toronto by road. Send was refused, so the form opens step 1 with focus on the summary; every answer is kept and Continue returns to step 4.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Apply as an artist</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="step-2.html">step-2</a></li>
+    <li><a href="step-3.html">step-3</a></li>
+    <li><a href="step-4.html">step-4</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="submitting.html">submitting</a></li>
+    <li><a href="success.html">success</a></li>
+    <li><a href="error.html">error</a></li>
+    <li><a href="outside-area.html" aria-current="page">outside-area</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

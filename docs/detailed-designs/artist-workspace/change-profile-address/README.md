@@ -40,12 +40,18 @@ the Zamaro API, and the Zamaro database.
 
 **Frontend (Zamaro Web)**
 
-- **`ProfileAddressSectionComponent`** (`features/artist-workspace`) — section of
-  `ArtistProfileEditorPage` at `/artist/profile` with its own Save action. It shows
-  the full profile address, a text field for the slug with the fixed URL prefix
-  beside it, and, inside the cooling-off period, a note with the next change date
-  formatted by `FormatService` in en-CA (L2-110). It shows server errors inline on
-  the slug field. The public URL prefix (domain) is `<TO SUPPLY>`.
+- **`ProfileAddressSectionComponent`** (`features/artist-workspace`) — the Profile
+  address section (`#address`) of `ArtistProfileEditorPage` at `/artist/profile`. It
+  shows a text field for the slug labelled with the fixed prefix `zamaro.ca/artists/`
+  and help that names when it last changed: "Lowercase letters, numbers and hyphens.
+  Last changed {date}, so you can change it now; then not again for 30 days. The old
+  address keeps redirecting here." A newly published artist sees that the address
+  was made from their name when the profile went live and that it can change now. Inside the cooling-off period the field is
+  read-only and says "You changed it on {date}. You can change it again from {date}."
+  Dates are formatted by `FormatService` in en-CA (L2-110). A changed slug is saved
+  by the editor's "Save changes", which calls the address endpoint only when the slug
+  changed, and server errors show inline on the slug field. The page header shows the
+  full address under the artist's name.
 - **`ProfileAddressApi`** — typed client for `GET /api/v1/artist/profile/address`
   and `PUT /api/v1/artist/profile/address`. Responses are `ProfileAddress` objects:
   `slug`, `url`, `changedAt` and `nextChangeOn`.
@@ -60,11 +66,13 @@ the Zamaro API, and the Zamaro database.
 - **`ProfileAddressController`** — `show` and `update` for the signed-in artist,
   behind `EnsureArtistRole`, which answers 404 to anyone else (L2-074).
 - **`ChangeProfileAddressRequest`** — FormRequest that lower-cases the input and
-  checks it against `^[a-z0-9]+(-[a-z0-9]+)*$`. The minimum and maximum length and a
-  list of reserved words (for example route names under `/artists`) are `<TO SUPPLY>`.
+  checks it against `^[a-z0-9]+(-[a-z0-9]+)*$`. Route names under `/artists` are
+  reserved, starting with `apply` (`/artists/apply`); the minimum and maximum length
+  and any other reserved words are `<TO SUPPLY>`.
 - **`ChangeArtistSlug`** — action that runs in one `DB::transaction` with the artist
   row locked. It rejects the change when `slug_changed_at` is fewer than 30 days ago,
-  evaluated in `America/Toronto`, and returns the next allowed date (L2-055). It asks
+  evaluated in `America/Toronto`, and returns the next allowed date, shown as "You
+  can change your address again from {date}." (L2-055). It asks
   `SlugRegistry` whether the slug is free. It sets `retired_at` on the old slug's
   `slug_histories` row, inserts a row for the new slug, then updates `artists.slug`
   and `slug_changed_at`. After commit it dispatches `ArtistSlugChanged`.
@@ -88,6 +96,14 @@ the Zamaro API, and the Zamaro database.
   profile URLs from the CDN within 60 seconds (L2-089) and refresh the sitemap and
   canonical URL (L2-112).
 - **`ProfileAddressResource`** — API resource that serialises `ProfileAddress`.
+
+**Mock screens** — the Profile address section (`#address`) of
+[`pages/edit-profile`](../../../mocks/pages/edit-profile/default.html) shows an
+address that can change now; [`empty`](../../../mocks/pages/edit-profile/empty.html)
+shows Miriam's generated `miriam-haile`, changeable as soon as it is published;
+[`address-locked`](../../../mocks/pages/edit-profile/address-locked.html) shows the
+read-only field inside the 30 days. The old-address redirect has no screen; the
+not-found case is [`pages/not-found/artist`](../../../mocks/pages/not-found/artist.html).
 
 **Data**
 

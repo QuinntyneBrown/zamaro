@@ -9,7 +9,7 @@ System_Ext(scanner, "Malware scanner", "Scans every upload")
 System_Ext(secrets, "Secrets manager", "Document encryption key")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "/artist/vulnerable-sector-check and /admin/vulnerable-sector-checks")
+  Container(web, "Zamaro Web", "Angular with SSR", "Check section of /artist/profile and /admin/vulnerable-sector-checks")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Upload, verification and signed document endpoints")
   Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Scans uploads; daily renewal reminders")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "vulnerable_sector_checks, audit_entries")

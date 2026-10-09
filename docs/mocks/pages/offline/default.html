@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="offline">
 <meta name="mock:state" content="default">
-<meta name="mock:requirements" content="L2-026 L2-027">
-<meta name="description" content="Offline: a danger banner under the top bar, “No signal”, the three saved artists from the device cache and Try again.">
+<meta name="mock:requirements" content="L2-026 L2-089 L2-108 L2-114">
+<meta name="description" content="Offline: a danger banner under the top bar, “No signal” and Try again. Nothing personal is kept on the device, and saving needs a connection.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -26,70 +26,26 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 <div class="banner banner--danger banner--persistent" role="status">
   <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 16.4a5 5 0 0 1 7 0M5 12.6a10 10 0 0 1 4.6-2.5M14.6 10.2a10 10 0 0 1 4.4 2.4M2 8.8a15 15 0 0 1 4.3-2.6M10.5 4.6A15 15 0 0 1 22 8.8M12 20h.01"/></svg>
-  <p class="banner__text banner__text--fill"><strong>You’re offline</strong>Saves you make now will sync when you reconnect.</p>
+  <p class="banner__text banner__text--fill"><strong>You’re offline</strong>Saving artists and sending requests need a connection.</p>
 </div>
 
 <main id="main">
   <div class="container error-page">
-    <p class="overline">Offline · Last synced 9:42 a.m.</p>
+    <p class="overline">Offline</p>
     <h1 class="error-poster">No signal</h1>
-    <p class="lead">We can’t reach Zamaro right now. Your saved artists are still here, as of this morning.</p>
+    <p class="lead">We can’t reach Zamaro right now. Check your connection and try again.</p>
     <div class="cluster">
       <button class="btn btn--primary btn--lg" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
     </div>
+    <p class="text-muted">Requests you’ve already sent are safe, and anything you were typing stays on the page you left.</p>
   </div>
-  <section class="section" aria-labelledby="cached-title" style="padding-top: 0;">
-    <div class="container stack stack--lg">
-      <div class="section__head">
-        <div><p class="overline section__kicker">Saved on this device</p><h2 id="cached-title">Your saved artists (3)</h2></div>
-        <p class="text-muted">Profiles you opened recently work offline. Booking waits for a connection.</p>
-      </div>
-      <ol class="lineup" role="list" aria-label="Saved artists available offline">
-        <li class="ticket">
-          <div class="art ticket__art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
-          <div class="ticket__body">
-            <span class="ticket__no">No. 01 · <span aria-hidden="true">★ 4.9</span><span class="visually-hidden">Rated 4.9 out of 5</span></span>
-            <h3 class="ticket__name"><a href="../artist/default.html">Abigail Mensah</a></h3>
-            <p class="ticket__meta">Gospel &amp; contemporary vocalist<br>Brampton · 44 km from you</p>
-          </div>
-          <div class="ticket__stub">
-            <p class="ticket__price"><small>From</small>$650</p>
-            <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-          </div>
-        </li>
-        <li class="ticket">
-          <div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div>
-          <div class="ticket__body">
-            <span class="ticket__no">No. 02 · <span aria-hidden="true">★ 4.8</span><span class="visually-hidden">Rated 4.8 out of 5</span></span>
-            <h3 class="ticket__name"><a href="../artist/default.html">Hosanna Collective</a></h3>
-            <p class="ticket__meta">Five-piece band · Contemporary<br>Mississauga · 32 km from you</p>
-          </div>
-          <div class="ticket__stub">
-            <p class="ticket__price"><small>From</small>$1,800</p>
-            <button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-          </div>
-        </li>
-        <li class="ticket">
-          <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
-          <div class="ticket__body">
-            <span class="ticket__no">No. 03 · <span aria-hidden="true">★ 5.0</span><span class="visually-hidden">Rated 5.0 out of 5</span></span>
-            <h3 class="ticket__name"><a href="../artist/default.html">Luz Viva</a></h3>
-            <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
-          </div>
-          <div class="ticket__stub">
-            <p class="ticket__price"><small>From</small>$900</p>
-            <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
 </main>
 
 <footer class="footer on-stage">
@@ -124,7 +80,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 14rem; right: 1rem;">Try again checks the connection; the banner leaves once it’s back. Unsaving now is queued and synced later.</p>
+<p class="mock-note" style="top: 14rem; right: 1rem;">Try again checks the connection and reopens the page Naomi asked for. Responses with personal data are never stored on the device (L2-089), so saved artists are not shown offline, and a save tried offline reverts with the usual error toast (L2-026).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

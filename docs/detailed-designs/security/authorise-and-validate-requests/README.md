@@ -48,6 +48,11 @@ Laravel middleware stack, the policy, the FormRequest, the action and the databa
   remains the authority. On 422 it maps `errors.body` onto the control.
 - **`BookingMessagesApi`** — typed client for `GET` and `POST
   /api/v1/bookings/{number}/messages`.
+- **Mock screens** — the thread is on
+  [`pages/booking-detail`](../../../mocks/pages/booking-detail/default.html); another
+  booker's booking answers 404 and looks like a mistyped link
+  ([`pages/booking-detail/forbidden`](../../../mocks/pages/booking-detail/forbidden.html),
+  [`pages/not-found`](../../../mocks/pages/not-found/default.html)).
 - **Lint rule** — the ESLint configuration bans calls to `bypassSecurityTrust*` and
   template bindings of `[innerHTML]` outside an allow-list of static, translated
   strings. A violation fails CI.

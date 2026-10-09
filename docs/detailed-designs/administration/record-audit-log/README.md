@@ -51,9 +51,13 @@ and a read-only admin page in Zamaro Web.
   `auth.sign_in`, `auth.sign_in_failed`, `auth.password_changed`,
   `auth.mfa_enabled`, `auth.mfa_disabled`, `auth.mfa_challenge`,
   `user.role_changed`, `refund.issued`, `payout.sent`, `artist.suspended`,
-  `artist.reinstated`, `review.hidden`, `review_report.dismissed`,
-  `booking_hold.resolved` and the application decisions from L2-048. The full list
-  of admin actions grows with the admin slices.
+  `artist.reinstated`, `booking.messages.viewed` (an administrator reading a booking
+  thread, L2-045), `review.hidden`, `review_report.dismissed`,
+  `booking_hold.resolved`, from the application review of L2-048
+  `application.viewed`, `application_reference.verified`, `application.approved` and
+  `application.rejected`, and from the Vulnerable Sector Check review of L2-049
+  `vsc_document.viewed` and `vsc.verified`. The full list of admin actions grows with
+  the admin slices.
 - **`AuditOutcome`** — enum `Succeeded`, `Failed`, `Denied`.
 - **`AuditAuthenticationEvents`** — event subscriber for Laravel's `Login` and
   `Failed` events and the application's `PasswordChanged`, `MfaEnabled`,
@@ -72,8 +76,9 @@ and a read-only admin page in Zamaro Web.
 
 - The `AuditEntry` model throws `ImmutableAuditEntry` from its `updating` and
   `deleting` model events, and no controller, route or action changes or deletes an
-  entry (L2-069). An acceptance test asserts that no route other than the read
-  endpoint touches `audit_entries`.
+  entry (L2-069). Acceptance tests prove the behaviour: an administrator's
+  `PATCH` or `DELETE` on `/api/v1/admin/audit-entries/{entry}` returns 405 or 404
+  and the entry is unchanged.
 - In PostgreSQL the application role holds only `INSERT` and `SELECT` on
   `audit_entries`. A trigger rejects `UPDATE` for every role and rejects `DELETE`
   for every role except `zamaro_audit_retention`.
@@ -98,6 +103,12 @@ and a read-only admin page in Zamaro Web.
   (L2-095), behind the admin route group (L2-066). Whether viewing the audit log is
   itself audited is `<TO SUPPLY>`.
 - **`AuditEntryResource`** — serialises the entry with the actor's name and email.
+
+**Mock screens** — the viewer is
+[`pages/admin-audit`](../../../mocks/pages/admin-audit/default.html) in states default
+(Thu 1 to Fri 9 Oct 2026, newest first), loading, error and
+[`no-results`](../../../mocks/pages/admin-audit/no-results.html). It shows no edit or
+delete control.
 
 **Data**
 

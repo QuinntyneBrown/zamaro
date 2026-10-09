@@ -51,6 +51,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -77,6 +78,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -117,7 +120,7 @@
       <p class="ds-kicker">Component · Zamaro signatures</p>
       <h1>Artwork</h1>
       <p class="ds-lead">Every artist image is printed like a gig poster: a halftone dot screen with a silhouette cut out of it until the photo arrives, and the photo itself in greyscale, multiplied onto the paper.</p>
-      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="img"</code> or <code>&lt;img alt&gt;</code></span><span class="ds-pill">Classes <code>.art</code> <code>.photo-grid</code> <code>.media-grid</code></span></div>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="img"</code> or <code>&lt;img alt&gt;</code></span><span class="ds-pill">Classes <code>.art</code> <code>.art--thumb</code> <code>.photo-grid</code> <code>.media-grid</code></span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
       </ul>
@@ -126,8 +129,8 @@
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
       <p><code>.art</code> is the frame for every picture of an artist: the profile portrait in the <a href="poster.html">poster</a>, the <a href="headliner.html">headliner</a>, the left column of a <a href="ticket.html">ticket</a>, <a href="video-card.html">video</a> thumbnails and the photo gallery. It always has the same 2px frame and print treatment, so real photos and placeholders sit together without looking broken.</p>
       <ul>
-        <li><b>Placeholder</b>: until an artist uploads a photo, or while it loads, the halftone shows a silhouette: one singer at a mic, or a group.</li>
-        <li><b>Photo</b>: an <code>&lt;img alt&gt;</code> inside <code>.art</code> is turned greyscale and multiplied onto the halftone paper.</li>
+        <li><b>Placeholder</b>: until an artist uploads a photo, or while it loads, the halftone shows a silhouette: one singer at a mic, or a group. An artist with no photos keeps it as the act-type illustration: the singer for a solo act, the group (<code>--group</code>) for a duo, band or choir, in the poster portrait and as the one square in the gallery, so nothing breaks and the section keeps its place (L2-020).</li>
+        <li><b>Photo</b>: an <code>&lt;img alt&gt;</code> inside <code>.art</code> (directly, or inside a <code>&lt;picture&gt;</code>) is turned greyscale and multiplied onto the halftone paper. In the product it is a <code>&lt;picture&gt;</code> with AVIF and WebP <code>srcset</code>s of the 400, 800, 1200 and 1600px renditions on the media domain (<code>{media}</code> in the samples), explicit <code>width</code> and <code>height</code>, and <code>loading="lazy"</code> unless it is above the fold (L2-088, operations/deliver-fast-pages).</li>
       </ul>
       <p>Do not use <code>.art</code> for icons, logos or illustrations of the product. Avatars of people who are not artists (the booker’s initials) use the <a href="avatar.html">avatar</a>.</p>
     </section>
@@ -173,8 +176,15 @@
           <div class="art art--yellow art-demo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='20' cy='17' r='8' fill-opacity='.55'/%3E%3Cpath d='M3 50c0-13 8-21 17-21s17 8 17 21z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Abigail Mensah singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
         </div>
         <div class="ds-example__caption"><span>An <code>&lt;img alt&gt;</code> fills the frame (<code>object-fit: cover</code>), turns greyscale and multiplies onto the paper or yellow, so it prints in the same two inks. The wrapper drops <code>role</code> and <code>aria-label</code>. (A simple shape stands in for a photo here.)</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="art"&gt;&lt;img src="/media/elijah-park.jpg" alt="Elijah Park seated on a stool with an acoustic guitar"&gt;&lt;/div&gt;
-&lt;div class="art art--yellow"&gt;&lt;img src="/media/abigail-mensah.jpg" alt="Abigail Mensah singing into a vintage microphone"&gt;&lt;span class="art__tag"&gt;Headliner&lt;/span&gt;&lt;/div&gt;</code></pre></details>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="art"&gt;
+  &lt;picture&gt;
+    &lt;source type="image/avif" srcset="{media}/elijah-park-400.avif 400w, {media}/elijah-park-800.avif 800w, …" sizes="(min-width: 62rem) 18rem, 50vw"&gt;
+    &lt;source type="image/webp" srcset="{media}/elijah-park-400.webp 400w, {media}/elijah-park-800.webp 800w, …" sizes="(min-width: 62rem) 18rem, 50vw"&gt;
+    &lt;img src="{media}/elijah-park-800.webp" width="800" height="1000" loading="lazy" alt="Elijah Park seated on a stool with an acoustic guitar"&gt;
+  &lt;/picture&gt;
+&lt;/div&gt;
+&lt;!-- The headliner photo is above the fold: eager, high priority --&gt;
+&lt;div class="art art--yellow"&gt;&lt;picture&gt;…&lt;img src="{media}/abigail-mensah-800.webp" width="800" height="1000" loading="eager" fetchpriority="high" alt="Abigail Mensah singing into a vintage microphone"&gt;&lt;/picture&gt;&lt;span class="art__tag"&gt;Headliner&lt;/span&gt;&lt;/div&gt;</code></pre></details>
       </div>
       <h3>Photo grid</h3>
       <div class="ds-example">
@@ -215,6 +225,17 @@
           <div class="art art--wide art-demo--wide" role="img" aria-label="Elijah Park with an acoustic guitar, wide"></div>
         </div>
         <div class="ds-example__caption"><span>Portrait 4:5 (default: poster, headliner), square 1:1 (<code>--square</code>: gallery), wide 16:9 (<code>--wide</code>: video). On a ticket the art fills the ticket’s height instead.</span></div>
+      </div>
+      <h3>Thumbnails</h3>
+      <p>Where art sits beside text in a row it needs a fixed width that does not shrink. Use the two thumbnail widths, never an inline width.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-end;">
+          <div class="art art--yellow art--square art--thumb" role="img" aria-label="Abigail Mensah singing into a vintage microphone, 80px thumbnail"></div>
+          <div class="art art--yellow art--thumb-lg" role="img" aria-label="Abigail Mensah singing into a vintage microphone, 128px thumbnail"></div>
+        </div>
+        <div class="ds-example__caption"><span><code>--thumb</code>: 80px (<code>--space-20</code>), the artist beside the request summary on Book. <code>--thumb-lg</code>: 128px (<code>--space-32</code>), the primary photo in Edit profile and the QR code on two-step sign-in setup. Both are <code>flex: none</code>; pair with <code>--square</code> or keep the 4:5 default. Their loading placeholders are <a href="skeleton.html"><code>.skeleton--thumb</code> / <code>--thumb-lg</code></a>.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="art art--yellow art--square art--thumb" role="img" aria-label="Abigail Mensah singing into a vintage microphone"&gt;&lt;/div&gt;
+&lt;div class="art art--yellow art--thumb-lg" role="img" aria-label="Your primary photo: Abigail singing into a vintage microphone"&gt;&lt;/div&gt;</code></pre></details>
       </div>
     </section>
 
@@ -324,6 +345,7 @@
           <tr><td>Frame</td><td><code>--color-border-strong</code>, <code>--border-width-thick</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
           <tr><td>Tag type / padding</td><td><code>--text-overline</code> / <code>--space-1</code> <code>--space-2</code></td><td colspan="2"><span data-token="--font-size-xs"></span> / <span data-token="--space-1"></span> <span data-token="--space-2"></span></td></tr>
           <tr><td>Inner padding</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr>
+          <tr><td>Thumbnail widths</td><td><code>--space-20</code> / <code>--space-32</code></td><td colspan="2"><span data-token="--space-20"></span> / <span data-token="--space-32"></span></td></tr>
           <tr><td>Grid gaps (photo / media)</td><td><code>--space-4</code> / <code>--space-6</code></td><td colspan="2"><span data-token="--space-4"></span> / <span data-token="--space-6"></span></td></tr>
         </tbody>
       </table></div>
@@ -334,7 +356,7 @@
 &lt;div class="art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"&gt;&lt;/div&gt;
 
 &lt;!-- Real photo --&gt;
-&lt;div class="art"&gt;&lt;img src="/media/hosanna-collective.jpg" alt="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"&gt;&lt;/div&gt;
+&lt;div class="art"&gt;&lt;picture&gt;&lt;source type="image/avif" srcset="…"&gt;&lt;source type="image/webp" srcset="…"&gt;&lt;img src="{media}/hosanna-collective-800.webp" width="800" height="1000" loading="lazy" alt="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"&gt;&lt;/picture&gt;&lt;/div&gt;
 
 &lt;!-- Decorative repeat --&gt;
 &lt;div class="art art--square" aria-hidden="true"&gt;&lt;/div&gt;</code></pre>
@@ -342,10 +364,11 @@
         <tr><td><code>.art</code></td><td>Framed halftone, 4:5, singer silhouette.</td></tr>
         <tr><td><code>.art--group</code></td><td>Group silhouette.</td></tr>
         <tr><td><code>.art--wide</code> <code>.art--square</code></td><td>16:9 or 1:1.</td></tr>
+        <tr><td><code>.art--thumb</code> <code>.art--thumb-lg</code></td><td>Fixed 80px / 128px width that does not shrink, for art in a row.</td></tr>
         <tr><td><code>.art--tilt</code></td><td>Coarser dot screen (0.85rem), to tell neighbours apart.</td></tr>
         <tr><td><code>.art--yellow</code></td><td>Ink dots on yellow: the headliner.</td></tr>
         <tr><td><code>.art__tag</code></td><td>Ink label pinned bottom-left.</td></tr>
-        <tr><td><code>.art &gt; img</code></td><td>Photo: cover, greyscale, multiplied.</td></tr>
+        <tr><td><code>.art &gt; img</code>, <code>.art &gt; picture &gt; img</code></td><td>Photo: cover, greyscale, multiplied. Product photos come in a <code>&lt;picture&gt;</code> (L2-088).</td></tr>
         <tr><td><code>role="img"</code> + <code>aria-label</code></td><td>Placeholder that stands for a photo.</td></tr>
         <tr><td><code>.photo-grid</code> <code>.media-grid</code></td><td>Gallery grids (2→4 square; 1→featured + 3 wide).</td></tr>
       </tbody></table>
@@ -358,13 +381,17 @@
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: ticket art as skeletons</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: portrait on the stage, four square photos, four wide video thumbnails</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: plain portrait for a new artist, a two-photo gallery</li>
+        <li><a href="../../mocks/pages/artist/no-photos.html">pages/artist/no-photos</a>: the act-type illustration for an artist with no photos, in the portrait and as the gallery’s single square</li>
         <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: portrait and video skeletons</li>
+        <li><a href="../../mocks/pages/book/default.html">pages/book/default</a>: <code>--thumb</code> beside the request summary</li>
+        <li><a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a>: <code>--thumb-lg</code> primary photo; <a href="../../mocks/pages/mfa-setup/default.html">pages/mfa-setup/default</a>: <code>--thumb-lg</code> QR code</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li><code>.art--yellow</code> dots and <code>.art__tag</code> read <code>--palette-ink</code> and <code>--palette-paper</code>. They now read <code>--color-border-on-accent</code> and the inverse pair, so the tag stays legible in the dark theme.</li>
         <li>Art skeletons used inline <code>aspect-ratio</code>. They now use <code>.skeleton--portrait</code> and <code>.skeleton--wide</code>.</li>
         <li>The grids used <code>1fr</code> tracks, which let long content push columns wider. They now use <code>minmax(0, 1fr)</code>.</li>
+        <li>Thumbnail art carried inline widths (<code>width: 8rem</code>, <code>width: 7rem</code>, <code>width: var(--space-20)</code>). They are now <code>.art--thumb</code> and <code>.art--thumb-lg</code>; the QR code grew from 7rem to 128px to match its loading placeholder.</li>
         <li>New: <code>.art &gt; img</code> defines the print treatment for real photos; the mocks only have placeholders.</li>
       </ul>
     </section>

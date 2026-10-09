@@ -30,8 +30,9 @@ package "Zamaro Web (Angular)" {
     +code: FormControl<string>
     +submit(): void
   }
-  class MfaApi {
-    +challenge(code: string): Observable<CurrentUser>
+  class AuthApi {
+    +signIn(credentials: Credentials): Observable<SignInResult>
+    +completeTwoFactor(code: string): Observable<CurrentUser>
   }
 }
 
@@ -46,10 +47,11 @@ package "Zamaro API (Laravel)" {
     +int timeoutMinutes = 30
     +handle(request: Request, next: Closure): Response
   }
-  class MfaChallengeController {
-    +__invoke(request: MfaChallengeRequest): JsonResponse
+  class SessionController {
+    +store(request: SignInRequest): JsonResponse
+    +twoFactor(request: TwoFactorChallengeRequest): JsonResponse
   }
-  class VerifyMfaChallenge <<action>> {
+  class CompleteTwoFactorChallenge <<action>> {
     +handle(pendingUserId: int, code: string, ip: string): User
   }
   interface TotpVerifier {
@@ -60,8 +62,7 @@ package "Zamaro API (Laravel)" {
     +string email
     +Role[] roles
     +bool mfaEnabled
-    +?string mfaSecret
-    +string[] mfaRecoveryCodes
+    +?string twoFactorSecret
     +hasRole(role: Role): bool
   }
   enum Role {
@@ -76,12 +77,12 @@ package "Zamaro API (Laravel)" {
 
 adminGuard ..> AuthService : reads
 adminGuard ..> NotFoundPage : falls through to
-MfaChallengePage --> MfaApi
-MfaApi ..> MfaChallengeController : POST /api/v1/auth/mfa/challenge
-MfaChallengeController --> VerifyMfaChallenge
-VerifyMfaChallenge --> TotpVerifier
-VerifyMfaChallenge ..> User : loads
-VerifyMfaChallenge ..> RecordAuditEntry : records
+MfaChallengePage --> AuthApi
+AuthApi ..> SessionController : POST /api/v1/session/two-factor
+SessionController --> CompleteTwoFactorChallenge
+CompleteTwoFactorChallenge --> TotpVerifier
+CompleteTwoFactorChallenge ..> User : loads
+CompleteTwoFactorChallenge ..> RecordAuditEntry : records
 EnsureAdministrator ..> User : checks role
 EnsureMfaVerified ..> User : checks session flag
 User --> Role

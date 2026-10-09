@@ -25,6 +25,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -35,12 +36,12 @@
         <span class="stub__code" aria-hidden="true">Admit one · Password help</span>
         <h1 id="card-title" class="auth-card__title">Forgot your password?</h1>
       </div>
-      <div class="alert alert--compact" role="alert">
+      <div class="alert alert--danger alert--compact" role="alert">
         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
         <div class="stack stack--sm"><p class="alert__title">We couldn’t send the link</p><p>Something went wrong on our side. Your email is still here; try again in a minute.</p></div>
       </div>
         <div class="field">
-          <label class="field__label" for="email">Email <span class="optional">required</span></label>
+          <label class="field__label" for="email">Email <span class="field__required">(required)</span></label>
           <input class="input" type="email" id="email" name="email" value="naomi.fraser@riversidecc.ca" autocomplete="email" placeholder="name@church.ca" required>
         </div>
       <button class="btn btn--primary btn--lg btn--block" type="submit">Send reset link</button>

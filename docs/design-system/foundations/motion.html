@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -133,7 +136,7 @@
     </section>
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Reduced motion</a></h2>
-<p>Under <code>prefers-reduced-motion: reduce</code>, <code>tokens.css</code> sets fast, base, slow and deliberate to 0.01ms, so every transition and keyframe in <code>components.css</code> finishes instantly with no extra media queries. Skeletons stop sweeping and the indeterminate progress bar becomes a static half-tint. Spinners keep turning on <code>--duration-loop</code>, because they are status indicators. Smooth scrolling is turned off.</p>
+<p>Under <code>prefers-reduced-motion: reduce</code>, <code>tokens.css</code> sets fast, base, slow and deliberate to 0.01ms, so every transition and keyframe in <code>components.css</code> finishes instantly with no extra media queries. Skeletons stop sweeping and the indeterminate progress bar becomes a static half-tint. Spinners and the busy heart stop too (L2-103): <code>components.css</code> sets <code>animation: none</code> on them, and the busy label or status text beside them says that work is in progress. <code>--duration-loop</code> is not zeroed, because a near-zero infinite loop would spin at full speed. Smooth scrolling is turned off.</p>
     </section>
 
     <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>

@@ -50,6 +50,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -76,6 +77,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -116,7 +119,7 @@
       <p class="ds-kicker">Component · Navigation</p>
       <h1>Sidebar navigation</h1>
       <p class="ds-lead">A vertical list of links for moving between the sections of an account area: an artist’s requests, bookings, calendar and payouts, or a church’s bookings and saved artists.</p>
-      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill ds-pill--warn">Status: ready, not in the mocks yet</span><span class="ds-pill"><code>&lt;nav&gt;</code> + <code>&lt;details&gt;</code></span><span class="ds-pill">Class <code>.sidenav</code></span></div>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable (settings nav in the mocks; the grouped panel is ready)</span><span class="ds-pill"><code>&lt;nav&gt;</code> + <code>&lt;details&gt;</code></span><span class="ds-pill">Class <code>.sidenav</code></span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
       </ul>
@@ -197,12 +200,12 @@
   &lt;details class="sidenav__group" open&gt;
     &lt;summary&gt;Gigs&lt;/summary&gt;
     &lt;ul class="sidenav__list"&gt;
-      &lt;li&gt;&lt;a class="sidenav__link" href="/dashboard/requests"&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/artist/requests"&gt;
         &lt;svg class="icon" aria-hidden="true" …/&gt;&lt;span class="sidenav__label"&gt;Requests&lt;/span&gt;
         &lt;span class="badge badge--count"&gt;2&lt;span class="visually-hidden"&gt; new&lt;/span&gt;&lt;/span&gt;
       &lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a class="sidenav__link" href="/dashboard/bookings" aria-current="page"&gt;…Bookings&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a class="sidenav__link" href="/dashboard/calendar"&gt;…Calendar&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/artist/bookings" aria-current="page"&gt;…Bookings&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/artist/calendar"&gt;…Calendar&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/details&gt;
   …
@@ -242,7 +245,65 @@
           </nav>
           <p class="text-caption" style="max-width: 24rem;">A 76px icon rail. Labels and group headings are visually hidden but still read out, and the count moves into the label (“Requests, 2 new”). Hover or focus shows the label in a <a href="tooltip.html">tooltip</a>.</p>
         </div>
-        <div class="ds-example__caption"><span><code>.sidenav--collapsed</code>: for 1024–1279px screens where the calendar needs the width.</span></div>
+        <div class="ds-example__caption"><span><code>.sidenav--collapsed</code>: for 992–1199px screens where the calendar needs the width.</span></div>
+      </div>
+      <h3>Settings nav (in-page sections)</h3>
+      <p><code>.settings-nav</code> is the variant the mocks use. It jumps between the sections of one long settings form (Naomi’s account, Abigail’s profile editor) rather than between pages, so the current item takes <code>aria-current="true"</code>, not <code>"page"</code>. From 992px it is a sticky 14rem column with a 4px yellow bar on the current item; below 992px it becomes a horizontally scrolling row above the form with a yellow underline. It sits in <code>.settings-layout</code> (see <a href="form-layout.html">Form layout</a>).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<nav class="settings-nav" aria-label="Settings sections" style="width: min(100%, 14rem); flex-direction: column;">
+  <a href="#variants" aria-current="true">Profile</a>
+  <a href="#variants">Church</a>
+  <a href="#variants">Email</a>
+  <a href="#variants">Password</a>
+  <a href="#variants">Signed-in devices</a>
+  <a href="#variants">Delete account</a>
+</nav>
+        </div>
+        <div class="ds-example__caption"><span>From 992px: a sticky column. From pages/account/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;nav class="settings-nav" aria-label="Settings sections" style="width: min(100%, 14rem); flex-direction: column;"&gt;
+  &lt;a href="#variants" aria-current="true"&gt;Profile&lt;/a&gt;
+  &lt;a href="#variants"&gt;Church&lt;/a&gt;
+  &lt;a href="#variants"&gt;Email&lt;/a&gt;
+  &lt;a href="#variants"&gt;Password&lt;/a&gt;
+  &lt;a href="#variants"&gt;Signed-in devices&lt;/a&gt;
+  &lt;a href="#variants"&gt;Delete account&lt;/a&gt;
+&lt;/nav&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<nav class="settings-nav" aria-label="Settings sections (phone)" style="width: 100%; flex-direction: row;">
+  <a href="#variants" aria-current="true">Profile</a>
+  <a href="#variants">Church</a>
+  <a href="#variants">Email</a>
+  <a href="#variants">Password</a>
+</nav>
+        </div>
+        <div class="ds-example__caption"><span>Below 992px: one scrolling row above the form.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;nav class="settings-nav" aria-label="Settings sections (phone)" style="width: 100%; flex-direction: row;"&gt;
+  &lt;a href="#variants" aria-current="true"&gt;Profile&lt;/a&gt;
+  &lt;a href="#variants"&gt;Church&lt;/a&gt;
+  &lt;a href="#variants"&gt;Email&lt;/a&gt;
+  &lt;a href="#variants"&gt;Password&lt;/a&gt;
+&lt;/nav&gt;</code></pre></details>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><nav class="settings-nav" aria-label="Settings sections, light" style="width: min(100%, 14rem); flex-direction: column;">
+  <a href="#variants" aria-current="true">Profile</a>
+  <a href="#variants">Church</a>
+  <a href="#variants">Email</a>
+  <a href="#variants">Password</a>
+  <a href="#variants">Signed-in devices</a>
+  <a href="#variants">Delete account</a>
+</nav></div>
+        <div data-theme="dark"><nav class="settings-nav" aria-label="Settings sections, dark" style="width: min(100%, 14rem); flex-direction: column;">
+  <a href="#variants" aria-current="true">Profile</a>
+  <a href="#variants">Church</a>
+  <a href="#variants">Email</a>
+  <a href="#variants">Password</a>
+  <a href="#variants">Signed-in devices</a>
+  <a href="#variants">Delete account</a>
+</nav></div>
       </div>
     </section>
 
@@ -303,16 +364,19 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>1280px and wider</b>: the full sidebar sits in the first column of a two-column page layout, beside the content.</li>
-        <li><b>1024–1279px</b>: pages that need width (the artist’s calendar) use <code>.sidenav--collapsed</code>, a 76px rail. Others keep the full sidebar.</li>
-        <li><b>Below 1024px</b>: the sidebar leaves the layout. Its links move into the top bar’s menu drawer, under the primary links and with the same groups, so there is one menu button on the page, not two.</li>
+        <li><b>1200px and wider</b>: the full sidebar sits in the first column of a two-column page layout, beside the content.</li>
+        <li><b>992–1199px</b>: pages that need width (the artist’s calendar) use <code>.sidenav--collapsed</code>, a 76px rail. Others keep the full sidebar.</li>
+        <li><b>Below 992px</b>: the sidebar leaves the layout. Its links move into the top bar’s menu drawer, under the primary links and with the same groups, so there is one menu button on the page, not two.</li>
         <li>The sidebar never scrolls sideways. Long labels wrap onto a second line inside the 44px-minimum row.</li>
+      </ul>
+      <ul>
+        <li><code>.settings-nav</code>: a horizontally scrolling row (no visible scrollbar, 44px targets) below 992px; a sticky column under the top bar from 992px (<code>--layout-breakpoint-lg</code>).</li>
       </ul>
     </section>
 
     <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
-      <p>The sidebar is a paper surface, not a stage surface, so it follows the theme. It reads <code>--color-bg-surface</code> and <code>--color-border-strong</code> for the panel, <code>--color-fg-default</code> for links, <code>--color-fg-muted</code> for group headings, <code>--color-bg-subtle</code> for hover, and <code>--color-accent-subtle</code>, <code>--color-fg-accent</code> and <code>--color-border-on-accent</code> for the current link.</p>
-      <p>In the dark theme <code>--color-fg-accent</code> turns yellow and the highlight darkens, so the current link reads as yellow text on a dim amber fill. The left bar reads <code>--color-border-on-accent</code>, which stays ink in the dark theme and almost disappears there; the fill, the yellow text and <code>aria-current</code> still mark the page. A proposed fix draws the bar in <code>--color-fg-accent</code> (ink on newsprint, yellow on the stage theme). The count badge keeps its yellow fill and ink number in both themes. There are no <code>--sidenav-*</code> component tokens yet; to re-skin the current marker, override the three semantic tokens on the <code>.sidenav</code> element.</p>
+      <p>The sidebar is a paper surface, not a stage surface, so it follows the theme. It reads <code>--color-bg-surface</code> and <code>--color-border-strong</code> for the panel, <code>--color-fg-default</code> for links, <code>--color-fg-muted</code> for group headings, <code>--color-bg-subtle</code> for hover, and <code>--color-accent-subtle</code>, <code>--color-fg-accent</code> and <code>--color-border-selected</code> for the current link.</p>
+      <p>In the dark theme <code>--color-fg-accent</code> turns yellow and the highlight darkens, so the current link reads as yellow text on a dim amber fill. The left bar reads <code>--color-border-selected</code>, ink on newsprint and yellow in the dark theme, so it stays visible in both; the fill, the text colour and <code>aria-current</code> also mark the page. The count badge keeps its yellow fill and ink number in both themes. There are no <code>--sidenav-*</code> component tokens yet; to re-skin the current marker, override the three semantic tokens on the <code>.sidenav</code> element.</p>
     </section>
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
@@ -378,6 +442,8 @@
           <tr><td>Link height</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
           <tr><td>Padding / gaps</td><td><code>--space-4</code>, <code>--space-3</code>, <code>--space-0-5</code></td><td colspan="2"><span data-token="--space-4"></span> / <span data-token="--space-3"></span> / <span data-token="--space-0-5"></span></td></tr>
           <tr><td>Link / heading type</td><td><code>--text-label</code> / <code>--text-overline</code></td><td colspan="2"><span data-token="--text-label"></span></td></tr>
+                  <tr><td>Settings nav current bar</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Settings nav sticky offset</td><td><code>--layout-topbar-height</code></td><td colspan="2"><span data-token="--layout-topbar-height"></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -387,11 +453,11 @@
   &lt;details class="sidenav__group" open&gt;
     &lt;summary&gt;Riverside Community Church&lt;/summary&gt;
     &lt;ul class="sidenav__list"&gt;
-      &lt;li&gt;&lt;a class="sidenav__link" href="/account/requests"&gt;&lt;svg class="icon" aria-hidden="true" …/&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/bookings?status=requested"&gt;&lt;svg class="icon" aria-hidden="true" …/&gt;
         &lt;span class="sidenav__label"&gt;Requests&lt;/span&gt;
         &lt;span class="badge badge--count"&gt;1&lt;span class="visually-hidden"&gt; awaiting reply&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a class="sidenav__link" href="/account/bookings"&gt;…Bookings&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a class="sidenav__link" href="/account/saved" aria-current="page"&gt;…Saved artists&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/bookings"&gt;…Bookings&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/saved" aria-current="page"&gt;…Saved artists&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/details&gt;
 &lt;/nav&gt;</code></pre>
@@ -405,16 +471,22 @@
         <tr><td><code>aria-current="page"</code></td><td>Current link: highlight and bar.</td></tr>
         <tr><td><code>open</code> (on <code>&lt;details&gt;</code>)</td><td>Group is expanded.</td></tr>
         <tr><td><code>data-state="hover|focus"</code></td><td>Documentation only: forces a state.</td></tr>
+      
+        <tr><td><code>.settings-nav</code></td><td>In-page section links for a settings form: row below 992px, sticky column from 992px.</td></tr>
+        <tr><td><code>.settings-nav a[aria-current="true"]</code></td><td>The section in view: yellow underline (row) or 4px bar (column).</td></tr>
+        <tr><td><code>.settings-layout</code></td><td>Places the settings nav beside the form from 992px.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The eight mock pages are public (Discover and the artist profile), and none of them has an account area. The product will need it for:</p>
+      <p>The settings nav is in these mocks:</p>
       <ul>
-        <li>The <b>artist dashboard</b>: requests, bookings, calendar, payouts and profile editing.</li>
-        <li>The <b>booker account</b>: Naomi’s requests, confirmed bookings and the saved artists that the top-bar “Saved (3)” and the footer link in <a href="../../mocks/pages/discover/default.html">pages/discover/default</a> point to.</li>
+        <li><a href="../../mocks/pages/account/default.html">pages/account/default</a> and its <a href="../../mocks/pages/account/loading.html">loading</a>, <a href="../../mocks/pages/account/invalid.html">invalid</a>, <a href="../../mocks/pages/account/submitting.html">submitting</a> and <a href="../../mocks/pages/account/success.html">success</a> states: nine sections from Profile to Delete account</li>
+        <li><a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a> and its <a href="../../mocks/pages/edit-profile/loading.html">loading</a>, <a href="../../mocks/pages/edit-profile/empty.html">empty</a> and <a href="../../mocks/pages/edit-profile/invalid.html">invalid</a> states: the artist’s profile editor</li>
+        <li>The dialogs opened from those pages keep the nav underneath: <a href="../../mocks/dialogs/delete-account/default.html">dialogs/delete-account/default</a>, <a href="../../mocks/dialogs/add-video/default.html">dialogs/add-video/default</a></li>
       </ul>
-      <p>Drift fixed during extraction: none, since no mock uses it. The current-link bar uses <code>--color-border-on-accent</code> from the start rather than the ink primitive the mocks used elsewhere, and the count badge uses the corrected 1.5em minimum width.</p>
+      <p>The grouped <code>.sidenav</code> panel is not in the mocks: the artist area (<a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>, <a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/availability/default.html">pages/availability/default</a>, <a href="../../mocks/pages/earnings/default.html">pages/earnings/default</a>) and the admin app (<a href="../../mocks/pages/admin-applications/default.html">pages/admin-applications/default</a> and the other admin pages) navigate through the workspace <a href="top-bar.html">top bar</a> and its drawer instead. It stays ready for an account area that outgrows the top bar.</p>
+      <p>Drift fixed during extraction: the current-link bar uses <code>--color-border-on-accent</code> rather than the ink primitive, and the count badge uses the corrected 1.5em minimum width. The settings nav breaks at the L2 LG breakpoint (992px).</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

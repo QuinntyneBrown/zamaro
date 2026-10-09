@@ -41,17 +41,22 @@ document, and the Zamaro Worker for emails and cache purges.
 
 **Frontend (Zamaro Web, `features/admin`)**
 
-- **`AdminApplicationPage`** — routed page for `/admin/applications/:id`. It shows
-  every applicant detail, the two references each with a verification checkbox,
-  a link to the VSC document if uploaded, and Approve and Reject actions (L2-067).
-  Approve stays disabled until both references are verified (L2-048).
-- **`AdminArtistsPage`** — routed page for `/admin/artists`, a searchable table of
-  artists with status and ticket number (for example `ZAM-0114`).
+- **`ApplicationReviewPage`** — routed page for `/admin/applications/:id`, owned by
+  `artist-onboarding/review-artist-application`. It shows every applicant detail,
+  the two references each with a verification checkbox, a link to the VSC document
+  if uploaded, and Approve and Reject actions (L2-067). Approve stays disabled until
+  both references are verified (L2-048).
+- **`AdminArtistsPage`** — routed page for `/admin/artists`, a table of artists with
+  act type, base city, rating and status, searchable by name, city or email.
 - **`AdminArtistPage`** — routed page for `/admin/artists/:id` with the artist's
   details, status, suspension history and the Suspend or Reinstate action.
-- **`SuspendArtistDialogComponent`** — design-system dialog with a required reason
-  textarea, a summary of what the suspension does, and Suspend artist. An empty
-  reason shows an inline error and moves focus to the field.
+- **`SuspendArtistDialogComponent`** — design-system dialog with a summary of what
+  the suspension does (naming the open requests it declines and the Confirmed
+  bookings it leaves to resolve), a required reason of up to 500 characters, and
+  Suspend artist. An empty reason shows an error summary and an inline error.
+- **`ReinstateArtistDialogComponent`** — design-system dialog that shows the
+  suspension on record, states that declined requests stay Declined, and has
+  Reinstate artist.
 - **`BookingsToResolveComponent`** — list shown after a suspension with each
   Confirmed booking's number, date and church, linking to
   `/admin/bookings/:number`.
@@ -62,19 +67,21 @@ document, and the Zamaro Worker for emails and cache purges.
 All routes sit in the `/api/v1/admin` group, which returns 404 to anyone but an
 MFA-verified administrator (L2-066).
 
-- **`Admin\ApplicationsController`** — `show` for
-  `GET /api/v1/admin/applications/{application}` returns
-  `AdminApplicationResource` with applicant details, references (contact details
-  decrypted for display, L2-079) and the VSC status. `verifyReference` handles
-  `PATCH /api/v1/admin/applications/{application}/references/{reference}`.
-- **`Admin\ApplicationDocumentsController`** — streams the VSC document through a
-  short-lived signed URL from object storage (lifetime `<TO SUPPLY>`) after a malware-clean check (L2-076). It
-  records an audit entry for each view.
+- **`AdminArtistApplicationsController`** and
+  **`AdminApplicationReferencesController`** — owned by
+  `artist-onboarding/review-artist-application`. They serve
+  `GET /api/v1/admin/artist-applications/{application}` (applicant details,
+  references with contact details decrypted for display, L2-079, and the VSC status)
+  and `PUT /api/v1/admin/artist-applications/{application}/references/{reference}/verification`.
+- **`DocumentLinksController`** — owned by
+  `artist-onboarding/verify-vulnerable-sector-check`. It serves
+  `GET /api/v1/vulnerable-sector-checks/{check}/document-link`, which returns a
+  5-minute signed URL for a malware-clean VSC document (L2-076) and records an audit
+  entry for each administrator view.
 - **`Admin\ArtistSuspensionsController`** — `store` handles
   `POST /api/v1/admin/artists/{artist}/suspension`; `destroy` handles
   `DELETE /api/v1/admin/artists/{artist}/suspension` (reinstate).
-- **`SuspendArtistRequest`** — requires a non-empty `reason` (maximum length
-  `<TO SUPPLY>`).
+- **`SuspendArtistRequest`** — requires a non-empty `reason` of up to 500 characters.
 - **`SuspendArtist`** — action that runs in one `DB::transaction` and locks the
   artist row. It rejects an artist that is not Approved with 409. It sets
   `status = Suspended` and writes an `ArtistSuspension` row. It moves each open
@@ -90,7 +97,7 @@ MFA-verified administrator (L2-066).
 
 **Backend (Zamaro Worker)**
 
-- **`BookingDeclinedNotification`** — queued email to the booker of each declined
+- **`RequestDeclinedNotification`** — queued email to the booker of each declined
   request (L2-063). Whether it lists similar free artists, as on an artist decline
   (L2-030), is `<TO SUPPLY>`.
 - **`PurgeArtistVisibility`** — queued listener for `ArtistSuspended` and
@@ -100,6 +107,19 @@ MFA-verified administrator (L2-066).
 Search and the profile already exclude any artist whose status is not Approved
 (L2-005, L2-021), so suspension requires no change in those slices. Whether the
 suspended artist is emailed is not stated in the specs and is `<TO SUPPLY>`.
+
+**Mock screens** — the list is
+[`pages/admin-artists`](../../../mocks/pages/admin-artists/default.html) in states
+default, loading, error and [`no-results`](../../../mocks/pages/admin-artists/no-results.html).
+The artist page is [`pages/admin-artist`](../../../mocks/pages/admin-artist/default.html)
+in states default (Marcus Bell Trio, Approved),
+[`suspended`](../../../mocks/pages/admin-artist/suspended.html) (open requests declined,
+ZAM-0097 to resolve), loading and error. The dialogs are
+[`dialogs/suspend-artist`](../../../mocks/dialogs/suspend-artist/default.html) in states
+default, busy, invalid and failed, and
+[`dialogs/reinstate-artist`](../../../mocks/dialogs/reinstate-artist/default.html) in
+states default, busy and failed. The application screens are listed in
+`artist-onboarding/review-artist-application`.
 
 **Data**
 

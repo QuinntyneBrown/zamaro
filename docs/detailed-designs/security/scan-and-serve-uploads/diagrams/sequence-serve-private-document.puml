@@ -16,11 +16,11 @@ skinparam package {
 }
 actor "Administrator" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "VscDocumentLinkComponent" as link
-  participant "UploadsApi" as client
+  participant "VscDocumentComponent" as link
+  participant "VulnerableSectorChecksApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
-  participant "VscDocumentUrlController" as urlctrl
+  participant "DocumentLinksController" as urlctrl
   participant "PrivateDocumentController\n(media domain)" as docctrl
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
@@ -33,8 +33,8 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 actor -> link : Open VSC document
-link -> client : vscDocumentUrl(artistId)
-client -> urlctrl : GET /api/v1/admin/artists/{artist}/vsc/document
+link -> client : documentLink(checkId)
+client -> urlctrl : GET /api/v1/vulnerable-sector-checks/{check}/document-link
 urlctrl -> policy : view(user, check)
 alt not the owning artist and not an administrator
   policy --> urlctrl : denyAsNotFound (L2-049, L2-074)

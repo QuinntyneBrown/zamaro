@@ -13,7 +13,7 @@ in front of the three forms that send email to arbitrary addresses.
 The slice follows representative requests end to end: a burst of searches from one
 browser (`GET /api/v1/search`), an eleventh booking request in 24 hours
 (`POST /api/v1/bookings`) and a registration submission
-(`POST /api/v1/auth/register`). Search itself is
+(`POST /api/v1/register`). Search itself is
 `discovery/search-available-artists`. The per-account sign-in lockout (L2-072) belongs
 to the identity slices. The edge that supplies the client IP is described in
 `security/enforce-transport-and-headers`.
@@ -45,15 +45,26 @@ bot challenge provider.
   reads `Retry-After`, and passes a typed `RateLimited` error with the wait in seconds
   to the caller. It does not retry on its own.
 - **`SearchStore`** (`discovery/search-available-artists`) — on `RateLimited`, keeps
-  the criteria and shows a wait message; its copy is `<TO SUPPLY>`.
+  the criteria and shows "Too many searches in a minute" with "Give it {n} seconds,
+  then try again.", where {n} comes from `Retry-After`; Try again counts down and
+  re-runs the same search when it reaches zero.
 - **`BookingStubComponent`** — on a 429 from `POST /api/v1/bookings`, shows the
   problem-details `detail` verbatim: "You've sent a lot of requests today. Try again
   tomorrow."
 - **`BotChallengeComponent`** — wraps the bot challenge provider's widget on the
-  registration, password-reset and artist-application forms. It emits the token into a
-  hidden `challengeToken` control and keeps the submit button disabled until a token
-  exists. After any failed submission it resets the widget, because tokens are
-  single-use. The provider's script origin is allowed in the page CSP.
+  registration, password-reset and artist-application forms. The widget is invisible:
+  it runs when the form is submitted and shows the provider's own short check only
+  when traffic looks automated. It emits the token into a hidden `challengeToken`
+  control and the form posts once the token exists. After any failed submission it
+  resets the widget, because tokens are single-use, and the form shows "We couldn't
+  check that you're a person" with every value kept. The provider's script origin is
+  allowed in the page CSP.
+
+**Mock screens** — the search limit is
+[`pages/discover/limited`](../../../mocks/pages/discover/limited.html), the daily
+allowance message is [`pages/book/limit`](../../../mocks/pages/book/limit.html) and a
+failed bot challenge is
+[`pages/sign-up/challenge`](../../../mocks/pages/sign-up/challenge.html).
 
 **Backend (Zamaro API)**
 
@@ -89,10 +100,11 @@ bot challenge provider.
   expiry limits the alert to one per booker per day. The alert channel beyond email is
   `<TO SUPPLY>`.
 - **`App\Http\Middleware\VerifyBotChallenge`** — route middleware on
-  `POST /api/v1/auth/register`, `POST /api/v1/auth/forgot-password` and
+  `POST /api/v1/register`, `POST /api/v1/password/forgot` and
   `POST /api/v1/artist-applications`. It reads `challengeToken` from the body and calls
   `BotChallengeVerifier`. A missing or failed token returns 422 with an error on
-  `challengeToken`; the copy is `<TO SUPPLY>`. Behaviour when the provider is
+  `challengeToken`: "We couldn't check that you're a person. Try again; if it keeps
+  happening, email hello@zamaro.ca." Behaviour when the provider is
   unreachable is `<TO SUPPLY>`.
 - **`App\Services\Security\BotChallengeVerifier`** — interface with one adapter for the
   bot challenge provider (vendor `<TO SUPPLY>`). It sends the token, the client IP and

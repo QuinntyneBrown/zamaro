@@ -18,7 +18,7 @@ package "Zamaro Web (Angular)" {
     +reviewStore: BookingReviewStore
     +onSubmitReview(form: ReviewForm): void
   }
-  class ReviewFormComponent {
+  class WriteReviewDialogComponent {
     +stars: FormControl<number>
     +text: FormControl<string>
     +editableUntil: Input<string | null>
@@ -109,7 +109,7 @@ package "Zamaro API (Laravel)" {
 }
 
 BookingDetailPage --> BookingReviewStore
-BookingDetailPage --> ReviewFormComponent
+BookingDetailPage --> WriteReviewDialogComponent : opens (CDK Dialog)
 BookingReviewStore --> ReviewsApi
 ReviewsApi ..> BookingReviewController : POST / PATCH
 BookingReviewController ..> StoreReviewRequest : validates

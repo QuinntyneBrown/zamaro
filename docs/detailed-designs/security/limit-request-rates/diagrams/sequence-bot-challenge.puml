@@ -30,26 +30,27 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 actor -> page : Open registration form
-page -> widget : Render with site key and action "register"
-widget -> provider : Load widget and run challenge
-provider --> widget : Single-use token
-widget --> page : tokenChange(token), enable submit
+page -> widget : Render invisibly with site key and action "register"
 actor -> page : Submit name, email, password
+page -> widget : execute()
+widget -> provider : Run challenge (visible check only if traffic looks automated)
+provider --> widget : Single-use token
+widget --> page : tokenChange(token)
 page -> client : register(form with challengeToken)
-client -> mw : POST /api/v1/auth/register
+client -> mw : POST /api/v1/register
 mw -> verifier : verify(token, client IP, "register")
 verifier -> provider : Verify token with site secret
 provider --> verifier : Result
 alt token missing, invalid, reused or wrong action (L2-077)
   verifier --> mw : passed = false
-  mw --> client : 422, errors.challengeToken (copy <TO SUPPLY>)
+  mw --> client : 422, errors.challengeToken
   client --> page : Error
   page -> widget : reset()
-  page --> actor : Ask to complete the challenge again
+  page --> actor : "We couldn't check that you're a person", values kept
 else passed
   verifier --> mw : passed = true
   mw -> controller : Proceed to registration (L2-022)
-  controller --> client : 201 "Check your email to finish signing up"
+  controller --> client : 202 "Check your email to finish signing up"
   client --> page : Success
   page --> actor : Confirmation shown
 end

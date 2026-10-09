@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Publish a calendar feed
 
-Container(web, "Zamaro Web", "Angular", "CalendarFeedComponent, CalendarFeedApi")
+Container(web, "Zamaro Web", "Angular", "CalendarFeedDialogComponent, CalendarFeedApi")
 System_Ext(calapp, "Calendar application", "Subscribes to iCalendar URLs")
 Container_Boundary(api, "Zamaro API") {
   Component(mgmt, "ArtistCalendarFeedController", "Laravel controller", "show, enable, regenerate")

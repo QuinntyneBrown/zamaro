@@ -9,7 +9,7 @@ harms real people. Nobody outside the Zamaro team can remove one.
 
 This feature is the path from a report to a decision. Any signed-in user reports a
 review with a reason, administrators are notified, and an administrator either hides
-the review with a recorded reason or dismisses the report. Writing reviews is
+the review with a recorded reason or dismisses its open reports. Writing reviews is
 `reviews/leave-review`; the rating that a hidden review leaves is computed in
 `reviews/show-reviews-and-rating`. The audit trail is
 `administration/record-audit-log`, and the `/admin` access rules are
@@ -21,7 +21,7 @@ Terms used in this design:
 - **report reason** — one of Offensive, Not about this artist, Personal information, Other
 - **open report** — review report that no administrator has resolved
 - **hidden review** — review that an administrator removed from public view with a recorded reason; it stays in the database
-- **dismissal** — administrator decision that closes a report and leaves the review visible
+- **dismissal** — administrator decision that closes every open report on a review and leaves the review visible
 - **moderation queue** — admin page listing reviews with open reports, oldest first
 
 Three rules come from L2-062. A report carries a reason and notifies an
@@ -38,14 +38,14 @@ service.
 **Frontend (Zamaro Web)**
 
 - **`ReviewComponent`** (`features/artist-profile`) — shows a Report link on each
-  review for a signed-in user. A guest sees no link.
+  review for a signed-in user, except on the user's own review. A guest sees no link.
 - **`ArtistReviewsPage`** (`features/artist-workspace`, from
   `reviews/reply-to-review`) — offers Reply and Report on each review of the
   artist's own profile, and no delete action (L2-062).
 - **`ReportReviewDialogComponent`** — design-system dialog with a radio group of the
-  four report reasons, an optional note (length `<TO SUPPLY>`) and Send report. It
+  four report reasons, an optional note of up to 500 characters and Send report. It
   traps focus and returns it to the Report link on close (L2-101). On success it
-  closes and raises a confirmation toast (copy `<TO SUPPLY>`).
+  closes and raises the toast "Report sent. The Zamaro team will take a look."
 - **`ReviewReportsApi`** — typed client for
   `POST /api/v1/reviews/{review}/reports`.
 - **`AdminReviewReportsPage`** (`features/admin`) — routed page for
@@ -57,7 +57,7 @@ service.
 - **`AdminReviewsStore`** and **`AdminReviewsApi`** — store and typed client for
   `GET /api/v1/admin/review-reports`,
   `POST /api/v1/admin/reviews/{review}/hide` and
-  `POST /api/v1/admin/review-reports/{report}/dismiss`.
+  `POST /api/v1/admin/reviews/{review}/reports/dismiss`.
 
 **Backend (Zamaro API)**
 
@@ -65,23 +65,26 @@ service.
   `POST /api/v1/reviews/{review}/reports`, behind `auth:sanctum` and the write rate
   limiter (L2-077). A hidden or unknown review returns 404.
 - **`ReportReviewRequest`** — validates `reason` against the `ReviewReportReason`
-  enum and the optional `note`. Whether Other requires a note is `<TO SUPPLY>`.
+  enum and the optional `note` of up to 500 characters. The note is optional for
+  every reason, Other included, as the report dialog mock shows.
 - **`ReportReview`** — action that inserts a `ReviewReport`. A unique index on
   `(review_id, reporter_id)` makes a repeat report by the same user return the
   existing report without a second notification. A new report dispatches
   `ReviewReported`.
 - **`Admin\ReviewModerationController`** — `index`, `hide` and `dismiss` under
   `/api/v1/admin`, which returns 404 to non-administrators (L2-066).
-- **`HideReviewRequest`** — requires a non-empty `reason` (maximum length
-  `<TO SUPPLY>`).
+- **`HideReviewRequest`** — requires a non-empty `reason` of up to 500 characters.
 - **`HideReview`** — action that, in one `DB::transaction`, sets `hidden_at`,
   `hidden_reason` and `hidden_by` on the review, resolves every open report on it
   with resolution `Hidden`, and calls `RecordAuditEntry` with action
   `review.hidden` (L2-069). After commit it dispatches `ReviewHidden`.
-- **`DismissReviewReport`** — action that resolves one report with resolution
-  `Dismissed` and records the audit entry `review_report.dismissed`.
-- **Route inventory test** — an acceptance test asserts that no route deletes a
-  review, for any role (L2-062).
+- **`DismissReviewReports`** — action that resolves every open report on the
+  review with resolution `Dismissed` and records the audit entry
+  `review_report.dismissed`.
+- **No delete operation** — no endpoint deletes a review for any role (L2-062). An
+  acceptance test proves the behaviour: an artist's, a booker's and an
+  administrator's `DELETE /api/v1/reviews/{review}` each returns 404 and the review
+  stays on the profile.
 
 **Backend (Zamaro Worker)**
 
@@ -93,6 +96,18 @@ service.
 - **`RecalculateArtistRating`** — dispatched for `ReviewHidden` by
   `reviews/show-reviews-and-rating`; it removes the review from the rating within
   60 seconds (L2-060) and clears the cached profile.
+
+**Mock screens** — the Report entry points are on
+[`pages/artist`](../../../mocks/pages/artist/default.html) (signed-in booker) and
+[`pages/artist-reviews`](../../../mocks/pages/artist-reviews/default.html) (the artist).
+The report dialog is
+[`dialogs/report-review`](../../../mocks/dialogs/report-review/default.html) in states
+default, busy, invalid and failed. The moderation queue is
+[`pages/admin-reviews`](../../../mocks/pages/admin-reviews/default.html) in states
+default, loading, [`empty`](../../../mocks/pages/admin-reviews/empty.html) and error,
+and the hide dialog is
+[`dialogs/hide-review`](../../../mocks/dialogs/hide-review/default.html) in states
+default, busy, invalid and failed. Dismiss acts at once, with no dialog.
 
 Restoring a hidden review is not described in the specs and is `<TO SUPPLY>`.
 
@@ -153,7 +168,7 @@ notifies every administrator; a repeat report changes nothing.
 
 ### Behaviour — hide or dismiss a reported review
 
-An administrator hides with a required reason or dismisses the report. Hiding
+An administrator hides with a required reason or dismisses the open reports. Hiding
 writes the audit entry in the same transaction, emails the reviewer and removes the
 review from the rating.
 

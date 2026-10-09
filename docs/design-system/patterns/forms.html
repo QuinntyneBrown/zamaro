@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -118,7 +121,7 @@
     </header>
 
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-      <p>The mocks have two forms. The <b>search</b> is the booking bar on the poster: four fields with sensible defaults and one submit, “Show the lineup”. The <b>booking request</b> is the stub beside an artist’s profile: date, kind of gathering, church and an optional message, sent with “Request to book · Sat 14 Nov”. Every future form (the artist application, church details, cancelling a booking) follows the same rules.</p>
+      <p>The mocks have two forms. The <b>search</b> is the booking bar on the poster: four fields with sensible defaults and one submit, “Show the lineup”. The <b>booking request</b> starts on the stub beside an artist’s profile (date, kind of gathering, church and an optional message, “Request to book · Sat 14 Nov”), which opens the request page (<code>/artists/{slug}/book</code>) where the request is checked and sent with “Send request to Abigail”. Every other form (the artist application, church details, cancelling a booking) follows the same rules.</p>
       <ul>
         <li><b>One column, labels above.</b> People read down the stub the way they read a ticket. Two columns appear only for short related fields, and only from 768px up.</li>
         <li><b>Validate late, re-check early.</b> A field is checked when the person leaves it. Once it shows an error, it is re-checked on every keystroke so the error disappears the moment it is fixed.</li>
@@ -133,10 +136,10 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Situation</th><th scope="col">Shape</th><th scope="col">Example</th></tr></thead>
         <tbody>
-          <tr><td>A few fields that narrow results shown on the same page</td><td>Booking bar on the poster. Every field has a default, so there is no error summary; results replace the lineup below.</td><td>Search: Sat 14 Nov · Burlington, ON · Sunday service · 120 km</td></tr>
-          <tr><td>A request sent to another person</td><td>Ticket stub, one column, sticky on desktop. Error summary on submit, busy submit, success in place.</td><td>“Request to book · Sat 14 Nov” on Abigail Mensah’s profile</td></tr>
-          <tr><td>A long form on several topics (six fields or more)</td><td>Its own page: <code>.form</code> with <code>.fieldset</code> groups and a <code>.form__actions</code> bar.</td><td>Artist application, church details (not in the mocks yet)</td></tr>
-          <tr><td>One on/off setting</td><td>No form and no submit: a toggle that saves at once and confirms with a toast.</td><td>Save toggle on a ticket, e-mail preferences</td></tr>
+          <tr><td>A few fields that narrow results shown on the same page</td><td>Booking bar on the poster. Every field has a default, so there is no error summary; results replace the lineup below.</td><td>Search: Sat 14 Nov · Burlington, ON · Worship night · 120 km</td></tr>
+          <tr><td>A request sent to another person</td><td>Ticket stub, one column, sticky on desktop, that hands its values to the request page. The request page has the error summary, the busy submit and the sent page.</td><td>“Request to book · Sat 14 Nov” on Abigail Mensah’s profile, then “Send request to Abigail”</td></tr>
+          <tr><td>A long form on several topics (six fields or more)</td><td>Its own page: a <code>.form-stack</code> of <code>.form-section</code> panels with <code>.form-grid</code> fields and <code>.fieldset</code> groups, and a sticky <code>.form-actions</code> bar (see <a href="../components/form-layout.html">Form layout</a>).</td><td>Account settings, the artist profile editor, the artist application, the booking request</td></tr>
+          <tr><td>One on/off setting</td><td>No form and no submit: a toggle that saves at once and confirms with a toast.</td><td>Save toggle on a ticket, email preferences</td></tr>
           <tr><td>A destructive or money decision</td><td>A confirmation <a href="dialogs-and-overlays.html">dialog</a>, not a form field.</td><td>Cancel booking, pay the deposit</td></tr>
         </tbody>
       </table></div>
@@ -155,20 +158,20 @@
     </section>
 
     <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
-      <p>The booking request on the profile stub, composed from existing classes. The head is a ticket header with the booking number, the fields are stacked <code>.field</code> blocks with the label above, and the submit fills the stub.</p>
+      <p>The booking request on the profile stub, composed from existing classes. The head is a ticket header with the artist’s ticket number, the fields are stacked <code>.field</code> blocks with the label above, and the submit fills the stub.</p>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas">
           <form class="stub" action="#structure" novalidate aria-labelledby="f1-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
-            <div class="stub__head"><p id="f1-title" class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+            <div class="stub__head"><p id="f1-title" class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
             <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
             <div class="field"><label class="field__label" for="f1-date">Event date</label>
               <input class="input" id="f1-date" type="date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="f1-date-msg">
               <span class="inline-msg inline-msg--success" id="f1-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div>
             <div class="field"><label class="field__label" for="f1-kind">Kind of gathering</label>
-              <select class="select" id="f1-kind" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+              <select class="select" id="f1-kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
             <div class="field"><label class="field__label" for="f1-church">Church</label>
               <input class="input" id="f1-church" type="text" name="church" value="Riverside Community Church, Burlington" autocomplete="organization"></div>
-            <div class="field"><div class="field__row"><label class="field__label" for="f1-msg">Message</label><span class="field__optional">Optional</span></div>
+            <div class="field"><div class="field__row"><label class="field__label" for="f1-msg">Message</label><span class="field__optional">(optional)</span></div>
               <textarea class="textarea" id="f1-msg" name="message" placeholder="Your church, the room, the songs you love." aria-describedby="f1-msg-help"></textarea>
               <span class="field__help" id="f1-msg-help">Abigail reads this before she accepts.</span></div>
             <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
@@ -177,7 +180,7 @@
         </div>
         <div class="ds-example__caption"><span>Head, price, four fields with labels above, availability as a success message, block submit, fine print that says what happens next.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="stub" novalidate aria-labelledby="book-title"&gt;
-  &lt;div class="stub__head"&gt;&lt;h2 id="book-title" class="stub__title"&gt;Book Abigail&lt;/h2&gt;&lt;span class="stub__code" aria-hidden="true"&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="stub__head"&gt;&lt;h2 id="book-title" class="stub__title"&gt;Book Abigail&lt;/h2&gt;&lt;span class="stub__code" aria-hidden="true"&gt;No. ACT-0027&lt;/span&gt;&lt;/div&gt;
   &lt;div class="field"&gt;
     &lt;label class="field__label" for="date"&gt;Event date&lt;/label&gt;
     &lt;input class="input" id="date" type="date" value="2026-11-14" aria-describedby="date-msg"&gt;
@@ -189,9 +192,9 @@
 &lt;/form&gt;</code></pre></details>
       </div>
       <ol>
-        <li><b>Form label.</b> The stub title names the form (“Book Abigail”) through <code>aria-labelledby</code>. The booking number is decoration for sighted readers.</li>
+        <li><b>Form label.</b> The stub title names the form (“Book Abigail”) through <code>aria-labelledby</code>. The ticket number (No. ACT-0027) is decoration for sighted readers; a booking number (ZAM-) only exists once the request is sent.</li>
         <li><b>Field.</b> <code>.field</code> stacks label, control, then help or error, 4px apart. Fields are 20px apart (<code>--space-5</code>).</li>
-        <li><b>Label above.</b> <code>.field__label</code> in the stamp style. Optional fields say “Optional” with <code>.field__optional</code>; required fields carry no marker because nearly every field is required.</li>
+        <li><b>Label above.</b> <code>.field__label</code> in the stamp style. The less common case on a form is marked in the label: “(optional)” with <code>.field__optional</code> or “(required)” with <code>.field__required</code>. Short forms where nearly every field is required mark only the optional ones; long forms and dialogs that mix them mark both.</li>
         <li><b>Help, status and error.</b> One line under the control, linked with <code>aria-describedby</code>. Help is muted, status uses <code>.inline-msg</code> with an icon, errors use <code>.field__error</code>.</li>
         <li><b>Submit.</b> The one yellow button. It names the action and the date, and fills the stub.</li>
         <li><b>Fine print.</b> <code>.stub__fine</code> says what the submit costs and what happens next.</li>
@@ -203,9 +206,9 @@
           <form class="booking-bar" data-theme="light" action="#structure" novalidate aria-labelledby="f2-title" style="width: 100%;">
             <p id="f2-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></p>
             <div class="field"><label class="field__label" for="f2-date">Event date</label><input class="input" id="f2-date" type="date" name="date" value="2026-11-14" min="2026-10-09"></div>
-            <div class="field"><label class="field__label" for="f2-kind">Kind of gathering</label><select class="select" id="f2-kind" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option></select></div>
+            <div class="field"><label class="field__label" for="f2-kind">Kind of gathering</label><select class="select" id="f2-kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option></select></div>
             <div class="field"><label class="field__label" for="f2-place">Church location</label><input class="input" id="f2-place" type="text" name="place" value="Burlingtn" autocomplete="address-level2" aria-invalid="true" aria-describedby="f2-place-err">
-              <span class="field__error" id="f2-place-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>We can’t find “Burlingtn”. Try a town name, like Burlington, ON.</span></div>
+              <span class="field__error" id="f2-place-err">We can’t find “Burlingtn”. Try a town name, like Burlington, ON.</span></div>
             <div class="field"><label class="field__label" for="f2-radius">How far can they drive?</label><select class="select" id="f2-radius" name="radius"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></div>
             <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
           </form>
@@ -215,35 +218,35 @@
     </section>
 
     <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
-      <p>A form moves through these states. The same stub is shown in each so you can compare them.</p>
+      <p>A form moves through these states. The stub only checks availability and hands over, so the examples below are the request page’s form (<a href="../../mocks/pages/book/default.html">pages/book</a>), which owns the error summary, the busy submit and the sent page.</p>
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">State</th><th scope="col">What the person sees</th><th scope="col">Markup</th></tr></thead>
         <tbody>
           <tr><td>Default</td><td>Values pre-filled from the search and the church profile; availability shown under the date.</td><td><code>.inline-msg--success</code> linked by <code>aria-describedby</code></td></tr>
           <tr><td>Checking</td><td>After a date change: “Checking Abigail’s calendar…” with a small spinner, under the date only.</td><td><code>.spinner-inline</code> inside <code>role="status"</code></td></tr>
-          <tr><td>Invalid field</td><td>Red rule on the left of the control and a bold message with a warning icon.</td><td><code>aria-invalid="true"</code> + <code>.field__error</code></td></tr>
+          <tr><td>Invalid field</td><td>Red rule on the left of the control and a bold, text-only message (no icon).</td><td><code>aria-invalid="true"</code> + <code>.field__error</code></td></tr>
           <tr><td>Submitted with errors</td><td>Error summary at the top of the form with a link per problem; focus moves to it.</td><td><code>.error-summary</code> with <code>tabindex="-1"</code></td></tr>
-          <tr><td>Busy</td><td>Fields dim, the submit keeps its size and says “Sending request…”.</td><td><code>aria-busy="true"</code> on the form and the button</td></tr>
+          <tr><td>Busy</td><td>Fields dim, the submit keeps its size and says “Sending request…”; a second press sends nothing (L2-108).</td><td><code>aria-busy="true"</code> on the form; <code>aria-busy="true"</code> and <code>aria-disabled="true"</code> on the submit, never native <code>disabled</code> (it would drop focus)</td></tr>
           <tr><td>Failed to send</td><td>An alert above the submit; every value is kept.</td><td><code>.alert--danger.alert--compact</code>, <code>role="alert"</code></td></tr>
-          <tr><td>Success</td><td>The stub is replaced by what happens next and the booking number.</td><td><code>.alert--success</code>; focus moves to its title</td></tr>
+          <tr><td>Success</td><td>The request page gives way to the sent page: the booking number, the Requested stamp and what happens next (<a href="../../mocks/pages/book/success.html">pages/book/success</a>).</td><td>Focus moves to its <code>&lt;h1&gt;</code></td></tr>
         </tbody>
       </table></div>
       <h3>Submitted with errors</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas">
-          <form class="stub" action="#states" novalidate aria-labelledby="f3-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
-            <div class="stub__head"><p id="f3-title" class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+          <form class="form-section" action="#states" novalidate aria-labelledby="f3-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
+            <p id="f3-title" class="form-section__title">Your event</p>
             <div class="error-summary" role="alert" tabindex="-1" aria-labelledby="f3-sum-title">
               <p class="error-summary__title" id="f3-sum-title">2 things to fix</p>
-              <ul><li><a href="#f3-date">Abigail is booked Sun 15 Nov</a></li><li><a href="#f3-church">Enter your church’s name</a></li></ul>
+              <ul><li><a href="#f3-date">Abigail is booked Sun 15 Nov</a></li><li><a href="#f3-time">Enter the service start time</a></li></ul>
             </div>
             <div class="field"><label class="field__label" for="f3-date">Event date</label>
               <input class="input" id="f3-date" type="date" value="2026-11-15" aria-invalid="true" aria-describedby="f3-date-err">
-              <span class="field__error" id="f3-date-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick Sat 14, Fri 20 or Sun 22 Nov.</span></div>
-            <div class="field"><label class="field__label" for="f3-church">Church</label>
-              <input class="input" id="f3-church" type="text" value="" autocomplete="organization" aria-invalid="true" aria-describedby="f3-church-err">
-              <span class="field__error" id="f3-church-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name so Abigail knows who’s asking.</span></div>
-            <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sun 15 Nov</button>
+              <span class="field__error" id="f3-date-err">Abigail is booked Sun 15 Nov. Pick Tue 17, Wed 18 or Thu 19 Nov.</span></div>
+            <div class="field"><label class="field__label" for="f3-time">Service start time</label>
+              <input class="input" id="f3-time" type="time" value="" aria-invalid="true" aria-describedby="f3-time-err">
+              <span class="field__error" id="f3-time-err">Enter the service start time so Abigail can plan her sound check.</span></div>
+            <button class="btn btn--primary btn--lg btn--block" type="submit">Send request to Abigail</button>
           </form>
         </div>
         <div class="ds-example__caption"><span>Summary first, in field order; each link moves focus to its field. The field errors repeat the full sentence.</span></div>
@@ -251,38 +254,36 @@
       <h3>Busy, failed and sent</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
-          <form class="stub form" action="#states" novalidate aria-labelledby="f4-title" aria-busy="true" style="width: 100%; max-width: var(--layout-sidebar-width);">
-            <div class="stub__head"><p id="f4-title" class="stub__title">Book Abigail</p></div>
-            <div class="field"><label class="field__label" for="f4-church">Church</label><input class="input" id="f4-church" type="text" value="Riverside Community Church, Burlington"></div>
-            <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true">Sending request…</button>
+          <form class="form-section form" action="#states" novalidate aria-labelledby="f4-title" aria-busy="true" style="width: 100%; max-width: var(--layout-sidebar-width);">
+            <p id="f4-title" class="form-section__title">Request to book Abigail</p>
+            <div class="field"><label class="field__label" for="f4-time">Service start time</label><input class="input" id="f4-time" type="time" value="19:00"></div>
+            <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" aria-disabled="true">Sending request…</button>
           </form>
-          <form class="stub" action="#states" novalidate aria-labelledby="f5-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
-            <div class="stub__head"><p id="f5-title" class="stub__title">Book Abigail</p></div>
-            <div class="field"><label class="field__label" for="f5-church">Church</label><input class="input" id="f5-church" type="text" value="Riverside Community Church, Burlington"></div>
+          <form class="form-section" action="#states" novalidate aria-labelledby="f5-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
+            <p id="f5-title" class="form-section__title">Request to book Abigail</p>
+            <div class="field"><label class="field__label" for="f5-time">Service start time</label><input class="input" id="f5-time" type="time" value="19:00"></div>
             <div class="alert alert--danger alert--compact" role="alert">
               <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
               <div class="stack stack--sm"><p class="alert__title">Your request didn’t send</p><p>We lost the connection. Your message is kept; nothing was charged.</p></div>
             </div>
             <button class="btn btn--primary btn--lg btn--block" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
           </form>
-          <div class="stub" style="width: 100%; max-width: var(--layout-sidebar-width);">
-            <div class="alert alert--success alert--compact">
-              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
-              <div class="stack stack--sm"><p class="alert__title" id="f6-title" tabindex="-1">Request sent to Abigail</p><p>She usually answers within two days. We’ll e-mail you when she does.</p></div>
-            </div>
-            <p class="stub__code">No. ZAM-0114 · Sat 14 Nov · Sunday service</p>
-            <p class="stub__fine">Nothing is charged until Abigail accepts.</p>
-            <a class="btn btn--block" href="#states">See your requests</a>
-          </div>
+          <section class="panel panel--raised" aria-labelledby="f6-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
+            <div class="panel__head"><span class="stub__code">Booking ZAM-0114</span><span class="stamp stamp--requested">Requested</span></div>
+            <p class="panel__title" id="f6-title" tabindex="-1">Request sent to Abigail</p>
+            <p>Nothing has been charged. Abigail has until Mon 12 Oct, 10:15 a.m. to reply.</p>
+            <p class="text-muted">Worship night · Sat 14 Nov at 7:00 p.m.</p>
+            <a class="btn btn--block" href="#states">View booking ZAM-0114</a>
+          </section>
         </div>
-        <div class="ds-example__caption"><span>Busy: fields dim and the button spins without changing size. Failed: the alert sits above the submit, which becomes “Try again”. Sent: the form gives way to what happens next.</span></div>
+        <div class="ds-example__caption"><span>On the request page. Busy: fields dim and the button spins without changing size. Failed: the alert sits above the submit, which becomes “Try again”. Sent: the page gives way to the booking number and what happens next, as in <a href="../../mocks/pages/book/success.html">pages/book/success</a>.</span></div>
       </div>
       <h3>Field states</h3>
       <div class="ds-matrix"><table>
         <thead><tr><th scope="col">Control</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Disabled</th></tr></thead>
         <tbody>
           <tr><th scope="row">Text field</th><td><input class="input" type="text" value="Burlington, ON" aria-label="Church location, default"></td><td><input class="input" type="text" value="Burlington, ON" data-state="hover" aria-label="Church location, hover"></td><td><input class="input" type="text" value="Burlington, ON" data-state="focus" aria-label="Church location, focus"></td><td><input class="input" type="text" value="Burlingtn" aria-invalid="true" aria-label="Church location, invalid"></td><td><input class="input" type="text" value="Burlington, ON" disabled aria-label="Church location, disabled"></td></tr>
-          <tr><th scope="row">Select</th><td><select class="select" aria-label="Kind of gathering, default"><option>Sunday service</option></select></td><td><select class="select" data-state="hover" aria-label="Kind of gathering, hover"><option>Sunday service</option></select></td><td><select class="select" data-state="focus" aria-label="Kind of gathering, focus"><option>Sunday service</option></select></td><td><select class="select" aria-invalid="true" aria-label="Kind of gathering, invalid"><option>Choose one</option></select></td><td><select class="select" disabled aria-label="Kind of gathering, disabled"><option>Sunday service</option></select></td></tr>
+          <tr><th scope="row">Select</th><td><select class="select" aria-label="Kind of gathering, default"><option>Worship night</option></select></td><td><select class="select" data-state="hover" aria-label="Kind of gathering, hover"><option>Worship night</option></select></td><td><select class="select" data-state="focus" aria-label="Kind of gathering, focus"><option>Worship night</option></select></td><td><select class="select" aria-invalid="true" aria-label="Kind of gathering, invalid"><option>Choose one</option></select></td><td><select class="select" disabled aria-label="Kind of gathering, disabled"><option>Worship night</option></select></td></tr>
           <tr><th scope="row">Date</th><td><input class="input" type="date" value="2026-11-14" aria-label="Event date, default"></td><td><input class="input" type="date" value="2026-11-14" data-state="hover" aria-label="Event date, hover"></td><td><input class="input" type="date" value="2026-11-14" data-state="focus" aria-label="Event date, focus"></td><td><input class="input" type="date" value="2026-11-15" aria-invalid="true" aria-label="Event date, invalid"></td><td><input class="input" type="date" value="2026-11-14" disabled aria-label="Event date, disabled"></td></tr>
         </tbody>
       </table></div>
@@ -290,21 +291,21 @@
       <div class="ds-themes">
         <div data-theme="light"><div class="stack">
           <div class="field"><label class="field__label" for="t1-date">Event date</label><input class="input" id="t1-date" type="date" value="2026-11-14" aria-describedby="t1-date-msg"><span class="inline-msg inline-msg--success" id="t1-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div>
-          <div class="field"><label class="field__label" for="t1-church">Church</label><input class="input" id="t1-church" type="text" value="" aria-invalid="true" aria-describedby="t1-church-err"><span class="field__error" id="t1-church-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</span></div>
-          <button class="btn btn--primary btn--block" type="button" aria-busy="true">Sending request…</button>
+          <div class="field"><label class="field__label" for="t1-church">Church</label><input class="input" id="t1-church" type="text" value="" aria-invalid="true" aria-describedby="t1-church-err"><span class="field__error" id="t1-church-err">Enter your church’s name.</span></div>
+          <button class="btn btn--primary btn--block" type="button" aria-busy="true" aria-disabled="true">Sending request…</button>
         </div></div>
         <div data-theme="dark"><div class="stack">
           <div class="field"><label class="field__label" for="t2-date">Event date</label><input class="input" id="t2-date" type="date" value="2026-11-14" aria-describedby="t2-date-msg"><span class="inline-msg inline-msg--success" id="t2-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div>
-          <div class="field"><label class="field__label" for="t2-church">Church</label><input class="input" id="t2-church" type="text" value="" aria-invalid="true" aria-describedby="t2-church-err"><span class="field__error" id="t2-church-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</span></div>
-          <button class="btn btn--primary btn--block" type="button" aria-busy="true">Sending request…</button>
+          <div class="field"><label class="field__label" for="t2-church">Church</label><input class="input" id="t2-church" type="text" value="" aria-invalid="true" aria-describedby="t2-church-err"><span class="field__error" id="t2-church-err">Enter your church’s name.</span></div>
+          <button class="btn btn--primary btn--block" type="button" aria-busy="true" aria-disabled="true">Sending request…</button>
         </div></div>
       </div>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Booking bar:</b> one column below 640px, two columns from 640px (<code>--layout-breakpoint-sm</code>). The title and the submit always span the full row.</li>
-        <li><b>Booking stub:</b> from 1024px it sits in the <code>--layout-sidebar-width</code> (22rem) column and stays pinned while the profile scrolls. Below 1024px it follows the reviews, and “Book for Sat 14 Nov” in the poster jumps to it.</li>
+        <li><b>Booking bar:</b> one column below 576px, two columns from 576px (<code>--layout-breakpoint-sm</code>). The title and the submit always span the full row.</li>
+        <li><b>Booking stub:</b> from 992px it sits in the <code>--layout-sidebar-width</code> (22rem) column and stays pinned while the profile scrolls. Below 992px it follows the reviews, and “Book for Sat 14 Nov” in the poster jumps to it.</li>
         <li><b>Long forms:</b> one column below 768px. <code>.form__row</code> puts two short related fields side by side from 768px only (first and last name, city and postal code). <code>.form__actions</code> wraps, primary first.</li>
         <li><b>Submit:</b> full width inside the stub and on phones (<code>.btn--block</code>); the label must fit at 360px, so “Request to book · Sat 14 Nov” is the longest allowed.</li>
         <li><b>Error summary:</b> when it takes focus, the page scrolls it below the sticky top bar (<code>scroll-padding-top</code> is the top bar height plus 16px). Summary links scroll the field into view with its label visible.</li>
@@ -357,7 +358,7 @@
         <li><b>Summary title</b> counts the problems: “2 things to fix”. Each link is the start of the field error.</li>
         <li><b>Submit</b> is a verb and, where useful, the date: “Show the lineup”, “Request to book · Sat 14 Nov”. Busy labels use the present tense: “Checking calendars…”, “Sending request…”.</li>
         <li><b>Fine print</b> under the submit says what it costs: “Nothing is charged until Abigail accepts.”</li>
-        <li><b>Success</b> names the person and the next step: “Request sent to Abigail. We’ll e-mail you when she answers.”</li>
+        <li><b>Success</b> names the person and the next step: “Request sent to Abigail. We’ll email you when she answers.”</li>
       </ul>
     </section>
 
@@ -366,10 +367,10 @@
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="d1-date">Event date</label><input class="input" id="d1-date" type="date" value="2026-11-14" aria-describedby="d1-msg"><span class="inline-msg inline-msg--success" id="d1-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div></div><figcaption>Status sits outside the label as an <code>.inline-msg--success</code> with an icon, linked by <code>aria-describedby</code>.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><label class="field"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"><span class="field__help">✓ Abigail is free Sat 14 Nov</span></label></div><figcaption>The mocks put muted help with a typed ✓ inside the wrapping label, so it became part of the field’s name and looked like plain help.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="d2-church">Church</label><input class="input" id="d2-church" type="text" value="Rivers" data-state="focus"></div></div><figcaption>Stay quiet while someone is typing a new value. Check it when they leave the field.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="d3-church">Church</label><input class="input" id="d3-church" type="text" value="Rivers" data-state="focus" aria-invalid="true" aria-describedby="d3-err"><span class="field__error" id="d3-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter a valid church</span></div></div><figcaption>Flagging a half-typed name on the first keystroke, with a message that doesn’t say how to fix it.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true">Sending request…</button></div><figcaption>Keep the submit enabled until it is pressed, then show it busy. If something is missing, the summary says what.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="d3-church">Church</label><input class="input" id="d3-church" type="text" value="Rivers" data-state="focus" aria-invalid="true" aria-describedby="d3-err"><span class="field__error" id="d3-err">Enter a valid church</span></div></div><figcaption>Flagging a half-typed name on the first keystroke, with a message that doesn’t say how to fix it.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" aria-disabled="true">Sending request…</button></div><figcaption>Keep the submit enabled until it is pressed, then show it busy. If something is missing, the summary says what.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><button class="btn btn--primary btn--lg btn--block" type="submit" disabled>Request to book · Sat 14 Nov</button></div><figcaption>A disabled submit until the form is valid loses its yellow and never says what is missing.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="d4-msg">Message</label><span class="field__optional">Optional</span></div><textarea class="textarea" id="d4-msg" placeholder="Your church, the room, the songs you love."></textarea></div></div><figcaption>A visible label, “Optional” beside it, and a placeholder that only gives an example.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="d4-msg">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="d4-msg" placeholder="Your church, the room, the songs you love."></textarea></div></div><figcaption>A visible label, “Optional” beside it, and a placeholder that only gives an example.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><textarea class="textarea" aria-label="Message" placeholder="Message (optional)"></textarea></div><figcaption>The placeholder as the only label disappears on the first keystroke and fails contrast for many readers.</figcaption></figure>
       </div>
     </section>
@@ -382,6 +383,11 @@
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: the search keeps Thu 24 Dec and 40 km after finding nobody</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub, availability help under the date, optional message, block submit, fine print</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Ask Miriam for a recording” jumps to the message field in the stub</li>
+        <li><a href="../../mocks/pages/book/default.html">pages/book/default</a>, <a href="../../mocks/pages/book/invalid.html">invalid</a>, <a href="../../mocks/pages/book/submitting.html">submitting</a>, <a href="../../mocks/pages/book/duplicate.html">duplicate</a>, <a href="../../mocks/pages/book/success.html">success</a>: the full booking request with error summary, busy submit and sent state (L2-108)</li>
+        <li><a href="../../mocks/pages/account/default.html">pages/account/default</a>, <a href="../../mocks/pages/account/invalid.html">invalid</a>, <a href="../../mocks/pages/account/submitting.html">submitting</a>, <a href="../../mocks/pages/account/success.html">success</a>: a long settings form with a sticky save bar and save status</li>
+        <li><a href="../../mocks/pages/apply/default.html">pages/apply/default</a> to <a href="../../mocks/pages/apply/success.html">success</a>: a four-step form with a stepper and saved progress</li>
+        <li><a href="../../mocks/pages/sign-in/invalid.html">pages/sign-in/invalid</a>, <a href="../../mocks/pages/sign-up/invalid.html">pages/sign-up/invalid</a>, <a href="../../mocks/pages/forgot-password/submitting.html">pages/forgot-password/submitting</a>: short auth forms</li>
+        <li><a href="../../mocks/dialogs/decline-request/invalid.html">dialogs/decline-request/invalid</a>, <a href="../../mocks/dialogs/pay-deposit/failed.html">dialogs/pay-deposit/failed</a>, <a href="../../mocks/dialogs/delete-account/invalid.html">dialogs/delete-account/invalid</a>: forms inside dialogs that keep every value after a failure</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
@@ -389,7 +395,8 @@
         <li>No field error element existed. It is now <code>.field__error</code> with <code>aria-invalid</code> and <code>aria-describedby</code>, and invalid styling covers input, select and textarea instead of only <code>.input</code>.</li>
         <li>The stub heading used <code>style="font: var(--text-h3)"</code>. It is now <code>.stub__title</code>.</li>
         <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks. It is now <code>.field--inline</code>.</li>
-        <li>Error summary, busy, failed and sent states are not in the mocks yet; they are part of the core set and every booking flow needs them.</li>
+        <li>Error summary, busy, failed and sent states arrived with the account, booking and dialog mocks listed above; they use <code>.error-summary</code>, <code>aria-busy</code> on the submit, <code>.form-actions__status</code> and a success page or toast.</li>
+        <li>This page showed busy, failed and sent states on the profile stub, with a booking number on it. The stub has no such states (it hands over to <code>/artists/{slug}/book</code>) and a stub carries only the artist’s ACT- number, so the state examples now use the request page’s form, and the default kind is Worship night as in the Discover search.</li>
       </ul>
     </section>
 

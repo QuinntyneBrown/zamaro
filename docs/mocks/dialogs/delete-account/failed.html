@@ -27,8 +27,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -45,9 +46,10 @@
       <nav class="settings-nav" aria-label="Settings sections">
         <a href="#profile" aria-current="true">Profile</a>
         <a href="#church">Church</a>
-        <a href="#email">E-mail</a>
+        <a href="#email">Email</a>
         <a href="#password">Password</a>
-        <a href="#preferences">E-mail preferences</a>
+        <a href="#preferences">Email preferences</a>
+        <a href="#two-step">Two-step sign-in</a>
         <a href="#devices">Signed-in devices</a>
         <a href="#data">Your data</a>
         <a href="#delete">Delete account</a>
@@ -57,7 +59,7 @@
         <section class="form-section" id="profile" aria-labelledby="profile-title">
           <h2 class="form-section__title" id="profile-title">Profile</h2>
           <div class="form-grid">
-        <label class="field"><span class="field__label">Your name <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">Your name <span class="field__required">(required)</span></span>
           <input class="input" id="full-name" name="full-name" type="text" value="Naomi Fraser" aria-describedby="full-name-help" required autocomplete="name">
           <span class="field__help" id="full-name-help">Artists see it on your requests.</span></label>
           </div>
@@ -66,55 +68,55 @@
           <h2 class="form-section__title" id="church-title">Church</h2>
           <p class="form-section__lead">Artists see this on every request. Bookings already sent keep the address they were made with.</p>
           <div class="form-grid">
-        <label class="field field--full"><span class="field__label">Church name <span class="optional">(required)</span></span>
+        <label class="field field--full"><span class="field__label">Church name <span class="field__required">(required)</span></span>
           <input class="input" id="church-name" name="church-name" type="text" value="Riverside Community Church" aria-describedby="church-name-help" required>
           <span class="field__help" id="church-name-help">2 to 120 characters.</span></label>
-        <label class="field"><span class="field__label">Street address <span class="optional">(required)</span></span>
-          <input class="input" id="street" name="street" type="text" value="2120 Lakeshore Road" aria-describedby="street-help" required autocomplete="street-address">
+        <label class="field"><span class="field__label">Street address <span class="field__required">(required)</span></span>
+          <input class="input" id="street" name="street" type="text" value="2150 Lakeshore Road" aria-describedby="street-help" required autocomplete="street-address">
           <span class="field__help" id="street-help">Must be inside the Zamaro service area.</span></label>
-        <label class="field"><span class="field__label">City <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">City <span class="field__required">(required)</span></span>
           <input class="input" id="city" name="city" type="text" value="Burlington" required autocomplete="address-level2"></label>
-        <label class="field"><span class="field__label">Postal code <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">Postal code <span class="field__required">(required)</span></span>
           <input class="input" id="postal" name="postal" type="text" value="L7R 1A3" required autocomplete="postal-code"></label>
-        <label class="field"><span class="field__label">Contact phone <span class="optional">(required)</span></span>
-          <input class="input" id="church-phone" name="church-phone" type="tel" value="905-555-0100" aria-describedby="church-phone-help" required>
+        <label class="field"><span class="field__label">Contact phone <span class="field__required">(required)</span></span>
+          <input class="input" id="church-phone" name="church-phone" type="tel" value="905-555-0123" aria-describedby="church-phone-help" required>
           <span class="field__help" id="church-phone-help">A North American number.</span></label>
-        <label class="field"><span class="field__label">Denomination <span class="optional">(optional)</span></span>
+        <label class="field"><span class="field__label">Denomination <span class="field__optional">(optional)</span></span>
           <input class="input" id="denomination" name="denomination" type="text" value="Non-denominational"></label>
-        <label class="field"><span class="field__label">Typical attendance <span class="optional">(optional)</span></span>
+        <label class="field"><span class="field__label">Typical attendance <span class="field__optional">(optional)</span></span>
           <input class="input" id="attendance" name="attendance" type="number" value="350" inputmode="numeric" min="1"></label>
           </div>
         </section>
         <section class="form-section" id="email" aria-labelledby="email-title">
-          <h2 class="form-section__title" id="email-title">E-mail</h2>
+          <h2 class="form-section__title" id="email-title">Email</h2>
           <p class="form-section__lead">You sign in with naomi.fraser@riversidecc.ca. A new address takes over only after you open the link we send to it, and we tell the old one.</p>
           <div class="form-grid">
-        <label class="field"><span class="field__label">New e-mail <span class="optional">(optional)</span></span>
+        <label class="field"><span class="field__label">New email <span class="field__optional">(optional)</span></span>
           <input class="input" id="new-email" name="new-email" type="email" autocomplete="email"></label>
-        <label class="field"><span class="field__label">Current password <span class="optional">(optional)</span></span>
+        <label class="field"><span class="field__label">Current password <span class="field__optional">(optional)</span></span>
           <input class="input" id="email-password" name="email-password" type="password" aria-describedby="email-password-help" autocomplete="current-password">
-          <span class="field__help" id="email-password-help">Needed to change your e-mail.</span></label>
+          <span class="field__help" id="email-password-help">Needed to change your email.</span></label>
           </div>
         </section>
         <section class="form-section" id="password" aria-labelledby="password-title">
           <h2 class="form-section__title" id="password-title">Password</h2>
           <p class="form-section__lead">Leave these empty to keep your password. A new one signs you out on your other 2 devices.</p>
           <div class="form-grid">
-        <label class="field"><span class="field__label">Current password <span class="optional">(optional)</span></span>
+        <label class="field"><span class="field__label">Current password <span class="field__optional">(optional)</span></span>
           <input class="input" id="current-password" name="current-password" type="password" autocomplete="current-password"></label>
-        <label class="field"><span class="field__label">New password <span class="optional">(optional)</span></span>
+        <label class="field"><span class="field__label">New password <span class="field__optional">(optional)</span></span>
           <input class="input" id="new-password" name="new-password" type="password" aria-describedby="new-password-help" autocomplete="new-password">
           <span class="field__help" id="new-password-help">12 to 128 characters. We check it against known leaked passwords.</span></label>
           </div>
         </section>
         <section class="form-section" id="preferences" aria-labelledby="preferences-title">
-          <h2 class="form-section__title" id="preferences-title">E-mail preferences</h2>
+          <h2 class="form-section__title" id="preferences-title">Email preferences</h2>
           <fieldset class="fieldset">
-            <legend>E-mail me about</legend>
+            <legend>Email me about</legend>
             <label class="choice"><input type="checkbox" name="n-booking" checked disabled><span class="choice__text">Bookings and payments<small>Always on: these are about your dates and your money.</small></span></label>
             <label class="choice"><input type="checkbox" name="n-remind" checked><span class="choice__text">Event reminders<small>A week and a day before each event.</small></span></label>
-            <label class="choice"><input type="checkbox" name="n-review" checked><span class="choice__text">Review prompts<small>The day after an event, so other churches hear how it went.</small></span></label>
-            <label class="choice"><input type="checkbox" name="n-news"><span class="choice__text">Zamaro news<small>A few times a year. You can stop any time.</small></span></label>
+            <label class="choice"><input type="checkbox" name="n-review" checked><span class="choice__text">Review prompts<small>Two days after an event, so other churches hear how it went.</small></span></label>
+            <label class="choice"><input type="checkbox" name="n-news"><span class="choice__text">New artists near my church<small>Optional. About once a month; the same choice you made at sign-up.</small></span></label>
           </fieldset>
         </section>
         <div class="form-actions">
@@ -125,6 +127,12 @@
           </div>
         </div>
       </form>
+        <section class="form-section" id="two-step" aria-labelledby="two-step-title">
+          <h2 class="form-section__title" id="two-step-title">Two-step sign-in</h2>
+          <p class="form-section__lead"><span class="badge">Off</span> Turn it on and Zamaro asks for a 6-digit code from an authenticator app after your password.</p>
+          <div class="cluster"><a class="btn" href="../../pages/mfa-setup/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg>Turn on two-step sign-in</a></div>
+          <p class="field__help">You also get 10 single-use recovery codes, for when your phone isn’t with you.</p>
+        </section>
         <section class="form-section" id="devices" aria-labelledby="devices-title">
           <h2 class="form-section__title" id="devices-title">Signed-in devices</h2>
           <ul class="device-list" role="list">
@@ -138,7 +146,7 @@
           <h2 class="form-section__title" id="data-title">Your data</h2>
           <p class="form-section__lead">Your profile, church, saved artists, bookings, messages, reviews and consent records, as one JSON file.</p>
           <div class="cluster"><button class="btn" type="button">Download my data</button></div>
-          <p class="field__help">We e-mail you a link within 24 hours. It works for 7 days.</p>
+          <p class="field__help">We email you a link within 24 hours. It works for 7 days.</p>
         </section>
         <section class="form-section form-section--danger" id="delete" aria-labelledby="delete-title">
           <h2 class="form-section__title" id="delete-title">Delete account</h2>
@@ -193,10 +201,10 @@
         <h2 class="dialog__title" id="dlg-title">Delete your account?</h2>
         <p id="dlg-desc" class="text-muted" style="margin-top: var(--space-1);">This can’t be undone. Enter your password to confirm.</p>
       </div>
-      <button class="close" type="button" aria-label="Close and keep my account"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <button class="close" type="button" aria-label="Close"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="dialog__body">
-      <div class="alert" role="alert">
+      <div class="alert alert--danger" role="alert">
         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
         <div class="stack stack--sm">
           <p class="alert__title">We couldn’t delete your account</p>
@@ -207,20 +215,20 @@
         <li>Sign-in stops straight away, on every device.</li>
         <li>Your church, saved artists and messages are erased within 30 days.</li>
         <li>Booking and payment records stay for 7 years, without your name.</li>
-        <li>Your request to Abigail Mensah for Sat 14 Nov (ZAM-0114) is withdrawn.</li>
+        <li>Your request to Abigail Mensah for Sat 14 Nov (ZAM-0114) and your accepted booking with Luz Viva for Sat 5 Dec (ZAM-0088) are withdrawn.</li>
       </ul>
-      <label class="field"><span class="field__label">Your password <span class="optional">(required)</span></span>
+      <label class="field"><span class="field__label">Your password <span class="field__required">(required)</span></span>
         <input class="input" id="delete-password" name="password" type="password" autocomplete="current-password" required value="psalm-23-riverside" aria-describedby="delete-password-help">
         <span class="field__help" id="delete-password-help">The one you sign in with.</span></label>
     </div>
     <div class="dialog__footer">
-      <button class="btn" type="button">Keep my account</button>
+      <button class="btn" type="button" autofocus>Keep my account</button>
       <button class="btn btn--danger" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
     </div>
   </form>
 </dialog>
 
-<p class="mock-note" style="top: 8rem; right: 1rem;">Nothing is deleted on failure. The password stays filled in.</p>
+<p class="mock-note" style="top: 8rem; right: 1rem;">Nothing is deleted on failure. The password stays filled in, and focus starts on Keep my account so a second Enter cannot delete by accident.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

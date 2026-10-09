@@ -34,21 +34,27 @@ cannot send a booking request until the email is verified.
 
 **Frontend (Zamaro Web, `features/account`)**
 
-- **`RegisterPage`** — routed page for `/register`. It hosts the registration form
+- **`RegisterPage`** — routed page for `/sign-up`. It hosts the registration form
   and carries a `returnUrl` query parameter so a guest who arrived from a Save or
   Book action returns to the same page after verifying.
 - **`RegisterFormComponent`** — reactive form with full name, email, password,
   a required checkbox accepting the terms and privacy policy (each linked to its
-  current version), a separate unchecked marketing email checkbox (L2-080), and the
-  bot challenge widget. It checks the 12–128 character password length on the
-  client, shows server reasons for a breached password, and disables the submit
-  button while the request is pending (L2-108).
+  current version), a separate unchecked marketing email checkbox "Email me about
+  new artists near my church" (L2-080), and the bot challenge widget. It checks the
+  12–128 character password length on the client, shows server reasons for a
+  breached password, and disables the submit button while the request is pending
+  (L2-108). A failed bot challenge shows "We couldn't check that you're a person"
+  and keeps every value.
 - **`CheckEmailPage`** — confirmation view that reads "Check your email to finish
   signing up" and offers a resend action. It is shown for both new and repeat
   addresses.
 - **`VerifyEmailPage`** — routed page for `/verify-email`. It reads the token from
-  the link, posts it once, and shows either a verified state or "This link has
-  expired" with a resend option.
+  the link and posts it once. On success it navigates to the `returnUrl` (Discover by
+  default), where a dismissible "Email verified" banner confirms it. A used or
+  expired token shows "This link has expired" with a resend option.
+- **Verify banner** — until the email is verified, every page shows a persistent
+  "Verify your email" banner with a Resend email action, and the booking stub asks
+  for verification instead of sending (L2-022).
 - **`AuthApi`** — typed client for `POST /api/v1/register`,
   `POST /api/v1/email/verify` and `POST /api/v1/email/verification-notification`.
   It first calls `GET /sanctum/csrf-cookie` so the XSRF interceptor can attach the
@@ -57,16 +63,35 @@ cannot send a booking request until the email is verified.
   exposes `isVerified` so the booking stub can ask for verification before a request
   is sent.
 
+**Mock screens** — registration is
+[`pages/sign-up`](../../../mocks/pages/sign-up/default.html) in states default,
+[`invalid`](../../../mocks/pages/sign-up/invalid.html), submitting, error,
+[`challenge`](../../../mocks/pages/sign-up/challenge.html) (bot check failed) and
+[`success`](../../../mocks/pages/sign-up/success.html), which is `CheckEmailPage`.
+The link lands on [`pages/verify-email`](../../../mocks/pages/verify-email/default.html)
+in states default, [`expired`](../../../mocks/pages/verify-email/expired.html) and
+error. The banners are
+[`notifications/system-banner/persistent`](../../../mocks/notifications/system-banner/persistent.html)
+(verify your email), its
+[`warning`](../../../mocks/notifications/system-banner/warning.html) state just after
+Resend email, and
+[`notifications/system-banner/success`](../../../mocks/notifications/system-banner/success.html)
+(email verified). An unverified booker who presses Send request on the booking stub
+sees [`pages/book/unverified`](../../../mocks/pages/book/unverified.html): the request
+is refused and not created, an alert asks them to verify first with Resend email, and
+every value stays (L2-022 AC4).
+
 **Backend (Zamaro API)**
 
 - **`RegistrationController`** — invokable controller for `POST /api/v1/register`,
-  behind the registration rate limiter. It returns `202 Accepted` with the same body
-  for every valid submission.
+  behind the registration rate limiter and the `VerifyBotChallenge` route middleware
+  of `security/limit-request-rates`, which checks `challengeToken` through
+  `BotChallengeVerifier` before the controller runs (L2-077). It returns
+  `202 Accepted` with the same body for every valid submission.
 - **`RegisterBookerRequest`** — FormRequest that validates name, email format,
   `accepted_terms` (rejected unless true), `marketing_opt_in`
-  (boolean, default false), the bot challenge token through `BotChallengeVerifier`
-  (L2-077), and the password through the `PasswordPolicy` rule (12–128 characters,
-  not in the breached-password list; L2-072).
+  (boolean, default false), and the password through the `PasswordPolicy` rule
+  (12–128 characters, not in the breached-password list; L2-072).
 - **`RegisterBooker`** — action run inside `DB::transaction`. When the email is new
   it creates a `User` with the `Booker` role and an Argon2id password hash, calls
   `RecordConsent` for the terms, the privacy policy and the marketing choice, issues
@@ -111,7 +136,7 @@ The feature realises the following level-2 (L2) requirements, quoted from
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-022` | `L1-004` | **Booker registration.**<br>Acceptance criteria:<br>1. Given a guest provides full name, email, a password meeting L2-072, and accepts the terms and privacy policy, when they register, then an account with the Booker role is created and a verification email is sent.<br>2. Given an email already registered, when someone registers with it, then the response is identical to a new registration ("Check your email to finish signing up") and the existing owner receives a "Someone tried to sign up with your email" message.<br>3. Given the verification link, when it is opened within 24 hours, then the email is marked verified; after 24 hours or after one use it shows "This link has expired" with a resend option.<br>4. Given an unverified booker, when they try to send a booking request, then they are asked to verify their email first and the request is not created. |
-| `L2-080` | `L1-017` | **Consent.**<br>Acceptance criteria:<br>1. Given registration, when it completes, then the versions of the terms and privacy policy accepted and the time are stored.<br>2. Given registration, when the form renders, then marketing email consent is a separate unchecked checkbox, and its value and time are stored as evidence under CASL.<br>3. Given a new version of the terms, when a user next signs in, then they must accept it before continuing. |
+| `L2-080` | `L1-017` | **Consent.**<br>Acceptance criteria:<br>1. Given registration, when it completes, then the versions of the terms and privacy policy accepted and the time are stored.<br>2. Given registration, when the form renders, then marketing email consent is a separate unchecked checkbox, and its value and time are stored as evidence under CASL.<br>3. Given a new version of the terms, when a user next signs in, then they must accept it before continuing.<br>4. Given a signed-in user changes the marketing email choice in their email preferences, when they save, then a new consent record with the value and the time is stored and earlier records are kept. |
 
 ## Diagrams
 
@@ -133,7 +158,8 @@ sends.
 
 ### Components
 
-`RegistrationController` validates with `RegisterBookerRequest` and calls
+`VerifyBotChallenge` admits only submissions with a passing challenge token.
+`RegistrationController` then validates with `RegisterBookerRequest` and calls
 `RegisterBooker`, which creates the user, records consent and queues the
 verification email. `VerifyEmail` later consumes the token.
 
@@ -148,7 +174,7 @@ A `User` owns zero or more `EmailVerificationToken` rows and `ConsentRecord` row
 
 ### Behaviour — register
 
-Validation runs before any write. A new address creates the account, the consent
+The bot challenge middleware and then validation run before any write. A new address creates the account, the consent
 records and a verification email. A repeat address changes nothing and emails the
 existing owner, while the guest sees the same message in both cases.
 

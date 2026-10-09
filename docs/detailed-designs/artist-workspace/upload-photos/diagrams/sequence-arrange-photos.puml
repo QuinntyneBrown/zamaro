@@ -34,7 +34,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 opt edit alt text
-  actor -> grid : Edit alt text
+  actor -> grid : Edit a photo's alt text field, then "Save changes"
   grid -> store : updateAltText(id, text)
   store -> client : update(id, text)
   client -> controller : PATCH /api/v1/artist/photos/{photo}
@@ -48,7 +48,7 @@ opt edit alt text
 end
 opt reorder
   actor -> grid : Drag, or use Move earlier and Move later buttons
-  actor -> grid : Activate "Save order"
+  actor -> grid : Activate "Save changes" in the editor's save bar
   grid -> store : reorder(ids)
   store -> client : reorder(ids)
   client -> orderctrl : PUT /api/v1/artist/photos/order

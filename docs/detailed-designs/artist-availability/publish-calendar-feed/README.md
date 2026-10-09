@@ -4,14 +4,14 @@
 
 Artists keep their lives in their own calendar applications, not in Zamaro. This
 feature lets an artist subscribe their calendar application to their Confirmed
-Zamaro bookings. The artist turns on the feed from the calendar page, receives a
-secret iCalendar URL and pastes it into their calendar application, which then polls
-it. If the URL leaks, the artist regenerates it and the old URL stops working at once
+Zamaro bookings. The artist turns on the feed from the calendar page's "Subscribe in
+your calendar" dialog, receives a secret iCalendar URL and pastes it into their
+calendar application, which then polls it. If the URL leaks, the artist regenerates it and the old URL stops working at once
 (L2-058).
 
 The slice sits in the artist-availability subsystem beside
 `artist-availability/manage-availability-calendar`, whose page at `/artist/calendar`
-hosts the feed panel. The feed lists bookings only; the artist's own unavailable
+opens the feed dialog. The feed lists bookings only; the artist's own unavailable
 dates are not part of it.
 
 Terms used in this design:
@@ -29,17 +29,25 @@ a hash for lookup, and never written to logs. An unknown or replaced token retur
 
 ## Description
 
-The slice runs from the feed panel in Zamaro Web to the feed management endpoints in
+The slice runs from the feed dialog in Zamaro Web to the feed management endpoints in
 the Zamaro API, and from the artist's calendar application to the feed endpoint. Both
 read the Zamaro database.
 
 **Frontend (Zamaro Web, `features/artist-workspace/calendar`)**
 
-- **`CalendarFeedComponent`** — panel on `ArtistCalendarPage`. Before the feed exists
-  it shows "Turn on calendar feed". Afterwards it shows the secret feed URL in a
-  read-only field with Copy, short instructions for subscribing, and "Regenerate URL".
-  Regenerate opens a confirmation dialog that states the old URL will stop working.
-  The panel copy is `<TO SUPPLY>`.
+- **`CalendarFeedDialogComponent`** — design-system dialog titled "Subscribe in your
+  calendar", opened by the button of that name on `ArtistCalendarPage`. Before the
+  feed exists it explains what the feed lists (Confirmed bookings with date, start
+  time, kind of gathering, church name and address; unavailable dates and open
+  requests stay in Zamaro) and offers "Turn on calendar feed", which shows "Turning
+  on…" while busy. Afterwards it opens straight to "Your secret calendar link" in a
+  read-only field with "Copy link" (the button reads "Copied" for a few seconds), the
+  warning "Anyone with this link can see your Confirmed bookings, so keep it to
+  yourself.", how to paste it where a calendar app says Subscribe or Add calendar
+  from URL, "Make a new link" and "Done". "Make a new link" switches to a danger
+  confirmation, "Make a new link? Your current link stops working straight away.",
+  with "Keep current link" focused first. A failed request shows an alert, keeps the
+  current link working and offers Try again.
 - **`CalendarFeedApi`** — typed client for the management endpoints.
 
 **Backend (Zamaro API)**
@@ -54,7 +62,7 @@ read the Zamaro database.
   also turn the feed off is `<TO SUPPLY>`.
 - **`FeedTokenGenerator`** — service that creates a 32-byte random token encoded as
   base64url, its SHA-256 hash for lookup, and an application-encrypted copy so the
-  panel can show the URL again.
+  dialog can show the URL again.
 - **`EnableCalendarFeed`** — action that creates the artist's `CalendarFeed` with a
   new token. Enabling an existing feed returns the current URL unchanged.
 - **`RegenerateCalendarFeed`** — action that replaces the token hash and encrypted
@@ -78,6 +86,14 @@ read the Zamaro database.
 - **`ICalendarWriter`** — service that writes RFC 5545 text with a `VTIMEZONE` for
   `America/Toronto`, line folding and escaping. The library behind it is
   `<TO SUPPLY>`.
+
+**Mock screens** — "Subscribe in your calendar" on
+[`pages/availability`](../../../mocks/pages/availability/default.html) opens
+[`dialogs/calendar-feed`](../../../mocks/dialogs/calendar-feed/default.html) in states
+default (the link with Copy link), [`off`](../../../mocks/dialogs/calendar-feed/off.html)
+(before the feed is turned on), busy,
+[`confirm`](../../../mocks/dialogs/calendar-feed/confirm.html) (make a new link) and
+failed.
 
 **Data**
 

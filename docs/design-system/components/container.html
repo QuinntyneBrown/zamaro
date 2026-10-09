@@ -58,6 +58,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -84,6 +85,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -157,7 +160,7 @@
           <span class="ds-callout" style="left: 46%; top: 82%;" aria-hidden="true">4</span>
         </figure>
         <ol class="ds-anatomy__list">
-          <li><div><b>Margin</b><small>The container’s side padding, <code>--layout-margin</code>: 20px on phones, 40px from 768px, 64px from 1024px. The dashed outline is the container.</small></div></li>
+          <li><div><b>Margin</b><small>The container’s side padding, <code>--layout-margin</code>: 20px on phones, 40px from 768px, 64px from 992px. The dashed outline is the container.</small></div></li>
           <li><div><b>Section head</b><small><code>.section__head</code>: kicker and heading on the left, an aside (sort, a note) on the right; wraps on phones.</small></div></li>
           <li><div><b>Stack gap</b><small>The space between the head and the grid: <code>.stack</code> is 16px, <code>.stack--lg</code> 40px.</small></div></li>
           <li><div><b>Columns and gutters</b><small><code>--layout-columns</code> (4, 8, 12) separated by <code>--layout-gutter</code> (16, 24, 32px). Resize the window: the numbered cells re-flow.</small></div></li>
@@ -223,6 +226,77 @@
               </div>
               <p class="lead">Pick your date, send a request, lock it in with a 25% deposit.</p>
             </div>
+      <h3 id="page-head">Page header and body (list, detail and settings pages)</h3>
+      <p>Every signed-in page that is not a poster opens with <code>.page-head</code>: an h1 in <code>.page-head__title</code>, a mono uppercase <code>.page-head__sub</code> line with the facts (“Sat 14 Nov 2026 · 7:00 p.m. · Burlington”), and an optional action or status stamp on the right that wraps under the title on phones. <code>.page-body</code> follows with 32px between blocks and 80px of room before the footer.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="container" style="width: 100%; padding-inline: 0;">
+  <div class="page-head">
+    <div>
+      <h2 class="page-head__title">Your bookings</h2>
+      <p class="page-head__sub">Riverside Community Church · 3 coming up</p>
+    </div>
+    <a class="btn btn--primary" href="#page-head">Find an artist</a>
+  </div>
+  <div class="page-body">
+    <p class="text-muted">Page content: lists, panels or a settings form, 32px apart.</p>
+  </div>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.page-head</code> then <code>.page-body</code> inside <code>.container</code>. From pages/bookings/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="container" style="width: 100%; padding-inline: 0;"&gt;
+  &lt;div class="page-head"&gt;
+    &lt;div&gt;
+      &lt;h2 class="page-head__title"&gt;Your bookings&lt;/h2&gt;
+      &lt;p class="page-head__sub"&gt;Riverside Community Church · 3 coming up&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;a class="btn btn--primary" href="#page-head"&gt;Find an artist&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class="page-body"&gt;
+    &lt;p class="text-muted"&gt;Page content: lists, panels or a settings form, 32px apart.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Detail layout</h3>
+      <p><code>.detail-layout</code> is the two-column page for one record (a booking, a request, an application): the main column of panels and a 22rem (<code>--layout-sidebar-width</code>) <code>&lt;aside&gt;</code> that sticks under the top bar from 992px. Below 992px it is one column with the aside last. <code>.detail-layout--aside-first</code> moves the aside straight after the page head below 992px, for pages whose one primary action lives in the aside (the booker’s payment panel), so it is never below a long thread of messages.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="detail-layout detail-layout--aside-first" style="width: 100%; padding-block: 0;">
+  <div class="stack">
+    <section class="panel" aria-labelledby="ct-progress"><div class="panel__head"><h3 id="ct-progress" class="panel__title">Where it stands</h3></div><p class="text-muted">Timeline, request details, messages.</p></section>
+  </div>
+  <aside aria-labelledby="ct-money">
+    <div class="panel panel--raised"><div class="panel__head"><h3 id="ct-money" class="panel__title">Payment</h3><span class="stub__code">No. ZAM-0114</span></div><p class="text-muted">Receipt and the one primary action.</p></div>
+  </aside>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.detail-layout.detail-layout--aside-first</code>: pages/booking-detail/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="detail-layout detail-layout--aside-first" style="width: 100%; padding-block: 0;"&gt;
+  &lt;div class="stack"&gt;
+    &lt;section class="panel" aria-labelledby="ct-progress"&gt;&lt;div class="panel__head"&gt;&lt;h3 id="ct-progress" class="panel__title"&gt;Where it stands&lt;/h3&gt;&lt;/div&gt;&lt;p class="text-muted"&gt;Timeline, request details, messages.&lt;/p&gt;&lt;/section&gt;
+  &lt;/div&gt;
+  &lt;aside aria-labelledby="ct-money"&gt;
+    &lt;div class="panel panel--raised"&gt;&lt;div class="panel__head"&gt;&lt;h3 id="ct-money" class="panel__title"&gt;Payment&lt;/h3&gt;&lt;span class="stub__code"&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;&lt;p class="text-muted"&gt;Receipt and the one primary action.&lt;/p&gt;&lt;/div&gt;
+  &lt;/aside&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Auth layout</h3>
+      <p><code>.auth-layout</code> centres one <a href="booking-form.html">auth card</a> on the stage, filling the viewport under the top bar. Sign-in, sign-up, password reset, email confirmation and the two-step code pages all use it inside <code>&lt;main class="poster"&gt;</code>.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<div class="poster" style="width: 100%; padding: var(--space-8) var(--space-4);">
+  <div class="auth-layout" style="min-height: 0;">
+    <div class="stub auth-card"><div class="stub__head"><span class="stub__code">Admit one · Your account</span><p class="auth-card__title">Sign in</p></div><p class="text-muted">The card, centred on the stage.</p></div>
+  </div>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.auth-layout</code> holding a <code>.stub.auth-card</code> on the stage. From pages/sign-in/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="poster" style="width: 100%; padding: var(--space-8) var(--space-4);"&gt;
+  &lt;div class="auth-layout" style="min-height: 0;"&gt;
+    &lt;div class="stub auth-card"&gt;&lt;div class="stub__head"&gt;&lt;span class="stub__code"&gt;Admit one · Your account&lt;/span&gt;&lt;p class="auth-card__title"&gt;Sign in&lt;/p&gt;&lt;/div&gt;&lt;p class="text-muted"&gt;The card, centred on the stage.&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
           </section>
           <section class="section section--tight" aria-labelledby="ds-sec-about">
             <div class="container">
@@ -252,7 +326,7 @@
             <aside aria-label="Booking ticket placeholder"><span class="ds-cell ds-cell--tall">Booking ticket (sticky)</span></aside>
           </div>
         </div>
-        <div class="ds-example__caption"><span><code>.profile-layout</code>: one column on phones and tablets; from 1024px, content plus a <code>--layout-sidebar-width</code> (22rem) column whose <code>&lt;aside&gt;</code> sticks below the top bar.</span></div>
+        <div class="ds-example__caption"><span><code>.profile-layout</code>: one column on phones and tablets; from 992px, content plus a <code>--layout-sidebar-width</code> (22rem) column whose <code>&lt;aside&gt;</code> sticks below the top bar.</span></div>
       </div>
     </section>
 
@@ -266,13 +340,13 @@
         </div>
         <div class="ds-example__caption"><span><code>.stack--sm</code> <code>--space-2</code> · <code>.stack</code> <code>--space-4</code> · <code>.stack--lg</code> <code>--space-10</code>. Clusters: <code>--space-2</code> and <code>.cluster--lg</code> <code>--space-4</code>.</span></div>
       </div>
-      <p>Sections have two sizes: <code>.section</code> (64px top and bottom, 80px from 1024px) and <code>.section--tight</code> (40px) for short bands such as the call-to-action band.</p>
+      <p>Sections have two sizes: <code>.section</code> (64px top and bottom, 80px from 992px) and <code>.section--tight</code> (40px) for short bands such as the call-to-action band.</p>
     </section>
 
     <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
       <p>Layout primitives have no interactive states. What changes is the breakpoint: the same markup takes these values as the viewport grows.</p>
       <div class="ds-matrix"><table>
-        <thead><tr><th scope="col">Primitive</th><th scope="col">Phone (base)</th><th scope="col">Tablet (768px)</th><th scope="col">Desktop (1024px)</th><th scope="col">Wide (1280px+)</th></tr></thead>
+        <thead><tr><th scope="col">Primitive</th><th scope="col">Phone (base)</th><th scope="col">Tablet (768px)</th><th scope="col">Desktop (992px)</th><th scope="col">Wide (1280px+)</th></tr></thead>
         <tbody>
           <tr><th scope="row"><code>.container</code></th><td>full width, 20px margin</td><td>40px margin</td><td>64px margin</td><td>capped at 1216px, centred</td></tr>
           <tr><th scope="row"><code>.grid</code></th><td>4 columns, 16px gutter</td><td>8 columns, 24px gutter</td><td>12 columns, 32px gutter</td><td>12 columns, 32px gutter</td></tr>
@@ -292,10 +366,15 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Mobile first: base styles are for 360px; <code>tokens.css</code> raises <code>--layout-columns</code>, <code>--layout-gutter</code> and <code>--layout-margin</code> at 48rem and 64rem. Components read the tokens rather than writing their own media queries.</li>
+        <li>Mobile first: base styles are for 360px; <code>tokens.css</code> raises <code>--layout-columns</code>, <code>--layout-gutter</code> and <code>--layout-margin</code> at 48rem and 62rem. Components read the tokens rather than writing their own media queries.</li>
         <li>Containers never cause sideways scrolling: grid tracks are <code>minmax(0, 1fr)</code>, and card minimums are <code>min(100%, 18rem)</code> so a card is never wider than a phone.</li>
         <li>Clusters wrap; stacks never do. A cluster of buttons becomes two rows on a phone rather than shrinking buttons.</li>
-        <li>On the profile, the ticket follows the reviews below 1024px; “Book for Sat 14 Nov” in the poster jumps to it.</li>
+        <li>On the profile, the ticket follows the reviews below 992px; “Book for Sat 14 Nov” in the poster jumps to it.</li>
+      </ul>
+      <ul>
+        <li><code>.page-head</code> wraps: the action or stamp drops under the title on narrow screens; it never shrinks the h1.</li>
+        <li><code>.detail-layout</code>: one column below 992px (aside last, or first with <code>--aside-first</code>); from 992px (<code>--layout-breakpoint-lg</code>) main column plus a sticky 22rem aside, 64px apart.</li>
+        <li><code>.auth-layout</code> fills <code>100dvh</code> minus the top bar and centres the card at every width; the card is at most <code>--layout-auth-width</code> (28rem).</li>
       </ul>
     </section>
 
@@ -363,6 +442,9 @@
           <tr><td>Ticket column</td><td><code>--layout-sidebar-width</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span></td></tr>
           <tr><td>Prose measure</td><td><code>--layout-measure</code></td><td colspan="2"><span data-token="--layout-measure"></span></td></tr>
           <tr><td>Section hairline</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+                  <tr><td>Detail aside width</td><td><code>--layout-sidebar-width</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span></td></tr>
+          <tr><td>Auth card width</td><td><code>--layout-auth-width</code></td><td colspan="2"><span data-token="--layout-auth-width"></span></td></tr>
+          <tr><td>Page head title</td><td><code>--text-h1</code></td><td colspan="2"><span data-token="--text-h1"></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -390,23 +472,35 @@
         <tr><td><code>.grid--cards</code></td><td>Auto-filling cards, 288px minimum.</td></tr>
         <tr><td><code>.section</code> <code>.section--tight</code></td><td>Page band, 64–80px or 40px padding; hairline between bands.</td></tr>
         <tr><td><code>.section__head</code> <code>.section__kicker</code> <code>.section__body</code></td><td>Heading row with aside; kicker above the heading; 16px before the body.</td></tr>
-        <tr><td><code>.profile-layout</code></td><td>Content plus a sticky 22rem aside from 1024px.</td></tr>
+        <tr><td><code>.profile-layout</code></td><td>Content plus a sticky 22rem aside from 992px.</td></tr>
+      
+        <tr><td><code>.page-head</code>, <code>__title</code>, <code>__sub</code></td><td>Page header: h1, facts line, optional action or stamp on the right.</td></tr>
+        <tr><td><code>.page-head__aside</code></td><td>A block on the right that needs room, at least 256px wide (Edit profile’s completeness meter and Preview button); it wraps under the title on narrow screens.</td></tr>
+        <tr><td><code>.page-head__search</code></td><td>A search field (<code>&lt;form class="field page-head__search" role="search"&gt;</code>) on the right of a list page head, at least 288px or the full width when narrower (Requests, admin Artists).</td></tr>
+        <tr><td><code>.page-body</code></td><td>Blocks 32px apart, 80px before the footer.</td></tr>
+        <tr><td><code>.detail-layout</code></td><td>Record page: main column plus a sticky 22rem aside from 992px.</td></tr>
+        <tr><td><code>.detail-layout--aside-first</code></td><td>Below 992px the aside comes straight after the page head.</td></tr>
+        <tr><td><code>.page-crumbs</code>, <code>.page-head--after-breadcrumb</code>, <code>.detail-layout--flush</code></td><td>Record pages with a paper breadcrumb: the <code>&lt;nav class="page-crumbs"&gt;</code> takes the 32px top room, the page head closes up to 16px under it, and the layout below drops its top padding.</td></tr>
+        <tr><td><code>.auth-layout</code></td><td>Centres one auth card on the stage under the top bar.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: <code>.container</code>, <code>.stack--lg</code>, <code>.section__head</code> with the sort field, <code>.section + .section</code> bands, the cluster of filter chips</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a> and <a href="../../mocks/pages/discover/empty.html">empty</a>: the same section skeleton while results load or when none match</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: <code>.profile-layout</code> with the sticky ticket, section kickers (“About”, “Live”, “On tour”)</li>
-        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the page keeps its container and margins around the error</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: <code>.container</code>, <code>.stack--lg</code>, <code>.section__head</code> with the sort field, <code>.section + .section</code> bands, the cluster of filter chips; <a href="../../mocks/pages/discover/loading.html">loading</a> and <a href="../../mocks/pages/discover/empty.html">empty</a> keep the same skeleton</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: <code>.profile-layout</code> with the sticky ticket, section kickers (“About”, “Live”, “On tour”); <a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the page keeps its container and margins around the error</li>
+        <li><code>.page-head</code> and <code>.page-body</code>: <a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/saved/default.html">pages/saved/default</a>, <a href="../../mocks/pages/account/default.html">pages/account/default</a>, <a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>, <a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/availability/default.html">pages/availability/default</a>, <a href="../../mocks/pages/earnings/default.html">pages/earnings/default</a>, <a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a></li>
+        <li><code>.detail-layout</code>: <a href="../../mocks/pages/request-detail/default.html">pages/request-detail/default</a>, <a href="../../mocks/pages/apply/default.html">pages/apply/default</a>; with <code>--aside-first</code>: <a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail/default</a> and every booking status</li>
+        <li><code>.auth-layout</code>: <a href="../../mocks/pages/sign-in/default.html">pages/sign-in/default</a>, <a href="../../mocks/pages/sign-up/default.html">pages/sign-up/default</a>, <a href="../../mocks/pages/forgot-password/default.html">pages/forgot-password/default</a>, <a href="../../mocks/pages/reset-password/default.html">pages/reset-password/default</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>About copy used <code>style="margin-top: var(--space-4)"</code> → <code>.section__body</code>.</li>
         <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks → <code>.field--inline</code>.</li>
+        <li>Edit profile’s completeness block used <code>style="min-width: 16rem"</code> and the Requests and admin Artists search fields <code>style="min-width: min(100%, 18rem)"</code>, in every mock behind them → <code>.page-head__aside</code> and <code>.page-head__search</code> (<a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a>, <a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/admin-artists/default.html">pages/admin-artists/default</a>).</li>
         <li>The artist error used inline <code>padding-block</code> → <code>.page-error</code>; layout spacing now only comes from these classes.</li>
+        <li><code>pages/booking-detail/*</code>, <code>pages/book/*</code>, the admin record pages and the dialogs over them overrode <code>.page-head</code> and <code>.detail-layout</code> padding with inline <code>style</code> attributes under the breadcrumb. They now use <code>.page-crumbs</code>, <code>.page-head--after-breadcrumb</code> and <code>.detail-layout--flush</code>.</li>
       </ul>
     </section>
 

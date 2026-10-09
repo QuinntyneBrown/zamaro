@@ -25,6 +25,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -37,15 +38,15 @@
       </div>
       <p class="text-muted" role="status">Checking your reset link…</p>
         <div class="field" aria-hidden="true">
-          <span class="skeleton skeleton--text" style="width: 45%;"></span>
-          <span class="skeleton" style="min-height: var(--control-height-md);"></span>
-          <span class="skeleton skeleton--text" style="width: 85%;"></span>
+          <span class="skeleton skeleton--text skeleton--short"></span>
+          <span class="skeleton skeleton--control"></span>
+          <span class="skeleton skeleton--text skeleton--long"></span>
         </div>
         <div class="field" aria-hidden="true">
-          <span class="skeleton skeleton--text" style="width: 45%;"></span>
-          <span class="skeleton" style="min-height: var(--control-height-md);"></span>
+          <span class="skeleton skeleton--text skeleton--short"></span>
+          <span class="skeleton skeleton--control"></span>
         </div>
-      <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" disabled>Checking link…</button>
+      <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" aria-disabled="true">Checking link…</button>
       <div class="auth-card__links"><a href="../sign-in/default.html">Back to sign in</a></div>
     </form>
   </div>

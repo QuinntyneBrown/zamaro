@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker or artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "NotificationSettingsPage" as page
+  participant "EmailPreferencesSectionComponent" as page
   participant "NotificationPreferencesApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -33,25 +33,25 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> page : Open /account/notifications
+actor -> page : Open /account#preferences
 page -> client : get()
 client -> controller : GET /api/v1/account/notification-preferences
 controller -> gate : forUser(user)
 gate -> db : Preference rows (missing row = enabled)
 controller --> client : Reminders on, Review prompts on, Booking and payment emails on and locked
-page --> actor : Switches; booking and payment switch disabled with explanation (L2-065)
-actor -> page : Turn off reminder emails
+page --> actor : Checkboxes; booking and payment box ticked and disabled with explanation (L2-065)
+actor -> page : Untick Event reminders, press Save changes
 page -> client : update([{Reminders, false}])
 client -> controller : PUT /api/v1/account/notification-preferences
 controller -> controller : Validate UpdateNotificationPreferencesRequest
 alt change to Transactional
   controller --> client : 422 problem details (L2-065)
-  page --> actor : Inline error; switch unchanged
+  page --> actor : Error summary; every choice kept (L2-108)
 else optional category
   controller -> update : handle(user, changes)
   update -> db : Upsert (user, Reminders, enabled = false)
   controller --> client : 200 NotificationPreferencesResource
-  page --> actor : Success toast (L2-109)
+  page --> actor : Saved banner on the page
 end
 == Later, when a reminder falls due ==
 notif -> gate : allows(user, Reminders)

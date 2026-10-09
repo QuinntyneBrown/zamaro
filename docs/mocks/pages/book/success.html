@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="book">
 <meta name="mock:state" content="success">
-<meta name="mock:requirements" content="L2-019 L2-024 L2-028 L2-032 L2-044 L2-105 L2-108 L2-110">
+<meta name="mock:requirements" content="L2-019 L2-022 L2-024 L2-028 L2-032 L2-044 L2-077 L2-105 L2-108 L2-110">
 <meta name="description" content="Request sent to Abigail: a Requested stamp, booking ZAM-0114, nothing charged, and her reply deadline of Mon 12 Oct, 10:15 a.m.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,14 +26,15 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover · Sat 14 Nov</a></li><li><a href="../artist/default.html">Abigail Mensah</a></li><li aria-current="page">Request sent</li></ol></nav>
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover · Sat 14 Nov</a></li><li><a href="../artist/default.html">Abigail Mensah</a></li><li aria-current="page">Request sent</li></ol></nav>
     <div class="detail-layout">
       <section class="panel panel--raised" aria-labelledby="sent-title">
         <div class="panel__head"><span class="stub__code">Booking ZAM-0114</span><span class="stamp stamp--lg stamp--requested">Requested</span></div>
@@ -41,7 +42,7 @@
         <p class="lead">Nothing has been charged. Abigail has until Mon 12 Oct, 10:15 a.m. to reply.</p>
         <ol class="timeline">
             <li data-state="done"><div><p class="timeline__title">Requested</p><p class="timeline__meta">Today, Fri 9 Oct at 10:15 a.m.</p></div></li>
-            <li aria-current="step"><div><p class="timeline__title">Abigail replies</p><p class="timeline__meta">By Mon 12 Oct, 10:15 a.m. We e-mail you the moment she does.</p></div></li>
+            <li aria-current="step"><div><p class="timeline__title">Abigail replies</p><p class="timeline__meta">By Mon 12 Oct, 10:15 a.m. We email you the moment she does.</p></div></li>
             <li><div><p class="timeline__title">Pay the $162.50 deposit</p><p class="timeline__meta">Within 48 hours of her yes. That confirms the date.</p></div></li>
             <li><div><p class="timeline__title">Worship night</p><p class="timeline__meta">Sat 14 Nov at 7:00 p.m., Riverside Community Church</p></div></li>
           </ol>
@@ -94,7 +95,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 14rem; right: 1rem;">Abigail gets an e-mail now. If she doesn’t reply by the deadline the request expires and Naomi is told.</p>
+<p class="mock-note" style="top: 14rem; right: 1rem;">Abigail gets an email now. If she doesn’t reply by the deadline the request expires and Naomi is told.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -106,6 +107,8 @@
     <li><a href="error.html">error</a></li>
     <li><a href="invalid.html">invalid</a></li>
     <li><a href="duplicate.html">duplicate</a></li>
+    <li><a href="limit.html">limit</a></li>
+    <li><a href="unverified.html">unverified</a></li>
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html" aria-current="page">success</a></li>
   </ul>

@@ -50,6 +50,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -76,6 +77,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -125,9 +128,10 @@
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
       <p>Use reviews in the “What churches say” section of an artist profile, in a <code>.reviews</code> grid, newest first. Each review is one church’s experience with that artist, written after a completed booking.</p>
       <ul>
-        <li>For the overall score (“★ 4.9 · 38 reviews”), use the <a href="rating.html">rating</a> component in the section head.</li>
+        <li>For the overall score (“★ 4.9 · 38 churches”), use the <a href="rating.html">rating</a> component in the section head.</li>
         <li>For a single pull quote inside another component, such as the <a href="headliner.html">headliner</a>, use a plain paragraph with the reviewer muted after a dash, not a full review card.</li>
         <li>When there are no reviews yet, keep the section and show a quiet <a href="empty-state.html">empty state</a>.</li>
+        <li>When the artist has replied (L2-061), the reply sits under its review as a <a href="card.html"><code>.message</code></a> whose meta line starts “Reply from {artist name}” (L2-018). Under each review a <code>.cluster</code> of small buttons holds what the viewer may do: Reply or Edit reply for the artist, Report for any signed-in user (L2-062).</li>
       </ul>
     </section>
 
@@ -158,7 +162,7 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
           <ul class="reviews" role="list">
-            <li><figure class="review"><blockquote><p>She had the whole congregation singing <em>Great Is Thy Faithfulness</em> in three-part harmony by the last verse.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Rev. Janet Clarke<span>St. Brendan’s Anglican, Oshawa · September 2026</span></figcaption></figure></li>
+            <li><figure class="review"><blockquote><p>She had the whole congregation singing in three-part harmony by the last verse.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Rev. Janet Clarke<span>St. Brendan’s Anglican, Oshawa · September 2026</span></figcaption></figure></li>
             <li><figure class="review"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure></li>
             <li><figure class="review"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure></li>
             <li><figure class="review"><blockquote><p>Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></li>
@@ -168,7 +172,7 @@
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="reviews" role="list"&gt;
   &lt;li&gt;
     &lt;figure class="review"&gt;
-      &lt;blockquote&gt;&lt;p&gt;She had the whole congregation singing &lt;em&gt;Great Is Thy Faithfulness&lt;/em&gt; in three-part harmony by the last verse.&lt;/p&gt;&lt;/blockquote&gt;
+      &lt;blockquote&gt;&lt;p&gt;She had the whole congregation singing in three-part harmony by the last verse.&lt;/p&gt;&lt;/blockquote&gt;
       &lt;figcaption&gt;
         &lt;span class="stars" role="img" aria-label="5 out of 5 stars"&gt;★★★★★&lt;/span&gt;Rev. Janet Clarke
         &lt;span&gt;St. Brendan’s Anglican, Oshawa · September 2026&lt;/span&gt;
@@ -184,6 +188,28 @@
           <figure class="review" style="max-width: 28rem;"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure>
         </div>
         <div class="ds-example__caption"><span>One review on its own, for example the most recent one under a booking confirmation. Keep it on the page canvas or a paper surface: <code>.review</code> sets no text colour, so on the stage it would inherit paper-coloured text on its paper card.</span></div>
+      </div>
+      <h3>With reply and actions</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ul class="reviews" role="list">
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>She had the whole congregation singing in three-part harmony by the last verse.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Rev. Janet Clarke<span>St. Brendan’s Anglican, Oshawa · September 2026</span></figcaption></figure><div class="cluster"><button class="btn btn--sm btn--primary" type="button"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M10 9V5l-7 7 7 7v-4c5 0 8 1.5 11 5-1-6-4-11-11-11z"/></svg>Reply<span class="visually-hidden"> to Rev. Janet Clarke’s review</span></button><button class="btn btn--ghost btn--sm" type="button"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>Report<span class="visually-hidden"> Rev. Janet Clarke’s review</span></button></div></li>
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure><div class="message"><p class="message__meta">Reply from Abigail Mensah · Thu 8 Oct · editable until Thu 15 Oct, 11:20 a.m.</p><blockquote><p>Thank you, Tomi! Your volunteers were ready for everything I threw at them. See you on Sun 1 Nov.</p></blockquote></div><div class="cluster"><button class="btn btn--sm" type="button"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M10 9V5l-7 7 7 7v-4c5 0 8 1.5 11 5-1-6-4-11-11-11z"/></svg>Edit reply<span class="visually-hidden"> to Tomi Oduya’s review</span></button><button class="btn btn--ghost btn--sm" type="button"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>Report<span class="visually-hidden"> Tomi Oduya’s review</span></button></div></li>
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure><div class="message"><p class="message__meta">Reply from Abigail Mensah · Tue 16 Jun · locked Tue 23 Jun</p><blockquote><p>Riverside, you sang the roof off. Thank you for having me.</p></blockquote></div><div class="cluster"><span class="text-caption"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4"/></svg> Reply locked</span><button class="btn btn--ghost btn--sm" type="button"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>Report<span class="visually-hidden"> Naomi Fraser’s review</span></button></div></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>Abigail’s Reviews page (L2-061, L2-062). Each list item is a <code>.stack.stack--sm</code>: the review, the reply as a <code>.message</code>, then a <code>.cluster</code> of small buttons. No reply yet: a primary “Reply”. Inside the 7-day edit window: a secondary “Edit reply”, with the deadline in the meta line. After 7 days: a caption with a lock icon, “Reply locked”. On the public profile the reply shows with its month and year and no Reply or Edit buttons, and guests see no Report button.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;li class="stack stack--sm"&gt;
+  &lt;figure class="review"&gt;…&lt;/figure&gt;
+  &lt;div class="message"&gt;
+    &lt;p class="message__meta"&gt;Reply from Abigail Mensah · Thu 8 Oct · editable until Thu 15 Oct, 11:20 a.m.&lt;/p&gt;
+    &lt;blockquote&gt;&lt;p&gt;Thank you, Tomi! …&lt;/p&gt;&lt;/blockquote&gt;
+  &lt;/div&gt;
+  &lt;div class="cluster"&gt;
+    &lt;a class="btn btn--sm" href="…"&gt;…Edit reply&lt;span class="visually-hidden"&gt; to Tomi Oduya’s review&lt;/span&gt;&lt;/a&gt;
+    &lt;a class="btn btn--ghost btn--sm" href="…"&gt;…Report&lt;span class="visually-hidden"&gt; Tomi Oduya’s review&lt;/span&gt;&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/li&gt;</code></pre></details>
       </div>
     </section>
 
@@ -233,11 +259,12 @@
       <p>Each review is a <code>&lt;figure&gt;</code> with a <code>&lt;blockquote&gt;</code> and a <code>&lt;figcaption&gt;</code>, which ties the quote to its source. The attribution is in the caption, not inside the blockquote, because it is not part of what was said. The reviews sit in a <code>&lt;ul role="list"&gt;</code> so the count is announced.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
-        <tr><td><kbd>Tab</kbd></td><td>Skips reviews; nothing in them is focusable. Screen reader users move through them by list item or with the reading keys.</td></tr>
+        <tr><td><kbd>Tab</kbd></td><td>Skips the review card; nothing in it is focusable. Stops on the Reply, Edit reply and Report buttons under it, in that order. Screen reader users move through reviews by list item or with the reading keys.</td></tr>
       </tbody></table>
       <h3>Focus</h3>
       <p>No focus style of its own.</p>
       <h3>Labelling</h3>
+      <p>Reply, Edit reply and Report repeat on every review, so each carries visually hidden text naming the reviewer: “Report Tomi Oduya’s review”. The reply’s meta line starts “Reply from {artist name}” so it is never mistaken for the church’s words.</p>
       <p>The star characters mean nothing when read one by one (“black star, black star…”), so <code>.stars</code> takes <code>role="img"</code> and an <code>aria-label</code> such as “4 out of 5 stars”. An <code>aria-label</code> on a plain <code>&lt;span&gt;</code> without a role is ignored by many screen readers. The quote mark is CSS content; some screen readers read it as “left double quotation mark”, which is accurate.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
@@ -262,6 +289,7 @@
         <li>Reviewer: name with title as they gave it (“Rev. Janet Clarke”, “Pastor Femi Adebayo”).</li>
         <li>Caption line: church, town · month and year: “St. Brendan’s Anglican, Oshawa · September 2026”.</li>
         <li>Stars: whole numbers, filled ★ then empty ☆, five in total. The label states the same number.</li>
+        <li>Reply meta line: “Reply from {artist name} · {date}”. On the artist’s own Reviews page add “editable until {day date, time}” inside the 7-day window and “locked {day date}” after it; on the public profile show the month and year only.</li>
       </ul>
     </section>
 
@@ -308,14 +336,18 @@
         <tr><td><code>.review figcaption</code> and its <code>&lt;span&gt;</code></td><td>Reviewer in the stub font; the plain span is the muted church and date line.</td></tr>
         <tr><td><code>.stars</code></td><td>Star characters in the stub font; on its own line inside a review.</td></tr>
         <tr><td><code>role="img"</code> + <code>aria-label</code> on <code>.stars</code></td><td>Reads the rating as one phrase.</td></tr>
+        <tr><td><code>li.stack.stack--sm</code> holding <code>.review</code>, <code>.message</code>, <code>.cluster</code></td><td>A review with the artist’s reply (<code>.message</code>, see <a href="card.html">card</a>) and its small action buttons, 8px apart.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: four reviews of Abigail Mensah and the “★★★★★ 4.9 · 38 reviews” summary</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: four reviews of Abigail Mensah, the “★★★★★ 4.9 · 38 churches” summary and “Show all 38 reviews”</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “No church reviews yet” for Miriam Haile</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a> and <a href="../../mocks/pages/profile-preview/default.html">pages/profile-preview/default</a>: public replies (“Reply from Abigail Mensah · October 2026”) and the Report button</li>
+        <li><a href="../../mocks/pages/artist-reviews/default.html">pages/artist-reviews/default</a> and <a href="../../mocks/pages/artist-reviews/loading.html">loading</a>: the artist’s Reply, Edit reply and “Reply locked” actions; the same list sits behind <a href="../../mocks/dialogs/reply-review/default.html">dialogs/reply-review</a> and <a href="../../mocks/dialogs/report-review/default.html">dialogs/report-review</a></li>
+        <li><a href="../../mocks/pages/admin-reviews/default.html">pages/admin-reviews/default</a> and <a href="../../mocks/dialogs/hide-review/default.html">dialogs/hide-review</a>: a single reported review quoted for moderation</li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the same quote as a pull quote in the headliner</li>
       </ul>
       <p>Drift fixed during extraction:</p>

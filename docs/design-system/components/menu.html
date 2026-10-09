@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -258,6 +261,46 @@
   &lt;/div&gt;
 &lt;/div&gt;</code></pre></details>
 </div>
+      <h3>Anchored account menu and drawer list</h3>
+      <p>The product’s account menu and navigation drawer hold only links and one or two buttons, so they use a plain list rather than the ARIA menu pattern: <code>.menu-list</code> is a <code>&lt;ul role="list"&gt;</code> of <code>.menu__item</code> links that Tab reaches in order. The account menu is an anchored, non-dimming <a href="dialog.html"><code>dialog.dialog--menu</code></a> that hangs under the avatar; it opens with <code>.menu__who</code> (name, church, email) above a dashed rule. The navigation drawer (<code>.dialog--drawer</code>) uses the same list, marks the current page with <code>aria-current="page"</code>, and ends with the theme toggle: a <code>.menu__item</code> button named “Dark theme” with <code>aria-pressed</code>, which shows a yellow inset bar and a filled icon when on.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <div class="menu" style="width: max-content;">
+            <div class="menu__who"><strong>Naomi Fraser</strong><span>Riverside Community Church</span><span class="text-muted">naomi.fraser@riversidecc.ca</span></div>
+            <ul class="menu-list" role="list">
+              <li><a class="menu__item" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/></svg>Your bookings</a></li>
+              <li><a class="menu__item" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved artists <span class="badge badge--count">3<span class="visually-hidden"> saved artists</span></span></a></li>
+              <li><a class="menu__item" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8M14 5v4M8 15v4"/></svg>Account settings</a></li>
+              <li class="menu__sep" aria-hidden="true"></li>
+              <li><button class="menu__item" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/></svg>Sign out</button></li>
+            </ul>
+          </div>
+          <div class="menu" style="width: max-content;">
+            <ul class="menu-list" role="list">
+              <li><a class="menu__item" href="#variants" aria-current="page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-2 5-4 1 2-5z"/></svg>Discover</a></li>
+              <li><a class="menu__item" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17v.5"/></svg>How booking works</a></li>
+              <li><a class="menu__item" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg>For artists</a></li>
+              <li class="menu__sep" aria-hidden="true"></li>
+              <li><button class="menu__item" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Dark theme</button></li>
+              <li><button class="menu__item" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Dark theme</button></li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Left: the account menu’s content (in the product it sits in <code>dialog.dialog--menu</code>). Right: the drawer’s list with the current page and the theme toggle off and on.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dialog class="dialog dialog--menu" aria-labelledby="acct-title" aria-describedby="acct-who"&gt;
+  &lt;h2 class="dialog__title visually-hidden" id="acct-title"&gt;Account menu for Naomi Fraser&lt;/h2&gt;
+  &lt;div class="menu__who" id="acct-who"&gt;&lt;strong&gt;Naomi Fraser&lt;/strong&gt;&lt;span&gt;Riverside Community Church&lt;/span&gt;…&lt;/div&gt;
+  &lt;ul class="menu-list" role="list"&gt;
+    &lt;li&gt;&lt;a class="menu__item" href="/bookings"&gt;…Your bookings&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="menu__sep" aria-hidden="true"&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;button class="menu__item" type="button"&gt;…Sign out&lt;/button&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/dialog&gt;
+
+&lt;!-- In the navigation drawer --&gt;
+&lt;li&gt;&lt;button class="menu__item" type="button" aria-pressed="false"&gt;&lt;svg class="icon" aria-hidden="true" …moon…/&gt;Dark theme&lt;/button&gt;&lt;/li&gt;</code></pre></details>
+      </div>
+
       <h3>Try it</h3>
       <p>This one works: click it, or Tab to it and press <kbd>Enter</kbd>, <kbd>↓</kbd> or <kbd>↑</kbd>. Inside, use the arrows, <kbd>Home</kbd>, <kbd>End</kbd>, a letter to jump, and <kbd>Esc</kbd> to close.</p>
       <div class="ds-example">
@@ -352,7 +395,7 @@
         <li>The panel is at least 14rem (224px) wide and grows to its longest item; the examples here set <code>width: max-content</code> inline until the stylesheet does. It opens under the trigger’s right edge, because triggers sit at the right of the top bar and of ticket stubs. At 360px it fits with the 16px page margin.</li>
         <li>Item labels wrap rather than truncate. Keep them short so they don’t.</li>
         <li>If a trigger sits on the left of a narrow screen, flip the panel to <code>left: 0</code> so it does not open off-screen.</li>
-        <li>On phones, the top-bar hamburger opens the main navigation; the avatar menu stays a menu. Neither turns into a bottom sheet.</li>
+        <li>On phones, the top-bar hamburger opens the main navigation drawer; the avatar menu stays an anchored menu under the top bar (it is not a full-screen dialog). Below 992px the theme toggle is the last item of the drawer.</li>
         <li>A menu with more than eight items is too long for a phone screen. Split it, or use a page.</li>
       </ul>
     </section>
@@ -468,6 +511,11 @@
         <tr><td><code>.menu__check</code> + <code>aria-checked</code></td><td>Tick shown when <code>aria-checked="true"</code>; space reserved when false.</td></tr>
         <tr><td><code>.menu__section</code>, <code>.menu__sep</code></td><td>Group label (also the group’s name) and hairline separator.</td></tr>
         <tr><td><code>.menu__shortcut</code></td><td>Trailing hint, pushed to the right: a count, a short reason, or a modifier shortcut.</td></tr>
+        <tr><td><code>.menu-list</code></td><td>A plain <code>&lt;ul role="list"&gt;</code> of <code>.menu__item</code> links and buttons, for the account menu and the navigation drawer (Tab order, no arrow-key model).</td></tr>
+        <tr><td><code>.menu__who</code></td><td>Who is signed in: name in <code>&lt;strong&gt;</code>, church, email; dashed rule below.</td></tr>
+        <tr><td><code>aria-current="page"</code> on <code>.menu__item</code></td><td>Current page in the drawer: bold with a yellow inset bar.</td></tr>
+        <tr><td><code>aria-pressed</code> on a <code>.menu__item</code> button</td><td>A toggle item (the drawer’s “Dark theme”): bold, inset bar and filled icon when <code>true</code>.</td></tr>
+        <tr><td><code>dialog.dialog--menu</code></td><td>The anchored account-menu panel; see <a href="dialog.html">Dialog</a>.</td></tr>
         <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only: forces an item state.</td></tr>
       </tbody></table>
     </section>
@@ -477,11 +525,13 @@
       <ul>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the “NF” avatar trigger for Naomi’s account menu (closed), the sort field the sort menu stands in for on compact screens</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the same avatar trigger in the profile top bar</li>
+        <li><a href="../../mocks/dialogs/account-menu/default.html">dialogs/account-menu/default</a> and <a href="../../mocks/dialogs/account-menu/artist.html">artist</a>: the open account menu (<code>dialog--menu</code>, <code>menu__who</code>, <code>menu-list</code>, a separator before Sign out)</li>
+        <li><a href="../../mocks/dialogs/menu/default.html">dialogs/menu/default</a>, <a href="../../mocks/dialogs/menu/artist.html">artist</a> and <a href="../../mocks/dialogs/menu/admin.html">admin</a>: the navigation drawer’s list with the current page, its count badges and the “Dark theme” toggle item</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The avatar trigger had <code>aria-expanded="false"</code> but no <code>aria-haspopup</code>, <code>aria-controls</code> or panel. It now follows the menu-button pattern.</li>
-        <li>The open menu itself is not in the mocks yet; it is part of the core set. The product needs it for the account menu, the saved-artists sort on phones and the per-artist actions on the saved list.</li>
+        <li>The account menu and drawer are now mocked as a plain link list in a dialog rather than an ARIA menu; that is documented above as <code>.menu-list</code>. The checkable sort menu and per-artist actions are still not in the mocks.</li>
       </ul>
     </section>
 

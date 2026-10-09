@@ -74,10 +74,13 @@ personal data (L2-084).
   root service that record the `X-Request-Id` of each failed response.
 - **`ErrorTrackingErrorHandler`** — Angular `ErrorHandler` that reports unhandled
   browser and SSR exceptions with the last request ID and the build's release version.
-- **`ErrorReferenceComponent`** — small presentational component placed on every error
-  state (search error L2-106, profile error L2-107, generic server error page). It shows
-  the request ID as a reference. The current mocks do not show it; its copy and
-  placement are `<TO SUPPLY>`.
+- **`ErrorReferenceComponent`** — small presentational component on the server error
+  page, as in the [`server-error`](../../../mocks/pages/server-error/default.html) mock:
+  a design-system receipt with a "Reference" row holding the request ID and a "When"
+  row with the Toronto time ("Fri 9 Oct, 10:42 a.m."), then "Email us the reference",
+  a `mailto:` link whose subject is the request ID. The search and profile error states
+  keep the copy fixed by L2-106 and L2-107 and put the request ID in the subject of
+  their email link to the Zamaro team, so support can find the logs either way.
 
 **Health checks (L2-090)**
 

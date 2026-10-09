@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -133,12 +136,12 @@
         <thead><tr><th scope="col">Event</th><th scope="col">Feedback</th><th scope="col">Example</th><th scope="col">Lifetime</th></tr></thead>
         <tbody>
           <tr><td>A fact about one field changes</td><td><a href="../components/inline-message.html">Inline message</a> under the field</td><td>“Abigail is free Sat 14 Nov”</td><td>While the value stands</td></tr>
-          <tr><td>A quick, reversible action the person just took</td><td>The control changes state, plus a <a href="../components/toast.html">toast</a> with Undo</td><td>Save toggle fills yellow; “Saved Luz Viva”</td><td>8 s or more, pauses on hover and focus</td></tr>
+          <tr><td>A quick, reversible action the person just took</td><td>The control changes state, plus a <a href="../components/toast.html">toast</a> with Undo</td><td>Save toggle fills yellow; “Saved Luz Viva”</td><td>5 s, pauses on hover and focus (L2-109)</td></tr>
           <tr><td>A region of the page failed to load</td><td><a href="../components/alert.html">Alert</a> in the region’s place, with Try again</td><td>“We lost the signal” in place of the lineup</td><td>Until it loads</td></tr>
           <tr><td>The whole page failed</td><td>Poster with a plain headline plus an alert</td><td>“This profile didn’t load”</td><td>Until it loads</td></tr>
           <tr><td>A submit found problems</td><td>Error summary plus field errors (see <a href="forms.html">forms</a>)</td><td>“2 things to fix”</td><td>Until fixed</td></tr>
           <tr><td>The person must decide before going on: money or loss</td><td><a href="../components/dialog.html">Dialog</a></td><td>“Cancel your booking with Abigail?”</td><td>Until answered</td></tr>
-          <tr><td>Something changed while they were away</td><td>Banner and e-mail (see <a href="notifications.html">notifications</a>)</td><td>“Abigail accepted your request”</td><td>Until acted on</td></tr>
+          <tr><td>Something changed while they were away</td><td>Banner and email (see <a href="notifications.html">notifications</a>)</td><td>“Abigail accepted your request”</td><td>Until acted on</td></tr>
         </tbody>
       </table></div>
       <p>Never use a toast for an error the person must act on, and never use a dialog to say something worked.</p>
@@ -157,7 +160,7 @@
       <h3>Timing</h3>
       <ul>
         <li><b>0–300 ms:</b> show nothing new; keep the old content.</li>
-        <li><b>300 ms–8 s:</b> skeleton or busy control, plus a status line: “Finding who’s free on Saturday 14 November…”.</li>
+        <li><b>300 ms–8 s:</b> skeleton or busy control, plus a status line: “Finding who’s free on Saturday 14 November 2026…”.</li>
         <li><b>After 8 s:</b> the status line changes to “Still checking — thanks for waiting.”</li>
         <li><b>On timeout or failure:</b> replace the skeleton with the alert. Keep the search, filters and anything typed.</li>
       </ul>
@@ -173,7 +176,7 @@
               <div><p class="overline section__kicker">Sat 14 Nov · checking calendars</p><p style="font: var(--text-h2); text-transform: uppercase;">The lineup</p></div>
               <div class="field field--inline"><label class="field__label" for="l-sort">Sort</label><select class="select" id="l-sort"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></div>
             </div>
-            <p class="lead"><span role="status">Finding who’s free on Saturday 14 November…</span></p>
+            <p class="lead"><span role="status">Finding who’s free on Saturday 14 November 2026…</span></p>
             <fieldset class="filters">
               <legend>Filter by style</legend>
               <button class="chip" type="button" aria-pressed="false" disabled>Band</button><button class="chip" type="button" aria-pressed="false" disabled>Solo vocalist</button><button class="chip" type="button" aria-pressed="false" disabled>Gospel choir</button><button class="chip" type="button" aria-pressed="false" disabled>Hymns</button>
@@ -195,7 +198,7 @@
         <div class="ds-example__caption"><span>Region <code>aria-busy="true"</code>; skeleton list <code>aria-hidden="true"</code>; chips <code>disabled</code>; one <code>role="status"</code> line.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section id="lineup" class="section" aria-labelledby="lineup-title" aria-busy="true"&gt;
   …
-  &lt;p class="lead"&gt;&lt;span role="status"&gt;Finding who’s free on Saturday 14 November…&lt;/span&gt;&lt;/p&gt;
+  &lt;p class="lead"&gt;&lt;span role="status"&gt;Finding who’s free on Saturday 14 November 2026…&lt;/span&gt;&lt;/p&gt;
   &lt;ul class="lineup" role="list" aria-hidden="true"&gt;
     &lt;li class="ticket ticket--loading"&gt;
       &lt;span class="skeleton ticket__art"&gt;&lt;/span&gt;
@@ -216,16 +219,16 @@
       </ol>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stage on-stage">
-          <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span></button>
+          <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
         </div>
         <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--stack">
           <ul class="lineup" role="list" aria-label="Example ticket" style="grid-template-columns: minmax(0, 1fr);">
             <li class="ticket">
               <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
               <div class="ticket__body">
-                <span class="ticket__no">No. 05 · ★ 5.0</span>
+                <span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span>
                 <p class="ticket__name"><a href="#structure">Luz Viva</a></p>
-                <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
+                <p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p>
               </div>
               <div class="ticket__stub">
                 <p class="ticket__price"><small>From</small>$900</p>
@@ -254,7 +257,7 @@
           </div>
           <div class="alert alert--danger" role="alert">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November 2026. Your date, location and filters are kept.</p></div>
             <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button><a class="btn" href="mailto:hello@zamaro.ca">Email the Zamaro team</a></div>
           </div>
         </div>
@@ -269,7 +272,7 @@
         <tbody>
           <tr><td>Idle</td><td>The last good content.</td><td>Nothing</td></tr>
           <tr><td>Pending (under 300 ms)</td><td>The last good content; the submit is busy.</td><td>Nothing</td></tr>
-          <tr><td>Loading</td><td>Skeletons, disabled filters, the status line.</td><td>“Finding who’s free on Saturday 14 November…”</td></tr>
+          <tr><td>Loading</td><td>Skeletons, disabled filters, the status line.</td><td>“Finding who’s free on Saturday 14 November 2026…”</td></tr>
           <tr><td>Slow (after 8 s)</td><td>Same, with new status copy.</td><td>“Still checking — thanks for waiting.”</td></tr>
           <tr><td>Done</td><td>Content; filters enabled; <code>aria-busy</code> removed.</td><td>The count: “7 artists free”</td></tr>
           <tr><td>Empty</td><td>The empty state in the content’s place.</td><td>Its title, via <code>role="status"</code></td></tr>
@@ -283,14 +286,14 @@
           <tr><th scope="row">Ticket</th>
             <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
-            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
           <tr><th scope="row">Profile poster</th>
             <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></div></td>
             <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
-            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true" aria-busy="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
             <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="false" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></div></td>
             <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
             <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></div></td></tr>
@@ -315,9 +318,9 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Skeletons use the same layout classes as the content (<code>.lineup</code>, <code>.ticket</code>, <code>.artist-poster</code>, <code>.profile-layout</code>), so they reflow exactly like it: one ticket column on phones, two from 1024px, the stub beside the body from 640px.</li>
-        <li>Toasts sit bottom right, 24rem wide, from 640px; on phones they span the width at the bottom, above the safe area. They never cover the booking stub’s submit while it is focused.</li>
-        <li>Alert actions sit under the text on phones and beside it from 640px. “Try again” comes first.</li>
+        <li>Skeletons use the same layout classes as the content (<code>.lineup</code>, <code>.ticket</code>, <code>.artist-poster</code>, <code>.profile-layout</code>), so they reflow exactly like it: one ticket column on phones, two from 992px, the stub beside the body from 576px.</li>
+        <li>Toasts sit bottom right, 24rem wide, from 576px; on phones they span the width at the bottom, above the safe area. They never cover the booking stub’s submit while it is focused.</li>
+        <li>Alert actions sit under the text on phones and beside it from 576px. “Try again” comes first.</li>
         <li>The status line sits right under the section head, so on a phone it is visible without scrolling past skeletons.</li>
         <li>Busy buttons keep their width at every size; the spinner sits inside the existing padding.</li>
       </ul>
@@ -335,7 +338,7 @@
       <h3>Focus</h3>
       <p>Feedback never steals focus. Toasts and inline messages are announced, not focused. After “Show the lineup”, focus stays on the submit; the result count is announced. An alert that replaces a region is announced through <code>role="alert"</code>, and its “Try again” is the next stop in the tab order. Undo in a toast is a shortcut, not the only way back: the toggle itself undoes.</p>
       <h3>Labelling</h3>
-      <p>Status copy says what is loading, with the date: “Finding who’s free on Saturday 14 November…”. Save toggles name the artist and the result of pressing: “Save Elijah Park to your saved artists”. The count badge says “3 saved artists”, not “3”. A toast’s dismiss button names the toast: “Dismiss: Saved Luz Viva”.</p>
+      <p>Status copy says what is loading, with the date: “Finding who’s free on Saturday 14 November 2026…”. Save toggles name the artist and the result of pressing: “Save Elijah Park to your saved artists”. The count badge says “3 saved artists”, not “3”. A toast’s dismiss button names the toast: “Dismiss: Saved Luz Viva”.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Toast text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
@@ -348,18 +351,18 @@
       </div>
       <p>Skeletons are decorative: they carry no information and are hidden from assistive technology, so their fills are exempt from 1.4.11.</p>
       <h3>Motion</h3>
-      <p>The skeleton shimmer sweeps slowly (<code>--duration-deliberate</code>) and stops under <code>prefers-reduced-motion</code>. Toasts slide in over <code>--duration-slow</code>; with reduced motion they appear at once. Spinners and the busy heart keep moving because they are status indicators. The indeterminate progress bar stops and shows a half-tone full bar instead.</p>
+      <p>The skeleton shimmer sweeps slowly (<code>--duration-deliberate</code>) and stops under <code>prefers-reduced-motion</code>. Toasts slide in over <code>--duration-slow</code>; with reduced motion they appear at once. Spinners and the busy heart hold still too (L2-103); their busy label or status text says the work is in progress. The indeterminate progress bar stops and shows a half-tone full bar instead.</p>
       <h3>Touch</h3>
       <p>The save toggle is 44px round, inside a stub with 16px of padding. Toast actions are 36px buttons in a 16px-padded toast. Nothing depends on hover.</p>
     </section>
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li><b>Loading:</b> present tense, says what and for when: “Checking calendars…”, “Finding who’s free on Saturday 14 November…”. Use an ellipsis character (…).</li>
+        <li><b>Loading:</b> present tense, says what and for when: “Checking calendars…”, “Finding who’s free on Saturday 14 November 2026…”. Use an ellipsis character (…).</li>
         <li><b>Slow:</b> one reassuring line, no blame: “Still checking — thanks for waiting.”</li>
         <li><b>Confirmation:</b> past-tense verb and the name: “Saved Luz Viva”, “Removed Elijah Park”, “Request sent to Abigail”. No exclamation marks.</li>
         <li><b>Undo</b> is always the single word “Undo”.</li>
-        <li><b>Errors:</b> what happened, what is safe, what to do: “We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.” + “Try again”.</li>
+        <li><b>Errors:</b> what happened, what is safe, what to do: “We couldn’t load who’s free on Saturday 14 November 2026. Your date, location and filters are kept.” + “Try again”.</li>
         <li><b>Counts:</b> numerals and the noun: “7 artists free”, “3 saved artists”.</li>
       </ul>
     </section>
@@ -381,7 +384,7 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: busy submit, region <code>aria-busy</code>, status line, disabled chips, ticket and headliner skeletons, and the note about “Still checking — thanks for waiting.” after 8 s</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: poster-sized name skeleton on the stage, stub skeleton, visually hidden “Loading artist profile” status</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: poster-sized name skeleton on the stage, stub skeleton, visually hidden “Loading the artist’s profile…” status</li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: save toggles on tickets, the Saved count, the empty toast region and the note promising a “Saved Luz Viva” toast</li>
         <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the region alert with Try again; the note about adding a status link after a third failure</li>
         <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: page-level failure with Try again and Back to the lineup</li>

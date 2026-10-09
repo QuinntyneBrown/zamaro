@@ -3,15 +3,15 @@
 LAYOUT_WITH_LEGEND()
 title Components — Respond to a booking request
 
-Container(web, "Zamaro Web", "Angular", "ArtistRequestsPage, ArtistRequestsStore, ArtistRequestsApi")
+Container(web, "Zamaro Web", "Angular", "ArtistRequestsPage, ArtistBookingPage, accept and decline dialogs, ArtistRequestsApi")
 Container(worker, "Zamaro Worker", "Laravel queue", "RequestAccepted and RequestDeclined listeners")
 System_Ext(routing, "Routing provider", "Driving distance")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "ArtistRequestsController", "Laravel controller", "index, accept, decline under /api/v1/artist/requests")
   Component(policy, "BookingPolicy", "Policy", "respond: artist of the booking, else 404")
-  Component(list, "ListArtistRequests", "Query action", "Requested bookings by respond_by")
+  Component(list, "ListArtistRequests", "Query action", "Requests by tab: New by respond_by, Accepted, Confirmed, Past")
   Component(accept, "AcceptBooking", "Action", "Artist lock, Confirmed-date check, Requested -> Accepted")
-  Component(decline, "DeclineBooking", "Action", "Requested -> Declined with optional reason")
+  Component(decline, "DeclineBooking", "Action", "Requested -> Declined with optional reason and note")
   Component(dist, "DistanceService", "Domain service", "Distance to church with cache")
   Component(price, "PriceBreakdown", "Value object", "Payout after the 8 % fee")
   Component(sm, "BookingStateMachine", "Domain service", "Applies transition and history")

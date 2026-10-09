@@ -6,7 +6,7 @@ title Containers — Manage setlist
 Person(artist, "Artist", "Approved worship artist")
 System_Ext(cdn, "CDN", "Caches public profile pages")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Setlist editor under /artist/setlist")
+  Container(web, "Zamaro Web", "Angular with SSR", "Songs section of the profile editor at /artist/profile")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Setlist endpoints under /api/v1/artist/setlist")
   Container(worker, "Zamaro Worker", "Laravel queue workers", "Runs the cache purge listener")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "setlist_songs")

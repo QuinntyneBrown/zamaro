@@ -7,7 +7,7 @@ organisation holds about them. Zamaro answers that right with a self-service
 "Download my data" action: a signed-in user asks for an export, and within 24 hours
 receives an email with a link to one JSON file of everything held about them.
 
-The slice runs from the privacy section of the account settings page
+The slice runs from the Your data section of the account settings page
 (`accounts/manage-account-settings`) through a queued job in the Zamaro Worker to
 object storage and the email delivery service. It reads data written by other
 slices, including consent records from `privacy/record-consent`. Account deletion is
@@ -29,16 +29,28 @@ deleted when the link expires.
 
 **Frontend (Zamaro Web, `features/account`)**
 
-- **`PrivacySectionComponent`** — section of `AccountSettingsPage` with the "Download
-  my data" button. It shows the state of the latest export: requested (with "We'll
-  email you a link within 24 hours"), ready (with a download link and expiry date),
-  or expired. While an export is pending, the button is disabled.
+- **`PrivacySectionComponent`** — Your data section (`#data`) of
+  `AccountSettingsPage`, with the "Download my data" button. It shows the state of the
+  latest export: requested (with the request time and "We'll email {address} a link
+  within 24 hours. It works for 7 days."), ready ("Your file is ready" with a
+  download link and expiry date). Once the file has expired the section shows
+  Download my data again. While an export is pending, the button is disabled.
 - **`DataExportDownloadPage`** — routed page for `/account/data-exports/:id`, the
   target of the emailed link. Behind `authGuard`, it calls the download endpoint and
-  hands the browser to the signed storage URL, or shows that the link has expired.
+  hands the browser to the signed storage URL with a "Download again" fallback, or
+  shows "This download has expired" with a way back to the Your data section.
 - **`PrivacyApi`** — typed client for `POST /api/v1/account/data-exports`,
   `GET /api/v1/account/data-exports/latest` and
   `GET /api/v1/account/data-exports/{id}/download`.
+
+**Mock screens** — the section is `#data` on
+[`pages/account`](../../../mocks/pages/account/default.html), with the requested
+state in [`export-requested`](../../../mocks/pages/account/export-requested.html) and
+the ready state, with Download your file and the expiry, in
+[`export-ready`](../../../mocks/pages/account/export-ready.html).
+The emailed link opens
+[`pages/data-export`](../../../mocks/pages/data-export/default.html) in states
+default, [`expired`](../../../mocks/pages/data-export/expired.html) and error.
 
 **Backend (Zamaro API and Zamaro Worker)**
 
@@ -53,7 +65,8 @@ deleted when the link expires.
   `expiresAt` (ready time plus 7 days), marks it `Ready`, and queues
   `DataExportReadyNotification` (L2-081).
 - **`PersonalDataExporter`** — composes the export file from one `ExportSection` per
-  kind of data: `ProfileSection` (user, and artist profile for artists),
+  kind of data: `ProfileSection` (user and email preferences, and for artists the artist
+  profile and private contact phone),
   `ChurchSection`, `SavedArtistsSection`, `BookingsSection` (including payments with
   card brand and last 4 only), `MessagesSection`, `ReviewsSection` and
   `ConsentRecordsSection`. Each section reads only rows the user owns or takes part

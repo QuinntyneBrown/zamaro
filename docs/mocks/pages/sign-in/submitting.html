@@ -25,6 +25,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link topbar__auth" href="../sign-up/default.html"><span class="topbar__auth-short">Sign up</span><span class="topbar__auth-long">Create account</span></a>
 </header>
 
@@ -37,14 +38,14 @@
       </div>
       <p class="text-muted">Welcome back. Your saved artists and requests are waiting.</p>
         <div class="field">
-          <label class="field__label" for="email">Email <span class="optional">required</span></label>
+          <label class="field__label" for="email">Email <span class="field__required">(required)</span></label>
           <input class="input" type="email" id="email" name="email" value="naomi.fraser@riversidecc.ca" autocomplete="email" placeholder="name@church.ca" required readonly>
         </div>
         <div class="field">
-          <label class="field__label" for="password">Password <span class="optional">required</span></label>
+          <label class="field__label" for="password">Password <span class="field__required">(required)</span></label>
           <input class="input" type="password" id="password" name="password" value="hosanna-in-the-highest" autocomplete="current-password" required readonly>
         </div>
-      <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" disabled>Signing in…</button>
+      <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" aria-disabled="true">Signing in…</button>
       <div class="auth-card__links"><a href="../forgot-password/default.html">Forgot your password?</a><a href="../sign-up/default.html">Create an account</a></div>
       <p class="stub__fine">Artists sign in here too.</p>
     </form>
@@ -95,6 +96,7 @@
     <li><a href="submitting.html" aria-current="page">submitting</a></li>
     <li><a href="error.html">error</a></li>
     <li><a href="expired.html">expired</a></li>
+    <li><a href="locked.html">locked</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

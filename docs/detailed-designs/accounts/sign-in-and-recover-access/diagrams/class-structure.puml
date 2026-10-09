@@ -28,14 +28,21 @@ package "Zamaro Web (Angular)" {
     +resetPassword(token: string, password: string): Observable<void>
     +beginTwoFactor(): Observable<TwoFactorSetup>
     +confirmTwoFactor(code: string): Observable<string[]>
+    +disableTwoFactor(code: string): Observable<void>
+    +regenerateRecoveryCodes(code: string): Observable<string[]>
   }
   class SignInPage {
     +returnUrl: string
     +onSubmit(): void
   }
-  class SecurityPage {
+  class MfaEnrolmentPage {
     +setup: Signal<TwoFactorSetup | null>
     +recoveryCodes: Signal<string[]>
+  }
+  class TwoStepCodeDialogComponent {
+    +mode: 'turn-off' | 'new-codes'
+    +newCodes: Signal<string[]>
+    +onSubmit(): void
   }
 }
 
@@ -109,7 +116,8 @@ package "Zamaro API (Laravel)" {
 }
 
 SignInPage --> AuthService
-SecurityPage --> AuthApi
+MfaEnrolmentPage --> AuthApi
+TwoStepCodeDialogComponent --> AuthApi
 AuthService --> AuthApi
 AuthApi ..> SessionController : /api/v1/session
 SessionController --> AttemptSignIn

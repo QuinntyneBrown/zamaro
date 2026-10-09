@@ -64,11 +64,13 @@ Zamaro database and the Redis cache.
   (L2-095). It eager-loads the booking's church snapshot, the booker and the reply.
 - **`ArtistProfileResource`** — owned by `artist-profiles/view-artist-profile`; it embeds the
   `RatingSummary` and the first 4 reviews from `ListArtistReviews`.
-- **`ReviewResource`** — serialises stars, text, reviewer display name, church
-  name, city, `createdAt` and an optional `ReviewReplyResource`. It never exposes
-  the booker's email or user ID.
+- **`ReviewResource`** — serialises `stars`, `text`, an `attribution` object
+  (`reviewerName`, `churchName`, `city` and `monthYear`, built by the
+  `ReviewAttribution` value object of `privacy/minimise-public-exposure`) and an
+  optional `ReviewReplyResource`. It never exposes the booker's email, user ID, the
+  booking number or the event date (L2-083).
 - **`ReviewReplyResource`** — serialises the reply text, artist display name and
-  date.
+  month and year, shown as "Reply from Abigail Mensah · October 2026".
 
 **Backend (Zamaro Worker)**
 
@@ -83,6 +85,16 @@ Zamaro database and the Redis cache.
   queue so a hidden review leaves the rating within 60 seconds (L2-060). Queue lag
   above 5 minutes already alerts (L2-093); a tighter alert for this queue is
   `<TO SUPPLY>`.
+
+**Mocks**
+
+- [Artist profile · default](../../../mocks/pages/artist/default.html) — "What
+  churches say" with "★★★★★ 4.9 · 38 churches", Abigail's 4 most recent reviews, her
+  replies beneath two of them ("Reply from Abigail Mensah") and "Show all 38 reviews".
+- [Artist profile · empty](../../../mocks/pages/artist/empty.html) — "No church
+  reviews yet" and "Be her first booking" for Miriam.
+- [Discover · default](../../../mocks/pages/discover/default.html) — the rating on
+  the headliner ("★ 4.9 · 38 churches") and on each ticket.
 
 **Data**
 

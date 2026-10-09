@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Leave a review
 
-Container(web, "Zamaro Web", "Angular", "BookingDetailPage, ReviewFormComponent, BookingReviewStore, ReviewsApi")
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, WriteReviewDialogComponent, BookingReviewStore, ReviewsApi")
 System_Ext(email, "Email delivery service", "Transactional email")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "BookingReviewController", "Laravel controller", "POST /api/v1/bookings/{number}/review, PATCH /api/v1/reviews/{review}")

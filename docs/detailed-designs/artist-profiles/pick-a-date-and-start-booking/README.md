@@ -49,10 +49,12 @@ share.
   message (L2-019). It binds the event date to the store's `selectedDate` and the
   message to `messageDraft`. Under the date field, an inline message reads "✓ {first
   name} is free {date}" or "{first name} is booked {date}. Try another date.". The
-  submit button, "Request to book · {short date}", is disabled while the date is not
-  free. Beneath it, the stub reads "Nothing is charged until {first name} accepts.
+  submit button, "Request to book · {short date}" ("Request to book" before a date is
+  chosen), is disabled while the date is not free. Beneath it, the stub reads "Nothing is charged until {first name} accepts.
   Cancel free up to 14 days before." The words "Cancel free up to 14 days before" link
-  to the full cancellation policy. The policy URL is `<TO SUPPLY>`.
+  to the full cancellation policy, the "Cancellation policy" list in the "How booking
+  works" section of Discover (`/#how`), the same target as every "Cancellation policy"
+  link.
 - **Stub placement** — from LG, the stub sits in the right-hand column with
   `position: sticky`, so it stays pinned while the profile scrolls. Below LG it follows
   the reviews section. The header Book button and "Check dates" both call
@@ -88,8 +90,23 @@ share.
   `bookings/view-booker-bookings` renders it there.
 - The catalogue key `cancellation.policy.short` holds "Cancel free up to 14 days before
   your event." The payment form and the confirmation email reuse it with the same policy
-  link (L2-044). How this sentence relates to the stub's L2-019 wording is noted under
-  Requirements.
+  link (L2-044). The stub carries the short form, "Cancel free up to 14 days before",
+  with the same link (L2-019).
+
+**Mocks**
+
+- [Artist profile · default](../../../mocks/pages/artist/default.html) — Abigail's
+  On tour list from her carried date, Sat 14 Nov (Monday is her weekly day off, so it
+  skips Mon 16 Nov), and her stub with "No. ACT-0027", the free-date message and the
+  policy link.
+- [Artist profile · empty](../../../mocks/pages/artist/empty.html) — Miriam's profile
+  opened without a search date: six free dates from Mon 12 Oct, 3 days from today, and
+  her stub with an empty date field, "No. ACT-0154", "From $300" and "Request to book".
+- [Artist profile · booked date](../../../mocks/pages/artist/booked-date.html) — Sun 15 Nov
+  typed into Abigail's stub: "Abigail is booked Sun 15 Nov. Try another date.", Request
+  to book disabled, and the header button reading "Book for Sun 15 Nov".
+- [Request to book · default](../../../mocks/pages/book/default.html) — where the stub
+  hands over on submit (`bookings/send-booking-request`).
 
 **Data**
 
@@ -105,12 +122,8 @@ level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-017` | `L1-003` | **Upcoming dates.** The "On tour" section lists the artist's next 6 dates that are either free or booked, starting from the search date if one is set, otherwise from 3 days from today.<br>Acceptance criteria:<br>1. Given a Confirmed booking on Sun 15 Nov for a Sunday service in Oakville, when the list renders, then that row shows "Booked" with "Sunday service, Oakville" and never the church's name or address.<br>2. Given a free date, when the list renders, then that row shows "Free · Open all day" and a "Pick" action.<br>3. Given a visitor activates "Pick" on Fri 20 Nov, when it completes, then the booking stub date changes to Fri 20 Nov and the Book button reads "Book for Fri 20 Nov".<br>4. Given a search date is set, when the list renders, then that date's row is labelled "Your date". |
-| `L2-019` | `L1-003` | **Booking stub.** The booking stub is the ticket-styled request form on each profile.<br>Acceptance criteria:<br>1. Given a profile, when the stub renders, then it shows "Book {first name}", the artist's ticket number (for example "No. ZAM-0114"), "From ${price}", "per service · travel included", and fields for event date, kind of gathering, church and message (optional).<br>2. Given a date on which the artist is free, when it is chosen, then the stub shows "✓ {first name} is free {date}".<br>3. Given a date on which the artist is not free, when it is chosen, then the stub shows "{first name} is booked {date}. Try another date." and the submit button is disabled.<br>4. Given a viewport at LG or wider, when the profile scrolls, then the stub stays pinned in the right-hand column.<br>5. Given a viewport narrower than LG, when the profile renders, then the stub follows the reviews section and the header Book button scrolls to it and focuses its date field.<br>6. Given the stub, when it renders, then beneath the submit button it reads "Nothing is charged until {first name} accepts. Cancel free up to 14 days before." |
-| `L2-044` | `L1-008` | **Cancellation policy visibility.**<br>Acceptance criteria:<br>1. Given the booking stub, the payment form and the confirmation email, when they render, then each states "Cancel free up to 14 days before your event." with a link to the full policy.<br>2. Given the booker's booking page, when the booking is Confirmed, then it shows the last date for a free cancellation (for example "Free cancellation until Sat 31 Oct"). |
-
-L2-019 criterion 6 and L2-044 criterion 1 word the stub's cancellation line
-differently. The design renders the L2-019 sentence with the policy link. Whether the
-stub should also carry the exact L2-044 sentence is `<TO SUPPLY>`.
+| `L2-019` | `L1-003` | **Booking stub.** The booking stub is the ticket-styled request form on each profile.<br>Acceptance criteria:<br>1. Given a profile, when the stub renders, then it shows "Book {first name}", the artist's ticket number (for example "No. ACT-0027"; artist ticket numbers use the `ACT-` prefix so they never read like a `ZAM-` booking number), "From ${price}", "per service · travel included", and fields for event date, kind of gathering, church and message (optional).<br>2. Given a date on which the artist is free, when it is chosen, then the stub shows "✓ {first name} is free {date}".<br>3. Given a date on which the artist is not free, when it is chosen, then the stub shows "{first name} is booked {date}. Try another date." and the submit button is disabled.<br>4. Given a viewport at LG or wider, when the profile scrolls, then the stub stays pinned in the right-hand column.<br>5. Given a viewport narrower than LG, when the profile renders, then the stub follows the reviews section and the header Book button scrolls to it and focuses its date field.<br>6. Given the stub, when it renders, then beneath the submit button it reads "Nothing is charged until {first name} accepts. Cancel free up to 14 days before.", and "Cancel free up to 14 days before" links to the full cancellation policy (the stub's short form of the L2-044 sentence). |
+| `L2-044` | `L1-008` | **Cancellation policy visibility.**<br>Acceptance criteria:<br>1. Given the payment form and the confirmation email, when they render, then each states "Cancel free up to 14 days before your event." with a link to the full policy; the booking stub carries the short form with the same link (L2-019).<br>2. Given the booker's booking page, when the booking is Confirmed, then it shows the last date for a free cancellation (for example "Free cancellation until Sat 31 Oct"). |
 
 ## Diagrams
 

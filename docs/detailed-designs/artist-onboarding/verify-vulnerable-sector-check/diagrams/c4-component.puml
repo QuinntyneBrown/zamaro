@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Verify a Vulnerable Sector Check
 
-Container(web, "Zamaro Web", "Angular", "VscPage, VscQueuePage, VscDocumentComponent")
+Container(web, "Zamaro Web", "Angular", "VscSectionComponent, VscUploadDialogComponent, VscQueuePage, VscDocumentComponent")
 Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "ScanVulnerableSectorCheck, SendVscRenewalReminders")
 System_Ext(secrets, "Secrets manager", "Document encryption key")
 Container_Boundary(api, "Zamaro API") {

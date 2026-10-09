@@ -14,8 +14,13 @@ skinparam class {
 title Class structure — Verify a Vulnerable Sector Check
 
 package "Zamaro Web (Angular)" {
-  class VscPage {
+  class VscSectionComponent {
     +current: Signal<VscSummary | null>
+    +pending: Signal<VscSummary | null>
+    +openUpload(): void
+  }
+  class VscUploadDialogComponent {
+    +progress: Signal<number>
     +upload(file: File, issuedOn: string): void
   }
   class VscQueuePage {
@@ -88,7 +93,9 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-VscPage --> VulnerableSectorChecksApi
+VscSectionComponent --> VscUploadDialogComponent : opens
+VscUploadDialogComponent --> VulnerableSectorChecksApi
+VscSectionComponent --> VulnerableSectorChecksApi
 VscQueuePage --> VulnerableSectorChecksApi
 VscQueuePage --> VscDocumentComponent
 VscDocumentComponent --> VulnerableSectorChecksApi

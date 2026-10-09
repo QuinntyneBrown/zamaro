@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -184,7 +187,7 @@
           <div class="field" style="width: 16rem;">
             <label class="field__label" for="v-err">Event date</label>
             <input class="input" id="v-err" type="date" value="2026-11-21" min="2026-10-09" aria-invalid="true" aria-describedby="v-err-msg">
-            <span class="field__error" id="v-err-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail isn’t free Sat 21 Nov. Pick another date.</span>
+            <span class="field__error" id="v-err-msg">Abigail isn’t free Sat 21 Nov. Pick another date.</span>
           </div>
         </div>
         <div class="ds-example__caption"><span>The message replaces the hint; a field never shows a hint and an error at once.</span></div>
@@ -205,16 +208,16 @@
       <div class="ds-example">
         <div class="ds-example__canvas">
           <button class="btn" type="button" aria-describedby="v-saved">Save changes</button>
-          <span class="inline-msg inline-msg--success" id="v-saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Saved at 2:14 pm</span>
+          <span class="inline-msg inline-msg--success" id="v-saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Saved at 2:14 p.m.</span>
         </div>
         <div class="ds-example__canvas" style="padding-top: 0;">
           <div class="ticket" style="width: 100%;">
             <div class="art ticket__art art--group" role="img" aria-label="Luz Viva performing on a church stage"></div>
             <div class="ticket__body">
-              <span class="ticket__no">No. 05 · ★ 4.8</span>
+              <span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span>
               <h3 class="ticket__name"><a href="#v-row-msg">Luz Viva</a></h3>
-              <p class="ticket__meta">Spanish &amp; English band<br>North York · 58 km from you</p>
-              <span class="inline-msg inline-msg--warning" id="v-row-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Free until 1 pm only</span>
+              <p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p>
+              <span class="inline-msg inline-msg--warning" id="v-row-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Free until 1:00 p.m. only</span>
             </div>
             <div class="ticket__stub">
               <p class="ticket__price"><small>From</small>$900</p>
@@ -222,7 +225,7 @@
             </div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>After an action (“Saved at 2:14 pm”) and on a ticket, where it flags a limit on the date before the booker opens the profile.</span></div>
+        <div class="ds-example__caption"><span>After an action (“Saved at 2:14 p.m.”) and on a ticket, where it flags a limit on the date before the booker opens the profile.</span></div>
       </div>
     </section>
 
@@ -238,12 +241,12 @@
           <tr><th scope="row">Hint</th>
             <td><div class="field" style="width: 13rem;"><input class="input" type="text" value="Riverside Community Church" aria-label="Church, hint, default" aria-describedby="m1"><span class="inline-msg" id="m1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>As it appears on your sign</span></div></td>
             <td><div class="field" style="width: 13rem;"><input class="input" type="text" value="Riverside Community Church" aria-label="Church, hint, focused" aria-describedby="m2" data-state="focus"><span class="inline-msg" id="m2"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>As it appears on your sign</span></div></td>
-            <td><div class="field" style="width: 13rem;"><input class="input" type="text" value="" aria-label="Church, error" aria-invalid="true" aria-describedby="m3"><span class="field__error" id="m3"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name</span></div></td>
+            <td><div class="field" style="width: 13rem;"><input class="input" type="text" value="" aria-label="Church, error" aria-invalid="true" aria-describedby="m3"><span class="field__error" id="m3">Enter your church’s name</span></div></td>
             <td><div class="field" style="width: 13rem;"><input class="input" type="text" value="Riverside Community Church" aria-label="Church, disabled" aria-describedby="m4" disabled><span class="inline-msg" id="m4"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>Set by your account</span></div></td></tr>
           <tr><th scope="row">Success</th>
             <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-14" aria-label="Event date, success, default" aria-describedby="m5"><span class="inline-msg inline-msg--success" id="m5"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div></td>
             <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-14" aria-label="Event date, success, focused" aria-describedby="m6" data-state="focus"><span class="inline-msg inline-msg--success" id="m6"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div></td>
-            <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-21" aria-label="Event date, unavailable" aria-invalid="true" aria-describedby="m7"><span class="field__error" id="m7"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail isn’t free Sat 21 Nov</span></div></td>
+            <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-21" aria-label="Event date, unavailable" aria-invalid="true" aria-describedby="m7"><span class="field__error" id="m7">Abigail isn’t free Sat 21 Nov</span></div></td>
             <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-14" aria-label="Event date, disabled" aria-describedby="m8" disabled><span class="inline-msg inline-msg--success" id="m8"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Booked · No. ZAM-0114</span></div></td></tr>
           <tr><th scope="row">Warning</th>
             <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-14" aria-label="Event date, warning, default" aria-describedby="m9"><span class="inline-msg inline-msg--warning" id="m9"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Another church asked first</span></div></td>
@@ -259,7 +262,7 @@
           <tr><th scope="row">Stub date</th>
             <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-14" aria-label="Event date, checking" aria-describedby="s1"><span class="spinner-inline text-caption" id="s1"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking Abigail’s calendar…</span></div></td>
             <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-14" aria-label="Event date, free" aria-describedby="s2"><span class="inline-msg inline-msg--success" id="s2"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div></td>
-            <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-21" aria-label="Event date, not free" aria-invalid="true" aria-describedby="s3"><span class="field__error" id="s3"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail isn’t free Sat 21 Nov</span></div></td></tr>
+            <td><div class="field" style="width: 13rem;"><input class="input" type="date" value="2026-11-21" aria-label="Event date, not free" aria-invalid="true" aria-describedby="s3"><span class="field__error" id="s3">Abigail isn’t free Sat 21 Nov</span></div></td></tr>
         </tbody>
       </table></div>
       <h3>Both themes</h3>
@@ -335,7 +338,7 @@
         <li>Name the person and the date: “Abigail isn’t free Sat 21 Nov”, not “Date unavailable”.</li>
         <li>Errors say how to fix it: “Pick another date.” “Enter your church’s name.” Never “Invalid input”.</li>
         <li>Hints give advice, not instructions the label already gives. “Most churches book 4–6 weeks ahead”, not “Choose a date”.</li>
-        <li>Use the Zamaro date format (“Sat 14 Nov”) and times like “2:14 pm”.</li>
+        <li>Use the Zamaro date format (“Sat 14 Nov”) and times like “2:14 p.m.”.</li>
       </ul>
     </section>
 
@@ -343,7 +346,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas"><span class="inline-msg inline-msg--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div><figcaption>A success message with a real icon and the success colour.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><span class="field__help">✓ Abigail is free Sat 14 Nov</span></div><figcaption>The mocks typed a ✓ into muted help text. It reads as a hint, the colour says nothing, and screen readers announce “check mark”.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="dd-ok">Church</label><input class="input" id="dd-ok" type="text" value="" aria-invalid="true" aria-describedby="dd-ok-msg"><span class="field__error" id="dd-ok-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name</span></div></div><figcaption>An error is linked with <code>aria-describedby</code> and the control has <code>aria-invalid="true"</code>.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="dd-ok">Church</label><input class="input" id="dd-ok" type="text" value="" aria-invalid="true" aria-describedby="dd-ok-msg"><span class="field__error" id="dd-ok-msg">Enter your church’s name</span></div></div><figcaption>An error is linked with <code>aria-describedby</code> and the control has <code>aria-invalid="true"</code>.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="dd-bad">Church</label><input class="input" id="dd-bad" type="text" value="" style="border-color: var(--color-danger-border);"><span class="text-caption" style="color: var(--color-danger-fg);">Required</span></div></div><figcaption>A red border and loose red text: nothing ties the message to the field, and “Required” doesn’t say what to enter.</figcaption></figure>
       </div>
     </section>
@@ -389,13 +392,12 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “✓ Abigail is free Sat 14 Nov” under the event date in the booking stub</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “✓ Miriam is free Sat 14 Nov” in Miriam Haile’s stub</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The field help “✓ Abigail is free Sat 14 Nov” was plain muted <code>.field__help</code> text with a typed ✓. It is now <code>.inline-msg--success</code> with a check icon.</li>
         <li>No field error element existed. Errors now use <code>.field__error</code> with <code>aria-invalid</code> and <code>aria-describedby</code>, and the invalid styling, which only covered <code>.input</code>, now covers input, select and textarea.</li>
-        <li>Hint, info, warning and danger messages outside a field are not in the mocks yet; they are part of the core set. The product needs them for the availability check in the stub, “Saved” confirmations in booking settings and date limits on tickets.</li>
+        <li>The info tone outside a field is in <a href="../../mocks/pages/account/export-requested.html">pages/account/export-requested</a> (“Requested today at 11:20 a.m.”, a <code>role="status"</code> line under the data export), <a href="../../mocks/pages/admin-application/default.html">pages/admin-application/default</a> and <a href="../../mocks/dialogs/reject-application/default.html">dialogs/reject-application</a>. Hint, warning and danger messages outside a field are not in the mocks yet; they are part of the core set for date limits on tickets and warnings in booking settings.</li>
       </ul>
     </section>
 

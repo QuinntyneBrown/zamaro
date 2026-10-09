@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "BookingStubComponent" as stub
+  participant "BookRequestPage" as stub
   participant "BookingRequestStore" as store
   participant "BookingsApi" as client
 end box
@@ -34,7 +34,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "Email delivery service" as email
 end box
 
-actor -> stub : Activate "Request to book · Sat 14 Nov"
+actor -> stub : Activate "Send request to Abigail" on /artists/abigail-mensah/book
 stub -> store : submit(payload)
 store -> store : Create idempotency key, status submitting,\nbutton busy and disabled (L2-108)
 store -> client : create(payload, key)

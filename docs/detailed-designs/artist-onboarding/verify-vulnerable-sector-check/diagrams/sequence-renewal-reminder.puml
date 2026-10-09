@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "VscPage" as page
+  participant "VscSectionComponent" as page
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
   participant "Scheduler" as scheduler
@@ -41,6 +41,6 @@ loop each expiring check
     command -> command : Skip; a second run has no effect (L2-092)
   end
 end
-actor -> page : Open /artist/vulnerable-sector-check from the email
-page --> actor : Current check with "Expires {date}" and Upload a new check
+actor -> page : Open /artist/profile#check from the email
+page --> actor : Current check with "Renew by {expiry date}" and Upload a newer check
 @enduml

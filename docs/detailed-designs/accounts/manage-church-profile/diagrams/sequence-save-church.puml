@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ChurchProfilePage" as page
+  participant "AccountSettingsPage (#church)" as page
   participant "ChurchApi" as client
   participant "AuthService" as auth
 end box
@@ -33,7 +33,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> page : Edit name, address, phone, optional fields, activate Save
+actor -> page : Edit name, address, phone, optional fields, press Save changes
 page -> page : Check name 2-120 and phone format, disable submit (L2-108)
 page -> client : save(form)
 client -> controller : PUT /api/v1/account/church
@@ -62,7 +62,7 @@ else geocoded
     action --> controller : Church
     controller --> client : 200 ChurchResource
     client --> auth : refresh() for header and Discover pre-fill
-    page --> actor : Saved toast, header lists church name (L2-024)
+    page --> actor : Saved banner, header lists church name (L2-024)
   end
 end
 @enduml

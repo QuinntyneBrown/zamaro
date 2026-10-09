@@ -7,7 +7,7 @@ Person(booker, "Booker", "Signed-in church representative")
 System_Ext(geo, "Geocoding provider", "Address to coordinates")
 System_Ext(routing, "Routing provider", "Driving distance")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "ChurchProfilePage, ChurchRequiredDialogComponent, AccountMenuComponent")
+  Container(web, "Zamaro Web", "Angular with SSR", "AccountSettingsPage church section, ChurchRequiredDialogComponent, AccountMenuComponent")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET and PUT /api/v1/account/church")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "churches, bookings address snapshots")
   ContainerDb(cache, "Cache and queue", "Redis", "Distance cache")

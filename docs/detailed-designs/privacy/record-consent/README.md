@@ -36,16 +36,30 @@ moment.
   required terms-and-privacy checkbox, with links that carry the current versions,
   and a separate marketing checkbox that starts unchecked (L2-080). It sends the
   versions it displayed with the submission.
-- **`AcceptTermsPage`** — routed page for `/account/accept-terms`. It shows a summary
-  of what changed, a link to the full terms, and an Accept and continue button.
-  Signing out is the only other action.
+- **`AcceptTermsPage`** — routed page for `/account/accept-terms`. It shows "We've
+  updated our terms", a summary of what changed, a link to the full terms, the version
+  and its start date, and an Accept and continue button. Signing out is the only
+  other action.
 - **`termsGuard`** — route guard on every private route. It reads
   `currentUser().termsAcceptanceRequired` and redirects to `/account/accept-terms`,
   keeping the original URL as `returnUrl` (L2-080).
 - **`termsInterceptor`** — HTTP interceptor that reacts to a `409` problem detail of
   type `terms-acceptance-required` from any endpoint by routing to the same page.
-- **`ConsentApi`** — typed client for `GET /api/v1/legal-documents/current` and
-  `POST /api/v1/account/consents/terms`.
+- **`ConsentApi`** — typed client for `GET /api/v1/legal-documents/current`,
+  `POST /api/v1/account/consents/terms` and `POST /api/v1/account/consents/marketing`.
+- **Marketing choice in settings** — the "New artists near my church" checkbox in the
+  Email preferences section of account settings
+  (`notifications/manage-email-preferences`) shows the latest marketing record and
+  sends a change through `ConsentApi`.
+
+**Mock screens** — the registration checkboxes are on
+[`pages/sign-up`](../../../mocks/pages/sign-up/default.html): the required terms and
+privacy box and the separate, unticked "Email me about new artists near my church"
+box, with the [`invalid`](../../../mocks/pages/sign-up/invalid.html) state for an
+unticked terms box. The terms gate is
+[`pages/accept-terms`](../../../mocks/pages/accept-terms/default.html) in states
+default, loading, submitting and error. The later marketing choice is in `#preferences`
+on [`pages/account`](../../../mocks/pages/account/default.html).
 
 **Backend (Zamaro API)**
 
@@ -64,7 +78,8 @@ moment.
   endpoint. It compares the user's latest granted terms record with the current
   version and returns `409` `terms-acceptance-required` when they differ (L2-080).
 - **`ConsentController`** — `POST /api/v1/account/consents/terms`, which takes the
-  version the person saw.
+  version the person saw, and `POST /api/v1/account/consents/marketing`, which takes
+  the new marketing choice and calls `RecordConsent` with source `settings`.
 - **`AcceptCurrentTerms`** — action that rejects a stale version with `409`, then
   calls `RecordConsent` with source `terms-update`.
 - **`CurrentUserResource`** — includes `termsAcceptanceRequired`, so the frontend can
@@ -85,9 +100,11 @@ through `RecordConsent` with source `settings`.
   `ip_address`, `user_agent`. The table has no update or delete path in the
   application.
 
-Whether a new privacy policy version also triggers the terms gate, the retention
-period for consent records after account deletion, and the version identifier format
-are `<TO SUPPLY>`.
+A version is identified by the year and month it takes effect, for example
+`2026-10`, which the accept-terms page shows with its start date ("Terms of use,
+version 2026-10, from Thu 8 Oct 2026"). Whether a new privacy policy version also
+triggers the terms gate, and the retention period for consent records after account
+deletion, are `<TO SUPPLY>`.
 
 ## Requirements
 
@@ -96,7 +113,7 @@ The feature realises the following level-2 (L2) requirement, quoted from
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-080` | `L1-017` | **Consent.**<br>Acceptance criteria:<br>1. Given registration, when it completes, then the versions of the terms and privacy policy accepted and the time are stored.<br>2. Given registration, when the form renders, then marketing email consent is a separate unchecked checkbox, and its value and time are stored as evidence under CASL.<br>3. Given a new version of the terms, when a user next signs in, then they must accept it before continuing. |
+| `L2-080` | `L1-017` | **Consent.**<br>Acceptance criteria:<br>1. Given registration, when it completes, then the versions of the terms and privacy policy accepted and the time are stored.<br>2. Given registration, when the form renders, then marketing email consent is a separate unchecked checkbox, and its value and time are stored as evidence under CASL.<br>3. Given a new version of the terms, when a user next signs in, then they must accept it before continuing.<br>4. Given a signed-in user changes the marketing email choice in their email preferences, when they save, then a new consent record with the value and the time is stored and earlier records are kept. |
 
 ## Diagrams
 

@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -120,7 +123,7 @@
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
       <p>Use skeletons on first load of a view whose layout you know: the lineup on Discover, the artist profile, the booking stub. Build them from the real component (a <code>.ticket</code>, a <code>.stub</code>, the <code>.artist-poster</code>) with skeleton blocks in place of text and images, so the loaded page lands in exactly the same place.</p>
       <ul>
-        <li>Pair every skeleton area with one line of status text, such as “Finding who’s free on Saturday 14 November…”, so the wait is announced and explained.</li>
+        <li>Pair every skeleton area with one line of status text, such as “Finding who’s free on Saturday 14 November 2026…”, so the wait is announced and explained.</li>
         <li>Don’t use skeletons for actions (sending a request, saving); use a busy <a href="button.html">button</a> or a <a href="spinner.html">spinner</a>.</li>
         <li>Don’t use them for content that refreshes while it is already on screen; keep the old content and show a spinner.</li>
         <li>If loading fails, replace the skeletons with an <a href="alert.html">alert</a>; if it returns nothing, with an <a href="empty-state.html">empty state</a>.</li>
@@ -168,10 +171,11 @@
             <div class="stack stack--sm"><span class="text-caption">--poster</span><span class="skeleton skeleton--poster"></span></div>
             <div class="stack stack--sm"><span class="text-caption">--block</span><span class="skeleton skeleton--block"></span></div>
             <div class="stack stack--sm"><span class="text-caption">--wide</span><span class="skeleton skeleton--wide"></span></div>
+            <div class="stack stack--sm"><span class="text-caption">--strip</span><span class="skeleton skeleton--strip"></span></div>
             <div class="stack stack--sm"><span class="text-caption">--portrait</span><span class="skeleton skeleton--portrait" style="max-width: 9rem;"></span></div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Text, title, figure, control (44px field), large control (56px button), target (save toggle) and circle (avatar), poster headline, block (textarea, panels), wide (16:9 video) and portrait (4:5 artist photo).</span></div>
+        <div class="ds-example__caption"><span>Text, title, figure, control (44px field), large control (56px button), target (save toggle) and circle (avatar), poster headline, block (textarea, panels), strip (the song marquee under the profile poster), wide (16:9 video) and portrait (4:5 artist photo).</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="skeleton skeleton--text"&gt;&lt;/span&gt;
 &lt;span class="skeleton skeleton--title"&gt;&lt;/span&gt;
 &lt;span class="skeleton skeleton--figure"&gt;&lt;/span&gt;
@@ -181,6 +185,7 @@
 &lt;span class="skeleton skeleton--circle"&gt;&lt;/span&gt;
 &lt;span class="skeleton skeleton--poster"&gt;&lt;/span&gt;
 &lt;span class="skeleton skeleton--block"&gt;&lt;/span&gt;
+&lt;div class="skeleton skeleton--strip"&gt;&lt;/div&gt;
 &lt;span class="skeleton skeleton--wide"&gt;&lt;/span&gt;
 &lt;span class="skeleton skeleton--portrait"&gt;&lt;/span&gt;</code></pre></details>
       </div>
@@ -191,7 +196,7 @@
         <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
           <section class="stack" aria-labelledby="sk-lineup" aria-busy="true">
             <p class="card__title" id="sk-lineup">The lineup</p>
-            <p class="spinner-inline" role="status"><span class="spinner spinner--sm" aria-hidden="true"></span>Finding who’s free on Saturday 14 November…</p>
+            <p class="spinner-inline" role="status"><span class="spinner spinner--sm" aria-hidden="true"></span>Finding who’s free on Saturday 14 November 2026…</p>
             <ul class="lineup" role="list" aria-hidden="true" style="grid-template-columns: minmax(0, 1fr);">
               <li class="ticket ticket--loading">
                 <span class="skeleton ticket__art"></span>
@@ -208,7 +213,7 @@
         </div>
         <div class="ds-example__caption"><span>The second ticket uses <code>--long</code> and <code>--medium</code> so the lineup doesn’t look stamped out.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section aria-labelledby="lineup-title" aria-busy="true"&gt;
-  &lt;p class="lead"&gt;&lt;span role="status"&gt;Finding who’s free on Saturday 14 November…&lt;/span&gt;&lt;/p&gt;
+  &lt;p class="lead"&gt;&lt;span role="status"&gt;Finding who’s free on Saturday 14 November 2026…&lt;/span&gt;&lt;/p&gt;
   &lt;ul class="lineup" role="list" aria-hidden="true"&gt;
     &lt;li class="ticket ticket--loading"&gt;
       &lt;span class="skeleton ticket__art"&gt;&lt;/span&gt;
@@ -236,11 +241,12 @@
                 <span class="skeleton skeleton--portrait"></span>
                 <div class="stack"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--poster skeleton--medium"></span><span class="skeleton skeleton--text"></span></div>
               </div>
-              <p class="visually-hidden" role="status">Loading artist profile</p>
+              <p class="visually-hidden" role="status">Loading the artist’s profile…</p>
             </div>
           </div>
+          <div class="skeleton skeleton--strip" aria-hidden="true"></div>
         </div>
-        <div class="ds-example__caption"><span>The artist loading mock: portrait, kicker, two poster lines for the name, the facts line.</span></div>
+        <div class="ds-example__caption"><span>The artist loading mock: portrait, kicker, two poster lines for the name, the facts line, then the strip skeleton where the song marquee lands.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="poster on-stage" aria-labelledby="artist-name"&gt;
   &lt;div class="container stack stack--lg"&gt;
     &lt;div class="artist-poster" aria-hidden="true"&gt;
@@ -253,9 +259,10 @@
       &lt;/div&gt;
     &lt;/div&gt;
     &lt;h1 id="artist-name" class="visually-hidden"&gt;Artist profile&lt;/h1&gt;
-    &lt;p class="visually-hidden" role="status"&gt;Loading artist profile&lt;/p&gt;
+    &lt;p class="visually-hidden" role="status"&gt;Loading the artist’s profile…&lt;/p&gt;
   &lt;/div&gt;
-&lt;/section&gt;</code></pre></details>
+&lt;/section&gt;
+&lt;div class="skeleton skeleton--strip" aria-hidden="true"&gt;&lt;/div&gt;</code></pre></details>
       </div>
 
       <h3>Composed: the booking stub</h3>
@@ -275,15 +282,16 @@
     </section>
 
     <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
-      <p>Heights come from the shape modifier; widths from the width modifiers. Text and title lines default to 70% and 55% of their container. Override with <code>--short</code> (40%), <code>--medium</code> (60%) or <code>--long</code> (90%) instead of inline widths.</p>
+      <p>Heights come from the shape modifier; widths from the width modifiers. Text and title lines default to 70% and 55% of their container. Override with <code>--short</code> (40%), <code>--medium</code> (60%), <code>--long</code> (90%) or <code>--full</code> (100%) instead of inline widths.</p>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stack" aria-hidden="true">
           <div class="stack stack--sm"><span class="text-caption">--short · 40%</span><span class="skeleton skeleton--text skeleton--short"></span></div>
           <div class="stack stack--sm"><span class="text-caption">--medium · 60%</span><span class="skeleton skeleton--text skeleton--medium"></span></div>
           <div class="stack stack--sm"><span class="text-caption">--text default · 70%</span><span class="skeleton skeleton--text"></span></div>
           <div class="stack stack--sm"><span class="text-caption">--long · 90%</span><span class="skeleton skeleton--text skeleton--long"></span></div>
+          <div class="stack stack--sm"><span class="text-caption">--full · 100%</span><span class="skeleton skeleton--text skeleton--full"></span></div>
         </div>
-        <div class="ds-example__caption"><span>Heights: text 16px, title 28px, figure 40px, control 44px, control-lg 56px, target 44px square, circle 40px, poster 56–128px (follows the viewport like the poster headline).</span></div>
+        <div class="ds-example__caption"><span>Heights: text 16px, title 28px, figure 40px, control 44px, control-lg 56px, target 44px square, circle 40px, poster 56–128px (follows the viewport like the poster headline), strip 50px (the marquee’s height, full width). Role sizes for repeated placeholders (<code>--control-sm</code>, <code>--day</code>, <code>--price</code>, <code>--date</code>, <code>--amount</code>, <code>--stamp</code>, <code>--badge</code>, <code>--thumb</code>, <code>--thumb-lg</code>) are listed under Code.</span></div>
       </div>
     </section>
 
@@ -306,7 +314,7 @@
       <ul>
         <li><b>Loading</b>: the region has <code>aria-busy="true"</code>; skeletons sweep once every <code>--duration-deliberate</code> (900ms).</li>
         <li><b>Loaded</b>: swap skeletons for content in one step, remove <code>aria-busy</code>, and update the status line (“7 artists free on Sat 14 Nov”). Don’t fade each block separately.</li>
-        <li><b>Slow</b>: after 10 seconds, keep the skeletons and add a sentence to the status line (“Still checking. Some calendars are slow.”).</li>
+        <li><b>Slow</b>: after 8 seconds, keep the skeletons and change the status line to “Still checking — thanks for waiting.” (as in <a href="../patterns/feedback-and-loading.html">Feedback and loading</a>).</li>
         <li><b>Failed / empty</b>: replace the skeleton list with an <a href="alert.html">alert</a> or an <a href="empty-state.html">empty state</a>; keep the controls above it (search, filters) so the booker can change their search.</li>
         <li><b>Disabled controls while loading</b>: filter chips above the lineup are <code>disabled</code> (and now styled) until results arrive.</li>
       </ul>
@@ -314,7 +322,7 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Skeletons inherit their layout from the component they sit in: the loading ticket stacks its stub below on phones and moves it to the right from 640px, exactly like a loaded ticket.</li>
+        <li>Skeletons inherit their layout from the component they sit in: the loading ticket stacks its stub below on phones and moves it to the right from 576px, exactly like a loaded ticket.</li>
         <li>Widths are percentages of the container, so lines shorten with the screen. Heights are fixed rem values, except <code>--poster</code>, which follows the poster headline (<code>clamp(3.5rem, 12vw, 8rem)</code>).</li>
         <li>Show as many skeleton items as fit the first screen (two tickets on phones, four on desktop), not the full expected count.</li>
       </ul>
@@ -337,7 +345,7 @@
       <h3>Focus</h3>
       <p>Nothing to focus. When content replaces skeletons, don’t move focus; the status line announces the result. Make sure no focusable element sits inside an <code>aria-hidden</code> skeleton.</p>
       <h3>Labelling</h3>
-      <p>One status message per loading region: “Finding who’s free on Saturday 14 November…”, “Loading artist profile”. Don’t give each skeleton block a label. Keep the page <code>&lt;h1&gt;</code> a real heading while loading (visually hidden if needed), separate from the status element.</p>
+      <p>One status message per loading region: “Finding who’s free on Saturday 14 November 2026…”, “Loading the artist’s profile…”. Don’t give each skeleton block a label. Keep the page <code>&lt;h1&gt;</code> a real heading while loading (visually hidden if needed), separate from the status element.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Status line on the page</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
@@ -356,7 +364,7 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>Skeletons have no text. The words live in the status line: a present-tense verb, the date and an ellipsis: “Finding who’s free on Saturday 14 November…”.</li>
+        <li>Skeletons have no text. The words live in the status line: a present-tense verb, the date and an ellipsis: “Finding who’s free on Saturday 14 November 2026…”.</li>
         <li>The loading page keeps everything already known: the search, the date in the poster, the breadcrumb (“Discover · Sat 14 Nov”), section headings like “The lineup”.</li>
         <li>Mirror the shape of the real copy: a short kicker line, a title line, a meta line. Don’t draw lines where the loaded component has none.</li>
       </ul>
@@ -381,7 +389,7 @@
           <tr><td>Sweep</td><td><code>--color-bg-subtle-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle-hover" data-swatch></i><span data-token="--color-bg-subtle-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle-hover" data-swatch></i><span data-token="--color-bg-subtle-hover"></span></span></td></tr>
           <tr><td>Stage block</td><td><code>--color-bg-stage-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td></tr>
           <tr><td>Stage sweep</td><td><code>--color-bg-stage-raised-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage-raised-hover" data-swatch></i><span data-token="--color-bg-stage-raised-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage-raised-hover" data-swatch></i><span data-token="--color-bg-stage-raised-hover"></span></span></td></tr>
-          <tr><td>Control heights</td><td><code>--control-height-md</code> / <code>--control-height-lg</code></td><td colspan="2"><span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+          <tr><td>Control heights</td><td><code>--control-height-sm</code> / <code>--control-height-md</code> / <code>--control-height-lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
           <tr><td>Target</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
           <tr><td>Circle</td><td><code>--radius-full</code></td><td colspan="2"><span data-token="--radius-full"></span></td></tr>
           <tr><td>Sweep duration</td><td><code>--duration-deliberate</code></td><td colspan="2"><span data-token="--duration-deliberate"></span></td></tr>
@@ -402,7 +410,14 @@
         <tr><td><code>--text</code> <code>--title</code> <code>--figure</code> <code>--poster</code></td><td>Text-shaped heights (16, 28, 40px, poster headline) with default widths.</td></tr>
         <tr><td><code>--control</code> <code>--control-lg</code> <code>--target</code> <code>--circle</code></td><td>Control-shaped: field, large button, save toggle, avatar.</td></tr>
         <tr><td><code>--block</code> <code>--portrait</code> <code>--wide</code></td><td>Fill the container height (min 96px); 4:5; 16:9.</td></tr>
-        <tr><td><code>--short</code> <code>--medium</code> <code>--long</code></td><td>Widths 40%, 60%, 90%.</td></tr>
+        <tr><td><code>--strip</code></td><td>Full width at the <a href="marquee.html">marquee</a>’s height (one line of <code>--text-h4</code> plus its padding and rules), in place of the profile’s song strip.</td></tr>
+        <tr><td><code>--short</code> <code>--medium</code> <code>--long</code> <code>--full</code></td><td>Widths 40%, 60%, 90%, 100%.</td></tr>
+        <tr><td><code>--control-sm</code></td><td>36px tall (<code>--control-height-sm</code>): a small button or a row of small controls (ticket actions, a stamp-sized status).</td></tr>
+        <tr><td><code>--day</code></td><td>20px wide (<code>--space-5</code>), with <code>--text</code>: the day number in a loading <a href="calendar.html">calendar</a> cell.</td></tr>
+        <tr><td><code>--price</code></td><td>80px wide (<code>--space-20</code>), with <code>--title</code>: the price in a loading ticket stub.</td></tr>
+        <tr><td><code>--date</code> <code>--amount</code> <code>--stamp</code> <code>--badge</code></td><td>The parts of a loading <a href="booking-list.html">booking-list</a> row: date block 48px tall; amount 96 × 32px; status stamp 96 × 24px; status badge 56 × 24px.</td></tr>
+        <tr><td><code>--thumb</code> <code>--thumb-lg</code></td><td>80px and 128px squares that hold the place of <a href="artwork.html"><code>.art--thumb</code> / <code>.art--thumb-lg</code></a> (the request summary’s artist, the MFA QR code), so nothing shifts when the art arrives.</td></tr>
+        <tr><td colspan="2">A placeholder used once may size itself with a spacing or control token inline (<code>height: var(--space-24)</code> for a message bubble); a repeated size gets a modifier here, and no raw rem value is ever inline.</td></tr>
         <tr><td><code>.ticket--loading</code></td><td>Loading ticket: no lift on hover or focus.</td></tr>
         <tr><td><code>.on-stage</code> ancestor</td><td>Switches to the raised stage greys.</td></tr>
         <tr><td><code>aria-hidden="true"</code> / <code>aria-busy="true"</code></td><td>On the skeleton container / on the loading region.</td></tr>
@@ -413,7 +428,12 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: headliner skeleton, four loading tickets, disabled filter chips, the “Finding who’s free…” status line, <code>aria-busy</code> on the lineup section</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: poster skeleton on the stage, profile sections, the stub skeleton in the sidebar, <code>aria-busy</code> on <code>&lt;main&gt;</code></li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: poster skeleton on the stage, the song strip’s <code>--strip</code> placeholder, profile sections, the stub skeleton in the sidebar, <code>aria-busy</code> on <code>&lt;main&gt;</code></li>
+        <li><a href="../../mocks/pages/availability/loading.html">pages/availability/loading</a>: <code>--day</code> in every calendar cell</li>
+        <li><a href="../../mocks/pages/bookings/loading.html">pages/bookings/loading</a>: booking-list rows with <code>--date</code>, <code>--amount</code> and <code>--stamp</code></li>
+        <li><a href="../../mocks/pages/dashboard/loading.html">pages/dashboard/loading</a>, <a href="../../mocks/pages/requests/loading.html">pages/requests/loading</a> and <a href="../../mocks/pages/earnings/loading.html">pages/earnings/loading</a>: rows with <code>--badge</code></li>
+        <li><a href="../../mocks/pages/saved/loading.html">pages/saved/loading</a>: ticket stubs with <code>--price</code>, actions row <code>--control-sm</code></li>
+        <li><a href="../../mocks/pages/book/loading.html">pages/book/loading</a> (<code>--thumb</code>), <a href="../../mocks/pages/mfa-setup/loading.html">pages/mfa-setup/loading</a> (<code>--thumb-lg</code>), <a href="../../mocks/pages/booking-detail/loading.html">pages/booking-detail/loading</a> (<code>--control-sm</code>)</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>

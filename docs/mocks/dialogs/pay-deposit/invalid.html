@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="dialog">
 <meta name="mock:screen" content="pay-deposit">
 <meta name="mock:state" content="invalid">
-<meta name="mock:requirements" content="L2-035 L2-036 L2-037 L2-044 L2-099 L2-101 L2-108">
+<meta name="mock:requirements" content="L2-032 L2-035 L2-036 L2-037 L2-044 L2-099 L2-101 L2-108">
 <meta name="description" content="Pay pressed with a short card number, an expired card and no consent: a summary links to each, and each field shows its own message.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -29,19 +29,20 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../../pages/bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
-    <div class="page-head" style="padding-top: var(--space-4);">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../../pages/bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
       <div><p class="overline">Booking ZAM-0114</p><h1 class="page-head__title">Worship night with Abigail Mensah</h1><p class="page-head__sub">Sat 14 Nov 2026 · 7:00 p.m. · Burlington</p></div>
       <span class="stamp stamp--lg stamp--accepted">Accepted</span>
     </div>
-    <div class="detail-layout detail-layout--aside-first" style="padding-top: 0;">
+    <div class="detail-layout detail-layout--aside-first detail-layout--flush">
       <div class="stack stack--lg">
         <section class="panel" aria-labelledby="progress-title">
           <div class="panel__head"><h2 id="progress-title" class="panel__title">Where it stands</h2><span class="text-caption">Accepted today, 2:40 p.m.</span></div>
@@ -64,7 +65,7 @@
             <div class="definition__row"><dt>Quoted price</dt><dd>$650, locked Fri 9 Oct</dd></div>
           </dl>
         </section>
-        <section class="panel" aria-labelledby="messages-title">
+        <section class="panel" id="messages" aria-labelledby="messages-title">
           <div class="panel__head"><h2 id="messages-title" class="panel__title">Messages</h2><span class="text-caption">Only you and Abigail see these</span></div>
           <div class="message">
             <p class="message__meta">You · Fri 9 Oct, 10:15 a.m.</p>
@@ -75,10 +76,10 @@
             <p class="message__meta">Abigail Mensah · Fri 9 Oct, 2:40 p.m.</p>
             <blockquote><p>Yes! I’d love to lead your worship night. Send the set list to [contact details shared after booking] and I’ll rehearse with your youth band at 5:30.</p></blockquote>
           </div>
-          <form class="stack stack--sm" action="#messages-title" aria-label="Send Abigail a message">
+          <form class="stack stack--sm" action="#messages" aria-label="Send Abigail a message">
             <div class="field"><label class="field__label" for="reply">Message to Abigail</label>
               <textarea class="textarea" id="reply" name="reply" rows="3" maxlength="2000" aria-describedby="reply-help"></textarea>
-              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an e-mail at most every 15 minutes.</span></div>
+              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an email at most every 15 minutes.</span></div>
             <div class="cluster"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
           </form>
         </section>
@@ -151,8 +152,8 @@
         <legend>Card details</legend>
         <p class="field__help" style="margin-bottom: var(--space-3);"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg> These fields are hosted by our payment processor. Your card number goes straight to them; Zamaro never sees or stores it.</p>
         <div class="form-grid">
-          <div class="field field--full"><label class="field__label" for="cardname">Name on card <span class="optional">(required)</span></label><input class="input" id="cardname" type="text" name="cardname" autocomplete="cc-name" value="Naomi Fraser"></div><div class="field field--full"><label class="field__label" for="cardnumber">Card number <span class="optional">(required)</span></label><input class="input" id="cardnumber" type="text" name="cardnumber" inputmode="numeric" autocomplete="cc-number" aria-describedby="cardnumber-error" aria-invalid="true" value="4242 4242 4242 424"><span class="field__error" id="cardnumber-error">Enter all 16 digits; this number has 15.</span></div><div class="field"><label class="field__label" for="expiry">Expiry (MM / YY) <span class="optional">(required)</span></label><input class="input" id="expiry" type="text" name="expiry" inputmode="numeric" autocomplete="cc-exp" aria-describedby="expiry-error" aria-invalid="true" value="09 / 26"><span class="field__error" id="expiry-error">This card expired in September 2026. Use one that’s still valid.</span></div><div class="field"><label class="field__label" for="cvc">Security code <span class="optional">(required)</span></label><input class="input" id="cvc" type="text" name="cvc" inputmode="numeric" autocomplete="cc-csc" aria-describedby="cvc-help" value="123"><span class="field__help" id="cvc-help">3 digits on the back</span></div><div class="field"><label class="field__label" for="postal">Billing postal code <span class="optional">(required)</span></label><input class="input" id="postal" type="text" name="postal" autocomplete="postal-code" value="L7R 2B4"></div>
-          <div class="field field--full"><label class="choice choice--stub"><input type="checkbox" id="consent" name="consent" aria-invalid="true" aria-describedby="consent-error"><span class="choice__text">Save this card for the $487.50 balance <span class="optional">(required)</span><small>Charged 48 hours after the event, Mon 16 Nov at 7:00 p.m., unless you report a problem first.</small></span></label><span class="field__error" id="consent-error">Tick the box so we can charge the balance after the event.</span></div>
+          <div class="field field--full"><label class="field__label" for="cardname">Name on card <span class="field__required">(required)</span></label><input class="input" id="cardname" type="text" name="cardname" autocomplete="cc-name" value="Naomi Fraser"></div><div class="field field--full"><label class="field__label" for="cardnumber">Card number <span class="field__required">(required)</span></label><input class="input" id="cardnumber" type="text" name="cardnumber" inputmode="numeric" autocomplete="cc-number" aria-describedby="cardnumber-error" aria-invalid="true" value="4242 4242 4242 424"><span class="field__error" id="cardnumber-error">Enter all 16 digits; this number has 15.</span></div><div class="field"><label class="field__label" for="expiry">Expiry (MM / YY) <span class="field__required">(required)</span></label><input class="input" id="expiry" type="text" name="expiry" inputmode="numeric" autocomplete="cc-exp" aria-describedby="expiry-error" aria-invalid="true" value="09 / 26"><span class="field__error" id="expiry-error">This card expired in September 2026. Use one that’s still valid.</span></div><div class="field"><label class="field__label" for="cvc">Security code <span class="field__required">(required)</span></label><input class="input" id="cvc" type="text" name="cvc" inputmode="numeric" autocomplete="cc-csc" aria-describedby="cvc-help" value="123"><span class="field__help" id="cvc-help">3 digits on the back</span></div><div class="field"><label class="field__label" for="postal">Billing postal code <span class="field__required">(required)</span></label><input class="input" id="postal" type="text" name="postal" autocomplete="postal-code" value="L7R 2B4"></div>
+          <div class="field field--full"><label class="choice choice--stub"><input type="checkbox" id="consent" name="consent" aria-invalid="true" aria-describedby="consent-error"><span class="choice__text">Save this card for the $487.50 balance <span class="field__required">(required)</span><small>Charged 48 hours after the event, Mon 16 Nov at 7:00 p.m., unless you report a problem first.</small></span></label><span class="field__error" id="consent-error">Tick the box so we can charge the balance after the event.</span></div>
         </div>
       </fieldset>
       <p class="stub__fine">Cancel free up to 14 days before your event. <a href="../../pages/discover/default.html#how">Cancellation policy</a></p>
@@ -175,6 +176,7 @@
     <li><a href="busy.html">busy</a></li>
     <li><a href="invalid.html" aria-current="page">invalid</a></li>
     <li><a href="failed.html">failed</a></li>
+    <li><a href="conflict.html">conflict</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

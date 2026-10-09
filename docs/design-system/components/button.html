@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -213,12 +216,12 @@
       <div class="ds-matrix"><table>
         <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Disabled</th><th scope="col">Loading</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Book</button></td><td><button class="btn btn--primary" type="button" data-state="hover">Book</button></td><td><button class="btn btn--primary" type="button" data-state="focus">Book</button></td><td><button class="btn btn--primary" type="button" data-state="active">Book</button></td><td><button class="btn btn--primary" type="button" disabled>Book</button></td><td><button class="btn btn--primary" type="button" aria-busy="true">Booking…</button></td></tr>
-          <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Share</button></td><td><button class="btn" type="button" data-state="hover">Share</button></td><td><button class="btn" type="button" data-state="focus">Share</button></td><td><button class="btn" type="button" data-state="active">Share</button></td><td><button class="btn" type="button" disabled>Share</button></td><td><button class="btn" type="button" aria-busy="true">Share</button></td></tr>
-          <tr><th scope="row">Ink</th><td><button class="btn btn--ink" type="button">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="hover">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="focus">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="active">Profile</button></td><td><button class="btn btn--ink" type="button" disabled>Profile</button></td><td><button class="btn btn--ink" type="button" aria-busy="true">Profile</button></td></tr>
-          <tr><th scope="row">Ghost</th><td><button class="btn btn--ghost" type="button">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="hover">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="focus">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="active">Edit</button></td><td><button class="btn btn--ghost" type="button" disabled>Edit</button></td><td><button class="btn btn--ghost" type="button" aria-busy="true">Edit</button></td></tr>
-          <tr><th scope="row">Link</th><td><button class="btn btn--link" type="button">Show all</button></td><td><button class="btn btn--link" type="button" data-state="hover">Show all</button></td><td><button class="btn btn--link" type="button" data-state="focus">Show all</button></td><td><button class="btn btn--link" type="button" data-state="active">Show all</button></td><td><button class="btn btn--link" type="button" disabled>Show all</button></td><td><button class="btn btn--link" type="button" aria-busy="true">Show all</button></td></tr>
-          <tr><th scope="row">Danger</th><td><button class="btn btn--danger" type="button">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="hover">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="focus">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="active">Cancel</button></td><td><button class="btn btn--danger" type="button" disabled>Cancel</button></td><td><button class="btn btn--danger" type="button" aria-busy="true">Cancelling…</button></td></tr>
+          <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Book</button></td><td><button class="btn btn--primary" type="button" data-state="hover">Book</button></td><td><button class="btn btn--primary" type="button" data-state="focus">Book</button></td><td><button class="btn btn--primary" type="button" data-state="active">Book</button></td><td><button class="btn btn--primary" type="button" disabled>Book</button></td><td><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Booking…</button></td></tr>
+          <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Share</button></td><td><button class="btn" type="button" data-state="hover">Share</button></td><td><button class="btn" type="button" data-state="focus">Share</button></td><td><button class="btn" type="button" data-state="active">Share</button></td><td><button class="btn" type="button" disabled>Share</button></td><td><button class="btn" type="button" aria-busy="true" aria-disabled="true">Share</button></td></tr>
+          <tr><th scope="row">Ink</th><td><button class="btn btn--ink" type="button">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="hover">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="focus">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="active">Profile</button></td><td><button class="btn btn--ink" type="button" disabled>Profile</button></td><td><button class="btn btn--ink" type="button" aria-busy="true" aria-disabled="true">Profile</button></td></tr>
+          <tr><th scope="row">Ghost</th><td><button class="btn btn--ghost" type="button">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="hover">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="focus">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="active">Edit</button></td><td><button class="btn btn--ghost" type="button" disabled>Edit</button></td><td><button class="btn btn--ghost" type="button" aria-busy="true" aria-disabled="true">Edit</button></td></tr>
+          <tr><th scope="row">Link</th><td><button class="btn btn--link" type="button">Show all</button></td><td><button class="btn btn--link" type="button" data-state="hover">Show all</button></td><td><button class="btn btn--link" type="button" data-state="focus">Show all</button></td><td><button class="btn btn--link" type="button" data-state="active">Show all</button></td><td><button class="btn btn--link" type="button" disabled>Show all</button></td><td><button class="btn btn--link" type="button" aria-busy="true" aria-disabled="true">Show all</button></td></tr>
+          <tr><th scope="row">Danger</th><td><button class="btn btn--danger" type="button">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="hover">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="focus">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="active">Cancel</button></td><td><button class="btn btn--danger" type="button" disabled>Cancel</button></td><td><button class="btn btn--danger" type="button" aria-busy="true" aria-disabled="true">Cancelling…</button></td></tr>
         </tbody>
       </table></div>
       <h3>Toggle and menu states</h3>
@@ -245,15 +248,15 @@
       <ul>
         <li><b>Hover</b> lifts the button 4px up and to the left over a hard print shadow, like a misregistered screen print. Ghost and link buttons highlight instead of lifting.</li>
         <li><b>Active</b> presses the button back flat. The shadow disappears, which reads as “pressed into the paper”.</li>
-        <li><b>Loading</b> sets <code>aria-busy="true"</code>, adds a spinner after the label and ignores further clicks. The label may change to a present-tense verb (“Checking calendars…”), but the button never gets narrower.</li>
-        <li><b>Disabled</b> uses the native attribute. It is not focusable and turns grey on a sunken fill, so a disabled primary is no longer yellow. Prefer leaving the button enabled and explaining what is missing when it is pressed.</li>
+        <li><b>Loading (busy)</b> is one pattern for every submit and primary button, on pages and in dialogs: <code>aria-busy="true"</code> plus <code>aria-disabled="true"</code>, and the label becomes the verb in progress with an ellipsis (“Sending request…”, “Saving…”, “Paying $162.50…”). Never the native <code>disabled</code> attribute: it would drop focus to <code>&lt;body&gt;</code>. The button stays focusable and keeps its variant’s colours, a spinner follows the label, and further presses do nothing, so a form is never sent twice (L2-108). The button never gets narrower.</li>
+        <li><b>Disabled</b> (not busy) uses the native attribute. It is not focusable and turns grey on a sunken fill, so a disabled primary is no longer yellow. Prefer leaving the button enabled and explaining what is missing when it is pressed.</li>
       </ul>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Labels never truncate. As a safety net they wrap to a balanced second line rather than overflow, but a label that wraps at 360px is too long, so shorten it. “Request to book · Sat 14 Nov” is the longest that still fits on one line inside the booking stub at 360px. The mocks’ “Search within 120 km · 2 choirs free” wrapped to three lines, so it became “Search within 120 km”, with the count moved into the sentence above.</li>
-        <li>Below <code>--layout-breakpoint-sm</code> (640px), a form’s submit button fills its container (<code>.btn--block</code>), as in the booking bar and stub.</li>
+        <li>Labels never truncate. As a safety net they wrap to a balanced second line rather than overflow, but a label that wraps at 360px is too long, so shorten it. “Request to book · Sat 14 Nov” is the longest that still fits on one line inside the booking stub at 360px. The mocks’ “Search within 120 km · 2 choirs free” wrapped to three lines, so it became “Search within 120 km · 2 free”, the L2-011 format “Search within {radius} km · {n} free”; the sentence above names the choirs.</li>
+        <li>Below <code>--layout-breakpoint-sm</code> (576px), a form’s submit button fills its container (<code>.btn--block</code>), as in the booking bar and stub.</li>
         <li>Button rows use <code>.cluster</code> and wrap onto a new line. In <a href="alert.html">alerts</a> and <a href="dialog.html">dialogs</a> the primary action comes first in the DOM and on the left. On phones, dialog footer buttons stretch to equal widths.</li>
         <li>Touch: every size is at least 36px tall. Small buttons are only used inside list rows that have 16px of vertical padding, so their effective target is 44px or more.</li>
       </ul>
@@ -299,7 +302,7 @@
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
         <li>Start with a verb, in sentence case in the source (CSS adds the uppercase): “Request to book”, “Try again”, “Apply as an artist”. Never “OK”, “Submit” or “Click here”.</li>
-        <li>Name the object or the date when the context is ambiguous: “Book for Sat 14 Nov”, “Search within 120 km · 2 choirs free”. A middle dot (·) separates the action from its detail.</li>
+        <li>Name the object or the date when the context is ambiguous: “Book for Sat 14 Nov”, “Search within 120 km · 2 free”. A middle dot (·) separates the action from its detail.</li>
         <li>Destructive labels name what is lost: “Cancel booking”, not “Confirm”.</li>
         <li>Keep it to four words or fewer before the dot. The label must fit at 360px.</li>
         <li>Loading labels use the present tense with an ellipsis: “Checking calendars…”, “Sending request…”.</li>
@@ -308,11 +311,11 @@
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Search within 120 km</button><button class="btn" type="button">Show all styles</button></div><figcaption>One yellow action with a secondary beside it, as in the Christmas Eve empty state.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Search within 120 km · 2 free</button><button class="btn" type="button">Show all styles</button></div><figcaption>One yellow action with a secondary beside it, as in the Christmas Eve empty state.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Search wider</button><button class="btn btn--primary" type="button">Show all styles</button></div><figcaption>Two yellow buttons compete, and neither reads as the main path.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div><figcaption>A toggle exposes <code>aria-pressed</code> and looks pressed: yellow fill, filled heart.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><span class="nav-link" style="color: var(--color-fg-default);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</span></div><figcaption>The mocks’ top-bar “Saved” mixed <code>.nav-link</code> and <code>.btn--ghost</code> with an inline style reset. Use one class (<code>.nav-link</code> now resets buttons itself).</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="submit" aria-busy="true">Checking calendars…</button></div><figcaption>A busy submit keeps its place and says what is happening.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Checking calendars…</button></div><figcaption>A busy submit keeps its place and says what is happening.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" style="opacity: 0.5;">Book</button></div><figcaption>Fading a yellow button to suggest “disabled”. Use the <code>disabled</code> attribute, which also drops the yellow fill.</figcaption></figure>
       </div>
     </section>
@@ -349,7 +352,7 @@
 &lt;/a&gt;
 
 &lt;button class="btn" type="button" aria-pressed="true"&gt;…Saved&lt;/button&gt;
-&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true"&gt;Checking calendars…&lt;/button&gt;
+&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true"&gt;Checking calendars…&lt;/button&gt;
 &lt;button class="btn btn--sm" type="button" aria-label="Pick Fri 20 Nov"&gt;Pick&lt;/button&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.btn</code></td><td>Base: secondary look, medium size.</td></tr>
@@ -359,7 +362,7 @@
         <tr><td><code>.btn--block</code></td><td>Full width.</td></tr>
         <tr><td><code>aria-pressed="true|false"</code></td><td>Toggle button; on = yellow fill, filled icon.</td></tr>
         <tr><td><code>aria-expanded</code></td><td>Opens a menu or panel; open = subtle fill, no lift.</td></tr>
-        <tr><td><code>aria-busy="true"</code></td><td>Loading: spinner after the label, clicks ignored.</td></tr>
+        <tr><td><code>aria-busy="true"</code> + <code>aria-disabled="true"</code></td><td>Busy (loading): spinner after the label, presses ignored, focus kept, variant colours kept. Always both attributes together, never native <code>disabled</code>.</td></tr>
         <tr><td><code>disabled</code></td><td>Disabled; not focusable; grey on sunken fill.</td></tr>
         <tr><td><code>.on-stage</code>, <code>.topbar</code>, <code>.band</code>, <code>.toast</code> ancestors</td><td>Re-map the button’s component tokens for that surface.</td></tr>
         <tr><td><code>data-state="hover|focus|active"</code></td><td>Documentation and mocks only: forces a pointer or focus state.</td></tr>

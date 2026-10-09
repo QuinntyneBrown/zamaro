@@ -19,7 +19,7 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "BookingDetailPage" as page
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
-  participant "BookingAcceptedNotification" as note
+  participant "RequestAcceptedNotification" as note
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
   participant "TorontoClock" as clock

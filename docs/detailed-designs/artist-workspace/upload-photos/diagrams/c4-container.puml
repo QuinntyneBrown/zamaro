@@ -7,7 +7,7 @@ Person(artist, "Artist", "Approved worship artist")
 System_Ext(scanner, "Malware scanner", "Scans every upload")
 System_Ext(cdn, "CDN", "Media domain")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Photos manager under /artist/photos")
+  Container(web, "Zamaro Web", "Angular with SSR", "Photos section of the profile editor at /artist/profile")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Photo endpoints under /api/v1/artist/photos")
   Container(worker, "Zamaro Worker", "Laravel queue workers", "Strips metadata and builds renditions")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artist_photos")

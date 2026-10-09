@@ -64,7 +64,7 @@ package "Zamaro API and Worker (Laravel)" {
     +preferredLocale(): string
   }
   interface HasLocalePreference
-  class BookingAcceptedNotification <<queued>> {
+  class RequestAcceptedNotification <<queued>> {
     +toMail(notifiable: User): MailMessage
   }
   class CheckTranslationsCommand <<artisan i18n:check>> {
@@ -80,9 +80,9 @@ TranslationCatalogueController --> Catalogue
 IcuTranslator --> Catalogue
 LocalFormatter --> Catalogue : format patterns
 User ..|> HasLocalePreference
-BookingAcceptedNotification ..> IcuTranslator
-BookingAcceptedNotification ..> LocalFormatter
-BookingAcceptedNotification ..> TorontoClock
-BookingAcceptedNotification ..> User : preferredLocale()
+RequestAcceptedNotification ..> IcuTranslator
+RequestAcceptedNotification ..> LocalFormatter
+RequestAcceptedNotification ..> TorontoClock
+RequestAcceptedNotification ..> User : preferredLocale()
 CheckTranslationsCommand ..> Catalogue : verifies keys exist
 @enduml

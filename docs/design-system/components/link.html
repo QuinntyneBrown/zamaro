@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -121,7 +124,7 @@
       <p>Use a link when activating it only navigates: to Abigail’s profile, to “How booking works”, to the Zamaro inbox. If it changes something (saves, submits, retries), it is a <a href="button.html">button</a>, even when it sits in a sentence.</p>
       <ul>
         <li><b>Inline</b> links sit inside running text and take its size. Every <code>&lt;a href&gt;</code> gets this look from the base stylesheet; <code>.link</code> applies it where a parent component has reset link styles.</li>
-        <li><b>Standalone</b> links (<code>.link--standalone</code>) stand on their own line under a section, in the label style with a trailing arrow: “See all 38 reviews”.</li>
+        <li><b>Standalone</b> links (<code>.link--standalone</code>) stand on their own line under a section, in the label style with a trailing arrow: “Full terms of use”.</li>
         <li><b>External</b> links leave Zamaro, such as an artist’s YouTube channel. They show a small arrow-out icon and tell screen readers that a new tab opens.</li>
         <li><b>On the stage</b> (top bar, poster, footer) links take the paper text colour and turn yellow on hover, with no fill.</li>
       </ul>
@@ -132,7 +135,7 @@
     <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
       <div class="ds-anatomy">
         <figure class="ds-anatomy__figure">
-          <a class="link link--standalone" href="#anatomy" data-state="hover">See all 38 reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+          <a class="link link--standalone" href="#anatomy" data-state="hover">Full terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
           <span class="ds-callout" style="left: 34%; top: 20%;" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: 52%; top: 72%;" aria-hidden="true">2</span>
           <span class="ds-callout" style="left: 70%; top: 20%;" aria-hidden="true">3</span>
@@ -160,11 +163,11 @@
       <h3>Standalone with arrow</h3>
 <div class="ds-example">
   <div class="ds-example__canvas">
-    <a class="link link--standalone" href="#states">See all 38 reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+    <a class="link link--standalone" href="#states">Full terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
     <a class="link link--standalone" href="#accessibility">How booking works <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
   </div>
   <div class="ds-example__caption"><span>Under a section or at the end of a card. The arrow means “go on”; it is decoration and hidden from screen readers.</span></div>
-  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;a class="link link--standalone" href="#states"&gt;See all 38 reviews &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;&lt;/a&gt;
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;a class="link link--standalone" href="#states"&gt;Full terms of use &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;&lt;/a&gt;
 &lt;a class="link link--standalone" href="#accessibility"&gt;How booking works &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;&lt;/a&gt;</code></pre></details>
 </div>
       <h3>External</h3>
@@ -207,16 +210,16 @@
         <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Visited</th></tr></thead>
         <tbody>
           <tr><th scope="row">Inline</th><td><a class="link" href="#states">cancellation terms</a></td><td><a class="link" href="#states" data-state="hover">cancellation terms</a></td><td><a class="link" href="#states" data-state="focus">cancellation terms</a></td><td><a class="link" href="#states">cancellation terms</a></td></tr>
-          <tr><th scope="row">Standalone</th><td><a class="link link--standalone" href="#states">All reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="link link--standalone" href="#states" data-state="hover">All reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="link link--standalone" href="#states" data-state="focus">All reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="link link--standalone" href="#states">All reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td></tr>
+          <tr><th scope="row">Standalone</th><td><a class="link link--standalone" href="#states">Terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="link link--standalone" href="#states" data-state="hover">Terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="link link--standalone" href="#states" data-state="focus">Terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="link link--standalone" href="#states">Terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td></tr>
           <tr><th scope="row">External</th><td><a class="link" href="#states">YouTube<svg class="icon link__external" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></a></td><td><a class="link" href="#states" data-state="hover">YouTube<svg class="icon link__external" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></a></td><td><a class="link" href="#states" data-state="focus">YouTube<svg class="icon link__external" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></a></td><td><a class="link" href="#states">YouTube<svg class="icon link__external" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg></a></td></tr>
-          <tr><th scope="row">On stage</th><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states">Discover</a></span></td><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states" style="color: var(--color-accent-on-stage);">Discover</a></span></td><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states" data-state="focus">Discover</a></span></td><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states">Discover</a></span></td></tr>
+          <tr><th scope="row">On stage</th><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states">Discover</a></span></td><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states" data-state="hover">Discover</a></span></td><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states" data-state="focus">Discover</a></span></td><td><span class="on-stage" style="display: inline-block; padding: var(--space-2) var(--space-3);"><a href="#states">Discover</a></span></td></tr>
         </tbody>
       </table></div>
-      <p>The on-stage hover cell is drawn with a token inline style, because the stage link rule has no <code>data-state="hover"</code> hook yet. Visited matches default on purpose.</p>
+      <p>Visited matches default on purpose.</p>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="stack"><p>Read <a class="link" href="#states">the terms</a> or <a class="link" href="#states" data-state="hover">how deposits work</a>.</p><p><a class="link link--standalone" href="#states">All reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a> <a class="link link--standalone" href="#states" data-state="focus">Focus <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p></div></div>
-        <div data-theme="dark"><div class="stack"><p>Read <a class="link" href="#states">the terms</a> or <a class="link" href="#states" data-state="hover">how deposits work</a>.</p><p><a class="link link--standalone" href="#states">All reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a> <a class="link link--standalone" href="#states" data-state="focus">Focus <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p></div></div>
+        <div data-theme="light"><div class="stack"><p>Read <a class="link" href="#states">the terms</a> or <a class="link" href="#states" data-state="hover">how deposits work</a>.</p><p><a class="link link--standalone" href="#states">Terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a> <a class="link link--standalone" href="#states" data-state="focus">Focus <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p></div></div>
+        <div data-theme="dark"><div class="stack"><p>Read <a class="link" href="#states">the terms</a> or <a class="link" href="#states" data-state="hover">how deposits work</a>.</p><p><a class="link link--standalone" href="#states">Terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a> <a class="link link--standalone" href="#states" data-state="focus">Focus <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p></div></div>
       </div>
       <ul>
         <li><b>Hover</b> fills the text with the subtle yellow and makes the underline solid. In dark mode the text itself turns yellow on a deep amber fill.</li>
@@ -229,7 +232,7 @@
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
         <li>Inline links wrap with the sentence. Long email addresses may break anywhere (<code>overflow-wrap: anywhere</code> on their container) so they never push the page sideways at 360px.</li>
-        <li>Standalone links keep their arrow on the same line as the last word. If the label is too long for 360px, shorten it (“All reviews”) rather than letting it wrap.</li>
+        <li>Standalone links keep their arrow on the same line as the last word. If the label is too long for 360px, shorten it (“Terms of use”) rather than letting it wrap.</li>
         <li>In stacked lists (the footer), links sit <code>--space-3</code> apart so each one is a separate target on a phone.</li>
         <li>The external icon scales with the text (<code>0.85em</code>), so it stays in proportion at 200% zoom.</li>
       </ul>
@@ -255,7 +258,7 @@
       <h3>Focus</h3>
       <p>The shared ring: a 3px outline with a 3px offset, ink on newsprint and yellow on the stage and in dark mode. It follows the link’s inline box, so a link that wraps onto two lines shows a ring on each line.</p>
       <h3>Labelling</h3>
-      <p>The link text is the accessible name and must make sense on its own (WCAG 2.4.4): “See all 38 reviews”, not “See more”. Icons are <code>aria-hidden</code>. External links add a visually hidden “(opens in a new tab)”. When several links on a page share a label, such as “Profile” in a list of tickets, make the text unique (“Elijah Park’s profile”) instead of reaching for <code>aria-label</code>.</p>
+      <p>The link text is the accessible name and must make sense on its own (WCAG 2.4.4): “Full terms of use”, not “Read more”. Icons are <code>aria-hidden</code>. External links add a visually hidden “(opens in a new tab)”. When several links on a page share a label, such as “Profile” in a list of tickets, make the text unique (“Elijah Park’s profile”) instead of reaching for <code>aria-label</code>.</p>
       <h3>Contrast</h3>
       <p>Link text matches body text, so colour alone does not mark a link. The underline does (WCAG 1.4.1).</p>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
@@ -277,7 +280,7 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>Name the destination: “How booking works”, “Abigail’s reviews”, “hello@zamaro.ca”. Never “click here”, “read more” or a bare URL.</li>
+        <li>Name the destination: “How booking works”, “Full terms of use”, “hello@zamaro.ca”. Never “click here”, “read more” or a bare URL.</li>
         <li>Link the few words that say where it goes, not a whole sentence.</li>
         <li>Sentence case in the source. Standalone links are uppercased by CSS.</li>
         <li>External links name the site: “Watch on YouTube”, not “Watch here”.</li>
@@ -287,8 +290,8 @@
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas"><a class="link link--standalone" href="#do-dont">See all 38 reviews <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div><figcaption>Link text that names the destination and makes sense out of context.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas"><p>To see all 38 reviews, <a class="link" href="#do-dont">click here</a>.</p></div><figcaption>“Click here” says nothing in a screen reader’s list of links.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><a class="link link--standalone" href="#do-dont">Full terms of use <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div><figcaption>Link text that names the destination and makes sense out of context.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><p>To read the full terms, <a class="link" href="#do-dont">click here</a>.</p></div><figcaption>“Click here” says nothing in a screen reader’s list of links.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button></div><figcaption>Retrying a failed load is an action, so it is a button, as in the error mocks.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><a class="link" href="#do-dont">Try again</a></div><figcaption>An <code>&lt;a href="#"&gt;</code> with a click handler. Space does nothing and the browser offers “Open in new tab”.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><p>Ask Miriam for a <a class="link" href="#do-dont">recording</a>, or see her on <a class="link" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube<svg class="icon link__external" aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg><span class="visually-hidden"> (opens in a new tab)</span></a>.</p></div><figcaption>Only the link that leaves Zamaro opens a new tab, and it says so.</figcaption></figure>
@@ -314,10 +317,10 @@
     </section>
 
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
-<pre><code>&lt;p&gt;Read &lt;a href="/help/cancellation"&gt;how cancellation works&lt;/a&gt;.&lt;/p&gt;
+<pre><code>&lt;p&gt;Read &lt;a href="/#how"&gt;how booking works&lt;/a&gt;.&lt;/p&gt;
 
-&lt;a class="link link--standalone" href="/artists/abigail-mensah/reviews"&gt;
-  See all 38 reviews
+&lt;a class="link link--standalone" href="https://zamaro.ca/legal/terms"&gt;
+  Full terms of use
   &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;
 &lt;/a&gt;
 
@@ -347,8 +350,8 @@
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>No link-specific drift. Every mock link already used the base <code>a</code> style or a surface override.</li>
-        <li>Standalone and external links are not in the mocks yet; they are part of the core set. The profile will need “See all 38 reviews” once reviews paginate, and external links when artists add YouTube or Instagram channels.</li>
-        <li>The stage hover rule has no <code>data-state="hover"</code> hook, so this page draws it with a token inline style. Add <code>[data-state="hover"]</code> to the selector <code>:is(.on-stage, .topbar) a:not(.btn):hover</code>.</li>
+        <li>The standalone link is in <a href="../../mocks/pages/accept-terms/default.html">pages/accept-terms/default</a> (with its <a href="../../mocks/pages/accept-terms/submitting.html">submitting</a> and <a href="../../mocks/pages/accept-terms/error.html">error</a> states): “Full terms of use” under the summary of changes. External links are not in the mocks yet; they are part of the core set for when artists add YouTube or Instagram channels. “Show all 38 reviews” on the profile loads more reviews in place (L2-018), so it is a button, not a link.</li>
+        <li>The stage hover rule had no <code>data-state="hover"</code> hook. <code>:is(.on-stage, .topbar) a:not(.btn):not(.menu__item)</code> now has one, so the on-stage hover cell above is forced like the others.</li>
       </ul>
     </section>
 

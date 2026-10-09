@@ -46,20 +46,35 @@ store in Redis and the audit log.
   response status to 404 through Angular SSR's response-init token, so `/admin`
   returns a real 404 to a non-administrator (L2-066).
 - **`SignInPage`** (`features/account`) — owned by `accounts/sign-in-and-recover-access` (L2-023). When
-  the sign-in response reports `mfaRequired`, it routes to `MfaChallengePage`
+  the sign-in result has status `TwoFactorRequired`, it routes to `MfaChallengePage`
   without completing sign-in.
-- **`MfaChallengePage`** — routed page for `/account/sign-in/verify`. It takes a
-  6-digit code or a recovery code, posts it, and on success navigates to the
+- **`MfaChallengePage`** — routed page for `/account/sign-in/verify`, owned by
+  `accounts/sign-in-and-recover-access`. It takes a 6-digit code or a recovery code,
+  posts it through `AuthApi.completeTwoFactor()`, and on success navigates to the
   original destination.
 - **`MfaEnrolmentPage`** — routed page for `/account/security/mfa`, reused from
   L2-072. An administrator without MFA is sent here before any admin page loads;
   it shows the QR code, confirms one code and lists the 10 recovery codes.
 - **`AuthService`** — holds the current user signal from `GET /api/v1/me`. On a 401
-  from any request it clears the user and routes to `SignInPage` with the return
-  URL, which handles the idle timeout.
-- **`AdminShellPage`** — layout for `/admin/*` with the design-system sidebar
-  navigation. It shows a toast 2 minutes before the idle timeout (warning interval
-  `<TO SUPPLY>`).
+  from any request, `SessionExpiredInterceptor` (`security/manage-sessions-and-csrf`)
+  clears the user and routes to `SignInPage` with the return URL, which handles the
+  idle timeout.
+- **`AdminShellPage`** — layout for `/admin/*`: the design-system workspace top bar
+  (`topbar--workspace`) with an "Admin" role tag, the admin sections (Applications,
+  Artists, Bookings, Reviews, Audit log) with their counts, and no public links. Below
+  XL (1200 px) the sections move into the menu drawer. It shows a warning toast with "Stay signed in" 2 minutes
+  before the idle timeout; unlike other warning toasts it does not time out (L2-066,
+  L2-109).
+
+**Mock screens** — the code step is
+[`pages/mfa-challenge`](../../../mocks/pages/mfa-challenge/default.html) in states
+default, [`recovery`](../../../mocks/pages/mfa-challenge/recovery.html), invalid,
+submitting, error and [`locked`](../../../mocks/pages/mfa-challenge/locked.html) (lockout). A
+non-administrator sees the shared [`pages/not-found`](../../../mocks/pages/not-found/default.html).
+The shell appears on every admin page, for example
+[`pages/admin-applications`](../../../mocks/pages/admin-applications/default.html); its
+drawer is [`dialogs/menu/admin`](../../../mocks/dialogs/menu/admin.html) and the idle
+warning is [`notifications/session-toast`](../../../mocks/notifications/session-toast/warning.html).
 
 **Backend (Zamaro API)**
 
@@ -78,14 +93,17 @@ store in Redis and the audit log.
   otherwise it stamps `last_activity_at`. Requests from the background polling of
   open admin pages do not count as activity (`<TO SUPPLY>`: list of polling
   endpoints).
-- **`SignInController`** — owned by `accounts/sign-in-and-recover-access`. After the password check,
-  `AuthenticateUser` returns `mfaRequired: true` for a user with MFA enabled or with
-  the Administrator role. The session then holds only `pending_mfa_user_id`.
-- **`MfaChallengeController`** — `POST /api/v1/auth/mfa/challenge`. It calls
-  `VerifyMfaChallenge`, which checks the code with `TotpVerifier` (allowing one
-  30-second step of clock drift) or consumes a recovery code. On success it
-  regenerates the session ID (L2-073), logs the user in and sets `mfa_verified_at`.
-  Failed codes count toward the account lockout in L2-072.
+- **`SessionController`** — owned by `accounts/sign-in-and-recover-access`.
+  `POST /api/v1/session` calls `AttemptSignIn`, which after the password check
+  returns status `TwoFactorRequired` for a user with MFA enabled or with the
+  Administrator role. The session then holds only the pending-challenge marker
+  `pending_mfa_user_id`.
+- **`SessionController::twoFactor`** — `POST /api/v1/session/two-factor`. It calls
+  `CompleteTwoFactorChallenge`, which checks the code with `TotpVerifier` (allowing
+  one 30-second step of clock drift) or consumes a recovery code. On success
+  `StartSession` regenerates the session ID (L2-073) and logs the user in; for an
+  administrator the action also sets `mfa_verified_at`. Failed codes count toward the
+  account lockout in L2-072.
 - **`TotpVerifier`** — interface in `App\Services\Auth\` with one adapter over a
   TOTP library (library `<TO SUPPLY>`). The TOTP secret is encrypted at the
   application level (L2-079).
@@ -94,8 +112,9 @@ store in Redis and the audit log.
 
 **Data and configuration**
 
-- `users` — `mfa_secret` (encrypted), `mfa_enabled_at`, `mfa_recovery_codes`
-  (hashed).
+- `users` — `mfa_enabled`, `two_factor_secret` (encrypted),
+  `two_factor_confirmed_at`; `recovery_codes` holds the hashed recovery codes. Both
+  belong to `accounts/sign-in-and-recover-access`.
 - Redis sessions — `pending_mfa_user_id`, `mfa_verified_at`, `last_activity_at`.
 - `config/zamaro.php` — `admin.idle_timeout_minutes = 30`.
 
@@ -106,7 +125,7 @@ The feature realises the following level-2 (L2) requirement. It refines the leve
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-066` | `L1-015` | **Administrator access.**<br>Acceptance criteria:<br>1. Given a user without the Administrator role, when they request any `/admin` page or `/api/v1/admin` endpoint, then the response is 404.<br>2. Given an administrator, when they sign in, then TOTP multi-factor authentication is required and their session ends after 30 minutes idle. |
+| `L2-066` | `L1-015` | **Administrator access.**<br>Acceptance criteria:<br>1. Given a user without the Administrator role, when they request any `/admin` page or `/api/v1/admin` endpoint, then the response is 404.<br>2. Given an administrator, when they sign in, then TOTP multi-factor authentication is required and their session ends after 30 minutes idle.<br>3. Given an administrator who has been idle for 28 minutes, when the warning appears, then a warning toast reads "You'll be signed out in 2 minutes." with a Stay signed in action, and it stays until they act or the session ends. |
 
 ## Diagrams
 
@@ -128,8 +147,8 @@ state in Redis.
 ### Components
 
 The admin route group runs three middleware in order: role, MFA, idle timeout.
-`MfaChallengeController` completes a two-step sign-in and records each outcome in
-the audit log.
+`SessionController` completes a two-step sign-in through
+`CompleteTwoFactorChallenge` and records each outcome in the audit log.
 
 ![C4 component view for secure administrator access](diagrams/c4-component.png)
 

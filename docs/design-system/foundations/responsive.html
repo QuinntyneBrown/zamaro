@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -111,17 +114,17 @@
       <p class="ds-kicker">Foundation</p>
       <h1>Responsive</h1>
       <p class="ds-lead">Most bookers search on a phone between services, so everything starts at 360px. Breakpoints add room; they never add features a phone can’t reach.</p>
-      <div class="ds-meta"><span class="ds-pill ds-pill--ok">Mobile first</span><span class="ds-pill">360 / 640 / 768 / 1024</span></div>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">Mobile first</span><span class="ds-pill">360 / 576 / 768 / 992 / 1200</span></div>
       <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#behaviours">Component behaviours by breakpoint</a></li><li><a href="#touch">Touch and pointer</a></li><li><a href="#type">Fluid display type</a></li><li><a href="#testing">Testing matrix</a></li></ul>
     </header>
 
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-<p>Base styles target a 360px phone. <code>min-width</code> queries at 640, 768 and 1024px (in rem) add columns and side-by-side layouts. Spacing and body type never scale with the viewport. Only the poster-sized display type is fluid.</p>
+<p>Base styles target a 360px phone. The breakpoints are the L2 viewport classes: XS below 576px, SM from 576px, MD from 768px, LG from 992px and XL from 1200px. <code>min-width</code> queries at 576, 768, 992 and 1200px (36, 48, 62 and 75rem) add columns and side-by-side layouts. Spacing and body type never scale with the viewport. Only the poster-sized display type is fluid.</p>
     </section>
 
     <section class="ds-section" id="behaviours"><h2><a href="#behaviours">Component behaviours by breakpoint</a></h2>
-<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Component</th><th scope="col">Phone (base)</th><th scope="col">sm 640</th><th scope="col">md 768</th><th scope="col">lg 1024</th></tr></thead><tbody>
-<tr><td><a href="../components/top-bar.html">Top bar</a></td><td>Brand, menu button, heart with count, avatar</td><td>–</td><td>–</td><td>Inline nav links; “Saved” text label</td></tr>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Component</th><th scope="col">Phone (base)</th><th scope="col">sm 576</th><th scope="col">md 768</th><th scope="col">lg 992</th></tr></thead><tbody>
+<tr><td><a href="../components/top-bar.html">Top bar</a></td><td>Brand, menu button, heart with count, avatar; the theme toggle is in the drawer (L2-099)</td><td>–</td><td>–</td><td>Booker: inline nav links, “Saved” text label and the theme toggle. The workspace bar (<code>.topbar--workspace</code>, artist and admin) keeps the menu button until XL (1200px), where its five links fit.</td></tr>
 <tr><td><a href="../components/poster.html">Poster hero</a></td><td>Stacked: title, date, booking bar</td><td>Booking bar two-up</td><td>Artist art beside the name</td><td>Title and booking bar side by side</td></tr>
 <tr><td><a href="../components/ticket.html">Ticket</a></td><td>Art + body; stub below with notches left/right</td><td>Stub becomes a right column; notches top/bottom</td><td>–</td><td>Lineup two-up</td></tr>
 <tr><td><a href="../components/headliner.html">Headliner</a></td><td>Art above text</td><td>–</td><td>16rem art column</td><td>20rem art column, 40px padding</td></tr>
@@ -129,7 +132,7 @@
 <tr><td><a href="../components/setlist.html">Setlist</a>, <a href="../components/review.html">reviews</a></td><td>One column</td><td>–</td><td>Two columns</td><td>–</td></tr>
 <tr><td><a href="../components/artwork.html">Photos / videos</a></td><td>Two-up photos; videos stacked</td><td>–</td><td>Four-up photos; first video full width, then three-up</td><td>–</td></tr>
 <tr><td><a href="../components/steps.html">Steps</a></td><td>Stacked</td><td>–</td><td>–</td><td>Three across</td></tr>
-<tr><td><a href="../components/dialog.html">Dialog</a></td><td>Bottom sheet, sticky footer</td><td>Centred</td><td>–</td><td>–</td></tr>
+<tr><td><a href="../components/dialog.html">Dialog</a></td><td>Fills the screen; title and close button stay at the top, footer sticky (L2-099)</td><td>Centred</td><td>–</td><td>–</td></tr>
 <tr><td><a href="../components/toast.html">Toast</a></td><td>Full width, bottom, safe-area aware</td><td>24rem, bottom right</td><td>–</td><td>–</td></tr>
 <tr><td><a href="../components/footer.html">Footer</a></td><td>Stacked</td><td>–</td><td>Wordmark row + three columns</td><td>Four columns</td></tr>
 <tr><td><a href="../components/table.html">Table</a></td><td>Scrolls inside its wrapper; first column may stick</td><td>–</td><td>–</td><td>–</td></tr>
@@ -138,7 +141,7 @@
     </section>
 
     <section class="ds-section" id="touch"><h2><a href="#touch">Touch and pointer</a></h2>
-<ul><li>Targets are at least 24px (WCAG 2.5.8). Chips, nav links, the save toggle and medium buttons are 44px.</li><li>Nothing important is hover-only. Ticket lift and button shadows are decoration; every action is a visible control.</li><li>Fixed bottom elements (toasts, dialog sheets) add <code>env(safe-area-inset-bottom)</code>.</li><li>Full-height layouts use <code>100dvh</code>.</li><li><code>(pointer: coarse)</code> is not used to resize targets, because they are already large enough.</li></ul>
+<ul><li>Targets are at least 24px (WCAG 2.5.8). Chips, nav links, the save toggle and medium buttons are 44px.</li><li>Nothing important is hover-only. Ticket lift and button shadows are decoration; every action is a visible control.</li><li>Fixed bottom elements (toasts, full-screen dialog footers) add <code>env(safe-area-inset-bottom)</code>.</li><li>Full-height layouts use <code>100dvh</code>.</li><li>On touch devices every control is at least 44 × 44px (L2-096): under <code>(pointer: coarse)</code> the compact controls (small buttons, link buttons, small fields and chips, the close button, breadcrumb and sort controls, small tabs) grow to <code>--target-comfortable</code>. Links inside running text are exempt, as WCAG 2.5.8 allows.</li></ul>
     </section>
 
     <section class="ds-section" id="type"><h2><a href="#type">Fluid display type</a></h2>
@@ -147,9 +150,11 @@
 
     <section class="ds-section" id="testing"><h2><a href="#testing">Testing matrix</a></h2>
 <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Viewport</th><th scope="col">Check</th></tr></thead><tbody>
-<tr><td>360×800</td><td>No horizontal scroll; booking bar fits; tickets stack; dialogs are sheets</td></tr>
-<tr><td>768×1024</td><td>Setlist two-up; headliner art beside text; menu button still shown</td></tr>
-<tr><td>1280×800</td><td>Top nav visible; lineup two-up; stub sticky under the top bar</td></tr>
+<tr><td>320×800 (XS)</td><td>No horizontal scroll and nothing clipped (L2-096); booking bar fits; tickets stack; dialogs fill the screen</td></tr>
+<tr><td>576×800 (SM)</td><td>Ticket stub beside the body; booking bar and form grids two-up; dialogs centred; menu button still shown</td></tr>
+<tr><td>768×1024 (MD)</td><td>Setlist two-up; headliner art beside text; menu button still shown</td></tr>
+<tr><td>992×800 (LG)</td><td>Booker top nav and theme toggle visible; lineup two-up; stub sticky under the top bar</td></tr>
+<tr><td>1200×800 (XL)</td><td>Workspace (artist and admin) top nav visible; container near its 1216px cap</td></tr>
 <tr><td>200% and 400% zoom</td><td>Reflows to one column; nothing clipped (1.4.10)</td></tr></tbody></table></div>
 <p>The docs’ own pages are screenshotted at 360 and 1280px in both themes before each release (see the README’s verification record).</p>
     </section>

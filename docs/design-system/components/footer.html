@@ -55,6 +55,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -81,6 +82,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -131,7 +134,13 @@
       <p>Every page ends with the footer. It repeats the routes people look for at the bottom of a page (how booking works, how to join as an artist, how to reach Zamaro) and gives a signed-in booker a shortcut to their saved artists. It is the page’s <code>&lt;footer&gt;</code> landmark.</p>
       <ul>
         <li><b>Full</b> (<code>.footer.on-stage</code>): the yellow word, a one-line description and three link columns. Use it on public pages.</li>
-        <li><b>Simple</b> (<code>.footer--simple</code>): one short row. Use it where the person is in the middle of a task, such as the booking flow or the artist dashboard, so the footer does not compete.</li>
+        <li><b>Simple</b> (<code>.footer--simple</code>): one short row, ready for a full-screen task that should not compete with a footer. No mock uses it: the booking flow and the artist area keep the full footer.</li>
+      </ul>
+      <p>The full footer’s columns follow the shell, like the <a href="top-bar.html">top bar</a>:</p>
+      <ul>
+        <li><b>Booker and signed-out pages</b>: Churches (Find who’s free, Your bookings, How booking works, hello@zamaro.ca), Artists (Join the lineup, What artists earn), then the booker’s name, church and “Saved artists (3)”, or “Your account” with Sign in and Create an account.</li>
+        <li><b>Artist area</b> (<code>.topbar--workspace</code> pages): Churches as above without Your bookings, Artists (Dashboard, Availability, Earnings), then the artist’s name, church and “Requests (3)”.</li>
+        <li><b>Admin app</b>: Admin (Applications, Artists, Bookings), Records (Reported reviews, Audit log), then the administrator’s name, “Zamaro team” and hello@zamaro.ca.</li>
       </ul>
       <p>Do not put primary actions in the footer. “Request to book” and “Apply as an artist” belong in the page (the <a href="booking-form.html">booking ticket</a> and the <a href="band.html">band</a>).</p>
     </section>
@@ -149,6 +158,7 @@
                 <h2>Churches</h2>
                 <ul>
                   <li><a href="#anatomy">Find who’s free</a></li>
+                  <li><a href="#anatomy">Your bookings</a></li>
                   <li><a href="#anatomy">How booking works</a></li>
                 </ul>
               </div>
@@ -181,7 +191,7 @@
           <li><div><b>Description</b><small>One sentence on what Zamaro is, in body text.</small></div></li>
           <li><div><b>Column heading</b><small>An <code>&lt;h2&gt;</code> in the mono overline style. It names the audience: churches, artists, the booker.</small></div></li>
           <li><div><b>Links</b><small>Underlined, inheriting paper text; yellow on hover. 12px between items.</small></div></li>
-          <li><div><b>Account column</b><small>Only when signed in: the booker’s name, church and “Saved artists (3)”.</small></div></li>
+          <li><div><b>Account column</b><small>Signed in, the column is headed with the person’s name. A booker sees their church and “Saved artists (3)”; an artist sees their church and “Requests (3)”; an administrator sees “Zamaro team” and the team address.</small></div></li>
         </ol>
       </div>
     </section>
@@ -200,6 +210,7 @@
                 <h2>Churches</h2>
                 <ul>
                   <li><a href="#variants">Find who’s free</a></li>
+                  <li><a href="#variants">Your bookings</a></li>
                   <li><a href="#variants">How booking works</a></li>
                   <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
                 </ul>
@@ -215,12 +226,13 @@
                 <h2>Your account</h2>
                 <ul>
                   <li><a href="#variants">Sign in</a></li>
+                  <li><a href="#variants">Create an account</a></li>
                 </ul>
               </div>
             </div>
           </footer>
         </div>
-        <div class="ds-example__caption"><span>The last column becomes “Your account · Sign in” when nobody is signed in. Signed in, it shows the booker’s name and saved artists, as in the anatomy above.</span></div>
+        <div class="ds-example__caption"><span>Signed out, the last column is “Your account” with Sign in and Create an account. Signed in, it shows the booker’s name and saved artists, as in the anatomy above.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;footer class="footer on-stage"&gt;
   &lt;div class="container footer__grid"&gt;
     &lt;div class="stack"&gt;
@@ -231,6 +243,7 @@
       &lt;h2&gt;Churches&lt;/h2&gt;
       &lt;ul&gt;
         &lt;li&gt;&lt;a href="/"&gt;Find who’s free&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/bookings"&gt;Your bookings&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href="/#how"&gt;How booking works&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href="mailto:hello@zamaro.ca"&gt;hello@zamaro.ca&lt;/a&gt;&lt;/li&gt;
       &lt;/ul&gt;
@@ -253,7 +266,7 @@
             </div>
           </footer>
         </div>
-        <div class="ds-example__caption"><span><code>.footer--simple</code>: 32px padding, one row that wraps on phones. For the booking flow and the artist dashboard.</span></div>
+        <div class="ds-example__caption"><span><code>.footer--simple</code>: 32px padding, one row that wraps on phones. Ready for a full-screen task; not in the mocks yet.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;footer class="footer footer--simple on-stage"&gt;
   &lt;div class="container cluster cluster--between"&gt;
     &lt;p&gt;Zamaro · Worship artists around Toronto&lt;/p&gt;
@@ -295,7 +308,7 @@
       <ul>
         <li><b>Below 768px</b>: one column. The word and description, then each link group stacked, 32px apart.</li>
         <li><b>768–1023px</b>: the word spans the full width; the three link groups sit in three columns under it.</li>
-        <li><b>1024px and wider</b>: four columns, 2fr for the word and 1fr for each group.</li>
+        <li><b>992px and wider</b>: four columns, 2fr for the word and 1fr for each group.</li>
         <li>The word scales with the viewport (<code>--font-size-5xl</code> is <code>clamp(4rem, 15vw, 10rem)</code>). With the condensed display face it fits its column; if the fallback face is wider, it can run past its column, so keep the word to one short line.</li>
         <li>Bottom padding is <code>--space-24</code> so the last link clears the toast region and the phone’s home indicator.</li>
       </ul>
@@ -334,11 +347,11 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>Column headings name people, not site sections: “Churches”, “Artists”, then the booker’s own name.</li>
+        <li>Column headings name people, not site sections: “Churches”, “Artists”, then the signed-in person’s own name. The admin app, which serves one team, names its two areas instead: “Admin” and “Records”.</li>
         <li>Links start with a verb or say exactly where they go: “Find who’s free”, “Join the lineup”, “What artists earn”.</li>
-        <li>Two or three links per column. The footer is a short list of routes, not a site map.</li>
+        <li>Two to four links per column. The footer is a short list of routes, not a site map.</li>
         <li>The description is one sentence: “Worship artists for churches around Toronto.”</li>
-        <li>Counts match the top bar: “Saved artists (3)”.</li>
+        <li>Counts match the top bar: “Saved artists (3)”, “Requests (3)”.</li>
       </ul>
     </section>
 
@@ -378,7 +391,7 @@
     &lt;div&gt;&lt;h2&gt;Artists&lt;/h2&gt;&lt;ul&gt;…&lt;/ul&gt;&lt;/div&gt;
     &lt;div&gt;&lt;h2&gt;Naomi Fraser&lt;/h2&gt;&lt;ul&gt;
       &lt;li&gt;Riverside Community Church&lt;/li&gt;
-      &lt;li&gt;&lt;a href="/account/saved"&gt;Saved artists (3)&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/saved"&gt;Saved artists (3)&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/footer&gt;</code></pre>
@@ -398,10 +411,14 @@
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the full footer with “Churches”, “Artists” and “Naomi Fraser” columns</li>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: unchanged while the lineup loads, is empty or fails</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>, <a href="../../mocks/pages/artist/loading.html">loading</a>, <a href="../../mocks/pages/artist/empty.html">empty</a> and <a href="../../mocks/pages/artist/error.html">error</a>: the same footer under the profile</li>
+        <li><a href="../../mocks/pages/apply/default.html">pages/apply/default</a>, <a href="../../mocks/pages/sign-in/default.html">pages/sign-in/default</a>: the signed-out “Your account” column</li>
+        <li><a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a> and every artist-area page: the artist footer (“Abigail Mensah · New Covenant Chapel · Requests (3)”); <a href="../../mocks/pages/dashboard/empty.html">pages/dashboard/empty</a>: Miriam Haile’s</li>
+        <li><a href="../../mocks/pages/admin-applications/default.html">pages/admin-applications/default</a> and every admin page: the admin footer (“Admin”, “Records”, “Priya Nair”)</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
-        <li>The mocks had only the full footer. <code>.footer--simple</code> was added for task pages (booking flow, dashboard), and the signed-out “Your account · Sign in” column was defined.</li>
+        <li>The mocks had only the full footer. <code>.footer--simple</code> was added as a core-set variant; the mocks still use the full footer on every page, including the booking flow and the artist area, so this page no longer recommends the simple one there.</li>
+        <li>This page described one footer for bookers. The artist-area and admin-app footers, the “Your bookings” link and the signed-out “Create an account” link are in the mocks and are now documented. Miriam Haile’s artist footer read “Approved Mon 5 Oct” or “Etobicoke” on some empty states; every artist footer now names the artist’s church, as Abigail’s does.</li>
         <li>The large bottom padding (<code>--space-24</code>) was kept so the last link clears the toast region; the toast region itself moved down to <code>--space-6</code> (phones <code>--space-4</code> plus the safe area) instead of sitting at <code>--space-16</code>.</li>
       </ul>
     </section>

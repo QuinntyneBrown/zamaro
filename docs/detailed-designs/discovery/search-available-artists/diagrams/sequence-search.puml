@@ -66,7 +66,8 @@ else valid input
     dist --> action : Distance (km, minutes)
   end
   action -> action : Keep distance <= radius and <= artist max drive (L2-003)
-  action -> action : Sort Closest first, take first 24, mark headliner (L2-006, L2-010)
+  action -> action : Pick headliner: most bookings confirmed this season,\nthen rating, distance, artist ID (L2-006)
+  action -> action : Sort the rest Closest first, number from No. 02,\nfirst page of 24 cards with the headliner (L2-007, L2-010)
   action --> controller : Lineup
   controller --> client : 200 LineupResource
   client --> store : Lineup

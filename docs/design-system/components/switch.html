@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Switch — Zamaro design system</title>
-<meta name="description" content="An on/off setting that applies the moment it is flipped, such as “Email me when an artist accepts”. A checkbox with role="switch", label left or right, with a description.">
+<meta name="description" content="An on/off setting that applies the moment it is flipped, such as “Dark theme”. A checkbox with role="switch", label left or right, with a description.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -110,7 +113,7 @@
     <header class="ds-header">
       <p class="ds-kicker">Component · Inputs</p>
       <h1>Switch</h1>
-      <p class="ds-lead">A switch turns a setting on or off right away, with no Save button: “Email me when an artist accepts”. On is a yellow track with the ink thumb at the right.</p>
+      <p class="ds-lead">A switch turns a setting on or off right away, with no Save button: “Dark theme”, or an artist’s “Calendar feed”. On is a yellow track with the ink thumb at the right.</p>
       <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="switch"</code></span><span class="ds-pill">Class <code>.switch</code></span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
@@ -118,7 +121,7 @@
     </header>
 
 <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-      <p>Use a switch for a preference that takes effect as soon as it changes and stays that way: Naomi’s notification settings, “Show prices with the Zamaro fee included”. The change is saved at once and confirmed with a short status message.</p>
+      <p>Use a switch for a preference that takes effect as soon as it changes and stays that way: the theme (L2-104) or an artist’s calendar feed (L2-058). Email preferences are not switches: they are checkboxes saved with the account form’s Save button (L2-065), and transactional emails about bookings and payments can’t be turned off at all. The change is saved at once and confirmed with a short status message.</p>
       <ul>
         <li>An answer that is sent with a form (“Bring backing tracks”): <a href="checkbox.html">checkbox</a>.</li>
         <li>Turning a filter on the lineup on or off: a filter <a href="chip.html">chip</a>.</li>
@@ -133,7 +136,7 @@
           <label class="switch">
             <input type="checkbox" role="switch" checked>
             <span class="switch__track"></span>
-            <span class="switch__text">Email me when an artist accepts<span class="switch__desc">Sent to naomi.fraser@riversidecc.ca</span></span>
+            <span class="switch__text">Dark theme<span class="switch__desc">Saved on this device and to your account</span></span>
           </label>
           <span class="ds-callout" style="left: calc(50% - 11rem); top: calc(50% - 2.5rem);" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: calc(50% - 9.25rem); top: calc(50% + 0.75rem);" aria-hidden="true">2</span>
@@ -154,48 +157,48 @@
 <div class="ds-example">
   <div class="ds-example__canvas">
     <label class="switch">
-      <input type="checkbox" role="switch" name="notify-accept" checked>
+      <input type="checkbox" role="switch" name="theme-dark" checked>
       <span class="switch__track"></span>
-      <span class="switch__text">Email me when an artist accepts</span>
+      <span class="switch__text">Dark theme</span>
     </label>
   </div>
   <div class="ds-example__caption"><span>The track leads, like a checkbox. Use this in forms and in single settings.</span></div>
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;label class="switch"&gt;
-  &lt;input type="checkbox" role="switch" name="notify-accept" checked&gt;
+  &lt;input type="checkbox" role="switch" name="theme-dark" checked&gt;
   &lt;span class="switch__track"&gt;&lt;/span&gt;
-  &lt;span class="switch__text"&gt;Email me when an artist accepts&lt;/span&gt;
+  &lt;span class="switch__text"&gt;Dark theme&lt;/span&gt;
 &lt;/label&gt;</code></pre></details>
 </div>
       <h3>Label left, in a settings list</h3>
 <div class="ds-example">
   <div class="ds-example__canvas ds-example__canvas--stack">
     <fieldset class="choice-group">
-      <legend>Notifications</legend>
+      <legend>Preferences</legend>
       <label class="switch switch--start" style="justify-content: space-between;">
-        <input type="checkbox" role="switch" name="notify-accept" checked data-switch-demo data-on="We’ll email you when an artist accepts." data-off="No emails when an artist accepts.">
+        <input type="checkbox" role="switch" name="theme-dark" checked data-switch-demo data-on="Dark theme on." data-off="Dark theme off.">
         <span class="switch__track"></span>
-        <span class="switch__text">Email me when an artist accepts<span class="switch__desc">One email for each accepted request.</span></span>
+        <span class="switch__text">Dark theme<span class="switch__desc">Saved on this device and to your account.</span></span>
       </label>
       <label class="switch switch--start" style="justify-content: space-between;">
-        <input type="checkbox" role="switch" name="notify-reminder" data-switch-demo data-on="We’ll text you the day before each event." data-off="No reminder texts.">
+        <input type="checkbox" role="switch" name="calendar-feed" data-switch-demo data-on="Calendar feed on. Your private link is ready to copy." data-off="Calendar feed off. The old link stops working.">
         <span class="switch__track"></span>
-        <span class="switch__text">Text me the day before an event<span class="switch__desc">To 905-555-0142.</span></span>
+        <span class="switch__text">Calendar feed<span class="switch__desc">Your confirmed bookings at a private iCalendar link.</span></span>
       </label>
     </fieldset>
     <p id="switch-demo-status" role="status" class="text-caption">Changes save as soon as you flip a switch.</p>
   </div>
   <div class="ds-example__caption"><span><code>.switch--start</code> puts the label first and the track at the end of the row, so a list of settings lines up on the right. Flip one: the status line confirms the save.</span></div>
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
-  &lt;legend&gt;Notifications&lt;/legend&gt;
+  &lt;legend&gt;Preferences&lt;/legend&gt;
   &lt;label class="switch switch--start" style="justify-content: space-between;"&gt;
-    &lt;input type="checkbox" role="switch" name="notify-accept" checked data-switch-demo data-on="We’ll email you when an artist accepts." data-off="No emails when an artist accepts."&gt;
+    &lt;input type="checkbox" role="switch" name="theme-dark" checked data-switch-demo data-on="Dark theme on." data-off="Dark theme off."&gt;
     &lt;span class="switch__track"&gt;&lt;/span&gt;
-    &lt;span class="switch__text"&gt;Email me when an artist accepts&lt;span class="switch__desc"&gt;One email for each accepted request.&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="switch__text"&gt;Dark theme&lt;span class="switch__desc"&gt;Saved on this device and to your account.&lt;/span&gt;&lt;/span&gt;
   &lt;/label&gt;
   &lt;label class="switch switch--start" style="justify-content: space-between;"&gt;
-    &lt;input type="checkbox" role="switch" name="notify-reminder" data-switch-demo data-on="We’ll text you the day before each event." data-off="No reminder texts."&gt;
+    &lt;input type="checkbox" role="switch" name="calendar-feed" data-switch-demo data-on="Calendar feed on. Your private link is ready to copy." data-off="Calendar feed off. The old link stops working."&gt;
     &lt;span class="switch__track"&gt;&lt;/span&gt;
-    &lt;span class="switch__text"&gt;Text me the day before an event&lt;span class="switch__desc"&gt;To 905-555-0142.&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="switch__text"&gt;Calendar feed&lt;span class="switch__desc"&gt;Your confirmed bookings at a private iCalendar link.&lt;/span&gt;&lt;/span&gt;
   &lt;/label&gt;
 &lt;/fieldset&gt;
 &lt;p id="switch-demo-status" role="status" class="text-caption"&gt;Changes save as soon as you flip a switch.&lt;/p&gt;</code></pre></details>
@@ -223,19 +226,19 @@
             <td><label class="switch"><input type="checkbox" role="switch" checked disabled><span class="switch__track" style="--switch-bg: var(--color-bg-subtle); --switch-border: var(--color-fg-disabled); --switch-thumb: var(--color-fg-disabled);"></span><span class="switch__text">Reminders</span></label></td></tr>
         </tbody>
       </table></div>
-      <p>A switch has no invalid state: any value is valid. If saving fails, flip it back and say so in a danger <a href="toast.html">toast</a>: “Couldn’t save your email setting. Try again.” There is no busy style either; saving is fast, and the switch stays usable.</p>
+      <p>A switch has no invalid state: any value is valid. If saving fails, flip it back and say so in a danger <a href="toast.html">toast</a>: “Couldn’t save that setting. Try again.” There is no busy style either; saving is fast, and the switch stays usable.</p>
       <h3>Both themes</h3>
       <div class="ds-themes">
         <div data-theme="light"><div class="stack stack--sm">
-          <label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Email me when an artist accepts</span></label>
-          <label class="switch"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">Text me the day before</span></label>
+          <label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Dark theme</span></label>
+          <label class="switch"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">Calendar feed</span></label>
           <label class="switch" data-state="hover"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">Hover</span></label>
           <label class="switch" data-state="focus" style="outline: none;"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Focus</span></label>
           <label class="switch"><input type="checkbox" role="switch" disabled><span class="switch__track" style="--switch-bg: var(--color-bg-subtle); --switch-border: var(--color-fg-disabled); --switch-thumb: var(--color-fg-disabled);"></span><span class="switch__text">Disabled</span></label>
         </div></div>
         <div data-theme="dark"><div class="stack stack--sm">
-          <label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Email me when an artist accepts</span></label>
-          <label class="switch"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">Text me the day before</span></label>
+          <label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Dark theme</span></label>
+          <label class="switch"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">Calendar feed</span></label>
           <label class="switch" data-state="hover"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">Hover</span></label>
           <label class="switch" data-state="focus" style="outline: none;"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Focus</span></label>
           <label class="switch"><input type="checkbox" role="switch" disabled><span class="switch__track" style="--switch-bg: var(--color-bg-subtle); --switch-border: var(--color-fg-disabled); --switch-thumb: var(--color-fg-disabled);"></span><span class="switch__text">Disabled</span></label>
@@ -273,7 +276,7 @@
       <h3>Focus</h3>
       <p>The ring goes around the track (<code>input:focus-visible + .switch__track</code>): 3px, 3px offset, ink on paper, yellow in dark mode. It follows the pill shape.</p>
       <h3>Labelling</h3>
-      <p>The label names the setting in a way that reads true when on: “Email me when an artist accepts”. Never change the label with the state (“Turn on emails” / “Turn off emails”); the role already says on or off. The result of a change is announced through a polite <code>role="status"</code> message (“Saved. We’ll email you when an artist accepts.”).</p>
+      <p>The label names the setting in a way that reads true when on: “Dark theme”, “Calendar feed”. Never change the label with the state (“Turn on dark theme” / “Turn off dark theme”); the role already says on or off. The result of a change is announced through a polite <code>role="status"</code> message (“Calendar feed on. Your private link is ready to copy.”).</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Off track rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
@@ -294,17 +297,17 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>Label the setting, in sentence case, as a statement that is true when on: “Email me when an artist accepts”, “Show prices with fees included”.</li>
+        <li>Label the setting, in sentence case, as a statement that is true when on: “Dark theme”, “Calendar feed”.</li>
         <li>No “Enable”, “Turn on” or a question mark.</li>
         <li>Use the description for the practical detail: where, when or how often.</li>
-        <li>Confirm the save in a few words: “Saved. We’ll text you the day before each event.”</li>
+        <li>Confirm the save in a few words: “Calendar feed off. The old link stops working.”</li>
       </ul>
     </section>
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas"><label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Email me when an artist accepts</span></label></div><figcaption>A label that is a statement, true when the switch is on.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas"><label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Turn off emails?</span></label></div><figcaption>An action as a question. “On” now means emails are off.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Dark theme</span></label></div><figcaption>A label that is a statement, true when the switch is on.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Turn off dark theme?</span></label></div><figcaption>An action as a question. “On” now means the dark theme is off.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><label class="check"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">I’ve read the cancellation terms</span></label><button class="btn btn--primary" type="button">Request to book</button></div><figcaption>In a form whose answers wait for submit, use a checkbox.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><label class="switch"><input type="checkbox" role="switch"><span class="switch__track"></span><span class="switch__text">I’ve read the cancellation terms</span></label><button class="btn btn--primary" type="button">Request to book</button></div><figcaption>A switch inside a booking form. Switches promise an immediate effect; this one does nothing until submit.</figcaption></figure>
       </div>
@@ -329,12 +332,12 @@
 
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
 <pre><code>&lt;label class="switch"&gt;
-  &lt;input type="checkbox" role="switch" name="notify-accept" checked&gt;
+  &lt;input type="checkbox" role="switch" name="theme-dark" checked&gt;
   &lt;span class="switch__track"&gt;&lt;/span&gt;
-  &lt;span class="switch__text"&gt;Email me when an artist accepts
-    &lt;span class="switch__desc"&gt;One email for each accepted request.&lt;/span&gt;&lt;/span&gt;
+  &lt;span class="switch__text"&gt;Dark theme
+    &lt;span class="switch__desc"&gt;Saved on this device and to your account.&lt;/span&gt;&lt;/span&gt;
 &lt;/label&gt;
-&lt;p role="status" class="text-caption"&gt;&lt;!-- "Saved. We’ll email you when an artist accepts." --&gt;&lt;/p&gt;</code></pre>
+&lt;p role="status" class="text-caption"&gt;&lt;!-- "Dark theme on." --&gt;&lt;/p&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.switch</code> (a <code>&lt;label&gt;</code>)</td><td>Row: hidden input, track, text.</td></tr>
         <tr><td><code>role="switch"</code> on the input</td><td>Announced as a switch, on or off.</td></tr>
@@ -347,9 +350,9 @@
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The product needs switches on Naomi’s account settings page for booking notifications and reminders, reached from the <a href="menu.html">account menu</a>.</p>
+      <p>Not in the mocks yet; part of the core set. No mock has a setting that applies the moment it changes: the account page’s email preferences (<a href="../../mocks/pages/account/default.html#preferences">pages/account/default</a>) are checkboxes saved with “Save changes” (L2-065), and the top bar’s theme toggle is a pressed button. Switches are for instant settings such as an artist’s calendar feed (L2-058).</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the “NF” account entry point and the 25% deposit / acceptance flow the notifications describe</li>
+        <li><a href="../../mocks/dialogs/calendar-feed/default.html">dialogs/calendar-feed/default</a> and <a href="../../mocks/dialogs/calendar-feed/off.html">off</a>: the calendar feed an instant switch would turn on and off</li>
       </ul>
       <p>Drift fixed during extraction: none; there was no switch in the mocks.</p>
     </section>

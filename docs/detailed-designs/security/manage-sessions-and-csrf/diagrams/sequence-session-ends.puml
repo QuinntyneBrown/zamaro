@@ -59,6 +59,6 @@ end
 opt 401 received
   expired -> auth : clear()
   expired --> page : Navigate to sign-in with returnUrl
-  page --> actor : Sign-in page with expiry toast (copy <TO SUPPLY>)
+  page --> actor : Sign-in page shows "Your session ended" above the form (L2-073)
 end
 @enduml

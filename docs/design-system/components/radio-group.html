@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -256,6 +259,44 @@
   &lt;/div&gt;
 &lt;/fieldset&gt;</code></pre></details>
 </div>
+      <h3>Choice row (forms and dialogs)</h3>
+      <p>The dialogs in the mocks ask single-choice questions with the light <code>.choice</code> row (see <a href="checkbox.html">Checkbox</a>): a native radio drawn as a round 20px dot with <code>appearance: none</code>, then <code>.choice__text</code> and an optional <code>&lt;small&gt;</code> detail. Use it for reasons and short answers in dialogs and forms (decline a request, the application). The report-review and resolve-hold dialogs use the full <code>.radio</code> row with a drawn dot instead; both are documented here, and both are native radios in a <code>&lt;fieldset&gt;</code>.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <fieldset class="choice-group">
+            <legend>Why are you declining? <span class="field__optional">(optional)</span></legend>
+            <label class="choice"><input type="radio" name="cr-reason" value="free" checked><span class="choice__text">I’m not free that day</span></label>
+            <label class="choice"><input type="radio" name="cr-reason" value="far"><span class="choice__text">It’s too far to travel<small>Burlington is 44 km from Brampton</small></span></label>
+            <label class="choice"><input type="radio" name="cr-reason" value="fit"><span class="choice__text">It’s not the right fit<small>For example the style or the size of the event</small></span></label>
+            <label class="choice"><input type="radio" name="cr-reason" value="other" disabled><span class="choice__text">Another reason<small>Say more in the note</small></span></label>
+          </fieldset>
+        </div>
+        <div class="ds-example__caption"><span>From dialogs/decline-request: checked, unchecked with a detail line, and disabled.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;Why are you declining? &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/legend&gt;
+  &lt;label class="choice"&gt;&lt;input type="radio" name="reason" value="free"&gt;&lt;span class="choice__text"&gt;I’m not free that day&lt;/span&gt;&lt;/label&gt;
+  &lt;label class="choice"&gt;&lt;input type="radio" name="reason" value="far"&gt;&lt;span class="choice__text"&gt;It’s too far to travel&lt;small&gt;Burlington is 44 km from Brampton&lt;/small&gt;&lt;/span&gt;&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre></details>
+      </div>
+      <h3>Star rating (write a review)</h3>
+      <p>The only star input in the product is a radio group: five <code>.choice.choice--stub</code> cards in a <code>.cluster</code>, one per score, each with the stars drawn as <code>aria-hidden</code> text, a visually hidden “{n} out of 5 stars” and a word under it. It gives every score a name, a large target and arrow-key support, which clickable star widgets usually lack (see <a href="rating.html">Rating</a>).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <fieldset class="fieldset">
+            <legend>Your rating <span class="field__required">(required)</span></legend>
+            <div class="cluster" style="align-items: stretch;"><label class="choice choice--stub"><input type="radio" name="ds-stars" value="5" checked><span class="choice__text"><span aria-hidden="true">★★★★★</span><span class="visually-hidden">5 out of 5 stars</span><small>Unforgettable</small></span></label><label class="choice choice--stub"><input type="radio" name="ds-stars" value="4"><span class="choice__text"><span aria-hidden="true">★★★★☆</span><span class="visually-hidden">4 out of 5 stars</span><small>Great</small></span></label><label class="choice choice--stub"><input type="radio" name="ds-stars" value="3"><span class="choice__text"><span aria-hidden="true">★★★☆☆</span><span class="visually-hidden">3 out of 5 stars</span><small>Good</small></span></label><label class="choice choice--stub"><input type="radio" name="ds-stars" value="2"><span class="choice__text"><span aria-hidden="true">★★☆☆☆</span><span class="visually-hidden">2 out of 5 stars</span><small>Fair</small></span></label><label class="choice choice--stub"><input type="radio" name="ds-stars" value="1"><span class="choice__text"><span aria-hidden="true">★☆☆☆☆</span><span class="visually-hidden">1 out of 5 stars</span><small>Poor</small></span></label></div>
+          </fieldset>
+        </div>
+        <div class="ds-example__caption"><span>From dialogs/write-review (L2-059): Unforgettable, Great, Good, Fair, Poor. The checked card takes the yellow tint of <code>.choice--stub</code>; the ring follows focus with the arrow keys. In edit mode the church’s score is checked.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="fieldset"&gt;
+  &lt;legend&gt;Your rating &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/legend&gt;
+  &lt;div class="cluster"&gt;
+    &lt;label class="choice choice--stub"&gt;&lt;input type="radio" name="stars" value="5"&gt;
+      &lt;span class="choice__text"&gt;&lt;span aria-hidden="true"&gt;★★★★★&lt;/span&gt;&lt;span class="visually-hidden"&gt;5 out of 5 stars&lt;/span&gt;&lt;small&gt;Unforgettable&lt;/small&gt;&lt;/span&gt;&lt;/label&gt;
+    …4 Great, 3 Good, 2 Fair, 1 Poor
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre></details>
+      </div>
     </section>
 
     <section class="ds-section" id="sizes" data-na="Radios have one size (a 24px dot). Choice cards size to their grid column."><h2><a href="#sizes">Sizes</a></h2>
@@ -303,7 +344,7 @@
         <label class="radio"><input type="radio" name="venue-err" value="in" aria-invalid="true" required><span class="radio__dot"></span><span class="radio__text">Indoors</span></label>
         <label class="radio"><input type="radio" name="venue-err" value="out" aria-invalid="true"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label>
       </div>
-      <p class="field__error" id="venue-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Choose indoors or outdoors so the artist can plan for sound.</p>
+      <p class="field__error" id="venue-err">Choose indoors or outdoors so the artist can plan for sound.</p>
     </fieldset>
   </div>
   <div class="ds-example__caption"><span>Every radio in the group gets <code>aria-invalid</code>; the fieldset is described by the error.</span></div>
@@ -329,7 +370,7 @@
           <label class="choice-card"><input type="radio" name="td-3"><span class="stack stack--sm"><span class="choice-card__title">Worship night</span><span class="choice-card__meta">A full set</span></span></label>
         </div></div>
       </div>
-      <p><b>Known issue in dark mode:</b> the selected choice card’s frame uses <code>--color-border-on-accent</code> (ink), which nearly disappears on the dark surface (about 1.2:1), and its amber fill is also close to the surface. Until it is fixed, the selected card in dark mode relies on its fill alone. See <a href="#theming">Theming</a> for the proposed token.</p>
+      <p>In dark mode the selected card’s frame and inset ring read <code>--color-border-selected</code>, which turns yellow on the charcoal surface (at least 9:1), so the selection never relies on the amber fill alone. See <a href="#theming">Theming</a>.</p>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
@@ -342,7 +383,7 @@
 
     <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
       <p>The dot shares the checkbox’s component tokens: <code>--control-bg</code>, <code>--control-border</code> and <code>--control-fg</code>. Selected sets <code>--control-bg</code> to <code>--color-accent</code> and the border to <code>--color-border-on-accent</code>; the centre is <code>currentColor</code> of the dot, ink on yellow in both themes.</p>
-      <p>Choice cards have one component token, <code>--choice-border</code> (<code>--color-border-strong</code>), set to <code>--color-border-on-accent</code> when selected, plus a <code>--color-accent-subtle</code> fill. In dark mode both are too close to the charcoal surface. Proposed fix: a theme-aware <code>--color-border-selected</code> token (ink <code>--palette-ink-750</code> on paper, yellow <code>--palette-signal-500</code> on the stage) used for <code>--choice-border</code> and the inset ring of selected cards.</p>
+      <p>Choice cards have one component token, <code>--choice-border</code> (<code>--color-border-strong</code>), set to the theme-aware <code>--color-border-selected</code> when selected (ink on newsprint, yellow on the stage theme), which also draws the inset ring, plus a <code>--color-accent-subtle</code> fill. A disabled card uses <code>--color-fg-disabled</code> for its frame on <code>--color-bg-subtle</code>; an invalid one (<code>aria-invalid="true"</code> on its input) uses <code>--color-danger-border</code>.</p>
     </section>
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
@@ -436,6 +477,7 @@
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.radio</code>, <code>.radio__dot</code>, <code>.radio__text</code>, <code>.radio__desc</code></td><td>Row with a hidden input, the drawn dot, label and description.</td></tr>
         <tr><td><code>.choice-group</code> / <code>--inline</code></td><td>Reset fieldset, stacked or in a wrapping row.</td></tr>
+        <tr><td><code>.choice</code>, <code>.choice__text</code></td><td>Light row: native radio drawn as a round 20px dot, then the text with an optional <code>&lt;small&gt;</code> detail; 44px minimum row. Shared with the checkbox.</td></tr>
         <tr><td><code>.choice-card</code>, <code>__title</code>, <code>__meta</code></td><td>Card-sized radio label; selected via <code>:has(&gt; input:checked)</code>.</td></tr>
         <tr><td><code>checked</code>, <code>disabled</code>, <code>aria-invalid</code></td><td>Native state; invalid red rule on dots.</td></tr>
         <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
@@ -443,12 +485,15 @@
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The mocks ask “Kind of gathering” with a select in the booking bar and stub; the full booking request will use choice cards for it, and radios for sound and venue questions.</p>
+      <p>The <code>.choice</code> and <code>.radio</code> rows and the star-rating <code>.choice--stub</code> cards are in the mocks; choice cards are not yet (the mocks ask “Kind of gathering” with a select in the booking bar, the stub and the book page).</p>
       <ul>
+        <li><code>.choice</code> radio rows: <a href="../../mocks/dialogs/decline-request/default.html">dialogs/decline-request</a> (with <a href="../../mocks/dialogs/decline-request/invalid.html">invalid</a>), <a href="../../mocks/pages/apply/default.html">pages/apply/default</a></li>
+        <li><code>.radio</code> rows: <a href="../../mocks/dialogs/report-review/default.html">dialogs/report-review</a> and <a href="../../mocks/dialogs/resolve-hold/default.html">dialogs/resolve-hold</a>, with their busy, failed and invalid states</li>
+        <li>Star rating (<code>.choice--stub</code> radio cards): <a href="../../mocks/dialogs/write-review/default.html">dialogs/write-review</a></li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Kind of gathering” as a select in the booking bar, with the six options the cards come from</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the same question in the stub</li>
       </ul>
-      <p>Drift fixed during extraction: none in the mocks. Found while documenting: choice cards have no disabled or invalid style, and the selected card frame fails contrast in dark mode. Both are listed above with proposed fixes.</p>
+      <p>Drift fixed during extraction: none in the mocks. Found while documenting and since fixed in <code>components.css</code>: choice cards had no disabled or invalid style, and the selected card frame failed contrast in dark mode (now <code>--color-border-selected</code>).</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

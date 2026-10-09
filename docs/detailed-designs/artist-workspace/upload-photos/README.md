@@ -5,8 +5,9 @@
 A church deciding whom to book looks first at photos. Each approved artist's public
 profile on Zamaro shows a photo gallery (L2-015), and the primary photo also appears
 on the headliner card in search results and in link previews (L2-006, L2-113). This
-feature lets the artist supply and curate those photos from the artist workspace, the
-`/artist/*` area of Zamaro Web for signed-in approved artists.
+feature lets the artist supply and curate those photos from the Photos section of
+the profile editor at `/artist/profile`, in the artist workspace (the `/artist/*` area
+of Zamaro Web for signed-in approved artists).
 
 The slice covers uploading an image, rejecting files that fail validation or the
 malware scan, turning an accepted image into responsive renditions without location
@@ -32,24 +33,35 @@ least 800 px and the malware scanner reports it clean (L2-051, L2-076).
 
 ## Description
 
-The slice runs from the photos manager in Zamaro Web to the photo endpoints in the
+The slice runs from the Photos section of the profile editor in Zamaro Web to the
+photo endpoints in the
 Zamaro API, a queued job in the Zamaro Worker, object storage, the malware scanner
 and the CDN.
 
 **Frontend (Zamaro Web, `features/artist-workspace`)**
 
-- **`PhotosManagerPage`** — routed page component for `/artist/photos`. It shows the
-  count against the limit ("5 of 12"), the upload control and the gallery. It
-  disables the upload control at 12 photos. The page polls
+- **`PhotosSectionComponent`** — the Photos section (`#photos`) of
+  `ArtistProfileEditorPage` (`artist-workspace/edit-profile-details`). It shows the
+  gallery, the count against the limit with the file rules ("4 of 12 photos · JPEG,
+  PNG, WebP or HEIC up to 15 MB, at least 800 px on the short side.") and "Add a
+  photo", which opens `PhotoUploadDialogComponent`; at 12 photos the dialog opens in
+  its limit state with "You can have up to 12 photos." The section polls
   `GET /api/v1/artist/photos` while any photo is `Processing`; the interval is
-  `<TO SUPPLY>`.
-- **`PhotoUploadDialogComponent`** — design-system dialog opened after a file is
-  chosen. It previews the image, requires alt text of 5–150 characters and pre-checks
-  size and file extension for early feedback. The server remains the authority.
-- **`PhotoGridComponent`** — ordered grid of thumbnails with status badges. Each
-  item offers "Edit alt text", "Make primary", "Delete", and "Move earlier" and "Move
-  later" buttons. Order changes also work by CDK drag and drop, and "Save order"
-  sends the new order. `LiveAnnouncer` reads each move and save.
+  `<TO SUPPLY>`. The editor's Photo & name section shows the primary photo and points
+  here to change it.
+- **`PhotoUploadDialogComponent`** — design-system dialog with a required file input
+  and required alt text of 5–150 characters. It pre-checks size and file extension
+  for early feedback; the server remains the authority. While uploading it shows a
+  progress bar with megabytes sent and "Cancel upload". A rejected file shows its
+  specific reason on the file field with an error summary, and a malware rejection
+  shows an alert while keeping the alt text. At the limit it shows only the limit
+  message and "Back to my photos".
+- **`PhotoGridComponent`** — ordered grid of thumbnails with a "Primary" tag on the
+  primary photo. Each item has an inline alt-text field and "Move earlier", "Move
+  later", "Make primary" (a star, absent on the primary photo) and "Remove" icon
+  buttons. Order changes also work by CDK drag and drop. Alt-text edits and the new
+  order are saved by the editor's "Save changes"; "Make primary" and "Remove" save at
+  once, and Remove offers Undo in a toast. `LiveAnnouncer` reads each move and save.
 - **`ArtistPhotosStore`** — signal-based store holding the photos, the in-flight
   uploads with percent progress, and `canAddMore`. It shows a per-file reason when
   the API rejects an upload.
@@ -83,8 +95,10 @@ Every endpoint sits behind `EnsureArtistRole`. Route-bound photos pass
   shortest side under 800 px. Inside one `DB::transaction` it locks the artist row,
   re-counts, writes the original to quarantine under a random name, inserts an
   `ArtistPhoto` in `Processing` at the last position and dispatches
-  `ProcessArtistPhoto`. Rejection copy other than the photo-limit message is
-  `<TO SUPPLY>`.
+  `ProcessArtistPhoto`. Rejection copy: "That file isn't a JPEG, PNG, WebP or HEIC
+  photo.", "This photo is {size} MB. Choose one up to 15 MB.", "This photo is {px} px
+  on its short side. Choose one at least 800 px." and, after a malware hit, "Our
+  safety scan flagged the file, so we deleted it."
 - **`UploadInspector`** — domain service shared with video and caption uploads. It
   reads the leading bytes (`finfo` magic) and returns a `DetectedType`. It rejects
   SVG and HTML in all cases and any type outside the allowed set for the upload kind
@@ -119,6 +133,14 @@ Every endpoint sits behind `EnsureArtistRole`. Route-bound photos pass
 
 Each change dispatches `ArtistProfileUpdated`, which purges the cached public profile
 (L2-089). The public profile shows only `Ready` photos.
+
+**Mock screens** — the Photos section (`#photos`) of
+[`pages/edit-profile`](../../../mocks/pages/edit-profile/default.html) shows Abigail's
+4 photos with alt text, the Primary tag and the move, star and remove buttons; the
+[`empty`](../../../mocks/pages/edit-profile/empty.html) state shows Miriam's 2. "Add a
+photo" opens [`dialogs/add-photo`](../../../mocks/dialogs/add-photo/default.html) in
+states default, busy (62% uploaded), invalid (640 px on the short side and 2-character
+alt text), failed (the malware scan) and limit.
 
 **Data and storage**
 

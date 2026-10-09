@@ -8,7 +8,7 @@ System_Ext(scanner, "Malware scanner", "Scans every upload")
 System_Ext(vps, "Video processing service", "Transcodes and makes poster frames")
 System_Ext(cdn, "CDN", "Media domain")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Videos manager under /artist/videos; chunked uploader")
+  Container(web, "Zamaro Web", "Angular with SSR", "Videos section of the profile editor at /artist/profile; chunked uploader")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Upload sessions, video metadata and processing webhook")
   Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Inspects, scans and probes sources; prunes abandoned uploads")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artist_videos")

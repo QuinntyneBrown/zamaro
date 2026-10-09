@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="apply">
 <meta name="mock:state" content="step-3">
-<meta name="mock:requirements" content="L2-039 L2-047 L2-052 L2-077 L2-108">
+<meta name="mock:requirements" content="L2-001 L2-039 L2-047 L2-052 L2-077 L2-108">
 <meta name="description" content="Step 3 of 4: the From price and a maximum driving distance from 20 to 200 km.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -25,6 +25,7 @@
     <a class="nav-link" href="default.html" aria-current="page">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -49,12 +50,12 @@
         <p class="form-section__lead">Churches only see you on dates you’re free and within your driving distance. You mark dates after you’re approved.</p>
         <div class="form-grid">
         <div class="field">
-          <label class="field__label" for="price">“From” price per service, in dollars <span class="optional">required</span></label>
-          <input class="input" type="number" id="price" name="price" value="400" required aria-describedby="price-help" min="100" step="25" inputmode="numeric">
-          <span class="field__help" id="price-help">Shown on your ticket as “From $400”. Zamaro keeps 8% when a church books you.</span>
+          <label class="field__label" for="price">“From” price per service, in dollars <span class="field__required">(required)</span></label>
+          <input class="input" type="number" id="price" name="price" value="400" required aria-describedby="price-help" min="100" max="20000" step="1" inputmode="numeric">
+          <span class="field__help" id="price-help">Whole dollars from $100 to $20,000. Shown on your ticket as “From $400”. Zamaro keeps 8% when a church books you.</span>
         </div>
         <div class="field">
-          <label class="field__label" for="distance">Maximum driving distance <span class="optional">required</span></label>
+          <label class="field__label" for="distance">Maximum driving distance <span class="field__required">(required)</span></label>
           <select class="select" id="distance" name="distance" required aria-describedby="distance-help"><option value="20">20 km</option><option value="30">30 km</option><option value="40">40 km</option><option value="50">50 km</option><option value="60">60 km</option><option value="70">70 km</option><option value="80" selected>80 km</option><option value="90">90 km</option><option value="100">100 km</option><option value="110">110 km</option><option value="120">120 km</option><option value="130">130 km</option><option value="140">140 km</option><option value="150">150 km</option><option value="160">160 km</option><option value="170">170 km</option><option value="180">180 km</option><option value="190">190 km</option><option value="200">200 km</option></select>
           <span class="field__help" id="distance-help">From Scarborough, 80 km reaches Oshawa, Newmarket and Mississauga.</span>
         </div>
@@ -127,6 +128,7 @@
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html">success</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="outside-area.html">outside-area</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

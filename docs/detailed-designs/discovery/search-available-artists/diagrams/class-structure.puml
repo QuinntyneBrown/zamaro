@@ -50,6 +50,9 @@ package "Zamaro API (Laravel)" {
   class SearchAvailableArtists <<action>> {
     +handle(criteria: SearchCriteria): Lineup
   }
+  class HeadlinerPicker {
+    +pick(cards: LineupCard[], today: CarbonImmutable): ?LineupCard
+  }
   class AvailabilityService {
     +isFree(artist: Artist, date: CarbonImmutable): bool
     +freeArtistIds(ids: array, date: CarbonImmutable): array
@@ -68,6 +71,7 @@ package "Zamaro API (Laravel)" {
     +label(): string
   }
   class Lineup <<value object>> {
+    +?LineupCard headliner
     +LineupCard[] cards
     +int total
     +?string nextCursor
@@ -75,10 +79,12 @@ package "Zamaro API (Laravel)" {
   class LineupCard <<value object>> {
     +int position
     +Artist artist
+    +string[] styles
     +Distance distance
     +?float rating
     +int reviewCount
     +int fromPriceCents
+    +int bookingsThisSeason
     +?Review headlinerQuote
   }
   class Artist <<Eloquent>> {
@@ -111,6 +117,7 @@ SearchArtistsRequest ..> SearchCriteria : creates
 SearchController --> SearchAvailableArtists
 SearchAvailableArtists --> AvailabilityService
 SearchAvailableArtists --> DistanceService
+SearchAvailableArtists --> HeadlinerPicker
 DistanceService --> RoutingProvider
 DistanceService ..> Distance : returns
 SearchAvailableArtists ..> Lineup : builds

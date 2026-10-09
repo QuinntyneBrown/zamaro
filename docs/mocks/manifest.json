@@ -7,6 +7,8 @@
       "title": "Discover artists",
       "route": "/",
       "requirements": [
+        "L2-002",
+        "L2-003",
         "L2-004",
         "L2-005",
         "L2-006",
@@ -15,15 +17,21 @@
         "L2-009",
         "L2-010",
         "L2-011",
+        "L2-044",
+        "L2-060",
+        "L2-077",
         "L2-097",
         "L2-105",
-        "L2-106"
+        "L2-106",
+        "L2-112"
       ],
       "states": [
         "default",
         "loading",
         "empty",
-        "error"
+        "error",
+        "invalid",
+        "limited"
       ]
     },
     {
@@ -42,15 +50,21 @@
         "L2-019",
         "L2-020",
         "L2-021",
+        "L2-060",
+        "L2-083",
         "L2-098",
         "L2-105",
-        "L2-107"
+        "L2-107",
+        "L2-112",
+        "L2-113"
       ],
       "states": [
         "default",
         "loading",
         "empty",
-        "error"
+        "error",
+        "booked-date",
+        "no-photos"
       ]
     },
     {
@@ -60,10 +74,12 @@
       "route": "/artists/:slug/book",
       "requirements": [
         "L2-019",
+        "L2-022",
         "L2-024",
         "L2-028",
         "L2-032",
         "L2-044",
+        "L2-077",
         "L2-105",
         "L2-108",
         "L2-110"
@@ -74,12 +90,33 @@
         "error",
         "invalid",
         "duplicate",
+        "limit",
+        "unverified",
         "submitting",
         "success"
       ],
       "not_applicable": {
         "empty": "The booking form always has fields; there is no collection to be empty."
       }
+    },
+    {
+      "id": "add-church",
+      "kind": "dialog",
+      "title": "Add your church",
+      "opens_from": "book",
+      "requirements": [
+        "L2-001",
+        "L2-024",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ]
     },
     {
       "id": "bookings",
@@ -106,7 +143,7 @@
       "id": "booking-detail",
       "kind": "page",
       "title": "Booking",
-      "route": "/bookings/:id",
+      "route": "/bookings/:number",
       "requirements": [
         "L2-029",
         "L2-030",
@@ -115,8 +152,10 @@
         "L2-033",
         "L2-036",
         "L2-037",
+        "L2-038",
         "L2-040",
         "L2-042",
+        "L2-043",
         "L2-044",
         "L2-045",
         "L2-046",
@@ -136,7 +175,12 @@
         "withdrawn",
         "cancelled",
         "expired",
-        "forbidden"
+        "deposit-expired",
+        "forbidden",
+        "artist-cancelled",
+        "balance-due",
+        "held",
+        "balance-failed"
       ],
       "not_applicable": {
         "empty": "A booking always has a date, an artist, a status and at least the request message."
@@ -191,10 +235,52 @@
       "title": "Pay deposit",
       "opens_from": "booking-detail",
       "requirements": [
+        "L2-032",
         "L2-035",
         "L2-036",
         "L2-037",
         "L2-044",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed",
+        "conflict"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "report-problem",
+      "kind": "dialog",
+      "title": "Report a problem",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-038",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "pay-balance",
+      "kind": "dialog",
+      "title": "Pay balance",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-035",
+        "L2-036",
+        "L2-038",
         "L2-099",
         "L2-101",
         "L2-108"
@@ -222,7 +308,8 @@
         "default",
         "busy",
         "invalid",
-        "failed"
+        "failed",
+        "edit"
       ],
       "not_applicable": {}
     },
@@ -232,7 +319,9 @@
       "title": "Booking toast",
       "opens_from": "booking-detail",
       "requirements": [
+        "L2-028",
         "L2-037",
+        "L2-045",
         "L2-063",
         "L2-109"
       ],
@@ -262,7 +351,8 @@
         "invalid",
         "submitting",
         "error",
-        "expired"
+        "expired",
+        "locked"
       ],
       "not_applicable": {
         "loading": "The form shows at once; there is nothing to fetch before it renders.",
@@ -286,11 +376,31 @@
         "invalid",
         "submitting",
         "success",
-        "error"
+        "error",
+        "challenge"
       ],
       "not_applicable": {
         "loading": "The form shows at once; there is nothing to fetch before it renders.",
         "empty": "A form always has its fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "verify-email",
+      "kind": "page",
+      "title": "Verify email",
+      "route": "/verify-email",
+      "requirements": [
+        "L2-022",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "expired",
+        "error"
+      ],
+      "not_applicable": {
+        "loading": "The default state is the link check itself; on success the page moves on with the Email verified banner.",
+        "empty": "The page shows one link check; there is no collection to be empty."
       }
     },
     {
@@ -381,7 +491,9 @@
       "route": "/offline",
       "requirements": [
         "L2-026",
-        "L2-027"
+        "L2-089",
+        "L2-108",
+        "L2-114"
       ],
       "states": [
         "default"
@@ -398,6 +510,7 @@
       "title": "Apply as an artist",
       "route": "/artists/apply",
       "requirements": [
+        "L2-001",
         "L2-039",
         "L2-047",
         "L2-052",
@@ -412,7 +525,8 @@
         "invalid",
         "submitting",
         "success",
-        "error"
+        "error",
+        "outside-area"
       ],
       "not_applicable": {
         "loading": "The form needs no data before it shows.",
@@ -427,14 +541,17 @@
       "requirements": [
         "L2-022",
         "L2-026",
-        "L2-090"
+        "L2-065",
+        "L2-090",
+        "L2-114"
       ],
       "states": [
         "info",
         "success",
         "warning",
         "danger",
-        "persistent"
+        "persistent",
+        "undeliverable"
       ],
       "not_applicable": {}
     },
@@ -461,6 +578,7 @@
       "title": "Account settings",
       "route": "/account",
       "requirements": [
+        "L2-001",
         "L2-024",
         "L2-025",
         "L2-065",
@@ -477,10 +595,96 @@
         "error",
         "invalid",
         "submitting",
-        "success"
+        "success",
+        "failed",
+        "out-of-area",
+        "export-requested",
+        "export-ready",
+        "artist",
+        "two-step-on"
       ],
       "not_applicable": {
         "empty": "Account settings always has the signed-in person’s values; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "confirm-email",
+      "kind": "page",
+      "title": "Confirm new email",
+      "route": "/account/email/confirm",
+      "requirements": [
+        "L2-025",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "expired",
+        "error"
+      ],
+      "not_applicable": {
+        "loading": "The default state is the link check itself; on success the page returns to Account settings.",
+        "empty": "The page shows one link check; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "accept-terms",
+      "kind": "page",
+      "title": "Accept updated terms",
+      "route": "/account/accept-terms",
+      "requirements": [
+        "L2-080",
+        "L2-105",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "submitting",
+        "error"
+      ],
+      "not_applicable": {
+        "empty": "There is always a current terms version and a summary of what changed."
+      }
+    },
+    {
+      "id": "data-export",
+      "kind": "page",
+      "title": "Download your data",
+      "route": "/account/data-exports/:id",
+      "requirements": [
+        "L2-074",
+        "L2-081"
+      ],
+      "states": [
+        "default",
+        "expired",
+        "error"
+      ],
+      "not_applicable": {
+        "loading": "The page asks for the file once and shows default at once; the browser shows the download progress.",
+        "empty": "An export always holds at least the profile and consent records."
+      }
+    },
+    {
+      "id": "mfa-setup",
+      "kind": "page",
+      "title": "Turn on two-step sign-in",
+      "route": "/account/security/mfa",
+      "requirements": [
+        "L2-072",
+        "L2-105",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "invalid",
+        "submitting",
+        "error",
+        "codes"
+      ],
+      "not_applicable": {
+        "empty": "Setup always has a key and a code field; there is no collection to be empty."
       }
     },
     {
@@ -500,6 +704,26 @@
         "invalid",
         "blocked",
         "failed"
+      ]
+    },
+    {
+      "id": "two-step-code",
+      "kind": "dialog",
+      "title": "Two-step code",
+      "opens_from": "account",
+      "requirements": [
+        "L2-072",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "invalid",
+        "busy",
+        "failed",
+        "new-codes",
+        "codes"
       ]
     },
     {
@@ -529,15 +753,35 @@
       "opens_from": "discover",
       "requirements": [
         "L2-099",
-        "L2-101"
+        "L2-101",
+        "L2-104"
       ],
       "states": [
         "default",
-        "artist"
+        "artist",
+        "admin"
       ],
       "not_applicable": {
         "busy": "A navigation drawer of links; nothing is submitted, so it is never busy.",
         "invalid": "A navigation drawer has no inputs to validate."
+      }
+    },
+    {
+      "id": "photo-viewer",
+      "kind": "dialog",
+      "title": "Photo viewer",
+      "opens_from": "artist",
+      "requirements": [
+        "L2-015",
+        "L2-099",
+        "L2-101"
+      ],
+      "states": [
+        "default"
+      ],
+      "not_applicable": {
+        "busy": "Viewing photos submits nothing, so it is never busy.",
+        "invalid": "The photo viewer has no inputs to validate."
       }
     },
     {
@@ -558,6 +802,24 @@
       ],
       "not_applicable": {
         "stacked": "Three stacked toasts are shown on booking-toast; a save produces one toast at a time."
+      }
+    },
+    {
+      "id": "share-toast",
+      "kind": "notification",
+      "title": "Share toast",
+      "opens_from": "artist",
+      "requirements": [
+        "L2-109",
+        "L2-113"
+      ],
+      "states": [
+        "success"
+      ],
+      "not_applicable": {
+        "info": "Share has one toast, Link copied; where a share sheet exists it opens instead and no toast follows.",
+        "warning": "Share has one toast, Link copied; where a share sheet exists it opens instead and no toast follows.",
+        "danger": "Dismissing the share sheet is not an error and shows nothing; Share has no failure toast in L2-113."
       }
     },
     {
@@ -583,8 +845,29 @@
         "error",
         "invalid",
         "submitting",
-        "success"
+        "success",
+        "address-locked",
+        "check-pending",
+        "video-processing"
       ]
+    },
+    {
+      "id": "profile-preview",
+      "kind": "page",
+      "title": "Profile preview",
+      "route": "/artist/profile/preview",
+      "requirements": [
+        "L2-054",
+        "L2-074",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error"
+      ],
+      "not_applicable": {}
     },
     {
       "id": "add-video",
@@ -593,6 +876,7 @@
       "opens_from": "edit-profile",
       "requirements": [
         "L2-052",
+        "L2-076",
         "L2-099",
         "L2-101",
         "L2-108"
@@ -603,6 +887,64 @@
         "invalid",
         "failed",
         "limit"
+      ]
+    },
+    {
+      "id": "add-photo",
+      "kind": "dialog",
+      "title": "Add photo",
+      "opens_from": "edit-profile",
+      "requirements": [
+        "L2-051",
+        "L2-076",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed",
+        "limit"
+      ]
+    },
+    {
+      "id": "add-song",
+      "kind": "dialog",
+      "title": "Add song",
+      "opens_from": "edit-profile",
+      "requirements": [
+        "L2-053",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed",
+        "limit"
+      ]
+    },
+    {
+      "id": "upload-check",
+      "kind": "dialog",
+      "title": "Upload check",
+      "opens_from": "edit-profile",
+      "requirements": [
+        "L2-049",
+        "L2-076",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
       ]
     },
     {
@@ -687,6 +1029,29 @@
       }
     },
     {
+      "id": "calendar-feed",
+      "kind": "dialog",
+      "title": "Calendar feed",
+      "opens_from": "availability",
+      "requirements": [
+        "L2-058",
+        "L2-074",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "off",
+        "busy",
+        "confirm",
+        "failed"
+      ],
+      "not_applicable": {
+        "invalid": "The dialog takes no typed input: it turns the feed on, copies the link or makes a new one."
+      }
+    },
+    {
       "id": "availability-toast",
       "kind": "notification",
       "title": "Availability toast",
@@ -731,13 +1096,15 @@
       "id": "request-detail",
       "kind": "page",
       "title": "Request",
-      "route": "/artist/requests/:id",
+      "route": "/artist/bookings/:number",
       "requirements": [
         "L2-029",
         "L2-030",
+        "L2-031",
         "L2-034",
         "L2-037",
         "L2-039",
+        "L2-042",
         "L2-043",
         "L2-045",
         "L2-046",
@@ -751,7 +1118,10 @@
         "declined",
         "confirmed",
         "completed",
-        "expired"
+        "expired",
+        "cancelled",
+        "booker-cancelled",
+        "withdrawn"
       ],
       "not_applicable": {
         "empty": "A request always has a church, a date, a price and a first message; there is nothing to be empty."
@@ -763,17 +1133,21 @@
       "title": "Accept request",
       "opens_from": "request-detail",
       "requirements": [
+        "L2-025",
         "L2-030",
         "L2-032",
         "L2-034",
+        "L2-046",
         "L2-099",
+        "L2-101",
         "L2-108"
       ],
       "states": [
         "default",
         "busy",
         "failed",
-        "conflict"
+        "conflict",
+        "no-phone"
       ],
       "not_applicable": {
         "invalid": "Accepting has no inputs; the price was locked when the church asked."
@@ -787,6 +1161,26 @@
       "requirements": [
         "L2-030",
         "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "artist-cancel-booking",
+      "kind": "dialog",
+      "title": "Cancel booking (artist)",
+      "opens_from": "request-detail",
+      "requirements": [
+        "L2-043",
+        "L2-099",
+        "L2-101",
         "L2-108"
       ],
       "states": [
@@ -832,9 +1226,417 @@
         "default",
         "loading",
         "empty",
+        "error",
+        "setup"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "artist-reviews",
+      "kind": "page",
+      "title": "Your reviews",
+      "route": "/artist/reviews",
+      "requirements": [
+        "L2-018",
+        "L2-060",
+        "L2-061",
+        "L2-062",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
         "error"
       ],
       "not_applicable": {}
+    },
+    {
+      "id": "reply-review",
+      "kind": "dialog",
+      "title": "Reply to a review",
+      "opens_from": "artist-reviews",
+      "requirements": [
+        "L2-061",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "edit",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "report-review",
+      "kind": "dialog",
+      "title": "Report a review",
+      "opens_from": "artist",
+      "requirements": [
+        "L2-062",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "mfa-challenge",
+      "kind": "page",
+      "title": "Two-step sign-in",
+      "route": "/account/sign-in/verify",
+      "requirements": [
+        "L2-066",
+        "L2-072",
+        "L2-073",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "recovery",
+        "invalid",
+        "submitting",
+        "error",
+        "locked"
+      ],
+      "not_applicable": {
+        "loading": "The challenge renders straight from the sign-in response; nothing loads.",
+        "empty": "A single code field; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "admin-applications",
+      "kind": "page",
+      "title": "Applications",
+      "route": "/admin/applications",
+      "requirements": [
+        "L2-048",
+        "L2-066",
+        "L2-067",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "admin-application",
+      "kind": "page",
+      "title": "Application",
+      "route": "/admin/applications/:id",
+      "requirements": [
+        "L2-048",
+        "L2-049",
+        "L2-066",
+        "L2-067",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "verified",
+        "approved",
+        "loading",
+        "error"
+      ],
+      "not_applicable": {
+        "empty": "A submitted application always has applicant details, a video and two references."
+      }
+    },
+    {
+      "id": "reject-application",
+      "kind": "dialog",
+      "title": "Reject application",
+      "opens_from": "admin-application",
+      "requirements": [
+        "L2-048",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "admin-artists",
+      "kind": "page",
+      "title": "Artists",
+      "route": "/admin/artists",
+      "requirements": [
+        "L2-066",
+        "L2-067",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error",
+        "no-results"
+      ],
+      "not_applicable": {
+        "empty": "Artists exist from the first approval; a search with no match is the no-results state."
+      }
+    },
+    {
+      "id": "admin-artist",
+      "kind": "page",
+      "title": "Artist",
+      "route": "/admin/artists/:id",
+      "requirements": [
+        "L2-066",
+        "L2-067",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "suspended",
+        "loading",
+        "error"
+      ],
+      "not_applicable": {
+        "empty": "An artist always has details and a standing."
+      }
+    },
+    {
+      "id": "admin-checks",
+      "kind": "page",
+      "title": "Vulnerable Sector Checks",
+      "route": "/admin/vulnerable-sector-checks",
+      "requirements": [
+        "L2-049",
+        "L2-066",
+        "L2-069",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "verified",
+        "loading",
+        "empty",
+        "error"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "suspend-artist",
+      "kind": "dialog",
+      "title": "Suspend artist",
+      "opens_from": "admin-artist",
+      "requirements": [
+        "L2-067",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "reinstate-artist",
+      "kind": "dialog",
+      "title": "Reinstate artist",
+      "opens_from": "admin-artist",
+      "requirements": [
+        "L2-067",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "failed"
+      ],
+      "not_applicable": {
+        "invalid": "Reinstating takes no input, so nothing can be invalid."
+      }
+    },
+    {
+      "id": "admin-bookings",
+      "kind": "page",
+      "title": "Bookings support",
+      "route": "/admin/bookings",
+      "requirements": [
+        "L2-066",
+        "L2-068",
+        "L2-105",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "held",
+        "loading",
+        "error",
+        "no-results"
+      ],
+      "not_applicable": {
+        "empty": "Bookings exist from the first request; a search with no match is the no-results state."
+      }
+    },
+    {
+      "id": "admin-booking",
+      "kind": "page",
+      "title": "Booking support",
+      "route": "/admin/bookings/:number",
+      "requirements": [
+        "L2-029",
+        "L2-038",
+        "L2-045",
+        "L2-066",
+        "L2-068",
+        "L2-105",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "held",
+        "loading",
+        "error"
+      ],
+      "not_applicable": {
+        "empty": "A booking always has a status, a church, an artist and a price."
+      }
+    },
+    {
+      "id": "issue-refund",
+      "kind": "dialog",
+      "title": "Issue refund",
+      "opens_from": "admin-booking",
+      "requirements": [
+        "L2-068",
+        "L2-099",
+        "L2-101",
+        "L2-108",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "invalid",
+        "confirm",
+        "busy",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "resolve-hold",
+      "kind": "dialog",
+      "title": "Resolve held booking",
+      "opens_from": "admin-booking",
+      "requirements": [
+        "L2-038",
+        "L2-068",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "admin-reviews",
+      "kind": "page",
+      "title": "Reported reviews",
+      "route": "/admin/reviews",
+      "requirements": [
+        "L2-060",
+        "L2-062",
+        "L2-066",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "hide-review",
+      "kind": "dialog",
+      "title": "Hide review",
+      "opens_from": "admin-reviews",
+      "requirements": [
+        "L2-060",
+        "L2-062",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "admin-audit",
+      "kind": "page",
+      "title": "Audit log",
+      "route": "/admin/audit",
+      "requirements": [
+        "L2-066",
+        "L2-069",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error",
+        "no-results"
+      ],
+      "not_applicable": {
+        "empty": "Every sign-in writes an entry, so the log is never empty; filters with no match are the no-results state."
+      }
+    },
+    {
+      "id": "session-toast",
+      "kind": "notification",
+      "title": "Admin session toast",
+      "opens_from": "admin-applications",
+      "requirements": [
+        "L2-066",
+        "L2-109"
+      ],
+      "states": [
+        "warning"
+      ],
+      "not_applicable": {
+        "info": "The only admin session toast is the idle warning.",
+        "success": "The only admin session toast is the idle warning.",
+        "danger": "When the session ends the administrator lands on Sign in with a return address, not a toast."
+      }
     }
   ]
 }

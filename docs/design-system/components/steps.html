@@ -52,6 +52,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -78,6 +79,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -166,7 +169,7 @@
             <li><div><h3>Lock it in</h3><p>When they accept, pay a 25% deposit. The rest is due after the event.</p></div></li>
           </ol>
         </div>
-        <div class="ds-example__caption"><span>Stacked under 1024px, three columns from 1024px. This is “How booking works” on Discover.</span></div>
+        <div class="ds-example__caption"><span>Stacked under 992px, three columns from 992px. This is “How booking works” on Discover.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="steps"&gt;
   &lt;li&gt;&lt;div&gt;&lt;h3&gt;Pick your date&lt;/h3&gt;&lt;p&gt;You only see artists who are free that day and will drive to you.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
   &lt;li&gt;&lt;div&gt;&lt;h3&gt;Send a request&lt;/h3&gt;&lt;p&gt;Tell them about your church and the songs you love. Nothing is charged yet.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
@@ -189,7 +192,7 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
           <ol class="steps" aria-label="Your request to Abigail Mensah">
-            <li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3><p>Sat 14 Nov, Sunday service at Riverside Community Church.</p></div></li>
+            <li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3><p>Sat 14 Nov, Worship night at Riverside Community Church.</p></div></li>
             <li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3><p>Abigail has your request. She usually replies within 2 days.</p></div></li>
             <li><div><p class="overline text-muted">Next</p><h3>Lock it in</h3><p>When she accepts, pay the 25% deposit: $162.50.</p></div></li>
           </ol>
@@ -200,6 +203,82 @@
   &lt;li aria-current="step"&gt;&lt;div&gt;&lt;p class="overline"&gt;Now&lt;/p&gt;&lt;h3&gt;Send a request&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
   &lt;li&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Next&lt;/p&gt;&lt;h3&gt;Lock it in&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3 id="stepper">Stepper (multi-step form)</h3>
+      <p><code>.stepper</code> shows where a person is in a form split over pages, such as the four-step artist application. Each <code>.stepper__step</code> is a numbered stub; the current one is yellow with <code>aria-current="step"</code>, completed ones are ink with a check (<code>data-state="done"</code>) and link back, and a step with errors after a failed submit takes <code>data-state="invalid"</code> and the danger colour. Say the state in the link’s name too (“About you, done”), because the check is drawn by CSS.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<ol class="stepper" aria-label="Application steps" style="width: 100%;">
+  <li class="stepper__step" data-state="done"><a href="#stepper" aria-label="About you, done">About you</a></li>
+  <li class="stepper__step" aria-current="step">Your music</li>
+  <li class="stepper__step">Price and travel</li>
+  <li class="stepper__step">References and review</li>
+</ol>
+        </div>
+        <div class="ds-example__caption"><span><code>.stepper</code> on step 2: pages/apply/step-2.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="stepper" aria-label="Application steps" style="width: 100%;"&gt;
+  &lt;li class="stepper__step" data-state="done"&gt;&lt;a href="#stepper" aria-label="About you, done"&gt;About you&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="stepper__step" aria-current="step"&gt;Your music&lt;/li&gt;
+  &lt;li class="stepper__step"&gt;Price and travel&lt;/li&gt;
+  &lt;li class="stepper__step"&gt;References and review&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<ol class="stepper" aria-label="Application steps, with a problem" style="width: 100%;">
+  <li class="stepper__step" data-state="done"><a href="#stepper" aria-label="About you, done">About you</a></li>
+  <li class="stepper__step" data-state="invalid"><a href="#stepper" aria-label="Your music, needs fixing">Your music</a></li>
+  <li class="stepper__step" data-state="done"><a href="#stepper" aria-label="Price and travel, done">Price and travel</a></li>
+  <li class="stepper__step" aria-current="step">References and review</li>
+</ol>
+        </div>
+        <div class="ds-example__caption"><span>A step with errors (<code>data-state="invalid"</code>) after a failed submit: pages/apply/invalid.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="stepper" aria-label="Application steps, with a problem" style="width: 100%;"&gt;
+  &lt;li class="stepper__step" data-state="done"&gt;&lt;a href="#stepper" aria-label="About you, done"&gt;About you&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="stepper__step" data-state="invalid"&gt;&lt;a href="#stepper" aria-label="Your music, needs fixing"&gt;Your music&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="stepper__step" data-state="done"&gt;&lt;a href="#stepper" aria-label="Price and travel, done"&gt;Price and travel&lt;/a&gt;&lt;/li&gt;
+  &lt;li class="stepper__step" aria-current="step"&gt;References and review&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3>Timeline (where a booking stands)</h3>
+      <p><code>.timeline</code> is the vertical itinerary of one booking or application: numbered stops joined by a dashed line, each with a <code>.timeline__title</code> and a <code>.timeline__meta</code> line with the date, time or deadline (L2-110 formats). Stops that happened take <code>data-state="done"</code> (ink), the stop being waited on takes <code>aria-current="step"</code> (yellow), and a stop that went wrong (cancelled, a failed balance charge) takes <code>data-state="danger"</code>. Future stops stay muted.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<ol class="timeline" style="width: min(100%, 28rem);">
+  <li data-state="done"><div><p class="timeline__title">Requested</p><p class="timeline__meta">Fri 9 Oct at 10:15 a.m.</p></div></li>
+  <li aria-current="step"><div><p class="timeline__title">Accepted</p><p class="timeline__meta">Waiting for Abigail. She replies by Mon 12 Oct, 10:15 a.m.</p></div></li>
+  <li><div><p class="timeline__title">Confirmed</p><p class="timeline__meta">When you pay the $162.50 deposit</p></div></li>
+  <li><div><p class="timeline__title">Event</p><p class="timeline__meta">Sat 14 Nov at 7:00 p.m.</p></div></li>
+  <li><div><p class="timeline__title">Completed</p><p class="timeline__meta">Balance charged 48 hours after the event</p></div></li>
+</ol>
+        </div>
+        <div class="ds-example__caption"><span><code>.timeline</code> for a Requested booking: pages/booking-detail/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="timeline" style="width: min(100%, 28rem);"&gt;
+  &lt;li data-state="done"&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Requested&lt;/p&gt;&lt;p class="timeline__meta"&gt;Fri 9 Oct at 10:15 a.m.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li aria-current="step"&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Accepted&lt;/p&gt;&lt;p class="timeline__meta"&gt;Waiting for Abigail. She replies by Mon 12 Oct, 10:15 a.m.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Confirmed&lt;/p&gt;&lt;p class="timeline__meta"&gt;When you pay the $162.50 deposit&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Event&lt;/p&gt;&lt;p class="timeline__meta"&gt;Sat 14 Nov at 7:00 p.m.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Completed&lt;/p&gt;&lt;p class="timeline__meta"&gt;Balance charged 48 hours after the event&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<ol class="timeline" style="width: min(100%, 28rem);">
+  <li data-state="done"><div><p class="timeline__title">Requested</p><p class="timeline__meta">Fri 25 Sep at 9:40 a.m.</p></div></li>
+  <li data-state="done"><div><p class="timeline__title">Confirmed</p><p class="timeline__meta">Deposit paid Tue 29 Sep</p></div></li>
+  <li data-state="danger"><div><p class="timeline__title">Cancelled</p><p class="timeline__meta">Abigail cancelled Fri 9 Oct at 4:30 p.m. Everything you paid is refunded.</p></div></li>
+</ol>
+        </div>
+        <div class="ds-example__caption"><span>A cancelled stop (<code>data-state="danger"</code>): pages/booking-detail/artist-cancelled.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="timeline" style="width: min(100%, 28rem);"&gt;
+  &lt;li data-state="done"&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Requested&lt;/p&gt;&lt;p class="timeline__meta"&gt;Fri 25 Sep at 9:40 a.m.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li data-state="done"&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Confirmed&lt;/p&gt;&lt;p class="timeline__meta"&gt;Deposit paid Tue 29 Sep&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li data-state="danger"&gt;&lt;div&gt;&lt;p class="timeline__title"&gt;Cancelled&lt;/p&gt;&lt;p class="timeline__meta"&gt;Abigail cancelled Fri 9 Oct at 4:30 p.m. Everything you paid is refunded.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><ol class="timeline"><li data-state="done"><div><p class="timeline__title">Requested</p><p class="timeline__meta">Fri 9 Oct</p></div></li><li aria-current="step"><div><p class="timeline__title">Accepted</p><p class="timeline__meta">By Mon 12 Oct</p></div></li><li data-state="danger"><div><p class="timeline__title">Completed</p><p class="timeline__meta">Balance charge failed</p></div></li></ol></div>
+        <div data-theme="dark"><ol class="timeline"><li data-state="done"><div><p class="timeline__title">Requested</p><p class="timeline__meta">Fri 9 Oct</p></div></li><li aria-current="step"><div><p class="timeline__title">Accepted</p><p class="timeline__meta">By Mon 12 Oct</p></div></li><li data-state="danger"><div><p class="timeline__title">Completed</p><p class="timeline__meta">Balance charge failed</p></div></li></ol></div>
       </div>
     </section>
 
@@ -238,10 +317,14 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Stacked, full width, under <code>--layout-breakpoint-lg</code> (1024px), with horizontal rules between steps.</li>
-        <li>From 1024px, three equal columns with vertical rules. Four or five steps also share the row, so keep the copy short.</li>
+        <li>Stacked, full width, under <code>--layout-breakpoint-lg</code> (992px), with horizontal rules between steps.</li>
+        <li>From 992px, three equal columns with vertical rules. Four or five steps also share the row, so keep the copy short.</li>
         <li><code>.steps--vertical</code> ignores the breakpoint and always stacks.</li>
         <li>The number sits to the left of the text at every width; it never moves above it.</li>
+      </ul>
+      <ul>
+        <li><code>.stepper</code> stays on one line and scrolls horizontally inside itself on phones (no visible scrollbar); the current step is scrolled into view.</li>
+        <li><code>.timeline</code> is a single column at every width; long meta lines wrap under their title.</li>
       </ul>
     </section>
 
@@ -310,36 +393,47 @@
           <tr><td>Number / title</td><td><code>--text-figure-lg</code> / <code>--text-h4</code></td><td colspan="2"><span data-token="--font-size-3xl"></span> / <span data-token="--font-size-xl"></span></td></tr>
           <tr><td>Panel padding / gap</td><td><code>--space-8</code> / <code>--space-5</code></td><td colspan="2"><span data-token="--space-8"></span> / <span data-token="--space-5"></span></td></tr>
           <tr><td>Current bar</td><td><code>--border-width-poster</code></td><td colspan="2"><span data-token="--border-width-poster"></span></td></tr>
+                  <tr><td>Current step / stop</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Problem stop</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Stop connector</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
         </tbody>
       </table></div>
     </section>
 
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
       <pre><code>&lt;ol class="steps" aria-label="Your request to Abigail Mensah"&gt;
-  &lt;li data-status="complete"&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Done&lt;/p&gt;&lt;h3&gt;Pick your date&lt;/h3&gt;&lt;p&gt;Sat 14 Nov, Sunday service.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li data-status="complete"&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Done&lt;/p&gt;&lt;h3&gt;Pick your date&lt;/h3&gt;&lt;p&gt;Sat 14 Nov, Worship night.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
   &lt;li aria-current="step"&gt;&lt;div&gt;&lt;p class="overline"&gt;Now&lt;/p&gt;&lt;h3&gt;Send a request&lt;/h3&gt;&lt;p&gt;Abigail usually replies within 2 days.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
   &lt;li&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Next&lt;/p&gt;&lt;h3&gt;Lock it in&lt;/h3&gt;&lt;p&gt;Pay the 25% deposit: $162.50.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;/ol&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
-        <tr><td><code>.steps</code></td><td>Framed numbered list; three columns from 1024px.</td></tr>
+        <tr><td><code>.steps</code></td><td>Framed numbered list; three columns from 992px.</td></tr>
         <tr><td><code>.steps--vertical</code></td><td>Always stacked.</td></tr>
         <tr><td><code>aria-current="step"</code></td><td>Current step: yellow bottom bar; announced as current.</td></tr>
         <tr><td><code>data-status="complete"</code></td><td>Complete step: ink number block. Not announced, so add “Done”.</td></tr>
         <tr><td><code>aria-label</code> on the <code>&lt;ol&gt;</code></td><td>Names a progress list.</td></tr>
+      
+        <tr><td><code>.stepper</code>, <code>.stepper__step</code></td><td>Numbered steps of a multi-page form; scrolls on phones.</td></tr>
+        <tr><td><code>.stepper__step[aria-current="step"]</code></td><td>Current step: yellow.</td></tr>
+        <tr><td><code>.stepper__step[data-state="done"|"invalid"]</code></td><td>Completed (ink, check) / has errors (danger).</td></tr>
+        <tr><td><code>.timeline</code>, <code>__title</code>, <code>__meta</code></td><td>Vertical itinerary of numbered stops.</td></tr>
+        <tr><td><code>.timeline li[data-state="done"|"danger"]</code></td><td>Happened (ink) / went wrong (danger).</td></tr>
+        <tr><td><code>.timeline li[aria-current="step"]</code></td><td>The stop being waited on: yellow.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “How booking works”, three steps</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same steps, unchanged</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “How booking works”, three steps; <a href="../../mocks/pages/discover/loading.html">loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a> keep them unchanged</li>
+        <li><code>.stepper</code>: <a href="../../mocks/pages/apply/default.html">pages/apply/default</a>, <a href="../../mocks/pages/apply/step-2.html">step-2</a>, <a href="../../mocks/pages/apply/step-3.html">step-3</a>, <a href="../../mocks/pages/apply/step-4.html">step-4</a>, <a href="../../mocks/pages/apply/invalid.html">invalid</a>, <a href="../../mocks/pages/apply/outside-area.html">outside-area</a> (step 1 marked invalid), <a href="../../mocks/pages/apply/success.html">success</a> (every step done, no links)</li>
+        <li><code>.timeline</code>: <a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail/default</a> and every booking status (<a href="../../mocks/pages/booking-detail/confirmed.html">confirmed</a>, <a href="../../mocks/pages/booking-detail/artist-cancelled.html">artist-cancelled</a>, <a href="../../mocks/pages/booking-detail/balance-failed.html">balance-failed</a>…), <a href="../../mocks/pages/request-detail/default.html">pages/request-detail/default</a>, <a href="../../mocks/pages/book/success.html">pages/book/success</a>, <a href="../../mocks/pages/apply/step-2.html">pages/apply/step-2</a> (“After you apply”), and the dialogs over a booking such as <a href="../../mocks/dialogs/cancel-booking/default.html">dialogs/cancel-booking/default</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The number’s rule read the primitive <code>--palette-ink</code>. It now reads <code>--color-border-on-accent</code>.</li>
         <li>The number used an inline display-font shorthand. It now reads <code>--text-figure-lg</code>.</li>
-        <li>Not in the mocks yet: <code>.steps--vertical</code>, <code>aria-current="step"</code> and <code>data-status="complete"</code> are part of the core set. The product needs them for a booking request’s status page and the request confirmation.</li>
+        <li><code>.steps--vertical</code> and <code>data-status="complete"</code> on <code>.steps</code> are still not in the mocks: booking progress uses <code>.timeline</code> and multi-page forms use <code>.stepper</code>.</li>
       </ul>
     </section>
 

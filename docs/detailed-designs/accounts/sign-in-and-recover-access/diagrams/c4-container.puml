@@ -8,7 +8,7 @@ System_Ext(breach, "Breached-password service", "k-anonymity range query")
 System_Ext(bot, "Bot challenge provider", "Human check")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "SignInPage, ForgotPasswordPage, ResetPasswordPage, SecurityPage")
+  Container(web, "Zamaro Web", "Angular with SSR", "SignInPage, MfaChallengePage, ForgotPasswordPage, ResetPasswordPage, MfaEnrolmentPage")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Session, password and two-factor endpoints")
   Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends reset and lockout emails")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Users, reset tokens, recovery codes, user_sessions, audit entries")

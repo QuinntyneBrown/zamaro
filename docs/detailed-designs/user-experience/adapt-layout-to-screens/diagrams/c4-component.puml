@@ -8,7 +8,7 @@ Container(api, "Zamaro API", "Laravel", "MeController, GET /api/v1/me")
 Container_Boundary(web, "Zamaro Web") {
   Component(shell, "AppShellComponent", "Angular component", "Skip link, header, main, footer")
   Component(bp, "BreakpointService", "Angular service", "Viewport class and isCompact signals from L2 breakpoints")
-  Component(topbar, "TopBarComponent", "Angular component", "Full header at MD+, compact at XS and SM")
+  Component(topbar, "TopBarComponent", "Angular component", "Full header from LG (artist shell from XL), compact below")
   Component(drawer, "NavDrawerComponent", "Angular component", "Primary links behind the menu button")
   Component(dialogs, "DialogService", "CDK Dialog wrapper", "Full-screen panel class at XS")
   Component(user_store, "CurrentUserStore", "Signal store", "Initials and Saved count")

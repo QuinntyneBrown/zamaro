@@ -16,6 +16,8 @@ title Class structure — View the booker's bookings
 package "Zamaro Web (Angular)" {
   class BookingsPage {
     +store: BookingsStore
+    +onSelectTab(group: BookingGroupName): void
+    +onFilterStatus(group: BookingGroupName, status: BookingStatus | null): void
     +onShowMore(group: BookingGroupName): void
   }
   class BookingListItemComponent {
@@ -26,6 +28,7 @@ package "Zamaro Web (Angular)" {
     +upcoming: Signal<BookingGroup>
     +past: Signal<BookingGroup>
     +load(): void
+    +setStatusFilter(group: BookingGroupName, status: BookingStatus | null): void
     +loadMore(group: BookingGroupName): void
   }
   class BookingDetailPage {
@@ -37,11 +40,12 @@ package "Zamaro Web (Angular)" {
     +load(number: string): void
   }
   class BookingsApi {
-    +list(group: BookingGroupName, cursor?: string): Observable<Page<BookingSummary>>
+    +list(group: BookingGroupName, status?: BookingStatus, cursor?: string): Observable<Page<BookingSummary>>
     +get(number: string): Observable<BookingDetail>
   }
   class BookingGroup {
     +items: BookingSummary[]
+    +statusFilter: BookingStatus | null
     +nextCursor: string | null
   }
 }
@@ -55,7 +59,7 @@ package "Zamaro API (Laravel)" {
     +rules(): array
   }
   class ListBookerBookings <<action>> {
-    +handle(booker: User, group: string, cursor: ?string): CursorPaginator
+    +handle(booker: User, group: string, status: ?BookingStatus, cursor: ?string): CursorPaginator
   }
   class BookingNextAction {
     +for(booking: Booking, party: User): ?NextAction
@@ -63,7 +67,6 @@ package "Zamaro API (Laravel)" {
   enum NextAction {
     PayDeposit
     Message
-    Cancel
     LeaveReview
   }
   class Booking <<Eloquent>> {
@@ -79,14 +82,15 @@ package "Zamaro API (Laravel)" {
   class BookingSummaryResource <<API resource>> {
     +string number
     +ArtistSummary artist
+    +int distanceKm
     +string eventDate
+    +string startTime
     +GatheringKind gatheringKind
     +BookingStatus status
     +int amountPaidCents
     +?NextAction nextAction
   }
   class BookingResource <<API resource>> {
-    +string startTime
     +ChurchSnapshot church
     +int quotedPriceCents
     +int hstCents

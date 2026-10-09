@@ -31,12 +31,20 @@ Worker.
 - **`BookingDetailPage`** — shows a "Withdraw request" button only when the
   booking's `allowedActions` contains `withdraw`. For a Confirmed booking the list
   holds `cancel` instead, so the page shows Cancel and never Withdraw (L2-031).
-- **`WithdrawRequestDialogComponent`** — design-system confirmation dialog that
-  states nothing has been charged and that the artist will be told. Its copy is
-  `<TO SUPPLY>`. The confirm button shows a busy state and blocks a second
-  submission while pending (L2-108).
+- **`WithdrawRequestDialogComponent`** — design-system confirmation dialog opened by
+  "Withdraw request" in the payment panel. Its kicker names the booking number,
+  status and date. The title reads "Withdraw your request to {first name}?" and the
+  description "Nothing has been charged and nothing will be." The body says the
+  artist is told straight away and that the booker can ask again later if the
+  artist is still free, above a small receipt with the booking and "Charged $0".
+  It has no inputs. Focus starts on "Keep request"; the confirm button reads
+  "Withdraw request", shows a busy state ("Withdrawing…") and blocks a second
+  submission while pending, and Close and Escape are disabled until the server
+  answers (L2-108). A failed request shows an alert at the top, "Your request
+  wasn't withdrawn", says the request is unchanged and nothing was charged, and
+  turns the confirm button into Try again.
 - **`BookingDetailStore`** — signal-based store for the open booking. On success it
-  replaces the booking with the response, so the status badge reads Withdrawn and
+  replaces the booking with the response, so the status stamp reads Withdrawn and
   the timeline gains an entry. On 409 it reloads the booking and shows an error
   toast (L2-109).
 - **`BookingsApi.withdraw(number)`** — typed client for the endpoint below.
@@ -61,8 +69,10 @@ Worker.
   and the other receives 409. When the processor charges a deposit after the
   booking has already left Accepted, `payments/pay-deposit` refunds it in full.
 - **Artist notice** — after commit, `RequestWithdrawn` emails the artist through
-  `notifications/send-transactional-emails` (L2-031). The withdrawn request leaves
-  the artist's inbox at `/artist/requests`.
+  `notifications/send-transactional-emails` (L2-031). The withdrawn request moves
+  from the New tab of the artist's inbox at `/artist/requests` to Past, and the
+  artist booking page shows it as withdrawn
+  ([`pages/request-detail/withdrawn`](../../../mocks/pages/request-detail/withdrawn.html)).
 - **Calendar** — a withdrawal frees nothing, because only Confirmed bookings block a
   date. The artist calendar's Requested count for the date drops by one (L2-056).
 
@@ -70,6 +80,16 @@ Worker.
 
 - `bookings.status` becomes `Withdrawn`.
 - `booking_transitions` gains one row with the booker as actor.
+
+**Mock screens** — [`dialogs/withdraw-request`](../../../mocks/dialogs/withdraw-request/default.html)
+in its states [default](../../../mocks/dialogs/withdraw-request/default.html),
+[busy](../../../mocks/dialogs/withdraw-request/busy.html) and
+[failed](../../../mocks/dialogs/withdraw-request/failed.html), opened from
+[`pages/booking-detail` default](../../../mocks/pages/booking-detail/default.html)
+(Requested) and [accepted](../../../mocks/pages/booking-detail/accepted.html); the
+result is the [withdrawn](../../../mocks/pages/booking-detail/withdrawn.html) state,
+and the [confirmed](../../../mocks/pages/booking-detail/confirmed.html) state shows
+Cancel booking in place of Withdraw.
 
 ## Requirements
 

@@ -52,8 +52,11 @@ package "Zamaro API (Laravel)" {
   interface BreachedPasswordChecker {
     +isBreached(password: string): bool
   }
+  class VerifyBotChallenge <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
   interface BotChallengeVerifier {
-    +verify(token: string, ip: string): bool
+    +verify(token: string, ip: string, action: string): ChallengeResult
   }
   class RegisterBooker <<action>> {
     +handle(data: RegistrationData): RegistrationResult
@@ -98,10 +101,11 @@ package "Zamaro API (Laravel)" {
 RegisterPage --> AuthApi
 VerifyEmailPage --> AuthApi
 AuthApi ..> RegistrationForm : sends
-AuthApi ..> RegistrationController : POST /api/v1/register
+AuthApi ..> VerifyBotChallenge : POST /api/v1/register
+VerifyBotChallenge ..> RegistrationController : passes on
+VerifyBotChallenge --> BotChallengeVerifier : checks
 RegistrationController ..> RegisterBookerRequest : validates
 RegisterBookerRequest ..> PasswordPolicy : applies
-RegisterBookerRequest ..> BotChallengeVerifier : checks
 PasswordPolicy --> BreachedPasswordChecker
 RegistrationController --> RegisterBooker
 RegisterBooker ..> RegistrationResult : returns

@@ -19,7 +19,7 @@ package "Zamaro Web (Angular)" {
     +onReply(reviewId: number, text: string): void
     +onEditReply(reviewId: number, text: string): void
   }
-  class ReviewReplyFormComponent {
+  class ReplyToReviewDialogComponent {
     +text: FormControl<string>
     +remaining: Signal<number>
     +editableUntil: Input<string | null>
@@ -79,7 +79,7 @@ package "Zamaro API (Laravel)" {
 }
 
 ArtistReviewsPage --> ArtistReviewsStore
-ArtistReviewsPage --> ReviewReplyFormComponent
+ArtistReviewsPage --> ReplyToReviewDialogComponent : opens (CDK Dialog)
 ArtistReviewsStore --> ArtistReviewsApi
 ArtistReviewsApi ..> ArtistReviewReplyController : POST / PATCH
 ArtistReviewReplyController ..> ReviewReplyPolicy : authorises

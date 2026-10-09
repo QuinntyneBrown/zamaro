@@ -57,7 +57,7 @@ package "Zamaro API (Laravel)" {
     +render(request: Request): JsonResponse
   }
   class SimilarArtistFinder {
-    +forMissingArtist(context: MissingArtistContext, date: ?CarbonImmutable, limit: int = 3): Artist[]
+    +forMissingArtist(context: MissingArtistContext, search: ?SearchCriteria, limit: int = 3): Artist[]
   }
   class SlugHistory <<Eloquent>> {
     +string oldSlug

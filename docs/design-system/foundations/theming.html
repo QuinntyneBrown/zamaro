@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -128,7 +131,9 @@
 <li><b>Light</b> is declared on <code>:root, [data-theme="light"]</code>. <b>Dark</b> is declared on <code>[data-theme="dark"]</code> and again inside <code>@media (prefers-color-scheme: dark)</code> for <code>:root:not([data-theme="light"])</code>, so the OS choice applies unless the page forces one. The two dark blocks are kept identical. The contrast checker reads both.</li>
 <li>Each theme sets <code>color-scheme</code>, so native date pickers, selects and scrollbars follow.</li>
 <li>Shadows are re-declared in every theme because they embed a themed colour. A custom property resolves where it is declared, so a shadow declared once on <code>:root</code> would keep the light ink inside a dark island.</li>
-<li>The product stores an explicit choice on <code>&lt;html data-theme&gt;</code>. Without one, it follows the OS.</li>
+<li>The product applies an explicit choice as <code>&lt;html data-theme&gt;</code>. Without one, it follows the OS. The choice is kept on the device and, for signed-in people, on their account, so it follows them to other devices (L2-104; see the <a href="../../detailed-designs/user-experience/switch-theme/README.md">switch-theme design</a>).</li>
+<li>The theme toggle (L2-104) is the <a href="../components/top-bar.html">top bar’s</a> <code>.topbar__theme</code> button from LG and a “Dark theme” item in the navigation drawer below it: a <code>button</code> with <code>aria-pressed="true"</code> while dark and a constant name. A small inline script applies a stored choice before the first paint, so a dark preference never flashes light.</li>
+<li><b>Dark-theme wrapper.</b> Any element with <code>data-theme="dark"</code> re-declares every colour and shadow token for its subtree, so a component renders in the stage theme without changing the page. The docs’ side-by-side theme blocks use it, and the component perf tests render through it as their “dark theme wrapper” composite, so the cost of re-resolving the dark tokens is measured once for every component.</li>
 </ul>
 <pre><code>&lt;html lang="en" data-theme="dark"&gt;   &lt;!-- forced stage --&gt;
 &lt;html lang="en"&gt;                      &lt;!-- follows prefers-color-scheme --&gt;</code></pre>

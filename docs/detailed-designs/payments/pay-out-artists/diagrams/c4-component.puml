@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Pay out artists
 
-Container(web, "Zamaro Web", "Angular", "PayoutSetupPage, EarningsPage, PayoutsApi")
+Container(web, "Zamaro Web", "Angular", "EarningsPage with payout account panel, PayoutsApi")
 System_Ext(processor, "Payment processor", "Connected accounts and transfers")
 Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
   Component(onbctrl, "PayoutAccountController", "Laravel controller", "POST /api/v1/artist/payout-account/onboarding-link, GET status")

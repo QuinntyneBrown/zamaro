@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account settings · artist — Zamaro mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="account">
+<meta name="mock:state" content="artist">
+<meta name="mock:requirements" content="L2-001 L2-024 L2-025 L2-065 L2-072 L2-080 L2-081 L2-082 L2-105 L2-108">
+<meta name="description" content="Abigail’s account settings on the artist side: the same page without the Church section, with her private contact phone, sign-in email, password, email preferences, two-step sign-in, devices, data and delete account.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar topbar--workspace">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <span class="topbar__role">Artists</span>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../dashboard/default.html">Dashboard</a>
+    <a class="nav-link" href="../requests/default.html">Requests <span class="badge badge--count">3<span class="visually-hidden"> awaiting reply</span></span></a>
+    <a class="nav-link" href="../availability/default.html">Availability</a>
+    <a class="nav-link" href="../earnings/default.html">Earnings</a>
+    <a class="nav-link" href="../edit-profile/default.html">Profile</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <a class="nav-link topbar__link" href="../artist/default.html">View public profile</a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+  <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
+</header>
+
+<main id="main">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <h1 class="page-head__title">Account settings</h1>
+        <p class="page-head__sub">Abigail Mensah · Artist</p>
+      </div>
+    </div>
+    <div class="page-body">
+    <div class="settings-layout">
+      <nav class="settings-nav" aria-label="Settings sections">
+        <a href="#profile" aria-current="true">Profile</a>
+        <a href="#contact">Contact</a>
+        <a href="#email">Email</a>
+        <a href="#password">Password</a>
+        <a href="#preferences">Email preferences</a>
+        <a href="#two-step">Two-step sign-in</a>
+        <a href="#devices">Signed-in devices</a>
+        <a href="#data">Your data</a>
+        <a href="#delete">Delete account</a>
+      </nav>
+      <div class="form-stack">
+      <form class="form-stack" id="account-form" action="success.html" novalidate>
+        <section class="form-section" id="profile" aria-labelledby="profile-title">
+          <h2 class="form-section__title" id="profile-title">Profile</h2>
+          <div class="form-grid">
+        <label class="field"><span class="field__label">Your name <span class="field__required">(required)</span></span>
+          <input class="input" id="full-name" name="full-name" type="text" value="Abigail Mensah" aria-describedby="full-name-help" required autocomplete="name">
+          <span class="field__help" id="full-name-help">Your account name. Churches see the display name from Edit profile.</span></label>
+          </div>
+        </section>
+        <section class="form-section" id="contact" aria-labelledby="contact-title">
+          <h2 class="form-section__title" id="contact-title">Contact</h2>
+          <div class="form-grid">
+        <label class="field"><span class="field__label">Contact phone <span class="field__required">(required)</span></span>
+          <input class="input" id="contact-phone" name="contact-phone" type="tel" value="905-555-0148" aria-describedby="contact-phone-help" required autocomplete="tel">
+          <span class="field__help" id="contact-phone-help">Churches see it only once a booking is confirmed. It’s never on your public profile.</span></label>
+          </div>
+        </section>
+        <section class="form-section" id="email" aria-labelledby="email-title">
+          <h2 class="form-section__title" id="email-title">Email</h2>
+          <p class="form-section__lead">You sign in with abigail@abigailmensah.ca. A new address takes over only after you open the link we send to it, and we tell the old one.</p>
+          <div class="form-grid">
+        <label class="field"><span class="field__label">New email <span class="field__optional">(optional)</span></span>
+          <input class="input" id="new-email" name="new-email" type="email" autocomplete="email"></label>
+        <label class="field"><span class="field__label">Current password <span class="field__optional">(optional)</span></span>
+          <input class="input" id="email-password" name="email-password" type="password" aria-describedby="email-password-help" autocomplete="current-password">
+          <span class="field__help" id="email-password-help">Needed to change your email.</span></label>
+          </div>
+        </section>
+        <section class="form-section" id="password" aria-labelledby="password-title">
+          <h2 class="form-section__title" id="password-title">Password</h2>
+          <p class="form-section__lead">Leave these empty to keep your password. A new one signs you out on your other device.</p>
+          <div class="form-grid">
+        <label class="field"><span class="field__label">Current password <span class="field__optional">(optional)</span></span>
+          <input class="input" id="current-password" name="current-password" type="password" autocomplete="current-password"></label>
+        <label class="field"><span class="field__label">New password <span class="field__optional">(optional)</span></span>
+          <input class="input" id="new-password" name="new-password" type="password" aria-describedby="new-password-help" autocomplete="new-password">
+          <span class="field__help" id="new-password-help">12 to 128 characters. We check it against known leaked passwords.</span></label>
+          </div>
+        </section>
+        <section class="form-section" id="preferences" aria-labelledby="preferences-title">
+          <h2 class="form-section__title" id="preferences-title">Email preferences</h2>
+          <fieldset class="fieldset">
+            <legend>Email me about</legend>
+            <label class="choice"><input type="checkbox" name="n-booking" checked disabled><span class="choice__text">Requests, bookings and payouts<small>Always on: these are about your dates and your money.</small></span></label>
+            <label class="choice"><input type="checkbox" name="n-remind" checked><span class="choice__text">Event reminders<small>A week and a day before each event.</small></span></label>
+          </fieldset>
+        </section>
+        <div class="form-actions">
+          <span class="form-actions__status" role="status"><span class="dot" aria-hidden="true"></span>Saved 2 min ago</span>
+          <div class="form-actions__buttons">
+            <button class="btn" type="reset">Discard</button>
+            <button class="btn btn--primary" type="submit">Save changes</button>
+          </div>
+        </div>
+      </form>
+        <section class="form-section" id="two-step" aria-labelledby="two-step-title">
+          <h2 class="form-section__title" id="two-step-title">Two-step sign-in</h2>
+          <p class="form-section__lead"><span class="badge">Off</span> Turn it on and Zamaro asks for a 6-digit code from an authenticator app after your password.</p>
+          <div class="cluster"><a class="btn" href="../mfa-setup/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg>Turn on two-step sign-in</a></div>
+          <p class="field__help">You also get 10 single-use recovery codes, for when your phone isn’t with you.</p>
+        </section>
+        <section class="form-section" id="devices" aria-labelledby="devices-title">
+          <h2 class="form-section__title" id="devices-title">Signed-in devices</h2>
+          <ul class="device-list" role="list">
+            <li><span><strong>Chrome on Mac</strong><span class="text-muted">Brampton, ON · This device · active now</span></span><span class="badge">This device</span></li>
+            <li><span><strong>Safari on iPhone</strong><span class="text-muted">Brampton, ON · Last active yesterday</span></span><button class="btn btn--sm" type="button" aria-label="End session on Safari on iPhone">End session</button></li>
+          </ul>
+          <p class="field__help">Cities are approximate, from each device’s network. Ending a session signs that device out at once.</p>
+        </section>
+        <section class="form-section" id="data" aria-labelledby="data-title">
+          <h2 class="form-section__title" id="data-title">Your data</h2>
+          <p class="form-section__lead">Your account and artist profile, bookings, messages, reviews, payouts and consent records, as one JSON file.</p>
+          <div class="cluster"><button class="btn" type="button">Download my data</button></div>
+          <p class="field__help">We email you a link within 24 hours. It works for 7 days.</p>
+        </section>
+        <section class="form-section form-section--danger" id="delete" aria-labelledby="delete-title">
+          <h2 class="form-section__title" id="delete-title">Delete account</h2>
+          <p class="form-section__lead">Your profile leaves Zamaro and sign-in stops straight away; your personal data, photos and videos are erased within 30 days. Booking and payment records stay for 7 years, without your name.</p>
+          <div class="cluster"><button class="btn btn--danger" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>Delete account…</button></div>
+        </section>
+      </div>
+    </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../discover/default.html">Find who’s free</a></li>
+        <li><a href="../discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../dashboard/default.html">Dashboard</a></li>
+        <li><a href="../availability/default.html">Availability</a></li>
+      <li><a href="../earnings/default.html">Earnings</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Abigail Mensah</h2>
+      <ul>
+        <li>New Covenant Chapel</li>
+        <li><a href="../requests/default.html">Requests (3)</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 14rem; right: 1rem;">Opened from Account settings in Abigail’s <a href="../../dialogs/account-menu/artist.html">account menu</a>. Artists have no Church section, saved artists, review prompts or news emails; their public details live in <a href="../edit-profile/default.html">Edit profile</a>. The Contact phone is needed before she can accept a request, and only the church on a confirmed booking sees it, with her sign-in email. While ZAM-0114 is Confirmed, Delete account answers “Finish your booking first”, as in <a href="../../dialogs/delete-account/blocked.html">the blocked dialog</a>.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Account settings</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="error.html">error</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="submitting.html">submitting</a></li>
+    <li><a href="success.html">success</a></li>
+    <li><a href="failed.html">failed</a></li>
+    <li><a href="out-of-area.html">out-of-area</a></li>
+    <li><a href="export-requested.html">export-requested</a></li>
+    <li><a href="export-ready.html">export-ready</a></li>
+    <li><a href="artist.html" aria-current="page">artist</a></li>
+    <li><a href="two-step-on.html">two-step-on</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

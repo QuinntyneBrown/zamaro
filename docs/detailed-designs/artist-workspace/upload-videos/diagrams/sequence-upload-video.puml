@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "VideosManagerPage" as page
+  participant "VideoUploadDialogComponent" as page
   participant "ArtistVideosStore" as store
   participant "ChunkedUploader" as up
   participant "ArtistVideosApi" as client
@@ -62,7 +62,8 @@ else under the limit
     store --> page : Progress bar "42%"
   end
   opt connection drops mid-upload (any size, including files above 50 MB)
-    up -> up : Wait for the browser online event, back off
+    store --> page : "Upload stopped at {n}%" with Resume upload
+    up -> up : Resume on the browser online event or Resume upload, with back-off
     up -> client : listParts(id)
     client -> controller : GET /api/v1/artist/videos/{video}/upload/parts
     controller -> storage : List uploaded parts
@@ -78,7 +79,7 @@ else under the limit
   complete --> controller : ArtistVideo
   controller --> client : 200 ArtistVideoResource (Processing)
   client --> store : Video
-  store --> page : Row shows "Processing" (L2-052)
+  store --> page : Close; the list row shows "Processing" (L2-052)
   opt caption file chosen
     store -> client : uploadCaptions(id, file)
     note right of client : WebVTT up to 1 MB, inspected and scanned (L2-052, L2-076)

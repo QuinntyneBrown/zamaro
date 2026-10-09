@@ -6,7 +6,7 @@ title Containers — Manage email preferences
 Person(user, "Booker or artist", "Signed-in user")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "NotificationSettingsPage at /account/notifications")
+  Container(web, "Zamaro Web", "Angular with SSR", "EmailPreferencesSectionComponent at /account#preferences")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET and PUT /api/v1/account/notification-preferences")
   Container(worker, "Zamaro Worker", "Laravel Horizon", "Checks preferences before sending optional emails")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "notification_preferences")

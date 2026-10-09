@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking list — Zamaro design system</title>
+<meta name="description" content="The booking list (tour book) shows a person’s bookings or requests as framed rows: date, who, details, amount, status stamp and the next action.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>Booking list</h1>
+      <p class="ds-lead">The tour book: one framed row per booking or request, with the date set big on the left, who and what in the middle, the money and the status stamp on the right, and the next action beside the stamp.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;ol&gt;</code> / <code>&lt;ul&gt;</code></span><span class="ds-pill">Class <code>.booking-list</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>A booking list shows many bookings of one person at once, ordered by date, so they can see what is coming and act on the one that needs them. Naomi’s <b>Your bookings</b> (L2-033) and Abigail’s <b>Requests</b> inbox (L2-034) both use it, as do “Needs your reply” on the artist dashboard and the Upcoming and Paid out lists on Earnings. One <code>.booking-list__row</code> as used on <a href="../../mocks/pages/requests/default.html">pages/requests</a> is the “requests inbox row” composite, which has its own perf-test scenario (AGENTS.md, component perf tests); the same row serves the booker’s bookings list.</p>
+      <ul>
+        <li>Use it for a person’s own bookings or requests, where each row leads to the booking page and has at most one next action.</li>
+        <li>Use a <a href="ticket.html">ticket card</a> for artists in search results; use a <a href="table.html">table</a> when people compare many columns or select rows (the admin queue); use <a href="tour-dates.html">tour dates</a> for a short list of an artist’s dates on a profile.</li>
+        <li>The whole row is one link target (the name link stretches over the row); the status stamp and the action button sit above it and stay separately clickable.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <ol class="booking-list" role="list" aria-label="Anatomy example" style="width: 100%;">
+            <li class="booking-list__row">
+              <p class="booking-list__date"><small>Sat</small>5 Dec</p>
+              <h3 class="booking-list__who"><a href="#anatomy">Luz Viva</a></h3>
+              <p class="booking-list__meta">ZAM-0088 · Worship night · 6:30 p.m. · North York, 63 km · Paid $0</p>
+              <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$0</p>
+              <div class="booking-list__status"><span class="stamp stamp--accepted">Accepted</span><a class="btn btn--sm btn--primary" href="#anatomy">Pay $225 deposit</a></div>
+            </li>
+          </ol>
+          <span class="ds-callout" style="left: 3%; top: 20%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 22%; top: 12%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 22%; top: 62%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 62%; top: 20%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 80%; top: 70%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Date</b><small><code>.booking-list__date</code>: day of the week as a mono overline over the date in the display face, 32px. Always the event date.</small></div></li>
+          <li><div><b>Who</b><small><code>.booking-list__who</code>: a heading holding the link to the booking; the link’s <code>::after</code> covers the whole row.</small></div></li>
+          <li><div><b>Meta</b><small><code>.booking-list__meta</code>: booking number, kind of gathering, start time, place and distance, amount; muted, 14px.</small></div></li>
+          <li><div><b>Amount</b><small><code>.booking-list__amount</code>: the figure again, big, from MD (768px). Hidden from assistive technology because the meta already says it.</small></div></li>
+          <li><div><b>Status</b><small><code>.booking-list__status</code>: the <a href="stamp.html">status stamp</a> and the one next action (or the time left to reply).</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Bookings (booker)</h3>
+      <p>Upcoming bookings in date order, each with the amount paid and its next action: Message, Pay deposit, Cancel or Leave a review (L2-033).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ol class="booking-list" role="list" aria-label="Upcoming bookings">
+            <li class="booking-list__row">
+              <p class="booking-list__date"><small>Sun</small>25 Oct</p>
+              <h3 class="booking-list__who"><a href="#variants">Marcus Bell Trio</a></h3>
+              <p class="booking-list__meta">ZAM-0097 · Sunday service · 10:30 a.m. · Hamilton, 14 km · Paid $237.50</p>
+              <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$237.50</p>
+              <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span><a class="btn btn--sm" href="#variants">Message</a></div>
+            </li>
+            <li class="booking-list__row">
+              <p class="booking-list__date"><small>Sat</small>14 Nov</p>
+              <h3 class="booking-list__who"><a href="#variants">Abigail Mensah</a></h3>
+              <p class="booking-list__meta">ZAM-0114 · Worship night · 7:00 p.m. · Brampton, 44 km · Paid $0</p>
+              <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$0</p>
+              <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><a class="btn btn--sm" href="#variants">Message</a></div>
+            </li>
+          </ol>
+        </div>
+        <div class="ds-example__caption"><span>As on <a href="../../mocks/pages/bookings/default.html">bookings/default</a>. The list is an <code>&lt;ol&gt;</code> because the order (by date) carries meaning.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="booking-list" role="list" aria-label="Upcoming bookings"&gt;
+  &lt;li class="booking-list__row"&gt;
+    &lt;p class="booking-list__date"&gt;&lt;small&gt;Sun&lt;/small&gt;25 Oct&lt;/p&gt;
+    &lt;h2 class="booking-list__who"&gt;&lt;a href="/bookings/ZAM-0097"&gt;Marcus Bell Trio&lt;/a&gt;&lt;/h2&gt;
+    &lt;p class="booking-list__meta"&gt;ZAM-0097 · Sunday service · 10:30 a.m. · Hamilton, 14 km · Paid $237.50&lt;/p&gt;
+    &lt;p class="booking-list__amount" aria-hidden="true"&gt;&lt;small&gt;Paid&lt;/small&gt;$237.50&lt;/p&gt;
+    &lt;div class="booking-list__status"&gt;
+      &lt;span class="stamp stamp--confirmed"&gt;Confirmed&lt;/span&gt;
+      &lt;a class="btn btn--sm" href="/bookings/ZAM-0097#messages"&gt;Message&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3>Requests (artist)</h3>
+      <p>Requested bookings ordered by reply deadline. The meta carries three lines: the event, the quoted price and the payout after the fee, and the start of the church’s message. The status line gives the time left instead of a button (L2-034).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ul class="booking-list" role="list" aria-label="Requests">
+            <li class="booking-list__row">
+              <p class="booking-list__date"><small>Sat</small>5 Dec</p>
+              <h3 class="booking-list__who"><a href="#variants">Harvest Point Church</a></h3>
+              <p class="booking-list__meta">Worship night · 7:00 p.m. · Milton, 31 km<br>$650 quoted · you get $598<br><q>We need a soloist for three carols and one of your own songs. Could you also…</q></p>
+              <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption"><strong>1 day left</strong> · reply by Sat 10 Oct, 3:15 p.m.</span></div>
+            </li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>As on <a href="../../mocks/pages/requests/default.html">requests/default</a>. Without an amount column the status moves into its place from MD.</span></div>
+      </div>
+      <h3>Compact (dashboard, earnings)</h3>
+      <p>The same rows under a section heading. “Needs your reply” on the dashboard shows the requests waiting on the artist, with the message preview and the reply deadline as in the inbox. “Upcoming” and “Paid out” on Earnings replace the preview with the money line (total, Zamaro fee, payout) and show a payment badge (“Deposit held”) in place of the stamp.</p>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The booking list has one size. Rows fill their container; the date column is 5.5rem on phones and 6.5rem from MD."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The booking list has one size. Rows fill their container; the date column is 5.5rem on phones and 6.5rem from MD.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">State</th><th scope="col">Row</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Default</th><td><ol class="booking-list" role="list" aria-label="Default"><li class="booking-list__row"><p class="booking-list__date"><small>Sat</small>14 Nov</p><h3 class="booking-list__who"><a href="#states">Abigail Mensah</a></h3><p class="booking-list__meta">ZAM-0114 · Worship night · 7:00 p.m.</p><div class="booking-list__status"><span class="stamp stamp--requested">Requested</span></div></li></ol></td></tr>
+          <tr><th scope="row">Hover / focus within</th><td><ol class="booking-list" role="list" aria-label="Hover"><li class="booking-list__row" data-state="hover"><p class="booking-list__date"><small>Sat</small>14 Nov</p><h3 class="booking-list__who"><a href="#states">Abigail Mensah</a></h3><p class="booking-list__meta">ZAM-0114 · Worship night · 7:00 p.m.</p><div class="booking-list__status"><span class="stamp stamp--requested">Requested</span></div></li></ol></td></tr>
+          <tr><th scope="row">Loading</th><td><ol class="booking-list booking-list--loading" role="list" aria-label="Loading"><li class="booking-list__row" aria-hidden="true"><span class="booking-list__date skeleton skeleton--figure"></span><span class="booking-list__who skeleton skeleton--text skeleton--medium"></span><span class="booking-list__meta skeleton skeleton--text skeleton--long"></span><span class="booking-list__status"><span class="skeleton skeleton--text skeleton--short"></span></span></li></ol></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Hover and focus within</b> lift the row by 4px with the first hard shadow, like a ticket; the focus ring is on the name link or the button that has focus.</li>
+        <li><b>Loading</b> (<code>.booking-list--loading</code>) keeps the row frame and puts skeletons in each slot so the swap causes no layout shift (L2-105). Rows are <code>aria-hidden</code>; the page’s <code>aria-busy="true"</code> region and a visually hidden status line (“Loading your bookings”) speak for them. Loading rows don’t lift.</li>
+        <li><b>Empty</b> and <b>no results</b> are not states of the list: the list is left out and an <a href="empty-state.html">empty state</a> takes its place (<a href="../../mocks/pages/bookings/empty.html">bookings/empty</a>, <a href="../../mocks/pages/requests/no-results.html">requests/no-results</a>).</li>
+        <li><b>Error</b> replaces the list with an <a href="alert.html">alert</a> and Try again (<a href="../../mocks/pages/bookings/error.html">bookings/error</a>).</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><ol class="booking-list" role="list" aria-label="Light"><li class="booking-list__row"><p class="booking-list__date"><small>Sun</small>25 Oct</p><h3 class="booking-list__who"><a href="#states">Marcus Bell Trio</a></h3><p class="booking-list__meta">ZAM-0097 · Sunday service · Paid $237.50</p><div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span><a class="btn btn--sm" href="#states">Message</a></div></li></ol></div>
+        <div data-theme="dark"><ol class="booking-list" role="list" aria-label="Dark"><li class="booking-list__row"><p class="booking-list__date"><small>Sun</small>25 Oct</p><h3 class="booking-list__who"><a href="#states">Marcus Bell Trio</a></h3><p class="booking-list__meta">ZAM-0097 · Sunday service · Paid $237.50</p><div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span><a class="btn btn--sm" href="#states">Message</a></div></li></ol></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Below MD (768px)</b>: two columns. The date spans the first two lines on the left; who and meta stack on the right; the status line (stamp left, action right) runs full width underneath. The amount is hidden because the meta already says it.</li>
+        <li><b>From MD (768px)</b>: four columns, date · who and meta · amount · status, vertically centred; the date column widens to 6.5rem and the status aligns right.</li>
+        <li>Long church names wrap inside their column; the date never wraps. Nothing scrolls sideways at 320px.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The booking list has no component tokens. Rows are <code>--color-bg-surface</code> framed in <code>--color-border-strong</code> at <code>--border-width-thick</code>; the day, meta and amount labels read <code>--color-fg-muted</code>. The hover lift reuses <code>--transform-lift</code> and <code>--shadow-1</code>, which is ink on newsprint and yellow on the stage. In the dark theme rows become charcoal paper on the charcoal canvas, framed in paper.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native list (<code>&lt;ol&gt;</code> when ordered by date or deadline, <code>&lt;ul&gt;</code> otherwise) with <code>role="list"</code> so Safari keeps list semantics after <code>list-style: none</code>, and an <code>aria-label</code> (“Upcoming bookings”, “Past bookings”). Each row starts with a heading at the right level for the page, so people can jump row to row with heading keys.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Moves to the row’s name link, then to its action button, then to the next row.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>On the name link, opens the booking or request; on the button, does the action.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The focus ring is drawn on the focused link or button (two-tone ring, 3px offset). The row also lifts on <code>:focus-within</code> so the active row is clear at a glance. The stretched link’s <code>::after</code> covers the row, and the stamp and buttons sit above it at <code>--z-raised</code>, so pointer users can click anywhere and the button still works.</p>
+      <h3>Labelling</h3>
+      <p>The name link’s text is the artist or church name; the row is read in source order: date, name, meta, stamp, action. Write the amount in the meta (“Paid $237.50”) and mark the big <code>.booking-list__amount</code> <code>aria-hidden="true"</code> so it is not read twice. Buttons repeat the object only when needed: “Pay $225 deposit” is clear on its own; several “Message” buttons in a row are disambiguated by the heading before them.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Name and date on the row</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Meta and day on the row</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Row frame against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: meta on the row</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: row frame against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The hover lift is a 160ms transform; under <code>prefers-reduced-motion</code> durations drop to zero and the row changes state without moving.</p>
+      <h3>Touch</h3>
+      <p>The whole row is a tap target for the booking; the small action button grows to 44px on touch devices, and sits at least 12px from the stamp.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Date: short day and date in the L2-110 pattern (“Sat” over “14 Nov”); add the year only outside the current year.</li>
+        <li>Who: the other party, as they name themselves (“Abigail Mensah”, “Harvest Point Church”).</li>
+        <li>Meta, separated by middle dots: booking number · kind of gathering · start time (“7:00 p.m.”) · place, distance (“Brampton, 44 km”) · amount (“Paid $237.50”). For requests: the event line, then “$800 quoted · you get $736”, then the first words of the message in <code>&lt;q&gt;</code>.</li>
+        <li>Action: one verb phrase with the amount when money moves (“Pay $225 deposit”). Time left to reply leads with the number: “1 day left · reply by Sat 10 Oct, 3:15 p.m.”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ol class="booking-list" role="list" aria-label="Do"><li class="booking-list__row"><p class="booking-list__date"><small>Sat</small>5 Dec</p><h3 class="booking-list__who"><a href="#do-dont">Luz Viva</a></h3><p class="booking-list__meta">ZAM-0088 · Worship night</p><div class="booking-list__status"><span class="stamp stamp--accepted">Accepted</span><a class="btn btn--sm btn--primary" href="#do-dont">Pay $225 deposit</a></div></li></ol></div><figcaption>One next action, named with the amount.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><ol class="booking-list" role="list" aria-label="Don't"><li class="booking-list__row"><p class="booking-list__date"><small>Sat</small>5 Dec</p><h3 class="booking-list__who"><a href="#do-dont">Luz Viva</a></h3><p class="booking-list__meta">ZAM-0088 · Worship night</p><div class="booking-list__status"><span class="stamp stamp--accepted">Accepted</span><a class="btn btn--sm" href="#do-dont">Pay</a><a class="btn btn--sm" href="#do-dont">Message</a><a class="btn btn--sm" href="#do-dont">Cancel</a></div></li></ol></div><figcaption>A row of buttons. Secondary actions belong on the booking page.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Row fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Row frame</td><td><code>--color-border-strong</code>, <code>--border-width-thick</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Meta, day, amount label</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Hover lift</td><td><code>--transform-lift</code>, <code>--shadow-1</code></td><td colspan="2"><span data-token="--transform-lift"></span></td></tr>
+          <tr><td>Date and amount face</td><td><code>--font-family-display</code>, <code>--font-size-2xl</code></td><td colspan="2"><span data-token="--font-size-2xl"></span></td></tr>
+          <tr><td>Who / meta</td><td><code>--text-h4</code> / <code>--text-body-sm</code></td><td colspan="2"><span data-token="--text-h4"></span> / <span data-token="--text-body-sm"></span></td></tr>
+          <tr><td>Row padding / gap between rows</td><td><code>--space-4</code> <code>--space-5</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span> <span data-token="--space-5"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;ol class="booking-list" role="list" aria-label="Upcoming bookings"&gt;
+  &lt;li class="booking-list__row"&gt;
+    &lt;p class="booking-list__date"&gt;&lt;small&gt;Sat&lt;/small&gt;5 Dec&lt;/p&gt;
+    &lt;h2 class="booking-list__who"&gt;&lt;a href="/bookings/ZAM-0088"&gt;Luz Viva&lt;/a&gt;&lt;/h2&gt;
+    &lt;p class="booking-list__meta"&gt;ZAM-0088 · Worship night · 6:30 p.m. · North York, 63 km · Paid $0&lt;/p&gt;
+    &lt;p class="booking-list__amount" aria-hidden="true"&gt;&lt;small&gt;Paid&lt;/small&gt;$0&lt;/p&gt;
+    &lt;div class="booking-list__status"&gt;
+      &lt;span class="stamp stamp--accepted"&gt;Accepted&lt;/span&gt;
+      &lt;a class="btn btn--sm btn--primary" href="/bookings/ZAM-0088"&gt;Pay $225 deposit&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.booking-list</code></td><td>Unstyled list, 16px between rows.</td></tr>
+        <tr><td><code>.booking-list__row</code></td><td>Framed paper row; grid areas date / who / meta / amount / status; lifts on hover and focus within. The “requests inbox row” perf-test composite.</td></tr>
+        <tr><td><code>.booking-list__date</code></td><td>Display date; <code>&lt;small&gt;</code> holds the day.</td></tr>
+        <tr><td><code>.booking-list__who</code></td><td>Heading; its link stretches over the row.</td></tr>
+        <tr><td><code>.booking-list__meta</code></td><td>Muted details line(s).</td></tr>
+        <tr><td><code>.booking-list__amount</code></td><td>Big figure from MD; <code>aria-hidden="true"</code>; <code>&lt;small&gt;</code> holds its label.</td></tr>
+        <tr><td><code>.booking-list__status</code></td><td>Stamp and action, raised above the stretched link.</td></tr>
+        <tr><td><code>.booking-list--loading</code></td><td>Skeleton rows that do not lift.</td></tr>
+        <tr><td><code>data-state="hover"</code></td><td>Documentation only: shows the hover lift.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Introduced by the MVP mocks for booking management; used on these screens:</p>
+      <ul>
+        <li><a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/bookings/past.html">bookings/past</a>, <a href="../../mocks/pages/bookings/loading.html">bookings/loading</a>: the booker’s upcoming and past bookings (L2-033)</li>
+        <li><a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/requests/loading.html">requests/loading</a>, <a href="../../mocks/pages/requests/no-results.html">requests/no-results</a>: the artist’s inbox (L2-034)</li>
+        <li><a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>, <a href="../../mocks/pages/dashboard/loading.html">dashboard/loading</a>: “Needs your reply”</li>
+        <li><a href="../../mocks/pages/earnings/default.html">pages/earnings/default</a>, <a href="../../mocks/pages/earnings/loading.html">earnings/loading</a>: “Upcoming” and “Paid out”</li>
+        <li><a href="../../mocks/notifications/request-toast/info.html">notifications/request-toast</a>: the inbox behind the toast</li>
+      </ul>
+      <p>Drift fixed:</p>
+      <ul>
+        <li>The loading mocks sized their skeletons with raw inline heights and widths. They now use the skeleton modifiers (<code>.skeleton--text</code>, <code>--title</code>, <code>--short/--medium/--long</code>), plus <code>--date</code>, <code>--amount</code> and <code>--stamp</code> for the fixed date block, amount and stamp in <a href="../../mocks/pages/bookings/loading.html">pages/bookings/loading</a> and <code>--badge</code> for the status in the artist’s lists.</li>
+      </ul>
+    </section>
+
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

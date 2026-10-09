@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resolve held booking · busy — Zamaro mocks</title>
+<meta name="mock:kind" content="dialog">
+<meta name="mock:screen" content="resolve-hold">
+<meta name="mock:state" content="busy">
+<meta name="mock:requirements" content="L2-038 L2-068 L2-099 L2-101 L2-108">
+<meta name="description" content="Resolving a full refund: choices and reason locked, buttons disabled.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- The page underneath is inert while the dialog is open. -->
+<div inert aria-hidden="true">
+
+<header class="topbar topbar--workspace">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../../pages/admin-applications/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <span class="topbar__role">Admin</span>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../../pages/admin-applications/default.html">Applications <span class="badge badge--count">3<span class="visually-hidden"> waiting</span></span></a>
+    <a class="nav-link" href="../../pages/admin-artists/default.html">Artists</a>
+    <a class="nav-link" href="../../pages/admin-bookings/default.html" aria-current="page">Bookings <span class="badge badge--count">1<span class="visually-hidden"> held</span></span></a>
+    <a class="nav-link" href="../../pages/admin-reviews/default.html">Reviews <span class="badge badge--count">2<span class="visually-hidden"> reported</span></span></a>
+    <a class="nav-link" href="../../pages/admin-audit/default.html">Audit log</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+  <button class="avatar" type="button" aria-label="Account menu for Priya Nair" aria-expanded="false">PN</button>
+</header>
+
+<main id="main">
+  <div class="container">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../../pages/admin-bookings/default.html">Bookings</a></li><li aria-current="page">ZAM-0104</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
+      <div><p class="overline">Booking ZAM-0104</p><h1 class="page-head__title">Hosanna Collective at Kingdom Life Centre</h1><p class="page-head__sub">Sun 4 Oct 2026 · 10:00 a.m. · Sunday service · Mississauga</p></div>
+      <div class="cluster"><span class="stamp stamp--lg stamp--completed">Completed</span><span class="badge badge--warning">Held</span></div>
+    </div>
+    <div class="detail-layout detail-layout--aside-first detail-layout--flush">
+      <div class="stack stack--lg">
+        <div class="alert alert--warning" role="status">
+          <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>
+          <div class="stack stack--sm">
+            <p class="alert__title">Held: balance and payout paused</p>
+            <p>Grace Ampofo reported a problem Mon 5 Oct, 4:12 p.m., within 48 hours of the event: “The band arrived 50 minutes late and played four songs instead of the eight we agreed.”</p>
+          </div>
+        </div>
+        <section class="panel" aria-labelledby="booking-title">
+          <div class="panel__head"><h2 id="booking-title" class="panel__title">Booking</h2></div>
+          <dl class="definition definition--two">
+            <div class="definition__row"><dt>Church</dt><dd>Kingdom Life Centre, Mississauga</dd></div>
+            <div class="definition__row"><dt>Booker</dt><dd>Grace Ampofo · grace.ampofo@kingdomlife.ca</dd></div>
+            <div class="definition__row"><dt>Artist</dt><dd>Hosanna Collective, Mississauga</dd></div>
+            <div class="definition__row"><dt>Quoted price</dt><dd>$800, locked Tue 1 Sep</dd></div>
+          </dl>
+        </section>
+        <section class="panel" aria-labelledby="status-title">
+          <div class="panel__head"><h2 id="status-title" class="panel__title">Status history</h2></div>
+          <ol class="timeline">
+            <li data-state="done"><div><p class="timeline__title">Requested</p><p class="timeline__meta">Tue 1 Sep at 11:30 a.m.</p></div></li>
+            <li data-state="done"><div><p class="timeline__title">Accepted</p><p class="timeline__meta">Tue 1 Sep at 6:05 p.m.</p></div></li>
+            <li data-state="done"><div><p class="timeline__title">Confirmed</p><p class="timeline__meta">Deposit $200 paid Wed 2 Sep, Mastercard ending 8810</p></div></li>
+            <li data-state="done"><div><p class="timeline__title">Completed</p><p class="timeline__meta">Mon 5 Oct at 10:00 a.m.</p></div></li>
+            <li aria-current="step"><div><p class="timeline__title">Held</p><p class="timeline__meta">Problem reported Mon 5 Oct at 4:12 p.m.</p></div></li>
+          </ol>
+        </section>
+        <section class="panel" aria-labelledby="payments-title">
+          <div class="panel__head"><h2 id="payments-title" class="panel__title">Payment history</h2></div>
+          <div class="table-wrap">
+            <table class="table table--dense">
+              <caption class="visually-hidden">Charges, refunds and payouts for ZAM-0104, oldest first</caption>
+              <thead><tr><th scope="col">Date</th><th scope="col">Kind</th><th scope="col">Card or account</th><th scope="col">Status</th><th scope="col" class="table__num">Amount</th></tr></thead>
+              <tbody>
+              <tr><th scope="row">Wed 2 Sep, 4:18 p.m.</th><td>Deposit charge</td><td>Mastercard ending 8810</td><td><span class="badge badge--success">Succeeded</span></td><td class="table__num">$200</td></tr>
+              <tr><th scope="row">Tue 6 Oct, 10:00 a.m.</th><td>Balance charge</td><td>Mastercard ending 8810</td><td><span class="badge badge--warning">Paused</span></td><td class="table__num">$600</td></tr>
+              <tr><th scope="row">Thu 8 Oct</th><td>Payout to Hosanna Collective</td><td>Bank account</td><td><span class="badge badge--warning">Paused</span></td><td class="table__num">$736</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="panel" id="messages" aria-labelledby="messages-title">
+          <div class="panel__head"><h2 id="messages-title" class="panel__title">Messages</h2><span class="text-caption">Read only · opening the thread is recorded in the audit log</span></div>
+          <div class="message">
+            <p class="message__meta">Grace Ampofo, booker · Tue 1 Sep, 11:30 a.m.</p>
+            <blockquote><p>We’d love eight songs for our 10:00 service: mostly contemporary, with two hymns near the end.</p></blockquote>
+          </div>
+          <div class="message">
+            <p class="message__meta">Hosanna Collective, artist · Tue 1 Sep, 6:05 p.m.</p>
+            <blockquote><p>Glad to serve. We’ll arrive at 8:30 for load-in and a sound check.</p></blockquote>
+          </div>
+          <div class="message">
+            <p class="message__meta">Grace Ampofo, booker · Sun 4 Oct, 11:50 a.m.</p>
+            <blockquote><p>You arrived at 10:50 and played four songs. We need to talk about the balance.</p></blockquote>
+          </div>
+          <div class="message">
+            <p class="message__meta">Hosanna Collective, artist · Sun 4 Oct, 2:15 p.m.</p>
+            <blockquote><p>We’re so sorry. The 403 was closed and we cut the set to fit the time that was left.</p></blockquote>
+          </div>
+        </section>
+      </div>
+      <aside aria-labelledby="money-title">
+        <div class="panel panel--raised">
+          <div class="panel__head"><h2 id="money-title" class="panel__title">Money</h2><span class="stub__code">No. ZAM-0104</span></div>
+          <dl class="receipt" aria-label="Money summary for ZAM-0104"><div class="receipt__row"><dt>Quoted price</dt><dd>$800</dd></div><div class="receipt__row"><dt>Charged</dt><dd>$200</dd></div><div class="receipt__row"><dt>Refunded</dt><dd>$0</dd></div><div class="receipt__row receipt__total"><dt>Refundable now</dt><dd>$200</dd></div></dl>
+          <a class="btn btn--primary btn--lg btn--block" href="../resolve-hold/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>Resolve hold…</a>
+          <a class="btn btn--block" href="../issue-refund/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 7h18v10H3zM7 12h.5M16.5 12h.5M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg>Issue refund…</a>
+          <p class="stub__fine">Resolving ends the hold: release the balance, or refund part or all of what Grace paid. Grace and Hosanna Collective are emailed.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Admin</h2>
+      <ul>
+        <li><a href="../../pages/admin-applications/default.html">Applications</a></li>
+        <li><a href="../../pages/admin-artists/default.html">Artists</a></li>
+        <li><a href="../../pages/admin-bookings/default.html">Bookings</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Records</h2>
+      <ul>
+        <li><a href="../../pages/admin-reviews/default.html">Reported reviews</a></li>
+        <li><a href="../../pages/admin-audit/default.html">Audit log</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Priya Nair</h2>
+      <ul>
+        <li>Zamaro team</li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<dialog class="dialog" open data-mock-modal aria-labelledby="dlg-title" aria-describedby="dlg-desc">
+  <form class="dialog__form" action="../../pages/admin-booking/held.html" novalidate>
+    <div class="dialog__header">
+      <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg></div>
+      <div style="flex: 1;">
+        <span class="dialog__kicker">ZAM-0104 · Completed · Held</span>
+        <h2 class="dialog__title" id="dlg-title">Resolve the hold on ZAM-0104</h2>
+        <p id="dlg-desc" class="text-muted" style="margin-top: var(--space-1);">Choose one outcome. Grace Ampofo and Hosanna Collective are emailed.</p>
+      </div>
+      <button class="close" type="button" aria-label="Close" disabled><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <fieldset class="choice-group">
+        <legend>Outcome <span class="field__required">(required)</span></legend>
+        <label class="radio">
+          <input type="radio" name="resolution" value="release" disabled>
+          <span class="radio__dot"></span>
+          <span class="radio__text">Release the balance<span class="radio__desc">Charge Grace’s $600 balance now and pay Hosanna Collective $736.</span></span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="resolution" value="partial" disabled>
+          <span class="radio__dot"></span>
+          <span class="radio__text">Partial refund<span class="radio__desc">Refund part of the $200 Grace has paid.</span></span>
+        </label>
+        <label class="radio">
+          <input type="radio" name="resolution" value="full" checked disabled>
+          <span class="radio__dot"></span>
+          <span class="radio__text">Full refund<span class="radio__desc">Refund the $200 deposit, cancel the $600 balance charge and the payout.</span></span>
+        </label>
+      </fieldset>
+      <div class="field">
+        <label class="field__label" for="reason">Reason <span class="field__required">(required)</span></label>
+        <textarea class="textarea" id="reason" name="reason" rows="3" required aria-describedby="reason-help" readonly>Arrived 50 minutes late and played half the agreed set. Hosanna Collective agreed to a full refund.</textarea>
+        <span class="field__help" id="reason-help">Grace and Hosanna Collective read this in the outcome email.</span>
+      </div>
+    </div>
+    <div class="dialog__footer">
+      <button class="btn" type="button" disabled>Cancel</button>
+      <button class="btn btn--primary" type="submit" aria-busy="true" aria-disabled="true">Resolving…</button>
+    </div>
+  </form>
+</dialog>
+
+
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Resolve held booking</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="busy.html" aria-current="page">busy</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="failed.html">failed</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

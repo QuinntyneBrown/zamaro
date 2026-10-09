@@ -100,7 +100,11 @@ package "Zamaro API (Laravel)" {
     Rejected
   }
   enum ApplicationRejectionReason {
-    <TO SUPPLY>
+    ReferencesNotConfirmed
+    VideosDoNotShowWorshipLeading
+    OutsideServiceArea
+    IncompleteOrInaccurate
+    Other
   }
 }
 

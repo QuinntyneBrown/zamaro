@@ -17,7 +17,7 @@ package "Zamaro Web (Angular)" {
   class BookingTimelineComponent {
     +history: InputSignal<BookingHistoryEntry[]>
   }
-  class BookingStatusBadgeComponent {
+  class BookingStatusStampComponent {
     +status: InputSignal<BookingStatus>
   }
   class BookingConflictError {

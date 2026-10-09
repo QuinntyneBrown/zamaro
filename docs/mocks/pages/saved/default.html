@@ -8,7 +8,7 @@
 <meta name="mock:screen" content="saved">
 <meta name="mock:state" content="default">
 <meta name="mock:requirements" content="L2-026 L2-027 L2-105">
-<meta name="description" content="Naomi’s three saved artists as admission tickets, most recently saved first, each marked Free or Booked on her last search date, Sat 14 Nov.">
+<meta name="description" content="Naomi’s three saved artists as admission tickets, most recently saved first, each marked Free or Booked on her last search date, Sat 14 Nov (all three are free).">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html" aria-current="page">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -40,7 +41,7 @@
       </div>
       <form class="cluster" action="default.html" style="align-items: end;">
         <label class="field"><span class="field__label">Who’s free on</span>
-          <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
+          <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-12" max="2028-04-09"></label>
         <button class="btn btn--primary" type="submit">Check date</button>
       </form>
     </div>
@@ -51,7 +52,7 @@
           <div class="ticket__body">
             <span class="ticket__no">Saved Wed 7 Oct</span>
             <h2 class="ticket__name"><a href="../artist/default.html">Abigail Mensah</a></h2>
-            <p class="ticket__meta">Gospel &amp; contemporary vocalist<br>Brampton · 44 km from you</p>
+            <p class="ticket__meta">Solo vocalist · Hymns<br>Brampton · 44 km from you</p>
             <div class="ticket__actions"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--sm" href="../book/default.html" aria-label="Request Abigail Mensah for Sat 14 Nov">Request</a></div>
           </div>
           <div class="ticket__stub">
@@ -64,7 +65,7 @@
           <div class="ticket__body">
             <span class="ticket__no">Saved Sun 27 Sep</span>
             <h2 class="ticket__name"><a href="../artist/default.html">Hosanna Collective</a></h2>
-            <p class="ticket__meta">Five-piece band · Contemporary<br>Mississauga · 32 km from you</p>
+            <p class="ticket__meta">Band · Hymns<br>Mississauga · 32 km from you</p>
             <div class="ticket__actions"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--sm" href="../book/default.html" aria-label="Request Hosanna Collective for Sat 14 Nov">Request</a></div>
           </div>
           <div class="ticket__stub">
@@ -77,8 +78,8 @@
           <div class="ticket__body">
             <span class="ticket__no">Saved Sat 12 Sep</span>
             <h2 class="ticket__name"><a href="../artist/default.html">Luz Viva</a></h2>
-            <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
-            <div class="ticket__actions"><span class="badge badge--booked">Booked Sat 14 Nov</span><a class="btn btn--sm" href="../artist/default.html#dates-title">See free dates</a></div>
+            <p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p>
+            <div class="ticket__actions"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--sm" href="../book/default.html" aria-label="Request Luz Viva for Sat 14 Nov">Request</a></div>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$900</p>
@@ -123,7 +124,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 14rem; right: 1rem;">Hearts remove in place with an Undo toast, never a dialog: <a href="../../notifications/saved-toast/with-action.html">see it</a>. Changing the date re-checks every ticket.</p>
+<p class="mock-note" style="top: 14rem; right: 1rem;">All three are free on Sat 14 Nov, as on Discover. An artist booked on the date shows “Booked Sat 14 Nov” and See free dates instead of Request. Hearts remove in place with an Undo toast, never a dialog: <a href="../../notifications/saved-toast/with-action.html">see it</a>. Changing the date re-checks every ticket.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

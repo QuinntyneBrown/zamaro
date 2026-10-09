@@ -6,7 +6,7 @@ title Components — Send transactional emails
 Container(web, "Zamaro Web", "Angular", "UndeliverableEmailBannerComponent")
 System_Ext(email, "Email delivery service", "Transactional email with bounce webhooks")
 Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
-  Component(events, "Domain events", "Laravel events", "BookingRequested, BookingAccepted, BookingConfirmed, ...")
+  Component(events, "Domain events", "Laravel events", "BookingRequested, RequestAccepted, RequestWithdrawn, BookingConfirmed, ...")
   Component(listeners, "SendBookingEmails", "Queued listeners", "Map each event to recipients and notification")
   Component(base, "TransactionalNotification", "Abstract notification", "mail channel, notifications queue, 5 tries with backoff")
   Component(data, "BookingEmailData", "Value object", "Booking number, link, parties; no card data")

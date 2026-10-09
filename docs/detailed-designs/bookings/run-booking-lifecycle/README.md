@@ -48,7 +48,7 @@ and leaves the status unchanged.
 ## Description
 
 The slice lives mostly in the Zamaro API and the Zamaro Worker, which share one
-Laravel code base. The frontend shows the result as a status badge and a history
+Laravel code base. The frontend shows the result as a status stamp and a history
 timeline.
 
 **Backend — domain (shared by Zamaro API and Zamaro Worker)**
@@ -136,11 +136,19 @@ Three properties make the scheduled work safe to repeat (L2-092):
 
 **Frontend (Zamaro Web)**
 
-- **`BookingStatusBadgeComponent`** — design-system badge that renders one booking
-  status with its label and colour.
+- **`BookingStatusStampComponent`** — renders one booking status as the
+  design-system stamp (`.stamp`, with the modifier `stamp--requested`,
+  `stamp--accepted`, `stamp--confirmed`, `stamp--completed`, `stamp--declined`,
+  `stamp--withdrawn`, `stamp--expired` or `stamp--cancelled`), labelled with the
+  status name. The booking pages use the large size (`stamp--lg`).
 - **`BookingTimelineComponent`** — presentational component on `BookingDetailPage`
-  (`/bookings/:number`) and `ArtistBookingPage` (`/artist/bookings/:number`). It
-  lists the history oldest first, formatted by `FormatService` in en-CA (L2-110).
+  (`/bookings/:number`) and `ArtistBookingPage` (`/artist/bookings/:number`), drawn
+  as the design-system timeline (`.timeline`). It lists the history oldest first,
+  formatted by `FormatService` in en-CA (L2-110), then the steps still to come, for
+  example "Waiting for Abigail. She replies by Mon 12 Oct, 10:15 a.m." A step that
+  ended the booking (Declined, Withdrawn, Expired, Cancelled) is marked in the
+  danger state and the later steps stay unreached; only the event step keeps its
+  date.
 - **`BookingsApi`** — maps a 409 problem to a typed `BookingConflictError`. The page
   then reloads the booking and shows an error toast that stays until dismissed
   (L2-109). The toast copy is `<TO SUPPLY>`.
@@ -156,6 +164,28 @@ Three properties make the scheduled work safe to repeat (L2-092):
   `to_status`, `actor_kind`, `actor_id` (null for the system), `reason`,
   `occurred_at`. The application has no update or delete path for this table.
   Retention is `<TO SUPPLY>`.
+
+**Mock screens** — the slice has no page of its own. Its stamps and timeline show on
+[`pages/bookings`](../../../mocks/pages/bookings/default.html) (default and
+[past](../../../mocks/pages/bookings/past.html)), on every status state of
+[`pages/booking-detail`](../../../mocks/pages/booking-detail/default.html)
+([accepted](../../../mocks/pages/booking-detail/accepted.html),
+[confirmed](../../../mocks/pages/booking-detail/confirmed.html),
+[completed](../../../mocks/pages/booking-detail/completed.html),
+[declined](../../../mocks/pages/booking-detail/declined.html),
+[withdrawn](../../../mocks/pages/booking-detail/withdrawn.html),
+[expired](../../../mocks/pages/booking-detail/expired.html),
+[deposit-expired](../../../mocks/pages/booking-detail/deposit-expired.html),
+[cancelled](../../../mocks/pages/booking-detail/cancelled.html) and
+[artist-cancelled](../../../mocks/pages/booking-detail/artist-cancelled.html)), and on
+[`pages/requests`](../../../mocks/pages/requests/default.html) and
+[`pages/request-detail`](../../../mocks/pages/request-detail/default.html) for the
+artist ([accepted](../../../mocks/pages/request-detail/accepted.html),
+[confirmed](../../../mocks/pages/request-detail/confirmed.html),
+[completed](../../../mocks/pages/request-detail/completed.html),
+[declined](../../../mocks/pages/request-detail/declined.html),
+[expired](../../../mocks/pages/request-detail/expired.html) and
+[cancelled](../../../mocks/pages/request-detail/cancelled.html)).
 
 ## Requirements
 

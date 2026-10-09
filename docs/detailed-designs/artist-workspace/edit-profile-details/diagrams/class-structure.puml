@@ -63,7 +63,8 @@ package "Zamaro API (Laravel)" {
   class ArtistProfileData <<value object>> {
     +string displayName
     +Pronoun pronoun
-    +?string headline
+    +string headline
+    +string? aboutHeading
     +string bio
     +string baseCity
     +int[] styleIds
@@ -90,6 +91,7 @@ package "Zamaro API (Laravel)" {
     +Pronoun pronoun
     +ActType actType
     +string headline
+    +string? aboutHeading
     +string bio
     +string baseCity
     +float baseLatitude

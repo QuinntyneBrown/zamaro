@@ -77,12 +77,21 @@ package "Zamaro API (Laravel)" {
     AuthPasswordChanged
     AuthMfaEnabled
     AuthMfaDisabled
+    AuthMfaChallenge
     UserRoleChanged
     RefundIssued
     PayoutSent
     ArtistSuspended
     ArtistReinstated
+    BookingMessagesViewed
+    ApplicationViewed
+    ApplicationReferenceVerified
+    ApplicationApproved
+    ApplicationRejected
+    VscDocumentViewed
+    VscVerified
     ReviewHidden
+    ReviewReportDismissed
     BookingHoldResolved
   }
   class ImmutableAuditEntry <<exception>>

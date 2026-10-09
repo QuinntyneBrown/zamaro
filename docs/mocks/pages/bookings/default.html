@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -39,11 +40,11 @@
     </div>
     <div class="page-body">
       <div class="tabs__list" role="tablist" aria-label="Bookings">
-        <button class="tabs__tab" type="button" role="tab" id="tab-upcoming" aria-selected="true" aria-controls="panel-upcoming">Upcoming <span class="badge badge--count" aria-label="3 upcoming bookings">3</span></button>
-        <button class="tabs__tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past <span class="badge badge--count" aria-label="3 past bookings">3</span></button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-upcoming" aria-selected="true" aria-controls="panel-upcoming">Upcoming <span class="tabs__count">3</span></button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past <span class="tabs__count">3</span></button>
       </div>
       <div role="tabpanel" id="panel-upcoming" aria-labelledby="tab-upcoming" class="stack">
-        <div class="cluster cluster--between"><p class="text-muted">Soonest first</p><div class="field" style="min-width: 12rem;"><label class="field__label" for="status">Status</label>
+        <div class="cluster cluster--between"><p class="text-muted">Soonest first</p><div class="field field--inline"><label class="field__label" for="status">Status</label>
           <select class="select" id="status" name="status"><option selected>All statuses</option><option>Requested</option><option>Accepted</option><option>Confirmed</option></select></div></div>
         <ol class="booking-list" role="list" aria-label="Upcoming bookings">
           <li class="booking-list__row">
@@ -51,19 +52,19 @@
             <h2 class="booking-list__who"><a href="../booking-detail/confirmed.html">Marcus Bell Trio</a></h2>
             <p class="booking-list__meta">ZAM-0097 · Sunday service · 10:30 a.m. · Hamilton, 14 km · Paid $237.50</p>
             <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$237.50</p>
-            <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span><a class="btn btn--sm" href="../booking-detail/confirmed.html#messages-title">Message</a></div>
+            <div class="booking-list__status"><span class="stamp stamp--confirmed">Confirmed</span><a class="btn btn--sm" href="../booking-detail/confirmed.html#messages">Message</a></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sat</small>14 Nov</p>
             <h2 class="booking-list__who"><a href="../booking-detail/default.html">Abigail Mensah</a></h2>
             <p class="booking-list__meta">ZAM-0114 · Worship night · 7:00 p.m. · Brampton, 44 km · Paid $0</p>
             <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$0</p>
-            <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><a class="btn btn--sm" href="../../dialogs/withdraw-request/default.html">Withdraw</a></div>
+            <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><a class="btn btn--sm" href="../booking-detail/default.html#messages">Message</a></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sat</small>5 Dec</p>
             <h2 class="booking-list__who"><a href="../booking-detail/accepted.html">Luz Viva</a></h2>
-            <p class="booking-list__meta">ZAM-0088 · Christmas concert · 6:30 p.m. · North York, 63 km · Paid $0</p>
+            <p class="booking-list__meta">ZAM-0088 · Worship night · 6:30 p.m. · North York, 63 km · Paid $0</p>
             <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$0</p>
             <div class="booking-list__status"><span class="stamp stamp--accepted">Accepted</span><a class="btn btn--sm btn--primary" href="../booking-detail/accepted.html">Pay $225 deposit</a></div>
           </li>
@@ -106,7 +107,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 12rem; right: 1rem;">Rows open ZAM-0114 in the matching state so the story holds. Upcoming is Requested, Accepted and Confirmed; everything else is under Past.</p>
+<p class="mock-note" style="top: 12rem; right: 1rem;">Rows open ZAM-0114 in the matching state so the story holds. Upcoming is Requested, Accepted and Confirmed; everything else is under Past. Withdraw and Cancel live on the booking page, not in the list.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

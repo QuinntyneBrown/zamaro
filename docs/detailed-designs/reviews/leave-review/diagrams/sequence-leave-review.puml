@@ -33,7 +33,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 actor -> page : Open /bookings/{number}#review
-page --> actor : Review form shown when review.canCreate (L2-059)
+page --> actor : "Leave a review" opens the review dialog when review.canCreate (L2-059)
 actor -> page : Choose stars, write text, activate Post review
 page -> page : Validate 1–5 stars and 20–1,000 characters
 alt invalid input

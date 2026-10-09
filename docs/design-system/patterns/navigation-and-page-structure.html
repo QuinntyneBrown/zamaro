@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -136,7 +139,9 @@
           <tr><td>Discover</td><td>Kicker, “Who’s free” + the date, one sentence, the booking bar</td><td>Towns within driving distance</td><td>The lineup, How booking works (steps), the artist band</td></tr>
           <tr><td>Artist profile</td><td>Breadcrumb, kicker, the name, facts, Book / Save / Share</td><td>Songs the artist leads</td><td><code>.profile-layout</code>: sections on the left, the booking stub pinned on the right</td></tr>
           <tr><td>Page error</td><td>Breadcrumb, stamp kicker, plain headline</td><td>None</td><td>The alert in <code>.page-error</code></td></tr>
-          <tr><td>Account pages (not in the mocks yet)</td><td>Title only, no marquee</td><td>None</td><td>Sidebar navigation from 1024px; tabs inside a page</td></tr>
+          <tr><td>List, form and account pages (bookings, requests, dashboard, account, edit profile)</td><td>No poster: a <code>.page-head</code> with the title and a mono sub-line</td><td>None</td><td>The settings pages put <code>.settings-nav</code> beside the form from 992px and above it, scrolling sideways, below</td></tr>
+          <tr><td>Artist area</td><td>As list pages, under the workspace top bar (<code>.topbar--workspace</code>) with an “Artists” role tag</td><td>None</td><td>Dashboard, Requests, Availability, Earnings, Profile</td></tr>
+          <tr><td>Admin app (<code>/admin</code>)</td><td>As list pages, under the workspace top bar (<code>.topbar--workspace</code>) with an “Admin” role tag</td><td>None</td><td>Applications, Artists, Bookings, Reviews, Audit log</td></tr>
         </tbody>
       </table></div>
       <h3>Breadcrumb, tabs or a sub-page</h3>
@@ -154,8 +159,8 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Action</th><th scope="col">Where it goes</th><th scope="col">What is kept</th></tr></thead>
         <tbody>
-          <tr><td>“Show the lineup”</td><td><code>/discover?date=2026-11-14&amp;near=burlington-on&amp;kind=sunday&amp;km=120</code></td><td>Writes the search to the URL; a new history entry</td></tr>
-          <tr><td>Press a chip or change the sort</td><td>Same URL, updated query (<code>&amp;style=choir&amp;sort=rating</code>)</td><td>Replaces the history entry, so Back doesn’t step through every chip</td></tr>
+          <tr><td>“Show the lineup”</td><td><code>/?date=2026-11-14&amp;kind=worship-night&amp;lat=43.325&amp;lng=-79.799&amp;place=Burlington&amp;radius=120</code></td><td>Writes the search to the URL; a new history entry</td></tr>
+          <tr><td>Press a chip or change the sort</td><td>Same URL, updated query (<code>&amp;styles=gospel-choir&amp;sort=rating</code>)</td><td>Replaces the history entry, so Back doesn’t step through every chip</td></tr>
           <tr><td>Open a ticket</td><td><code>/artists/abigail-mensah?date=2026-11-14&amp;…</code></td><td>The date fills the stub and the “Book for Sat 14 Nov” button</td></tr>
           <tr><td>Breadcrumb “Discover · Sat 14 Nov”</td><td>The exact search URL</td><td>Date, place, filters, sort</td></tr>
           <tr><td>Browser Back</td><td>The previous search</td><td>Results from cache and the scroll position, with the ticket they opened in view</td></tr>
@@ -177,7 +182,7 @@
               <a class="nav-link" href="#content">For artists</a>
             </nav>
             <span class="topbar__spacer"></span>
-            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span></button>
+            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
             <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
           </header>
           <div class="poster on-stage" style="padding-block: var(--space-10);">
@@ -203,7 +208,7 @@
 &lt;header class="topbar"&gt;
   &lt;button class="btn btn--ghost btn--icon topbar__menu" aria-label="Open menu" aria-expanded="false" aria-controls="phone-menu"&gt;…&lt;/button&gt;
   &lt;a class="topbar__brand" href="/"&gt;&lt;span class="brand-mark" aria-hidden="true"&gt;…&lt;/span&gt;Zamaro&lt;/a&gt;
-  &lt;nav class="topbar__nav" aria-label="Primary"&gt;&lt;a class="nav-link" href="/discover" aria-current="page"&gt;Discover&lt;/a&gt;…&lt;/nav&gt;
+  &lt;nav class="topbar__nav" aria-label="Primary"&gt;&lt;a class="nav-link" href="/" aria-current="page"&gt;Discover&lt;/a&gt;…&lt;/nav&gt;
   &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
   &lt;button class="nav-link topbar__saved" …&gt;…&lt;/button&gt;
   &lt;button class="avatar" aria-label="Account menu for Naomi Fraser" aria-expanded="false"&gt;NF&lt;/button&gt;
@@ -243,15 +248,15 @@
               <p class="section__body">I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone.</p>
             </div>
             <div class="stub" id="pf-stub">
-              <div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+              <div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
               <button class="btn btn--primary btn--lg btn--block" type="button">Request to book · Sat 14 Nov</button>
             </div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Breadcrumb back to the search, the name as the poster headline, songs in the marquee, sections beside the stub. From 1024px the stub is pinned while the profile scrolls.</span></div>
+        <div class="ds-example__caption"><span>Breadcrumb back to the search, the name as the poster headline, songs in the marquee, sections beside the stub. From 992px the stub is pinned while the profile scrolls.</span></div>
       </div>
       <h3>The phone menu</h3>
-      <p>Below 1024px the primary links move behind the menu button. It is a disclosure, not an ARIA menu: a list of links that opens under the top bar and pushes nothing else around.</p>
+      <p>Below 992px (below 1200px in the artist area) the primary links move behind the menu button, which L2-099 requires at XS and SM. The button opens the navigation drawer, a modal <a href="../components/dialog.html"><code>dialog.dialog--drawer</code></a> from the left edge holding the same links as a plain <code>.menu-list</code> (not an ARIA menu), with the current page marked and the “Dark theme” toggle last. Saved and the avatar stay in the bar. The sketch below shows the list’s content.</p>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas">
           <div style="width: 100%; max-width: 24rem; border: var(--border-width-thick) solid var(--color-border-strong);">
@@ -259,7 +264,7 @@
               <button class="btn btn--ghost btn--icon" type="button" aria-label="Close menu" aria-expanded="true" aria-controls="ph-menu" style="--btn-bg: var(--color-bg-stage-raised);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
               <a class="topbar__brand" href="#structure"><span class="brand-mark" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
               <span class="topbar__spacer"></span>
-              <button class="nav-link" type="button" aria-label="Saved artists, 3"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="badge badge--count" aria-hidden="true">3</span></button>
+              <a class="nav-link topbar__saved" href="#structure"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></a>
             </div>
             <nav id="ph-menu" class="on-stage" aria-label="Primary, phone example" style="padding: 0 var(--space-3) var(--space-4);">
               <ul class="menu" role="list" style="min-width: 0;">
@@ -267,8 +272,7 @@
                 <li><a class="menu__item" href="#when">How booking works</a></li>
                 <li><a class="menu__item" href="#content">For artists</a></li>
                 <li class="menu__sep" aria-hidden="true"></li>
-                <li><a class="menu__item" href="#states">Your requests</a></li>
-                <li><a class="menu__item" href="#states">Account · Naomi Fraser</a></li>
+                <li><button class="menu__item" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Dark theme</button></li>
               </ul>
             </nav>
           </div>
@@ -280,10 +284,10 @@
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
           <nav class="sidenav" aria-label="Account">
             <ul class="sidenav__list">
-              <li><a class="sidenav__link" href="#structure" aria-current="page">Your requests <span class="badge badge--count" aria-label="1 needs action">1</span></a></li>
+              <li><a class="sidenav__link" href="#structure" aria-current="page">Your requests <span class="badge badge--count">1<span class="visually-hidden"> needs action</span></span></a></li>
               <li><a class="sidenav__link" href="#structure">Saved artists</a></li>
               <li><a class="sidenav__link" href="#structure">Church details</a></li>
-              <li><a class="sidenav__link" href="#structure">E-mail preferences</a></li>
+              <li><a class="sidenav__link" href="#structure">Email preferences</a></li>
             </ul>
           </nav>
           <div class="tabs" style="flex: 1 1 20rem; min-width: 0;">
@@ -297,7 +301,7 @@
             <div class="tabs__panel" role="tabpanel" id="rq-p3" aria-labelledby="rq-t3" hidden><p>Four past bookings.</p></div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Different tasks are sub-pages in the sidebar; views of the same list are tabs. Not in the mocks yet.</span></div>
+        <div class="ds-example__caption"><span>Different tasks are sub-pages in the sidebar; views of the same list are tabs. The grouped sidebar is not in the mocks yet; the tabs are, on pages/bookings (“Upcoming · Past”) and pages/requests (“New · Accepted · Confirmed · Past”).</span></div>
       </div>
     </section>
 
@@ -343,13 +347,13 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Top bar:</b> below 1024px the primary links hide behind the menu button and Saved shows only the heart and the count. From 1024px the links and the word “Saved” show and the menu button hides. The bar is sticky at every size.</li>
-        <li><b>Poster:</b> one column on phones and tablets; from 1024px the Discover poster puts the headline and the booking bar side by side, and the profile poster puts the artwork to the right of the name.</li>
+        <li><b>Top bar:</b> below 992px (XS, SM and MD) the primary links and the theme toggle move into the navigation drawer behind the menu button, and Saved shows only the heart and the count (L2-099 requires this at XS and SM). From 992px the links, the word “Saved” and the theme toggle show and the menu button hides. The workspace bar (<code>.topbar--workspace</code>, artist and admin), with five links, stays compact until 1200px. The bar is sticky at every size.</li>
+        <li><b>Poster:</b> one column on phones and tablets; from 992px the Discover poster puts the headline and the booking bar side by side, and the profile poster puts the artwork to the right of the name.</li>
         <li><b>Marquee:</b> a single clipped line at every size; it never wraps or scrolls on its own.</li>
-        <li><b>Profile layout:</b> from 1024px the stub sits in a 22rem column and stays pinned under the top bar. Below 1024px it follows the reviews, and “Book for Sat 14 Nov” jumps to it.</li>
+        <li><b>Profile layout:</b> from 992px the stub sits in a 22rem column and stays pinned under the top bar. Below 992px it follows the reviews, and “Book for Sat 14 Nov” jumps to it.</li>
         <li><b>Breadcrumb:</b> wraps onto a second line rather than truncating; it only ever has two items.</li>
-        <li><b>Footer:</b> one column on phones, three from 768px, four from 1024px.</li>
-        <li><b>Sidebar navigation (account pages):</b> a column from 1024px; below that, the same links appear at the top of the page as a list, and tabs scroll sideways if they overflow.</li>
+        <li><b>Footer:</b> one column on phones, three from 768px, four from 992px.</li>
+        <li><b>Sidebar navigation (account pages):</b> a column from 992px; below that, the same links appear at the top of the page as a list, and tabs scroll sideways if they overflow.</li>
       </ul>
     </section>
 
@@ -358,9 +362,9 @@
       <p>Landmarks in this order: skip link, <code>&lt;header&gt;</code> with <code>&lt;nav aria-label="Primary"&gt;</code>, <code>&lt;main id="main"&gt;</code>, <code>&lt;footer&gt;</code>. One <code>&lt;h1&gt;</code> per page, in the poster; each section has an <code>&lt;h2&gt;</code>, tickets and headliner <code>&lt;h3&gt;</code>. The breadcrumb is <code>&lt;nav aria-label="Breadcrumb"&gt;</code> with <code>aria-current="page"</code> on the last item (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">APG Breadcrumb</a>). The phone menu follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">APG Disclosure pattern</a> (<code>aria-expanded</code> + <code>aria-controls</code>), not the Menu pattern. The avatar opens a real account <a href="../components/menu.html">menu</a>. Account tabs follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/">APG Tabs pattern</a> with manual activation.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
-        <tr><td><kbd>Tab</kbd></td><td>Skip link, menu button (phones), brand, primary links, Saved, account, then the page.</td></tr>
+        <tr><td><kbd>Tab</kbd></td><td>Skip link, menu button (compact), brand, primary links, Saved, theme toggle (from 992px), account, then the page.</td></tr>
         <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Opens or closes the phone menu; follows links.</td></tr>
-        <tr><td><kbd>Esc</kbd></td><td>Closes the phone menu and returns focus to the menu button.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the navigation drawer and returns focus to the menu button.</td></tr>
         <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Moves between account tabs; <kbd>Enter</kbd> selects.</td></tr>
         <tr><td><kbd>Alt</kbd>+<kbd>←</kbd></td><td>Browser Back returns to the same search and scroll position.</td></tr>
       </tbody></table>
@@ -399,7 +403,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><nav aria-label="Breadcrumb, do example"><ol class="breadcrumb"><li><a href="#do-dont">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div><figcaption>The breadcrumb goes back to the exact search and says which date it was.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><a class="link--standalone" href="#do-dont">← Home</a></div><figcaption>A “Home” link that drops the date, place and filters, so the church has to search again.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span></button></div><figcaption>Saved is one <code>.nav-link</code> button; the class resets button styles itself.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button></div><figcaption>Saved is one <code>.nav-link</code> button; the class resets button styles itself.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link btn--ghost" type="button" style="background: none; border: 0; cursor: pointer;">Saved</button></div><figcaption>The mocks combined <code>.nav-link</code> with <code>.btn--ghost</code> and an inline style reset.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Jireh</span></div></div><figcaption>The marquee repeats the setlist as decoration and is hidden from screen readers.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee"><span>Free cancellation ends Sat 31 Oct ✦</span><span>Pay your deposit</span></div></div><figcaption>Real information only in the marquee, where it is clipped on phones and hidden from assistive technology.</figcaption></figure>
@@ -410,9 +414,11 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the full shell: skip link, top bar with menu button, brand, primary links, Saved with count and avatar; poster with the date and booking bar; marquee of towns; lineup, steps and band sections; the footer</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: breadcrumb back to “Discover · Sat 14 Nov”, artist poster, marquee of songs, <code>.profile-layout</code> with the pinned stub; the note on the jump link below 1024px</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: breadcrumb back to “Discover · Sat 14 Nov”, artist poster, marquee of songs, <code>.profile-layout</code> with the pinned stub; the note on the jump link below 992px</li>
         <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the breadcrumb and shell stay while the profile loads</li>
         <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the breadcrumb is kept on a failed page</li>
+        <li><a href="../../mocks/dialogs/menu/default.html">dialogs/menu/default</a> and <a href="../../mocks/dialogs/menu/artist.html">artist</a>: the navigation drawer with the current page and the “Dark theme” toggle; <a href="../../mocks/dialogs/account-menu/default.html">dialogs/account-menu</a>: the account menu under the avatar</li>
+        <li><a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/account/default.html">pages/account/default</a> and <a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>: list, settings and artist pages with <code>.page-head</code>, <code>.settings-nav</code> and the artist top bar</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
@@ -420,7 +426,8 @@
         <li><code>.brand-mark</code> was 1.9rem (30.4px, off the grid). It is now 2rem.</li>
         <li>The brand mark, marquee, band, count badge and skip link read primitives (<code>--palette-ink</code>, <code>--palette-paper*</code>). They now use <code>--color-fg-on-accent</code>, <code>--color-border-on-accent</code> and stage tokens.</li>
         <li>Badge count min-width was 1.4em; it is now 1.5em.</li>
-        <li>Tabs, sidebar navigation and the phone menu panel are not in the mocks yet; they are part of the core set for the account pages and phones.</li>
+        <li>The phone menu is now mocked as a navigation drawer dialog (<code>.dialog--drawer</code>) and the account pages use <code>.settings-nav</code>; the bookings and requests pages use tabs. The collapsible sidebar navigation is still not in the mocks.</li>
+        <li>The product had no theme toggle although L2-104 requires one; the top bar and the drawer now carry it.</li>
       </ul>
     </section>
 

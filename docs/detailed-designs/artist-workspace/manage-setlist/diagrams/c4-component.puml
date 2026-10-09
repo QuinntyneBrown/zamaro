@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Manage setlist
 
-Container(web, "Zamaro Web", "Angular", "SetlistEditorPage, SetlistStore, SetlistApi")
+Container(web, "Zamaro Web", "Angular", "SetlistSectionComponent, SetlistSongDialogComponent, SetlistStore, SetlistApi")
 Container_Boundary(api, "Zamaro API") {
   Component(songs, "SetlistSongController", "Laravel controller", "index, store, update, destroy")
   Component(order, "SetlistOrderController", "Invokable controller", "PUT /api/v1/artist/setlist/order")

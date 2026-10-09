@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "WeeklyDefaultFormComponent" as form
+  participant "WeeklyDefaultDialogComponent" as form
   participant "AvailabilityStore" as store
   participant "AvailabilityApi" as client
 end box
@@ -31,7 +31,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   queue "Cache and queue" as queue
 end box
 
-actor -> form : Switch Monday to "Unavailable", activate Save
+actor -> form : Tick Monday, activate "Save weekly default"
 form -> store : saveWeekly([1])
 store -> client : putWeekly([1])
 client -> controller : PUT /api/v1/artist/availability/weekly
@@ -44,6 +44,6 @@ controller --> client : 204
 client --> store : Saved
 store -> store : Reload calendar
 store --> form : Every future Monday shows Unavailable unless overridden (L2-056)
-form --> actor : Success toast
+form --> actor : Dialog closes; page shows "Unavailable every Monday"
 note over action : Overrides take precedence over the weekly default; Booked days are never changed (L2-056, L2-057)
 @enduml

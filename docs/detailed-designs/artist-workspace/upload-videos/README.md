@@ -6,8 +6,9 @@ Video is the closest a church gets to hearing an artist lead before booking. Eac
 approved artist's public profile on Zamaro has a "Watch {pronoun} lead" section
 (L2-014) that streams the artist's own videos. Artists upload video files rather than
 linking to third-party video sites (`docs/specs/L1.md`, assumptions). This feature
-lets an artist upload, title, caption and remove those videos from the artist
-workspace, the `/artist/*` area of Zamaro Web for signed-in approved artists.
+lets an artist upload, title, caption and remove those videos from the Videos section
+of the profile editor at `/artist/profile`, in the artist workspace (the `/artist/*`
+area of Zamaro Web for signed-in approved artists).
 
 The slice covers the full path of one video: an upload of up to 1 GB that survives a
 dropped connection, content-type checking and a malware scan before any processing,
@@ -35,31 +36,42 @@ up to 8 videos (L2-052).
 
 ## Description
 
-The slice runs from the videos manager in Zamaro Web to the video endpoints in the
+The slice runs from the Videos section of the profile editor in Zamaro Web to the
+video endpoints in the
 Zamaro API, queued jobs in the Zamaro Worker, object storage, the malware scanner, the
 video processing service and the CDN.
 
 **Frontend (Zamaro Web, `features/artist-workspace`)**
 
-- **`VideosManagerPage`** — routed page component for `/artist/videos`. It shows the
-  count against the limit ("3 of 8"), the upload control and the list of videos. It
-  disables the upload control at 8 videos.
-- **`VideoUploadDialogComponent`** — design-system dialog that collects the title
-  (5–100 characters) and an optional caption file. It pre-checks the file size
-  (1 GB) and the caption size (1 MB) for early feedback.
-- **`VideoListComponent`** — list of videos with poster, title, duration and a status
-  cell: a design-system progress bar with percent while `Uploading`, "Processing",
-  "Live", or the failure reason. Each row offers "Edit title", "Replace captions" and
-  "Delete".
+- **`VideosSectionComponent`** — the Videos section (`#videos`) of
+  `ArtistProfileEditorPage` (`artist-workspace/edit-profile-details`). It shows the
+  list, the count against the limit with the file rules ("4 of 8 videos · MP4, MOV or
+  WebM, up to 1 GB and 15 minutes each") and "Add a video", which opens
+  `VideoUploadDialogComponent`; at 8 videos the dialog opens in its limit state with
+  "You can have up to 8 videos." With no videos the section shows an empty state with
+  the same button.
+- **`VideoUploadDialogComponent`** — design-system dialog that collects the video file,
+  the title (5–100 characters) and an optional WebVTT caption file. It pre-checks the
+  file type, the file size (1 GB) and the caption size (1 MB) for early feedback, and
+  shows an error summary with inline errors. While uploading it locks the fields and
+  shows a progress bar with percent and megabytes sent, with "Cancel upload". After a
+  dropped connection it shows "Upload stopped at {n}%" and "Resume upload", keeping
+  the title and captions. At the limit it shows only the limit message and "Back to my
+  videos". It closes when the upload completes.
+- **`VideoListComponent`** — list of videos with poster, title, duration and status:
+  "Processing", "Live" or the failure reason. Each row offers "Remove", which saves at
+  once and offers Undo in a toast. Titles and captions are set in the upload dialog;
+  the title endpoint below has no screen yet.
 - **`ArtistVideosStore`** — signal-based store holding the videos and the active
   uploads. While any video is `Processing` it polls
   `GET /api/v1/artist/videos/{video}`; the interval is `<TO SUPPLY>`.
 - **`ChunkedUploader`** — service that sends the source in parts straight to object
   storage through pre-signed URLs and reports percent uploaded. It retries a failed
-  part with backoff. After a dropped connection it waits for the browser `online`
-  event, asks the API which parts storage already holds, and continues from the first
-  missing part (L2-052). Every source uses parts, so resume applies to all sizes,
-  including the files above 50 MB that L2-052 names. The part size (at least 5 MB, the
+  part with backoff. After a dropped connection it resumes on the browser `online`
+  event or when the artist activates "Resume upload": it asks the API which parts
+  storage already holds and continues from the first missing part (L2-052). Every
+  source uses parts, so resume applies to all sizes, including the files above 50 MB
+  that L2-052 names. The part size (at least 5 MB, the
   storage minimum) and the number of parallel parts are `<TO SUPPLY>`. Resuming after
   a page reload, which requires the artist to choose the file again, is `<TO SUPPLY>`.
 - **`ArtistVideosApi`** — typed client for the endpoints below.
@@ -137,8 +149,20 @@ plus form overhead.
   `Content-Disposition` (L2-076).
 
 Each change that alters what the public sees dispatches `ArtistProfileUpdated`, which
-purges the cached public profile (L2-089). Failure-reason copy shown to the artist is
-`<TO SUPPLY>`.
+purges the cached public profile (L2-089). A source over 15 minutes fails with
+"Longer than 15 minutes. Trim it and upload it again."; copy for the other failure
+reasons is `<TO SUPPLY>`.
+
+**Mock screens** — the Videos section (`#videos`) of
+[`pages/edit-profile`](../../../mocks/pages/edit-profile/default.html) lists Abigail's 4
+Live videos; the [`empty`](../../../mocks/pages/edit-profile/empty.html) state shows
+the no-videos empty state; the
+[`video-processing`](../../../mocks/pages/edit-profile/video-processing.html) state
+adds Jireh as "Processing" and a 16:20 video as "Failed" with its reason, at 5 of 8.
+"Add a video" opens
+[`dialogs/add-video`](../../../mocks/dialogs/add-video/default.html) in states default,
+busy (46% uploaded, on the design-system progress bar), invalid (an AVI file and a
+4-character title), failed (stopped at 61% with Resume upload) and limit.
 
 **Data and storage**
 

@@ -14,7 +14,7 @@ skinparam class {
 title Class structure — Publish a calendar feed
 
 package "Zamaro Web (Angular)" {
-  class CalendarFeedComponent {
+  class CalendarFeedDialogComponent {
     +feed: Signal<FeedState | null>
     +enable(): void
     +regenerate(): void
@@ -84,7 +84,7 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-CalendarFeedComponent --> CalendarFeedApi
+CalendarFeedDialogComponent --> CalendarFeedApi
 CalendarFeedApi ..> ArtistCalendarFeedController : /api/v1/artist/calendar-feed
 ArtistCalendarFeedController --> EnableCalendarFeed
 ArtistCalendarFeedController --> RegenerateCalendarFeed

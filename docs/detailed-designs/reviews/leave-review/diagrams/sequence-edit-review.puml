@@ -33,7 +33,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 actor -> page : Activate Edit review
-page -> page : Show form only when review.canEdit (L2-059)
+page -> page : Offer "Edit your review" only when review.canEdit (L2-059)
 actor -> page : Change stars or text, activate Save
 page -> store : update(reviewId, form)
 store -> client : update(reviewId, form)

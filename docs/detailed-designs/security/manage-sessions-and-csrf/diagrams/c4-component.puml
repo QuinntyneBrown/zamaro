@@ -13,7 +13,7 @@ Container_Boundary(api, "Zamaro API") {
   Component(start, "StartSession", "Laravel middleware", "Loads session by cookie, refreshes idle expiry")
   Component(csrf, "ValidateCsrfToken", "Laravel middleware", "Rejects mismatched token with 419, writes XSRF-TOKEN")
   Component(absolute, "EnforceAbsoluteSessionLifetime", "Laravel middleware", "Ends sessions 30 days after sign-in")
-  Component(signin, "SignInController + AuthenticateUser", "Controller and action", "Checks credentials, regenerates session and token")
+  Component(signin, "SessionController + AttemptSignIn", "Controller and actions (accounts/sign-in-and-recover-access)", "Checks credentials, regenerates session and token")
   Component(problem, "ProblemDetailsRenderer", "Exception renderer", "Renders 419 and 401 as RFC 9457")
   ComponentDb(cache, "Cache and queue", "Redis", "Session payloads")
 }

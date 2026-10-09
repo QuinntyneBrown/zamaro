@@ -46,10 +46,24 @@ Worker, object storage, the malware scanner and back out through the media domai
   a convenience only; the server decides.
 - **`UploadsApi`** — typed client for the upload endpoints and for
   `GET /api/v1/uploads/{id}`, which it polls until the status leaves `Quarantined`.
-- **`UploadStatusComponent`** — shows "Checking file", then the accepted state or the
-  rejection reason. The copy for a malware rejection is `<TO SUPPLY>`.
-- **`VscDocumentLinkComponent`** — in the administrator's application view, requests a
-  signed URL and opens it in a new tab.
+- **`UploadStatusComponent`** — shows "Checking the file", then the accepted state or
+  the rejection reason. A VSC document rejected by the malware scan reads "Rejected"
+  and the earlier verified check still counts; a rejected photo reads "This photo
+  wasn't uploaded. Our safety scan flagged the file, so we deleted it. Export the
+  photo again and try that copy."
+- **`VscDocumentComponent`** — owned by
+  `artist-onboarding/verify-vulnerable-sector-check` and reused in the administrator's
+  application view; it requests a signed link through `VulnerableSectorChecksApi` and
+  opens it in a new tab.
+
+**Mock screens** — the VSC upload is
+[`dialogs/upload-check`](../../../mocks/dialogs/upload-check/default.html) in states
+default, [`busy`](../../../mocks/dialogs/upload-check/busy.html) (upload progress),
+[`invalid`](../../../mocks/dialogs/upload-check/invalid.html) (too large, wrong type or
+a future date) and failed, after which the profile editor shows the check as
+[`pages/edit-profile/check-pending`](../../../mocks/pages/edit-profile/check-pending.html)
+("Checking the file"). A photo rejected by the scan is
+[`dialogs/add-photo/failed`](../../../mocks/dialogs/add-photo/failed.html).
 
 **Backend (Zamaro API)**
 
@@ -73,10 +87,12 @@ Worker, object storage, the malware scanner and back out through the media domai
 - **`UploadPurpose` allow-lists** — `VscDocument`: `application/pdf`, `image/jpeg`,
   `image/png`. `Photo`: `image/jpeg`, `image/png`, `image/webp`, `image/heic`.
   `Video`: `video/mp4`, `video/quicktime`, `video/webm`. `Caption`: `text/vtt`.
-- **`VscDocumentUrlController`** — `GET /api/v1/artist/vsc/document` for the owning
-  artist and `GET /api/v1/admin/artists/{artist}/vsc/document` for administrators.
-  `VulnerableSectorCheckPolicy::view` returns `denyAsNotFound()` for anyone else
-  (L2-049). The controller returns `{ url, expiresAt }` from `PrivateDocumentUrl`.
+- **`DocumentLinksController`** — owned by
+  `artist-onboarding/verify-vulnerable-sector-check`:
+  `GET /api/v1/vulnerable-sector-checks/{check}/document-link`, for the owning artist
+  and administrators. `VulnerableSectorCheckPolicy::view` returns `denyAsNotFound()`
+  for anyone else (L2-049, L2-074). The controller returns `{ url, expiresAt }` from
+  `PrivateDocumentUrl`.
 - **`App\Support\PrivateDocumentUrl`** — builds
   `URL::temporarySignedRoute('documents.show', now()->addMinutes(5), ...)` on the media
   domain host for the document's random object name.

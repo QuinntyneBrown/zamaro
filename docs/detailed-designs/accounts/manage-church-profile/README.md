@@ -30,23 +30,46 @@ which the address snapshot guarantees.
 
 **Frontend (Zamaro Web, `features/account`)**
 
-- **`ChurchProfilePage`** — routed page for `/account/church` that loads the church,
-  hosts `ChurchFormComponent`, and shows a success toast on save.
+- **Church section** — section `#church` of `AccountSettingsPage` (`/account`, owned
+  by `accounts/manage-account-settings`). It loads the church, hosts
+  `ChurchFormComponent`, and is saved by the page's Save changes button; the page
+  shows a "Saved" banner that says bookings already sent keep the address they were
+  made with.
 - **`ChurchFormComponent`** — reactive form with church name (2–120 characters),
-  street address with type-ahead, contact phone (North American number),
-  denomination (optional) and typical attendance (optional, whole number). It keeps
-  every value when the server rejects the address (L2-001) and disables the submit
-  button while saving (L2-108).
-- **`ChurchRequiredDialogComponent`** — design-system dialog opened by the booking
-  stub when `AuthService.currentUser().church` is null. It embeds
-  `ChurchFormComponent`, and on save it closes and calls back into the booking stub,
-  which resubmits the held request (L2-024).
-- **`AccountMenuComponent`** — header avatar showing the booker's initials, with a
-  menu that lists the booker's name and church name (L2-024).
+  street address with type-ahead, city and postal code, contact phone (North American
+  number), denomination (optional) and typical attendance (optional, whole number).
+  It shows the server's service-area or geocoding message on the street address,
+  keeps every value when the server rejects the address (L2-001) and disables the
+  submit button while saving (L2-108).
+- **`ChurchRequiredDialogComponent`** — CDK dialog "Add your church" opened by the
+  request form (`BookRequestPage`, `bookings/send-booking-request`) when
+  `AuthService.currentUser().church` is null, or when the API answers 409
+  `church-required`. It embeds
+  `ChurchFormComponent` with a "Save and send request" button; on save it closes and
+  calls back into the request form, which resubmits the held request (L2-024). "Not
+  now" closes it and keeps the request draft.
+- **`AccountMenuComponent`** — header avatar showing the booker's initials, with an
+  anchored menu (`dialog--menu`) that lists the booker's name, church name and email
+  (L2-024), then Your bookings, Saved artists with the count, Account settings and
+  Sign out (L2-023). An artist's menu shows the artist's name and church and how many
+  requests await a reply, and offers Dashboard, View public profile, Account settings
+  and Sign out.
 - **`ChurchApi`** — typed client for `GET /api/v1/account/church` and
   `PUT /api/v1/account/church`.
 - **`AuthService`** — refreshes `currentUser` after a save so the header and the
   Discover pre-fill read the new church.
+
+**Mock screens** — the church section is `#church` on
+[`pages/account`](../../../mocks/pages/account/default.html); an address outside the
+service area is the [`out-of-area`](../../../mocks/pages/account/out-of-area.html)
+state and a malformed postal code the
+[`invalid`](../../../mocks/pages/account/invalid.html) state. The first-request
+prompt is [`dialogs/add-church`](../../../mocks/dialogs/add-church/default.html) over
+the request form, in states default, busy,
+[`invalid`](../../../mocks/dialogs/add-church/invalid.html) (address not found) and
+failed. The header initials and the menu with name and church are
+[`dialogs/account-menu`](../../../mocks/dialogs/account-menu/default.html), with its
+[`artist`](../../../mocks/dialogs/account-menu/artist.html) state.
 
 **Backend (Zamaro API)**
 
@@ -54,8 +77,8 @@ which the address snapshot guarantees.
   to the `Booker` role. Each booker has at most one church; `PUT` creates or
   replaces it.
 - **`SaveChurchRequest`** — FormRequest that validates name length 2–120, address
-  presence, phone through the `NorthAmericanPhone` rule, denomination length, and
-  typical attendance as a positive integer.
+  presence, phone through the `NorthAmericanPhone` rule, denomination as optional free
+  text, and typical attendance as a positive integer.
 - **`SaveChurch`** — action that geocodes the address through `Geocoder`, asks
   `ServiceArea` whether the point is inside, and only then writes the `Church` inside
   `DB::transaction`. A geocoding miss raises a 422 with "We couldn't find that
@@ -89,8 +112,8 @@ they were made with (L2-024).
 - `bookings` — `church_name`, `church_address`, `church_latitude`,
   `church_longitude` snapshot columns, written by the bookings subsystem.
 
-The geocoding provider vendor, the type-ahead source, and the list of denomination
-values (free text or a fixed list) are `<TO SUPPLY>`.
+Denomination is free text, as in the mocks. The geocoding provider vendor and the
+type-ahead source are `<TO SUPPLY>`.
 
 ## Requirements
 
@@ -113,7 +136,7 @@ measures road distance from Toronto City Hall to enforce the service area.
 
 ### Containers
 
-The church page and the booking-stub dialog in Zamaro Web call the church endpoint in
+The church section of account settings and the request-form dialog in Zamaro Web call the church endpoint in
 the Zamaro API. The API calls the geocoding and routing providers, uses Redis for the
 distance cache, and stores the church in the database.
 
@@ -143,7 +166,7 @@ and keeps every value in the form.
 
 ### Behaviour — add a church before the first request
 
-A booker without a church who submits the booking stub is asked for the church
+A booker without a church who submits the request form is asked for the church
 first. Once it is saved, the held request is sent without re-entry.
 
 ![Sequence diagram for adding a church before the first booking request](diagrams/sequence-church-before-request.png)

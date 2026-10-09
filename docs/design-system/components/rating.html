@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rating — Zamaro design system</title>
-<meta name="description" content="The rating shows how churches scored an artist: five star glyphs, the score and how many churches rated. Read-only text; there is no star input in v1.">
+<meta name="description" content="The rating shows how churches scored an artist: five star glyphs, the score and how many churches rated. Read-only text; scores are entered with a radio group in the write-review dialog.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -122,22 +125,23 @@
       <ul>
         <li><b>Full</b> (<code>.rating</code>: stars, score, count) on the profile and the reviews heading.</li>
         <li><b>Compact</b> (score and count, no stars) in tight places: ticket numbers and list meta.</li>
+        <li><b>Inline</b> (one <code>role="img"</code> span: a single ★, the score and the count, “★ 4.9 · 38 churches”) inside a line of facts: the profile poster, the headliner meta, ticket numbers, the reviews heading, the dashboard and admin rows. This is the form every mock uses; the <code>.rating</code> classes above are ready but not yet in the mocks.</li>
         <li><b>Stars only</b> (<code>.stars</code>) for a single review, where the score is one church’s whole-star rating.</li>
       </ul>
-      <h3>Why there is no star input in v1</h3>
-      <p>Bookers never type a rating on Zamaro in v1. Churches rate an artist once, after the service, in a short follow-up form, and that form uses a native <a href="radio-group.html">radio group</a> (“How was Sun 15 Nov?” with five labelled options) rather than clickable stars. Star widgets commonly fail the basics: hover-only previews, no arrow-key support, 16px targets, and no way to say what three stars means. A radio group gives every option a word, a 44px target and keyboard support for free. If a star input is added later it must be a radio group styled as stars, following the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">APG Radio Group pattern</a>.</p>
+      <h3>Rating input: a radio group, not clickable stars</h3>
+      <p>The rating is display-only. Churches give their score once, after the event, in the <a href="../../mocks/dialogs/write-review/default.html">write-review dialog</a> (L2-059), and that input is a native <a href="radio-group.html#variants">radio group</a> of five <code>.choice--stub</code> cards (“Star rating” on the radio group page): each shows the stars as <code>aria-hidden</code> text, says “{n} out of 5 stars” in visually hidden text and names the score in a word, Unforgettable, Great, Good, Fair or Poor. Star widgets commonly fail the basics: hover-only previews, no arrow-key support, 16px targets, and no way to say what three stars means. A radio group gives every option a word, a large target and keyboard support for free, following the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">APG Radio Group pattern</a>. Do not build a clickable row of <code>.stars</code>.</p>
     </section>
 
     <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
       <div class="ds-anatomy">
         <figure class="ds-anatomy__figure">
-          <p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count">38 churches</span></p>
+          <p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></p>
           <span class="ds-callout" style="left: 22%; top: 26%;" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: 46%; top: 26%;" aria-hidden="true">2</span>
           <span class="ds-callout" style="left: 70%; top: 26%;" aria-hidden="true">3</span>
         </figure>
         <ol class="ds-anatomy__list">
-          <li><div><b>Stars</b><small><code>.stars</code>: five glyphs, ★ filled and ☆ empty, in the mono stub face with wide tracking. <code>role="img"</code> with <code>aria-label="4.9 out of 5 stars"</code>.</small></div></li>
+          <li><div><b>Stars</b><small><code>.stars</code>: five glyphs, ★ filled and ☆ empty, in the mono stub face with wide tracking. In the full and compact forms the whole <code>.rating</code> is one <code>role="img"</code> named “Rated 4.9 out of 5 by 38 churches” (L2-102); on its own, for one review, <code>.stars</code> takes <code>role="img"</code> and “4 out of 5 stars”.</small></div></li>
           <li><div><b>Score</b><small><code>.rating__score</code>: one decimal in the display figure face, 24px. Hidden from screen readers because the stars’ label already says it.</small></div></li>
           <li><div><b>Count</b><small><code>.rating__count</code>: how many churches rated, muted stub text.</small></div></li>
         </ol>
@@ -147,25 +151,37 @@
     <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stack" style="align-items: flex-start;">
-          <p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count">38 churches</span></p>
-          <p class="rating"><span class="rating__score">4.8<span class="visually-hidden"> out of 5</span></span><span class="rating__count">· 21 churches</span></p>
+          <p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></p>
+          <p class="rating" role="img" aria-label="Rated 4.8 out of 5 by 21 churches"><span class="rating__score">4.8</span><span class="rating__count">· 21 churches</span></p>
           <p><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span></p>
         </div>
         <div class="ds-example__caption"><span>Full (Abigail Mensah), compact (Hosanna Collective) and stars only (one review by Pastor Femi Adebayo).</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;p class="rating"&gt;
-  &lt;span class="stars" role="img" aria-label="4.9 out of 5 stars"&gt;★★★★★&lt;/span&gt;
-  &lt;span class="rating__score" aria-hidden="true"&gt;4.9&lt;/span&gt;
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"&gt;
+  &lt;span class="stars"&gt;★★★★★&lt;/span&gt;
+  &lt;span class="rating__score"&gt;4.9&lt;/span&gt;
   &lt;span class="rating__count"&gt;38 churches&lt;/span&gt;
 &lt;/p&gt;
 
-&lt;p class="rating"&gt;&lt;span class="rating__score"&gt;4.8&lt;span class="visually-hidden"&gt; out of 5&lt;/span&gt;&lt;/span&gt;&lt;span class="rating__count"&gt;· 21 churches&lt;/span&gt;&lt;/p&gt;
+&lt;p class="rating" role="img" aria-label="Rated 4.8 out of 5 by 21 churches"&gt;&lt;span class="rating__score"&gt;4.8&lt;/span&gt;&lt;span class="rating__count"&gt;· 21 churches&lt;/span&gt;&lt;/p&gt;
 
 &lt;span class="stars" role="img" aria-label="4 out of 5 stars"&gt;★★★★☆&lt;/span&gt;</code></pre></details>
+      </div>
+      <h3>Inline</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack" style="align-items: flex-start;">
+          <p class="text-sm">Brampton · 44 km · <span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span> · From $650</p>
+          <p class="overline">No. 02 · <span role="img" aria-label="Rated 4.6 out of 5 by 17 churches">★ 4.6 · 17 churches</span></p>
+          <p class="stars" role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★★★★★ 4.9 · 38 churches</p>
+        </div>
+        <div class="ds-example__caption"><span>The headliner meta, a ticket number and the profile’s reviews heading, as in pages/discover/default and pages/artist/default. The whole phrase is one image with the label “Rated {score} out of 5 by {n} churches”, so the glyph, score and count are read once, in words. Where the count is shown elsewhere (an admin table row) the label drops it: “Rated 4.6 out of 5”.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span role="img" aria-label="Rated 4.9 out of 5 by 38 churches"&gt;★ 4.9 · 38 churches&lt;/span&gt;
+
+&lt;p class="stars" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"&gt;★★★★★ 4.9 · 38 churches&lt;/p&gt;</code></pre></details>
       </div>
       <h3>In context</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stage on-stage">
-          <p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars" style="color: var(--color-accent-on-stage);">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count" style="color: var(--color-fg-on-stage-muted);">38 churches</span></p>
+          <p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars" style="color: var(--color-accent-on-stage);">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count" style="color: var(--color-fg-on-stage-muted);">38 churches</span></p>
         </div>
         <div class="ds-example__canvas">
           <figure class="review" style="max-width: 28rem;"><blockquote><p>Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure>
@@ -184,15 +200,15 @@
         <thead><tr><th scope="col">Variant</th><th scope="col">Rated</th><th scope="col">Low score</th><th scope="col">Loading</th><th scope="col">No reviews yet</th></tr></thead>
         <tbody>
           <tr><th scope="row">Full</th>
-            <td><p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count">38 churches</span></p></td>
-            <td><p class="rating"><span class="stars" role="img" aria-label="3.4 out of 5 stars">★★★☆☆</span><span class="rating__score" aria-hidden="true">3.4</span><span class="rating__count">5 churches</span></p></td>
+            <td><p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></p></td>
+            <td><p class="rating" role="img" aria-label="Rated 3.4 out of 5 by 5 churches"><span class="stars">★★★☆☆</span><span class="rating__score">3.4</span><span class="rating__count">5 churches</span></p></td>
             <td><span class="skeleton skeleton--text" style="width: 7rem;" role="img" aria-label="Loading rating"></span></td>
-            <td><p class="rating"><span class="rating__count">No reviews yet</span></p></td></tr>
+            <td><p class="rating"><strong>New</strong><span class="rating__count">· No reviews yet</span></p></td></tr>
           <tr><th scope="row">Compact</th>
-            <td><p class="rating"><span class="rating__score">4.9<span class="visually-hidden"> out of 5</span></span><span class="rating__count">· 38</span></p></td>
-            <td><p class="rating"><span class="rating__score">3.4<span class="visually-hidden"> out of 5</span></span><span class="rating__count">· 5</span></p></td>
+            <td><p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="rating__score">4.9</span><span class="rating__count">· 38</span></p></td>
+            <td><p class="rating" role="img" aria-label="Rated 3.4 out of 5 by 5 churches"><span class="rating__score">3.4</span><span class="rating__count">· 5</span></p></td>
             <td><span class="skeleton skeleton--text" style="width: 4rem;" role="img" aria-label="Loading rating"></span></td>
-            <td><span class="badge">New on Zamaro</span></td></tr>
+            <td><p class="rating"><span class="rating__count">New</span></p></td></tr>
           <tr><th scope="row">Stars only</th>
             <td><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span></td>
             <td><span class="stars" role="img" aria-label="3 out of 5 stars">★★★☆☆</span></td>
@@ -203,20 +219,19 @@
       <ul>
         <li><b>Low score</b> looks exactly like a high one. The rating reports; it never turns red or adds a warning.</li>
         <li><b>Loading</b> holds the space with a one-line skeleton.</li>
-        <li><b>No reviews yet</b> says so in words, as on Miriam Haile’s profile. Never show ☆☆☆☆☆ or “0.0”, which reads as a bad rating.</li>
-        <li>Show the stars only from three ratings up; below that show the count in words (“2 reviews”) beside the review cards.</li>
+        <li><b>No reviews yet</b> says so in words: “New · No reviews yet” in the profile header, as on Miriam Haile’s profile (L2-012, L2-020), and “New” in a ticket’s number line (L2-006). Never show ☆☆☆☆☆ or “0.0”, which reads as a bad rating.</li>
       </ul>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="stack"><p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count">38 churches</span></p><p class="rating"><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span><span class="rating__count">Pastor Femi Adebayo</span></p></div></div>
-        <div data-theme="dark"><div class="stack"><p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count">38 churches</span></p><p class="rating"><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span><span class="rating__count">Pastor Femi Adebayo</span></p></div></div>
+        <div data-theme="light"><div class="stack"><p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></p><p class="rating"><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span><span class="rating__count">Pastor Femi Adebayo</span></p></div></div>
+        <div data-theme="dark"><div class="stack"><p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></p><p class="rating"><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span><span class="rating__count">Pastor Femi Adebayo</span></p></div></div>
       </div>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
         <li>The rating is an inline row that wraps between its parts, never inside the stars. At 360px the full rating (about 15rem) fits on one line.</li>
-        <li>On ticket cards at every width use the compact form in the ticket number line: “No. 02 · 4.8”.</li>
+        <li>On ticket cards at every width put the score and the count in the ticket number line: “No. 02 · ★ 4.6 · 17 churches”, so every card shows its review count (L2-006).</li>
         <li>The score never scales with the viewport.</li>
       </ul>
     </section>
@@ -228,7 +243,7 @@
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
       <h3>Role and pattern</h3>
-      <p>Static text. The star string is a <code>&lt;span role="img"&gt;</code> with an <code>aria-label</code> that states the score: “4.9 out of 5 stars”. Without it, screen readers read “black star, black star…” five times. There is no interactive pattern in v1; a future star input would be the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">APG Radio Group</a>.</p>
+      <p>Static text. An artist’s rating is one <code>role="img"</code> whose <code>aria-label</code> says it in words: “Rated 4.9 out of 5 by 38 churches” (L2-102). Without it, screen readers read “black star, black star…” five times, then the score and the count. The rating itself is not interactive; the score is entered with a radio group (see Overview and the <a href="radio-group.html">radio group</a> page), following the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">APG Radio Group</a>.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd></td><td>Skips the rating; it is never focusable. A link to the reviews (“Read 38 reviews”) sits next to it when one is needed.</td></tr>
@@ -236,7 +251,7 @@
       <h3>Focus</h3>
       <p>No focus. Don’t make the stars a link; link the words instead.</p>
       <h3>Labelling</h3>
-      <p>The full rating is read as “4.9 out of 5 stars, 38 churches”: the stars carry the score in their label and the visible score is <code>aria-hidden="true"</code> so it isn’t read twice. In the compact form there are no stars, so the score carries a visually hidden “out of 5”. A single review’s stars say that church’s whole-star rating (“4 out of 5 stars”).</p>
+      <p>The full and compact ratings are read as one phrase, “Rated 4.9 out of 5 by 38 churches” (L2-102): the label is on the <code>.rating</code> wrapper with <code>role="img"</code>, so the stars, score and count inside are not read again. The inline form in the mocks does the same with one <code>role="img"</code> span. A single review’s stars say that church’s whole-star rating (“4 out of 5 stars”).</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Stars and score on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
@@ -258,16 +273,17 @@
         <li>Score: one decimal, always (“5.0”, “4.9”). Glyphs round to the nearest whole star, halves up: 4.9 and 4.6 show five, 4.4 shows four. The score gives the precision.</li>
         <li>Always five glyphs: filled ★ then empty ☆. No half-star glyphs; they don’t exist in most fonts.</li>
         <li>Count names who rated: “38 churches”, not “38 reviews” or “(38)”. In the compact form, “· 38” is enough when the context already says churches.</li>
-        <li>The label is “{score} out of 5 stars”.</li>
-        <li>Unrated artists: “No reviews yet” or the “New on Zamaro” badge.</li>
+        <li>An artist’s rating is labelled “Rated {score} out of 5 by {n} churches” (L2-102), on the full, compact and inline forms alike; “Rated {score} out of 5” only where the count is shown elsewhere. A single review’s <code>.stars</code> say “{n} out of 5 stars”.</li>
+        <li>Separate the score and the count with a middle dot: “★ 4.9 · 38 churches”, never brackets.</li>
+        <li>Unrated artists: “New · No reviews yet” on the profile, “New” on a ticket.</li>
       </ul>
     </section>
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas"><p class="rating"><span class="stars" role="img" aria-label="4.9 out of 5 stars">★★★★★</span><span class="rating__score" aria-hidden="true">4.9</span><span class="rating__count">38 churches</span></p></div><figcaption>One labelled image for the stars, then the count.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas"><p>★ 4.9 (38 churches)</p></div><figcaption>A typed ★ is read as “black star” and the brackets as noise. The headliner meta and ticket numbers in the mocks did this.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><p class="rating"><span class="rating__count">No reviews yet</span></p></div><figcaption>New artists say so in words.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="stars">★★★★★</span><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></p></div><figcaption>One labelled image for the whole rating: “Rated 4.9 out of 5 by 38 churches”.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><p>★ 4.9 (38 churches)</p></div><figcaption>A bare typed ★ is read as “black star” and the brackets as noise. The headliner meta in the mocks did this; it is now the labelled inline form, “★ 4.9 · 38 churches”.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><p class="rating"><strong>New</strong><span class="rating__count">· No reviews yet</span></p></div><figcaption>New artists say so in words.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><p class="rating"><span class="stars" role="img" aria-label="0 out of 5 stars">☆☆☆☆☆</span><span class="rating__score" aria-hidden="true">0.0</span></p></div><figcaption>Five empty stars and 0.0 look like a terrible artist, not a new one.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span></div><figcaption><code>role="img"</code> with the label, so the label is read.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><span class="stars">★★★★★</span></div><figcaption>The mocks’ reviews put <code>aria-label</code> on a plain <code>&lt;span class="stars"&gt;</code>. Without a role the label is often ignored and the glyphs are read one by one.</figcaption></figure>
@@ -290,13 +306,13 @@
     </section>
 
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
-      <pre><code>&lt;p class="rating"&gt;
-  &lt;span class="stars" role="img" aria-label="4.9 out of 5 stars"&gt;★★★★★&lt;/span&gt;
-  &lt;span class="rating__score" aria-hidden="true"&gt;4.9&lt;/span&gt;
+      <pre><code>&lt;p class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"&gt;
+  &lt;span class="stars"&gt;★★★★★&lt;/span&gt;
+  &lt;span class="rating__score"&gt;4.9&lt;/span&gt;
   &lt;span class="rating__count"&gt;38 churches&lt;/span&gt;
 &lt;/p&gt;
 
-/* Stage overrides, proposed for components.css */
+/* Stage overrides, in components.css */
 .on-stage .stars { color: var(--color-accent-on-stage); }
 .on-stage .rating__count { color: var(--color-fg-on-stage-muted); }</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
@@ -311,15 +327,17 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “★ 4.9 · 38 churches” in the poster facts, “★★★★★ 4.9 · 38 reviews” in the reviews heading, and stars on each review</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “★ 4.9 · 38 churches” in the poster facts, “★★★★★ 4.9 · 38 churches” in the reviews heading, and stars on each review</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “New · No reviews yet” for Miriam Haile</li>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “★ 4.9 (38 churches)” on the headliner and “No. 02 · ★ 4.8” on tickets</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “★ 4.9 · 38 churches” on the headliner and “No. 0N · ★ {score} · {n} churches” on every ticket</li>
+        <li><a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>: “★★★★★ 4.9 · 38 churches” as one labelled line; <a href="../../mocks/pages/artist-reviews/default.html">pages/artist-reviews/default</a>: the inline form “★ 4.9 · 38 churches” in the page head; <a href="../../mocks/pages/admin-artists/default.html">pages/admin-artists/default</a>, <a href="../../mocks/pages/admin-artist/default.html">pages/admin-artist/default</a> and <a href="../../mocks/dialogs/suspend-artist/default.html">dialogs/suspend-artist</a>: the inline form in table rows, where the label drops the count (“Rated 4.6 out of 5”)</li>
+        <li>Single-review stars (<code>.stars</code>, “5 out of 5 stars”) on <a href="../../mocks/pages/artist-reviews/default.html">pages/artist-reviews/default</a>, <a href="../../mocks/pages/admin-reviews/default.html">pages/admin-reviews/default</a> and <a href="../../mocks/dialogs/hide-review/default.html">dialogs/hide-review</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li><code>.review figcaption span</code> also restyled the stars span. It is now scoped to non-star spans, so <code>.stars</code> keeps its own type in reviews.</li>
-        <li>Ratings were typed four different ways (★ 4.9, ★★★★★ 4.9 · 38 reviews, ★ 4.9 (38 churches), No. 02 · ★ 4.8). They are now one component with full and compact forms, and one count noun: churches.</li>
-        <li>Star strings carried <code>aria-label</code> without a role, and single typed ★ glyphs had no label at all. Stars are now <code>role="img"</code> with “{score} out of 5 stars”.</li>
+        <li>Ratings were typed four different ways (★ 4.9, ★★★★★ 4.9 · 38 reviews, ★ 4.9 (38 churches), No. 02 · ★ 4.8). The mocks now use one labelled inline form, “★ {score} · {n} churches”, and one count noun: churches. The <code>.rating</code> full and compact classes are ready for the product but no mock uses them yet.</li>
+        <li>Star strings carried <code>aria-label</code> without a role, and single typed ★ glyphs had no label at all. Stars are now <code>role="img"</code> with “{score} out of 5 stars”, and inline ratings with “Rated {score} out of 5 by {n} churches”.</li>
       </ul>
     </section>
 

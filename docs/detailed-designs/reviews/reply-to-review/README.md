@@ -34,14 +34,19 @@ in the Zamaro API and the Zamaro database.
 
 - **`ArtistReviewsPage`** — routed page for `/artist/reviews`. It lists the visible
   reviews of the signed-in artist's own profile, newest first, with each review's
-  reply or a Reply button. It also hosts the Report action from
-  `reviews/report-and-moderate-review`; it offers no delete action (L2-062).
-- **`ReviewReplyFormComponent`** — inline form with a textarea, a live count of
-  remaining characters out of 500, Post reply and Cancel. In edit mode it shows the
-  date the reply locks. It validates 1–500 characters after trimming.
+  reply and either a Reply button, an Edit reply button while the reply edit window
+  is open, or "Reply locked" after it. The dashboard's Reviews panel links here. It
+  also hosts the Report action from `reviews/report-and-moderate-review`; it offers
+  no delete action (L2-062).
+- **`ReplyToReviewDialogComponent`** — CDK dialog opened by Reply or Edit reply. It
+  shows the review, a textarea with a live count out of 500, Post reply (Save reply
+  in edit mode) and Cancel. In edit mode it shows the time the reply locks. It
+  validates 1–500 characters after trimming, traps focus and returns it to the
+  opening button on close (L2-101).
 - **`ArtistReviewsStore`** — signal-based store holding the page of reviews, the
-  reply being edited and a status. It disables the submit button while saving
-  (L2-108) and raises a toast on success (L2-109).
+  reply being edited and a status. While saving, the submit button shows its busy
+  state ("Posting…", or "Saving…" in edit mode) and blocks a second submission
+  (L2-108); on success it raises a "Reply posted" toast (L2-109).
 - **`ArtistReviewsApi`** — typed client for `GET /api/v1/artist/reviews`,
   `POST /api/v1/artist/reviews/{review}/reply` and
   `PATCH /api/v1/artist/reviews/{review}/reply`.
@@ -70,6 +75,15 @@ in the Zamaro API and the Zamaro database.
 Whether the reviewing booker is emailed when a reply is posted is not stated in the
 specs and is `<TO SUPPLY>`. If moderation later hides the review, the reply is
 hidden with it, because it renders only beneath a visible review.
+
+**Mock screens** — the page is
+[`pages/artist-reviews`](../../../mocks/pages/artist-reviews/default.html) in states
+default (Abigail: one reply editable, one locked, two without a reply), loading,
+[`empty`](../../../mocks/pages/artist-reviews/empty.html) (Miriam) and error. The
+dialog is [`dialogs/reply-review`](../../../mocks/dialogs/reply-review/default.html) in
+states default, [`edit`](../../../mocks/dialogs/reply-review/edit.html), busy, invalid
+and failed. The public reply under the review is in
+[`pages/artist`](../../../mocks/pages/artist/default.html).
 
 **Data**
 

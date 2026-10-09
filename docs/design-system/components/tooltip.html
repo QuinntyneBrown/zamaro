@@ -52,6 +52,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -78,6 +79,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -193,7 +196,7 @@
             <span class="tooltip tooltip--below" role="tooltip" id="v-tip-menu">Menu</span>
           </span>
         </div>
-        <div class="ds-example__caption"><span><code>.tooltip--below</code>: the bar sits at the top of the viewport, so tooltips open downwards. On the stage the ink label sits close to the charcoal behind it; its paper text still reads at full contrast. A proposed stage rule turns it into a paper label there.</span></div>
+        <div class="ds-example__caption"><span><code>.tooltip--below</code>: the bar sits at the top of the viewport, so tooltips open downwards. On the stage (and in the top bar) the tooltip turns into a paper label with a hairline outline, so it never sinks into the charcoal behind it.</span></div>
       </div>
     </section>
 
@@ -248,14 +251,14 @@
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd></td><td>Focusing the control opens its tooltip after the delay; moving focus closes it.</td></tr>
-        <tr><td><kbd>Esc</kbd></td><td>Closes the open tooltip without moving focus (WCAG 1.4.13 Dismissible). Needs the proposed <code>data-state="closed"</code> hook; see below.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the open tooltip without moving focus (WCAG 1.4.13 Dismissible), through the <code>data-state="closed"</code> hook; see below.</td></tr>
         <tr><td>Shortcut (e.g. <kbd>S</kbd>)</td><td>Runs the control’s action when the page defines that shortcut; it must not fire while typing in a field.</td></tr>
       </tbody></table>
       <h3>Focus</h3>
       <p>Focus stays on the control. The label sits 8px away, just beyond the 3px ring and its 3px offset, so the ring never covers the text; only the arrow’s tip meets it.</p>
       <h3>Labelling</h3>
       <p>Keep the visible tooltip text consistent with the accessible name (WCAG 2.5.3): “Share profile” matches “Share Abigail Mensah’s profile”. When a toggle changes state, update the tooltip text with it (“Save to compare later” → “Saved · press to remove”).</p>
-      <p>Two gaps in the current CSS against WCAG 1.4.13 (Content on Hover or Focus): the tooltip has <code>pointer-events: none</code>, so moving the pointer onto it closes it (not hoverable); and there is no hook to dismiss it with <kbd>Esc</kbd>. Both are listed as proposed fixes for <code>components.css</code>.</p>
+      <p>WCAG 1.4.13 (Content on Hover or Focus) is met in <code>components.css</code>: the tooltip takes pointer events and an invisible bridge (<code>.tooltip::before</code>) spans the 8px gap, so the pointer can move onto it without closing it (hoverable); <code>data-state="closed"</code> hides it until the pointer or focus leaves, so <kbd>Esc</kbd> can dismiss it.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Tooltip text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
@@ -311,7 +314,7 @@
   &lt;span class="tooltip" role="tooltip" id="tip-save-hosanna"&gt;Save to compare later&lt;/span&gt;
 &lt;/span&gt;
 
-// Esc dismisses (WCAG 1.4.13), once the proposed data-state="closed" rule exists:
+// Esc dismisses (WCAG 1.4.13) through the data-state="closed" rule:
 document.addEventListener('keydown', (e) =&gt; {
   if (e.key !== 'Escape') return;
   document.querySelectorAll('.tooltip-anchor:is(:hover, :focus-within) &gt; .tooltip')
@@ -321,6 +324,7 @@ document.addEventListener('keydown', (e) =&gt; {
         <tr><td><code>.tooltip-anchor</code></td><td>Wraps the control and its tooltip; positions the tooltip.</td></tr>
         <tr><td><code>.tooltip</code> + <code>role="tooltip"</code> + <code>id</code></td><td>The label; opens on the anchor’s hover or focus-within.</td></tr>
         <tr><td><code>.tooltip--below</code></td><td>Opens below the control; arrow points up.</td></tr>
+        <tr><td><code>.tooltip--start</code>, <code>.tooltip--end</code></td><td>Aligns the label with the control’s start or end edge instead of centring it, with the arrow 16px in from that edge. For controls at the edge of the screen, such as the avatar at the end of the top bar, so the label is not clipped.</td></tr>
         <tr><td><code>&lt;kbd&gt;</code> inside</td><td>Keyboard shortcut in a hairline box.</td></tr>
         <tr><td><code>aria-describedby</code> on the control</td><td>Links the tooltip as the control’s description.</td></tr>
         <tr><td><code>aria-keyshortcuts</code> on the control</td><td>Declares a shortcut shown in the tooltip.</td></tr>

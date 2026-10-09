@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -39,12 +40,12 @@
         <h1 id="hero-title" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h1>
         <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
       </div>
-      <form class="booking-bar" aria-labelledby="find-title" action="../../pages/discover/default.html">
+      <form class="booking-bar" data-theme="light" aria-labelledby="find-title" action="../../pages/discover/default.html">
         <h2 id="find-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
         <label class="field"><span class="field__label">Event date</span>
-          <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
+          <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-12" max="2028-04-09"></label>
         <label class="field"><span class="field__label">Kind of gathering</span>
-          <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+          <select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
         <label class="field"><span class="field__label">Church location</span>
           <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
         <label class="field"><span class="field__label">How far can they drive?</span>
@@ -59,7 +60,7 @@
     <div class="container stack stack--lg">
       <div class="section__head">
         <div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><h2 id="lineup-title">The lineup</h2></div>
-        <label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span>
+        <label class="field field--inline"><span class="field__label">Sort</span>
           <select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
       </div>
       <fieldset class="filters">
@@ -71,7 +72,7 @@
         <div class="stack">
           <p class="overline">No. 01 · Most booked this autumn</p>
           <h3 id="headliner-name" class="headliner__name"><a href="../../pages/artist/default.html">Abigail Mensah</a></h3>
-          <div class="headliner__meta"><span>Gospel &amp; contemporary vocalist</span><span>Brampton · 44 km</span><span>★ 4.9 (38 churches)</span><span>From $650</span></div>
+          <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
           <p>“She had the whole congregation singing in three-part harmony by the last verse.” <span class="text-muted">— Rev. Janet Clarke, Oshawa</span></p>
           <div class="cluster">
             <span class="badge badge--free">Free Sat 14 Nov</span>
@@ -80,13 +81,25 @@
           </div>
         </div>
       </article>
-      <ol class="lineup" role="list" aria-label="More artists free Saturday 14 November">
+      <ol class="lineup" role="list" aria-label="More artists free Saturday 14 November 2026">
+        <li class="ticket">
+          <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 02 · <span role="img" aria-label="Rated 4.6 out of 5 by 17 churches">★ 4.6 · 17 churches</span></span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Marcus Bell Trio</a></h3>
+            <p class="ticket__meta">Band · Acoustic, Hymns<br>Hamilton · 14 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$950</p>
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
         <li class="ticket">
           <div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div>
           <div class="ticket__body">
-            <span class="ticket__no">No. 02 · ★ 4.8</span>
+            <span class="ticket__no">No. 03 · <span role="img" aria-label="Rated 4.8 out of 5 by 21 churches">★ 4.8 · 21 churches</span></span>
             <h3 class="ticket__name"><a href="../../pages/artist/default.html">Hosanna Collective</a></h3>
-            <p class="ticket__meta">Five-piece band · Contemporary<br>Mississauga · 32 km from you</p>
+            <p class="ticket__meta">Band · Hymns<br>Mississauga · 32 km from you</p>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$1,800</p>
@@ -94,11 +107,23 @@
           </div>
         </li>
         <li class="ticket">
+          <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+          <div class="ticket__body">
+            <span class="ticket__no">No. 04 · <span role="img" aria-label="Rated 5.0 out of 5 by 6 churches">★ 5.0 · 6 churches</span></span>
+            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Luz Viva</a></h3>
+            <p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p>
+          </div>
+          <div class="ticket__stub">
+            <p class="ticket__price"><small>From</small>$900</p>
+            <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+        </li>
+        <li class="ticket">
           <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
           <div class="ticket__body">
-            <span class="ticket__no">No. 03 · ★ 4.7</span>
+            <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
             <h3 class="ticket__name"><a href="../../pages/artist/default.html">Elijah Park</a></h3>
-            <p class="ticket__meta">Solo vocalist · Acoustic guitar<br>Markham · 74 km from you</p>
+            <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$350</p>
@@ -108,9 +133,9 @@
         <li class="ticket">
           <div class="art ticket__art art--group art--tilt" role="img" aria-label="Grace Tabernacle Mass Choir in gold robes, three rows deep"></div>
           <div class="ticket__body">
-            <span class="ticket__no">No. 04 · ★ 4.8</span>
+            <span class="ticket__no">No. 06 · <span role="img" aria-label="Rated 4.8 out of 5 by 26 churches">★ 4.8 · 26 churches</span></span>
             <h3 class="ticket__name"><a href="../../pages/artist/default.html">Grace Tabernacle Mass Choir</a></h3>
-            <p class="ticket__meta">30-voice gospel choir<br>Scarborough · 81 km from you</p>
+            <p class="ticket__meta">Gospel choir<br>Scarborough · 81 km from you</p>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$2,400</p>
@@ -118,39 +143,15 @@
           </div>
         </li>
         <li class="ticket">
-          <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
-          <div class="ticket__body">
-            <span class="ticket__no">No. 05 · ★ 5.0</span>
-            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Luz Viva</a></h3>
-            <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
-          </div>
-          <div class="ticket__stub">
-            <p class="ticket__price"><small>From</small>$900</p>
-            <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-          </div>
-        </li>
-        <li class="ticket">
           <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
           <div class="ticket__body">
-            <span class="ticket__no">No. 06 · ★ 4.9</span>
+            <span class="ticket__no">No. 07 · <span role="img" aria-label="Rated 4.9 out of 5 by 14 churches">★ 4.9 · 14 churches</span></span>
             <h3 class="ticket__name"><a href="../../pages/artist/default.html">Daniel &amp; Ruth Okonkwo</a></h3>
-            <p class="ticket__meta">Duo · Hymns &amp; acoustic<br>Ajax · 97 km from you</p>
+            <p class="ticket__meta">Duo · Acoustic, Hymns<br>Ajax · 97 km from you</p>
           </div>
           <div class="ticket__stub">
             <p class="ticket__price"><small>From</small>$700</p>
             <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-          </div>
-        </li>
-        <li class="ticket">
-          <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
-          <div class="ticket__body">
-            <span class="ticket__no">No. 07 · ★ 4.6</span>
-            <h3 class="ticket__name"><a href="../../pages/artist/default.html">Marcus Bell Trio</a></h3>
-            <p class="ticket__meta">Piano trio · Gospel &amp; hymns<br>Hamilton · 14 km from you</p>
-          </div>
-          <div class="ticket__stub">
-            <p class="ticket__price"><small>From</small>$950</p>
-            <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
           </div>
         </li>
       </ol>
@@ -159,7 +160,7 @@
 
   <span id="saved"></span>
   <section id="how" class="section" aria-labelledby="how-title">
-    <div class="container">
+    <div class="container stack stack--lg">
       <div class="section__head">
         <div><p class="overline section__kicker">Three songs and you’re done</p><h2 id="how-title">How booking works</h2></div>
         <p class="text-muted">Cancel free up to 14 days before your event.</p>
@@ -169,6 +170,14 @@
         <li><div><h3>Send a request</h3><p>Tell them about your church and the songs you love. Nothing is charged yet.</p></div></li>
         <li><div><h3>Lock it in</h3><p>When they accept, pay a 25% deposit. The rest is due after the event.</p></div></li>
       </ol>
+      <section id="policy" class="stack" aria-labelledby="policy-title">
+        <h3 id="policy-title">Cancellation policy</h3>
+        <dl class="definition definition--two">
+          <div class="definition__row"><dt>14 days or more before</dt><dd>Cancel free. Your deposit comes back in full.</dd></div>
+          <div class="definition__row"><dt>Fewer than 14 days before</dt><dd>Your deposit isn’t refunded. The balance is never charged.</dd></div>
+          <div class="definition__row"><dt>If the artist cancels</dt><dd>Everything you paid comes back.</dd></div>
+        </dl>
+      </section>
     </div>
   </section>
 
@@ -218,7 +227,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="bottom: 14rem; right: 1rem;">Shown once, the first time Naomi saves anyone. Dismisses after 5 s and pauses on hover or focus.</p>
+<p class="mock-note" style="bottom: 14rem; right: 1rem;">Shown once, the first time Naomi saves anyone; on that first save the count reads 1 (the backdrop keeps her usual three). Dismisses after 5 s and pauses on hover or focus.</p>
 <div class="toast-region" role="status" aria-live="polite">
   <div class="toast toast--info">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
@@ -228,7 +237,7 @@
       <p class="toast__text">Only you see who you save. They wait under Saved in the top bar.</p>
       <div class="toast__actions"><a class="btn btn--sm" href="../../pages/saved/default.html">View saved</a></div>
     </div>
-    <button class="close" type="button" aria-label="Dismiss"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <button class="close" type="button" aria-label="Dismiss: Saved artists are private"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <span class="toast__progress" aria-hidden="true"></span>
   </div>
 </div>

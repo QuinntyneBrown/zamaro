@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="book">
 <meta name="mock:state" content="invalid">
-<meta name="mock:requirements" content="L2-019 L2-024 L2-028 L2-032 L2-044 L2-105 L2-108 L2-110">
+<meta name="mock:requirements" content="L2-019 L2-022 L2-024 L2-028 L2-032 L2-044 L2-077 L2-105 L2-108 L2-110">
 <meta name="description" content="Abigail was booked while the form was open: the date field says so in the spec’s words and offers her next three free dates.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,18 +26,19 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover · Sat 14 Nov</a></li><li><a href="../artist/default.html">Abigail Mensah</a></li><li aria-current="page">Request to book</li></ol></nav>
-    <div class="page-head" style="padding-top: var(--space-4);">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover · Sat 14 Nov</a></li><li><a href="../artist/default.html">Abigail Mensah</a></li><li aria-current="page">Request to book</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
       <div><p class="overline">Admit one church · Sat 14 Nov</p><h1 id="book-title" class="page-head__title">Request to book Abigail</h1><p class="page-head__sub">$650 · travel included · replies in 72 hours</p></div>
     </div>
-    <div class="detail-layout" style="padding-top: 0;">
+    <div class="detail-layout detail-layout--flush">
       <form class="form-stack" action="success.html" novalidate aria-labelledby="book-title">
         <div class="error-summary" role="alert" tabindex="-1" aria-labelledby="error-summary-title">
           <h2 id="error-summary-title" class="error-summary__title">Your request wasn’t sent</h2>
@@ -48,18 +49,18 @@
         <section class="form-section" aria-labelledby="event-title">
           <h2 id="event-title" class="form-section__title">Your event</h2>
           <div class="form-grid">
-          <div class="field field--full"><label class="field__label" for="date">Event date <span class="optional">(required)</span></label>
-          <input class="input" type="date" id="date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-error" aria-invalid="true">
-          <span class="field__error" id="date-error">Abigail was just booked for Sat 14 Nov. Pick one of her next free dates.</span><ul class="date-swap" role="list" aria-label="Abigail’s next 3 free dates" style="margin-top: var(--space-2);"><li><button type="button"><strong>Fri 20 Nov</strong>Open all day</button></li><li><button type="button"><strong>Sun 22 Nov</strong>Open all day</button></li><li><button type="button"><strong>Sat 28 Nov</strong>Open all day</button></li></ul></div>
-          <div class="field"><label class="field__label" for="kind">Kind of gathering <span class="optional">(required)</span></label>
+          <div class="field field--full"><label class="field__label" for="date">Event date <span class="field__required">(required)</span></label>
+          <input class="input" type="date" id="date" name="date" value="2026-11-14" min="2026-10-12" max="2028-04-09" aria-describedby="date-error" aria-invalid="true">
+          <span class="field__error" id="date-error">Abigail was just booked for Sat 14 Nov. Pick one of her next free dates.</span><ul class="date-swap" role="list" aria-label="Abigail’s next 3 free dates" style="margin-top: var(--space-2);"><li><button type="button"><strong>Tue 17 Nov</strong>Open all day</button></li><li><button type="button"><strong>Wed 18 Nov</strong>Open all day</button></li><li><button type="button"><strong>Thu 19 Nov</strong>Open all day</button></li></ul></div>
+          <div class="field"><label class="field__label" for="kind">Kind of gathering <span class="field__required">(required)</span></label>
           <select class="select" id="kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select>
           </div>
-          <div class="field"><label class="field__label" for="start">Service start time <span class="optional">(required)</span></label>
+          <div class="field"><label class="field__label" for="start">Service start time <span class="field__required">(required)</span></label>
           <input class="input" type="time" id="start" name="start" value="19:00" aria-describedby="start-help">
           <span class="field__help" id="start-help">7:00 p.m. Abigail arrives an hour early for a sound check.</span></div>
-          <div class="field field--full"><label class="field__label" for="message">Message to Abigail <span class="optional">(optional)</span></label>
-          <textarea class="textarea" id="message" name="message" rows="5" maxlength="2000" aria-describedby="message-help">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs.</textarea>
-          <span class="field__help" id="message-help">Up to 2,000 characters. Phone numbers and e-mails are hidden from her until the booking is confirmed.</span></div>
+          <div class="field field--full"><label class="field__label" for="message">Message to Abigail <span class="field__optional">(optional)</span></label>
+          <textarea class="textarea" id="message" name="message" rows="5" maxlength="2000" aria-describedby="message-help">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</textarea>
+          <span class="field__help" id="message-help">Up to 2,000 characters. Phone numbers and emails are hidden from her until the booking is confirmed.</span></div>
           </div>
         </section>
         <section class="form-section" aria-labelledby="church-title">
@@ -72,16 +73,16 @@
           </dl>
           <p class="text-muted">From your church profile. Abigail sees only the city until the booking is confirmed. <a href="../account/default.html">Edit your church in your account</a></p>
         </section>
-        <div class="form-actions" style="position: static;">
+        <div class="form-actions form-actions--static">
           <p class="form-actions__status"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg>Nothing is charged today</p>
           <div class="form-actions__buttons"><a class="btn" href="../artist/default.html">Back to profile</a><button class="btn btn--primary btn--lg" type="submit">Send request to Abigail</button></div>
         </div>
       </form>
       <aside aria-labelledby="summary-title">
         <div class="panel panel--raised">
-          <div class="panel__head"><h2 id="summary-title" class="panel__title">Abigail Mensah</h2><span class="stub__code">No. ZAM-0114</span></div>
+          <div class="panel__head"><h2 id="summary-title" class="panel__title">Abigail Mensah</h2><span class="stub__code">No. ACT-0027</span></div>
           <div class="cluster" style="flex-wrap: nowrap; align-items: flex-start; gap: var(--space-4);">
-            <div class="art art--yellow art--square" role="img" aria-label="Abigail Mensah singing into a vintage microphone" style="width: 5rem; flex: none;"></div>
+            <div class="art art--yellow art--square art--thumb" role="img" aria-label="Abigail Mensah singing into a vintage microphone"></div>
             <p class="text-muted">Gospel &amp; contemporary vocalist · Brampton, 44 km from you · <span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></p>
           </div>
           <dl class="receipt" aria-label="What you would pay"><div class="receipt__row"><dt>Quoted price, locked when you send</dt><dd>$650</dd></div><div class="receipt__row"><dt>Deposit after she accepts (25%)</dt><dd>$162.50</dd></div><div class="receipt__row"><dt>Balance after the event</dt><dd>$487.50</dd></div><div class="receipt__row receipt__total"><dt>Due today</dt><dd>$0</dd></div></dl>
@@ -136,6 +137,8 @@
     <li><a href="error.html">error</a></li>
     <li><a href="invalid.html" aria-current="page">invalid</a></li>
     <li><a href="duplicate.html">duplicate</a></li>
+    <li><a href="limit.html">limit</a></li>
+    <li><a href="unverified.html">unverified</a></li>
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html">success</a></li>
   </ul>

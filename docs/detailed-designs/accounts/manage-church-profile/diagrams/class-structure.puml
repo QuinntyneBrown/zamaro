@@ -14,7 +14,7 @@ skinparam class {
 title Class structure — Manage the church profile
 
 package "Zamaro Web (Angular)" {
-  class ChurchProfilePage {
+  class AccountSettingsPage {
     +church: Signal<Church | null>
     +onSave(form: ChurchForm): void
   }
@@ -88,9 +88,9 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-ChurchProfilePage --> ChurchFormComponent
+AccountSettingsPage --> ChurchFormComponent
 ChurchRequiredDialogComponent --> ChurchFormComponent
-ChurchProfilePage --> ChurchApi
+AccountSettingsPage --> ChurchApi
 ChurchRequiredDialogComponent --> ChurchApi
 ChurchApi ..> ChurchController : PUT /api/v1/account/church
 ChurchController ..> SaveChurchRequest : validates

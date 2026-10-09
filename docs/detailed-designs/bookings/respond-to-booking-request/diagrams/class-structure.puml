@@ -16,30 +16,45 @@ title Class structure — Respond to a booking request
 package "Zamaro Web (Angular)" {
   class ArtistRequestsPage {
     +store: ArtistRequestsStore
-    +onAccept(number: string): void
-    +onDecline(number: string): void
+    +onSelectTab(tab: RequestsTab): void
+    +onSearch(query: string): void
   }
-  class RequestCardComponent {
+  class RequestRowComponent {
     +request: InputSignal<ArtistRequest>
     +timeLeft: Signal<string>
-    +accept: OutputEmitterRef<void>
-    +decline: OutputEmitterRef<void>
+  }
+  class ArtistBookingPage {
+    +store: ArtistBookingStore
+    +onAccept(): void
+    +onDecline(): void
+  }
+  class AcceptRequestDialogComponent {
+    +booking: ArtistBookingDetail
+    +state: Signal<'ready'|'busy'|'failed'|'conflict'>
+    +confirm(): void
   }
   class DeclineRequestDialogComponent {
-    +reason: FormControl<string>
+    +reason: FormControl<DeclineReason | null>
+    +note: FormControl<string>
     +confirm(): void
   }
   class ArtistRequestsStore {
+    +tab: Signal<RequestsTab>
+    +query: Signal<string>
     +requests: Signal<ArtistRequest[]>
-    +busyNumber: Signal<string | null>
     +load(): void
-    +accept(number: string): void
-    +decline(number: string, reason?: string): void
+  }
+  class ArtistBookingStore {
+    +booking: Signal<ArtistBookingDetail | null>
+    +busy: Signal<boolean>
+    +load(number: string): void
+    +accept(): void
+    +decline(reason: DeclineReason | null, note: string): void
   }
   class ArtistRequestsApi {
-    +list(cursor?: string): Observable<Page<ArtistRequest>>
+    +list(tab: RequestsTab, query?: string, cursor?: string): Observable<Page<ArtistRequest>>
     +accept(number: string): Observable<void>
-    +decline(number: string, reason?: string): Observable<void>
+    +decline(number: string, reason?: DeclineReason, note?: string): Observable<void>
   }
 }
 
@@ -72,7 +87,13 @@ package "Zamaro API (Laravel)" {
     +handle(booking: Booking, artistUser: User): Booking
   }
   class DeclineBooking <<action>> {
-    +handle(booking: Booking, artistUser: User, reason: ?string): Booking
+    +handle(booking: Booking, artistUser: User, reason: ?DeclineReason, note: ?string): Booking
+  }
+  enum DeclineReason {
+    NotFree
+    TooFar
+    NotRightFit
+    Other
   }
   class BookingStateMachine {
     +transition(booking: Booking, to: BookingStatus, actor: TransitionActor, reason: ?string): BookingTransition
@@ -95,18 +116,24 @@ package "Zamaro API (Laravel)" {
     +CarbonImmutable respondBy
     +?CarbonImmutable acceptedAt
     +?CarbonImmutable depositDueBy
-    +?string declineReason
+    +?DeclineReason declineReason
+    +?string declineNote
   }
   class RequestDeclined <<event>> {
     +int bookingId
-    +?string reason
+    +?DeclineReason reason
+    +?string note
   }
 }
 
 ArtistRequestsPage --> ArtistRequestsStore
-ArtistRequestsPage *-- RequestCardComponent
-ArtistRequestsPage ..> DeclineRequestDialogComponent : opens
+ArtistRequestsPage *-- RequestRowComponent
+RequestRowComponent ..> ArtistBookingPage : links to /artist/bookings/:number
+ArtistBookingPage --> ArtistBookingStore
+ArtistBookingPage ..> AcceptRequestDialogComponent : opens
+ArtistBookingPage ..> DeclineRequestDialogComponent : opens
 ArtistRequestsStore --> ArtistRequestsApi
+ArtistBookingStore --> ArtistRequestsApi
 ArtistRequestsApi ..> ArtistRequestsController : /api/v1/artist/requests
 ArtistRequestsController --> ListArtistRequests
 ArtistRequestsController --> AcceptBooking

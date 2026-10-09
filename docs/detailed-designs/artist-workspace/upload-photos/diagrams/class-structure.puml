@@ -14,20 +14,22 @@ skinparam class {
 title Class structure — Upload photos
 
 package "Zamaro Web (Angular)" {
-  class PhotosManagerPage {
+  class PhotosSectionComponent {
     +store: ArtistPhotosStore
-    +onFilesSelected(files: FileList): void
-    +onSaveOrder(): void
+    +openAddPhoto(): void
   }
   class PhotoUploadDialogComponent {
-    +file: input<File>
+    +file: FormControl<File | null>
     +altText: FormControl<string>
+    +atLimit: input<boolean>
     +confirm(): void
   }
   class PhotoGridComponent {
     +photos: input<ArtistPhoto[]>
     +moved: output<string[]>
+    +altTextChanged: output<AltTextChange>
     +primaryChosen: output<string>
+    +removed: output<string>
   }
   class ArtistPhotosStore {
     +photos: Signal<ArtistPhoto[]>
@@ -107,9 +109,9 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-PhotosManagerPage --> ArtistPhotosStore
-PhotosManagerPage *-- PhotoGridComponent
-PhotosManagerPage *-- PhotoUploadDialogComponent
+PhotosSectionComponent --> ArtistPhotosStore
+PhotosSectionComponent *-- PhotoGridComponent
+PhotosSectionComponent ..> PhotoUploadDialogComponent : opens
 ArtistPhotosStore --> ArtistPhotosApi
 ArtistPhotosApi ..> ArtistPhotoController : /api/v1/artist/photos
 ArtistPhotoController --> StoreArtistPhoto

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — View the artist dashboard
+
+Person(artist, "Artist", "Approved worship artist")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(routing, "Routing provider", "Driving distance to each church")
+
+Rel(artist, zamaro, "Sees open requests, next dates, free Saturdays, completeness and reviews using", "HTTPS")
+Rel(booker, zamaro, "Opens /artist and sees the artists-only state in", "HTTPS")
+Rel(zamaro, routing, "Measures distance to each requesting church with", "HTTPS/JSON")
+@enduml

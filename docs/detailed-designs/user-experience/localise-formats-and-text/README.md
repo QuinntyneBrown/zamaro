@@ -85,6 +85,18 @@ Worker, and CI checks on both codebases.
   `HH:MM`, instants as ISO 8601 UTC, money as integer cents and distances as whole
   kilometres, so no value is pre-formatted on the server for the web.
 
+**Mocks and design system**
+
+- The mocks use these formats throughout: short dates on the poster and stubs
+  ([`discover/default`](../../../mocks/pages/discover/default.html), "Sat 14 Nov"),
+  long dates in sentences and announcements ("Saturday 14 November 2026"), times
+  and money on the booking ([`booking-detail/default`](../../../mocks/pages/booking-detail/default.html),
+  "7:00 p.m.", "$650", "$162.50"), totals in [`earnings/default`](../../../mocks/pages/earnings/default.html)
+  and distances on tickets ("44 km").
+- Design system: the formats table in the [Content](../../../design-system/foundations/content.html)
+  foundation and the [Content & tone](../../../design-system/patterns/content-and-tone.html)
+  pattern follow L2-110.
+
 **Backend (Zamaro API and Zamaro Worker)**
 
 - **`LocalFormatter`** (`App\Support\LocalFormatter`) — PHP mirror of `FormatService`

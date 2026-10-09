@@ -35,13 +35,24 @@ Zamaro Worker.
 
 **Frontend (Zamaro Web, `features/artist-workspace`)**
 
-- **`PayoutSetupPage`** — routed page for `/artist/payouts`. It shows the connected
-  account status and a "Set up payouts" action that redirects to the processor's
-  hosted onboarding. On return it refreshes the status. The artist workspace shows
-  this step as required before publication (L2-039).
-- **`EarningsPage`** — routed page for `/artist/earnings`. It renders a design-system
-  table with one row per booking: booking number, total, fee, payout amount, payout
-  status and payout date (L2-039). Amounts use `FormatService` (L2-110).
+- **`EarningsPage`** — routed page for `/artist/earnings`, behind the Artist role
+  guard. It has three parts:
+  - a header with the amount paid out this year, the number of upcoming bookings and
+    the deposits Zamaro holds for them;
+  - the payout account panel. When the connected account is payout ready it names
+    the bank account by its last 4 digits and states that payouts arrive within 2
+    business days of the balance being collected. When it is not, it shows a "Set up
+    payouts" action that redirects to the processor's hosted onboarding and states
+    that the profile is published only after setup (L2-039). Onboarding returns to
+    `/artist/earnings`, which refreshes the status. There is no separate payout setup
+    page;
+  - two lists, Upcoming and Paid out, with one row per booking that has collected
+    money: event date, church, kind of gathering, total, Zamaro fee, payout amount,
+    and payout status with its date (L2-039). An upcoming booking with no `Payout`
+    row yet shows "Deposit held"; a sent or paid payout shows "Paid {date}".
+
+  Amounts use `FormatService` (L2-110). Empty, loading and error states follow
+  L2-105.
 - **`EarningsStore`** — signal-based store holding the loaded rows and the next
   cursor.
 - **`PayoutsApi`** — typed client for the three endpoints below.
@@ -109,6 +120,15 @@ HST.
   `failure_code`.
 - `artists` — `processor_account_id`, `payout_ready`.
 
+**Mock screens** — the earnings page in states
+[default](../../../mocks/pages/earnings/default.html),
+[loading](../../../mocks/pages/earnings/loading.html),
+[empty](../../../mocks/pages/earnings/empty.html),
+[error](../../../mocks/pages/earnings/error.html) and
+[setup](../../../mocks/pages/earnings/setup.html) (payouts not set up yet). The artist
+booking page in state [completed](../../../mocks/pages/request-detail/completed.html) shows
+one booking's payout timeline.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the
@@ -154,7 +174,7 @@ date.
 ### Behaviour — complete payout onboarding
 
 The artist leaves Zamaro for the processor's hosted onboarding and returns to
-`/artist/payouts`. Zamaro then reads the account status and marks the artist payout
+`/artist/earnings`. Zamaro then reads the account status and marks the artist payout
 ready, which publication requires.
 
 ![Sequence diagram for payout onboarding](diagrams/sequence-onboard-payout-account.png)

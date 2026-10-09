@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Upload photos
 
-Container(web, "Zamaro Web", "Angular", "PhotosManagerPage, ArtistPhotosStore, ArtistPhotosApi")
+Container(web, "Zamaro Web", "Angular", "PhotosSectionComponent, PhotoUploadDialogComponent, ArtistPhotosStore, ArtistPhotosApi")
 System_Ext(scanner, "Malware scanner", "Scans every upload")
 Container_Boundary(api, "Zamaro API and Worker") {
   Component(ctrl, "ArtistPhotoController", "Laravel controller", "index, store, update, destroy")

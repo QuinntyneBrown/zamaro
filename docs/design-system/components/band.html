@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../assets/ds.css">
 <style>
 /* Docs only: on phones, let specimen bands use the full column, as they do in the product. */
-@media (max-width: 39.99rem) { .band-demo { padding-inline: 0; } }
+@media (max-width: 35.99rem) { .band-demo { padding-inline: 0; } }
 /* Docs only: the band needs the width of the product container, and its clamp()ed headline is sized
    for the viewport, so this page stacks side-by-side grids and scales the headline to the docs column. */
 .ds-section .ds-anatomy, .ds-section .ds-themes, .ds-section .ds-dodont { grid-template-columns: minmax(0, 1fr); }
@@ -53,6 +53,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -79,6 +80,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -156,8 +159,8 @@
           <li><div><b>Overline</b><small>Who it is for: “For artists”. Mono, 12px.</small></div></li>
           <li><div><b>Headline</b><small>An <code>&lt;h2&gt;</code> set in <code>--text-h1</code>: a question and an answer.</small></div></li>
           <li><div><b>Body</b><small>One or two short sentences with the terms.</small></div></li>
-          <li><div><b>Action</b><small>A large button re-skinned as a charcoal stage button (<code>.band .btn</code>). Right of the copy from 1024px.</small></div></li>
-          <li><div><b>Band</b><small>Yellow fill, ink text, 4px ink frame, 40/32px padding (48px from 1024px).</small></div></li>
+          <li><div><b>Action</b><small>A large button re-skinned as a charcoal stage button (<code>.band .btn</code>). Right of the copy from 992px.</small></div></li>
+          <li><div><b>Band</b><small>Yellow fill, ink text, 4px ink frame, 40/32px padding (48px from 992px).</small></div></li>
         </ol>
       </div>
     </section>
@@ -219,8 +222,8 @@
       </div>
     </section>
 
-    <section class="ds-section" id="sizes" data-na="The band has one size: it fills its container. Padding grows from 40/32px to 48px at 1024px."><h2><a href="#sizes">Sizes</a></h2>
-      <p class="ds-na">The band has one size: it fills its container. Padding grows from 40/32px to 48px at 1024px.</p>
+    <section class="ds-section" id="sizes" data-na="The band has one size: it fills its container. Padding grows from 40/32px to 48px at 992px."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The band has one size: it fills its container. Padding grows from 40/32px to 48px at 992px.</p>
     </section>
 
     <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
@@ -233,7 +236,7 @@
             <td><div class="band" style="padding: var(--space-4);"><a class="btn" href="#states" data-state="hover">Apply</a></div></td>
             <td><div class="band" style="padding: var(--space-4);"><a class="btn" href="#states" data-state="focus">Apply</a></div></td>
             <td><div class="band" style="padding: var(--space-4);"><a class="btn" href="#states" data-state="active">Apply</a></div></td>
-            <td><div class="band" style="padding: var(--space-4);"><button class="btn" type="button" aria-busy="true">Sending…</button></div></td></tr>
+            <td><div class="band" style="padding: var(--space-4);"><button class="btn" type="button" aria-busy="true" aria-disabled="true">Sending…</button></div></td></tr>
           <tr><th scope="row">Text link</th>
             <td><div class="band" style="padding: var(--space-4);"><p><a href="#states">What artists earn</a></p></div></td>
             <td><div class="band" style="padding: var(--space-4);"><p><a href="#states" style="background: var(--color-bg-surface); color: var(--color-fg-on-accent);">What artists earn</a></p></div></td>
@@ -257,8 +260,8 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Under 1024px the copy and the button stack, button below, left-aligned. Padding is 40px top and bottom, 32px at the sides.</li>
-        <li>From <code>--layout-breakpoint-lg</code> (1024px), the copy takes the remaining width and the button sits right, vertically centred, 40px away. Padding becomes 48px.</li>
+        <li>Under 992px the copy and the button stack, button below, left-aligned. Padding is 40px top and bottom, 32px at the sides.</li>
+        <li>From <code>--layout-breakpoint-lg</code> (992px), the copy takes the remaining width and the button sits right, vertically centred, 40px away. Padding becomes 48px.</li>
         <li>The headline is <code>--text-h1</code> (48–88px) and wraps in balanced lines. Keep it under eight words.</li>
         <li>On a 360px phone the band leaves about 256px for the button. “Apply as an artist” with its arrow just fits on one line; a longer label wraps onto balanced lines, so keep it to three or four words.</li>
       </ul>
@@ -345,7 +348,7 @@
   &lt;a class="btn btn--lg" href="/artists/apply"&gt;Apply as an artist …&lt;/a&gt;
 &lt;/div&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
-        <tr><td><code>.band</code></td><td>Yellow panel with a 4px ink frame; copy and action side by side from 1024px.</td></tr>
+        <tr><td><code>.band</code></td><td>Yellow panel with a 4px ink frame; copy and action side by side from 992px.</td></tr>
         <tr><td><code>.band h2</code></td><td>Headline in <code>--text-h1</code>.</td></tr>
         <tr><td><code>.band .btn</code></td><td>Any button becomes the charcoal stage button with a paper hover shadow.</td></tr>
         <tr><td><code>.band a:not(.btn)</code></td><td>Ink links that highlight paper on hover.</td></tr>
@@ -364,7 +367,7 @@
         <li>The band button set <code>background</code>, <code>color</code> and <code>border-color</code> from <code>--palette-ink</code> and <code>--palette-paper</code>, and its hover shadow from <code>--palette-paper-bright</code>. It now overrides the button’s component tokens with stage tokens.</li>
         <li>Band links and the focus ring read <code>--palette-ink</code>. They now read <code>--color-fg-on-accent</code> (inherited) and <code>--color-border-on-accent</code>.</li>
         <li>The band read <code>--palette-ink</code> for its frame. It now reads <code>--color-border-on-accent</code>.</li>
-        <li>Not fixed in the mocks: “Apply as an artist” is a <code>&lt;button type="button"&gt;</code> but navigates. This page documents it as a link.</li>
+        <li>“Apply as an artist” was a <code>&lt;button type="button"&gt;</code> that navigated. The mocks now use a link to the apply page, as this page documents.</li>
       </ul>
     </section>
 

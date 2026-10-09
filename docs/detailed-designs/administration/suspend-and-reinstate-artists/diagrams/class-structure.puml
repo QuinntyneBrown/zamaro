@@ -14,7 +14,7 @@ skinparam class {
 title Class structure — Suspend and reinstate artists
 
 package "Zamaro Web (Angular)" {
-  class AdminApplicationPage {
+  class ApplicationReviewPage {
     +application: Signal<AdminApplicationView>
     +onVerifyReference(referenceId: number, verified: boolean): void
     +onOpenVsc(): void
@@ -27,6 +27,9 @@ package "Zamaro Web (Angular)" {
   }
   class SuspendArtistDialogComponent {
     +reason: FormControl<string>
+    +submit(): void
+  }
+  class ReinstateArtistDialogComponent {
     +submit(): void
   }
   class AdminArtistsApi {
@@ -42,7 +45,7 @@ package "Zamaro API (Laravel)" {
     +store(request: SuspendArtistRequest, artist: Artist): SuspensionOutcomeResource
     +destroy(artist: Artist): Response
   }
-  class "Admin\\ApplicationsController" as AppCtrl {
+  class "AdminArtistApplicationsController" as AppCtrl {
     +show(application: ArtistApplication): AdminApplicationResource
     +verifyReference(application: ArtistApplication, reference: ApplicationReference): Response
   }
@@ -104,9 +107,10 @@ package "Zamaro API (Laravel)" {
 
 AdminArtistPage --> AdminArtistsApi
 AdminArtistPage --> SuspendArtistDialogComponent
-AdminApplicationPage --> AdminArtistsApi
+AdminArtistPage --> ReinstateArtistDialogComponent
+ApplicationReviewPage --> AdminArtistsApi
 AdminArtistsApi ..> SuspCtrl : POST / DELETE
-AdminArtistsApi ..> AppCtrl : GET / PATCH
+AdminArtistsApi ..> AppCtrl : GET / PUT
 SuspCtrl --> SuspendArtist
 SuspCtrl --> ReinstateArtist
 SuspendArtist --> BookingStateMachine

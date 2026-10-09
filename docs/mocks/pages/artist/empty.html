@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="artist">
 <meta name="mock:state" content="empty">
-<meta name="mock:requirements" content="L2-012 L2-013 L2-014 L2-015 L2-016 L2-017 L2-018 L2-019 L2-020 L2-021 L2-098 L2-105 L2-107">
+<meta name="mock:requirements" content="L2-012 L2-013 L2-014 L2-015 L2-016 L2-017 L2-018 L2-019 L2-020 L2-021 L2-060 L2-083 L2-098 L2-105 L2-107 L2-112 L2-113">
 <meta name="description" content="Miriam Haile is new to Zamaro: no videos or reviews yet, each section says so warmly and offers a next step, and booking still works.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,23 +26,24 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <section class="poster on-stage" aria-labelledby="artist-name">
     <div class="container stack stack--lg">
-      <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover · Sat 14 Nov</a></li><li aria-current="page">Miriam Haile</li></ol></nav>
+      <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover</a></li><li aria-current="page">Miriam Haile</li></ol></nav>
       <div class="artist-poster">
-        <div class="art " role="img" aria-label="Miriam Haile seated at an upright piano, smiling toward the camera"></div>
+        <div class="art" role="img" aria-label="Miriam Haile seated at an upright piano, smiling toward the camera"></div>
         <div class="stack">
           <p class="overline poster__kicker">New to Zamaro · Solo vocalist &amp; pianist</p>
           <h1 id="artist-name" class="artist-poster__name">Miriam Haile</h1>
-          <p class="artist-poster__facts"><strong>New</strong><span>No reviews yet</span><span>Etobicoke, ON</span><span>Drives up to 60 km</span></p>
+          <p class="artist-poster__facts"><strong>New</strong><span>No reviews yet</span><span>Etobicoke, ON</span><span>Drives up to 40 km</span></p>
           <div class="cluster">
-            <a class="btn btn--primary" href="#book-title">Book for Sat 14 Nov</a>
+            <a class="btn btn--primary" href="#book-date">Check dates</a>
             <button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button>
             <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share</button>
           </div>
@@ -50,6 +51,7 @@
       </div>
     </div>
   </section>
+  <div class="marquee" aria-hidden="true"><span>Goodness of God ✦</span><span>It Is Well With My Soul ✦</span><span>Abide With Me ✦</span><span>Firm Foundation</span></div>
   <div class="container profile-layout">
     <div>
         <section class="section" aria-labelledby="about-title">
@@ -74,8 +76,8 @@
         <section class="section" aria-labelledby="photos-title">
           <div class="section__head"><div><p class="overline section__kicker">Gallery</p><h2 id="photos-title">Photos</h2></div></div>
           <ul class="photo-grid" role="list">
-            <li><div class="art art--square" role="img" aria-label="Miriam at the piano during a Sunday evening service"></div></li>
-            <li><div class="art art--square art--yellow" role="img" aria-label="Portrait of Miriam in a white netela shawl"></div></li>
+            <li><a href="../../dialogs/photo-viewer/default.html" aria-label="Open photo 1 of 2: Miriam at the piano during a Sunday evening service"><span class="art art--square" aria-hidden="true"></span></a></li>
+            <li><a href="../../dialogs/photo-viewer/default.html" aria-label="Open photo 2 of 2: Portrait of Miriam in a white netela shawl"><span class="art art--square art--yellow" aria-hidden="true"></span></a></li>
           </ul>
         </section>
 
@@ -91,10 +93,12 @@
         <section class="section" aria-labelledby="dates-title">
           <div class="section__head"><div><p class="overline section__kicker">On tour</p><h2 id="dates-title">Upcoming dates</h2></div><p class="text-muted">Miriam’s calendar is wide open this autumn.</p></div>
           <ul class="tour-dates" role="list">
-            <li aria-current="date"><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span class="cluster"><span class="tour-dates__note">Your date</span></span><span class="badge badge--free">Free</span></li>
-            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span class="cluster"><span class="tour-dates__note">Her home church</span></span><span class="badge badge--booked">Booked</span></li>
-            <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Sat 21 Nov">Pick</button></li>
-            <li><span class="tour-dates__day"><small>Sat</small>28 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Sat 28 Nov">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Mon</small>12 Oct</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Mon 12 Oct">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Tue</small>13 Oct</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Tue 13 Oct">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Wed</small>14 Oct</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Wed 14 Oct">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Thu</small>15 Oct</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Thu 15 Oct">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Fri</small>16 Oct</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Fri 16 Oct">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Sat</small>17 Oct</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Sat 17 Oct">Pick</button></li>
           </ul>
         </section>
 
@@ -112,20 +116,19 @@
       <form class="stub" action="../book/default.html">
         <div class="stub__head">
           <h2 id="book-title" class="stub__title">Book Miriam</h2>
-          <span class="stub__code" aria-hidden="true">No. ZAM-0115</span>
+          <span class="stub__code" aria-hidden="true">No. ACT-0154</span>
         </div>
         <p><span class="stub__price">From $300</span><br><span class="text-muted">per service · travel included</span></p>
         <div class="field"><label class="field__label" for="book-date">Event date</label>
-          <input class="input" type="date" id="book-date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-help">
-          <span class="field__help inline-msg inline-msg--success" id="date-help"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Miriam is free Sat 14 Nov</span></div>
+          <input class="input" type="date" id="book-date" name="date" min="2026-10-12" max="2028-04-09"></div>
         <label class="field"><span class="field__label">Kind of gathering</span>
           <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
         <label class="field"><span class="field__label">Church</span>
           <input class="input" type="text" name="church" value="Riverside Community Church, Burlington"></label>
-        <label class="field" id="message-field"><span class="field__label">Message (optional)</span>
+        <label class="field" id="message-field"><span class="field__label">Message <span class="field__optional">(optional)</span></span>
           <textarea class="textarea" name="message" id="message" placeholder="Your church, the room, the songs you love."></textarea></label>
-        <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
-        <p class="stub__fine">Nothing is charged until Miriam accepts. Cancel free up to 14 days before.</p>
+        <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button>
+        <p class="stub__fine">Nothing is charged until Miriam accepts. <a href="../discover/default.html#how">Cancel free up to 14 days before</a>.</p>
       </form>
     </aside>
   </div>
@@ -163,7 +166,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 40rem; right: 1rem;">Sections with nothing in them stay, so the page shape matches a full profile and churches know what to expect later.</p>
+<p class="mock-note" style="top: 40rem; right: 1rem;">Sections with nothing in them stay, so the page shape matches a full profile and churches know what to expect later. Naomi opened this profile from a shared link, without a search date: “Check dates” moves focus to the stub’s date field, and the upcoming dates start 3 days from today. Miriam drives up to 40 km and Riverside is 48 km away, so she is not in Naomi’s Burlington lineup. Her About heading is optional; without one the section reads “About Miriam”.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -174,6 +177,8 @@
     <li><a href="loading.html">loading</a></li>
     <li><a href="empty.html" aria-current="page">empty</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="booked-date.html">booked-date</a></li>
+    <li><a href="no-photos.html">no-photos</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

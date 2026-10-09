@@ -11,7 +11,7 @@ System_Ext(scanner, "Malware scanner", "Scans every upload")
 System_Ext(video, "Video processing service", "Transcodes uploads")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "/apply page, application form and video uploader")
+  Container(web, "Zamaro Web", "Angular with SSR", "/artists/apply page, application form and video uploader")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Application and upload endpoints under /api/v1")
   Container(worker, "Zamaro Worker", "Laravel queue workers", "Scans and transcodes videos, sends email")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Applications, references, videos")

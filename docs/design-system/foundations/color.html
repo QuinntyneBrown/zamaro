@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -229,7 +232,7 @@
 <ul>
   <li>Use the role that describes the job (<code>--color-fg-muted</code> for secondary text), never the colour you want (<code>--palette-ink-600</code>).</li>
   <li>Muted text (6:1) is for metadata and help. Subtle text (at least 4.9:1) is for placeholders and small print only. Disabled text is exempt from contrast and must never carry information.</li>
-  <li>Rules: <code>--color-border-strong</code> (9:1) outlines controls, cards and tickets. <code>--color-border-default</code> is a decorative hairline for list dividers only and never the only edge of a control.</li>
+  <li>Rules: <code>--color-border-strong</code> (9:1 on light, at least 7:1 on dark) outlines controls, cards and tickets. <code>--color-border-default</code> is a decorative hairline for list dividers only and never the only edge of a control.</li>
   <li>Yellow fills on paper always get an ink outline (<code>--color-border-on-accent</code>): the fill alone is 1.4:1 against paper and would vanish for some readers.</li>
   <li>On the stage, use <code>--color-fg-on-stage</code>, <code>--color-fg-on-stage-muted</code> and <code>--color-accent-on-stage</code>. Never use the page roles there; they flip with the theme and the stage does not.</li>
   <li>Halftone artwork uses its own pair so placeholders read as texture, not noise, in both themes.</li>
@@ -265,7 +268,7 @@
 <tr><td><code>--palette-ink-750</code> <button class="ds-copy" type="button" data-copy="--palette-ink-750" aria-label="Copy --palette-ink-750">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-750" data-swatch></i><span data-token="--palette-ink-750"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>ink: text and rules on paper, 11:1</td></tr>
 <tr><td><code>--palette-ink-700</code> <button class="ds-copy" type="button" data-copy="--palette-ink-700" aria-label="Copy --palette-ink-700">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-700" data-swatch></i><span data-token="--palette-ink-700"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>poster rules, control edges on light</td></tr>
 <tr><td><code>--palette-ink-600</code> <button class="ds-copy" type="button" data-copy="--palette-ink-600" aria-label="Copy --palette-ink-600">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-600" data-swatch></i><span data-token="--palette-ink-600"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>muted text on light, 6:1</td></tr>
-<tr><td><code>--palette-ink-500</code> <button class="ds-copy" type="button" data-copy="--palette-ink-500" aria-label="Copy --palette-ink-500">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-500" data-swatch></i><span data-token="--palette-ink-500"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>subtle text on light, &gt;= 4.6:1</td></tr>
+<tr><td><code>--palette-ink-500</code> <button class="ds-copy" type="button" data-copy="--palette-ink-500" aria-label="Copy --palette-ink-500">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-500" data-swatch></i><span data-token="--palette-ink-500"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>subtle text on light, &gt;= 4.9:1</td></tr>
 <tr><td><code>--palette-ink-400</code> <button class="ds-copy" type="button" data-copy="--palette-ink-400" aria-label="Copy --palette-ink-400">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-400" data-swatch></i><span data-token="--palette-ink-400"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>subtle text on dark</td></tr>
 <tr><td><code>--palette-ink-300</code> <button class="ds-copy" type="button" data-copy="--palette-ink-300" aria-label="Copy --palette-ink-300">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-300" data-swatch></i><span data-token="--palette-ink-300"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>muted text on dark, 7:1</td></tr>
 <tr><td><code>--palette-ink-200</code> <button class="ds-copy" type="button" data-copy="--palette-ink-200" aria-label="Copy --palette-ink-200">Copy</button></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--palette-ink-200" data-swatch></i><span data-token="--palette-ink-200"></span></span></td><td><span class="ds-swatch__value">same</span></td><td>hairline dividers on light</td></tr>

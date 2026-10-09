@@ -31,7 +31,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> toggle : Activate "Switch to dark theme"
+actor -> toggle : Activate "Dark theme" (aria-pressed false)
 toggle -> service : toggle()
 service -> service : preference = opposite of effective theme
 service -> service : html[data-theme] = dark, aria-pressed = true

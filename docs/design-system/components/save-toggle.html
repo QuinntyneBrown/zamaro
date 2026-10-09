@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -166,9 +169,9 @@
       <li class="ticket">
         <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
         <div class="ticket__body">
-          <span class="ticket__no">No. 05 · ★ 5.0</span>
+          <span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span>
           <h3 class="ticket__name"><a href="#variants">Luz Viva</a></h3>
-          <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
+          <p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p>
         </div>
         <div class="ticket__stub">
           <p class="ticket__price"><small>From</small>$900</p>
@@ -177,14 +180,14 @@
       </li>
     </ol>
   </div>
-  <div class="ds-example__caption"><span>From the Discover lineup. On phones the stub runs along the bottom; from 640px it is a column on the right.</span></div>
+  <div class="ds-example__caption"><span>From the Discover lineup. On phones the stub runs along the bottom; from 576px it is a column on the right.</span></div>
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="lineup" role="list" aria-label="Example lineup" style="grid-template-columns: minmax(0, 1fr); max-width: 44rem;"&gt;
   &lt;li class="ticket"&gt;
     &lt;div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"&gt;&lt;/div&gt;
     &lt;div class="ticket__body"&gt;
-      &lt;span class="ticket__no"&gt;No. 05 · ★ 5.0&lt;/span&gt;
+      &lt;span class="ticket__no"&gt;No. 04 · ★ 5.0 · 6 churches&lt;/span&gt;
       &lt;h3 class="ticket__name"&gt;&lt;a href="#variants"&gt;Luz Viva&lt;/a&gt;&lt;/h3&gt;
-      &lt;p class="ticket__meta"&gt;Band · Spanish &amp;amp; English worship&lt;br&gt;North York · 63 km from you&lt;/p&gt;
+      &lt;p class="ticket__meta"&gt;Band · Acoustic, Spanish&lt;br&gt;North York · 63 km from you&lt;/p&gt;
     &lt;/div&gt;
     &lt;div class="ticket__stub"&gt;
       &lt;p class="ticket__price"&gt;&lt;small&gt;From&lt;/small&gt;$900&lt;/p&gt;
@@ -233,14 +236,14 @@
             <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, hover example" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, focus example" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, active example" data-state="active"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
-            <td><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-label="Save Elijah Park to your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-disabled="true" aria-label="Save Elijah Park to your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="false" disabled aria-label="Save Elijah Park to your saved artists, disabled example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
           <tr><th scope="row">On</th>
             <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, hover example" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, focus example" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, active example" data-state="active"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
-            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Abigail Mensah from your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Abigail Mensah from your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" disabled aria-label="Remove Abigail Mensah from your saved artists, disabled example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
         </tbody>
       </table></div>
@@ -252,7 +255,7 @@
       <ul>
         <li><b>Hover</b> grows the circle by 8% on the spring easing. It does not lift or cast a shadow, so it does not compete with the ticket’s own lift.</li>
         <li><b>Active</b> squeezes it to 94%, like pressing a rubber stamp.</li>
-        <li><b>Busy</b> sets <code>aria-busy="true"</code> while the save is sent. The heart pulses and clicks are ignored. The value has already flipped (optimistic update); if the request fails, flip it back and show a danger toast: “Couldn’t save Luz Viva. Try again.”</li>
+        <li><b>Busy</b> sets <code>aria-busy="true"</code> and <code>aria-disabled="true"</code> while the save is sent, like every busy button. The heart pulses and clicks are ignored. The value has already flipped (optimistic update); if the request fails, flip it back and show a danger toast: “Couldn’t save Luz Viva. Try again.”</li>
         <li><b>Disabled</b> is rare: only while the lineup itself is loading. A signed-out visitor gets an enabled toggle that asks them to sign in.</li>
       </ul>
     </section>
@@ -260,7 +263,7 @@
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
         <li>The toggle is the same 44px at every width. It never shrinks inside a cramped stub.</li>
-        <li>In a ticket it moves with the stub: bottom-right on phones, bottom of the right-hand stub column from 640px (<code>--layout-breakpoint-sm</code>).</li>
+        <li>In a ticket it moves with the stub: bottom-right on phones, bottom of the right-hand stub column from 576px (<code>--layout-breakpoint-sm</code>).</li>
         <li>It keeps at least 8px from the price and from the ticket edge, so a thumb aimed at the heart does not open the profile.</li>
         <li>Touch devices get no hover growth; the pressed fill is the only feedback they need.</li>
       </ul>
@@ -284,7 +287,7 @@
       <h3>Focus</h3>
       <p>The shared 3px ring with a 3px offset, ink on paper and yellow in dark mode. It follows the square outline box around the circle. When the toggle is inside a ticket, the ticket also lifts (<code>:focus-within</code>), which helps keyboard users see which artist they are on.</p>
       <h3>Labelling</h3>
-      <p>The icon is <code>aria-hidden</code>, so the <code>aria-label</code> is the only name, and it must name the artist. The label changes with the value: “Save Elijah Park to your saved artists” when off, “Remove Abigail Mensah from your saved artists” when on. With <code>aria-pressed</code> a screen reader adds the state: “Remove Abigail Mensah from your saved artists, toggle button, pressed”. The APG prefers a label that stays the same when pressed; if usability testing shows the changing label confuses people, keep “Save Abigail Mensah” and let “pressed” carry the state. The result is announced politely by the toast (“Saved Luz Viva”), and the top-bar count’s label updates (“4 saved artists”).</p>
+      <p>The icon is <code>aria-hidden</code>, so the <code>aria-label</code> is the only name, and it must name the artist. The label changes with the value: “Save Elijah Park to your saved artists” when off, “Remove Abigail Mensah from your saved artists” when on. With <code>aria-pressed</code> a screen reader adds the state: “Remove Abigail Mensah from your saved artists, toggle button, pressed”. The APG prefers a label that stays the same when pressed; if usability testing shows the changing label confuses people, keep “Save Abigail Mensah” and let “pressed” carry the state. The result is announced politely by the toast (“Saved Luz Viva”), and the top-bar count updates with it (the Saved link reads “Saved 3 artists” once Luz Viva is saved).</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Circle rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
@@ -306,7 +309,7 @@
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
         <li>Off: “Save {artist} to your saved artists”. On: “Remove {artist} from your saved artists”. Use the artist’s full display name, with “and” for “&amp;” (“Daniel and Ruth Okonkwo”).</li>
-        <li>The confirmation toast is short and past tense: “Saved Luz Viva”, “Removed Luz Viva from saved”, with an Undo action.</li>
+        <li>The confirmation toast is short and past tense: “Saved Luz Viva”, “Removed Elijah Park”, with an Undo action.</li>
         <li>Never add a visible label next to the circle. If the space allows a label, use the “Save” / “Saved” button instead.</li>
       </ul>
     </section>
@@ -315,7 +318,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>Every toggle names its artist, so a screen-reader list of buttons on the lineup is not seven identical “Save” buttons.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="true" aria-label="Save"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>A bare “Save”. Out of context, nobody can tell which artist it saves.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-label="Save Marcus Bell Trio to your saved artists, busy"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>While saving, the toggle reports busy and ignores extra presses, so a double tap does not save and unsave.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-disabled="true" aria-label="Save Marcus Bell Trio to your saved artists, busy"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>While saving, the toggle reports busy and ignores extra presses, so a double tap does not save and unsave.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists, confirm example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="text-caption">“Are you sure you want to save?”</span></div><figcaption>Asking for confirmation. Saving is instant and undoable; a toast with Undo is enough.</figcaption></figure>
       </div>
     </section>
@@ -345,14 +348,14 @@
 &lt;/button&gt;
 
 &lt;!-- after a press: flipped at once, busy until the server confirms --&gt;
-&lt;button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Elijah Park from your saved artists"&gt;
+&lt;button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Elijah Park from your saved artists"&gt;
   &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;
 &lt;/button&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.save</code></td><td>The round 44px toggle.</td></tr>
         <tr><td><code>aria-pressed="true|false"</code></td><td>On = yellow fill, filled heart. Always present.</td></tr>
         <tr><td><code>aria-label</code></td><td>Required. Names the action and the artist; changes with the value.</td></tr>
-        <tr><td><code>aria-busy="true"</code></td><td>Saving: heart pulses, clicks ignored.</td></tr>
+        <tr><td><code>aria-busy="true"</code> + <code>aria-disabled="true"</code></td><td>Saving: heart pulses, clicks ignored, focus stays.</td></tr>
         <tr><td><code>disabled</code></td><td>Greyed and not focusable. Only while the lineup loads.</td></tr>
         <tr><td><code>.ticket .save</code></td><td>Raised above the ticket’s stretched name link.</td></tr>
         <tr><td><code>data-state="hover|focus|active"</code></td><td>Documentation and mocks only: forces the state.</td></tr>
@@ -365,10 +368,12 @@
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: a save toggle on every ticket stub and on the headliner, three of them pressed (Abigail Mensah, Hosanna Collective, Luz Viva), and the mock note that promises a “Saved Luz Viva” toast</li>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: the lineup while it loads, when toggles cannot act yet</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the labelled “Saved” toggle button the circle stands in for on tickets</li>
+        <li><a href="../../mocks/pages/saved/default.html">pages/saved/default</a>: pressed toggles on every saved ticket, next to the ticket actions; the lineup suggestions on <a href="../../mocks/pages/not-found/artist.html">pages/not-found/artist</a></li>
+        <li>notifications/saved-toast (<a href="../../mocks/notifications/saved-toast/success.html">success</a>, <a href="../../mocks/notifications/saved-toast/with-action.html">with-action</a>, <a href="../../mocks/notifications/saved-toast/danger.html">danger</a>): the toggle on the page behind the “Saved Luz Viva” toast and its failure</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
-        <li>The mock note promised a “Saved Luz Viva” toast, but no toast existed and the toast region sat high to clear the mock bar. There is now a <a href="toast.html">toast</a> component, and the region sits at <code>--space-6</code>.</li>
+        <li>The mock note promised a “Saved Luz Viva” toast, but no toast existed and the toast region sat high to clear the mock bar. There is now a <a href="toast.html">toast</a> component, the region sits at <code>--space-6</code>, and notifications/saved-toast draws it.</li>
         <li>The profile’s <code>aria-pressed="true"</code> “Saved” button had no pressed style. It now matches the circle: yellow fill, filled heart.</li>
         <li>Busy and disabled states did not exist in the mocks. They were added so a double tap cannot save and unsave, and so the toggle is inert while the lineup loads.</li>
       </ul>
@@ -383,12 +388,15 @@ document.querySelectorAll('[data-save-demo]').forEach(function (button) {
   var name = button.getAttribute('data-artist');
   var status = document.getElementById('save-demo-status');
   button.addEventListener('click', function () {
+    if (button.getAttribute('aria-busy') === 'true') return;
     var on = button.getAttribute('aria-pressed') !== 'true';
     button.setAttribute('aria-pressed', on ? 'true' : 'false');
     button.setAttribute('aria-label', on ? 'Remove ' + name + ' from your saved artists' : 'Save ' + name + ' to your saved artists');
     button.setAttribute('aria-busy', 'true');
+    button.setAttribute('aria-disabled', 'true');
     setTimeout(function () {
       button.removeAttribute('aria-busy');
+      button.removeAttribute('aria-disabled');
       if (status) status.textContent = on ? 'Saved ' + name : 'Removed ' + name + ' from saved';
     }, 700);
   });

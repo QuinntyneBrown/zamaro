@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -153,7 +156,7 @@
           <li><div><b>Icon</b><small>28px (<code>.icon--lg</code>) in <code>--alert-icon</code>, <code>aria-hidden</code>. Info circle, check, or warning triangle for warning and danger.</small></div></li>
           <li><div><b>Title</b><small><code>.alert__title</code>: display face, 28px, uppercase. Says what happened in a few words.</small></div></li>
           <li><div><b>Body</b><small>One or two sentences of body text: what is safe and what to do.</small></div></li>
-          <li><div><b>Actions (optional)</b><small><code>.alert__actions</code>: at most one primary and one secondary button. Sits under the text, aligned with it from 640px.</small></div></li>
+          <li><div><b>Actions (optional)</b><small><code>.alert__actions</code>: at most one primary and one secondary button. Sits under the text, aligned with it from 576px.</small></div></li>
           <li><div><b>Close (optional)</b><small><code>.alert__close</code> on a ghost icon button, only on <code>.alert--dismissible</code>.</small></div></li>
           <li><div><b>Container</b><small>2px rule in <code>--alert-border</code>, tinted fill <code>--alert-bg</code>, 24px padding, square corners.</small></div></li>
         </ol>
@@ -180,7 +183,7 @@
           </div>
           <div class="alert alert--danger">
             <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November 2026. Your date, location and filters are kept.</p></div>
             <div class="alert__actions">
               <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
               <a class="btn" href="mailto:hello@zamaro.ca">Email us</a>
@@ -192,7 +195,7 @@
   &lt;svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;
   &lt;div class="stack stack--sm"&gt;
     &lt;p class="alert__title"&gt;We lost the signal&lt;/p&gt;
-    &lt;p&gt;We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.&lt;/p&gt;
+    &lt;p&gt;We couldn’t load who’s free on Saturday 14 November 2026. Your date, location and filters are kept.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="alert__actions"&gt;
     &lt;button class="btn btn--primary" type="button"&gt;…Try again&lt;/button&gt;
@@ -221,12 +224,12 @@
       </div>
 
       <h3>Page banner</h3>
-      <p>A <code>.banner</code> spans the full width directly under the top bar. It is a single line of small text with an optional small button. It defaults to warning; <code>.banner--info</code> and <code>.banner--danger</code> change the tone.</p>
+      <p>A <code>.banner</code> spans the full width directly under the top bar. It is a single line of small text with an optional small button. It defaults to warning; <code>.banner--info</code>, <code>.banner--success</code>, <code>.banner--warning</code> and <code>.banner--danger</code> set the tone explicitly.</p>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--flush">
-          <div class="banner">
-            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-            <p class="banner__text">Zamaro is down for maintenance Sun 11 Oct, 1–3 am. Requests you send before then are safe.</p>
+          <div class="banner banner--info">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>
+            <p class="banner__text">Zamaro is offline Sun 18 Oct, 2:00 a.m. to 4:00 a.m., for upgrades. Requests you’ve already sent are safe.</p>
           </div>
           <div class="banner banner--info">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>
@@ -235,15 +238,51 @@
           </div>
           <div class="banner banner--danger">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-            <p class="banner__text">You’re offline. Your search is kept, and the lineup will refresh when you reconnect.</p>
-            <button class="btn btn--sm" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+            <p class="banner__text">You’re offline. You can keep reading what’s loaded. Saving artists and sending requests need a connection.</p>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Warning (default), info and danger banners. The text wraps; the button drops below it when space runs out.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="banner banner--danger" role="status"&gt;
-  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…warning…&lt;/svg&gt;
-  &lt;p class="banner__text"&gt;You’re offline. Your search is kept, and the lineup will refresh when you reconnect.&lt;/p&gt;
-  &lt;button class="btn btn--sm" type="button"&gt;Try again&lt;/button&gt;
+        <div class="ds-example__caption"><span>Info banners (planned maintenance from <a href="../../mocks/notifications/system-banner/info.html">system-banner/info</a>, the search area with a “Change location” button) and the danger offline banner (L2-114). A plain <code>.banner</code> is warning. The text wraps; a button drops below it when space runs out.</span></div>
+      </div>
+
+      <h3>Product banners: label, inline action, dismiss, persistent</h3>
+      <p>The product’s system banners (maintenance, offline, email to verify, profile live) open with a short uppercase label in a <code>&lt;strong&gt;</code>, then one sentence. <code>.banner__text--fill</code> lets the text take the whole row so an inline <code>.banner__action</code> (a link, or <code>button.banner__action</code> for “Resend email”) runs on after the sentence. A dismissible banner ends with the generic <code>.close</code> button; <code>.banner--persistent</code> hides the close button for notices that stay until the cause is fixed (offline, unverified or bouncing email).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="banner banner--info">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+            <p class="banner__text banner__text--fill"><strong>Maintenance</strong>Zamaro is offline Sun 18 Oct, 2:00 a.m. to 4:00 a.m., for upgrades. Requests you’ve already sent are safe.</p>
+            <button class="close" type="button" aria-label="Dismiss maintenance notice"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+          <div class="banner banner--success">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+            <p class="banner__text"><strong>Live</strong>Your changes are on your public profile now. Churches see them in their next search.</p>
+            <a class="banner__action" href="#variants">View your profile</a>
+            <button class="close" type="button" aria-label="Dismiss message"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+          <div class="banner banner--warning banner--persistent">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <p class="banner__text banner__text--fill"><strong>Verify your email</strong>We sent a link to naomi.fraser@riversidecc.ca. You need it to send requests. <button class="banner__action" type="button">Resend email</button></p>
+          </div>
+          <div class="banner banner--danger banner--persistent">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 3l18 18M8.5 16.4a5 5 0 0 1 7 0M5 12.6a10 10 0 0 1 4.6-2.5M14.6 10.2a10 10 0 0 1 4.4 2.4M12 20h.01"/></svg>
+            <p class="banner__text banner__text--fill"><strong>You’re offline</strong>You can keep reading what’s loaded. Saving artists and sending requests need a connection.</p>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Info with dismiss, success with a trailing action, then warning and danger persistent banners. The label is read first, so it names the situation.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="banner banner--warning banner--persistent" role="status"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+  &lt;p class="banner__text banner__text--fill"&gt;&lt;strong&gt;Verify your email&lt;/strong&gt;We sent a link to naomi.fraser@riversidecc.ca. You need it to send requests.
+    &lt;button class="banner__action" type="button"&gt;Resend email&lt;/button&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class="banner banner--info" role="status"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+  &lt;p class="banner__text banner__text--fill"&gt;&lt;strong&gt;Maintenance&lt;/strong&gt;Zamaro is offline Sun 18 Oct, 2:00 a.m. to 4:00 a.m.…&lt;/p&gt;
+  &lt;button class="close" type="button" aria-label="Dismiss maintenance notice"&gt;…&lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="banner banner--danger" role="alert"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+  &lt;p class="banner__text"&gt;You’re offline. You can keep reading what’s loaded. Saving artists and sending requests need a connection.&lt;/p&gt;
 &lt;/div&gt;</code></pre></details>
       </div>
     </section>
@@ -273,19 +312,19 @@
           <tr><th scope="row">Info</th>
             <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button">See rates</button></div></div></div></td>
             <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button" data-state="focus">See rates</button></div></div></div></td>
-            <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button" aria-busy="true">Loading…</button></div></div></div></td></tr>
+            <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button" aria-busy="true" aria-disabled="true">Loading…</button></div></div></div></td></tr>
           <tr><th scope="row">Success</th>
             <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button">View request</button></div></div></div></td>
             <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button" data-state="focus">View request</button></div></div></div></td>
-            <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button" aria-busy="true">Opening…</button></div></div></div></td></tr>
+            <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button" aria-busy="true" aria-disabled="true">Opening…</button></div></div></div></td></tr>
           <tr><th scope="row">Warning</th>
             <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Pay deposit</button></div></div></div></td>
             <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" data-state="focus">Pay deposit</button></div></div></div></td>
-            <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true">Paying…</button></div></div></div></td></tr>
+            <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true" aria-disabled="true">Paying…</button></div></div></div></td></tr>
           <tr><th scope="row">Danger</th>
             <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div></div></td>
             <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" data-state="focus">Try again</button></div></div></div></td>
-            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true">Retrying…</button></div></div></div></td></tr>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true" aria-disabled="true">Retrying…</button></div></div></div></td></tr>
         </tbody>
       </table></div>
       <h3>Dismiss button</h3>
@@ -325,7 +364,7 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Below 640px the actions span the full width under the icon and text (<code>grid-column: 1 / -1</code>). From 640px they line up with the text column.</li>
+        <li>Below 576px the actions span the full width under the icon and text (<code>grid-column: 1 / -1</code>). From 576px they line up with the text column.</li>
         <li>Action buttons wrap onto a new line instead of shrinking. A label that is too long wraps to a balanced second line rather than overflowing, but that is a safety net: keep labels short enough for one line. The mock’s “Email the Zamaro team” just fits a full-width alert at 360px; inside anything narrower (a card, the stub, these examples) use “Email us”.</li>
         <li>The alert fills its container. In the lineup it spans the container; in the booking stub it uses <code>.alert--compact</code>.</li>
         <li>Banners pad with <code>--layout-margin</code>, so their text lines up with the page content at every breakpoint. The text takes the remaining width (<code>flex: 1 1 16rem</code>) and the button wraps below it on phones.</li>
@@ -376,9 +415,10 @@
       <ul>
         <li>Title: what happened, in a few words, in sentence case in the source: “We lost the signal”, “Request sent to Abigail Mensah”, “Deposit due Fri 30 Oct”.</li>
         <li>Body: what is safe and what to do, in one or two short sentences. “Your date, location and filters are kept.” is the reassurance the error mocks use.</li>
+        <li>Every error or failure uses <code>.alert--danger</code> with <code>role="alert"</code>; the plain <code>.alert</code> is the info tone and must not carry a failure.</li>
         <li>For errors, say whose side it is on when you know: “It’s on our side, not yours.” Never blame the booker or show a raw error string.</li>
         <li>Actions start with a verb and say what happens: “Try again”, “Pay deposit”, “Back to the lineup”. One primary action at most.</li>
-        <li>Banners are one sentence. Name the date and time for planned events: “Sun 11 Oct, 1–3 am”.</li>
+        <li>Banners are one sentence. Name the date and time for planned events: “Sun 11 Oct, 1:00–3:00 a.m.”.</li>
       </ul>
     </section>
 
@@ -425,25 +465,29 @@
   &lt;/div&gt;
   &lt;div class="alert__actions"&gt;
     &lt;button class="btn btn--primary" type="button"&gt;…Try again&lt;/button&gt;
-    &lt;a class="btn" href="/discover"&gt;Back to the lineup&lt;/a&gt;
+    &lt;a class="btn" href="/"&gt;Back to the lineup&lt;/a&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
 &lt;!-- Page-wide news under the top bar --&gt;
-&lt;div class="banner" role="status"&gt;
+&lt;div class="banner banner--info" role="status"&gt;
   &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
-  &lt;p class="banner__text"&gt;Zamaro is down for maintenance Sun 11 Oct, 1–3 am.&lt;/p&gt;
+  &lt;p class="banner__text"&gt;Zamaro is offline Sun 18 Oct, 2:00 a.m. to 4:00 a.m., for upgrades.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
-        <tr><td><code>.alert</code></td><td>Base alert, info tone: icon column and text column, 24px padding.</td></tr>
+        <tr><td><code>.alert</code></td><td>Base alert, info tone: icon column and text column, 24px padding. A plain <code>.alert</code> reads as an info tip, so every error or failure (page and section errors, failed dialogs, <code>role="alert"</code>) must add <code>.alert--danger</code>.</td></tr>
         <tr><td><code>.alert--success</code> <code>.alert--warning</code> <code>.alert--danger</code></td><td>Tone; sets the four <code>--alert-*</code> tokens.</td></tr>
         <tr><td><code>.alert__title</code></td><td>Display-face title.</td></tr>
-        <tr><td><code>.alert__actions</code></td><td>Button row; full width on phones, under the text from 640px.</td></tr>
+        <tr><td><code>.alert__actions</code></td><td>Button row; full width on phones, under the text from 576px.</td></tr>
         <tr><td><code>.alert--dismissible</code> + <code>.alert__close</code></td><td>Reserves room on the right and pins the close button to the top-right corner.</td></tr>
         <tr><td><code>.alert--compact</code></td><td>16px padding, <code>--text-h4</code> title. For cards, stubs and dialogs.</td></tr>
         <tr><td><code>.banner</code></td><td>Full-width page banner, warning tone, one line of small text.</td></tr>
-        <tr><td><code>.banner--info</code> <code>.banner--danger</code></td><td>Banner tone.</td></tr>
-        <tr><td><code>.banner__text</code></td><td>Flexible text column; the button wraps below it.</td></tr>
+        <tr><td><code>.banner--info</code> <code>.banner--success</code> <code>.banner--warning</code> <code>.banner--danger</code></td><td>Banner tone (plain <code>.banner</code> is warning).</td></tr>
+        <tr><td><code>.banner__text</code></td><td>Flexible text column; the button wraps below it. A leading <code>&lt;strong&gt;</code> is the uppercase label.</td></tr>
+        <tr><td><code>.banner__text--fill</code></td><td>Text takes the whole row, so an inline action can follow the sentence.</td></tr>
+        <tr><td><code>.banner__action</code></td><td>Uppercase label link, or <code>button.banner__action</code> (an underlined, unframed button), inside or after the text.</td></tr>
+        <tr><td><code>.close</code> in a banner</td><td>Dismiss button (generic 36px close; 44px under a coarse pointer).</td></tr>
+        <tr><td><code>.banner--persistent</code></td><td>Hides the close button: the notice stays until its cause is fixed.</td></tr>
         <tr><td><code>role="alert"</code> / <code>role="status"</code></td><td>Assertive for new failures; polite for confirmations and banners. Omit on content present at load.</td></tr>
         <tr><td><code>.page-error</code></td><td>Vertical spacing for an alert that stands in for a whole page section.</td></tr>
       </tbody></table>
@@ -452,6 +496,10 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
+        <li>notifications/system-banner (<a href="../../mocks/notifications/system-banner/info.html">info</a>, <a href="../../mocks/notifications/system-banner/success.html">success</a>, <a href="../../mocks/notifications/system-banner/warning.html">warning</a>, <a href="../../mocks/notifications/system-banner/danger.html">danger</a>, <a href="../../mocks/notifications/system-banner/persistent.html">persistent</a>, <a href="../../mocks/notifications/system-banner/undeliverable.html">undeliverable</a>): every banner tone, the label, inline and trailing actions, dismiss and persistent</li>
+        <li><a href="../../mocks/pages/offline/default.html">pages/offline/default</a>: persistent danger “You’re offline” banner; <a href="../../mocks/pages/edit-profile/success.html">pages/edit-profile/success</a> and <a href="../../mocks/pages/account/success.html">pages/account/success</a>: success banners with an action</li>
+        <li>Compact alerts (<code>.alert--compact</code>) in forms and dialogs: <a href="../../mocks/pages/sign-in/error.html">pages/sign-in/error</a>, <a href="../../mocks/pages/apply/error.html">pages/apply/error</a>, <a href="../../mocks/dialogs/pay-balance/default.html">dialogs/pay-balance</a>, <a href="../../mocks/pages/booking-detail/held.html">pages/booking-detail/held</a></li>
+        <li>Page and section errors (<code>alert alert--danger</code>): <a href="../../mocks/pages/bookings/error.html">pages/bookings/error</a>, <a href="../../mocks/pages/requests/error.html">pages/requests/error</a>, <a href="../../mocks/pages/dashboard/error.html">pages/dashboard/error</a>, <a href="../../mocks/pages/earnings/error.html">pages/earnings/error</a>, <a href="../../mocks/pages/availability/error.html">pages/availability/error</a>, <a href="../../mocks/pages/saved/error.html">pages/saved/error</a>, <a href="../../mocks/dialogs/delete-account/failed.html">dialogs/delete-account/failed</a></li>
         <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “We lost the signal” alert in place of the lineup, with “Try again” (primary) and “Email the Zamaro team”; the search and filters stay on screen</li>
         <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: “We couldn’t reach the artist’s page” under the “Show postponed” poster, with “Try again” and “Back to the lineup”</li>
       </ul>
@@ -459,7 +507,7 @@
       <ul>
         <li><code>.alert</code> was danger-only by default. It now has an info default and <code>.alert--danger</code>, <code>.alert--success</code> and <code>.alert--warning</code> tones; the mocks now use <code>alert alert--danger</code>.</li>
         <li>The artist error mock spaced its alert with an inline <code>padding-block</code>. That is now <code>.page-error</code>.</li>
-        <li>Dismissible, compact and banner variants are not in the mocks yet. They are part of the core set: the product will need banners for maintenance and offline notices, and compact alerts for the deposit reminder in the booking stub.</li>
+        <li>The system-banner mocks added a label, an inline action, success and warning tones and a persistent variant. They are now <code>.banner--success</code>, <code>.banner--warning</code>, <code>.banner__action</code>, <code>.banner__text--fill</code> and <code>.banner--persistent</code>; dismiss uses the shared <code>.close</code> button.</li>
       </ul>
     </section>
 

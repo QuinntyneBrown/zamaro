@@ -17,7 +17,6 @@ package "Zamaro Web (Angular)" {
   class UploadsApi {
     +uploadVsc(file: File, issuedOn: string): Observable<UploadStatusDto>
     +status(id: string): Observable<UploadStatusDto>
-    +vscDocumentUrl(artistId?: number): Observable<SignedUrlDto>
   }
   class UploadStatusDto <<interface>> {
     +id: string

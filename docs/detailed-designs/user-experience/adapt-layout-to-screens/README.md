@@ -22,9 +22,9 @@ Terms used in this design:
 - **viewport class** — one of XS, SM, MD, LG or XL for the current viewport width
 - **reflow** — re-arrangement of content into fewer columns so that no horizontal scrolling or clipping occurs
 - **touch target** — hit area of an interactive control, measured in CSS pixels
-- **compact header** — top bar variant for XS and SM in which the primary links sit behind a menu button
+- **compact header** — top bar variant in which the primary links sit behind a menu button: below LG for the booker shell (L2-099 requires it at XS and SM), below XL for the artist shell
 - **navigation drawer** — overlay panel that holds the primary links of the compact header
-- **full-screen dialog** — dialog variant for XS that covers the whole viewport with its close button pinned at the top
+- **full-screen dialog** — how every design-system dialog renders at XS: it covers the whole viewport with its title and close button pinned at the top
 - **visual baseline** — approved screenshot of one page state at one viewport class, stored in the repository and compared on every build
 
 ## Description
@@ -38,32 +38,34 @@ and through the seeded API that the visual test suite runs against.
 - **`breakpoints.scss`** — the single SCSS map of the L2 breakpoints and the
   `respond-to(xs|sm|md|lg|xl)` mixin. Layout itself is CSS: mobile-first media
   queries, CSS grid and `min-width: 0` on grid children. The design system's
-  `--layout-breakpoint-*` tokens (640, 768, 1024 and 1280 px) differ from the L2
-  values; Zamaro Web uses the L2 values, and the alignment of `tokens.css` is
-  `<TO SUPPLY>`.
+  `--layout-breakpoint-sm/md/lg/xl` tokens hold the same values (36, 48, 62 and
+  75rem, that is 576, 768, 992 and 1200 px), so the map, `tokens.css` and
+  `components.css` agree.
 - **`BreakpointService`** — wraps the CDK `BreakpointObserver` with the same five
   queries. It exposes `viewportClass: Signal<ViewportClass>` and
-  `isCompact: Signal<boolean>` (true at XS and SM). Components read it only where
+  `isCompact: Signal<boolean>` (true below LG). Components read it only where
   behaviour changes, not to lay out content. During server-side rendering it reports
   `xs`, so the first paint of a phone needs no client correction.
 - **`AppShellComponent`** — root layout holding the skip link, `TopBarComponent`,
   the routed `<main>` and `FooterComponent`.
-- **`TopBarComponent`** — the design-system top bar. At MD and above it shows
-  Discover, How booking works and For artists inline. At XS and SM it switches to the
-  compact header: the three links move into `NavDrawerComponent` behind a menu button
+- **`TopBarComponent`** — the design-system top bar. From LG it shows Discover,
+  How booking works and For artists inline, with the theme toggle from
+  `user-experience/switch-theme`. Below LG it uses the compact header: the three
+  links and the theme toggle move into `NavDrawerComponent` behind a menu button
   with `aria-expanded` and `aria-controls`, while the Saved count and the account
-  initials stay visible (L2-099). The Saved button keeps its word in the accessible
-  name when only the heart and count show. The design system collapses below 1024 px
-  and labels the second link "How it works"; this design follows L2-099.
+  initials stay visible (L2-099). L2-099 requires this at XS and SM; MD keeps it too
+  because the links, Saved, the toggle and the account button do not fit in 768 px.
+  The workspace bar (`topbar--workspace`: the artist area and the admin app) has five
+  primary links and stays compact until XL. The Saved
+  button keeps its word in the accessible name when only the heart and count show.
 - **`NavDrawerComponent`** — CDK overlay holding the primary links. It traps focus,
   closes on Escape, on backdrop click and on `NavigationEnd`, and returns focus to
   the menu button.
-- **`DialogService`** — wrapper around the CDK `Dialog` used by every dialog. At XS
-  it adds the `dialog--fullscreen` panel class: `100vw` by `100dvh`, a sticky header
-  holding the title and close button, a scrolling body and a footer padded by the
-  safe-area inset. The close button therefore stays reachable without scrolling
-  (L2-099). The design system's 92 %-height bottom sheet is replaced by this variant
-  at XS.
+- **`DialogService`** — wrapper around the CDK `Dialog` used by every dialog. Its
+  panel uses the design-system `.dialog` classes, which at XS fill the screen:
+  `100vw` by `100dvh`, the header holding the title and close button at the top, a
+  scrolling body and a sticky footer padded by the safe-area inset. The close button
+  therefore stays reachable without scrolling (L2-099).
 - **Global layout rules (`styles/layout.scss`)** — `rem` units for type and spacing,
   no fixed heights on text containers, `overflow-wrap: anywhere` on display names,
   media with `aspect-ratio`, and tables and tab strips that scroll inside their own
@@ -73,10 +75,32 @@ and through the seeded API that the visual test suite runs against.
 - **Touch targets** — under `@media (pointer: coarse)` every button, link styled as
   a control, chip, toggle and form control has a minimum block and inline size of
   `--target-comfortable` (44 px), extended with padding or a `::before` hit area when
-  the visible shape is smaller (L2-096). Whether inline links inside running text are
-  exempt is `<TO SUPPLY>`.
+  the visible shape is smaller (L2-096). The design system's `components.css` carries
+  this `(pointer: coarse)` rule. Links inside running text are exempt, following the
+  WCAG 2.5.8 inline exception and the design system's responsive foundation.
 - **`CurrentUserStore`** — signal store fed by `AuthService`. It holds the initials
   and the Saved count that the compact header keeps visible.
+
+**Mocks and design system**
+
+- The top bar of every mock is the shell: booker pages such as
+  [`discover/default`](../../../mocks/pages/discover/default.html), artist pages such as
+  [`dashboard/default`](../../../mocks/pages/dashboard/default.html) and admin pages such as
+  [`admin-applications/default`](../../../mocks/pages/admin-applications/default.html)
+  (both `topbar--workspace`, with an "Artists" or "Admin" role tag), and guest pages such as
+  [`sign-in/default`](../../../mocks/pages/sign-in/default.html).
+- The navigation drawer is [`dialogs/menu`](../../../mocks/dialogs/menu/default.html)
+  ([`artist`](../../../mocks/dialogs/menu/artist.html), [`admin`](../../../mocks/dialogs/menu/admin.html)); the account menu is
+  [`dialogs/account-menu`](../../../mocks/dialogs/account-menu/default.html).
+- Every dialog mock under `docs/mocks/dialogs/`, for example
+  [`withdraw-request`](../../../mocks/dialogs/withdraw-request/default.html), shows the
+  full-screen dialog when viewed at XS.
+- Design system: [Layout](../../../design-system/foundations/layout.html) and
+  [Responsive](../../../design-system/foundations/responsive.html) foundations,
+  [Top bar](../../../design-system/components/top-bar.html),
+  [Dialog](../../../design-system/components/dialog.html) and the
+  [Navigation & page structure](../../../design-system/patterns/navigation-and-page-structure.html)
+  pattern.
 
 **Visual tests (Zamaro Web, `e2e/visual`)**
 
