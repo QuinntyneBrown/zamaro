@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Header scan in CI
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "CI pipeline" as ci
+participant "Header scan step" as scan
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Edge load balancer (preview)" as edge
+end box
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "server.ts with securityHeaders" as web
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SetSecurityHeaders" as api
+end box
+
+ci -> scan : Run after preview deploy
+scan -> edge : GET http://{preview}/
+edge --> scan : 301 to https (L2-070)
+scan -> edge : TLS 1.0 and TLS 1.1 handshakes
+edge --> scan : Both refused (L2-070)
+loop each URL in security/expected-headers.json
+  alt page URL
+    scan -> edge : GET /, /artists/{seed slug}, unknown path
+    edge -> web : Forward
+    web --> edge : HTML with CSP, nosniff, referrer, permissions
+  else API URL
+    scan -> edge : GET /api/v1/search
+    edge -> api : Forward
+    api --> edge : JSON with header set
+  end
+  edge --> scan : Response with HSTS
+  scan -> scan : Compare with HeaderExpectation, reject unsafe-inline or unsafe-eval in script-src (L2-071)
+end
+alt every expectation met
+  scan --> ci : Exit 0
+else any header missing or weakened
+  scan --> ci : Exit non-zero, build fails (L2-071)
+end
+@enduml

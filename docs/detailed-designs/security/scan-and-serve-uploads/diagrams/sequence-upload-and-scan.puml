@@ -1,0 +1,83 @@
+@startuml
+title UML sequence behaviour — Upload and scan a file
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VscUploadComponent" as page
+  participant "UploadsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "VscDocumentController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReceiveUpload" as receive
+  participant "ContentTypeDetector" as detect
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ScanUpload" as job
+  participant "PromoteUpload" as promote
+  participant "RejectInfectedUpload" as reject
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+  participant "Malware scanner" as scanner
+end box
+
+actor -> page : Choose PDF and issue date, upload
+page -> client : uploadVsc(file, issuedOn)
+client -> controller : POST /api/v1/artist/vsc (multipart, up to 10 MB)
+controller -> receive : handle(user, file, VscDocument)
+receive -> detect : detect(temp path)
+detect -> detect : Read leading bytes, ignore name and declared type (L2-076)
+alt SVG, HTML or type outside allow-list
+  detect --> receive : Rejected type
+  receive --> controller : Validation failure
+  controller --> client : 422 with reason on document field
+  client --> page : Show reason
+else allowed type
+  detect --> receive : application/pdf
+  receive -> storage : Put quarantine/{uuid} (private)
+  receive -> db : Insert Upload status Quarantined
+  receive -> job : Dispatch ScanUpload
+  controller --> client : 202 upload id, Quarantined
+  client --> page : "Checking file"
+  job -> storage : Stream quarantine object
+  job -> scanner : Scan before any processing (L2-076)
+  alt Infected
+    scanner --> job : Infected with signature
+    job -> reject : handle(upload, verdict)
+    reject -> storage : Delete quarantine object (L2-076)
+    reject -> db : Status Rejected, reason malware
+    reject -> reject : RecordSecurityEvent to security log (L2-076)
+  else Clean
+    scanner --> job : Clean
+    job -> promote : handle(upload)
+    promote -> storage : Encrypt and put documents/{random hex}, set Content-Type and Content-Disposition (L2-076, L2-079)
+    promote -> storage : Delete quarantine object
+    promote -> db : Status Clean, link VSC for verification (L2-049)
+  else scanner error
+    scanner --> job : Error
+    job -> job : Retry with backoff up to 5 times, stay Quarantined (L2-092)
+  end
+  page -> client : Poll status(id)
+  client -> controller : GET /api/v1/uploads/{id}
+  controller -> db : Read Upload
+  controller --> client : Clean or Rejected
+  client --> page : Show accepted state or rejection reason
+  page --> actor : Upload outcome
+end
+@enduml

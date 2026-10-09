@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Limit request rates
+
+Person(user, "Guest or booker", "Browser user")
+System_Ext(bot, "Bot challenge provider", "Vendor <TO SUPPLY>")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(edge, "Edge load balancer", "Managed load balancer, vendor <TO SUPPLY>", "Sets X-Forwarded-For")
+  Container(web, "Zamaro Web", "Angular SSR on Node.js", "RateLimitInterceptor, BotChallengeComponent")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Named limiters, booking allowance, challenge check")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends BookingRequestFloodAlert")
+  ContainerDb(cache, "Cache and queue", "Redis", "Throttle counters, alert dedupe key, queue")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, edge, "Calls /api/v1", "JSON/HTTPS")
+Rel(edge, api, "Forwards with client IP", "HTTP, private network")
+Rel(api, cache, "Increments counters", "RESP")
+Rel(api, db, "Counts bookings in last 24 hours", "SQL")
+Rel(api, bot, "Verifies token", "HTTPS/JSON")
+Rel(api, cache, "Queues flood alert", "RESP")
+Rel(worker, email, "Sends alert", "HTTPS")
+@enduml

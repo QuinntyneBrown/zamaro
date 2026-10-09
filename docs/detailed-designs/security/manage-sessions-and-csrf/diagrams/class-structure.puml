@@ -1,0 +1,83 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage sessions and CSRF
+
+package "Zamaro Web (Angular)" {
+  class AuthService {
+    +user: Signal<CurrentUser | null>
+    +ensureCsrfCookie(): Observable<void>
+    +signIn(email: string, password: string): Observable<CurrentUser>
+    +signOut(): Observable<void>
+    +clear(): void
+  }
+  class CurrentUser <<interface>> {
+    +id: number
+    +name: string
+    +roles: Role[]
+  }
+  class CsrfRecoveryInterceptor <<HttpInterceptorFn>> {
+    +intercept(req: HttpRequest, next: HttpHandlerFn): Observable<HttpEvent>
+  }
+  class SessionExpiredInterceptor <<HttpInterceptorFn>> {
+    +intercept(req: HttpRequest, next: HttpHandlerFn): Observable<HttpEvent>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SessionLifetimePolicy <<value object>> {
+    +int idleMinutes = 10080
+    +int absoluteMinutes = 43200
+    +forRoles(roles: Role[]): SessionLifetimePolicy
+    +isExpired(startedAt: CarbonImmutable, now: CarbonImmutable): bool
+  }
+  class EnforceAbsoluteSessionLifetime <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class ValidateCsrfToken <<Laravel middleware>> {
+    #except: array
+    +handle(request: Request, next: Closure): Response
+  }
+  class AuthenticateUser <<action>> {
+    +handle(request: SignInRequest): User
+  }
+  class SignOutController {
+    +__invoke(request: Request): Response
+  }
+  class ProblemDetailsRenderer {
+    +render(e: Throwable, request: Request): JsonResponse
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string email
+    +Role[] roles
+  }
+  enum Role {
+    Booker
+    Artist
+    Administrator
+  }
+}
+
+AuthService --> CurrentUser
+SessionExpiredInterceptor ..> AuthService : clears
+CsrfRecoveryInterceptor ..> AuthService : ensureCsrfCookie()
+AuthService ..> AuthenticateUser : POST /api/v1/auth/sign-in
+AuthService ..> SignOutController : POST /api/v1/auth/sign-out
+AuthenticateUser --> User : authenticates
+EnforceAbsoluteSessionLifetime --> SessionLifetimePolicy : applies
+SessionLifetimePolicy ..> Role : per role
+ValidateCsrfToken ..> ProblemDetailsRenderer : 419 via TokenMismatchException
+EnforceAbsoluteSessionLifetime ..> ProblemDetailsRenderer : 401
+User --> Role
+@enduml

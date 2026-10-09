@@ -1,0 +1,119 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Scan and serve uploads
+
+package "Zamaro Web (Angular)" {
+  class UploadsApi {
+    +uploadVsc(file: File, issuedOn: string): Observable<UploadStatusDto>
+    +status(id: string): Observable<UploadStatusDto>
+    +vscDocumentUrl(artistId?: number): Observable<SignedUrlDto>
+  }
+  class UploadStatusDto <<interface>> {
+    +id: string
+    +status: 'Quarantined'|'Clean'|'Rejected'
+    +rejectionReason: string | null
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class Upload <<Eloquent>> {
+    +string id
+    +int userId
+    +UploadPurpose purpose
+    +string detectedMime
+    +int sizeBytes
+    +string quarantineKey
+    +?string objectKey
+    +UploadStatus status
+    +?string rejectionReason
+    +?string scannerSignature
+    +?CarbonImmutable scannedAt
+  }
+  enum UploadStatus {
+    Quarantined
+    Clean
+    Rejected
+  }
+  enum UploadPurpose {
+    VscDocument
+    Photo
+    Video
+    Caption
+    +allowedMimes(): string[]
+    +maxBytes(): int
+    +isPrivate(): bool
+  }
+  class ContentTypeDetector {
+    +detect(path: string): string
+    +isForbidden(mime: string, head: string): bool
+  }
+  class ReceiveUpload <<action>> {
+    +handle(user: User, file: UploadedFile, purpose: UploadPurpose): Upload
+  }
+  class ScanUpload <<job>> {
+    +int tries = 5
+    +handle(scanner: MalwareScanner): void
+  }
+  interface MalwareScanner {
+    +scan(stream: resource): ScanVerdict
+  }
+  class ScanVerdict <<value object>> {
+    +ScanOutcome outcome
+    +?string signature
+  }
+  enum ScanOutcome {
+    Clean
+    Infected
+    Error
+  }
+  class PromoteUpload <<action>> {
+    +handle(upload: Upload): void
+  }
+  class RejectInfectedUpload <<action>> {
+    +handle(upload: Upload, verdict: ScanVerdict): void
+  }
+  class RecordSecurityEvent <<action>> {
+    +handle(type: string, context: array): void
+  }
+  class PrivateDocumentUrl {
+    +for(upload: Upload, ttlMinutes: int = 5): SignedUrl
+  }
+  class PrivateDocumentController {
+    +show(request: Request, objectName: string): StreamedResponse
+  }
+  class VulnerableSectorCheck <<Eloquent>> {
+    +int id
+    +int artistId
+    +string uploadId
+    +CarbonImmutable issuedOn
+    +?CarbonImmutable verifiedAt
+  }
+}
+
+UploadsApi ..> UploadStatusDto
+ReceiveUpload ..> ContentTypeDetector : uses
+ReceiveUpload ..> Upload : creates
+ReceiveUpload ..> ScanUpload : dispatches
+ScanUpload --> MalwareScanner
+MalwareScanner ..> ScanVerdict : returns
+ScanVerdict --> ScanOutcome
+ScanUpload ..> PromoteUpload : Clean
+ScanUpload ..> RejectInfectedUpload : Infected
+RejectInfectedUpload ..> RecordSecurityEvent
+Upload --> UploadStatus
+Upload --> UploadPurpose
+VulnerableSectorCheck "1" --> "1" Upload : document
+PrivateDocumentUrl ..> Upload : signs object name
+PrivateDocumentController ..> Upload : streams
+@enduml

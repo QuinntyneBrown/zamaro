@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Throttle API and search traffic
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SearchStore" as store
+  participant "RateLimitInterceptor" as interceptor
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "TrustProxies" as proxies
+  participant "ThrottleRequestsWithRedis" as throttle
+  participant "SearchController" as controller
+  participant "ProblemDetailsRenderer" as problem
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as cache
+end box
+
+actor -> store : Run a search
+store -> interceptor : GET /api/v1/search
+interceptor -> proxies : Request via edge
+proxies -> throttle : Client IP from X-Forwarded-For
+alt anonymous
+  throttle -> cache : Increment ip:{ip} in 60 s window
+  cache --> throttle : Count
+end
+throttle -> cache : Increment search-ip:{ip}, and search-user:{id} when signed in
+cache --> throttle : Counts
+alt anonymous count above 120 per minute (L2-077)
+  throttle -> problem : ThrottleRequestsException
+  problem --> interceptor : 429 problem details, Retry-After
+else search count above 30 per minute for IP or account (L2-077)
+  throttle -> problem : ThrottleRequestsException
+  problem --> interceptor : 429 problem details, Retry-After
+else within limits
+  throttle -> controller : Proceed
+  controller --> interceptor : 200 LineupResource with X-RateLimit headers
+end
+alt 429
+  interceptor --> store : RateLimited(retryAfterSeconds)
+  store --> actor : Criteria kept, wait message (copy <TO SUPPLY>)
+else 200
+  interceptor --> store : Lineup
+  store --> actor : Lineup shown
+end
+@enduml

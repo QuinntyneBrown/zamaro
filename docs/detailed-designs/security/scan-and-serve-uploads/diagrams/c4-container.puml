@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Scan and serve uploads
+
+Person(artist, "Artist", "Uploads files")
+Person(admin, "Administrator", "Opens VSC documents")
+System_Ext(scanner, "Malware scanner", "Vendor <TO SUPPLY>")
+System_Ext(cdn, "CDN", "Public media on the media domain")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular SSR on Node.js", "Upload forms, status, document links")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Content sniffing, quarantine, signed URLs, document streaming")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Malware scan, promotion, rejection")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "uploads, vulnerable_sector_checks")
+  ContainerQueue(queue, "Cache and queue", "Redis", "uploads queue")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "quarantine/, documents/, originals/")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(admin, web, "Uses", "HTTPS")
+Rel(web, api, "POST /api/v1/artist/vsc, GET /api/v1/uploads/{id}", "JSON/HTTPS")
+Rel(api, storage, "Writes quarantine object", "S3 API")
+Rel(api, db, "Creates Upload", "SQL")
+Rel(api, queue, "Dispatches ScanUpload", "RESP")
+Rel(worker, queue, "Consumes", "RESP")
+Rel(worker, scanner, "Streams file", "HTTPS")
+Rel(worker, storage, "Promotes or deletes", "S3 API")
+Rel(worker, db, "Updates Upload status", "SQL")
+Rel(admin, api, "Follows signed URL on media domain", "HTTPS")
+Rel(cdn, storage, "Pulls public media", "HTTPS")
+@enduml

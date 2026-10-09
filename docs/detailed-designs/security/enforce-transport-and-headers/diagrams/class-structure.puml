@@ -1,0 +1,81 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Enforce transport security and headers
+
+package "Zamaro Web (Angular SSR)" {
+  class securityHeaders <<Express middleware>> {
+    +(req: Request, res: Response, next: NextFunction): void
+    -createNonce(): string
+  }
+  class SecurityHeaderSet <<interface>> {
+    +contentSecurityPolicy: string
+    +strictTransportSecurity: string
+    +xContentTypeOptions: 'nosniff'
+    +referrerPolicy: 'strict-origin-when-cross-origin'
+    +permissionsPolicy: string
+  }
+  class CspDirectives <<interface>> {
+    +defaultSrc: string[]
+    +scriptSrc: string[]
+    +imgSrc: string[]
+    +connectSrc: string[]
+    +frameSrc: string[]
+    +frameAncestors: "'none'"
+  }
+  class SecurityHeadersModule <<module security-headers.ts>> {
+    +buildContentSecurityPolicy(nonce: string): string
+    +buildHeaderSet(nonce: string): SecurityHeaderSet
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SetSecurityHeaders <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class TrustProxies <<middleware>> {
+    #proxies: array|string
+    #headers: int
+  }
+  class SecurityConfig <<config/security.php>> {
+    +string hsts
+    +string apiContentSecurityPolicy
+    +string referrerPolicy
+    +string permissionsPolicy
+  }
+}
+
+package "CI pipeline" {
+  class HeaderScan {
+    +run(baseUrl: string): ScanResult
+  }
+  class HeaderExpectation {
+    +string url
+    +int expectedStatus
+    +map<string,string> requiredHeaders
+    +string[] forbiddenScriptSources
+  }
+  class ScanResult {
+    +bool passed
+    +string[] failures
+  }
+}
+
+securityHeaders ..> SecurityHeadersModule : calls
+SecurityHeadersModule ..> SecurityHeaderSet : returns
+SecurityHeadersModule ..> CspDirectives : reads
+SetSecurityHeaders --> SecurityConfig : reads
+TrustProxies ..> SetSecurityHeaders : runs before
+HeaderScan "1" --> "*" HeaderExpectation : checks
+HeaderScan ..> ScanResult : returns
+@enduml

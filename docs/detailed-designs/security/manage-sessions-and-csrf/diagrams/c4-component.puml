@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Manage sessions and CSRF
+
+Container_Boundary(web, "Zamaro Web") {
+  Component(auth, "AuthService", "Angular service", "Current user signal, CSRF cookie bootstrap, sign-in and sign-out")
+  Component(xsrf, "XSRF interceptor", "HttpClient withXsrfConfiguration", "Copies XSRF-TOKEN into X-XSRF-TOKEN")
+  Component(recover, "CsrfRecoveryInterceptor", "HttpInterceptorFn", "On 419 refreshes token and retries once")
+  Component(expired, "SessionExpiredInterceptor", "HttpInterceptorFn", "On 401 clears user and routes to sign-in")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(start, "StartSession", "Laravel middleware", "Loads session by cookie, refreshes idle expiry")
+  Component(csrf, "ValidateCsrfToken", "Laravel middleware", "Rejects mismatched token with 419, writes XSRF-TOKEN")
+  Component(absolute, "EnforceAbsoluteSessionLifetime", "Laravel middleware", "Ends sessions 30 days after sign-in")
+  Component(signin, "SignInController + AuthenticateUser", "Controller and action", "Checks credentials, regenerates session and token")
+  Component(problem, "ProblemDetailsRenderer", "Exception renderer", "Renders 419 and 401 as RFC 9457")
+  ComponentDb(cache, "Cache and queue", "Redis", "Session payloads")
+}
+Rel(auth, xsrf, "Sends requests through")
+Rel(xsrf, recover, "Passes to")
+Rel(recover, expired, "Passes to")
+Rel(expired, start, "POST /api/v1/...", "JSON/HTTPS")
+Rel(start, cache, "Reads and writes", "RESP")
+Rel(start, csrf, "Passes to")
+Rel(csrf, absolute, "Passes to")
+Rel(absolute, signin, "Routes sign-in to")
+Rel(csrf, problem, "Throws TokenMismatchException to")
+Rel(absolute, problem, "Returns 401 through")
+@enduml

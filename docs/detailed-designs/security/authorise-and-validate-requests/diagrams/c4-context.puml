@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Authorise and validate requests
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(ci, "CI pipeline", "Runs the acceptance suite and lint rules; vendor <TO SUPPLY>")
+
+Rel(booker, zamaro, "Sends messages and manages own bookings using", "HTTPS")
+Rel(artist, zamaro, "Answers requests and manages own profile using", "HTTPS")
+Rel(admin, zamaro, "Supports bookings through /admin using", "HTTPS")
+Rel(ci, zamaro, "Runs cross-user tests, SQL and sanitisation lint against", "Build")
+@enduml

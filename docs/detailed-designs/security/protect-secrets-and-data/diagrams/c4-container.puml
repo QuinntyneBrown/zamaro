@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Protect secrets and data
+
+Person(booker, "Booker", "Signed-in church representative")
+System_Ext(secrets, "Secrets manager", "Vendor <TO SUPPLY>")
+System_Ext(errors, "Error tracking service", "Redacted exceptions")
+System_Ext(ci, "CI pipeline", "Scans before deploy")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular SSR on Node.js", "Church profile form; public config only")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Field encryption, log redaction, production safety check")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Same secrets, encryption and redaction")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16, AES-256 at rest", "Encrypted fields as ciphertext")
+  ContainerDb(storage, "Object storage", "S3-compatible, AES-256 at rest", "Encrypted VSC documents")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "PUT /api/v1/account/church", "JSON/HTTPS")
+Rel(secrets, api, "Injects secrets at container start", "Platform integration")
+Rel(secrets, worker, "Injects secrets at container start", "Platform integration")
+Rel(api, db, "Writes ciphertext", "SQL/TLS")
+Rel(worker, storage, "Writes encrypted documents", "S3 API/TLS")
+Rel(api, errors, "Sends redacted exceptions", "HTTPS")
+Rel(ci, api, "Gates the release of")
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — Session ends at its idle or absolute limit
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingsPage" as page
+  participant "SessionExpiredInterceptor" as expired
+  participant "AuthService" as auth
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "StartSession" as start
+  participant "EnforceAbsoluteSessionLifetime" as absolute
+  participant "auth:sanctum" as guard
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SessionLifetimePolicy" as policy
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Open /bookings
+page -> expired : GET /api/v1/bookings
+expired -> start : With zamaro_session cookie
+start -> cache : Load session
+alt no request for 7 days
+  cache --> start : Key expired (lifetime 10080 min) (L2-073)
+  start -> absolute : New empty session
+  absolute -> guard : Not authenticated
+  guard --> expired : 401 problem details
+else session found
+  cache --> start : Payload with auth.started_at
+  start -> cache : Refresh 7-day expiry
+  start -> absolute : Session loaded
+  absolute -> policy : isExpired(auth.started_at, now)
+  alt open 30 days or more
+    policy --> absolute : true (L2-073)
+    absolute -> cache : Log out, invalidate session, regenerate token
+    absolute --> expired : 401 problem details
+  else within limits
+    policy --> absolute : false
+    absolute -> guard : Continue
+    guard --> page : 200 bookings
+  end
+end
+opt 401 received
+  expired -> auth : clear()
+  expired --> page : Navigate to sign-in with returnUrl
+  page --> actor : Sign-in page with expiry toast (copy <TO SUPPLY>)
+end
+@enduml

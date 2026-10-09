@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Store a sensitive field
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ChurchProfileFormComponent" as form
+  participant "AccountApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "LogRequest" as logreq
+  participant "ChurchController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UpdateChurch" as action
+  participant "EncryptedField" as cast
+  participant "FieldEncrypter" as enc
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "RedactSensitiveData" as redact
+  database "Zamaro database" as db
+  participant "Log storage" as logs
+end box
+
+actor -> form : Enter contact phone and save
+form -> client : updateChurch(form)
+client -> logreq : PUT /api/v1/account/church
+logreq -> controller : Proceed
+controller -> controller : Validate UpdateChurchRequest (L2-024)
+controller -> action : handle(booker, data)
+action -> cast : Set phone
+cast -> enc : encrypt(phone)
+enc -> enc : AES-256-GCM with field key from secrets manager (L2-079)
+enc --> cast : "v1:..." ciphertext
+action -> db : UPDATE churches SET phone = ciphertext
+db -> db : Write to AES-256 encrypted volume (L2-079)
+db --> action : Saved
+action --> controller : Church
+controller -> cast : Read phone for response
+cast -> enc : decrypt
+enc --> cast : Phone
+controller --> client : 200 ChurchResource
+client --> form : Saved
+form --> actor : Church details saved
+logreq -> redact : Request line: id, method, route, status, duration, user ID
+redact -> redact : Replace passwords, tokens, session IDs, message bodies; keep last 4 of payment IDs (L2-079)
+redact -> logs : Structured JSON line with no phone or body
+@enduml

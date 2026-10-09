@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Enforce transport security and headers
+
+Person(guest, "Guest or booker", "Uses a browser")
+System_Ext(cdn, "CDN", "Hashed bundles and media with HSTS and nosniff")
+System_Ext(ci, "CI pipeline", "Header scan step")
+System_Boundary(zamaro, "Zamaro") {
+  Container(edge, "Edge load balancer", "Managed load balancer, vendor <TO SUPPLY>", "301 to HTTPS, TLS 1.2/1.3 termination, HSTS, path routing")
+  Container(web, "Zamaro Web", "Angular SSR on Node.js", "Server-renders pages with a per-request CSP nonce")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "JSON API under /api/v1 with SetSecurityHeaders")
+}
+Rel(guest, edge, "Requests pages and API", "HTTP 80 then HTTPS 443")
+Rel(guest, cdn, "Loads assets", "HTTPS")
+Rel(edge, web, "Forwards all other paths", "HTTP, private network")
+Rel(edge, api, "Forwards /api, /sanctum, /health", "HTTP, private network")
+Rel(web, edge, "Fetches API data while server-rendering", "HTTPS")
+Rel(ci, edge, "Probes headers and TLS versions", "HTTP/HTTPS")
+@enduml

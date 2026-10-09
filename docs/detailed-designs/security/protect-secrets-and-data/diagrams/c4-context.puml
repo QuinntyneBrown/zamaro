@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Protect secrets and data
+
+Person(booker, "Booker", "Saves church contact details")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(secrets, "Secrets manager", "Runtime secrets and field keys; vendor <TO SUPPLY>")
+System_Ext(errors, "Error tracking service", "Receives redacted exceptions")
+System_Ext(ci, "CI pipeline", "Secret scan, dependency audit, code scanning; vendor <TO SUPPLY>")
+
+Rel(booker, zamaro, "Saves church phone using", "HTTPS")
+Rel(zamaro, secrets, "Receives secrets at start-up from", "HTTPS")
+Rel(zamaro, errors, "Reports redacted exceptions to", "HTTPS")
+Rel(ci, zamaro, "Blocks releases with committed credentials or vulnerable dependencies of", "Build")
+@enduml

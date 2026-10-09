@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Daily booking request allowance
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingStubComponent" as stub
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+  participant "ProblemDetailsRenderer" as problem
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendBookingRequest" as send
+  participant "EnsureBookingRequestAllowance" as allow
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "AlertAdministratorsOfBookingFlood" as listener
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+  participant "Email delivery service" as email
+end box
+
+actor -> stub : Send booking request
+stub -> client : create(request)
+client -> controller : POST /api/v1/bookings
+controller -> send : handle(booker, data)
+send -> db : BEGIN, lock booker users row FOR UPDATE
+send -> allow : handle(booker)
+allow -> db : COUNT bookings WHERE booker_id AND created_at >= now - 24 h
+db --> allow : Count
+alt count >= 10 (L2-077)
+  allow -> cache : SET booking-flood-alerted:{bookerId} NX EX 86400
+  opt key newly set
+    allow -> listener : Dispatch BookingRequestLimitReached
+    listener -> email : BookingRequestFloodAlert to administrators (L2-077)
+  end
+  allow --> send : throw BookingRequestLimitReached
+  send -> db : ROLLBACK
+  send --> controller : Exception
+  controller -> problem : Render
+  problem --> client : 429, detail "You've sent a lot of requests today. Try again tomorrow.", Retry-After
+  client --> stub : Error with detail
+  stub --> actor : Message shown under the stub
+else count < 10
+  allow --> send : Allowed
+  send -> db : Insert Requested booking, COMMIT (L2-028)
+  send --> controller : Booking
+  controller --> client : 201 booking
+  client --> stub : Success
+  stub --> actor : "Request sent to {first name}"
+end
+@enduml

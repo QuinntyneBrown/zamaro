@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Redirect to HTTPS and render a page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Edge load balancer" as edge
+end box
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "server.ts" as server
+  participant "securityHeaders" as mw
+  participant "ArtistProfilePage (SSR)" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "TrustProxies" as proxies
+  participant "SetSecurityHeaders" as headers
+  participant "ArtistProfileController" as controller
+end box
+
+actor -> edge : GET http://{host}/artists/abigail-mensah
+edge --> actor : 301 Location https://{host}/artists/abigail-mensah (L2-070)
+actor -> edge : TLS handshake
+alt client offers only TLS 1.0 or 1.1
+  edge --> actor : Handshake refused (L2-070)
+else TLS 1.2 or 1.3
+  edge -> server : GET /artists/abigail-mensah, X-Forwarded-Proto https
+  server -> mw : Handle request
+  mw -> mw : Create 128-bit nonce, build CSP without unsafe-inline or unsafe-eval (L2-071)
+  mw -> page : Render with CSP_NONCE
+  page -> edge : GET /api/v1/artists/abigail-mensah
+  edge -> proxies : Forward with X-Forwarded-Proto https
+  proxies -> controller : Request marked secure
+  controller --> headers : JSON profile
+  headers -> headers : Add HSTS, CSP default-src 'none', nosniff, referrer, permissions (L2-070, L2-071)
+  headers --> edge : 200 JSON with header set
+  edge --> page : Profile data
+  page --> mw : HTML with nonce on Angular-created elements
+  mw --> server : Set CSP, nosniff, Referrer-Policy, Permissions-Policy
+  server --> edge : 200 HTML
+  edge -> edge : Add Strict-Transport-Security max-age=31536000; includeSubDomains (L2-070)
+  edge --> actor : 200 HTML with full security header set
+end
+@enduml

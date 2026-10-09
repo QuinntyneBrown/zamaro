@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Enforce transport security and headers
+
+Person(guest, "Guest or booker", "Uses a browser")
+Container(edge, "Edge load balancer", "Managed load balancer", "TLS policy, 301 rule, HSTS rule, path routing")
+Container_Boundary(web, "Zamaro Web") {
+  Component(server, "server.ts", "Express host (Angular SSR)", "Registers middleware before rendering")
+  Component(mw, "securityHeaders", "Express middleware", "Creates nonce, sets security header set")
+  Component(csp, "buildContentSecurityPolicy", "TypeScript function", "Builds the page CSP from one directive list")
+  Component(render, "Angular render handler", "CommonEngine with CSP_NONCE", "Renders the page with the nonce")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(proxies, "TrustProxies", "Laravel middleware", "Trusts edge X-Forwarded-Proto")
+  Component(headers, "SetSecurityHeaders", "Laravel middleware", "Adds HSTS, CSP default-src 'none', nosniff, referrer and permissions policies")
+  Component(config, "config/security.php", "Laravel config", "Header values")
+}
+Rel(guest, edge, "Requests", "HTTPS")
+Rel(edge, server, "Forwards page requests", "HTTP")
+Rel(edge, proxies, "Forwards API requests", "HTTP")
+Rel(server, mw, "Runs first")
+Rel(mw, csp, "Builds policy with nonce")
+Rel(server, render, "Renders with nonce")
+Rel(proxies, headers, "Passes request on")
+Rel(headers, config, "Reads values")
+@enduml

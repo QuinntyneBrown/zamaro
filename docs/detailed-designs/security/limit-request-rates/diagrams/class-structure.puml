@@ -1,0 +1,82 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Limit request rates
+
+package "Zamaro Web (Angular)" {
+  class RateLimitInterceptor <<HttpInterceptorFn>> {
+    +intercept(req: HttpRequest, next: HttpHandlerFn): Observable<HttpEvent>
+  }
+  class RateLimited <<error>> {
+    +retryAfterSeconds: number
+    +detail: string | null
+  }
+  class BotChallengeComponent {
+    +siteKey: InputSignal<string>
+    +action: InputSignal<string>
+    +tokenChange: OutputEmitterRef<string | null>
+    +reset(): void
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class RateLimitServiceProvider {
+    +boot(): void
+    -apiLimit(request: Request): Limit
+    -searchLimits(request: Request): Limit[]
+  }
+  class Limit <<Laravel>> {
+    +int maxAttempts
+    +int decaySeconds
+    +string key
+  }
+  class EnsureBookingRequestAllowance <<action>> {
+    +int maxPerDay = 10
+    +handle(booker: User): void
+  }
+  class BookingRequestLimitReached <<exception + event>> {
+    +User booker
+    +int retryAfterSeconds
+    +string detail
+  }
+  class AlertAdministratorsOfBookingFlood <<queued listener>> {
+    +handle(event: BookingRequestLimitReached): void
+  }
+  class BookingRequestFloodAlert <<notification>> {
+    +via(admin: User): array
+  }
+  class VerifyBotChallenge <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  interface BotChallengeVerifier {
+    +verify(token: string, ip: string, action: string): ChallengeResult
+  }
+  class ChallengeResult <<value object>> {
+    +bool passed
+    +?string errorCode
+  }
+  class SendBookingRequest <<action>> {
+    +handle(booker: User, data: BookingRequestData): Booking
+  }
+}
+
+RateLimitInterceptor ..> RateLimited : emits
+RateLimitServiceProvider ..> Limit : defines
+SendBookingRequest --> EnsureBookingRequestAllowance
+EnsureBookingRequestAllowance ..> BookingRequestLimitReached : throws and dispatches
+AlertAdministratorsOfBookingFlood ..> BookingRequestLimitReached : handles
+AlertAdministratorsOfBookingFlood ..> BookingRequestFloodAlert : sends
+VerifyBotChallenge --> BotChallengeVerifier
+BotChallengeVerifier ..> ChallengeResult : returns
+BotChallengeComponent ..> VerifyBotChallenge : challengeToken
+@enduml

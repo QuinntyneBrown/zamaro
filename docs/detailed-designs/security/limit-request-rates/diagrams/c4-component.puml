@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Limit request rates
+
+Container(web, "Zamaro Web", "Angular", "RateLimitInterceptor, BotChallengeComponent, BookingStubComponent")
+System_Ext(bot, "Bot challenge provider", "Vendor <TO SUPPLY>")
+Container_Boundary(api, "Zamaro API") {
+  Component(proxies, "TrustProxies", "Laravel middleware", "Client IP from X-Forwarded-For")
+  Component(throttle, "ThrottleRequestsWithRedis", "Laravel middleware", "Applies api and search limiters")
+  Component(limits, "RateLimitServiceProvider", "Service provider", "api: 120/min per IP; search: 30/min per IP and per account")
+  Component(challenge, "VerifyBotChallenge", "Laravel middleware", "Register, forgot-password, artist-applications")
+  Component(verifier, "BotChallengeVerifier", "Interface + adapter", "Checks token with provider")
+  Component(send, "SendBookingRequest", "Action", "Creates a Requested booking")
+  Component(allow, "EnsureBookingRequestAllowance", "Action", "10 per booker per rolling 24 hours")
+  Component(listener, "AlertAdministratorsOfBookingFlood", "Queued listener", "One alert per booker per day")
+  Component(problem, "ProblemDetailsRenderer", "Exception renderer", "429 with Retry-After")
+  ComponentDb(cache, "Cache and queue", "Redis", "Counters and dedupe keys")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings")
+}
+Rel(web, proxies, "Requests", "JSON/HTTPS")
+Rel(proxies, throttle, "Passes to")
+Rel(throttle, limits, "Resolves limiter")
+Rel(throttle, cache, "Increments", "RESP")
+Rel(proxies, challenge, "Form routes pass to")
+Rel(challenge, verifier, "Verifies with")
+Rel(verifier, bot, "Calls", "HTTPS/JSON")
+Rel(send, allow, "Checks first")
+Rel(allow, db, "Counts last 24 hours", "SQL")
+Rel(allow, listener, "Raises BookingRequestLimitReached")
+Rel(throttle, problem, "Refuses through")
+Rel(allow, problem, "Refuses through")
+@enduml

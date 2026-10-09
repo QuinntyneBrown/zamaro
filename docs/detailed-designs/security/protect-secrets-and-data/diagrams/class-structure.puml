@@ -1,0 +1,91 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Protect secrets and data
+
+package "Zamaro Web (Angular)" {
+  class ChurchProfileFormComponent {
+    +form: FormGroup<ChurchForm>
+    +save(): void
+  }
+  class AccountApi {
+    +updateChurch(church: ChurchForm): Observable<ChurchDto>
+  }
+  class ErrorTrackingService {
+    +capture(error: unknown): void
+    -beforeSend(event: ErrorEvent): ErrorEvent
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ProductionSafetyServiceProvider {
+    +boot(): void
+  }
+  class UnsafeProductionConfiguration <<exception>> {
+    +string reason
+  }
+  class FieldEncrypter {
+    -string currentVersion
+    -map<string, Encrypter> encrypters
+    +encrypt(plain: string): string
+    +decrypt(cipher: string): string
+    +encryptStream(input: resource): resource
+    +decryptStream(input: resource): resource
+  }
+  class EncryptedField <<Eloquent cast>> {
+    +get(model: Model, key: string, value: ?string, attributes: array): ?string
+    +set(model: Model, key: string, value: ?string, attributes: array): ?string
+  }
+  class Church <<Eloquent>> {
+    +int id
+    +int bookerId
+    +string name
+    +string address
+    +float latitude
+    +float longitude
+    +string phone <<encrypted>>
+    +?string denomination
+    +?int typicalAttendance
+  }
+  class ApplicationReference <<Eloquent>> {
+    +int id
+    +int applicationId
+    +string name
+    +string church
+    +?string phone <<encrypted>>
+    +?string email <<encrypted>>
+  }
+  class UpdateChurch <<action>> {
+    +handle(booker: User, data: array): Church
+  }
+  class LogRequest <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+    +terminate(request: Request, response: Response): void
+  }
+  class RedactSensitiveData <<Monolog processor>> {
+    +string[] redactedKeys
+    +string[] lastFourKeys
+    +__invoke(record: LogRecord): LogRecord
+  }
+}
+
+ChurchProfileFormComponent --> AccountApi
+AccountApi ..> UpdateChurch : PUT /api/v1/account/church
+ErrorTrackingService ..> RedactSensitiveData : same key list
+ProductionSafetyServiceProvider ..> UnsafeProductionConfiguration : throws
+UpdateChurch ..> Church : saves
+Church ..> EncryptedField : casts phone
+ApplicationReference ..> EncryptedField : casts phone, email
+EncryptedField --> FieldEncrypter
+LogRequest ..> RedactSensitiveData : records pass through
+@enduml

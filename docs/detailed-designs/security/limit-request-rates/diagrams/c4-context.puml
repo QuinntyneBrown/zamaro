@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Limit request rates
+
+Person(guest, "Guest", "Searches and registers")
+Person(booker, "Booker", "Searches and sends booking requests")
+Person(applicant, "Artist applicant", "Submits an artist application")
+Person(admin, "Administrator", "Receives flood alerts")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(bot, "Bot challenge provider", "Privacy-respecting challenge; vendor <TO SUPPLY>")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(guest, zamaro, "Searches and registers using", "HTTPS, 120 req/min per IP")
+Rel(booker, zamaro, "Searches and requests bookings using", "HTTPS")
+Rel(applicant, zamaro, "Applies using", "HTTPS")
+Rel(guest, bot, "Solves challenge in widget from", "HTTPS")
+Rel(zamaro, bot, "Verifies challenge tokens with", "HTTPS/JSON")
+Rel(zamaro, email, "Sends flood alerts through", "HTTPS")
+Rel(email, admin, "Delivers alert to")
+@enduml

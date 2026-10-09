@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Sign in and change state
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AuthService" as auth
+  participant "XSRF interceptor" as xsrf
+  participant "CsrfRecoveryInterceptor" as recover
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "StartSession" as start
+  participant "ValidateCsrfToken" as csrf
+  participant "SignInController" as signin
+  participant "SavedArtistsController" as saved
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AuthenticateUser" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as cache
+end box
+
+auth -> start : GET /sanctum/csrf-cookie
+start -> cache : Create guest session
+start --> auth : Set-Cookie zamaro_session (HttpOnly, Secure, SameSite=Lax) and XSRF-TOKEN (L2-073)
+actor -> auth : Submit email and password
+auth -> xsrf : POST /api/v1/auth/sign-in
+xsrf -> start : With X-XSRF-TOKEN header
+start -> csrf : Session loaded
+csrf -> signin : Token matches
+signin -> action : handle(SignInRequest)
+action -> action : Verify credentials (L2-023)
+action -> cache : session()->regenerate() and regenerateToken(), store auth.started_at (L2-073)
+action --> signin : User
+signin --> auth : 200 user, new zamaro_session and XSRF-TOKEN cookies
+actor -> auth : Save an artist
+auth -> xsrf : POST /api/v1/saved-artists
+alt X-XSRF-TOKEN matches session token
+  xsrf -> start : With header
+  start -> csrf : Session loaded
+  csrf -> saved : Proceed
+  saved --> auth : 201 saved
+else token missing or stale
+  xsrf -> start : Without valid header
+  start -> csrf : Session loaded
+  csrf --> recover : 419 problem details, controller not reached, nothing changes (L2-073)
+  recover -> start : GET /sanctum/csrf-cookie
+  start --> recover : Fresh XSRF-TOKEN
+  recover -> csrf : Retry POST once with new header
+  csrf -> saved : Proceed
+  saved --> auth : 201 saved
+end
+auth --> actor : Save toggle shows saved
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Authorise a request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingMessagesApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "auth:sanctum" as auth
+  participant "EnsureUserHasRole" as role
+  participant "BookingMessagesController" as controller
+  participant "ProblemDetailsRenderer" as problem
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BookingPolicy" as policy
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+alt artist-only or admin-only endpoint
+  actor -> client : Call /api/v1/artist/... or /api/v1/admin/...
+  client -> auth : Request with session
+  auth -> role : User is a booker
+  role -> problem : abort(404) (L2-074)
+  problem --> client : 404 problem details
+else booking thread
+  actor -> page : Open /bookings/{number}
+  page -> client : list(number)
+  client -> auth : GET /api/v1/bookings/{number}/messages
+  auth -> controller : Authenticated user
+  controller -> db : Resolve booking by number (bound parameter)
+  db --> controller : Booking or none
+  alt booking not found
+    controller -> problem : ModelNotFoundException
+    problem --> client : 404 problem details
+  else booking found
+    controller -> policy : participate(user, booking)
+    alt user is neither booker nor artist on the booking
+      policy --> controller : denyAsNotFound() (L2-074)
+      controller -> problem : AuthorizationException as 404
+      problem --> client : Same 404 body, no booking data
+    else participant
+      policy --> controller : allow
+      controller -> db : Load messages
+      db --> controller : Messages
+      controller --> client : 200 MessageResource collection
+    end
+  end
+end
+client --> page : Thread or not-found state
+page --> actor : Show thread or "not found" page
+@enduml
