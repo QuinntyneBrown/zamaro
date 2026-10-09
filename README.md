@@ -40,7 +40,7 @@ Implementation starts from these artifacts, one thin vertical slice at a time.
 | HTML mocks for every page, dialog and state | [`docs/mocks/`](docs/mocks/README.md) | Draft complete |
 | Design system (tokens, components, patterns) | [`docs/design-system/`](docs/design-system/README.md) | Draft complete |
 | Laravel API, worker and scheduler | `backend/` (planned) | Not started |
-| Angular web app | `frontend/` (planned) | Not started |
+| Angular web app | [`frontend/`](frontend/README.md) | Scaffolded: empty workspace with lint, format and pre-commit hook |
 | Playwright end-to-end suite | `e2e/` (planned) | Not started |
 
 APIs, folder names and behaviour can change without notice until the first release.
