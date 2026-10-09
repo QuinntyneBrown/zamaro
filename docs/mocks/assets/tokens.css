@@ -205,6 +205,11 @@
   --layout-measure: 58ch;
   --layout-sidebar-width: 22rem;     /* booking stub on the artist page */
   --layout-topbar-height: 4.25rem;
+  --layout-dialog-width: 32rem;
+  --layout-drawer-width: 20rem;      /* navigation drawer under 64rem */
+  --layout-menu-width: 16rem;        /* account menu popover */
+  --layout-auth-width: 28rem;        /* sign-in / sign-up stub */
+  --layout-calendar-cell: 2.75rem;   /* min-height of an availability day */
 
   /* ---------- Semantic: shape (square, printed) ------------------------- */
   --radius-xs: 0;
