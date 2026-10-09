@@ -1,9 +1,0 @@
-"""Build the collection entry point. Preview images are captured by verify.py."""
-from build import ROOT, CONCEPTS
-
-tiles=[]
-for index,c in enumerate(CONCEPTS,1):
-    slug,name,title,lead,kicker,style,motion=c
-    tiles.append(f'''<article class="concept-tile"><img src="assets/previews/{slug}.jpg" alt="{name} Discover page preview" loading="lazy"><div class="concept-description"><span class="eyebrow">{index:02d} / {style}</span><h2>{name}</h2><p>{motion}</p><div class="concept-links"><a href="{slug}/pages/discover/default.html">Discover ↗</a><a href="{slug}/pages/artist/default.html">Artist profile ↗</a><a href="{slug}/index.html">All 8 states</a></div></div></article>''')
-html='''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ten ways to gather — Zamaro concepts</title><link rel="stylesheet" href="assets/tokens.css"><link rel="stylesheet" href="assets/ui.css"></head><body><a class="skip-link" href="#main">Skip to content</a><header class="topbar shell"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">✳</span> zamaro</a><div class="actions"><button class="plain" data-theme-toggle>◐ Theme</button></div></header><main id="main" class="shell"><section class="gallery-intro"><span class="eyebrow">Concept studies / October 2026</span><h1>Ten ways<br>to <em>gather.</em></h1><p>One purpose. Ten different feelings. Explore two pages in each direction, with room to breathe and a little room to play.</p><p>10 concepts · 2 pages each · 4 states · light & dark</p></section><section class="gallery-grid" aria-label="Visual concepts">'''+''.join(tiles)+'''</section></main><script src="assets/mock.js"></script></body></html>'''
-(ROOT/'index.html').write_text(html,encoding='utf-8')

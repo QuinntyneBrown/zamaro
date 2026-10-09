@@ -1,16 +1,406 @@
+/* ==========================================================================
+   Design tokens for the Zamaro "gig poster" style.
+
+   Charcoal ink on warm newsprint, one butter-yellow accent, condensed
+   grotesque display type, square corners and hard offset shadows like a
+   screen-printed tour poster. Contrast is deliberately softened from pure
+   black on white: body text sits around 11:1, muted text around 6:1 and
+   subtle text at or above 4.5:1 on every surface it is used on. Every pair
+   still clears WCAG 2.2 AA.
+
+   Tiers: primitives (--palette-*, --font-*) -> semantic (--color-*, --text-*,
+   --space-*, ...) -> components in ui.css. Components only use semantic tokens.
+
+   Themes: light ("newsprint") is :root. Dark ("stage") applies with
+   [data-theme="dark"] or when the OS prefers dark and the page has not forced
+   [data-theme="light"].
+
+   Accent rule: yellow is a FILL colour. Text on it is always ink.
+   On the light canvas yellow is never used as a text colour (contrast 1.4:1);
+   on the dark canvas it is (contrast 10:1).
+   ========================================================================== */
+
 :root {
+  /* ---------- Primitives: colour --------------------------------------- */
+  --palette-ink: #34322e;          /* text and rules: warm charcoal, 11:1 on paper */
+  --palette-ink-950: #141413;      /* dark stage */
+  --palette-ink-900: #1b1b19;      /* dark canvas */
+  --palette-ink-850: #232320;      /* dark surface, light stage */
+  --palette-ink-800: #2d2d2a;      /* dark raised surface */
+  --palette-ink-700: #3f3d38;
+  --palette-ink-600: #5a5853;      /* muted text on light, 6:1 */
+  --palette-ink-500: #67655f;      /* subtle text on light, 4.9:1 on the warmest surface */
+  --palette-ink-400: #97948d;      /* subtle text on dark, 4.6:1 on the lightest surface */
+  --palette-ink-300: #b5b2aa;      /* muted text on dark, 7:1 */
+  --palette-ink-200: #d9d6cd;
+  --palette-ink-100: #e9e6de;      /* default text on dark, 13:1 */
+  --palette-paper: #f4f2ec;
+  --palette-paper-bright: #faf9f4;
+  --palette-paper-warm: #efece4;
+
+  --palette-signal-300: #fae27f;
+  --palette-signal-400: #f7d65a;
+  --palette-signal-500: #f3cc3f;
+  --palette-signal-950: #2f2a12;
+
+  --palette-red-50: #fdeceb;
+  --palette-red-300: #ff8a7f;
+  --palette-red-600: #c8231b;
+  --palette-red-700: #a01a14;
+  --palette-red-950: #3a0f0c;
+
+  --palette-green-50: #e8f5ec;
+  --palette-green-300: #7fdc9c;
+  --palette-green-700: #1b6b3c;
+  --palette-green-950: #0b2918;
+
+  --palette-amber-50: #fff4dc;
+  --palette-amber-300: #f7c15c;
+  --palette-amber-700: #8a5300;
+  --palette-amber-950: #2e1d05;
+
+  /* ---------- Primitives: typography ----------------------------------- */
+  /* Condensed grotesque for display; all are local/system fonts so the mocks
+     open offline. Impact ships with Windows and macOS. */
+  --font-family-display: "Bebas Neue", "Anton", "Oswald", Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Narrow", sans-serif;
+  --font-family-sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", system-ui, sans-serif;
+  --font-family-mono: ui-monospace, "SFMono-Regular", Consolas, "Courier New", monospace;
+
+  --font-size-xs: 0.75rem;     /* 12px stub small print */
+  --font-size-sm: 0.875rem;    /* 14px meta */
+  --font-size-md: 1rem;        /* 16px body */
+  --font-size-lg: 1.125rem;    /* 18px lead */
+  --font-size-xl: 1.375rem;    /* 22px h4 (display) */
+  --font-size-2xl: 1.75rem;    /* 28px h3 (display) */
+  --font-size-3xl: 2.5rem;     /* 40px h2 (display) */
+  --font-size-4xl: clamp(3rem, 9vw, 5.5rem);      /* h1 */
+  --font-size-5xl: clamp(4rem, 15vw, 10rem);      /* tour-poster dates */
+  --font-size-6xl: clamp(4.5rem, 19vw, 13rem);    /* headliner names */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --line-height-poster: 0.86;
+  --line-height-tight: 0.95;
+  --line-height-snug: 1.2;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.75;
+
+  --letter-spacing-poster: -0.005em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.08em;
+  --letter-spacing-stamp: 0.18em;
+
+  /* ---------- Semantic: colour (light / newsprint) --------------------- */
+  --color-bg-canvas: var(--palette-paper);
+  --color-bg-surface: var(--palette-paper-bright);
+  --color-bg-surface-raised: var(--palette-paper-bright);
+  --color-bg-surface-sunken: var(--palette-paper-warm);
+  --color-bg-subtle: var(--palette-ink-100);
+  --color-bg-subtle-hover: var(--palette-ink-200);
+  --color-bg-inverse: var(--palette-ink);
+  --color-bg-backdrop: rgb(20 20 19 / 0.65);
+  --color-bg-stage: var(--palette-ink-850);      /* topbar, poster blocks: charcoal in both themes */
+  --color-fg-on-stage: var(--palette-ink-100);
+  --color-fg-on-stage-muted: var(--palette-ink-300);
+
+  --color-fg-default: var(--palette-ink);
+  --color-fg-muted: var(--palette-ink-600);
+  --color-fg-subtle: var(--palette-ink-500);
+  --color-fg-disabled: var(--palette-ink-400);
+  --color-fg-inverse: var(--palette-paper);
+  --color-fg-link: var(--palette-ink);
+  --color-fg-link-hover: var(--palette-ink);
+
+  --color-border-default: var(--palette-ink-200);
+  --color-border-strong: var(--palette-ink-700); /* poster rules, control edges: 9:1, softer than text */
+  --color-border-inverse: var(--palette-ink-300);
+
+  --color-accent: var(--palette-signal-500);     /* fill: primary buttons, highlights */
+  --color-accent-hover: var(--palette-signal-300);
+  --color-accent-active: var(--palette-signal-400);
+  --color-accent-subtle: var(--palette-signal-300);
+  --color-accent-subtle-hover: var(--palette-signal-500);
+  --color-fg-on-accent: var(--palette-ink);
+  --color-fg-accent: var(--palette-ink);         /* "accent" text on canvas: ink (yellow is fill-only in light) */
+  --color-accent-on-stage: var(--palette-signal-500); /* yellow text on the charcoal stage */
+
+  --color-focus-ring: var(--palette-ink);
+  --color-focus-ring-offset: var(--palette-signal-500);
+
+  --color-info-bg: var(--palette-paper-warm);
+  --color-info-fg: var(--palette-ink);
+  --color-info-border: var(--palette-ink-700);
+  --color-info-icon: var(--palette-ink);
+  --color-info-solid: var(--palette-ink);
+
+  --color-success-bg: var(--palette-green-50);
+  --color-success-fg: var(--palette-green-700);
+  --color-success-border: var(--palette-green-700);
+  --color-success-icon: var(--palette-green-700);
+  --color-success-solid: var(--palette-green-700);
+
+  --color-warning-bg: var(--palette-amber-50);
+  --color-warning-fg: var(--palette-amber-700);
+  --color-warning-border: var(--palette-amber-300);
+  --color-warning-icon: var(--palette-amber-700);
+  --color-warning-solid: var(--palette-amber-700);
+
+  --color-danger-bg: var(--palette-red-50);
+  --color-danger-fg: var(--palette-red-700);
+  --color-danger-border: var(--palette-red-600);
+  --color-danger-icon: var(--palette-red-600);
+  --color-danger-solid: var(--palette-red-600);
+  --color-danger-solid-hover: var(--palette-red-700);
+  --color-fg-on-danger: var(--palette-paper-bright);
+
+  /* halftone placeholder dots: a mid grey so artwork reads as texture, not noise */
+  --color-halftone-ink: var(--palette-ink-500);
+  --color-halftone-paper: var(--palette-paper-bright);
+
+  /* ---------- Semantic: typography roles ------------------------------- */
+  --text-poster: var(--font-weight-regular) var(--font-size-6xl) / var(--line-height-poster) var(--font-family-display);
+  --text-display: var(--font-weight-regular) var(--font-size-5xl) / var(--line-height-poster) var(--font-family-display);
+  --text-h1: var(--font-weight-regular) var(--font-size-4xl) / var(--line-height-tight) var(--font-family-display);
+  --text-h2: var(--font-weight-regular) var(--font-size-3xl) / var(--line-height-tight) var(--font-family-display);
+  --text-h3: var(--font-weight-regular) var(--font-size-2xl) / var(--line-height-snug) var(--font-family-display);
+  --text-h4: var(--font-weight-regular) var(--font-size-xl) / var(--line-height-snug) var(--font-family-display);
+  --text-body-lg: var(--font-weight-regular) var(--font-size-lg) / var(--line-height-relaxed) var(--font-family-sans);
+  --text-body: var(--font-weight-regular) var(--font-size-md) / var(--line-height-normal) var(--font-family-sans);
+  --text-body-sm: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-family-sans);
+  --text-caption: var(--font-weight-regular) var(--font-size-xs) / var(--line-height-normal) var(--font-family-sans);
+  --text-label: var(--font-weight-bold) var(--font-size-sm) / var(--line-height-normal) var(--font-family-sans);
+  --text-overline: var(--font-weight-medium) var(--font-size-xs) / var(--line-height-normal) var(--font-family-mono);
+  --text-stub: var(--font-weight-medium) var(--font-size-sm) / var(--line-height-snug) var(--font-family-mono);
+  --text-code: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-family-mono);
+
+  /* ---------- Semantic: spacing (4px base) ----------------------------- */
+  --space-0: 0;
+  --space-0-5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ---------- Semantic: layout ----------------------------------------- */
+  --layout-breakpoint-sm: 40rem;
+  --layout-breakpoint-md: 48rem;
+  --layout-breakpoint-lg: 64rem;
+  --layout-breakpoint-xl: 80rem;
+  --layout-columns: 4;
+  --layout-gutter: var(--space-4);
+  --layout-margin: var(--space-5);
+  --layout-container-max: 76rem;
+  --layout-measure: 58ch;
+  --layout-sidebar-width: 22rem;     /* booking stub on the artist page */
+  --layout-topbar-height: 4.25rem;
+
+  /* ---------- Semantic: shape (square, printed) ------------------------- */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-full: 9999px;           /* only for avatars and the round save button */
+
+  --border-width-hairline: 1px;
+  --border-width-thick: 2px;
+  --border-width-poster: 4px;
+
+  /* ---------- Semantic: elevation (hard offset print shadows) ---------- */
+  --shadow-color: var(--palette-ink-700);
+  --offset-1: 3px;   /* print-misregistration offsets for hard shadows and lifts */
+  --offset-2: 5px;
+  --offset-3: 8px;
+  --offset-4: 12px;
+  --shadow-1: var(--offset-1) var(--offset-1) 0 var(--shadow-color);
+  --shadow-2: var(--offset-2) var(--offset-2) 0 var(--shadow-color);
+  --shadow-3: var(--offset-3) var(--offset-3) 0 var(--shadow-color);
+  --shadow-4: var(--offset-4) var(--offset-4) 0 var(--shadow-color);
+  --lift: translate(calc(var(--offset-1) * -1), calc(var(--offset-1) * -1));
+  --shadow-focus: 0 0 0 3px var(--color-focus-ring-offset), 0 0 0 6px var(--color-focus-ring);
+
+  /* ---------- Semantic: motion ----------------------------------------- */
+  --duration-instant: 0ms;
+  --duration-fast: 90ms;
+  --duration-base: 160ms;
+  --duration-slow: 260ms;
+  --duration-deliberate: 900ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+  --ease-snap: cubic-bezier(0.5, 1.8, 0.4, 0.8);
+
+  /* ---------- Semantic: z-order ---------------------------------------- */
+  --z-base: 0;
+  --z-raised: 1;
+  --z-sticky: 100;
+  --z-dropdown: 1000;
+  --z-overlay: 1200;
+  --z-modal: 1300;
+  --z-popover: 1400;
+  --z-toast: 1500;
+  --z-tooltip: 1600;
+
+  /* ---------- Semantic: interaction ------------------------------------ */
+  --target-min: 1.5rem;
+  --target-comfortable: 2.75rem;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+  --control-height-sm: 2.25rem;
+  --control-height-md: 2.75rem;
+  --control-height-lg: 3.5rem;
+
   color-scheme: light;
-  --bg:#fcfbf7; --surface:#ffffff; --ink:#26251f; --muted:#646158; --line:#dcd8ce;
-  --accent:#76551c; --tint:#f1e8d2; --on-accent:#fff; --photo-ink:#fff; --photo-shade:#121515;
-  --font:Arial, Helvetica, sans-serif; --display:Georgia, 'Times New Roman', serif;
-  --s0:0; --s1:.25rem; --s2:.5rem; --s3:.75rem; --s4:1rem; --s5:1.5rem; --s6:2rem; --s7:3rem; --s8:4rem; --s9:6rem; --s10:8rem;
-  --small:.75rem; --label:.875rem; --body:1rem; --lead:1.15rem; --subhead:1.8rem; --title:clamp(3.4rem,6.7vw,6.6rem); --profile-title:clamp(3rem,5.7vw,5.4rem);
-  --weight:400; --tracking:-.065em; --caps:.15em; --leading:.99; --copy-leading:1.6;
-  --radius:1.3rem; --pill:100rem; --rule:1px; --focus:3px; --target:2.75rem;
-  --page:1440px; --gutter:clamp(1.25rem,5vw,5rem); --hero-height:31rem; --image-height:20rem; --card-min:15rem;
-  --duration-fast:120ms; --duration-reveal:200ms; --duration-slide:320ms; --duration-ambient:8s;
-  --shadow:0 1rem 4rem #29231412; --overlay:linear-gradient(0deg,#121515d9,transparent 65%);
-  --ease:cubic-bezier(.2,.8,.2,1); --gpu-r:.8; --gpu-g:.58; --gpu-b:.3;
 }
-[data-theme=dark]{color-scheme:dark;--bg:#191a1b;--surface:#232527;--ink:#f5f2eb;--muted:#bdbbb3;--line:#424448;--accent:#e4c486;--tint:#353026;--on-accent:#181815;--shadow:0 1rem 4rem #0004}
-@media(prefers-reduced-motion:reduce){:root{--duration-fast:0ms;--duration-reveal:0ms;--duration-slide:0ms;--duration-ambient:0ms}}
+
+@media (min-width: 48rem) {
+  :root { --layout-columns: 8; --layout-gutter: var(--space-6); --layout-margin: var(--space-10); }
+}
+@media (min-width: 64rem) {
+  :root { --layout-columns: 12; --layout-gutter: var(--space-8); --layout-margin: var(--space-16); }
+}
+
+/* ---------- Dark theme ("stage") ----------------------------------------- */
+[data-theme="dark"] {
+  --color-bg-canvas: var(--palette-ink-900);
+  --color-bg-surface: var(--palette-ink-850);
+  --color-bg-surface-raised: var(--palette-ink-800);
+  --color-bg-surface-sunken: var(--palette-ink-950);
+  --color-bg-subtle: var(--palette-ink-700);
+  --color-bg-subtle-hover: var(--palette-ink-600);
+  --color-bg-inverse: var(--palette-ink-100);
+  --color-bg-backdrop: rgb(0 0 0 / 0.7);
+  --color-bg-stage: var(--palette-ink-950);
+  --color-fg-on-stage: var(--palette-ink-100);
+  --color-fg-on-stage-muted: var(--palette-ink-300);
+  --color-fg-default: var(--palette-ink-100);
+  --color-fg-muted: var(--palette-ink-300);
+  --color-fg-subtle: var(--palette-ink-400);
+  --color-fg-disabled: var(--palette-ink-600);
+  --color-fg-inverse: var(--palette-ink);
+  --color-fg-link: var(--palette-ink-100);
+  --color-fg-link-hover: var(--palette-signal-500);
+  --color-border-default: var(--palette-ink-700);
+  --color-border-strong: var(--palette-ink-300);
+  --color-border-inverse: var(--palette-ink-600);
+  --color-accent: var(--palette-signal-500);
+  --color-accent-hover: var(--palette-signal-300);
+  --color-accent-active: var(--palette-signal-400);
+  --color-accent-subtle: var(--palette-signal-950);
+  --color-accent-subtle-hover: var(--palette-ink-700);
+  --color-fg-on-accent: var(--palette-ink);
+  --color-fg-accent: var(--palette-signal-500);
+  --color-accent-on-stage: var(--palette-signal-500);
+  --color-focus-ring: var(--palette-signal-500);
+  --color-focus-ring-offset: var(--palette-ink-900);
+  --color-info-bg: var(--palette-ink-800);
+  --color-info-fg: var(--palette-ink-100);
+  --color-info-border: var(--palette-ink-300);
+  --color-info-icon: var(--palette-signal-500);
+  --color-info-solid: var(--palette-ink-100);
+  --color-success-bg: var(--palette-green-950);
+  --color-success-fg: var(--palette-green-300);
+  --color-success-border: var(--palette-green-300);
+  --color-success-icon: var(--palette-green-300);
+  --color-success-solid: var(--palette-green-300);
+  --color-warning-bg: var(--palette-amber-950);
+  --color-warning-fg: var(--palette-amber-300);
+  --color-warning-border: var(--palette-amber-700);
+  --color-warning-icon: var(--palette-amber-300);
+  --color-warning-solid: var(--palette-amber-300);
+  --color-danger-bg: var(--palette-red-950);
+  --color-danger-fg: var(--palette-red-300);
+  --color-danger-border: var(--palette-red-300);
+  --color-danger-icon: var(--palette-red-300);
+  --color-danger-solid: var(--palette-red-300);
+  --color-danger-solid-hover: var(--palette-red-50);
+  --color-fg-on-danger: var(--palette-ink);
+  --color-halftone-ink: var(--palette-ink-400);
+  --color-halftone-paper: var(--palette-ink-800);
+  --shadow-color: var(--palette-signal-500);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg-canvas: var(--palette-ink-900);
+    --color-bg-surface: var(--palette-ink-850);
+    --color-bg-surface-raised: var(--palette-ink-800);
+    --color-bg-surface-sunken: var(--palette-ink-950);
+    --color-bg-subtle: var(--palette-ink-700);
+    --color-bg-subtle-hover: var(--palette-ink-600);
+    --color-bg-inverse: var(--palette-ink-100);
+    --color-bg-backdrop: rgb(0 0 0 / 0.7);
+    --color-bg-stage: var(--palette-ink-950);
+    --color-fg-on-stage: var(--palette-ink-100);
+    --color-fg-on-stage-muted: var(--palette-ink-300);
+    --color-fg-default: var(--palette-ink-100);
+    --color-fg-muted: var(--palette-ink-300);
+    --color-fg-subtle: var(--palette-ink-400);
+    --color-fg-disabled: var(--palette-ink-600);
+    --color-fg-inverse: var(--palette-ink);
+    --color-fg-link: var(--palette-ink-100);
+    --color-fg-link-hover: var(--palette-signal-500);
+    --color-border-default: var(--palette-ink-700);
+    --color-border-strong: var(--palette-ink-300);
+    --color-border-inverse: var(--palette-ink-600);
+    --color-accent: var(--palette-signal-500);
+    --color-accent-hover: var(--palette-signal-300);
+    --color-accent-active: var(--palette-signal-400);
+    --color-accent-subtle: var(--palette-signal-950);
+    --color-accent-subtle-hover: var(--palette-ink-700);
+    --color-fg-on-accent: var(--palette-ink);
+    --color-fg-accent: var(--palette-signal-500);
+    --color-accent-on-stage: var(--palette-signal-500);
+    --color-focus-ring: var(--palette-signal-500);
+    --color-focus-ring-offset: var(--palette-ink-900);
+    --color-info-bg: var(--palette-ink-800);
+    --color-info-fg: var(--palette-ink-100);
+    --color-info-border: var(--palette-ink-300);
+    --color-info-icon: var(--palette-signal-500);
+    --color-info-solid: var(--palette-ink-100);
+    --color-success-bg: var(--palette-green-950);
+    --color-success-fg: var(--palette-green-300);
+    --color-success-border: var(--palette-green-300);
+    --color-success-icon: var(--palette-green-300);
+    --color-success-solid: var(--palette-green-300);
+    --color-warning-bg: var(--palette-amber-950);
+    --color-warning-fg: var(--palette-amber-300);
+    --color-warning-border: var(--palette-amber-700);
+    --color-warning-icon: var(--palette-amber-300);
+    --color-warning-solid: var(--palette-amber-300);
+    --color-danger-bg: var(--palette-red-950);
+    --color-danger-fg: var(--palette-red-300);
+    --color-danger-border: var(--palette-red-300);
+    --color-danger-icon: var(--palette-red-300);
+    --color-danger-solid: var(--palette-red-300);
+    --color-danger-solid-hover: var(--palette-red-50);
+    --color-fg-on-danger: var(--palette-ink);
+    --color-halftone-ink: var(--palette-ink-400);
+    --color-halftone-paper: var(--palette-ink-800);
+    --shadow-color: var(--palette-signal-500);
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration-fast: 0.01ms; --duration-base: 0.01ms; --duration-slow: 0.01ms; --duration-deliberate: 0.01ms; }
+}
+@media (prefers-contrast: more) {
+  :root { --color-border-default: var(--color-border-strong); --color-border-strong: var(--color-fg-default); --color-fg-muted: var(--color-fg-default); --color-fg-subtle: var(--color-fg-default); }
+}
+@media (forced-colors: active) {
+  :root { --color-focus-ring: Highlight; --color-border-default: CanvasText; --color-border-strong: CanvasText; }
+}
