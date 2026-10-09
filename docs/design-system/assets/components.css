@@ -1295,3 +1295,11 @@ button.banner__action { min-height: var(--target-min); padding: 0; border: 0; ba
 .device-list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: var(--space-3); border-bottom: var(--border-width-hairline) solid var(--color-border-default); }
 .device-list li > span:first-child { display: grid; gap: var(--space-0-5); font: var(--text-body-sm); }
 .device-list strong { font: var(--text-label); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide); }
+
+/* ---------- Slice D: artist ---------------------------------------------
+   aria-selected belongs on the gridcell (role="gridcell"), not on the day
+   button, so the selection ring is driven from the cell. */
+.calendar__cell[aria-selected="true"] .calendar__day { position: relative; box-shadow: var(--shadow-focus); z-index: var(--z-raised); }
+.calendar__cell[aria-selected="true"] .calendar__day[data-status="requested"] { box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-fg-on-accent), var(--shadow-focus); }
+/* Rows in a two-column definition list keep dt and dd together at the top. */
+.definition__row { align-content: start; }
