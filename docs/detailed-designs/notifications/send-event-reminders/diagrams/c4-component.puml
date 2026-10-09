@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Send event reminders
+
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(cmd, "SendEventRemindersCommand", "Scheduled command", "notifications:send-event-reminders, every 15 minutes")
+  Component(find, "FindDueReminders", "Query", "Confirmed bookings inside the 7-day or 1-day window")
+  Component(dispatch, "DispatchEventReminder", "Action", "Inserts ReminderDispatch once, queues notifications")
+  Component(notif, "EventReminderNotification", "Queued notification", "Category Reminders; re-checks status at send time")
+  Component(gate, "NotificationPreferenceGate", "Domain service", "Honours reminder opt-out")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, reminder_dispatches")
+}
+Rel(cmd, find, "Runs")
+Rel(find, db, "Reads", "SQL")
+Rel(cmd, dispatch, "Calls per due reminder")
+Rel(dispatch, db, "INSERT ... ON CONFLICT DO NOTHING", "SQL")
+Rel(dispatch, notif, "Queues to booker and artist")
+Rel(notif, gate, "Checks opt-out")
+Rel(notif, db, "Re-reads booking status", "SQL")
+Rel(notif, email, "Sends", "HTTPS/JSON")
+@enduml

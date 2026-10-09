@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Daily payment reconciliation
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminBookingSearchPage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ReconcilePaymentsCommand" as cmd
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "PaymentReconciler" as recon
+  participant "AlertAdministrators" as alert
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "PaymentGateway" as gateway
+  database "Zamaro database" as db
+end box
+
+cmd -> recon : reconcile(previous day, America/Toronto)
+recon -> gateway : listRecords(day start, day end)
+gateway --> recon : Charges, refunds and transfers with ids, amounts, statuses
+recon -> db : Payments, refunds and payouts for the same day
+db --> recon : Zamaro records
+recon -> recon : Match by processor id; compare amount and status
+recon -> db : Insert ReconciliationRun and ReconciliationMismatch rows
+opt any mismatch (L2-041)
+  recon -> alert : handle(PaymentMismatch, run, booking numbers)
+  alert -> db : Insert AdminAlert
+  alert --> actor : Email listing mismatched booking numbers
+  actor -> page : Search /admin/bookings by booking number (L2-068)
+  page --> actor : Status and payment history
+end
+@enduml

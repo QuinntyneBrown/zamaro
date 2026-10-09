@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Send event reminders
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "SendEventRemindersCommand" as cmd
+  participant "EventReminderNotification" as notif
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "FindDueReminders" as find
+  participant "DispatchEventReminder" as dispatch
+  participant "NotificationPreferenceGate" as gate
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+cmd -> find : due(now), every 15 minutes
+find -> db : Confirmed bookings with event start - 7 days <= now (no SevenDays dispatch)\nor event start - 1 day <= now (no OneDay dispatch), event not started (L2-064)
+db --> find : Due reminders, including any missed during downtime (L2-092)
+loop each due reminder
+  cmd -> dispatch : handle(booking, kind)
+  dispatch -> db : INSERT reminder_dispatches (booking, kind) ON CONFLICT DO NOTHING
+  alt already dispatched
+    db --> dispatch : 0 rows; no effect (L2-092)
+  else new
+    dispatch -> notif : Queue to booker and to artist
+  end
+end
+notif -> db : Re-read booking status
+alt booking no longer Confirmed (L2-064)
+  notif -> notif : shouldSend = false; no reminder
+else still Confirmed
+  notif -> gate : allows(user, Reminders) (L2-065)
+  alt reminders turned off
+    gate --> notif : false; Suppressed
+  else allowed
+    gate --> notif : true
+    notif -> email : Date, start time, address, contact details, thread link (L2-064)
+    email --> actor : Reminder email
+    actor -> page : Follow thread link to /bookings/{number}#messages
+  end
+end
+@enduml

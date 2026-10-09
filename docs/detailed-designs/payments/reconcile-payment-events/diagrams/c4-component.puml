@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Reconcile payment events
+
+System_Ext(processor, "Payment processor", "Signed webhooks and records")
+Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
+  Component(ctrl, "PaymentWebhookController", "Laravel controller", "POST /api/v1/webhooks/payments; no session, no CSRF")
+  Component(verify, "PaymentGateway::verifyWebhook", "Adapter method", "Checks signature and timestamp")
+  Component(sec, "SecurityEventLogger", "Support class", "Writes security events to the security log channel")
+  Component(record, "RecordProcessorEvent", "Action", "Inserts event once by processor event ID")
+  Component(job, "ProcessProcessorEvent", "Queued job", "Routes one event to its handler")
+  Component(router, "ProcessorEventRouter", "Domain service", "Maps event types to payment actions")
+  Component(keys, "IdempotencyKey", "Value object", "Key from booking and operation")
+  Component(cmd, "ReconcilePaymentsCommand", "Scheduled command", "payments:reconcile, daily")
+  Component(recon, "PaymentReconciler", "Domain service", "Compares processor and Zamaro records")
+  Component(alert, "AlertAdministrators", "Action", "AdminAlert with booking numbers")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "processor_events, payments, refunds, payouts, reconciliation_runs")
+}
+Rel(processor, ctrl, "POSTs event", "HTTPS")
+Rel(ctrl, verify, "Verifies with")
+Rel(ctrl, sec, "Logs invalid signature")
+Rel(ctrl, record, "Calls")
+Rel(record, db, "INSERT ... ON CONFLICT DO NOTHING", "SQL")
+Rel(record, job, "Dispatches when new")
+Rel(job, router, "Calls")
+Rel(router, keys, "Payment actions build keys with")
+Rel(cmd, recon, "Runs")
+Rel(recon, processor, "Lists records", "HTTPS/JSON")
+Rel(recon, db, "Reads payments, refunds, payouts; writes mismatches", "SQL")
+Rel(recon, alert, "Alerts on mismatch")
+@enduml

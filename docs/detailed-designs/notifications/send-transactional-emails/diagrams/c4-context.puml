@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Send transactional emails
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(applicant, "Artist applicant", "Person applying to join as an artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email with bounce webhooks")
+
+Rel(zamaro, email, "Sends booking, payment and application emails via", "HTTPS/JSON")
+Rel(email, booker, "Delivers emails to")
+Rel(email, artist, "Delivers emails to")
+Rel(email, applicant, "Delivers emails to")
+Rel(email, zamaro, "Reports bounces to", "Signed webhook")
+Rel(booker, zamaro, "Updates an undeliverable address using", "HTTPS")
+@enduml

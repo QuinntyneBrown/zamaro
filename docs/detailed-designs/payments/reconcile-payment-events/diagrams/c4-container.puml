@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Reconcile payment events
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(processor, "Payment processor", "Signed webhooks and records")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Admin booking support pages")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "POST /api/v1/webhooks/payments")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Processes events; daily reconciliation")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "processor_events, payments, refunds, payouts, reconciliation runs")
+  ContainerQueue(cache, "Cache and queue", "Redis", "ProcessProcessorEvent jobs")
+}
+Rel(processor, api, "POSTs signed events", "HTTPS")
+Rel(api, db, "Inserts ProcessorEvent once", "SQL")
+Rel(api, cache, "Queues processing", "RESP")
+Rel(worker, cache, "Consumes", "RESP")
+Rel(worker, db, "Applies events, records mismatches", "SQL")
+Rel(worker, processor, "Lists the previous day's records", "HTTPS/JSON")
+Rel(admin, web, "Uses /admin", "HTTPS")
+Rel(web, api, "Searches bookings and payment history", "JSON/HTTPS")
+@enduml

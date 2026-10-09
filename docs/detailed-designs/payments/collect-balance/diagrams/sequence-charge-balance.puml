@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Charge the balance with retries
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PayBalancePage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ChargeDueBalancesCommand" as cmd
+  participant "ChargeBookingBalance" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "CollectBalance" as action
+  participant "AlertAdministrators" as alert
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "PaymentGateway" as gateway
+  participant "Payment processor" as processor
+end box
+
+cmd -> db : Completed bookings, event start + 48 h <= now, not held, no open problem report (L2-038)
+cmd -> db : ... plus Failed balance attempts with nextRetryAt <= now
+db --> cmd : Due bookings
+loop each due booking
+  cmd -> job : dispatch(bookingId, attempt)
+end
+job -> action : handle(booking, attempt)
+action -> db : Re-check status Completed, not held, no Succeeded balance (L2-092)
+action -> gateway : chargeSavedCard(customer, balance cents, key balance:{id}:{attempt}) (L2-041)
+gateway -> processor : Off-session charge
+alt charge succeeded
+  processor --> gateway : Succeeded
+  action -> db : Insert Payment(Balance, Succeeded)
+  action -> action : Dispatch PaymentSucceeded and BalanceCharged (receipt, booker email, payout) (L2-063)
+else charge failed, attempt 1 to 3
+  processor --> gateway : Declined or error
+  action -> db : Insert Payment(Balance, Failed, nextRetryAt = +1, +3 or +7 days) (L2-038)
+  action -> action : Queue BalancePaymentFailedNotification with payment link
+  actor -> page : Follow link to /bookings/{number}/pay-balance
+  page --> actor : Hosted card fields for another card
+else final failure after the 7-day retry
+  action -> db : Insert Payment(Balance, Failed), no further retry
+  action -> alert : handle(BalanceCollectionFailed, booking) (L2-038)
+  alert -> db : Insert AdminAlert
+end
+@enduml

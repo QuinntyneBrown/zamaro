@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Pay out artists
+
+Container(web, "Zamaro Web", "Angular", "PayoutSetupPage, EarningsPage, PayoutsApi")
+System_Ext(processor, "Payment processor", "Connected accounts and transfers")
+Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
+  Component(onbctrl, "PayoutAccountController", "Laravel controller", "POST /api/v1/artist/payout-account/onboarding-link, GET status")
+  Component(onb, "StartPayoutOnboarding", "Action", "Creates connected account and onboarding link")
+  Component(sync, "SyncConnectedAccount", "Action", "Sets payoutReady from processor account status")
+  Component(earnctrl, "EarningsController", "Laravel controller", "GET /api/v1/artist/earnings")
+  Component(create, "CreatePayout", "Action", "Total collected minus 8% fee; status Scheduled")
+  Component(cmd, "SendDuePayoutsCommand", "Scheduled command", "payments:send-due-payouts, each business day")
+  Component(send, "SendPayout", "Action", "Transfers to connected account")
+  Component(cal, "BusinessDayCalendar", "Support class", "Ontario business days")
+  Component(gateway, "PaymentGateway", "Interface + adapter", "Connected accounts and transfers")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists, payouts")
+}
+Rel(web, onbctrl, "Calls", "JSON/HTTPS")
+Rel(web, earnctrl, "Calls", "JSON/HTTPS")
+Rel(onbctrl, onb, "Calls")
+Rel(onb, gateway, "createConnectedAccount(), createOnboardingLink()")
+Rel(onbctrl, sync, "Refreshes on return")
+Rel(sync, gateway, "retrieveConnectedAccount()")
+Rel(sync, db, "Writes artists.payout_ready", "SQL")
+Rel(create, db, "Inserts Payout", "SQL")
+Rel(cmd, cal, "Computes payout due date")
+Rel(cmd, send, "Calls per due payout")
+Rel(send, gateway, "createTransfer()")
+Rel(send, db, "Updates Payout status", "SQL")
+Rel(earnctrl, db, "Reads bookings, payments and payouts", "SQL")
+Rel(gateway, processor, "Calls", "HTTPS/JSON")
+@enduml

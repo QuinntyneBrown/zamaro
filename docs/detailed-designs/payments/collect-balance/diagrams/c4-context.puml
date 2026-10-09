@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Collect the balance
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(processor, "Payment processor", "Charges saved cards off-session")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Reports a problem or pays a failed balance using", "HTTPS")
+Rel(zamaro, processor, "Charges the 75% balance to the saved card through", "HTTPS/JSON")
+Rel(zamaro, email, "Sends payment links and administrator alerts via", "HTTPS/JSON")
+Rel(admin, zamaro, "Resolves held bookings using", "HTTPS")
+@enduml

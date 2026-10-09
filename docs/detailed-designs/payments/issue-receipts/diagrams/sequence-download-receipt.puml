@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Download a PDF receipt
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "ReceiptsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ReceiptController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReceiptPdfRenderer" as pdf
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /bookings/{number}
+page -> client : list(number)
+client -> controller : GET /api/v1/bookings/{number}/receipts
+controller -> controller : BookingPolicy: booker only, else 404 (L2-033)
+controller -> db : Receipts for booking
+controller --> client : ReceiptResource[]
+actor -> page : Activate "Download receipt" (L2-040)
+loop each receipt
+  page -> client : pdf(number, receiptId)
+  client -> controller : GET /api/v1/bookings/{number}/receipts/{id}/pdf
+  controller -> db : Load Receipt snapshot
+  controller -> pdf : render(receipt)
+  pdf --> controller : PDF bytes
+  controller --> client : 200 application/pdf, Content-Disposition attachment
+  client --> page : Blob
+  page --> actor : Save receipt-{number}.pdf
+end
+@enduml

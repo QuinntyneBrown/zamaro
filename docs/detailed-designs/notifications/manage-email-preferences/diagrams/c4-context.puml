@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Manage email preferences
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Turns reminder and review-prompt emails on or off using", "HTTPS")
+Rel(artist, zamaro, "Turns reminder and review-prompt emails on or off using", "HTTPS")
+Rel(zamaro, email, "Sends only the emails each user allows via", "HTTPS/JSON")
+@enduml

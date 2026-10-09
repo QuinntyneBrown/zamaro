@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Collect the balance
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, ReportProblemDialogComponent, PayBalancePage")
+System_Ext(processor, "Payment processor", "Off-session charges")
+Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
+  Component(probctrl, "ProblemReportController", "Laravel controller", "POST /api/v1/bookings/{number}/problem-reports")
+  Component(report, "ReportBookingProblem", "Action", "Checks the 48-hour window, holds balance and payout")
+  Component(cmd, "ChargeDueBalancesCommand", "Scheduled command", "payments:charge-due-balances, hourly")
+  Component(due, "FindDueBalances", "Query", "Completed, 48 h after start, not held, unpaid")
+  Component(job, "ChargeBookingBalance", "Queued job", "One attempt for one booking")
+  Component(charge, "CollectBalance", "Action", "Charges saved card, records outcome, schedules retry")
+  Component(alert, "AlertAdministrators", "Action", "Records AdminAlert and emails administrators")
+  Component(gateway, "PaymentGateway", "Interface + adapter", "Off-session charge with idempotency key")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, problem_reports")
+}
+Rel(web, probctrl, "Calls", "JSON/HTTPS")
+Rel(probctrl, report, "Calls")
+Rel(report, alert, "Alerts on hold")
+Rel(report, db, "Inserts ProblemReport, sets held_at", "SQL")
+Rel(cmd, due, "Runs")
+Rel(due, db, "Reads", "SQL")
+Rel(cmd, job, "Dispatches per booking")
+Rel(job, charge, "Calls")
+Rel(charge, gateway, "chargeSavedCard()")
+Rel(charge, db, "Writes Payment(Balance)", "SQL")
+Rel(charge, alert, "Alerts after final failure")
+Rel(gateway, processor, "Calls", "HTTPS/JSON")
+@enduml

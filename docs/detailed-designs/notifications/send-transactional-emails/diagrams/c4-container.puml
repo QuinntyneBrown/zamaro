@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Send transactional emails
+
+Person(user, "Booker, artist or applicant", "Email recipient")
+System_Ext(email, "Email delivery service", "Transactional email with bounce webhooks")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Undeliverable-address banner")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Raises domain events; email webhook endpoint")
+  Container(worker, "Zamaro Worker", "Laravel Horizon", "notifications queue; sends emails with retries")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "email_messages, users")
+  ContainerQueue(cache, "Cache and queue", "Redis", "notifications queue")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Reads current user", "JSON/HTTPS")
+Rel(api, cache, "Queues notifications", "RESP")
+Rel(worker, cache, "Consumes", "RESP")
+Rel(worker, email, "Sends HTML and plain-text email", "HTTPS/JSON")
+Rel(worker, db, "Writes email_messages", "SQL")
+Rel(email, api, "POSTs bounce events", "HTTPS")
+Rel(api, db, "Marks address undeliverable", "SQL")
+@enduml

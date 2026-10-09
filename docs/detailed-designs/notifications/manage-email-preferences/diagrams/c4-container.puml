@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Manage email preferences
+
+Person(user, "Booker or artist", "Signed-in user")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "NotificationSettingsPage at /account/notifications")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET and PUT /api/v1/account/notification-preferences")
+  Container(worker, "Zamaro Worker", "Laravel Horizon", "Checks preferences before sending optional emails")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "notification_preferences")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Reads and saves preferences", "JSON/HTTPS")
+Rel(api, db, "Reads and writes", "SQL")
+Rel(worker, db, "Reads preferences", "SQL")
+Rel(worker, email, "Sends allowed emails", "HTTPS/JSON")
+@enduml

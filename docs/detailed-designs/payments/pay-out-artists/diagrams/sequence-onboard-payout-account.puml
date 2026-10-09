@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Artist completes payout onboarding
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PayoutSetupPage" as page
+  participant "PayoutsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "PayoutAccountController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "StartPayoutOnboarding" as start
+  participant "SyncConnectedAccount" as sync
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "PaymentGateway" as gateway
+  participant "Payment processor" as processor
+end box
+
+actor -> page : Open /artist/payouts after approval
+page --> actor : "Set up payouts" required before the profile is published (L2-039)
+actor -> page : Activate "Set up payouts"
+page -> client : onboardingLink()
+client -> controller : POST /api/v1/artist/payout-account/onboarding-link
+controller -> start : handle(artist)
+opt no connected account yet
+  start -> gateway : createConnectedAccount(artist) (key connect:{artistId})
+  gateway -> processor : Create account
+  start -> db : Store artists.processor_account_id
+end
+start -> gateway : createOnboardingLink(accountId, return URL)
+gateway --> start : Hosted onboarding URL
+controller --> client : 200 {url}
+page --> actor : Redirect to processor onboarding
+actor -> processor : Identity and bank details (never sent to Zamaro)
+processor --> actor : Redirect to /artist/payouts?return=1
+page -> client : accountStatus()
+client -> controller : GET /api/v1/artist/payout-account
+controller -> sync : handle(accountId)
+sync -> gateway : retrieveConnectedAccount(accountId)
+gateway --> sync : Payouts enabled
+sync -> db : artists.payout_ready = true (L2-039)
+controller --> client : PayoutAccountResource
+page --> actor : Payouts ready; profile may be published
+note over sync, processor : The account-updated webhook (payments/reconcile-payment-events)\ncalls SyncConnectedAccount too, so readiness also updates later
+@enduml

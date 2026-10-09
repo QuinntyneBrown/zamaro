@@ -1,0 +1,82 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Issue receipts
+
+package "Zamaro Web (Angular)" {
+  class BookingDetailPage {
+    +receipts: Signal<ReceiptDto[]>
+    +downloadReceipts(): void
+  }
+  class ReceiptsApi {
+    +list(number: string): Observable<ReceiptDto[]>
+    +pdf(number: string, receiptId: string): Observable<Blob>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class IssueReceiptListener <<listener>> {
+    +handlePayment(event: PaymentSucceeded): void
+    +handleRefund(event: RefundSucceeded): void
+  }
+  class IssueReceipt <<action>> {
+    +forPayment(payment: Payment): Receipt
+    +forRefund(refund: Refund): Receipt
+  }
+  class ReceiptController {
+    +index(booking: Booking): ReceiptResource[]
+    +pdf(booking: Booking, receipt: Receipt): Response
+  }
+  class ReceiptPdfRenderer {
+    +render(receipt: Receipt): string
+  }
+  class ReceiptNotification <<notification>> {
+    +Receipt receipt
+    +toMail(user: User): MailMessage
+  }
+  class Receipt <<Eloquent>> {
+    +int id
+    +string number
+    +int bookingId
+    +?int paymentId
+    +?int refundId
+    +ReceiptKind kind
+    +int amountCents
+    +ReceiptLine[] lines
+    +string last4
+    +string businessNumber
+    +CarbonImmutable issuedAt
+  }
+  class ReceiptLine <<value object>> {
+    +string label
+    +int amountCents
+  }
+  enum ReceiptKind {
+    Charge
+    Refund
+  }
+  class Payment <<Eloquent>>
+  class Refund <<Eloquent>>
+}
+
+BookingDetailPage --> ReceiptsApi
+ReceiptsApi ..> ReceiptController : GET /api/v1/bookings/{number}/receipts
+IssueReceiptListener --> IssueReceipt
+IssueReceipt ..> Receipt : creates
+IssueReceipt ..> ReceiptNotification : queues
+ReceiptController --> ReceiptPdfRenderer
+Receipt "1" *-- "1..*" ReceiptLine
+Receipt --> ReceiptKind
+Receipt "0..1" --> "1" Payment
+Receipt "0..1" --> "1" Refund
+@enduml

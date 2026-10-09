@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Hard bounce marks an address undeliverable
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "UndeliverableEmailBannerComponent" as banner
+  participant "AuthService" as auth
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EmailWebhookController" as controller
+  participant "MeController" as me
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RecordEmailBounce" as bounce
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Email delivery service" as email
+  database "Zamaro database" as db
+end box
+
+email -> controller : POST /api/v1/webhooks/email (signed)
+controller -> controller : Verify signature, else 400 and security event
+controller -> bounce : handle(event)
+bounce -> db : Find EmailMessage by provider message id
+alt hard bounce (L2-065)
+  bounce -> db : EmailMessage Bounced; users.email_undeliverable_at = now
+else soft bounce or complaint
+  bounce -> db : Record on EmailMessage only
+end
+controller --> email : 200
+actor -> auth : Next page load
+auth -> me : GET /api/v1/me
+me --> auth : emailUndeliverable = true
+auth --> banner : currentUser updated
+banner --> actor : Banner asking to update the address, linking to /account/settings (L2-065)
+note over banner, db : Verifying a new address (L2-025) clears email_undeliverable_at
+@enduml

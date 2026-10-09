@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Manage email preferences
+
+Container(web, "Zamaro Web", "Angular", "NotificationSettingsPage, NotificationPreferencesApi")
+Container(worker, "Zamaro Worker", "Laravel Horizon", "EventReminderNotification, ReviewPromptNotification")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "NotificationPreferencesController", "Laravel controller", "GET and PUT /api/v1/account/notification-preferences")
+  Component(req, "UpdateNotificationPreferencesRequest", "FormRequest", "Accepts only optional categories")
+  Component(update, "UpdateNotificationPreferences", "Action", "Upserts one row per category")
+  Component(gate, "NotificationPreferenceGate", "Domain service", "Transactional always allowed; others per preference")
+  Component(res, "NotificationPreferencesResource", "API resource", "Every category with enabled and locked flags")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "notification_preferences")
+}
+Rel(web, ctrl, "Calls", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, update, "Calls")
+Rel(update, db, "Upserts", "SQL")
+Rel(ctrl, res, "Returns")
+Rel(gate, db, "Reads", "SQL")
+Rel(worker, gate, "Asks allows(user, category)")
+@enduml
