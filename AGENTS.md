@@ -9,9 +9,110 @@ Zamaro is a full-stack platform for booking Christian praise and worship artists
 ## Repository layout
 
 - `docs/specs/` — requirements (`L1.md` high-level, `L2.md` detailed with acceptance criteria)
+- `docs/detailed-designs/` — one detailed design per feature, grouped by subsystem; see `docs/detailed-designs/README.md`
 - `docs/mocks/` — static design reference (every page and state, light and dark); see `docs/mocks/README.md`
+- `docs/design-system/` — tokens, foundations, components, and patterns extracted from the mocks
 - `docs/adr/` — architecture decisions; read relevant ADRs before changing the areas they cover
 - `.claude/skills/` and `.agents/skills/` — the skills this repository expects agents to follow
+
+### Target folder structure
+
+This is the layout the repository grows into once the whole solution is built. Folders appear slice by
+slice as features land; create new code where this tree says it belongs. The three runtime containers
+from the detailed designs map to two applications: `backend/` builds the `zamaro-api` image, which runs
+as both the Zamaro API and the Zamaro Worker (Horizon and the scheduler), and `frontend/` builds the
+`zamaro-web` image (Angular with SSR). Subsystem names below match `docs/detailed-designs/`. If a change
+needs a different layout, record the decision in `docs/adr/` and update this tree in the same change.
+
+```text
+zamaro/
+├── AGENTS.md                      # single source of agent guidance (CLAUDE.md, GEMINI.md point here)
+├── CLAUDE.md
+├── GEMINI.md
+├── .agents/skills/                # agent skills (mirrored in .claude/skills/)
+├── .claude/skills/
+├── .ci/                           # pipeline: lint, tests, scans, budgets, contract, build, migrate, rollout
+├── .github/
+│   └── copilot-instructions.md
+├── .husky/                        # pre-commit hook that fixes staged frontend files
+├── docs/
+│   ├── adr/                       # architecture decision records (NNNN-title.md)
+│   ├── design-system/             # tokens/, foundations/, components/, patterns/, assets/
+│   ├── detailed-designs/          # {subsystem}/{feature}/README.md + diagrams/
+│   ├── mocks/                     # pages/, dialogs/, notifications/, assets/
+│   └── specs/                     # L1.md, L2.md
+├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
+│   ├── app/
+│   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
+│   │   ├── Services/{Subsystem}/  # domain services (AvailabilityService, DistanceService, ...)
+│   │   ├── Jobs/{Subsystem}/      # queued work (expiry, reminders, payouts, rating recalculation)
+│   │   ├── Events/  Listeners/
+│   │   ├── Models/                # Eloquent models (Booking, Artist, Church, Review, ...)
+│   │   ├── Enums/                 # BookingStatus and other closed vocabularies
+│   │   ├── Contracts/             # ports for outside services (PaymentGateway, MediaScanner, ...)
+│   │   ├── Integrations/          # adapters that implement Contracts/
+│   │   ├── Policies/              # ownership and role authorisation
+│   │   ├── Notifications/         # transactional email
+│   │   ├── Console/Commands/      # artisan commands (i18n:check, ...)
+│   │   └── Http/
+│   │       ├── Controllers/Api/V1/{Subsystem}/   # thin: validate, call an action, return a resource
+│   │       ├── Controllers/Health/               # /health/live, /health/ready
+│   │       ├── Middleware/
+│   │       ├── Requests/{Subsystem}/             # FormRequest validation
+│   │       └── Resources/{Subsystem}/            # JSON response shapes
+│   ├── bootstrap/                 # app.php: middleware order, exception handling, routing
+│   ├── config/                    # Laravel config plus zamaro.php and security.php
+│   ├── database/
+│   │   ├── factories/
+│   │   ├── migrations/            # expand–contract only; never run on startup
+│   │   └── seeders/               # idempotent, safe to re-run
+│   ├── resources/
+│   │   ├── i18n/{locale}/         # translation catalogues served at /api/v1/i18n/{locale}
+│   │   └── views/emails/
+│   ├── routes/
+│   │   ├── api.php                # /api/v1, authenticated by default
+│   │   ├── api_public.php         # intentional anonymous routes
+│   │   └── console.php            # scheduled commands
+│   ├── tests/
+│   │   ├── Feature/{Subsystem}/   # integration tests against the API
+│   │   ├── Feature/Security/      # cross-user access suite and route-ownership fixtures
+│   │   └── load/                  # load scenarios for the response-time budgets
+│   ├── composer.json
+│   └── Dockerfile                 # zamaro-api image (API and Worker)
+├── frontend/                      # Angular with SSR — Zamaro Web
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── core/              # app-wide singletons: auth, http interceptors, i18n, theme, SEO, errors
+│   │   │   ├── api/{subsystem}/   # per-service contract, injection token, and HTTP implementation
+│   │   │   ├── layout/            # shell, header, footer, navigation menu
+│   │   │   ├── shared/
+│   │   │   │   ├── ui/            # zm-* design-system components (button, ticket, stub, toast, ...)
+│   │   │   │   ├── dialogs/       # CDK Dialog components, one folder per docs/mocks/dialogs entry
+│   │   │   │   └── pipes/         # date, money, and distance formatting
+│   │   │   ├── pages/             # routed screens, one folder per docs/mocks/pages entry
+│   │   │   │   ├── discover/  artist/  book/  saved/  bookings/  booking-detail/
+│   │   │   │   ├── sign-in/  sign-up/  forgot-password/  reset-password/  account/
+│   │   │   │   ├── apply/  dashboard/  requests/  request-detail/  availability/
+│   │   │   │   ├── edit-profile/  earnings/
+│   │   │   │   ├── admin/         # applications, artists, bookings, reviews, audit entries
+│   │   │   │   └── not-found/  server-error/  offline/
+│   │   │   └── app.config.ts  app.config.server.ts  app.routes.ts
+│   │   ├── styles/                # global foundations: tokens, reset, utilities only
+│   │   ├── main.ts  main.server.ts  server.ts
+│   │   └── index.html
+│   ├── angular.json  package.json  eslint.config.js  .prettierrc
+│   └── Dockerfile                 # zamaro-web image
+└── e2e/                           # Playwright, Chromium only
+    ├── playwright.config.ts
+    ├── routes.manifest.ts         # every route in every state, shared by visual, a11y, and perf
+    ├── pages/                     # page objects, one per screen; they own every selector
+    ├── fixtures/                  # seeded data and test helpers
+    ├── specs/{subsystem}/         # acceptance tests for the L2 criteria; no selectors
+    ├── visual/                    # visual parity with docs/mocks at every breakpoint, light and dark
+    ├── a11y/                      # axe WCAG 2.2 AA checks per route and theme
+    ├── perf/                      # layout-shift and loading-state checks
+    └── package.json
+```
 
 ## Backend conventions
 
