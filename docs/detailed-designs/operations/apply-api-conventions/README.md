@@ -102,12 +102,14 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
 **OpenAPI and contract tests (L2-095 criterion 3)**
 
 - **OpenAPI generator** — CI generates `openapi.json` in OpenAPI 3.1 from the routes,
-  FormRequests and API resources. The generator is `<TO SUPPLY>`. The document is kept
+  FormRequests and API resources. The generator is Scramble (`php artisan scramble:export
+  --fail-on-unknown`, ADR-0006). The document is kept
   as a pipeline artifact; publishing it beyond the team is `<TO SUPPLY>`.
 - **`AssertsOpenApiContract`** — test trait used by every API feature test. After each
   request it validates the status, headers and body against the operation in
   `openapi.json`, including the problem-details schema for errors. A mismatch fails the
-  build. The validator library is `<TO SUPPLY>`.
+  build. The validator library is `opis/json-schema` (ADR-0006). Statuses without a body
+  (304) are not documented and are asserted directly.
 - Generating the Angular `*Api` types from the same document is `<TO SUPPLY>`.
 
 ## Requirements

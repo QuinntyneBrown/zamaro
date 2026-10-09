@@ -14,3 +14,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0003](0003-design-tokens-copied-into-components-library.md) | Design tokens are copied into the components library | Accepted |
 | [0004](0004-stay-on-laravel-11-with-ignored-advisories.md) | Stay on Laravel 11 and ignore its seven blocking advisories by ID | Accepted |
 | [0005](0005-api-skeleton-route-files-support-and-problem-types.md) | API skeleton: route files, `app/Support`, problem types and health responses | Accepted |
+| [0006](0006-openapi-from-code-with-scramble-and-opis.md) | OpenAPI 3.1 generated from code with Scramble; contract tests validate with opis | Accepted |

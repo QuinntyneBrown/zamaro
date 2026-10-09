@@ -47,10 +47,13 @@ Worker, and CI checks on both codebases.
   (`format.distance.km`, `format.distance.under1`, `format.distance.about`). A
   French catalogue can therefore reorder or rename them without code changes
   (L2-111).
-- **`TranslationCatalogueController`** — `GET /api/v1/i18n/{locale}` returns the
-  merged catalogue for one locale with a strong `ETag` and a public
-  `Cache-Control` lifetime of `<TO SUPPLY>`; a matching `If-None-Match` returns 304.
-  `GET /api/v1/i18n` lists the available locales.
+- **`TranslationCatalogueController`** — `GET /api/v1/i18n/{locale}` (anonymous,
+  `routes/api_public.php`) returns the merged catalogue for one locale as
+  `{"data":{"locale":"fr","messages":{"common.nav.discover":"Découvrir", ...}}}`, keys being
+  `{namespace}.{key}`. It sends a strong `ETag` (SHA-256 of the body) and
+  `Cache-Control: public, max-age=0, s-maxage=60`, so browsers revalidate and a matching
+  `If-None-Match` returns 304. A locale with no directory returns a 404 problem.
+  `GET /api/v1/i18n` lists the available locales; it is built when a locale switcher needs it.
 - **`Catalogue`** — backend service that discovers locales from the directories present,
   loads and caches the merged JSON, and resolves a key with fallback to `en`. Adding
   `resources/i18n/fr/` makes French available with no code change (L2-111).
