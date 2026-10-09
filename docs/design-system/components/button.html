@@ -252,7 +252,7 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Buttons never truncate or wrap their label (<code>white-space: nowrap</code>). If a label does not fit at 360px, shorten it. “Request to book · Sat 14 Nov” is the longest allowed and still fits inside the booking stub at 360px.</li>
+        <li>Labels never truncate. As a safety net they wrap to a balanced second line rather than overflow, but a label that wraps at 360px is too long, so shorten it. “Request to book · Sat 14 Nov” is the longest that still fits on one line inside the booking stub at 360px. The mocks’ “Search within 120 km · 2 choirs free” wraps and should become “Search within 120 km”, with the count moved into the sentence above.</li>
         <li>Below <code>--layout-breakpoint-sm</code> (640px), a form’s submit button fills its container (<code>.btn--block</code>), as in the booking bar and stub.</li>
         <li>Button rows use <code>.cluster</code> and wrap onto a new line. In <a href="alert.html">alerts</a> and <a href="dialog.html">dialogs</a> the primary action comes first in the DOM and on the left. On phones, dialog footer buttons stretch to equal widths.</li>
         <li>Touch: every size is at least 36px tall. Small buttons are only used inside list rows that have 16px of vertical padding, so their effective target is 44px or more.</li>

@@ -22,7 +22,7 @@ body {
   -webkit-font-smoothing: antialiased; font-synthesis: none;
 }
 h1, h2, h3, h4, p, ul, ol, figure, blockquote, dl, dd { margin: 0; }
-h1, h2, h3, h4 { text-transform: uppercase; letter-spacing: var(--letter-spacing-poster); text-wrap: balance; }
+h1, h2, h3, h4 { text-transform: uppercase; letter-spacing: var(--letter-spacing-poster); text-wrap: balance; overflow-wrap: break-word; }
 h1 { font: var(--text-h1); }
 h2 { font: var(--text-h2); }
 h3 { font: var(--text-h3); }
@@ -113,9 +113,9 @@ a:hover, .link:hover, .link[data-state="hover"] { color: var(--color-fg-link-hov
   --btn-padding: var(--space-5);
   --btn-font-size: var(--font-size-sm);
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-  min-height: var(--btn-height); padding: 0 var(--btn-padding);
+  min-height: var(--btn-height); padding-inline: var(--btn-padding);
   font: var(--text-label); font-size: var(--btn-font-size); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide);
-  text-decoration: none; text-align: center; white-space: nowrap;
+  text-decoration: none; text-align: center; text-wrap: balance; padding-block: var(--space-1);
   color: var(--btn-fg); background: var(--btn-bg);
   border: var(--border-width-thick) solid var(--btn-border); border-radius: var(--radius-md);
   cursor: pointer;
@@ -382,9 +382,14 @@ button.avatar:hover, button.avatar[data-state="hover"] { transform: scale(1.06);
   border-bottom: var(--border-width-poster) solid var(--color-accent);
 }
 .topbar--static { position: relative; }
+@media (max-width: 39.99rem) {
+  .topbar { gap: var(--space-2); }
+  .topbar__brand { font-size: var(--font-size-xl); min-width: 0; }
+  .topbar .nav-link { padding-inline: var(--space-2); }
+}
 .topbar__brand { display: inline-flex; align-items: center; gap: var(--space-2); color: inherit; text-decoration: none; font: var(--text-figure); letter-spacing: var(--letter-spacing-wide); text-transform: uppercase; }
 .topbar__brand:hover { background: none; color: var(--color-accent-on-stage); }
-.brand-mark { display: inline-grid; place-items: center; width: 2rem; height: 2rem; background: var(--color-accent); color: var(--color-fg-on-accent); }
+.brand-mark { flex: none; display: inline-grid; place-items: center; width: 2rem; height: 2rem; background: var(--color-accent); color: var(--color-fg-on-accent); }
 .topbar__nav { display: none; gap: var(--space-1); }
 .topbar__spacer { flex: 1; }
 .topbar__menu { color: inherit; }

@@ -24,7 +24,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
-  <button class="nav-link topbar__saved btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;">
+  <button class="nav-link topbar__saved" type="button" aria-expanded="false">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
   </button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
@@ -55,7 +55,7 @@
         <section class="section" aria-labelledby="about-title">
           <p class="overline section__kicker">About</p>
           <h2 id="about-title">Raised in the choir loft</h2>
-          <div class="stack" style="margin-top: var(--space-4);">
+          <div class="stack section__body">
             <p class="lead">I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone. I’ve led worship at New Covenant Chapel for nine years.</p>
             <p>I lead in English and Twi, bring my own tracks if you don’t have a band, and I’m happy to rehearse with your volunteers. My aim is a congregation that sings.</p>
           </div>
@@ -119,13 +119,13 @@
     <aside aria-labelledby="book-title">
       <form class="stub" action="default.html">
         <div class="stub__head">
-          <h2 id="book-title" style="font: var(--text-h3);">Book Abigail</h2>
+          <h2 id="book-title" class="stub__title">Book Abigail</h2>
           <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
         </div>
         <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
         <label class="field"><span class="field__label">Event date</span>
           <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-help">
-          <span class="field__help" id="date-help">✓ Abigail is free Sat 14 Nov</span></label>
+          <span class="field__help inline-msg inline-msg--success" id="date-help"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></label>
         <label class="field"><span class="field__label">Kind of gathering</span>
           <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
         <label class="field"><span class="field__label">Church</span>

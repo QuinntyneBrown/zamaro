@@ -24,7 +24,7 @@
     <a class="nav-link" href="default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
-  <button class="nav-link topbar__saved btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;">
+  <button class="nav-link topbar__saved" type="button" aria-expanded="false">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
   </button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
@@ -38,7 +38,7 @@
         <h1 id="hero-title" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h1>
         <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
       </div>
-      <form class="booking-bar" aria-labelledby="find-title" action="default.html">
+      <form class="booking-bar" data-theme="light" aria-labelledby="find-title" action="default.html">
         <h2 id="find-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
         <label class="field"><span class="field__label">Event date</span>
           <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
@@ -58,7 +58,7 @@
     <div class="container stack stack--lg">
       <div class="section__head">
         <div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><h2 id="lineup-title">The lineup</h2></div>
-        <label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span>
+        <label class="field field--inline"><span class="field__label">Sort</span>
           <select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
       </div>
       <fieldset class="filters">

@@ -16,11 +16,16 @@ spacing scale leaves generous room between sections.
 | Token decision | Value |
 |---|---|
 | Ink / paper | Charcoal `#34322e` on newsprint `#f4f2ec`; dark canvas `#1b1b19`, dark text `#e9e6de` |
-| Muted / subtle | `#5a5853` (6:1) and `#67655f` (4.9:1 on the warmest surface) on light; `#b5b2aa` and `#97948d` on dark |
+| Muted / subtle | `#5a5853` (6:1) and `#67655f` (4.9:1 on the warmest surface) on light; `#b5b2aa` and `#a19e97` on dark |
 | Accent | Butter yellow `#f3cc3f`, a fill colour only on light (text on it is always ink, 8:1); text-safe on dark (10:1) |
 | Type | Condensed display (Bebas Neue / Anton / Oswald / Impact fallback), uppercase; Helvetica/Arial body at 1.6 leading; mono for stub small print |
 | Shape | Square corners, 2–4 px rules in charcoal (not ink), hard offset shadows instead of blur |
 | Focus | Yellow inner ring + ink outer ring (light); ink inner + yellow outer (dark) |
+
+The tokens and components now live in the design system. `assets/tokens.css` and
+`assets/ui.css` only forward to [`docs/design-system/tokens/tokens.css`](../design-system/tokens/tokens.css)
+and [`docs/design-system/assets/components.css`](../design-system/assets/components.css), so the mocks and the
+system cannot drift apart. See the [design system](../design-system/README.md) for every token and component.
 
 ## Cast & catalog
 

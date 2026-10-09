@@ -24,7 +24,7 @@
     <a class="nav-link" href="default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
-  <button class="nav-link topbar__saved btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;">
+  <button class="nav-link topbar__saved" type="button" aria-expanded="false">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
   </button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
@@ -38,7 +38,7 @@
         <h1 id="hero-title" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h1>
         <p class="poster__sub">Checking the calendars of every artist who drives to Burlington…</p>
       </div>
-      <form class="booking-bar" aria-labelledby="find-title" action="default.html">
+      <form class="booking-bar" data-theme="light" aria-labelledby="find-title" action="default.html">
         <h2 id="find-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
         <label class="field"><span class="field__label">Event date</span>
           <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
@@ -58,7 +58,7 @@
     <div class="container stack stack--lg">
       <div class="section__head">
         <div><p class="overline section__kicker">Sat 14 Nov · checking calendars</p><h2 id="lineup-title">The lineup</h2></div>
-        <label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span>
+        <label class="field field--inline"><span class="field__label">Sort</span>
           <select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
       </div>
       <p class="lead"><span role="status">Finding who’s free on Saturday 14 November…</span></p>
@@ -67,29 +67,29 @@
         <button class="chip" type="button" aria-pressed="false" disabled>Band</button><button class="chip" type="button" aria-pressed="false" disabled>Solo vocalist</button><button class="chip" type="button" aria-pressed="false" disabled>Gospel choir</button><button class="chip" type="button" aria-pressed="false" disabled>Acoustic</button><button class="chip" type="button" aria-pressed="false" disabled>Hymns</button><button class="chip" type="button" aria-pressed="false" disabled>Spanish</button><button class="chip" type="button" aria-pressed="false" disabled>Under $800</button>
       </fieldset>
       <div class="headliner" aria-hidden="true">
-        <span class="skeleton" style="aspect-ratio: 4 / 5;"></span>
-        <div class="stack"><span class="skeleton skeleton--text" style="width: 40%;"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--text" style="width: 85%;"></span></div>
+        <span class="skeleton skeleton--portrait"></span>
+        <div class="stack"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--text skeleton--long"></span></div>
       </div>
       <ul class="lineup" role="list" aria-hidden="true">
         <li class="ticket ticket--loading">
           <span class="skeleton ticket__art"></span>
-          <div class="ticket__body"><span class="skeleton skeleton--text" style="width: 45%;"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
-          <div class="ticket__stub"><span class="skeleton skeleton--title" style="width: 5rem;"></span><span class="skeleton" style="width: 2.75rem; height: 2.75rem;"></span></div>
+          <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+          <div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div>
         </li>
         <li class="ticket ticket--loading">
           <span class="skeleton ticket__art"></span>
-          <div class="ticket__body"><span class="skeleton skeleton--text" style="width: 45%;"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
-          <div class="ticket__stub"><span class="skeleton skeleton--title" style="width: 5rem;"></span><span class="skeleton" style="width: 2.75rem; height: 2.75rem;"></span></div>
+          <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+          <div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div>
         </li>
         <li class="ticket ticket--loading">
           <span class="skeleton ticket__art"></span>
-          <div class="ticket__body"><span class="skeleton skeleton--text" style="width: 45%;"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
-          <div class="ticket__stub"><span class="skeleton skeleton--title" style="width: 5rem;"></span><span class="skeleton" style="width: 2.75rem; height: 2.75rem;"></span></div>
+          <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+          <div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div>
         </li>
         <li class="ticket ticket--loading">
           <span class="skeleton ticket__art"></span>
-          <div class="ticket__body"><span class="skeleton skeleton--text" style="width: 45%;"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
-          <div class="ticket__stub"><span class="skeleton skeleton--title" style="width: 5rem;"></span><span class="skeleton" style="width: 2.75rem; height: 2.75rem;"></span></div>
+          <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+          <div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div>
         </li>
       </ul>
     </div>
