@@ -42,6 +42,17 @@ module.exports = defineConfig([
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
     rules: {},
   },
+  // User-facing text comes from the translation catalogue (L2-111.1). Perf-test scenarios render
+  // fixed mock copy on purpose and are not user-facing; index.html is the static host page whose
+  // <title> the title strategy replaces.
+  {
+    files: ['projects/{zamaro,admin,components}/**/*.html'],
+    ignores: ['**/index.html'],
+    plugins: {
+      zamaro: { rules: { 'no-hardcoded-text': require('./tools/eslint/no-hardcoded-text') } },
+    },
+    rules: { 'zamaro/no-hardcoded-text': 'error' },
+  },
   // Prettier owns formatting: turn off every lint rule that would fight it.
   prettier,
 ]);
