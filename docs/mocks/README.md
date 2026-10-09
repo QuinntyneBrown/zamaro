@@ -45,18 +45,25 @@ Harvest Point Church, Milton (Tomi Oduya); Living Waters Fellowship, Brampton (P
 Lakeshore Alliance Church, Oakville (Pastor Dave Mwangi); Kingdom Life Centre, Mississauga (Grace Ampofo);
 Trinity Lutheran, Kitchener (declined for distance, 130 km).
 Money on a $650 booking: deposit 25% $162.50, balance $487.50, Zamaro 8% $52, artist receives $598.
-Naomi's bookings: ZAM-0114 Abigail Sat 14 Nov worship night 7 pm, Sent today (every booking-detail state reuses this id);
-ZAM-0097 Marcus Bell Trio Sun 25 Oct, Paid (deposit $237.50, balance $712.50); ZAM-0088 Luz Viva Sat 5 Dec, Accepted,
-deposit $225 due Fri 16 Oct; ZAM-0075 Grace Tabernacle Sun 20 Sep, Declined; ZAM-0080 Elijah Park Sat 3 Oct, Cancelled free;
-ZAM-0061 Abigail Sun 14 Jun, Done (matches Naomi's June review).
-Abigail's incoming requests: Riverside Sat 14 Nov $650 Sent today, reply by Mon 12 Oct (72 h); St. Brendan's Sun 22 Nov $650;
-Harvest Point Sat 5 Dec Christmas concert $800; Trinity Lutheran Sun 29 Nov, declined; St. Brendan's Sun 13 Sep, done.
-Abigail's confirmed dates: Sun 18 Oct Living Waters; Sun 15 Nov Lakeshore Alliance; Sat 21 Nov Kingdom Life women's
-conference; Sun 13 Dec Living Waters carol service.
-Abigail's calendar Nov-Dec 2026: booked 1, 15, 21 Nov, 13, 20 Dec; requested 14, 22 Nov, 5 Dec; blocked 26-27 Nov (studio),
-24-26 Dec (family), 31 Dec. Default view November 2026.
-Dashboard numbers: Awaiting reply 3 / Confirmed dates 4 / Free Saturdays in Nov 2 / Profile complete 100%. No payouts in MVP.
-Entry: naomi.fraser@riversidecc.ca; reset links expire after 1 hour; verification e-mail can be resent.
+Statuses (L2-029): Requested, Accepted, Confirmed, Completed, Declined, Withdrawn, Expired, Cancelled.
+Deadlines (America/Toronto): artists reply within 72 hours (24 if the event is under 7 days away); bookers pay the deposit
+within 48 hours of acceptance; free cancellation until 14 full days before the event (Sat 31 Oct for Sat 14 Nov).
+Naomi's bookings: ZAM-0114 Abigail Sat 14 Nov worship night 7:00 p.m., Requested Fri 9 Oct 10:15 a.m., price locked at $650
+(every booking-detail state reuses this id; its "accepted" state assumes acceptance Fri 9 Oct 2:40 p.m., deposit due
+Sun 11 Oct 2:40 p.m.); ZAM-0097 Marcus Bell Trio Sun 25 Oct, Confirmed (deposit $237.50 paid, balance $712.50 after);
+ZAM-0088 Luz Viva Sat 5 Dec, Accepted Thu 8 Oct 4:00 p.m., deposit $225 due Sat 10 Oct 4:00 p.m.; ZAM-0075 Grace Tabernacle
+Sun 20 Sep, Declined; ZAM-0080 Elijah Park Sat 3 Oct, Withdrawn; ZAM-0061 Abigail Sun 14 Jun, Completed (Naomi's June review).
+Abigail's incoming requests: Riverside Sat 14 Nov $650, reply by Mon 12 Oct 10:15 a.m.; Harvest Point Sat 5 Dec Christmas
+concert $800, reply by Sat 10 Oct 3:15 p.m.; St. Brendan's Sun 22 Nov $650, reply by Sun 11 Oct 9:00 a.m.;
+Living Waters Sat 21 Nov youth night (ZAM-0121, used for the "already booked" conflict); Trinity Lutheran Sun 29 Nov, Declined;
+St. Brendan's Sun 13 Sep, Completed ($650 / $52 fee / $598 paid out Tue 15 Sep).
+Abigail's confirmed dates: Sun 18 Oct Living Waters; Sun 1 Nov Harvest Point; Sun 15 Nov Lakeshore Alliance; Sat 21 Nov
+Kingdom Life women's conference; Sun 13 Dec Living Waters carol service; Sun 20 Dec Lakeshore Alliance.
+Abigail's calendar (route /artist/calendar, 18 months): weekly default Unavailable every Monday; booked 1, 15, 21 Nov,
+13, 20 Dec; requested 14, 22 Nov, 5 Dec; unavailable 26-27 Nov (studio), 24-26 Dec (family), 31 Dec. Default view November 2026.
+Abigail's vulnerable sector check: verified until Fri 3 Mar 2028.
+Dashboard numbers: Awaiting reply 3 / Confirmed dates 4 (Oct-Nov) / Free Saturdays in Nov 2 / Profile complete 100%.
+Entry: naomi.fraser@riversidecc.ca; verification links last 24 hours; reset links are single-use and expire after 60 minutes.
 All people and churches are fictional.
 -->
 
@@ -65,7 +72,7 @@ All people and churches are fictional.
 - **Featured artist:** Abigail Mensah. The empty profile shows Miriam Haile, who is new.
 - **Signed-in artist:** Abigail Mensah. Artist-side empty states switch to Miriam Haile.
 - **Applicant:** Tobi Adeyemi, Scarborough, applying through the artist form.
-- **Current booking:** ZAM-0114, Abigail for Riverside's worship night, Sat 14 Nov, 7 pm.
+- **Current booking:** ZAM-0114, Abigail for Riverside's worship night, Sat 14 Nov, 7:00 p.m.
 
 ## How to open
 
@@ -77,10 +84,16 @@ Open `index.html` from disk. Append `?theme=dark` to force the dark theme and
 - The display face falls back to Impact when Bebas Neue/Anton/Oswald are not installed; the product would self-host one.
 - Every ticket links to Abigail’s profile, since there is only one full profile mock.
 - Deposit (25%), artist fee (8%) and 14-day free cancellation are assumed.
-- Requests expire after 72 hours without a reply; a reply-by time is shown to the artist.
-- No payout, admin review or messaging screens are in the MVP. Artist applications say "we review within 3 business days"; the only message is the one inside a request and the accept/decline note.
-- Church accounts that open an artist route see a forbidden state with a way back, not a redirect.
-- Sign-in is required before a request is sent; the book page assumes Naomi is signed in.
+- Rules follow `docs/specs/L2.md`; every mock lists the L2 ids it serves in `manifest.json` and a `mock:requirements` meta.
+- Admin screens (L2-066 to L2-069) are not mocked yet.
+- Booking messages appear as a thread on the booking page (church) and the request page (artist). Contact details are masked until a booking is Confirmed.
+- A church account that opens an artist route sees a forbidden state with a way back, not a redirect.
+- Another booker's booking URL shows a not-found state, matching the 404 in L2-033.
+- Sign-in is required before a request is sent; the book page assumes Naomi is signed in and verified.
+- Only Riverside's request has a detail mock; other request rows link to it and say so in a note.
+- Dialog mocks are native `<dialog>` elements; `assets/mock.js` reopens them with `showModal()` so the backdrop, focus trap and Escape match the product.
+- Riverside is 44 km from Abigail on Discover but 62 km on her request pages. One figure should win when the distance service is designed.
+- An artist cancelling a Confirmed booking (L2-043) and the calendar feed (L2-058) are buttons with notes; neither has its own dialog yet.
 
 <!-- coverage:start -->
 

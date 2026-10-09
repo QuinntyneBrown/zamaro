@@ -836,6 +836,9 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 .footer a:hover { background: none; color: var(--color-accent-on-stage); }
 .footer__grid { display: grid; gap: var(--space-8); }
 .footer__word { font: var(--text-display); text-transform: uppercase; color: var(--color-accent-on-stage); }
+/* The wordmark scales with its column so it never runs into the link columns beside it. */
+.footer__grid > :first-child { container-type: inline-size; }
+.footer__word { font-size: min(var(--font-size-5xl), 26cqi); }
 .footer ul { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
 .footer h2 { font: var(--text-overline); letter-spacing: var(--letter-spacing-stamp); margin-bottom: var(--space-3); }
 @media (min-width: 48rem) { .footer__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .footer__grid > :first-child { grid-column: 1 / -1; } }
