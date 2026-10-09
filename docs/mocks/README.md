@@ -1,18 +1,25 @@
 # Zamaro mocks
 
 The mocks treat booking worship like booking a band for worship night. They are
-a screen-printed gig poster: black ink on newsprint, one electric accent
-(signal yellow), condensed grotesque headlines, the event date set huge like a
-tour poster, artists as admission tickets with a perforated price stub, and the
-songs an artist leads as a numbered setlist. The dark theme is the stage: black
-canvas, paper text, yellow hard shadows.
+a screen-printed gig poster: charcoal ink on warm newsprint, one butter-yellow
+accent, condensed grotesque headlines, the event date set huge like a tour
+poster, artists as admission tickets with a perforated price stub, and the
+songs an artist leads as a numbered setlist. The dark theme is the stage: a
+deep charcoal canvas, paper text, yellow hard shadows.
+
+Contrast is deliberately softened from pure black on white, and every pair
+still clears WCAG 2.2 AA: body text sits around 11:1, muted text around 6:1,
+subtle text at or above 4.9:1 on the warmest surface, and control borders at
+9:1 or better. Copy is kept to one or two short sentences per block, and the
+spacing scale leaves generous room between sections.
 
 | Token decision | Value |
 |---|---|
-| Ink / paper | `#0c0c0c` on newsprint `#f3f1ea`; dark canvas `#0c0c0c` |
-| Accent | Signal yellow `#ffd400`, a fill colour only on light (text on it is always ink); text-safe on dark |
-| Type | Condensed display (Bebas Neue / Anton / Oswald / Impact fallback), uppercase; Helvetica/Arial body; mono for stub small print |
-| Shape | Square corners, 3–6 px rules, hard offset shadows instead of blur |
+| Ink / paper | Charcoal `#34322e` on newsprint `#f4f2ec`; dark canvas `#1b1b19`, dark text `#e9e6de` |
+| Muted / subtle | `#5a5853` (6:1) and `#67655f` (4.9:1 on the warmest surface) on light; `#b5b2aa` and `#97948d` on dark |
+| Accent | Butter yellow `#f3cc3f`, a fill colour only on light (text on it is always ink, 8:1); text-safe on dark (10:1) |
+| Type | Condensed display (Bebas Neue / Anton / Oswald / Impact fallback), uppercase; Helvetica/Arial body at 1.6 leading; mono for stub small print |
+| Shape | Square corners, 2–4 px rules in charcoal (not ink), hard offset shadows instead of blur |
 | Focus | Yellow inner ring + ink outer ring (light); ink inner + yellow outer (dark) |
 
 ## Cast & catalog
