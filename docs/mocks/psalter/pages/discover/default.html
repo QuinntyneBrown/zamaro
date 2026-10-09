@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discover artists · default — Zamaro Psalter mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="discover">
+<meta name="mock:state" content="default">
+<meta name="description" content="Discover: pick a service date, filter by style, and read a numbered register of the seven artists free that day, with a margin column explaining how booking works and listing saved artists.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead__strip container">
+    <span class="masthead__motto">Worship artists for churches in Toronto &amp; within a comfortable drive</span>
+    <a href="#join">For artists: join the register</a>
+  </div>
+  <div class="masthead__bar container">
+    <a class="wordmark" href="../discover/default.html"><span class="wordmark__name">Zamaro</span><span class="wordmark__sub">a register of praise &amp; worship artists</span></a>
+    <nav class="masthead__nav" id="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a class="nav-link" href="../discover/default.html" aria-current="page">Discover</a></li>
+        <li><a class="nav-link" href="../discover/default.html#how">How booking works</a></li>
+        <li class="keep"><a class="nav-link" href="../discover/default.html#saved">Saved <span class="count" aria-label="2 artists">2</span></a></li>
+        <li class="keep">
+          <details class="account">
+            <summary aria-label="Account: Naomi Fraser"><span class="monogram" aria-hidden="true">NF</span><span class="account__name">Naomi Fraser</span></summary>
+            <ul class="account__menu">
+              <li><a href="../discover/default.html#saved">Saved artists</a></li>
+              <li><a href="#account">Your booking requests</a></li>
+              <li><a href="#account">Riverside Community Church</a></li>
+              <li><a href="#account">Account settings</a></li>
+              <li><a href="#account">Sign out</a></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+    <button class="btn btn--quiet btn--sm masthead__menu" type="button" aria-expanded="false" aria-controls="primary-nav"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
+  </div>
+  <hr class="masthead__rule">
+</header>
+
+<main id="main" class="container">
+
+  <div class="folio">
+    <p class="smallcaps smallcaps--accent folio__no">No. I &nbsp;·&nbsp; Discover</p>
+    <h1>Who is free to lead worship <em>on your date?</em></h1>
+    <p class="lede">Choose the day of your service and we will show the praise and worship artists who are free, all within an easy drive of your church.</p>
+  </div>
+
+
+      <form class="rubric" role="search" aria-label="Find artists free on your date" action="default.html">
+        <div class="rubric__row">
+          <div class="field">
+            <label class="field__label" for="date">Date of your service</label>
+            <input class="input" id="date" name="date" type="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-hint">
+            <span class="field__hint" id="date-hint">We only show artists free that day.</span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="where">Where it is held</label>
+            <input class="input" id="where" name="where" type="text" value="Riverside Community Church, Burlington" autocomplete="street-address">
+            <span class="field__hint">Distances are driving distances from here.</span>
+          </div>
+          <div class="field">
+            <label class="field__label" for="radius">Within</label>
+            <select class="select" id="radius" name="radius">
+              <option>50 km</option>
+              <option selected>100 km</option>
+              <option>150 km</option>
+            </select>
+            <span class="field__hint">About 1 hr 15 min</span>
+          </div>
+          <button class="btn btn--primary" type="submit">Show who is free</button>
+        </div>
+        <fieldset class="filters">
+          <legend class="field__label">Style of worship</legend>
+          <div class="tags">
+            <label class="tag"><input type="checkbox" name="style" value="Band">Band</label>
+            <label class="tag"><input type="checkbox" name="style" value="Solo vocalist">Solo vocalist</label>
+            <label class="tag"><input type="checkbox" name="style" value="Gospel choir">Gospel choir</label>
+            <label class="tag"><input type="checkbox" name="style" value="Acoustic">Acoustic</label>
+            <label class="tag"><input type="checkbox" name="style" value="Hymns">Hymns</label>
+            <label class="tag"><input type="checkbox" name="style" value="Spanish">Spanish</label>
+            <label class="tag"><input type="checkbox" name="style" value="Under $800">Under &#36;800</label>
+          </div>
+        </fieldset>
+      </form>
+
+    <div class="folio-layout">
+      <section class="results" aria-labelledby="results-h">
+        <div class="results-head">
+          <div>
+            <h2 id="results-h">Seven artists are free on Saturday, 14 November</h2>
+            <p class="text-muted" role="status">Within 100 km of Riverside Community Church, Burlington</p>
+          </div>
+          <div class="field">
+            <label class="field__label" for="sort">Order by</label>
+            <select class="select" id="sort"><option>Best match</option><option>Nearest first</option><option>Lowest fee first</option><option>Most reviewed</option></select>
+          </div>
+        </div>
+        <ol class="register">
+          <li>
+            <article class="entry" aria-labelledby="a1">
+              <span class="entry__no" aria-hidden="true">1</span>
+              <div class="plate entry__plate" role="img" aria-label="Portrait of Abigail Mensah, smiling at a microphone in a church sanctuary (photo placeholder)"><span class="plate__mark" aria-hidden="true">AM</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Solo vocalist · Gospel &amp; contemporary</p>
+                <h3 class="entry__name" id="a1"><a href="../artist/default.html">Abigail Mensah</a></h3>
+                <p class="entry__where">Brampton · 48 km away · from $650 a service</p>
+                <p class="entry__desc">Leads a congregation with choir-loft warmth. At home with the old hymns, Ghanaian praise choruses and the songs your people already know.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 4.9<span class="visually-hidden"> out of 5</span> · 38 church reviews</li>
+                  <li class="free">Free all day</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="true"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved<span class="visually-hidden"> Abigail Mensah</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Abigail Mensah</span></a>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="entry" aria-labelledby="a2">
+              <span class="entry__no" aria-hidden="true">2</span>
+              <div class="plate entry__plate" role="img" aria-label="The five members of Hosanna Collective on a church platform (photo placeholder)"><span class="plate__mark" aria-hidden="true">HC</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Worship band · Five piece</p>
+                <h3 class="entry__name" id="a2"><a href="../artist/default.html">Hosanna Collective</a></h3>
+                <p class="entry__where">Mississauga · 32 km away · from $1,800 a service</p>
+                <p class="entry__desc">Drums, bass, keys and two vocalists. They bring their own sound system and are set up in under an hour.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 4.8<span class="visually-hidden"> out of 5</span> · 61 church reviews</li>
+                  <li class="free">Free from 2 pm</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Save<span class="visually-hidden"> Hosanna Collective</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Hosanna Collective</span></a>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="entry" aria-labelledby="a3">
+              <span class="entry__no" aria-hidden="true">3</span>
+              <div class="plate entry__plate" role="img" aria-label="Marcus Bell at the piano with his bassist and drummer (photo placeholder)"><span class="plate__mark" aria-hidden="true">MB</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Band · Contemporary &amp; youth</p>
+                <h3 class="entry__name" id="a3"><a href="../artist/default.html">Marcus Bell Trio</a></h3>
+                <p class="entry__where">Hamilton · 18 km away · from $950 a service</p>
+                <p class="entry__desc">Piano, upright bass and drums. Youth nights, outdoor services and gospel standards with room to breathe.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 4.6<span class="visually-hidden"> out of 5</span> · 19 church reviews</li>
+                  <li class="free">Free all day</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Save<span class="visually-hidden"> Marcus Bell Trio</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Marcus Bell Trio</span></a>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="entry" aria-labelledby="a4">
+              <span class="entry__no" aria-hidden="true">4</span>
+              <div class="plate entry__plate" role="img" aria-label="Mariela and Tomás Rivas of Luz Viva singing together (photo placeholder)"><span class="plate__mark" aria-hidden="true">LV</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Band · Spanish &amp; bilingual</p>
+                <h3 class="entry__name" id="a4"><a href="../artist/default.html">Luz Viva</a></h3>
+                <p class="entry__where">North York · 62 km away · from $900 a service</p>
+                <p class="entry__desc">Bilingual worship in Spanish and English for congregations who pray in both, led by Mariela and Tomás Rivas.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 5.0<span class="visually-hidden"> out of 5</span> · 17 church reviews</li>
+                  <li class="free">Free in the evening</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Save<span class="visually-hidden"> Luz Viva</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Luz Viva</span></a>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="entry" aria-labelledby="a5">
+              <span class="entry__no" aria-hidden="true">5</span>
+              <div class="plate entry__plate" role="img" aria-label="Grace Tabernacle Mass Choir in burgundy robes, mid-song (photo placeholder)"><span class="plate__mark" aria-hidden="true">GT</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Gospel choir · Thirty voices</p>
+                <h3 class="entry__name" id="a5"><a href="../artist/default.html">Grace Tabernacle Mass Choir</a></h3>
+                <p class="entry__where">Scarborough · 78 km away · from $2,400 a service</p>
+                <p class="entry__desc">Thirty voices and a Hammond organ, for anniversaries, revivals and Easter mornings that should shake the rafters.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 4.8<span class="visually-hidden"> out of 5</span> · 45 church reviews</li>
+                  <li class="free">Free until 6 pm</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Save<span class="visually-hidden"> Grace Tabernacle Mass Choir</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Grace Tabernacle Mass Choir</span></a>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="entry" aria-labelledby="a6">
+              <span class="entry__no" aria-hidden="true">6</span>
+              <div class="plate entry__plate" role="img" aria-label="Elijah Park seated with an acoustic guitar (photo placeholder)"><span class="plate__mark" aria-hidden="true">EP</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Acoustic · Guitar &amp; voice</p>
+                <h3 class="entry__name" id="a6"><a href="../artist/default.html">Elijah Park</a></h3>
+                <p class="entry__where">Markham · 74 km away · from $350 a service</p>
+                <p class="entry__desc">Gentle, unhurried acoustic worship for small gatherings, prayer evenings and Taizé-style services.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 4.7<span class="visually-hidden"> out of 5</span> · 29 church reviews</li>
+                  <li class="free">Free all day</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="true"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved<span class="visually-hidden"> Elijah Park</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Elijah Park</span></a>
+              </div>
+            </article>
+          </li>
+          <li>
+            <article class="entry" aria-labelledby="a7">
+              <span class="entry__no" aria-hidden="true">7</span>
+              <div class="plate entry__plate" role="img" aria-label="Daniel Okonkwo at the piano and Ruth Okonkwo with her violin (photo placeholder)"><span class="plate__mark" aria-hidden="true">DR</span></div>
+              <div class="entry__body">
+                <p class="smallcaps">Duo · Hymns &amp; acoustic</p>
+                <h3 class="entry__name" id="a7"><a href="../artist/default.html">Daniel &amp; Ruth Okonkwo</a></h3>
+                <p class="entry__where">Ajax · 92 km away · from $700 a service</p>
+                <p class="entry__desc">A husband-and-wife duo on piano and violin who love the old hymns and teach new ones gently.</p>
+                <ul class="entry__meta">
+                  <li><span class="stars" aria-hidden="true">★</span> 4.9<span class="visually-hidden"> out of 5</span> · 33 church reviews</li>
+                  <li class="free">Free in the morning</li>
+                </ul>
+              </div>
+              <div class="entry__actions">
+                <button class="save" type="button" aria-pressed="false"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Save<span class="visually-hidden"> Daniel &amp; Ruth Okonkwo</span></button>
+                <a class="btn btn--sm" href="../artist/default.html">View profile<span class="visually-hidden"> of Daniel &amp; Ruth Okonkwo</span></a>
+              </div>
+            </article>
+          </li>
+        </ol>
+        <p class="text-muted" style="margin-top: var(--space-6);">That is everyone free on the 14th. <button class="link-btn" type="button">Widen to 150 km</button> to see artists from London and Barrie.</p>
+      </section>
+
+      <aside class="margin margin--sticky" aria-label="Booking guide and saved artists">
+        <div class="stack stack--lg">
+          <section id="how" aria-labelledby="how-h">
+            <h2 class="margin-title" id="how-h">How booking works</h2>
+            <ol class="ordinal">
+              <li><div><strong>Choose your date</strong><p>See only the artists who are free that day, within driving distance of your church.</p></div></li>
+              <li><div><strong>Send a request</strong><p>Tell them about the service: the time, the congregation, the songs you love. Nothing is charged yet.</p></div></li>
+              <li><div><strong>Hear back within two days</strong><p>The artist accepts, asks a question, or suggests another time.</p></div></li>
+              <li><div><strong>Confirm with a deposit</strong><p>A 25% deposit holds the date. We keep it safe until after the service.</p></div></li>
+              <li><div><strong>Worship, then reflect</strong><p>The balance is paid after the service, and your review helps the next church.</p></div></li>
+            </ol>
+          </section>
+          <section id="saved" aria-labelledby="saved-h">
+            <h2 class="margin-title" id="saved-h">Saved artists</h2>
+            <ul class="index-list">
+              <li><a href="../artist/default.html">Abigail Mensah</a><span class="text-caption">from $650</span></li>
+              <li><a href="../artist/default.html">Elijah Park</a><span class="text-caption">from $350</span></li>
+            </ul>
+            <p class="text-caption" style="margin-top: var(--space-3);">Saved artists are shared with everyone on Riverside Community Church’s account.</p>
+          </section>
+        </div>
+      </aside>
+
+    </div>
+</main>
+
+<footer class="colophon">
+  <div class="container">
+    <div class="colophon__grid">
+      <section class="join" id="join" aria-labelledby="join-h">
+        <p class="smallcaps smallcaps--accent">For artists</p>
+        <h2 id="join-h">Lead worship for churches across the region</h2>
+        <p>Tell churches your story, share a few live videos, set how far you will drive, and receive booking requests for the dates you are free. Every artist is interviewed and reference-checked before their page goes live.</p>
+        <a class="btn" href="#join">Apply to join the register</a>
+      </section>
+      <section id="account" aria-labelledby="account-h">
+        <h2 id="account-h">Your account</h2>
+        <ul>
+          <li><a href="../discover/default.html#saved">Saved artists</a></li>
+          <li><a href="#account">Booking requests</a></li>
+          <li><a href="#account">Church details</a></li>
+          <li><a href="#account">Account settings</a></li>
+        </ul>
+      </section>
+      <section aria-labelledby="about-h">
+        <h2 id="about-h">Zamaro</h2>
+        <ul>
+          <li><a href="../discover/default.html#how">How booking works</a></li>
+          <li><a href="mailto:help@zamaro.ca">help@zamaro.ca</a></li>
+          <li><a href="#join">For artists</a></li>
+        </ul>
+      </section>
+    </div>
+    <p class="imprint">Zamaro · Toronto, Ontario · MMXXVI</p>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 26rem; right: 1rem;">Changing the date, distance or a style updates the register in place and announces the new count politely. Saving toggles instantly; the margin list updates too.</p>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Discover</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html" aria-current="page">default</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="empty.html">empty</a></li>
+    <li><a href="error.html">error</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

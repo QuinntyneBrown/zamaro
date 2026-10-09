@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discover artists · error — Zamaro Sabbath mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="discover">
+<meta name="mock:state" content="error">
+<meta name="description" content="Availability failed to load: the calendar keeps its dates, counts read as dashes, an alert explains and Try again is offered; saved artists still work.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar topbar--swiss">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="default.html"><span class="brandmark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>Zamaro</a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="default.html" aria-current="page">Calendar</a>
+    <a class="nav-link" href="#how-it-works">How booking works</a>
+    <a class="nav-link" href="#for-artists">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <a class="nav-link" href="#saved">Saved <span class="topbar__count" aria-label="3 artists">3</span></a>
+  <span class="topbar__count topbar__hide-sm">Naomi Fraser · Riverside Community Church</span>
+  <button class="avatar avatar--sm" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu for Naomi Fraser" style="border: 0; cursor: pointer;">NF</button>
+</header>
+
+<main id="main" class="container sb-page">
+  <div class="sb-head">
+    <p class="overline">Toronto and a good drive beyond</p>
+    <h1>Who’s free, and when.</h1>
+    <p class="sb-head__meta">We couldn’t check the artists’ calendars just now.</p>
+  </div>
+
+  <form class="toolbar" role="search" aria-label="Filter availability">
+      <label class="field"><span class="field__label">Your church</span>
+        <input class="input" type="text" name="where" value="Riverside Community Church, Burlington" autocomplete="street-address">
+      </label>
+      <label class="field"><span class="field__label">Drive distance</span>
+        <select class="select" name="radius"><option value="40">Within 40 km</option><option value="80">Within 80 km</option><option value="120" selected>Within 120 km</option><option value="200">Within 200 km</option></select>
+      </label>
+      <fieldset class="toolbar__styles">
+        <legend>Style and budget</legend>
+        <div class="cluster"><button class="chip" type="button" aria-pressed="false">Band</button><button class="chip" type="button" aria-pressed="false">Solo vocalist</button><button class="chip" type="button" aria-pressed="false">Gospel choir</button><button class="chip" type="button" aria-pressed="false">Acoustic</button><button class="chip" type="button" aria-pressed="false">Hymns</button><button class="chip" type="button" aria-pressed="false">Spanish</button><button class="chip" type="button" aria-pressed="false">Under $800</button></div>
+      </fieldset>
+    </form>
+
+  <div class="sb-grid">
+      <section class="sb-col-8" aria-labelledby="cal-title">
+        <div class="cal-head">
+          <h2 id="cal-title">November <span>2026</span></h2>
+          <div class="cluster" style="gap: var(--space-2);">
+            <div class="btn-group" role="group" aria-label="Calendar view">
+              <button class="btn btn--sm" type="button" aria-pressed="true">Month</button>
+              <button class="btn btn--sm" type="button" aria-pressed="false">Week</button>
+            </div>
+            <button class="btn btn--sm btn--icon" type="button" aria-label="Previous month, October 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
+            <button class="btn btn--sm" type="button">Today</button>
+            <button class="btn btn--sm btn--icon" type="button" aria-label="Next month, December 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></button>
+          </div>
+        </div>
+        <div class="alert alert--danger" role="alert" style="margin-block: var(--space-2) var(--space-3);">
+          <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+          <div class="alert__body">
+            <p class="alert__title">November’s availability didn’t load</p>
+            <p>The artists’ calendars didn’t answer in time. Your date and filters are kept, so trying again is one click.</p>
+            <div class="alert__actions"><button class="btn btn--sm" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>Try again</button></div>
+          </div>
+        </div>
+        <table class="cal" aria-labelledby="cal-title">
+          <thead><tr><th scope="col"><abbr title="Sunday">Sun</abbr></th><th scope="col"><abbr title="Monday">Mon</abbr></th><th scope="col"><abbr title="Tuesday">Tue</abbr></th><th scope="col"><abbr title="Wednesday">Wed</abbr></th><th scope="col"><abbr title="Thursday">Thu</abbr></th><th scope="col"><abbr title="Friday">Fri</abbr></th><th scope="col"><abbr title="Saturday">Sat</abbr></th></tr></thead>
+          <tbody>
+            <tr><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Sunday 1 November, availability not loaded"><span class="cal__num" aria-hidden="true">1</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Monday 2 November, availability not loaded"><span class="cal__num" aria-hidden="true">2</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Tuesday 3 November, availability not loaded"><span class="cal__num" aria-hidden="true">3</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Wednesday 4 November, availability not loaded"><span class="cal__num" aria-hidden="true">4</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Thursday 5 November, availability not loaded"><span class="cal__num" aria-hidden="true">5</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Friday 6 November, availability not loaded"><span class="cal__num" aria-hidden="true">6</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Saturday 7 November, availability not loaded"><span class="cal__num" aria-hidden="true">7</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td></tr>
+<tr><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Sunday 8 November, availability not loaded"><span class="cal__num" aria-hidden="true">8</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Monday 9 November, availability not loaded"><span class="cal__num" aria-hidden="true">9</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Tuesday 10 November, availability not loaded"><span class="cal__num" aria-hidden="true">10</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Wednesday 11 November, availability not loaded"><span class="cal__num" aria-hidden="true">11</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Thursday 12 November, availability not loaded"><span class="cal__num" aria-hidden="true">12</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Friday 13 November, availability not loaded"><span class="cal__num" aria-hidden="true">13</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="true" aria-label="Saturday 14 November, availability not loaded"><span class="cal__num" aria-hidden="true">14</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td></tr>
+<tr><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Sunday 15 November, availability not loaded"><span class="cal__num" aria-hidden="true">15</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Monday 16 November, availability not loaded"><span class="cal__num" aria-hidden="true">16</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Tuesday 17 November, availability not loaded"><span class="cal__num" aria-hidden="true">17</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Wednesday 18 November, availability not loaded"><span class="cal__num" aria-hidden="true">18</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Thursday 19 November, availability not loaded"><span class="cal__num" aria-hidden="true">19</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Friday 20 November, availability not loaded"><span class="cal__num" aria-hidden="true">20</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Saturday 21 November, availability not loaded"><span class="cal__num" aria-hidden="true">21</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td></tr>
+<tr><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Sunday 22 November, availability not loaded"><span class="cal__num" aria-hidden="true">22</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Monday 23 November, availability not loaded"><span class="cal__num" aria-hidden="true">23</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Tuesday 24 November, availability not loaded"><span class="cal__num" aria-hidden="true">24</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Wednesday 25 November, availability not loaded"><span class="cal__num" aria-hidden="true">25</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Thursday 26 November, availability not loaded"><span class="cal__num" aria-hidden="true">26</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Friday 27 November, availability not loaded"><span class="cal__num" aria-hidden="true">27</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Saturday 28 November, availability not loaded"><span class="cal__num" aria-hidden="true">28</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td></tr>
+<tr><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Sunday 29 November, availability not loaded"><span class="cal__num" aria-hidden="true">29</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><button class="cal__day cal__day--none" type="button" aria-pressed="false" aria-label="Monday 30 November, availability not loaded"><span class="cal__num" aria-hidden="true">30</span><span aria-hidden="true"><span class="cal__count">—</span></span></button></td><td><span class="cal__day cal__day--out" aria-hidden="true"><span class="cal__num">1</span></span></td><td><span class="cal__day cal__day--out" aria-hidden="true"><span class="cal__num">2</span></span></td><td><span class="cal__day cal__day--out" aria-hidden="true"><span class="cal__num">3</span></span></td><td><span class="cal__day cal__day--out" aria-hidden="true"><span class="cal__num">4</span></span></td><td><span class="cal__day cal__day--out" aria-hidden="true"><span class="cal__num">5</span></span></td></tr>
+          </tbody>
+        </table>
+        <ul class="cal-legend" aria-label="Legend">
+          <li><span class="cal__bar" style="--fill: 0.5" aria-hidden="true"></span>Share of artists free that day</li>
+          <li><span class="swatch-sun" aria-hidden="true"></span>Shaded column: Sunday</li>
+          <li>Today is Friday 9 October</li>
+        </ul>
+      </section>
+      <aside class="sb-col-4 dayplate" aria-labelledby="day-title">
+        <div>
+          <h2 id="day-title">Selected date</h2>
+          <div class="dayplate__date">
+            <span class="dayplate__num" aria-hidden="true">14</span>
+            <span class="dayplate__dow">Saturday</span>
+            <span class="dayplate__month">14 November 2026 · evening</span>
+          </div>
+          <span class="visually-hidden">Saturday 14 November 2026</span>
+          <dl class="dayplate__stats"><div><dt>Free</dt><dd aria-label="Not loaded">—</dd></div><div><dt>On hold</dt><dd aria-label="Not loaded">—</dd></div><div><dt>In range</dt><dd aria-label="Not loaded">—</dd></div></dl>
+        </div>
+        <div id="saved">
+          <h2>Saved artists · 3</h2>
+          <ul class="rlist"><li><span class="rlist__main"><a href="../artist/default.html">Abigail Mensah</a><span class="rlist__meta">Solo vocalist · Brampton · 45 km</span></span><span class="tag">Not loaded</span><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></li><li><span class="rlist__main"><a href="../artist/default.html">Luz Viva</a><span class="rlist__meta">Band · North York · 60 km</span></span><span class="tag">Not loaded</span><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></li><li><span class="rlist__main"><a href="../artist/default.html">Elijah Park</a><span class="rlist__meta">Solo acoustic · Markham · 75 km</span></span><span class="tag">Not loaded</span><button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg></button></li></ul>
+        </div>
+      </aside>
+  </div>
+
+    <section class="sb-section" id="matrix" aria-labelledby="matrix-title">
+      <div class="sb-section__head"><h2 id="matrix-title">Free on Saturday 14 November</h2><p>Not loaded</p></div>
+      <div class="notice notice--error">
+        <h3>Open dates didn’t load</h3>
+        <p>This is on our side, not yours. Try again in a moment; if it keeps happening, call us at 416-555-0142 and we’ll check the date with artists directly.</p>
+        <div class="cluster">
+          <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>Try again</button>
+          <a class="btn btn--ghost" href="#saved">Go to your saved artists</a>
+        </div>
+        <p class="notice__code">Error 503 · reference ZM-4D81</p>
+      </div>
+    </section>
+
+    <section class="sb-section" id="how-it-works" aria-labelledby="how-title">
+      <div class="sb-section__head"><h2 id="how-title">How booking works</h2><p>Four steps. Nothing is charged until an artist says yes.</p></div>
+      <ol class="steps">
+        <li><span class="steps__n" aria-hidden="true">01</span><h3>Pick your date</h3><p>The calendar counts who is free each day within your drive distance. Select a day to see each artist’s open dates around it.</p></li>
+        <li><span class="steps__n" aria-hidden="true">02</span><h3>Send a request</h3><p>Choose an artist, add your service time, venue and what you hope the worship will carry. It takes about two minutes.</p></li>
+        <li><span class="steps__n" aria-hidden="true">03</span><h3>Hear back within 48 hours</h3><p>The artist accepts, suggests a change or kindly declines. We hold the date for you while they decide.</p></li>
+        <li><span class="steps__n" aria-hidden="true">04</span><h3>Confirm with a deposit</h3><p>A 25% deposit locks the date; the rest is paid after the service. Free cancellation up to 30 days before.</p></li>
+      </ol>
+    </section>
+
+    <section class="band" id="for-artists" aria-labelledby="artists-title">
+      <div class="band__text">
+        <h2 id="artists-title">Do you lead worship?</h2>
+        <p>Keep your open dates on Zamaro and churches within driving distance will find you on the days you’re free. Joining is free; we take 8% only when a booking is confirmed.</p>
+      </div>
+      <div class="band__cta"><a class="btn btn--lg" href="#for-artists">Apply as an artist</a></div>
+    </section>
+</main>
+
+
+<footer class="sb-footer">
+  <div class="container">
+    <div><h2>Zamaro</h2><p>Praise and worship artists for churches in Toronto and within a good drive of it.</p></div>
+    <div><h2>Churches</h2><ul><li><a href="#how-it-works">How booking works</a></li><li><a href="#saved">Saved artists</a></li><li><a href="default.html">Calendar</a></li></ul></div>
+    <div><h2>Artists</h2><ul><li><a href="#for-artists">Apply to join</a></li><li><a href="#for-artists">Fees and payouts</a></li></ul></div>
+    <div><h2>Help</h2><ul><li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li><li><a href="tel:+14165550142">416-555-0142</a>, weekdays 9–5</li></ul></div>
+  </div>
+</footer>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Discover</span>
+  <ul class="mock-bar__states"><li><a href="default.html">default</a></li><li><a href="loading.html">loading</a></li><li><a href="empty.html">empty</a></li><li><a href="error.html" aria-current="page">error</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>
