@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form layout — Zamaro design system</title>
+<meta name="description" content="How fields are arranged into forms: single column, two-column rows, inline forms, the perforated actions bar, the error summary and the submitting state, shown in the booking stub and the booking bar.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Form layout</h1>
+      <p class="ds-lead">Forms on Zamaro are short tickets: one column of fields, a perforated line, then one yellow button. This page covers the arrangement, the error summary and what happens while a request is sending.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;form novalidate&gt;</code></span><span class="ds-pill">Class <code>.form</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use these classes to arrange <a href="form-field.html">form fields</a> into a form. They handle spacing, columns, the actions bar and the error summary; the fields handle labels and messages.</p>
+      <ul>
+        <li><b>Single column</b> (<code>.form</code>): the default. Fields 20px apart, the form capped at 36rem so lines stay short.</li>
+        <li><b>Two-column row</b> (<code>.form__row</code>): two short, related fields side by side from 768px, such as first and last day.</li>
+        <li><b>Inline</b> (<code>.form__inline</code>): fields and a button on one line that wraps, for a quick search.</li>
+        <li><b>Actions bar</b> (<code>.form__actions</code>): the submit and secondary buttons below a dashed perforation, like a ticket stub.</li>
+        <li><b>Error summary</b> (<code>.error-summary</code>): after a failed submit, a list of what to fix with links to each field.</li>
+        <li><b>Submitting</b> (<code>.form[aria-busy="true"]</code>): fields fade and stop taking input; the submit shows a spinner.</li>
+      </ul>
+      <p>Zamaro’s two real forms are the <b>booking bar</b> on the Discover poster and the <b>booking stub</b> on an artist’s profile. Both are shown below. The full pattern, including validation timing, is in <a href="../patterns/forms.html">Forms</a>.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <form class="form" action="#anatomy" novalidate style="width: min(100%, 22rem);" aria-label="Anatomy example">
+            <div class="error-summary" tabindex="-1">
+              <p class="error-summary__title">Fix 1 thing</p>
+              <ul><li><a href="#ana-church">Enter your church’s name</a></li></ul>
+            </div>
+            <div class="field"><label class="field__label" for="ana-church">Church</label><input class="input" type="text" id="ana-church" aria-invalid="true"></div>
+            <div class="form__actions"><button class="btn btn--primary" type="submit">Request to book</button></div>
+          </form>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 13rem)); top: 3rem;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 13rem)); top: 9.5rem;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 13rem)); top: 13rem;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 13rem)); top: 15.5rem;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Error summary</b><small>Appears at the top after a failed submit and takes focus. Danger tint, 2px red rule, a title that counts the problems, one link per field.</small></div></li>
+          <li><div><b>Fields</b><small>A column with 20px (<code>--space-5</code>) between fields.</small></div></li>
+          <li><div><b>Perforation</b><small>A 2px dashed charcoal rule above the actions, with 16px above the buttons. It separates “what you told us” from “send it”.</small></div></li>
+          <li><div><b>Actions</b><small>The primary button first, then any secondary. Right-aligned by default; <code>.form__actions--start</code> aligns them left.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Single column with actions</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <form class="form" action="#variants" novalidate aria-labelledby="fl-req-title" style="width: 100%;">
+      <h4 id="fl-req-title">Request Abigail Mensah</h4>
+      <div class="field">
+        <label class="field__label" for="fl-date">Event date</label>
+        <input class="input" type="date" id="fl-date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="fl-date-msg">
+        <p class="inline-msg inline-msg--success" id="fl-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="fl-kind">Kind of gathering</label>
+        <select class="select" id="fl-kind" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option></select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="fl-msg">Message <span class="field__optional">(optional)</span></label>
+        <textarea class="textarea" id="fl-msg" name="message" placeholder="Your church, the room, the songs you love."></textarea>
+      </div>
+      <label class="check">
+        <input type="checkbox" name="terms">
+        <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+        <span class="check__text">I’ve read the cancellation terms</span>
+      </label>
+      <div class="form__actions">
+        <button class="btn btn--primary" type="submit">Request to book · Sat 14 Nov</button>
+        <button class="btn btn--ghost" type="button">Save for later</button>
+      </div>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span>One column, one primary action. The secondary action is a ghost button so it does not compete.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="form" action="#variants" novalidate aria-labelledby="fl-req-title" style="width: 100%;"&gt;
+  &lt;h4 id="fl-req-title"&gt;Request Abigail Mensah&lt;/h4&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-date"&gt;Event date&lt;/label&gt;
+    &lt;input class="input" type="date" id="fl-date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="fl-date-msg"&gt;
+    &lt;p class="inline-msg inline-msg--success" id="fl-date-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Abigail is free Sat 14 Nov&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-kind"&gt;Kind of gathering&lt;/label&gt;
+    &lt;select class="select" id="fl-kind" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;/select&gt;
+  &lt;/div&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-msg"&gt;Message &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
+    &lt;textarea class="textarea" id="fl-msg" name="message" placeholder="Your church, the room, the songs you love."&gt;&lt;/textarea&gt;
+  &lt;/div&gt;
+  &lt;label class="check"&gt;
+    &lt;input type="checkbox" name="terms"&gt;
+    &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class="check__text"&gt;I’ve read the cancellation terms&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;div class="form__actions"&gt;
+    &lt;button class="btn btn--primary" type="submit"&gt;Request to book · Sat 14 Nov&lt;/button&gt;
+    &lt;button class="btn btn--ghost" type="button"&gt;Save for later&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+      <h3>Two-column rows</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <form class="form" action="#variants" novalidate aria-label="Contact on the day" style="width: 100%;">
+      <div class="form__row">
+        <div class="field"><label class="field__label" for="fl-name">Contact on the day</label><input class="input" type="text" id="fl-name" name="contact" value="Naomi Fraser" autocomplete="name"></div>
+        <div class="field"><label class="field__label" for="fl-phone">Phone <span class="field__optional">(optional)</span></label><input class="input" type="tel" id="fl-phone" name="phone" autocomplete="tel"></div>
+      </div>
+      <div class="form__row">
+        <div class="field"><label class="field__label" for="fl-first">First day</label><input class="input" type="date" id="fl-first" name="first" value="2027-03-05" min="2026-10-09"></div>
+        <div class="field"><label class="field__label" for="fl-last">Last day</label><input class="input" type="date" id="fl-last" name="last" value="2027-03-07" min="2027-03-05"></div>
+      </div>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span>Pairs only for short fields that belong together. Below 768px every row is one column, in the same order.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="form" action="#variants" novalidate aria-label="Contact on the day" style="width: 100%;"&gt;
+  &lt;div class="form__row"&gt;
+    &lt;div class="field"&gt;&lt;label class="field__label" for="fl-name"&gt;Contact on the day&lt;/label&gt;&lt;input class="input" type="text" id="fl-name" name="contact" value="Naomi Fraser" autocomplete="name"&gt;&lt;/div&gt;
+    &lt;div class="field"&gt;&lt;label class="field__label" for="fl-phone"&gt;Phone &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;&lt;input class="input" type="tel" id="fl-phone" name="phone" autocomplete="tel"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form__row"&gt;
+    &lt;div class="field"&gt;&lt;label class="field__label" for="fl-first"&gt;First day&lt;/label&gt;&lt;input class="input" type="date" id="fl-first" name="first" value="2027-03-05" min="2026-10-09"&gt;&lt;/div&gt;
+    &lt;div class="field"&gt;&lt;label class="field__label" for="fl-last"&gt;Last day&lt;/label&gt;&lt;input class="input" type="date" id="fl-last" name="last" value="2027-03-07" min="2027-03-05"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+      <h3>Inline</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <form class="form__inline" action="#variants" role="search" aria-label="Find an artist" style="width: 100%;">
+      <div class="field">
+        <label class="field__label" for="fl-q">Artist or song</label>
+        <div class="input-icon"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" id="fl-q" name="q" value="Way Maker"></div>
+      </div>
+      <button class="btn" type="submit">Search</button>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span><code>.form__inline</code> aligns the button with the bottom of the fields (<code>align-items: end</code>) and wraps it underneath on phones.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="form__inline" action="#variants" role="search" aria-label="Find an artist" style="width: 100%;"&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-q"&gt;Artist or song&lt;/label&gt;
+    &lt;div class="input-icon"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/&gt;&lt;/svg&gt;&lt;input class="input" type="search" id="fl-q" name="q" value="Way Maker"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="btn" type="submit"&gt;Search&lt;/button&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+      <h3>Error summary</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <form class="form" action="#variants" novalidate aria-labelledby="fl-err-title" style="width: 100%;">
+      <h4 id="fl-err-title">Book Abigail</h4>
+      <div class="error-summary" tabindex="-1" aria-labelledby="fl-err-summary">
+        <p class="error-summary__title" id="fl-err-summary">Fix 2 things to send your request</p>
+        <ul>
+          <li><a href="#fl-err-date">Pick a date Abigail is free</a></li>
+          <li><a href="#fl-err-terms">Confirm you’ve read the cancellation terms</a></li>
+        </ul>
+      </div>
+      <div class="field">
+        <label class="field__label" for="fl-err-date">Event date</label>
+        <input class="input" type="date" id="fl-err-date" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="fl-err-date-msg">
+        <p class="field__error" id="fl-err-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
+      </div>
+      <div class="stack stack--sm">
+        <label class="check">
+          <input type="checkbox" id="fl-err-terms" name="terms" aria-invalid="true" aria-describedby="fl-err-terms-msg">
+          <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+          <span class="check__text">I’ve read the cancellation terms</span>
+        </label>
+        <p class="field__error" id="fl-err-terms-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Confirm this to send the request. Cancelling is free up to 14 days before.</p>
+      </div>
+      <div class="form__actions"><button class="btn btn--primary" type="submit">Request to book</button></div>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span>On submit, the summary appears and takes focus. Each link moves focus to its field. Nothing Naomi typed is lost.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="form" action="#variants" novalidate aria-labelledby="fl-err-title" style="width: 100%;"&gt;
+  &lt;h4 id="fl-err-title"&gt;Book Abigail&lt;/h4&gt;
+  &lt;div class="error-summary" tabindex="-1" aria-labelledby="fl-err-summary"&gt;
+    &lt;p class="error-summary__title" id="fl-err-summary"&gt;Fix 2 things to send your request&lt;/p&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href="#fl-err-date"&gt;Pick a date Abigail is free&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href="#fl-err-terms"&gt;Confirm you’ve read the cancellation terms&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-err-date"&gt;Event date&lt;/label&gt;
+    &lt;input class="input" type="date" id="fl-err-date" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="fl-err-date-msg"&gt;
+    &lt;p class="field__error" id="fl-err-date-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="stack stack--sm"&gt;
+    &lt;label class="check"&gt;
+      &lt;input type="checkbox" id="fl-err-terms" name="terms" aria-invalid="true" aria-describedby="fl-err-terms-msg"&gt;
+      &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class="check__text"&gt;I’ve read the cancellation terms&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;p class="field__error" id="fl-err-terms-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Confirm this to send the request. Cancelling is free up to 14 days before.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="form__actions"&gt;&lt;button class="btn btn--primary" type="submit"&gt;Request to book&lt;/button&gt;&lt;/div&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+      <h3>Submitting</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <form class="form" action="#variants" aria-busy="true" aria-labelledby="fl-busy-title" style="width: 100%;">
+      <h4 id="fl-busy-title">Book Abigail</h4>
+      <div class="field"><label class="field__label" for="fl-busy-date">Event date</label><input class="input" type="date" id="fl-busy-date" value="2026-11-14"></div>
+      <div class="field"><label class="field__label" for="fl-busy-church">Church</label><input class="input" type="text" id="fl-busy-church" value="Riverside Community Church, Burlington"></div>
+      <div class="form__actions"><button class="btn btn--primary" type="submit" aria-busy="true">Sending request…</button></div>
+      <p class="visually-hidden" role="status">Sending your request to Abigail</p>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span><code>aria-busy="true"</code> on the form fades fields to 60% and blocks input; the submit is busy too. Fields are not disabled, so their values stay readable and are not dropped from the submission.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="form" action="#variants" aria-busy="true" aria-labelledby="fl-busy-title" style="width: 100%;"&gt;
+  &lt;h4 id="fl-busy-title"&gt;Book Abigail&lt;/h4&gt;
+  &lt;div class="field"&gt;&lt;label class="field__label" for="fl-busy-date"&gt;Event date&lt;/label&gt;&lt;input class="input" type="date" id="fl-busy-date" value="2026-11-14"&gt;&lt;/div&gt;
+  &lt;div class="field"&gt;&lt;label class="field__label" for="fl-busy-church"&gt;Church&lt;/label&gt;&lt;input class="input" type="text" id="fl-busy-church" value="Riverside Community Church, Burlington"&gt;&lt;/div&gt;
+  &lt;div class="form__actions"&gt;&lt;button class="btn btn--primary" type="submit" aria-busy="true"&gt;Sending request…&lt;/button&gt;&lt;/div&gt;
+  &lt;p class="visually-hidden" role="status"&gt;Sending your request to Abigail&lt;/p&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+      <h3>Real layouts: the booking stub</h3>
+      <p>The profile’s sidebar form. On phones it follows the profile content; from 1024px it is a sticky sidebar. It is the reference single-column form.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--canvas">
+    <form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 24rem);">
+      <div class="stub__head">
+        <h4 id="fl-stub-title" class="stub__title">Book Abigail</h4>
+        <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
+      </div>
+      <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
+      <div class="field">
+        <label class="field__label" for="fl-stub-date">Event date</label>
+        <input class="input" type="date" id="fl-stub-date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="fl-stub-date-msg">
+        <p class="inline-msg inline-msg--success" id="fl-stub-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p>
+      </div>
+      <label class="field"><span class="field__label">Kind of gathering</span>
+        <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+      <label class="field"><span class="field__label">Church</span>
+        <input class="input" type="text" name="church" value="Riverside Community Church, Burlington" autocomplete="organization"></label>
+      <div class="field">
+        <label class="field__label" for="fl-stub-msg">Message <span class="field__optional">(optional)</span></label>
+        <textarea class="textarea" id="fl-stub-msg" name="message" placeholder="Your church, the room, the songs you love."></textarea>
+      </div>
+      <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
+      <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span>The stub from the profile mock, with the drift fixed: <code>.stub__title</code> instead of an inline font, a success message instead of a typed ✓, and a field with <code>label for</code> where there is help.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 24rem);"&gt;
+  &lt;div class="stub__head"&gt;
+    &lt;h4 id="fl-stub-title" class="stub__title"&gt;Book Abigail&lt;/h4&gt;
+    &lt;span class="stub__code" aria-hidden="true"&gt;No. ZAM-0114&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;p&gt;&lt;span class="stub__price"&gt;From $650&lt;/span&gt;&lt;br&gt;&lt;span class="text-muted"&gt;per service · travel included&lt;/span&gt;&lt;/p&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-stub-date"&gt;Event date&lt;/label&gt;
+    &lt;input class="input" type="date" id="fl-stub-date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="fl-stub-date-msg"&gt;
+    &lt;p class="inline-msg inline-msg--success" id="fl-stub-date-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Abigail is free Sat 14 Nov&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;Kind of gathering&lt;/span&gt;
+    &lt;select class="select" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;Church&lt;/span&gt;
+    &lt;input class="input" type="text" name="church" value="Riverside Community Church, Burlington" autocomplete="organization"&gt;&lt;/label&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="fl-stub-msg"&gt;Message &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
+    &lt;textarea class="textarea" id="fl-stub-msg" name="message" placeholder="Your church, the room, the songs you love."&gt;&lt;/textarea&gt;
+  &lt;/div&gt;
+  &lt;button class="btn btn--primary btn--lg btn--block" type="submit"&gt;Request to book · Sat 14 Nov&lt;/button&gt;
+  &lt;p class="stub__fine"&gt;Nothing is charged until Abigail accepts. Cancel free up to 14 days before.&lt;/p&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+      <h3>Real layouts: the booking bar</h3>
+      <p>The Discover poster’s search form. It sits on the charcoal stage, so it carries <code>data-theme="light"</code> to stay a paper ticket in both themes. Fields stack on phones and pair up from 640px; the title and the submit span both columns.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stage">
+    <form class="booking-bar" data-theme="light" action="#variants" aria-labelledby="fl-bar-title" style="width: min(100%, 36rem);">
+      <h4 id="fl-bar-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h4>
+      <label class="field"><span class="field__label">Event date</span>
+        <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
+      <label class="field"><span class="field__label">Kind of gathering</span>
+        <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+      <label class="field"><span class="field__label">Church location</span>
+        <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
+      <label class="field"><span class="field__label">How far can they drive?</span>
+        <select class="select" name="radius"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+      <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span>The Discover booking bar. Its yellow hard shadow (<code>--size-offset-3</code> in <code>--color-accent-on-stage</code>) lifts it off the poster.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="booking-bar" data-theme="light" action="#variants" aria-labelledby="fl-bar-title" style="width: min(100%, 36rem);"&gt;
+  &lt;h4 id="fl-bar-title" class="booking-bar__title"&gt;Your event &lt;small aria-hidden="true"&gt;Admit one church&lt;/small&gt;&lt;/h4&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;Event date&lt;/span&gt;
+    &lt;input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"&gt;&lt;/label&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;Kind of gathering&lt;/span&gt;
+    &lt;select class="select" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;Church location&lt;/span&gt;
+    &lt;input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"&gt;&lt;/label&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;How far can they drive?&lt;/span&gt;
+    &lt;select class="select" name="radius"&gt;&lt;option value="40"&gt;40 km · 30 min&lt;/option&gt;&lt;option value="80"&gt;80 km · 1 hr&lt;/option&gt;&lt;option value="120" selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;option value="200"&gt;200 km · 2.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;button class="btn btn--primary btn--lg" type="submit"&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Forms have two widths. Field and button heights come from their own sizes.</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Class</th><th scope="col">Width</th><th scope="col">Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>.form</code></td><td>Up to 36rem (576px)</td><td>Every standalone form: booking request, account settings, sign-in.</td></tr>
+          <tr><td><code>.form.form--wide</code></td><td>Its container</td><td>Forms inside a card, stub or bar that already sets the width.</td></tr>
+          <tr><td><code>.stub</code></td><td>The sidebar (<code>--layout-sidebar-width</code>) from 1024px</td><td>The booking stub.</td></tr>
+          <tr><td><code>.booking-bar</code></td><td>Its poster column</td><td>The Discover search.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>A form moves through four states. The submit button is never disabled: pressing it with problems shows the error summary.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Ready</th><th scope="col">Invalid</th><th scope="col">Submitting</th><th scope="col">Sent</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Summary</th>
+            <td><span class="text-caption">None</span></td>
+            <td><div class="error-summary" style="width: 14rem;"><p class="error-summary__title">Fix 1 thing</p><ul><li><a href="#st-f2">Enter your church’s name</a></li></ul></div></td>
+            <td><span class="text-caption">None</span></td>
+            <td><div class="alert alert--success alert--compact" role="status" style="width: 14rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="alert__title">Request sent</p><p class="text-sm">No. ZAM-0114</p></div></div></td></tr>
+          <tr><th scope="row">Field</th>
+            <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f1">Church</label><input class="input" type="text" id="st-f1" value="Riverside"></div></td>
+            <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f2">Church</label><input class="input" type="text" id="st-f2" aria-invalid="true" aria-describedby="st-f2-e"><p class="field__error" id="st-f2-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</p></div></td>
+            <td><div class="form" aria-busy="true" style="width: 12rem;"><div class="field"><label class="field__label" for="st-f3">Church</label><input class="input" type="text" id="st-f3" value="Riverside"></div></div></td>
+            <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f4">Church</label><input class="input" type="text" id="st-f4" value="Riverside" readonly></div></td></tr>
+          <tr><th scope="row">Submit</th>
+            <td><button class="btn btn--primary" type="button">Request to book</button></td>
+            <td><button class="btn btn--primary" type="button">Request to book</button></td>
+            <td><button class="btn btn--primary" type="button" aria-busy="true">Sending request…</button></td>
+            <td><a class="btn" href="#states">See your requests</a></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><form class="form form--wide" action="#states" novalidate aria-label="Light theme example">
+          <div class="error-summary"><p class="error-summary__title">Fix 1 thing</p><ul><li><a href="#th-l-church">Enter your church’s name</a></li></ul></div>
+          <div class="form__row">
+            <div class="field"><label class="field__label" for="th-l-church">Church</label><input class="input" type="text" id="th-l-church" aria-invalid="true"></div>
+            <div class="field"><label class="field__label" for="th-l-date">Event date</label><input class="input" type="date" id="th-l-date" value="2026-11-14"></div>
+          </div>
+          <div class="form__actions"><button class="btn btn--primary" type="button">Request to book</button><button class="btn btn--ghost" type="button">Save for later</button></div>
+        </form></div>
+        <div data-theme="dark"><form class="form form--wide" action="#states" novalidate aria-label="Dark theme example">
+          <div class="error-summary"><p class="error-summary__title">Fix 1 thing</p><ul><li><a href="#th-d-church">Enter your church’s name</a></li></ul></div>
+          <div class="form__row">
+            <div class="field"><label class="field__label" for="th-d-church">Church</label><input class="input" type="text" id="th-d-church" aria-invalid="true"></div>
+            <div class="field"><label class="field__label" for="th-d-date">Event date</label><input class="input" type="date" id="th-d-date" value="2026-11-14"></div>
+          </div>
+          <div class="form__actions"><button class="btn btn--primary" type="button">Request to book</button><button class="btn btn--ghost" type="button">Save for later</button></div>
+        </form></div>
+      </div>
+      <ul>
+        <li><b>Ready</b>: fields prefilled with what Zamaro knows; errors appear only after leaving a field or submitting.</li>
+        <li><b>Invalid</b>: the summary at the top takes focus and lists each problem as a link; each field shows its own error.</li>
+        <li><b>Submitting</b>: <code>aria-busy</code> on the form and the button, a polite “Sending your request to Abigail”, no double submit.</li>
+        <li><b>Sent</b>: the form is replaced by a confirmation with the booking code, and focus moves to it. Values become read-only if shown again.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>One column below 768px (<code>--layout-breakpoint-md</code>). <code>.form__row</code> becomes two equal columns from 768px; the DOM order is the reading order at every width.</li>
+        <li>The booking bar pairs its fields from 640px (<code>--layout-breakpoint-sm</code>); its title and submit always span the full width.</li>
+        <li>The booking stub becomes a sticky sidebar from 1024px (<code>--layout-breakpoint-lg</code>), below the top bar. Its submit is always full width (<code>.btn--block</code>).</li>
+        <li><code>.form__actions</code> wraps; on phones the buttons stack in DOM order, primary first.</li>
+        <li><code>.form__inline</code> fields grow from 12rem; the button drops under the field when space runs out.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Form layout has no component tokens of its own. It reads spacing tokens (<code>--space-3</code>, <code>--space-4</code>, <code>--space-5</code>), the perforation (<code>--border-width-thick</code> dashed in <code>--color-border-strong</code>) and the danger set for the summary (<code>--color-danger-bg</code>, <code>--color-danger-border</code>, <code>--color-danger-fg</code>). Fields inside carry the field tokens (<code>--field-bg</code>, <code>--field-fg</code>, <code>--field-border</code>).</p>
+      <p>The booking bar is a <b>paper island</b>: <code>data-theme="light"</code> re-applies the light semantic tokens inside it, so it stays newsprint on the dark stage in both themes. The stub has no such attribute and turns charcoal in dark mode, like every other card. Its shadow is <code>--shadow-3</code>, which turns yellow in dark mode.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;form&gt;</code> named by its heading (<code>aria-labelledby</code>), with <code>novalidate</code> so Zamaro’s own messages replace the browser’s bubbles. Search forms add <code>role="search"</code>. Follow the <a href="https://www.w3.org/WAI/tutorials/forms/notifications/">W3C WAI forms tutorial on user notifications</a> for the summary and success messages.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through fields and buttons in reading order, top to bottom, left to right in rows.</td></tr>
+        <tr><td><kbd>Enter</kbd> in a text field</td><td>Submits the form (not in a textarea).</td></tr>
+        <tr><td><kbd>Enter</kbd> on a summary link</td><td>Moves focus to that field and scrolls it below the sticky top bar.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>After a failed submit, focus moves to the error summary (<code>tabindex="-1"</code>). After success, focus moves to the confirmation heading. While submitting, focus stays on the busy button. <code>scroll-padding-top</code> keeps focused fields clear of the sticky top bar (WCAG 2.4.11).</p>
+      <h3>Labelling</h3>
+      <ul>
+        <li>The summary is labelled by its title and announced by taking focus; it has no <code>role="alert"</code>, which would read it twice. The title counts the problems; each link text names the field and the fix, and its <code>href</code> is the field’s <code>id</code>.</li>
+        <li>Groups of checkboxes or radios are fieldsets with legends; rows of unrelated fields are not.</li>
+        <li>Submitting is announced in a polite status region; the form and button carry <code>aria-busy="true"</code>.</li>
+        <li>Never disable the submit to signal “not ready”: disabled buttons are skipped by Tab and explain nothing.</li>
+      </ul>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Summary title on tint</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Summary text on tint</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Summary rule on card</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Perforation on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Fine print on stub</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: summary title on tint</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: summary text on tint</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: perforation on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <p>Busy fields fade to 60% opacity. They are not interactive while faded, and they return to full contrast as soon as the request finishes or fails.</p>
+      <h3>Motion</h3>
+      <p>The summary appears without animation; scrolling to it is smooth unless the user prefers reduced motion. The busy spinner keeps turning under reduced motion because it reports status.</p>
+      <h3>Touch</h3>
+      <p>20px between fields, 12px between action buttons, 44px fields and a 56px block submit in the stub, all reachable with a thumb on a 360px phone.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>The form heading names the task and the person: “Book Abigail”, “Your event”.</li>
+        <li>The submit names the action and the key detail: “Request to book · Sat 14 Nov”, “Show the lineup”.</li>
+        <li>Put reassurance next to the submit, not in a tooltip: “Nothing is charged until Abigail accepts. Cancel free up to 14 days before.”</li>
+        <li>The summary title says how many and why: “Fix 2 things to send your request”. Links read as instructions: “Pick a date Abigail is free”.</li>
+        <li>Busy labels are present tense: “Sending request…”, “Checking calendars…”.</li>
+        <li>Success gives the booking code and the next step: “Request sent · No. ZAM-0114. We’ll email you when Abigail replies.”</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="error-summary"><p class="error-summary__title">Fix 2 things to send your request</p><ul><li><a href="#fl-err-date">Pick a date Abigail is free</a></li><li><a href="#fl-err-terms">Confirm the cancellation terms</a></li></ul></div></div><figcaption>A summary that takes focus and links to each field, plus errors at the fields.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--danger" style="animation: none;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Form invalid</p></div></div></div><figcaption>A toast that says “Form invalid” and disappears. It names nothing and points nowhere.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Request to book</button></div><figcaption>The submit stays enabled; pressing it explains what is missing.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" disabled>Request to book</button></div><figcaption>A disabled submit until everything is valid. Naomi can’t tell what is missing, and keyboard users can’t reach the button.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><h4 class="stub__title">Book Abigail</h4><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption><code>.stub__title</code> for the stub heading.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><h4 style="font: var(--text-h3);">Book Abigail</h4><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption>The mocks set the stub heading with <code>style="font: var(--text-h3)"</code>. A class keeps every stub the same.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Summary fill</td><td><code>--color-danger-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td></tr>
+          <tr><td>Summary rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Summary title and links</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Perforation</td><td><code>--color-border-strong</code>, <code>--border-width-thick</code> dashed</td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Booking bar shadow</td><td><code>--size-offset-3</code>, <code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Stub shadow</td><td><code>--shadow-3</code></td><td><span data-theme="light" data-token="--shadow-3"></span></td><td><span data-theme="dark" data-token="--shadow-3"></span></td></tr>
+          <tr><td>Gap between fields / rows</td><td><code>--space-5</code></td><td colspan="2"><span data-token="--space-5"></span></td></tr>
+          <tr><td>Gap between actions / inline items</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr>
+          <tr><td>Perforation to buttons</td><td><code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr>
+          <tr><td>Summary padding</td><td><code>--space-5</code></td><td colspan="2"><span data-token="--space-5"></span></td></tr>
+          <tr><td>Stub and bar padding</td><td><code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span></td></tr>
+          <tr><td>Two-column breakpoint</td><td><code>--layout-breakpoint-md</code></td><td colspan="2"><span data-token="--layout-breakpoint-md"></span></td></tr>
+        </tbody>
+      </table></div>
+      <p>The 36rem form cap and the 60% busy opacity are fixed values in <code>components.css</code>.</p>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;form class="form" action="/bookings" method="post" novalidate aria-labelledby="book-title"&gt;
+  &lt;h2 id="book-title"&gt;Book Abigail&lt;/h2&gt;
+
+  &lt;div class="error-summary" tabindex="-1" aria-labelledby="summary-title" hidden&gt;
+    &lt;!-- focus moves here on submit; no role="alert", or it is announced twice --&gt;
+    &lt;p class="error-summary__title" id="summary-title"&gt;Fix 2 things to send your request&lt;/p&gt;
+    &lt;ul&gt;&lt;li&gt;&lt;a href="#event-date"&gt;Pick a date Abigail is free&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;
+  &lt;/div&gt;
+
+  &lt;div class="form__row"&gt;
+    &lt;div class="field"&gt;…&lt;/div&gt;
+    &lt;div class="field"&gt;…&lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class="form__actions"&gt;
+    &lt;button class="btn btn--primary" type="submit"&gt;Request to book · Sat 14 Nov&lt;/button&gt;
+    &lt;button class="btn btn--ghost" type="button"&gt;Save for later&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+
+&lt;!-- while sending --&gt;
+&lt;form class="form" aria-busy="true"&gt;… &lt;button class="btn btn--primary" type="submit" aria-busy="true"&gt;Sending request…&lt;/button&gt;&lt;/form&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.form</code> / <code>.form--wide</code></td><td>Column with 20px gaps, capped at 36rem / uncapped.</td></tr>
+        <tr><td><code>.form__row</code></td><td>One column; two equal columns from 768px.</td></tr>
+        <tr><td><code>.form__inline</code></td><td>Wrapping row aligned to the bottom; fields grow from 12rem.</td></tr>
+        <tr><td><code>.form__actions</code> / <code>--start</code></td><td>Perforated actions bar, right- or left-aligned.</td></tr>
+        <tr><td><code>.error-summary</code>, <code>__title</code></td><td>Danger-tinted list of problems with links.</td></tr>
+        <tr><td><code>.form[aria-busy="true"]</code></td><td>Fields fade to 60% and ignore input.</td></tr>
+        <tr><td><code>.stub</code>, <code>.stub__head</code>, <code>.stub__title</code>, <code>.stub__price</code>, <code>.stub__fine</code>, <code>.stub__code</code></td><td>The booking stub.</td></tr>
+        <tr><td><code>.booking-bar[data-theme="light"]</code>, <code>.booking-bar__title</code></td><td>The paper booking bar on the stage.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the booking bar with four fields and “Show the lineup”</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: the busy submit “Checking calendars…”</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>, <a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the bar keeping its values when results are empty or fail</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub, “Request to book · Sat 14 Nov” and its fine print</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: the same stub for Miriam Haile</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The booking bar read primitives (<code>--palette-ink</code>, <code>--palette-paper*</code>) to stay paper on the stage. It is now a <code>data-theme="light"</code> paper island.</li>
+        <li>The stub heading used <code>style="font: var(--text-h3)"</code>. It is now <code>.stub__title</code>.</li>
+        <li>The stub’s “✓ Abigail is free” help was muted text with a typed tick. It is now an <code>.inline-msg--success</code>.</li>
+        <li>No error element or error summary existed. <code>.field__error</code> and <code>.error-summary</code> were added; invalid styling now covers input, select and textarea.</li>
+        <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks. It is now <code>.field--inline</code>.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

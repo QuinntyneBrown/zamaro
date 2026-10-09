@@ -153,6 +153,9 @@ The mocks now read the system: `docs/mocks/assets/tokens.css` and `ui.css` forwa
 | pages/artist/loading | `role="status"` on the page `<h1>` replaced its heading role. | A plain visually hidden `<h1>` plus a separate `role="status"` line. |
 | pages/discover/empty, artist/empty | Decorative stamps (“Sold out”, “Fresh on the bill”, “Opening night”) were read aloud before the real title. | Stamps are `aria-hidden="true"`. |
 | pages/discover/empty | Date-swap buttons read “Sun 20 Dec2 choirs free”: no space between date and count. | A space after the date. |
+| pages/artist/default, empty | The date help sat inside the wrapping `<label>`, so the field’s name became “Event date ✓ Abigail is free…”; review stars put `aria-label` on a plain `<span>`. | The help sits outside a `<label for>`; the stars get `role="img"`. |
+| pages/discover/* (4 mocks) | “Apply as an artist” was a `<button>` although it leads to another page. | A button-styled link. |
+| assets/ui.css | On the stage, the yellow focus ring also applied inside the paper booking bar (1.4:1 on paper); reviews placed on the stage inherited paper-coloured text. | Paper islands restore the ink ring; `.review` sets its own text colour. |
 | all pages | The top bar overflowed 360px by 15px when no condensed display font is installed. | Tighter gaps and a 22px wordmark below 640px; brand mark never shrinks. |
 
 Decisions kept from the mocks rather than normalised: a 20px phone margin (so ticket notches clear the screen edge), a 3px focus ring with 3px offset, 44px default control height, all-zero radii, and round radios and switches as the only rounded controls besides avatars and the save toggle.

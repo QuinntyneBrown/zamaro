@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tooltip — Zamaro design system</title>
+<meta name="description" content="Tooltips put a short ink label next to an icon-only control, such as Share and the save toggle, on hover and on keyboard focus. Above or below, with an optional keyboard shortcut.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: room above and below the anchors so open tooltips are not clipped by the example frame. */
+  .ds-tip-row { padding-block: var(--space-12) var(--space-12); justify-content: center; gap: var(--space-16); }
+  .ds-matrix { position: relative; }
+  .ds-matrix td { padding-block: var(--space-12); text-align: center; }
+  .ds-themes .cluster { padding-block: var(--space-10) var(--space-2); justify-content: center; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers &amp; overlays</p>
+      <h1>Tooltip</h1>
+      <p class="ds-lead">A small ink label that appears beside an icon-only control when you point at it or tab to it: “Share profile” over the share arrow, “Save to compare later” over the heart.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">APG Tooltip · <code>role="tooltip"</code></span><span class="ds-pill">Class <code>.tooltip</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a tooltip to show, in words, what an icon-only control does: the share button on a profile, the round <a href="save-toggle.html">save toggle</a> on a ticket, the heart in the compact <a href="top-bar.html">top bar</a>. It shows on hover and on keyboard focus, after a short delay, and never holds anything you can click.</p>
+      <ul>
+        <li><b>Above</b> is the default. The tooltip sits 8px over the control with a small ink arrow.</li>
+        <li><b>Below</b> (<code>.tooltip--below</code>) is for controls near the top of the screen, such as the top bar.</li>
+        <li><b>With a shortcut</b>: a <code>&lt;kbd&gt;</code> after the text, where a keyboard shortcut exists.</li>
+      </ul>
+      <p>Do not use a tooltip for information people need to complete a task (put it on the page as <a href="form-field.html">help text</a>), for errors (use an <a href="inline-message.html">inline message</a>), on controls that already have a visible label, or on touch-only screens where nothing hovers.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding-top: var(--space-16);">
+          <span class="tooltip-anchor">
+            <button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile" aria-describedby="an-tip" aria-keyshortcuts="S"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button>
+            <span class="tooltip" role="tooltip" id="an-tip" data-state="open">Share profile<kbd>S</kbd></span>
+          </span>
+          <span class="ds-callout" style="left: 34%; top: 16%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 64%; top: 16%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 54%; top: 46%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 40%; top: 72%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small>Bold 12px sentence case (<code>--text-caption</code>), paper on ink, 4 × 8px padding, up to 16rem wide.</small></div></li>
+          <li><div><b>Shortcut (optional)</b><small>A <code>&lt;kbd&gt;</code> in the mono overline style with a hairline box.</small></div></li>
+          <li><div><b>Arrow</b><small>A 4px triangle in the same ink, centred on the control.</small></div></li>
+          <li><div><b>Anchor</b><small><code>.tooltip-anchor</code> wraps the control and the tooltip; the control points to the tooltip with <code>aria-describedby</code>.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Hover or tab to the controls; the first one in each example is shown open with <code>data-state="open"</code>.</p>
+      <h3>On icon-only buttons (above)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-tip-row">
+          <span class="tooltip-anchor">
+            <button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile" aria-describedby="v-tip-share" aria-keyshortcuts="S"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button>
+            <span class="tooltip" role="tooltip" id="v-tip-share" data-state="open">Share profile<kbd>S</kbd></span>
+          </span>
+          <span class="tooltip-anchor">
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Hosanna Collective" aria-describedby="v-tip-save"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+            <span class="tooltip" role="tooltip" id="v-tip-save">Save to compare later</span>
+          </span>
+          <span class="tooltip-anchor">
+            <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists" aria-describedby="v-tip-saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+            <span class="tooltip" role="tooltip" id="v-tip-saved">Saved · press to remove</span>
+          </span>
+        </div>
+        <div class="ds-example__caption"><span>Share on the profile poster; the save toggle off and on. The tooltip changes with the toggle’s state.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="tooltip-anchor"&gt;
+  &lt;button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile"
+          aria-describedby="tip-share" aria-keyshortcuts="S"&gt;&lt;svg class="icon" aria-hidden="true" …/&gt;&lt;/button&gt;
+  &lt;span class="tooltip" role="tooltip" id="tip-share"&gt;Share profile&lt;kbd&gt;S&lt;/kbd&gt;&lt;/span&gt;
+&lt;/span&gt;</code></pre></details>
+      </div>
+
+      <h3>Below (in the top bar)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stage on-stage" style="padding-bottom: var(--space-12); justify-content: center;">
+          <span class="tooltip-anchor">
+            <button class="nav-link" type="button" aria-expanded="false" aria-describedby="v-tip-below"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="visually-hidden">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+            <span class="tooltip tooltip--below" role="tooltip" id="v-tip-below" data-state="open">Your saved artists</span>
+          </span>
+          <span class="tooltip-anchor">
+            <button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false" aria-describedby="v-tip-menu"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+            <span class="tooltip tooltip--below" role="tooltip" id="v-tip-menu">Menu</span>
+          </span>
+        </div>
+        <div class="ds-example__caption"><span><code>.tooltip--below</code>: the bar sits at the top of the viewport, so tooltips open downwards. On the stage the ink label sits close to the charcoal behind it; its paper text still reads at full contrast. A proposed stage rule turns it into a paper label there.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Tooltips have one size. Long text wraps at 16rem; if it needs more, it belongs on the page."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Tooltips have one size. Long text wraps at 16rem; if it needs more, it belongs on the page.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hidden is the default. Real pages open the tooltip from <code>:hover</code> and <code>:focus-within</code> on the anchor; documentation forces it with <code>data-state="open"</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Placement</th><th scope="col">Hidden</th><th scope="col">Open on hover</th><th scope="col">Open on focus</th><th scope="col">With shortcut</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Above</th>
+            <td><span class="tooltip-anchor"><button class="btn btn--icon" type="button" aria-label="Share Elijah Park’s profile" aria-describedby="m-a1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="m-a1">Share profile</span></span></td>
+            <td><span class="tooltip-anchor"><button class="btn btn--icon" type="button" aria-label="Share Elijah Park’s profile" aria-describedby="m-a2" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="m-a2" data-state="open">Share profile</span></span></td>
+            <td><span class="tooltip-anchor"><button class="btn btn--icon" type="button" aria-label="Share Elijah Park’s profile" aria-describedby="m-a3" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="m-a3" data-state="open">Share profile</span></span></td>
+            <td><span class="tooltip-anchor"><button class="btn btn--icon" type="button" aria-label="Share Elijah Park’s profile" aria-describedby="m-a4" aria-keyshortcuts="S" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="m-a4" data-state="open">Share profile<kbd>S</kbd></span></span></td></tr>
+          <tr><th scope="row">Below</th>
+            <td><span class="tooltip-anchor"><button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva" aria-describedby="m-b1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="tooltip tooltip--below" role="tooltip" id="m-b1">Save to compare later</span></span></td>
+            <td><span class="tooltip-anchor"><button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva" aria-describedby="m-b2" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="tooltip tooltip--below" role="tooltip" id="m-b2" data-state="open">Save to compare later</span></span></td>
+            <td><span class="tooltip-anchor"><button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva" aria-describedby="m-b3" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="tooltip tooltip--below" role="tooltip" id="m-b3" data-state="open">Save to compare later</span></span></td>
+            <td><span class="tooltip-anchor"><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists" aria-describedby="m-b4" aria-keyshortcuts="S" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="tooltip tooltip--below" role="tooltip" id="m-b4" data-state="open">Saved<kbd>S</kbd></span></span></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster cluster--lg"><span class="tooltip-anchor"><button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile" aria-describedby="th-l1" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="th-l1" data-state="open">Share profile<kbd>S</kbd></span></span></div></div>
+        <div data-theme="dark"><div class="cluster cluster--lg"><span class="tooltip-anchor"><button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile" aria-describedby="th-d1" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="th-d1" data-state="open">Share profile<kbd>S</kbd></span></span></div></div>
+      </div>
+      <ul>
+        <li><b>Opening</b> waits <code>--duration-tooltip-delay</code> (300ms) of hover or focus, then fades in over <code>--duration-fast</code>, so sweeping the pointer across a row of tickets does not flash a tooltip on each.</li>
+        <li><b>Closing</b> is immediate when the pointer leaves or focus moves on.</li>
+        <li><b>Static</b> (<code>data-state="open"</code>) shows without the delay or transition. Documentation only.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The tooltip is centred on its control and grows to fit its text up to 16rem, then wraps. It does not move to stay on screen, so do not put above-tooltips on controls within 8rem of the left or right edge; on phones, prefer labels on screen.</li>
+        <li>Touch screens have no hover. The tooltip still shows on keyboard focus, but a tap fires the button first, so on phones the control must make sense without its tooltip: icon-only buttons always carry an <code>aria-label</code>, and important ones get a visible label instead.</li>
+        <li>Use <code>.tooltip--below</code> inside the top bar and within 3rem of the top of the viewport.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The tooltip reads the inverse pair: <code>--color-bg-inverse</code> for the label and arrow and <code>--color-fg-inverse</code> for the text. On newsprint it is a charcoal label with paper text; on the stage theme the pair flips to a paper label with charcoal text, so it always stands out from the surface around it. It has no component tokens. It stacks at <code>--z-tooltip</code>, above dialogs, toasts and the sticky top bar.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p><a href="https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/">APG Tooltip pattern</a>: the tooltip has <code>role="tooltip"</code> and an <code>id</code>; the control points to it with <code>aria-describedby</code>. The control’s name comes from its own <code>aria-label</code>, which names the object (“Share Abigail Mensah’s profile”); the tooltip adds a short description and any shortcut, which is also declared with <code>aria-keyshortcuts</code>. A tooltip never receives focus and never contains links or buttons.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Focusing the control opens its tooltip after the delay; moving focus closes it.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the open tooltip without moving focus (WCAG 1.4.13 Dismissible). Needs the proposed <code>data-state="closed"</code> hook; see below.</td></tr>
+        <tr><td>Shortcut (e.g. <kbd>S</kbd>)</td><td>Runs the control’s action when the page defines that shortcut; it must not fire while typing in a field.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Focus stays on the control. The label sits 8px away, just beyond the 3px ring and its 3px offset, so the ring never covers the text; only the arrow’s tip meets it.</p>
+      <h3>Labelling</h3>
+      <p>Keep the visible tooltip text consistent with the accessible name (WCAG 2.5.3): “Share profile” matches “Share Abigail Mensah’s profile”. When a toggle changes state, update the tooltip text with it (“Save to compare later” → “Saved · press to remove”).</p>
+      <p>Two gaps in the current CSS against WCAG 1.4.13 (Content on Hover or Focus): the tooltip has <code>pointer-events: none</code>, so moving the pointer onto it closes it (not hoverable); and there is no hook to dismiss it with <kbd>Esc</kbd>. Both are listed as proposed fixes for <code>components.css</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Tooltip text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Tooltip against the page</span><span class="ds-pair__ratio" data-contrast="--color-bg-inverse|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: tooltip text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: tooltip against the page</span><span class="ds-pair__ratio" data-contrast="--color-bg-inverse|--color-bg-canvas" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>A fade only, over <code>--duration-fast</code>, after the hover-intent delay. Under <code>prefers-reduced-motion</code> the fade drops to near zero; the 300ms delay stays, because it prevents flicker rather than decorating.</p>
+      <h3>Touch</h3>
+      <p>Tooltips do not help on touch; the controls they describe are 44px targets (<code>.save</code>, <code>.btn--icon</code>) that work without them. Nothing important may live only in a tooltip.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Two to four words, sentence case, no full stop: “Share profile”, “Save to compare later”, “Your saved artists”.</li>
+        <li>Start with the verb the control performs; do not repeat the artist’s name, which is already on the ticket.</li>
+        <li>Show the state for toggles: “Saved · press to remove”.</li>
+        <li>Shortcuts are single keys in a <code>&lt;kbd&gt;</code>, written as the key shows on a keyboard: <kbd>S</kbd>, not “s”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas" style="padding-top: var(--space-12); justify-content: center;"><span class="tooltip-anchor"><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio" aria-describedby="dd-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="tooltip" role="tooltip" id="dd-1" data-state="open">Save to compare later</span></span></div><figcaption>An icon-only control with an <code>aria-label</code> and a short tooltip for sighted users.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas" style="padding-top: var(--space-12); justify-content: center;"><span class="tooltip-anchor"><button class="btn" type="button" aria-describedby="dd-2"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share</button><span class="tooltip" role="tooltip" id="dd-2" data-state="open">Share</span></span></div><figcaption>A tooltip that repeats a visible label. It adds noise for every user.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><p class="field__help">Cancel free up to 14 days before your event.</p></div><figcaption>Terms that affect a decision stay on the page, as the ticket’s fine print does.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas" style="padding-top: var(--space-16); justify-content: center;"><span class="tooltip-anchor"><button class="btn btn--icon btn--ghost" type="button" aria-label="Cancellation terms" aria-describedby="dd-3"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg></button><span class="tooltip" role="tooltip" id="dd-3" data-state="open">Cancel free up to 14 days before your event.</span></span></div><figcaption>Cancellation terms hidden behind an info icon: easy to miss, impossible to reach on a phone.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Label and arrow</td><td><code>--color-bg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Text</td><td><code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-inverse" data-swatch></i><span data-token="--color-fg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-inverse" data-swatch></i><span data-token="--color-fg-inverse"></span></span></td></tr>
+          <tr><td>Type</td><td><code>--text-caption</code>, <code>--font-weight-bold</code>; <code>&lt;kbd&gt;</code> <code>--text-overline</code></td><td colspan="2"><span data-token="--text-caption"></span></td></tr>
+          <tr><td>Padding / offset / arrow</td><td><code>--space-1</code> × <code>--space-2</code>, <code>--space-2</code>, <code>--space-1</code></td><td colspan="2"><span data-token="--space-1"></span> × <span data-token="--space-2"></span> / <span data-token="--space-2"></span> / <span data-token="--space-1"></span></td></tr>
+          <tr><td>Show delay</td><td><code>--duration-tooltip-delay</code></td><td colspan="2"><span data-token="--duration-tooltip-delay"></span></td></tr>
+          <tr><td>Fade</td><td><code>--duration-fast</code>, <code>--ease-enter</code> / <code>--ease-exit</code></td><td colspan="2"><span data-token="--duration-fast"></span></td></tr>
+          <tr><td>Stacking</td><td><code>--z-tooltip</code></td><td colspan="2"><span data-token="--z-tooltip"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;span class="tooltip-anchor"&gt;
+  &lt;button class="save" type="button" aria-pressed="false"
+          aria-label="Save Hosanna Collective" aria-describedby="tip-save-hosanna"&gt;
+    &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+  &lt;/button&gt;
+  &lt;span class="tooltip" role="tooltip" id="tip-save-hosanna"&gt;Save to compare later&lt;/span&gt;
+&lt;/span&gt;
+
+// Esc dismisses (WCAG 1.4.13), once the proposed data-state="closed" rule exists:
+document.addEventListener('keydown', (e) =&gt; {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('.tooltip-anchor:is(:hover, :focus-within) &gt; .tooltip')
+    .forEach((tip) =&gt; tip.setAttribute('data-state', 'closed'));
+});</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.tooltip-anchor</code></td><td>Wraps the control and its tooltip; positions the tooltip.</td></tr>
+        <tr><td><code>.tooltip</code> + <code>role="tooltip"</code> + <code>id</code></td><td>The label; opens on the anchor’s hover or focus-within.</td></tr>
+        <tr><td><code>.tooltip--below</code></td><td>Opens below the control; arrow points up.</td></tr>
+        <tr><td><code>&lt;kbd&gt;</code> inside</td><td>Keyboard shortcut in a hairline box.</td></tr>
+        <tr><td><code>aria-describedby</code> on the control</td><td>Links the tooltip as the control’s description.</td></tr>
+        <tr><td><code>aria-keyshortcuts</code> on the control</td><td>Declares a shortcut shown in the tooltip.</td></tr>
+        <tr><td><code>data-state="open"</code></td><td>Documentation only: shows the tooltip without hover.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>The mocks have the icon-only controls a tooltip serves, but no tooltip yet:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the round save toggle on every ticket and on the headliner, labelled “Remove Abigail Mensah from your saved artists”; the heart and count in the compact top bar</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: Share and Saved on the profile poster (text buttons there, icon-only where space is tight)</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: the same controls on a new artist’s profile</li>
+      </ul>
+      <p>Drift fixed during extraction: none in the tooltip itself. The <code>&lt;kbd&gt;</code> style and the 300ms <code>--duration-tooltip-delay</code> token were added so the hover-intent delay is shared rather than hard-coded.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

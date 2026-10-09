@@ -668,7 +668,7 @@ dialog.dialog:not([open]) { display: none; }
   font: var(--text-label); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide);
   transition: transform var(--duration-fast) var(--ease-standard), box-shadow var(--duration-fast) var(--ease-standard);
 }
-.video:hover .video__play, .video[data-state="hover"] .video__play { box-shadow: var(--size-offset-1) var(--size-offset-1) 0 var(--color-border-on-accent); transform: var(--transform-lift); }
+.video:hover .video__play, .video[data-state="hover"] .video__play { box-shadow: var(--shadow-1); transform: var(--transform-lift); }
 .video:active .video__play, .video[data-state="active"] .video__play { box-shadow: none; transform: none; }
 .video[aria-busy="true"] .video__play::after { content: ""; width: 1em; height: 1em; border: var(--border-width-thick) solid currentColor; border-right-color: transparent; border-radius: var(--radius-full); animation: spin var(--duration-loop) linear infinite; }
 .video__caption { display: block; margin-top: var(--space-2); font: var(--text-body-sm); color: var(--color-fg-muted); }
@@ -982,3 +982,8 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 .toast--danger .btn--ghost { --btn-border: transparent; }
 .toast-region--static { z-index: auto; }
 @media (max-width: 39.99rem) { .empty { padding: var(--space-8) var(--space-5); } }
+.on-stage [data-theme="light"] :focus-visible, .on-stage [data-theme="light"] [data-state="focus"] { outline-color: var(--color-focus-ring); }
+.headliner__name a[data-state="hover"] { background: var(--color-accent); color: var(--color-fg-on-accent); }
+.band a:not(.btn)[data-state="hover"] { background: var(--color-bg-surface); color: var(--color-fg-on-accent); }
+.review { color: var(--color-fg-default); }
+.stub__code { white-space: nowrap; }
