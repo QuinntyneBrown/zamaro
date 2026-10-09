@@ -16,19 +16,20 @@
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="topbar topbar--artist">
+<header class="topbar topbar--workspace">
   <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <a class="topbar__brand" href="../dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
   <span class="topbar__role">Artists</span>
   <nav class="topbar__nav" aria-label="Primary">
     <a class="nav-link" href="../dashboard/default.html" aria-current="page">Dashboard</a>
-    <a class="nav-link" href="../requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
+    <a class="nav-link" href="../requests/default.html">Requests <span class="badge badge--count">3<span class="visually-hidden"> awaiting reply</span></span></a>
     <a class="nav-link" href="../availability/default.html">Availability</a>
    <a class="nav-link" href="../earnings/default.html">Earnings</a>
     <a class="nav-link" href="../edit-profile/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__link" href="../artist/default.html">View public profile</a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
 </header>
 
@@ -36,7 +37,7 @@
   <div class="container">
     <header class="page-head">
       <div>
-        <h1 class="page-head__title">Good morning, Abigail</h1>
+        <h1 class="page-head__title">Good afternoon, Abigail</h1>
         <p class="page-head__sub">Fri 9 Oct · 3 requests to answer · next date Sun 18 Oct</p>
       </div>
       <a class="btn btn--primary" href="../requests/default.html">Answer requests <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
@@ -72,7 +73,7 @@
       <li class="booking-list__row">
         <p class="booking-list__date"><small>Sat</small>5 Dec</p>
         <h3 class="booking-list__who"><a href="../request-detail/default.html">Harvest Point Church</a></h3>
-        <p class="booking-list__meta">Christmas concert · 7:00 p.m. · Milton, 31 km<br>$800 quoted · you get $736<br><q>We need a soloist for three carols and one of your own songs. Could you also…</q></p>
+        <p class="booking-list__meta">Worship night · 7:00 p.m. · Milton, 31 km<br>$650 quoted · you get $598<br><q>We need a soloist for three carols and one of your own songs. Could you also…</q></p>
         <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption"><strong>1 day left</strong> · reply by Sat 10 Oct, 3:15 p.m.</span></div>
       </li>
       <li class="booking-list__row">
@@ -84,21 +85,26 @@
       <li class="booking-list__row">
         <p class="booking-list__date"><small>Sat</small>14 Nov</p>
         <h3 class="booking-list__who"><a href="../request-detail/default.html">Riverside Community Church</a></h3>
-        <p class="booking-list__meta">Worship night · 7:00 p.m. · Burlington, 62 km<br>$650 quoted · you get $598<br><q>We’re planning our first worship night since the renovation, about 250 people…</q></p>
+        <p class="booking-list__meta">Worship night · 7:00 p.m. · Burlington, 44 km<br>$650 quoted · you get $598<br><q>We’re hosting a worship night for churches across Burlington, about 250 people…</q></p>
         <div class="booking-list__status"><span class="stamp stamp--requested">Requested</span><span class="text-caption">2 days 19 hr left · reply by Mon 12 Oct, 10:15 a.m.</span></div>
       </li>
           </ul>
         </section>
-      <aside>
+      <aside class="stack stack--lg">
         <section class="panel" aria-labelledby="coming-title">
           <div class="panel__head"><h2 id="coming-title" class="panel__title">Coming up</h2><a class="text-sm" href="../availability/default.html">Calendar</a></div>
           <ul class="tour-dates" role="list">
           <li><span class="tour-dates__day"><small>Sun</small>18 Oct</span><span><strong>Living Waters Fellowship</strong><br><span class="tour-dates__note">Sunday service, Brampton</span></span><span></span></li>
           <li><span class="tour-dates__day"><small>Sun</small>1 Nov</span><span><strong>Harvest Point Church</strong><br><span class="tour-dates__note">Sunday service, Milton</span></span><span></span></li>
           <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance Church</strong><br><span class="tour-dates__note">Sunday service, Oakville</span></span><span></span></li>
-          <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span></span></li>
+          <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Conference or retreat, Mississauga</span></span><span></span></li>
           </ul>
           <p class="text-caption">Two more confirmed dates in December. Fees and payouts are on <a href="../earnings/default.html">Earnings</a>.</p>
+        </section>
+        <section class="panel" aria-labelledby="reviews-title">
+          <div class="panel__head"><h2 id="reviews-title" class="panel__title">Reviews</h2><a class="text-sm" href="../artist-reviews/default.html">All reviews</a></div>
+          <p class="stars" role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★★★★★ 4.9 · 38 churches</p>
+          <p class="text-caption">Rev. Janet Clarke’s September review and one other have no reply yet.</p>
         </section>
       </aside>
       </div>

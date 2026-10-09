@@ -25,6 +25,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -40,7 +41,7 @@
         <ul><li><a href="#email">Enter an email address like name@church.ca</a></li></ul>
       </div>
         <div class="field">
-          <label class="field__label" for="email">Email <span class="optional">required</span></label>
+          <label class="field__label" for="email">Email <span class="field__required">(required)</span></label>
           <input class="input" type="email" id="email" name="email" value="naomi.fraser@riversidecc" autocomplete="email" placeholder="name@church.ca" required aria-describedby="email-error" aria-invalid="true">
           <span class="field__error" id="email-error">Enter an email address like name@church.ca</span>
         </div>

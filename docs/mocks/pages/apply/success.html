@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="apply">
 <meta name="mock:state" content="success">
-<meta name="mock:requirements" content="L2-039 L2-047 L2-052 L2-077 L2-108">
+<meta name="mock:requirements" content="L2-001 L2-039 L2-047 L2-052 L2-077 L2-108">
 <meta name="description" content="Application submitted: confirmation emailed, references checked, review within 3 business days, payouts before going live.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -25,6 +25,7 @@
     <a class="nav-link" href="default.html" aria-current="page">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -37,10 +38,10 @@
     </div>
   </div>
   <ol class="stepper" aria-label="Application steps">
-    <li class="stepper__step" data-state="done"><a href="default.html" aria-label="About you, done">About you</a></li>
-    <li class="stepper__step" data-state="done"><a href="step-2.html" aria-label="Your music, done">Your music</a></li>
-    <li class="stepper__step" data-state="done"><a href="step-3.html" aria-label="Price and travel, done">Price and travel</a></li>
-    <li class="stepper__step" data-state="done"><a href="step-4.html" aria-label="References and review, done">References and review</a></li>
+    <li class="stepper__step" data-state="done">About you<span class="visually-hidden">, done</span></li>
+    <li class="stepper__step" data-state="done">Your music<span class="visually-hidden">, done</span></li>
+    <li class="stepper__step" data-state="done">Price and travel<span class="visually-hidden">, done</span></li>
+    <li class="stepper__step" data-state="done">References and review<span class="visually-hidden">, done</span></li>
   </ol>
   <div class="detail-layout">
     <section class="panel panel--raised" aria-labelledby="done-title">
@@ -104,7 +105,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 22rem; right: 1rem;">Status Submitted. The team approves only after both references are verified; the profile is published after payout setup.</p>
+<p class="mock-note" style="top: 22rem; right: 1rem;">Status Submitted. The team approves only after both references are verified; the profile is published after payout setup. Once sent, the answers are cleared from this device and the steps are no longer links.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -119,6 +120,7 @@
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html" aria-current="page">success</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="outside-area.html">outside-area</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

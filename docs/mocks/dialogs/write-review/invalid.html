@@ -29,19 +29,20 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../../pages/bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
-    <div class="page-head" style="padding-top: var(--space-4);">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../../pages/bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
       <div><p class="overline">Booking ZAM-0114</p><h1 class="page-head__title">Worship night with Abigail Mensah</h1><p class="page-head__sub">Sat 14 Nov 2026 · 7:00 p.m. · Burlington</p></div>
       <span class="stamp stamp--lg stamp--completed">Completed</span>
     </div>
-    <div class="detail-layout detail-layout--aside-first" style="padding-top: 0;">
+    <div class="detail-layout detail-layout--aside-first detail-layout--flush">
       <div class="stack stack--lg">
         <section class="panel" aria-labelledby="progress-title">
           <div class="panel__head"><h2 id="progress-title" class="panel__title">Where it stands</h2><span class="text-caption">Completed Sun 15 Nov</span></div>
@@ -62,9 +63,12 @@
             <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington</dd></div>
             <div class="definition__row"><dt>Artist</dt><dd><a href="../../pages/artist/default.html">Abigail Mensah</a>, Brampton · 44 km</dd></div>
             <div class="definition__row"><dt>Quoted price</dt><dd>$650, locked Fri 9 Oct</dd></div>
+            <div class="definition__row"><dt>Abigail’s phone</dt><dd><a href="tel:+19055550148">905-555-0148</a></dd></div>
+            <div class="definition__row"><dt>Abigail’s email</dt><dd><a href="mailto:abigail@abigailmensah.ca">abigail@abigailmensah.ca</a></dd></div>
+            <div class="definition__row"><dt>Your church phone (shared with Abigail)</dt><dd>905-555-0123</dd></div>
           </dl>
         </section>
-        <section class="panel" aria-labelledby="messages-title">
+        <section class="panel" id="messages" aria-labelledby="messages-title">
           <div class="panel__head"><h2 id="messages-title" class="panel__title">Messages</h2><span class="text-caption">Only you and Abigail see these</span></div>
           <div class="message">
             <p class="message__meta">You · Fri 9 Oct, 10:15 a.m.</p>
@@ -82,7 +86,7 @@
           <form class="stack stack--sm" action="#messages-title" aria-label="Send Abigail a message">
             <div class="field"><label class="field__label" for="reply">Message to Abigail</label>
               <textarea class="textarea" id="reply" name="reply" rows="3" maxlength="2000" aria-describedby="reply-help"></textarea>
-              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an e-mail at most every 15 minutes.</span></div>
+              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an email at most every 15 minutes.</span></div>
             <div class="cluster"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
           </form>
         </section>
@@ -151,11 +155,11 @@
         <ul><li><a href="#review">Write at least 20 characters</a></li></ul>
       </div>
       <fieldset class="fieldset">
-        <legend>Your rating <span class="optional">(required)</span></legend>
+        <legend>Your rating <span class="field__required">(required)</span></legend>
         <div class="cluster" style="align-items: stretch;"><label class="choice choice--stub"><input type="radio" id="stars-5" name="stars" value="5" checked><span class="choice__text"><span aria-hidden="true">★★★★★</span><span class="visually-hidden">5 out of 5 stars</span><small>Unforgettable</small></span></label><label class="choice choice--stub"><input type="radio" id="stars-4" name="stars" value="4"><span class="choice__text"><span aria-hidden="true">★★★★☆</span><span class="visually-hidden">4 out of 5 stars</span><small>Great</small></span></label><label class="choice choice--stub"><input type="radio" id="stars-3" name="stars" value="3"><span class="choice__text"><span aria-hidden="true">★★★☆☆</span><span class="visually-hidden">3 out of 5 stars</span><small>Good</small></span></label><label class="choice choice--stub"><input type="radio" id="stars-2" name="stars" value="2"><span class="choice__text"><span aria-hidden="true">★★☆☆☆</span><span class="visually-hidden">2 out of 5 stars</span><small>Fair</small></span></label><label class="choice choice--stub"><input type="radio" id="stars-1" name="stars" value="1"><span class="choice__text"><span aria-hidden="true">★☆☆☆☆</span><span class="visually-hidden">1 out of 5 stars</span><small>Poor</small></span></label></div>
       </fieldset>
-      <div class="field"><label class="field__label" for="review">Your review <span class="optional">(required)</span></label>
-        <textarea class="textarea" id="review" name="review" rows="5" minlength="20" maxlength="1000" aria-describedby="review-error review-help" aria-invalid="true">So good!</textarea>
+      <div class="field"><div class="field__row"><label class="field__label" for="review">Your review <span class="field__required">(required)</span></label><span class="field__counter" id="review-count">8 / 1,000</span></div>
+        <textarea class="textarea" id="review" name="review" rows="5" minlength="20" maxlength="1000" aria-describedby="review-error review-help review-count" aria-invalid="true">So good!</textarea>
         <span class="field__error" id="review-error">Write at least 20 characters; you have 8.</span><span class="field__help" id="review-help">20 to 1,000 characters. Shown on Abigail’s profile with your name and church.</span></div>
     </div>
     <div class="dialog__footer">
@@ -175,6 +179,7 @@
     <li><a href="busy.html">busy</a></li>
     <li><a href="invalid.html" aria-current="page">invalid</a></li>
     <li><a href="failed.html">failed</a></li>
+    <li><a href="edit.html">edit</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

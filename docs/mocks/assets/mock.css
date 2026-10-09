@@ -35,4 +35,4 @@
 }
 .mock-note::before { content: "Note"; display: block; font-weight: var(--font-weight-bold); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide); }
 [data-chrome="off"] .mock-note { display: none; }
-@media (max-width: 39.99rem) { .mock-bar__states { max-width: 40vw; } .mock-note { display: none; } }
+@media (max-width: 35.99rem) { .mock-bar__states { max-width: 40vw; } .mock-note { display: none; } }

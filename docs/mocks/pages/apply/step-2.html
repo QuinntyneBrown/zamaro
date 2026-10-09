@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="apply">
 <meta name="mock:state" content="step-2">
-<meta name="mock:requirements" content="L2-039 L2-047 L2-052 L2-077 L2-108">
+<meta name="mock:requirements" content="L2-001 L2-039 L2-047 L2-052 L2-077 L2-108">
 <meta name="description" content="Step 2 of 4: styles, a 100 to 1,500 character bio and an uploaded live video.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -25,6 +25,7 @@
     <a class="nav-link" href="default.html" aria-current="page">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -49,17 +50,18 @@
         <p class="form-section__lead">This becomes your public profile. Write it for a pastor deciding who leads their people.</p>
         <div class="form-grid">
         <fieldset class="fieldset">
-          <legend>Styles <span class="optional">required, pick 1 to 4</span></legend>
+          <legend>Styles <span class="field__required">(required, pick 1 to 4)</span></legend>
           <div class="cluster">
-        <label class="choice"><input type="checkbox" id="style-gospel" name="styles" checked><span class="choice__text"><span>Gospel</span></span></label>
-        <label class="choice"><input type="checkbox" id="style-contemporary" name="styles" checked><span class="choice__text"><span>Contemporary</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-band" name="styles"><span class="choice__text"><span>Band</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-solo-vocalist" name="styles" checked><span class="choice__text"><span>Solo vocalist</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-gospel-choir" name="styles"><span class="choice__text"><span>Gospel choir</span></span></label>
+        <label class="choice"><input type="checkbox" id="style-acoustic" name="styles" checked><span class="choice__text"><span>Acoustic</span></span></label>
         <label class="choice"><input type="checkbox" id="style-hymns" name="styles" checked><span class="choice__text"><span>Hymns</span></span></label>
-        <label class="choice"><input type="checkbox" id="style-acoustic" name="styles"><span class="choice__text"><span>Acoustic</span></span></label>
         <label class="choice"><input type="checkbox" id="style-spanish" name="styles"><span class="choice__text"><span>Spanish</span></span></label>
           </div>
         </fieldset>
         <div class="field field--full">
-          <label class="field__label" for="bio">Bio <span class="optional">required</span></label>
+          <label class="field__label" for="bio">Bio <span class="field__required">(required)</span></label>
           <textarea class="textarea" rows="6" id="bio" name="bio" required aria-describedby="bio-help">I’m a vocalist and keys player from Scarborough, and I’ve led Sunday worship at Cornerstone Baptist for six years. I lead from the piano, so I can carry a service on my own or slot in with your band. My sets mix the hymns your seniors love with newer songs your youth know, and I’m happy to send charts to your volunteers ahead of time.</textarea>
           <span class="field__help" id="bio-help">100 to 1,500 characters. 336 so far.</span>
         </div>
@@ -71,18 +73,18 @@
         <ul class="upload-list" role="list" aria-label="Uploaded videos">
           <li class="upload-list__item">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
-            <div class="upload-list__text"><strong>Way Maker, live at Cornerstone</strong><span>way-maker-cornerstone.mp4 · 214 MB · 6:12 · Uploaded</span></div>
+            <div class="upload-list__text"><strong>Way Maker, live at Cornerstone</strong><span>way-maker-cornerstone.mp4 · 214 MB · 6:12 · Live</span></div>
             <button class="btn btn--sm btn--ghost" type="button" aria-label="Remove Way Maker, live at Cornerstone">Remove</button>
           </li>
         </ul>
         <div class="form-grid">
         <div class="field field--full">
-          <label class="field__label" for="video-title">Title for your next video <span class="optional">optional</span></label>
+          <label class="field__label" for="video-title">Title for your next video <span class="field__required">(required with a video)</span></label>
           <input class="input" type="text" id="video-title" name="video-title" aria-describedby="video-title-help">
           <span class="field__help" id="video-title-help">5 to 100 characters, for example “Great Is Thy Faithfulness, acoustic”.</span>
         </div>
         <div class="field field--full">
-          <label class="field__label" for="video-file">Add a video <span class="optional">optional</span></label>
+          <label class="field__label" for="video-file">Add a video <span class="field__optional">(optional)</span></label>
           <input class="input" type="file" id="video-file" name="video-file" aria-describedby="video-file-help" accept="video/mp4,video/quicktime,video/webm">
           <span class="field__help" id="video-file-help">MP4, MOV or WebM, up to 1 GB and 15 minutes. A full song, filmed during a real service if you can.</span>
         </div>
@@ -155,6 +157,7 @@
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html">success</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="outside-area.html">outside-area</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

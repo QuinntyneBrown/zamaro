@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add your church · invalid — Zamaro mocks</title>
+<meta name="mock:kind" content="dialog">
+<meta name="mock:screen" content="add-church">
+<meta name="mock:state" content="invalid">
+<meta name="mock:requirements" content="L2-001 L2-024 L2-099 L2-101 L2-108">
+<meta name="description" content="The address could not be found: the summary and the street field say so and every value stays.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div inert aria-hidden="true">
+
+<header class="topbar">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../../pages/discover/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../../pages/discover/default.html">Discover</a>
+    <a class="nav-link" href="../../pages/discover/default.html#how">How booking works</a>
+    <a class="nav-link" href="../../pages/discover/default.html#join">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
+  </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+  <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+</header>
+
+<main id="main">
+  <div class="container">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../../pages/discover/default.html">Discover · Sat 14 Nov</a></li><li><a href="../../pages/artist/default.html">Abigail Mensah</a></li><li aria-current="page">Request to book</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
+      <div><p class="overline">Admit one church · Sat 14 Nov</p><h1 id="book-title" class="page-head__title">Request to book Abigail</h1><p class="page-head__sub">$650 · travel included · replies in 72 hours</p></div>
+    </div>
+    <div class="detail-layout detail-layout--flush">
+      <form class="form-stack" action="../../pages/book/success.html" novalidate aria-labelledby="book-title">
+        <section class="form-section" aria-labelledby="event-title">
+          <h2 id="event-title" class="form-section__title">Your event</h2>
+          <div class="form-grid">
+          <div class="field"><label class="field__label" for="date">Event date <span class="field__required">(required)</span></label>
+          <input class="input" type="date" id="date" name="date" value="2026-11-14" min="2026-10-12" max="2028-04-09" aria-describedby="date-help">
+          <span class="field__help" id="date-help">✓ Abigail is free Sat 14 Nov</span></div>
+          <div class="field"><label class="field__label" for="kind">Kind of gathering <span class="field__required">(required)</span></label>
+          <select class="select" id="kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select>
+          </div>
+          <div class="field"><label class="field__label" for="start">Service start time <span class="field__required">(required)</span></label>
+          <input class="input" type="time" id="start" name="start" value="19:00" aria-describedby="start-help">
+          <span class="field__help" id="start-help">7:00 p.m. Abigail arrives an hour early for a sound check.</span></div>
+          <div class="field field--full"><label class="field__label" for="message">Message to Abigail <span class="field__optional">(optional)</span></label>
+          <textarea class="textarea" id="message" name="message" rows="5" maxlength="2000" aria-describedby="message-help">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</textarea>
+          <span class="field__help" id="message-help">Up to 2,000 characters. Phone numbers and emails are hidden from her until the booking is confirmed.</span></div>
+          </div>
+        </section>
+        <section class="form-section" aria-labelledby="church-title">
+          <h2 id="church-title" class="form-section__title">Your church</h2>
+          <p class="text-muted">You haven’t added your church yet. We’ll ask for it when you send the request.</p>
+        </section>
+        <div class="form-actions form-actions--static">
+          <p class="form-actions__status"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg>Nothing is charged today</p>
+          <div class="form-actions__buttons"><a class="btn" href="../../pages/artist/default.html">Back to profile</a><button class="btn btn--primary btn--lg" type="submit">Send request to Abigail</button></div>
+        </div>
+      </form>
+      <aside aria-labelledby="summary-title">
+        <div class="panel panel--raised">
+          <div class="panel__head"><h2 id="summary-title" class="panel__title">Abigail Mensah</h2><span class="stub__code">No. ACT-0027</span></div>
+          <div class="cluster" style="flex-wrap: nowrap; align-items: flex-start; gap: var(--space-4);">
+            <div class="art art--yellow art--square art--thumb" role="img" aria-label="Abigail Mensah singing into a vintage microphone"></div>
+            <p class="text-muted">Gospel &amp; contemporary vocalist · Brampton, 44 km from you · <span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></p>
+          </div>
+          <dl class="receipt" aria-label="What you would pay"><div class="receipt__row"><dt>Quoted price, locked when you send</dt><dd>$650</dd></div><div class="receipt__row"><dt>Deposit after she accepts (25%)</dt><dd>$162.50</dd></div><div class="receipt__row"><dt>Balance after the event</dt><dd>$487.50</dd></div><div class="receipt__row receipt__total"><dt>Due today</dt><dd>$0</dd></div></dl>
+          <p class="stub__fine">Nothing is charged until Abigail accepts and you pay the deposit. Cancel free up to 14 days before your event. <a href="../../pages/discover/default.html#how">Cancellation policy</a></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../../pages/discover/default.html">Find who’s free</a></li>
+        <li><a href="../../pages/bookings/default.html">Your bookings</a></li>
+        <li><a href="../../pages/discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../../pages/apply/default.html">Join the lineup</a></li>
+        <li><a href="../../pages/discover/default.html#how">What artists earn</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Naomi Fraser</h2>
+      <ul>
+        <li>Riverside Community Church</li>
+        <li><a href="../../pages/saved/default.html">Saved artists (3)</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+</div>
+
+<dialog class="dialog dialog--lg" open data-mock-modal aria-labelledby="dlg-title" aria-describedby="dlg-desc">
+  <form class="dialog__form" action="../../pages/book/success.html" novalidate>
+    <div class="dialog__header">
+      <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 4 8v13h16V8zM9 21v-6h6v6M12 7v4M10 9h4"/></svg></div>
+      <div style="flex: 1;">
+        <span class="dialog__kicker">Before your request to Abigail</span>
+        <h2 class="dialog__title" id="dlg-title">Add your church</h2>
+        <p id="dlg-desc" class="text-muted" style="margin-top: var(--space-1);">Artists see who is asking on every request. We send your request as soon as this is saved.</p>
+      </div>
+      <button class="close" type="button" aria-label="Close"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="dialog__body">
+      <div class="error-summary" role="alert" tabindex="-1" autofocus>
+        <h3 class="error-summary__title">Your church wasn’t saved</h3>
+        <ul><li><a href="#ch-street">We couldn’t find that address. Check the street and postal code.</a></li></ul>
+      </div>
+      <div class="form-grid">
+        <label class="field field--full"><span class="field__label">Church name <span class="field__required">(required)</span></span>
+          <input class="input" id="ch-name" name="church-name" type="text" value="Riverside Community Church" required aria-describedby="ch-name-help">
+          <span class="field__help" id="ch-name-help">2 to 120 characters.</span></label>
+        <label class="field field--full"><span class="field__label">Street address <span class="field__required">(required)</span></span>
+          <input class="input" id="ch-street" name="street" type="text" value="2150 Lakeshore Raod" required autocomplete="street-address" aria-invalid="true" aria-describedby="ch-street-error ch-street-help">
+          <span class="field__error" id="ch-street-error">We couldn’t find that address. Check the street and postal code.</span>
+          <span class="field__help" id="ch-street-help">Zamaro serves churches within 200 km of Toronto.</span></label>
+        <label class="field"><span class="field__label">City <span class="field__required">(required)</span></span>
+          <input class="input" id="ch-city" name="city" type="text" value="Burlington" required aria-invalid="true" aria-describedby="ch-street-error" autocomplete="address-level2"></label>
+        <label class="field"><span class="field__label">Postal code <span class="field__required">(required)</span></span>
+          <input class="input" id="ch-postal" name="postal" type="text" value="L7R 1A3" required aria-invalid="true" aria-describedby="ch-street-error" autocomplete="postal-code"></label>
+        <label class="field"><span class="field__label">Contact phone <span class="field__required">(required)</span></span>
+          <input class="input" id="ch-phone" name="phone" type="tel" value="905-555-0123" required autocomplete="tel" aria-describedby="ch-phone-help">
+          <span class="field__help" id="ch-phone-help">A North American number. Abigail sees it once the booking is confirmed.</span></label>
+        <label class="field"><span class="field__label">Denomination <span class="field__optional">(optional)</span></span>
+          <input class="input" id="ch-denom" name="denomination" type="text" value="Non-denominational"></label>
+        <label class="field"><span class="field__label">Typical attendance <span class="field__optional">(optional)</span></span>
+          <input class="input" id="ch-attendance" name="attendance" type="number" inputmode="numeric" min="1" value="350"></label>
+      </div>
+    </div>
+    <div class="dialog__footer">
+      <button class="btn" type="button">Not now</button>
+      <button class="btn btn--primary" type="submit">Save and send request</button>
+    </div>
+  </form>
+</dialog>
+
+<p class="mock-note" style="top: 8rem; right: 1rem;">An address outside the service area says “Zamaro serves churches within 200 km of Toronto.” instead: <a href="../../pages/account/out-of-area.html">see it on Account settings</a>. Nothing is stored and the request is not sent.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Add your church</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="busy.html">busy</a></li>
+    <li><a href="invalid.html" aria-current="page">invalid</a></li>
+    <li><a href="failed.html">failed</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

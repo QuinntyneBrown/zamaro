@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="apply">
 <meta name="mock:state" content="step-4">
-<meta name="mock:requirements" content="L2-039 L2-047 L2-052 L2-077 L2-108">
+<meta name="mock:requirements" content="L2-001 L2-039 L2-047 L2-052 L2-077 L2-108">
 <meta name="description" content="Step 4 of 4: two church references, then every answer with Edit links back to each step.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -25,6 +25,7 @@
     <a class="nav-link" href="default.html" aria-current="page">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -51,15 +52,15 @@
           <legend>Reference 1</legend>
           <div class="form-grid">
         <div class="field">
-          <label class="field__label" for="ref1-name">Name <span class="optional">required</span></label>
+          <label class="field__label" for="ref1-name">Name <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="ref1-name" name="ref1-name" value="Pastor Samuel Osei" required>
         </div>
         <div class="field">
-          <label class="field__label" for="ref1-church">Church <span class="optional">required</span></label>
+          <label class="field__label" for="ref1-church">Church <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="ref1-church" name="ref1-church" value="Cornerstone Baptist, Scarborough" required>
         </div>
         <div class="field field--full">
-          <label class="field__label" for="ref1-contact">Phone or email <span class="optional">required</span></label>
+          <label class="field__label" for="ref1-contact">Phone or email <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="ref1-contact" name="ref1-contact" value="samuel.osei@cornerstonebaptist.ca" required>
         </div>
           </div>
@@ -68,15 +69,15 @@
           <legend>Reference 2</legend>
           <div class="form-grid">
         <div class="field">
-          <label class="field__label" for="ref2-name">Name <span class="optional">required</span></label>
+          <label class="field__label" for="ref2-name">Name <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="ref2-name" name="ref2-name" value="Ruth Kim" required>
         </div>
         <div class="field">
-          <label class="field__label" for="ref2-church">Church <span class="optional">required</span></label>
+          <label class="field__label" for="ref2-church">Church <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="ref2-church" name="ref2-church" value="Agincourt Community Church" required>
         </div>
         <div class="field field--full">
-          <label class="field__label" for="ref2-contact">Phone or email <span class="optional">required</span></label>
+          <label class="field__label" for="ref2-contact">Phone or email <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="ref2-contact" name="ref2-contact" value="647 555 0192" required>
         </div>
           </div>
@@ -95,7 +96,7 @@
       <section class="panel" aria-labelledby="review-2">
         <div class="panel__head"><h2 id="review-2" class="panel__title">Your music</h2><a href="step-2.html">Edit<span class="visually-hidden"> your music</span></a></div>
         <dl class="definition definition--two">
-          <div class="definition__row"><dt>Styles</dt><dd>Gospel, Contemporary, Hymns</dd></div>
+          <div class="definition__row"><dt>Styles</dt><dd>Solo vocalist, Acoustic, Hymns</dd></div>
           <div class="definition__row"><dt>Bio</dt><dd>336 characters, starts “I’m a vocalist and keys player from Scarborough…”</dd></div>
           <div class="definition__row"><dt>Videos</dt><dd>1 uploaded: Way Maker, live at Cornerstone</dd></div>
         </dl>
@@ -174,6 +175,7 @@
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html">success</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="outside-area.html">outside-area</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

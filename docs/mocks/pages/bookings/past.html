@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -39,12 +40,12 @@
     </div>
     <div class="page-body">
       <div class="tabs__list" role="tablist" aria-label="Bookings">
-        <button class="tabs__tab" type="button" role="tab" id="tab-upcoming" aria-selected="false" aria-controls="panel-upcoming" tabindex="-1">Upcoming <span class="badge badge--count" aria-label="3 upcoming bookings">3</span></button>
-        <button class="tabs__tab" type="button" role="tab" id="tab-past" aria-selected="true" aria-controls="panel-past">Past <span class="badge badge--count" aria-label="3 past bookings">3</span></button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-upcoming" aria-selected="false" aria-controls="panel-upcoming" tabindex="-1">Upcoming <span class="tabs__count">3</span></button>
+        <button class="tabs__tab" type="button" role="tab" id="tab-past" aria-selected="true" aria-controls="panel-past">Past <span class="tabs__count">3</span></button>
       </div>
       <div role="tabpanel" id="panel-upcoming" aria-labelledby="tab-upcoming" hidden></div>
       <div role="tabpanel" id="panel-past" aria-labelledby="tab-past" class="stack">
-        <div class="cluster cluster--between"><p class="text-muted">Most recent first</p><div class="field" style="min-width: 12rem;"><label class="field__label" for="status">Status</label>
+        <div class="cluster cluster--between"><p class="text-muted">Most recent first</p><div class="field field--inline"><label class="field__label" for="status">Status</label>
           <select class="select" id="status" name="status"><option selected>All statuses</option><option>Completed</option><option>Declined</option><option>Withdrawn</option><option>Expired</option><option>Cancelled</option></select></div></div>
         <ol class="booking-list" role="list" aria-label="Past bookings">
           <li class="booking-list__row">
@@ -59,7 +60,7 @@
             <h2 class="booking-list__who"><a href="../booking-detail/declined.html">Grace Tabernacle Mass Choir</a></h2>
             <p class="booking-list__meta">ZAM-0075 · Sunday service · 10:30 a.m. · Scarborough, 81 km · Paid $0</p>
             <p class="booking-list__amount" aria-hidden="true"><small>Paid</small>$0</p>
-            <div class="booking-list__status"><span class="stamp stamp--declined">Declined</span><a class="btn btn--sm" href="../booking-detail/declined.html#messages-title">Message</a></div>
+            <div class="booking-list__status"><span class="stamp stamp--declined">Declined</span><a class="btn btn--sm" href="../booking-detail/declined.html#messages">Message</a></div>
           </li>
           <li class="booking-list__row">
             <p class="booking-list__date"><small>Sun</small>14 Jun</p>

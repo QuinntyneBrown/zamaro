@@ -19,6 +19,8 @@
     if (persist) store('mock-theme', theme);
     document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
       button.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      // The product toggle (top bar, navigation drawer) keeps its own constant name, "Dark theme".
+      if (button.getAttribute('data-theme-toggle') === 'product') return;
       button.textContent = theme === 'dark' ? '☀ Light' : '☾ Dark';
       button.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
     });

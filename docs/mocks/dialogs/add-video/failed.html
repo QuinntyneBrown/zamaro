@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="dialog">
 <meta name="mock:screen" content="add-video">
 <meta name="mock:state" content="failed">
-<meta name="mock:requirements" content="L2-052 L2-099 L2-101 L2-108">
+<meta name="mock:requirements" content="L2-052 L2-076 L2-099 L2-101 L2-108">
 <meta name="description" content="The upload stopped at 61% when the connection dropped: the alert explains, the inputs are kept and Resume upload picks up where it stopped.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -17,19 +17,20 @@
 <a class="skip-link" href="#main">Skip to content</a>
 
 <div inert aria-hidden="true">
-<header class="topbar topbar--artist">
+<header class="topbar topbar--workspace">
   <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <a class="topbar__brand" href="../../pages/dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
   <span class="topbar__role">Artists</span>
   <nav class="topbar__nav" aria-label="Primary">
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
-    <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
+    <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count">3<span class="visually-hidden"> awaiting reply</span></span></a>
     <a class="nav-link" href="../../pages/availability/default.html">Availability</a>
     <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
     <a class="nav-link" href="../../pages/edit-profile/default.html" aria-current="page">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
 </header>
 
@@ -40,11 +41,11 @@
         <h1 class="page-head__title">Edit profile</h1>
         <p class="page-head__sub">Abigail Mensah · zamaro.ca/artists/abigail-mensah</p>
       </div>
-      <div class="stack stack--sm" style="min-width: 16rem;">
+      <div class="stack stack--sm page-head__aside">
         <p class="field__label" id="complete-label">Profile 100% complete</p>
         <div class="meter" role="progressbar" aria-labelledby="complete-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="--value: 100%;"><div class="meter__bar"></div></div>
         <p class="text-caption">Everything a church needs to book you is here.</p>
-        <a class="btn btn--sm" href="../../pages/artist/default.html" style="align-self: start;"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</a>
+        <a class="btn btn--sm" href="../../pages/profile-preview/default.html" style="align-self: start;"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Preview</a>
       </div>
     </div>
     <div class="page-body">
@@ -64,24 +65,24 @@
         <section class="form-section" id="basics" aria-labelledby="basics-title">
           <h2 class="form-section__title" id="basics-title">Photo &amp; name</h2>
           <div class="cluster" style="gap: var(--space-5); align-items: end;">
-            <div class="art art--yellow" role="img" aria-label="Your primary photo: Abigail singing into a vintage microphone" style="width: 8rem;"></div>
-            <p class="field__help" style="max-width: 16rem;">Your primary photo comes from Photos below. Pick a different one there with the star.</p>
+            <div class="art art--yellow art--thumb-lg" role="img" aria-label="Your primary photo: Abigail singing into a vintage microphone"></div>
+            <p class="field__help field__help--narrow">Your primary photo comes from Photos below. Pick a different one there with the star.</p>
           </div>
           <div class="form-grid">
-        <label class="field"><span class="field__label">Display name <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">Display name <span class="field__required">(required)</span></span>
           <input class="input" id="display-name" name="display-name" type="text" value="Abigail Mensah" aria-describedby="display-name-help" required>
           <span class="field__help" id="display-name-help">2 to 80 characters.</span></label>
-        <label class="field"><span class="field__label">Headline <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">Headline <span class="field__required">(required)</span></span>
           <input class="input" id="headline" name="headline" type="text" value="Gospel &amp; contemporary vocalist" aria-describedby="headline-help" required>
-          <span class="field__help" id="headline-help">Up to 80 characters, shown under your name.</span></label>
-        <label class="field"><span class="field__label">Pronoun in your profile <span class="optional">(required)</span></span>
+          <span class="field__help" id="headline-help">Up to 80 characters, shown above your name.</span></label>
+        <label class="field"><span class="field__label">Pronoun in your profile <span class="field__required">(required)</span></span>
           <select class="select" id="pronoun" name="pronoun" aria-describedby="pronoun-help" required><option selected>she/her</option><option>he/him</option><option>they/them</option></select>
           <span class="field__help" id="pronoun-help">Used in copy like “Watch her lead”. Groups always use they/them.</span></label>
-        <label class="field"><span class="field__label">Base city <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">Base city <span class="field__required">(required)</span></span>
           <input class="input" id="base-city" name="base-city" type="text" value="Brampton, ON" aria-describedby="base-city-help" required>
           <span class="field__help" id="base-city-help">Inside the Zamaro service area.</span></label>
             <fieldset class="fieldset">
-              <legend>Styles <span class="optional">(required, pick 1 to 4)</span></legend>
+              <legend>Styles <span class="field__required">(required, pick 1 to 4)</span></legend>
               <div class="cluster" style="gap: 0 var(--space-6);">
               <label class="choice"><input type="checkbox" name="styles"><span class="choice__text">Band</span></label>
               <label class="choice"><input type="checkbox" name="styles" checked><span class="choice__text">Solo vocalist</span></label>
@@ -95,7 +96,10 @@
         </section>
         <section class="form-section" id="bio" aria-labelledby="bio-title">
           <h2 class="form-section__title" id="bio-title">Bio</h2>
-          <label class="field"><span class="field__label">About you <span class="optional">(required)</span></span>
+          <label class="field"><span class="field__label">About heading <span class="field__optional">(optional)</span></span>
+            <input class="input" id="about-heading" name="about-heading" type="text" maxlength="80" value="Raised in the choir loft" aria-describedby="about-heading-help">
+            <span class="field__help" id="about-heading-help">Up to 80 characters, the title over your bio.</span></label>
+          <label class="field"><span class="field__label">About you <span class="field__required">(required)</span></span>
             <textarea class="textarea" id="bio-text" name="bio" rows="7" aria-describedby="bio-text-help" required>I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone. I’ve led worship at New Covenant Chapel for nine years.
 
 I lead in English and Twi, bring my own tracks if you don’t have a band, and I’m happy to rehearse with your volunteers. My aim is a congregation that sings.</textarea>
@@ -104,10 +108,10 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
         <section class="form-section" id="rate" aria-labelledby="rate-title">
           <h2 class="form-section__title" id="rate-title">Rate &amp; travel</h2>
           <div class="form-grid">
-        <label class="field"><span class="field__label">From price, in dollars <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">From price, in dollars <span class="field__required">(required)</span></span>
           <input class="input" id="price" name="price" type="number" value="650" aria-describedby="price-help" required inputmode="numeric" min="100" max="20000" step="1">
           <span class="field__help" id="price-help">Whole dollars from $100 to $20,000, travel included. Requests already sent keep their locked price.</span></label>
-        <label class="field"><span class="field__label">Maximum driving distance <span class="optional">(required)</span></span>
+        <label class="field"><span class="field__label">Maximum driving distance <span class="field__required">(required)</span></span>
           <select class="select" id="radius" name="radius" aria-describedby="radius-help" required><option>20 km</option><option>30 km</option><option>40 km</option><option>50 km</option><option>60 km</option><option>70 km</option><option>80 km</option><option>90 km</option><option>100 km</option><option>110 km</option><option selected>120 km</option><option>130 km</option><option>140 km</option><option>150 km</option><option>160 km</option><option>170 km</option><option>180 km</option><option>190 km</option><option>200 km</option></select>
           <span class="field__help" id="radius-help">20 to 200 km. Churches farther away don’t see you.</span></label>
           </div>
@@ -187,22 +191,10 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
                 <button class="btn btn--ghost btn--icon" type="button" aria-label="Remove Twi praise medley"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
               </span></li>
           </ol>
-          <fieldset class="fieldset">
-            <legend>Add a song</legend>
-            <div class="form-grid">
-        <label class="field"><span class="field__label">Song title</span>
-          <input class="input" id="new-song" name="new-song" type="text" aria-describedby="new-song-help">
-          <span class="field__help" id="new-song-help">1 to 100 characters.</span></label>
-        <label class="field"><span class="field__label">Writer or source <span class="optional">(optional)</span></span>
-          <input class="input" id="new-credit" name="new-credit" type="text" aria-describedby="new-credit-help">
-          <span class="field__help" id="new-credit-help">Up to 100 characters.</span></label>
-        <label class="field"><span class="field__label">Key</span>
-          <select class="select" id="new-key" name="new-key" aria-describedby="new-key-help"><option selected>Any key</option><option>Key of C</option><option>Key of D♭</option><option>Key of D</option><option>Key of E♭</option><option>Key of E</option><option>Key of F</option><option>Key of F♯</option><option>Key of G</option><option>Key of A♭</option><option>Key of A</option><option>Key of B♭</option><option>Key of B</option><option>Key of C minor</option><option>Key of C♯ minor</option><option>Key of D minor</option><option>Key of E♭ minor</option><option>Key of E minor</option><option>Key of F minor</option><option>Key of F♯ minor</option><option>Key of G minor</option><option>Key of G♯ minor</option><option>Key of A minor</option><option>Key of B♭ minor</option><option>Key of B minor</option></select>
-          <span class="field__help" id="new-key-help">Any of the 24 keys, or Any key.</span></label>
-              <div class="field" style="justify-content: end;"><button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add song</button></div>
-            </div>
+          <div class="cluster cluster--between">
             <p class="field__help">8 of 50 songs.</p>
-          </fieldset>
+            <a class="btn" href="../../dialogs/add-song/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add a song</a>
+          </div>
         </section>
         <section class="form-section" id="videos" aria-labelledby="videos-title">
           <h2 class="form-section__title" id="videos-title">Videos</h2>
@@ -238,7 +230,7 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
           </ul>
           <div class="cluster cluster--between">
             <p class="field__help">4 of 8 videos · MP4, MOV or WebM, up to 1 GB and 15 minutes each</p>
-            <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add a video</button>
+            <a class="btn" href="../../dialogs/add-video/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add a video</a>
           </div>
         </section>
         <section class="form-section" id="photos" aria-labelledby="photos-title">
@@ -246,7 +238,7 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
           <ul class="photo-grid" role="list">
             <li class="stack stack--sm">
               <div class="art art--square " role="img" aria-label="Abigail at the microphone during a Sunday service"><span class="art__tag">Primary</span></div>
-              <label class="field"><span class="field__label">Alt text <span class="optional">(required)</span></span>
+              <label class="field"><span class="field__label">Alt text <span class="field__required">(required)</span></span>
                 <input class="input" id="alt-1" name="alt-1" type="text" value="Abigail at the microphone during a Sunday service" minlength="5" maxlength="150" required></label>
               <div class="cluster" style="gap: 0;">
                 <button class="btn btn--ghost btn--icon" type="button" aria-label="Move photo 1 earlier" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></button>
@@ -257,7 +249,7 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
             </li>
             <li class="stack stack--sm">
               <div class="art art--square art--group" role="img" aria-label="Abigail rehearsing with a church volunteer band"></div>
-              <label class="field"><span class="field__label">Alt text <span class="optional">(required)</span></span>
+              <label class="field"><span class="field__label">Alt text <span class="field__required">(required)</span></span>
                 <input class="input" id="alt-2" name="alt-2" type="text" value="Abigail rehearsing with a church volunteer band" minlength="5" maxlength="150" required></label>
               <div class="cluster" style="gap: 0;">
                 <button class="btn btn--ghost btn--icon" type="button" aria-label="Move photo 2 earlier"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></button>
@@ -268,7 +260,7 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
             </li>
             <li class="stack stack--sm">
               <div class="art art--square art--yellow" role="img" aria-label="Portrait of Abigail smiling in a kente scarf"></div>
-              <label class="field"><span class="field__label">Alt text <span class="optional">(required)</span></span>
+              <label class="field"><span class="field__label">Alt text <span class="field__required">(required)</span></span>
                 <input class="input" id="alt-3" name="alt-3" type="text" value="Portrait of Abigail smiling in a kente scarf" minlength="5" maxlength="150" required></label>
               <div class="cluster" style="gap: 0;">
                 <button class="btn btn--ghost btn--icon" type="button" aria-label="Move photo 3 earlier"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></button>
@@ -279,7 +271,7 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
             </li>
             <li class="stack stack--sm">
               <div class="art art--square art--tilt" role="img" aria-label="Abigail leading a youth night from the floor, not the stage"></div>
-              <label class="field"><span class="field__label">Alt text <span class="optional">(required)</span></span>
+              <label class="field"><span class="field__label">Alt text <span class="field__required">(required)</span></span>
                 <input class="input" id="alt-4" name="alt-4" type="text" value="Abigail leading a youth night from the floor, not the stage" minlength="5" maxlength="150" required></label>
               <div class="cluster" style="gap: 0;">
                 <button class="btn btn--ghost btn--icon" type="button" aria-label="Move photo 4 earlier"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></button>
@@ -292,29 +284,23 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
           <p class="field__help">Alt text describes the photo for people who can’t see it: 5 to 150 characters. The star makes a photo your primary one.</p>
           <div class="cluster cluster--between">
             <p class="field__help">4 of 12 photos · JPEG, PNG, WebP or HEIC up to 15 MB, at least 800 px on the short side.</p>
-            <label class="btn upload"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 14v6h14v-6"/></svg><input class="visually-hidden" type="file" name="photos" accept="image/jpeg,image/png,image/webp,image/heic" multiple>Upload photos</label>
+            <a class="btn" href="../../dialogs/add-photo/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M5 14v6h14v-6"/></svg>Add a photo</a>
           </div>
         </section>
         <section class="form-section" id="address" aria-labelledby="address-title">
           <h2 class="form-section__title" id="address-title">Profile address</h2>
           <div class="form-grid">
-        <label class="field field--full"><span class="field__label">zamaro.ca/artists/ <span class="optional">(required)</span></span>
+        <label class="field field--full"><span class="field__label">zamaro.ca/artists/ <span class="field__required">(required)</span></span>
           <input class="input" id="slug" name="slug" type="text" value="abigail-mensah" aria-describedby="slug-help" required autocapitalize="off" spellcheck="false" pattern="[a-z0-9-]+">
           <span class="field__help" id="slug-help">Lowercase letters, numbers and hyphens. Last changed Mon 3 Aug, so you can change it now; then not again for 30 days. The old address keeps redirecting here.</span></label>
           </div>
         </section>
         <section class="form-section" id="check" aria-labelledby="check-title">
           <h2 class="form-section__title" id="check-title">Vulnerable Sector Check</h2>
-          <p class="cluster"><span class="badge badge--free">Verified</span><span>Verified until Fri 3 Mar 2028 · issued Mon 3 Mar 2025. You appear in Youth event searches until then.</span></p>
-          <div class="form-grid">
-            <div class="field">
-              <span class="field__label">Police check document <span class="optional">(optional)</span></span>
-              <label class="btn upload" style="align-self: start;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6zM8.5 12l2.5 2.5 4.5-5"/></svg><input class="visually-hidden" type="file" name="vsc" accept="application/pdf,image/jpeg,image/png" aria-describedby="vsc-help">Upload a newer check</label>
-              <span class="field__help" id="vsc-help">PDF, JPEG or PNG up to 10 MB.</span>
-            </div>
-        <label class="field"><span class="field__label">Issue date <span class="optional">(optional)</span></span>
-          <input class="input" id="vsc-date" name="vsc-date" type="date" aria-describedby="vsc-date-help" max="2026-10-09">
-          <span class="field__help" id="vsc-date-help">The date printed on the check.</span></label>
+          <p class="cluster"><span class="badge badge--success">Verified</span><span>Verified until Fri 3 Mar 2028 · issued Mon 3 Mar 2025. You appear in Youth event searches until then.</span></p>
+          <div class="cluster">
+            <a class="btn" href="../../dialogs/upload-check/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6zM8.5 12l2.5 2.5 4.5-5"/></svg>Upload a newer check</a>
+            <span class="field__help">PDF, JPEG or PNG up to 10 MB, with the issue date printed on it.</span>
           </div>
           <p class="field__help">Only you and Zamaro administrators can open it; churches never see the document. We remind you 60 days before it runs out.</p>
         </section>
@@ -375,27 +361,27 @@ I lead in English and Twi, bring my own tracks if you don’t have a band, and I
       <button class="close" type="button" aria-label="Close"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="dialog__body">
-      <div class="alert" role="alert">
+      <div class="alert alert--danger alert--compact" role="alert">
         <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
         <div class="stack stack--sm">
           <p class="alert__title">Upload stopped at 61%</p>
           <p>Your connection dropped. The 492 MB already sent are kept, so Resume picks up from there.</p>
         </div>
       </div>
-      <label class="field"><span class="field__label">Video file <span class="optional">(required)</span></span>
+      <label class="field"><span class="field__label">Video file <span class="field__required">(required)</span></span>
         <input class="input" id="video-file" name="video" type="file" accept="video/mp4,video/quicktime,video/webm" required aria-describedby="video-file-chosen video-file-help">
         <span class="field__help" id="video-file-chosen">Chosen: jireh-living-waters.mp4 · 808 MB · 7 min 42 s</span>
         <span class="field__help" id="video-file-help">MP4, MOV or WebM, up to 1 GB and 15 minutes.</span></label>
-      <label class="field"><span class="field__label">Title <span class="optional">(required)</span></span>
+      <label class="field"><span class="field__label">Title <span class="field__required">(required)</span></span>
         <input class="input" id="video-title" name="title" type="text" minlength="5" maxlength="100" required value="Jireh — live at Living Waters, Brampton" aria-describedby="video-title-help">
         <span class="field__help" id="video-title-help">5 to 100 characters. Name the song and where you led it.</span></label>
-      <label class="field"><span class="field__label">Captions <span class="optional">(optional)</span></span>
+      <label class="field"><span class="field__label">Captions <span class="field__optional">(optional)</span></span>
         <input class="input" id="video-captions" name="captions" type="file" accept=".vtt,text/vtt" aria-describedby="video-captions-help">
         <span class="field__help" id="video-captions-help">A WebVTT file up to 1 MB.</span></label>
     </div>
     <div class="dialog__footer">
       <button class="btn" type="button">Cancel</button>
-      <button class="btn btn--primary" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Resume upload</button>
+      <button class="btn btn--primary" type="submit" autofocus><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Resume upload</button>
     </div>
   </form>
 </dialog>

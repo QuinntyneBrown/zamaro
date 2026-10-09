@@ -25,6 +25,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -37,22 +38,22 @@
       </div>
       <p class="text-muted">Free for churches. You’ll add your church when you send your first request.</p>
         <div class="field">
-          <label class="field__label" for="name">Full name <span class="optional">required</span></label>
+          <label class="field__label" for="name">Full name <span class="field__required">(required)</span></label>
           <input class="input" type="text" id="name" name="name" value="Naomi Fraser" autocomplete="name" required readonly>
         </div>
         <div class="field">
-          <label class="field__label" for="email">Email <span class="optional">required</span></label>
+          <label class="field__label" for="email">Email <span class="field__required">(required)</span></label>
           <input class="input" type="email" id="email" name="email" value="naomi.fraser@riversidecc.ca" autocomplete="email" placeholder="name@church.ca" required aria-describedby="email-help" readonly>
           <span class="field__help" id="email-help">Use your church email if you have one.</span>
         </div>
         <div class="field">
-          <label class="field__label" for="password">Password <span class="optional">required</span></label>
+          <label class="field__label" for="password">Password <span class="field__required">(required)</span></label>
           <input class="input" type="password" id="password" name="password" value="hosanna-in-the-highest" autocomplete="new-password" required aria-describedby="password-help" readonly>
           <span class="field__help" id="password-help">12 to 128 characters. Passwords found in known data breaches are refused.</span>
         </div>
-        <label class="choice"><input type="checkbox" id="terms" name="terms" checked required disabled><span class="choice__text"><span>I accept Zamaro’s terms of use and privacy policy <span class="optional">required</span></span></span></label>
+        <label class="choice"><input type="checkbox" id="terms" name="terms" checked required disabled><span class="choice__text"><span>I accept Zamaro’s terms of use and privacy policy <span class="field__required">(required)</span></span></span></label>
         <label class="choice"><input type="checkbox" id="news" name="news" disabled><span class="choice__text"><span>Email me about new artists near my church</span><small>Optional. About once a month; unsubscribe any time.</small></span></label>
-      <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" disabled>Creating account…</button>
+      <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" aria-disabled="true">Creating account…</button>
       <div class="auth-card__links"><a href="../sign-in/default.html">Already have an account? Sign in</a></div>
       <p class="stub__fine">Leading worship yourself? <a href="../apply/default.html">Apply as an artist</a> instead.</p>
     </form>
@@ -103,6 +104,7 @@
     <li><a href="submitting.html" aria-current="page">submitting</a></li>
     <li><a href="success.html">success</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="challenge.html">challenge</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

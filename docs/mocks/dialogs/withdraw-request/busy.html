@@ -29,19 +29,20 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../../pages/bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
-    <div class="page-head" style="padding-top: var(--space-4);">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../../pages/bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
       <div><p class="overline">Booking ZAM-0114</p><h1 class="page-head__title">Worship night with Abigail Mensah</h1><p class="page-head__sub">Sat 14 Nov 2026 · 7:00 p.m. · Burlington</p></div>
       <span class="stamp stamp--lg stamp--requested">Requested</span>
     </div>
-    <div class="detail-layout detail-layout--aside-first" style="padding-top: 0;">
+    <div class="detail-layout detail-layout--aside-first detail-layout--flush">
       <div class="stack stack--lg">
         <section class="panel" aria-labelledby="progress-title">
           <div class="panel__head"><h2 id="progress-title" class="panel__title">Where it stands</h2><span class="text-caption">Requested today, 10:15 a.m.</span></div>
@@ -64,17 +65,17 @@
             <div class="definition__row"><dt>Quoted price</dt><dd>$650, locked Fri 9 Oct</dd></div>
           </dl>
         </section>
-        <section class="panel" aria-labelledby="messages-title">
+        <section class="panel" id="messages" aria-labelledby="messages-title">
           <div class="panel__head"><h2 id="messages-title" class="panel__title">Messages</h2><span class="text-caption">Only you and Abigail see these</span></div>
           <div class="message">
             <p class="message__meta">You · Fri 9 Oct, 10:15 a.m.</p>
             <blockquote><p>We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</p></blockquote>
             <p class="field__help">Abigail sees “[contact details shared after booking]” in place of your phone number until the booking is confirmed.</p>
           </div>
-          <form class="stack stack--sm" action="#messages-title" aria-label="Send Abigail a message">
+          <form class="stack stack--sm" action="#messages" aria-label="Send Abigail a message">
             <div class="field"><label class="field__label" for="reply">Message to Abigail</label>
               <textarea class="textarea" id="reply" name="reply" rows="3" maxlength="2000" aria-describedby="reply-help"></textarea>
-              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an e-mail at most every 15 minutes.</span></div>
+              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an email at most every 15 minutes.</span></div>
             <div class="cluster"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
           </form>
         </section>
@@ -137,7 +138,7 @@
       <button class="close" type="button" aria-label="Close" disabled><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="dialog__body">
-      <p>Abigail is told straight away and Sat 14 Nov opens on her calendar for other churches. If she’s still free later, you can ask her again.</p>
+      <p>Abigail is told straight away and the request leaves her inbox. If she’s still free on Sat 14 Nov later, you can ask her again.</p>
       <dl class="definition definition--two">
         <div class="definition__row"><dt>Booking</dt><dd>ZAM-0114, worship night</dd></div>
         <div class="definition__row"><dt>Charged</dt><dd>$0</dd></div>

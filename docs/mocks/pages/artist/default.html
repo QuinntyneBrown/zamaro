@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="artist">
 <meta name="mock:state" content="default">
-<meta name="mock:requirements" content="L2-012 L2-013 L2-014 L2-015 L2-016 L2-017 L2-018 L2-019 L2-020 L2-021 L2-098 L2-105 L2-107">
+<meta name="mock:requirements" content="L2-012 L2-013 L2-014 L2-015 L2-016 L2-017 L2-018 L2-019 L2-020 L2-021 L2-060 L2-083 L2-098 L2-105 L2-107 L2-112 L2-113">
 <meta name="description" content="Abigail Mensah’s profile as a gig poster: huge name, bio, live videos, photos, her setlist, upcoming dates, church reviews and a ticket-stub booking form.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -40,7 +41,7 @@
         <div class="stack">
           <p class="overline poster__kicker">Headliner · Gospel &amp; contemporary vocalist</p>
           <h1 id="artist-name" class="artist-poster__name">Abigail Mensah</h1>
-          <p class="artist-poster__facts"><strong>★ 4.9</strong><span>38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
+          <p class="artist-poster__facts"><strong><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9</span></strong><span aria-hidden="true">38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
           <div class="cluster">
             <a class="btn btn--primary" href="#book-title">Book for Sat 14 Nov</a>
             <button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button>
@@ -50,7 +51,7 @@
       </div>
     </div>
   </section>
-  <div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance ✦</span><span>Build My Life</span></div>
+  <div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance</span></div>
   <div class="container profile-layout">
     <div>
         <section class="section" aria-labelledby="about-title">
@@ -65,20 +66,20 @@
         <section class="section" aria-labelledby="videos-title">
           <div class="section__head"><div><p class="overline section__kicker">Live</p><h2 id="videos-title">Watch her lead</h2></div></div>
           <ul class="media-grid" role="list">
-            <li><button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"></span><span class="video__play">PLAY · 6:12</span></button><span class="video__caption">Way Maker — live at Bethel Pentecostal, Hamilton</span></li>
-            <li><button class="video" type="button" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist in a small chapel"></span><span class="video__play">PLAY · 4:40</span></button><span class="video__caption">Great Is Thy Faithfulness — acoustic</span></li>
-            <li><button class="video" type="button" aria-label="Play Twi praise medley, Harvest Sunday 2025, 8 minutes 5 seconds"><span class="art art--wide art--tilt" role="img" aria-label="A congregation dancing during a Ghanaian praise medley"></span><span class="video__play">PLAY · 8:05</span></button><span class="video__caption">Twi praise medley — Harvest Sunday 2025</span></li>
-            <li><button class="video" type="button" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail singing at a lakeside women’s retreat"></span><span class="video__play">PLAY · 5:30</span></button><span class="video__caption">Goodness of God — women’s retreat, Muskoka</span></li>
+            <li><button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"></span><span class="video__play">Play · 6:12</span></button><span class="video__caption">Way Maker — live at Bethel Pentecostal, Hamilton</span></li>
+            <li><button class="video" type="button" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist in a small chapel"></span><span class="video__play">Play · 4:40</span></button><span class="video__caption">Great Is Thy Faithfulness — acoustic</span></li>
+            <li><button class="video" type="button" aria-label="Play Twi praise medley, Harvest Sunday 2025, 8 minutes 5 seconds"><span class="art art--wide art--tilt" role="img" aria-label="A congregation dancing during a Ghanaian praise medley"></span><span class="video__play">Play · 8:05</span></button><span class="video__caption">Twi praise medley — Harvest Sunday 2025</span></li>
+            <li><button class="video" type="button" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail singing at a lakeside women’s retreat"></span><span class="video__play">Play · 5:30</span></button><span class="video__caption">Goodness of God — women’s retreat, Muskoka</span></li>
           </ul>
         </section>
 
         <section class="section" aria-labelledby="photos-title">
           <div class="section__head"><div><p class="overline section__kicker">Gallery</p><h2 id="photos-title">Photos</h2></div></div>
           <ul class="photo-grid" role="list">
-            <li><div class="art art--square" role="img" aria-label="Abigail at the microphone during a Sunday service"></div></li>
-            <li><div class="art art--square art--group" role="img" aria-label="Abigail rehearsing with a church volunteer band"></div></li>
-            <li><div class="art art--square art--yellow" role="img" aria-label="Portrait of Abigail smiling in a kente scarf"></div></li>
-            <li><div class="art art--square art--tilt" role="img" aria-label="Abigail leading a youth night from the floor, not the stage"></div></li>
+            <li><a href="../../dialogs/photo-viewer/default.html" aria-label="Open photo 1 of 4: Abigail at the microphone during a Sunday service"><span class="art art--square" aria-hidden="true"></span></a></li>
+            <li><a href="../../dialogs/photo-viewer/default.html" aria-label="Open photo 2 of 4: Abigail rehearsing with a church volunteer band"><span class="art art--square art--group" aria-hidden="true"></span></a></li>
+            <li><a href="../../dialogs/photo-viewer/default.html" aria-label="Open photo 3 of 4: Portrait of Abigail smiling in a kente scarf"><span class="art art--square art--yellow" aria-hidden="true"></span></a></li>
+            <li><a href="../../dialogs/photo-viewer/default.html" aria-label="Open photo 4 of 4: Abigail leading a youth night from the floor, not the stage"><span class="art art--square art--tilt" aria-hidden="true"></span></a></li>
           </ul>
         </section>
 
@@ -100,41 +101,42 @@
           <ul class="tour-dates" role="list">
             <li aria-current="date"><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span class="cluster"><span class="tour-dates__note">Your date</span></span><span class="badge badge--free">Free</span></li>
             <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span class="cluster"><span class="tour-dates__note">Sunday service, Oakville</span></span><span class="badge badge--booked">Booked</span></li>
+            <li><span class="tour-dates__day"><small>Tue</small>17 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Tue 17 Nov">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Wed</small>18 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Wed 18 Nov">Pick</button></li>
+            <li><span class="tour-dates__day"><small>Thu</small>19 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Thu 19 Nov">Pick</button></li>
             <li><span class="tour-dates__day"><small>Fri</small>20 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Fri 20 Nov">Pick</button></li>
-            <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span class="cluster"><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span class="badge badge--booked">Booked</span></li>
-            <li><span class="tour-dates__day"><small>Sun</small>22 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Sun 22 Nov">Pick</button></li>
-            <li><span class="tour-dates__day"><small>Sat</small>28 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Sat 28 Nov">Pick</button></li>
           </ul>
         </section>
 
         <section class="section" aria-labelledby="reviews-title">
-          <div class="section__head"><div><p class="overline section__kicker">Word of mouth</p><h2 id="reviews-title">What churches say</h2></div><p class="stars">★★★★★ 4.9 · 38 reviews</p></div>
+          <div class="section__head"><div><p class="overline section__kicker">Word of mouth</p><h2 id="reviews-title">What churches say</h2></div><p class="stars" role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★★★★★ 4.9 · 38 churches</p></div>
           <ul class="reviews" role="list">
-            <li><figure class="review"><blockquote><p>She had the whole congregation singing <em>Great Is Thy Faithfulness</em> in three-part harmony by the last verse.</p></blockquote><figcaption><span role="img" aria-label="5 out of 5 stars" class="stars">★★★★★</span>Rev. Janet Clarke<span>St. Brendan’s Anglican, Oshawa · September 2026</span></figcaption></figure></li>
-            <li><figure class="review"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption><span role="img" aria-label="5 out of 5 stars" class="stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure></li>
-            <li><figure class="review"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span role="img" aria-label="5 out of 5 stars" class="stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure></li>
-            <li><figure class="review"><blockquote><p>Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.</p></blockquote><figcaption><span role="img" aria-label="4 out of 5 stars" class="stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></li>
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>She had the whole congregation singing in three-part harmony by the last verse.</p></blockquote><figcaption><span role="img" aria-label="5 out of 5 stars" class="stars">★★★★★</span>Rev. Janet Clarke<span>St. Brendan’s Anglican, Oshawa · September 2026</span></figcaption></figure><div class="cluster"><a class="btn btn--ghost btn--sm" href="../../dialogs/report-review/default.html"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>Report<span class="visually-hidden"> Rev. Janet Clarke’s review</span></a></div></li>
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption><span role="img" aria-label="5 out of 5 stars" class="stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure><div class="message"><p class="message__meta">Reply from Abigail Mensah · October 2026</p><blockquote><p>Thank you, Tomi! Your volunteers were ready for everything I threw at them. See you on Sun 1 Nov.</p></blockquote></div><div class="cluster"><a class="btn btn--ghost btn--sm" href="../../dialogs/report-review/default.html"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>Report<span class="visually-hidden"> Tomi Oduya’s review</span></a></div></li>
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span role="img" aria-label="5 out of 5 stars" class="stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure><div class="message"><p class="message__meta">Reply from Abigail Mensah · June 2026</p><blockquote><p>Riverside, you sang the roof off. Thank you for having me.</p></blockquote></div></li>
+            <li class="stack stack--sm"><figure class="review"><blockquote><p>Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.</p></blockquote><figcaption><span role="img" aria-label="4 out of 5 stars" class="stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure><div class="cluster"><a class="btn btn--ghost btn--sm" href="../../dialogs/report-review/default.html"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>Report<span class="visually-hidden"> Pastor Femi Adebayo’s review</span></a></div></li>
           </ul>
+          <div class="cluster" style="margin-top: var(--space-6);"><button class="btn" type="button">Show all 38 reviews</button></div>
         </section>
     </div>
     <aside aria-labelledby="book-title">
       <form class="stub" action="../book/default.html">
         <div class="stub__head">
           <h2 id="book-title" class="stub__title">Book Abigail</h2>
-          <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
+          <span class="stub__code" aria-hidden="true">No. ACT-0027</span>
         </div>
         <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
         <div class="field"><label class="field__label" for="book-date">Event date</label>
-          <input class="input" type="date" id="book-date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-help">
+          <input class="input" type="date" id="book-date" name="date" value="2026-11-14" min="2026-10-12" max="2028-04-09" aria-describedby="date-help">
           <span class="field__help inline-msg inline-msg--success" id="date-help"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div>
         <label class="field"><span class="field__label">Kind of gathering</span>
-          <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+          <select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
         <label class="field"><span class="field__label">Church</span>
           <input class="input" type="text" name="church" value="Riverside Community Church, Burlington"></label>
-        <label class="field" id="message-field"><span class="field__label">Message (optional)</span>
+        <label class="field" id="message-field"><span class="field__label">Message <span class="field__optional">(optional)</span></span>
           <textarea class="textarea" name="message" id="message" placeholder="Your church, the room, the songs you love."></textarea></label>
         <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
-        <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+        <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="../discover/default.html#how">Cancel free up to 14 days before</a>.</p>
       </form>
     </aside>
   </div>
@@ -172,7 +174,8 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 34rem; right: 1rem;">On desktop the ticket stub stays pinned while the profile scrolls. Under 1024 px it follows the reviews, and “Book for Sat 14 Nov” jumps to it.</p>
+<p class="mock-note" style="top: 34rem; right: 1rem;">On desktop the ticket stub stays pinned while the profile scrolls. Below LG (992 px) it follows the reviews, and “Book for Sat 14 Nov” jumps to it and focuses the date. Opened without a search date, that button reads “Check dates”. Share opens the device’s share sheet, or copies the link and shows a “Link copied” toast.</p>
+<p class="mock-note" style="top: 52rem; left: 1rem;">Signed in, Naomi sees Report on every review but her own; guests see no Report link (L2-062). Artist replies sit beneath their review as “Reply from Abigail Mensah” (L2-018, L2-061).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -183,6 +186,8 @@
     <li><a href="loading.html">loading</a></li>
     <li><a href="empty.html">empty</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="booked-date.html">booked-date</a></li>
+    <li><a href="no-photos.html">no-photos</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

@@ -25,6 +25,7 @@
     <a class="nav-link" href="../discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <a class="nav-link" href="../sign-in/default.html">Sign in</a>
 </header>
 
@@ -40,13 +41,13 @@
         <ul><li><a href="#new-password">Use at least 12 characters</a></li><li><a href="#confirm-password">Make the two passwords match</a></li></ul>
       </div>
         <div class="field">
-          <label class="field__label" for="new-password">New password <span class="optional">required</span></label>
+          <label class="field__label" for="new-password">New password <span class="field__required">(required)</span></label>
           <input class="input" type="password" id="new-password" name="new-password" value="grace2026" autocomplete="new-password" required aria-describedby="new-password-error new-password-help" aria-invalid="true">
           <span class="field__error" id="new-password-error">Use at least 12 characters. A short phrase like a song line works well.</span>
           <span class="field__help" id="new-password-help">12 to 128 characters, and not one found in a known data breach.</span>
         </div>
         <div class="field">
-          <label class="field__label" for="confirm-password">Type it again <span class="optional">required</span></label>
+          <label class="field__label" for="confirm-password">Type it again <span class="field__required">(required)</span></label>
           <input class="input" type="password" id="confirm-password" name="confirm-password" value="grace2O26" autocomplete="new-password" required aria-describedby="confirm-password-error" aria-invalid="true">
           <span class="field__error" id="confirm-password-error">The two passwords don’t match. Type the new one again.</span>
         </div>

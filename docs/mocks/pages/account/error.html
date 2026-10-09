@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="account">
 <meta name="mock:state" content="error">
-<meta name="mock:requirements" content="L2-024 L2-025 L2-065 L2-072 L2-080 L2-081 L2-082 L2-105 L2-108">
+<meta name="mock:requirements" content="L2-001 L2-024 L2-025 L2-065 L2-072 L2-080 L2-081 L2-082 L2-105 L2-108">
 <meta name="description" content="Settings could not load: the chrome stays, the alert says nothing changed and offers Try again.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -40,7 +41,7 @@
       </div>
     </div>
     <div class="page-body">
-      <div class="alert" role="alert">
+      <div class="alert alert--danger" role="alert">
         <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
         <div class="stack stack--sm">
           <p class="alert__title">We couldn’t load your settings</p>
@@ -100,6 +101,12 @@
     <li><a href="invalid.html">invalid</a></li>
     <li><a href="submitting.html">submitting</a></li>
     <li><a href="success.html">success</a></li>
+    <li><a href="failed.html">failed</a></li>
+    <li><a href="out-of-area.html">out-of-area</a></li>
+    <li><a href="export-requested.html">export-requested</a></li>
+    <li><a href="export-ready.html">export-ready</a></li>
+    <li><a href="artist.html">artist</a></li>
+    <li><a href="two-step-on.html">two-step-on</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

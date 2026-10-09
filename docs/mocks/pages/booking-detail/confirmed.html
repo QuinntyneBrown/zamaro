@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="booking-detail">
 <meta name="mock:state" content="confirmed">
-<meta name="mock:requirements" content="L2-029 L2-030 L2-031 L2-032 L2-033 L2-036 L2-037 L2-040 L2-042 L2-044 L2-045 L2-046 L2-059 L2-105 L2-108 L2-110">
+<meta name="mock:requirements" content="L2-029 L2-030 L2-031 L2-032 L2-033 L2-036 L2-037 L2-038 L2-040 L2-042 L2-043 L2-044 L2-045 L2-046 L2-059 L2-105 L2-108 L2-110">
 <meta name="description" content="ZAM-0114 confirmed: deposit paid, free cancellation until Sat 31 Oct, both sides’ phone numbers shown, Download receipt and Cancel booking.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,19 +26,20 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
-    <div class="page-head" style="padding-top: var(--space-4);">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../bookings/default.html">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
       <div><p class="overline">Booking ZAM-0114</p><h1 class="page-head__title">Worship night with Abigail Mensah</h1><p class="page-head__sub">Sat 14 Nov 2026 · 7:00 p.m. · Burlington</p></div>
       <span class="stamp stamp--lg stamp--confirmed">Confirmed</span>
     </div>
-    <div class="detail-layout detail-layout--aside-first" style="padding-top: 0;">
+    <div class="detail-layout detail-layout--aside-first detail-layout--flush">
       <div class="stack stack--lg">
         <section class="panel" aria-labelledby="progress-title">
           <div class="panel__head"><h2 id="progress-title" class="panel__title">Where it stands</h2><span class="text-caption">Confirmed today, 3:05 p.m.</span></div>
@@ -60,11 +61,11 @@
             <div class="definition__row"><dt>Artist</dt><dd><a href="../artist/default.html">Abigail Mensah</a>, Brampton · 44 km</dd></div>
             <div class="definition__row"><dt>Quoted price</dt><dd>$650, locked Fri 9 Oct</dd></div>
             <div class="definition__row"><dt>Abigail’s phone</dt><dd><a href="tel:+19055550148">905-555-0148</a></dd></div>
-            <div class="definition__row"><dt>Abigail’s e-mail</dt><dd><a href="mailto:abigail@abigailmensah.ca">abigail@abigailmensah.ca</a></dd></div>
+            <div class="definition__row"><dt>Abigail’s email</dt><dd><a href="mailto:abigail@abigailmensah.ca">abigail@abigailmensah.ca</a></dd></div>
             <div class="definition__row"><dt>Your church phone (shared with Abigail)</dt><dd>905-555-0123</dd></div>
           </dl>
         </section>
-        <section class="panel" aria-labelledby="messages-title">
+        <section class="panel" id="messages" aria-labelledby="messages-title">
           <div class="panel__head"><h2 id="messages-title" class="panel__title">Messages</h2><span class="text-caption">Only you and Abigail see these</span></div>
           <div class="message">
             <p class="message__meta">You · Fri 9 Oct, 10:15 a.m.</p>
@@ -75,10 +76,10 @@
             <p class="message__meta">Abigail Mensah · Fri 9 Oct, 2:40 p.m.</p>
             <blockquote><p>Yes! I’d love to lead your worship night. Send the set list to [contact details shared after booking] and I’ll rehearse with your youth band at 5:30.</p></blockquote>
           </div>
-          <form class="stack stack--sm" action="#messages-title" aria-label="Send Abigail a message">
+          <form class="stack stack--sm" action="#messages" aria-label="Send Abigail a message">
             <div class="field"><label class="field__label" for="reply">Message to Abigail</label>
               <textarea class="textarea" id="reply" name="reply" rows="3" maxlength="2000" aria-describedby="reply-help"></textarea>
-              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an e-mail at most every 15 minutes.</span></div>
+              <span class="field__help" id="reply-help">Plain text, 1 to 2,000 characters. Abigail gets an email at most every 15 minutes.</span></div>
             <div class="cluster"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-8z"/></svg>Send message</button></div>
           </form>
         </section>
@@ -87,7 +88,6 @@
         <div class="panel panel--raised">
           <div class="panel__head"><h2 id="money-title" class="panel__title">Payment</h2><span class="stub__code">No. ZAM-0114</span></div>
           <dl class="receipt" aria-label="Payment summary for ZAM-0114"><div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div><div class="receipt__row"><dt>Deposit paid Fri 9 Oct</dt><dd>$162.50</dd></div><div class="receipt__row"><dt>Balance on Mon 16 Nov</dt><dd>$487.50</dd></div><div class="receipt__row receipt__total"><dt>Paid so far</dt><dd>$162.50</dd></div></dl>
-          <button class="btn btn--primary btn--lg btn--block" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/></svg>Add to calendar</button>
           <div class="cluster"><button class="btn btn--sm" type="button"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5M5 21h14"/></svg>Download receipt</button><a class="btn btn--sm btn--ghost" href="../../dialogs/cancel-booking/default.html">Cancel booking</a></div>
           <p class="stub__fine">Free cancellation until Sat 31 Oct. Your card ending 4242 is saved for the balance. <a href="../discover/default.html#how">Cancellation policy</a></p>
         </div>
@@ -127,7 +127,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 16rem; right: 1rem;">Phone numbers appear for both sides once the deposit is paid. Add to calendar downloads an .ics file.</p>
+<p class="mock-note" style="top: 16rem; right: 1rem;">Phone numbers appear for both sides once the deposit is paid.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -144,7 +144,12 @@
     <li><a href="withdrawn.html">withdrawn</a></li>
     <li><a href="cancelled.html">cancelled</a></li>
     <li><a href="expired.html">expired</a></li>
+    <li><a href="deposit-expired.html">deposit-expired</a></li>
     <li><a href="forbidden.html">forbidden</a></li>
+    <li><a href="artist-cancelled.html">artist-cancelled</a></li>
+    <li><a href="balance-due.html">balance-due</a></li>
+    <li><a href="held.html">held</a></li>
+    <li><a href="balance-failed.html">balance-failed</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

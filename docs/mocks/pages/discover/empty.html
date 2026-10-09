@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="discover">
 <meta name="mock:state" content="empty">
-<meta name="mock:requirements" content="L2-004 L2-005 L2-006 L2-007 L2-008 L2-009 L2-010 L2-011 L2-097 L2-105 L2-106">
+<meta name="mock:requirements" content="L2-002 L2-003 L2-004 L2-005 L2-006 L2-007 L2-008 L2-009 L2-010 L2-011 L2-044 L2-060 L2-077 L2-097 L2-105 L2-106 L2-112">
 <meta name="description" content="No artist is free on the chosen date within the radius: a sold-out stamp, nearby dates with free artists, and a wider-radius option.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -42,9 +43,9 @@
       <form class="booking-bar" data-theme="light" aria-labelledby="find-title" action="default.html">
         <h2 id="find-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
         <label class="field"><span class="field__label">Event date</span>
-          <input class="input" type="date" name="date" value="2026-12-24" min="2026-10-09"></label>
+          <input class="input" type="date" name="date" value="2026-12-24" min="2026-10-12" max="2028-04-09"></label>
         <label class="field"><span class="field__label">Kind of gathering</span>
-          <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+          <select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
         <label class="field"><span class="field__label">Church location</span>
           <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
         <label class="field"><span class="field__label">How far can they drive?</span>
@@ -73,13 +74,13 @@
         <div class="stack">
           <h4>Nearby dates with choirs free</h4>
           <ul class="date-swap" role="list">
-            <li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li>
             <li><button type="button"><strong>Wed 23 Dec</strong> 1 choir free</button></li>
             <li><button type="button"><strong>Sun 27 Dec</strong> 3 choirs free</button></li>
+            <li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li>
           </ul>
         </div>
         <div class="cluster">
-          <button class="btn btn--primary" type="button">Search within 120 km <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+          <button class="btn btn--primary" type="button">Search within 120 km · 2 free <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
           <button class="btn" type="button">Show all styles</button>
         </div>
       </div>
@@ -88,7 +89,7 @@
 
   <span id="saved"></span>
   <section id="how" class="section" aria-labelledby="how-title">
-    <div class="container">
+    <div class="container stack stack--lg">
       <div class="section__head">
         <div><p class="overline section__kicker">Three songs and you’re done</p><h2 id="how-title">How booking works</h2></div>
         <p class="text-muted">Cancel free up to 14 days before your event.</p>
@@ -98,6 +99,14 @@
         <li><div><h3>Send a request</h3><p>Tell them about your church and the songs you love. Nothing is charged yet.</p></div></li>
         <li><div><h3>Lock it in</h3><p>When they accept, pay a 25% deposit. The rest is due after the event.</p></div></li>
       </ol>
+      <section id="policy" class="stack" aria-labelledby="policy-title">
+        <h3 id="policy-title">Cancellation policy</h3>
+        <dl class="definition definition--two">
+          <div class="definition__row"><dt>14 days or more before</dt><dd>Cancel free. Your deposit comes back in full.</dd></div>
+          <div class="definition__row"><dt>Fewer than 14 days before</dt><dd>Your deposit isn’t refunded. The balance is never charged.</dd></div>
+          <div class="definition__row"><dt>If the artist cancels</dt><dd>Everything you paid comes back.</dd></div>
+        </dl>
+      </section>
     </div>
   </section>
 
@@ -147,7 +156,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 52rem; right: 1rem;">Nearby-date counts respect the current filters. Picking one updates the date field and the poster headline.</p>
+<p class="mock-note" style="top: 52rem; right: 1rem;">Nearby dates are the closest days first, within 7 days either side; counts respect the current filters. Picking one updates the date field and the poster headline.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -158,6 +167,8 @@
     <li><a href="loading.html">loading</a></li>
     <li><a href="empty.html" aria-current="page">empty</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="limited.html">limited</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

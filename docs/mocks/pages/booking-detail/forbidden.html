@@ -7,7 +7,7 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="booking-detail">
 <meta name="mock:state" content="forbidden">
-<meta name="mock:requirements" content="L2-029 L2-030 L2-031 L2-032 L2-033 L2-036 L2-037 L2-040 L2-042 L2-044 L2-045 L2-046 L2-059 L2-105 L2-108 L2-110">
+<meta name="mock:requirements" content="L2-029 L2-030 L2-031 L2-032 L2-033 L2-036 L2-037 L2-038 L2-040 L2-042 L2-043 L2-044 L2-045 L2-046 L2-059 L2-105 L2-108 L2-110">
 <meta name="description" content="Another church’s booking link: shown as not found, never confirming the booking exists, with a way back to Naomi’s bookings.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
@@ -26,15 +26,16 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
 <main id="main">
   <div class="container">
-    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../bookings/default.html">Your bookings</a></li><li aria-current="page">Booking not found</li></ol></nav>
-    <div class="page-head" style="padding-top: var(--space-4);">
+    <nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../bookings/default.html">Your bookings</a></li><li aria-current="page">Booking not found</li></ol></nav>
+    <div class="page-head page-head--after-breadcrumb">
       <div><p class="overline">Error 404</p><h1 class="page-head__title">We couldn’t find that booking</h1></div>
     </div>
     <div class="page-body">
@@ -42,7 +43,7 @@
         <p class="empty__stamp" aria-hidden="true">No such ticket</p>
         <h2 class="empty__title">Check the link</h2>
         <p>The booking number may have a typo, or the link was meant for someone else. Every booking Riverside has made is on your bookings page.</p>
-        <div class="cluster"><a class="btn btn--primary" href="../bookings/default.html">Go to your bookings <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="btn" href="mailto:hello@zamaro.ca">E-mail hello@zamaro.ca</a></div>
+        <div class="cluster"><a class="btn btn--primary" href="../bookings/default.html">Go to your bookings <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><a class="btn" href="mailto:hello@zamaro.ca">Email hello@zamaro.ca</a></div>
       </div>
     </div>
   </div>
@@ -96,7 +97,12 @@
     <li><a href="withdrawn.html">withdrawn</a></li>
     <li><a href="cancelled.html">cancelled</a></li>
     <li><a href="expired.html">expired</a></li>
+    <li><a href="deposit-expired.html">deposit-expired</a></li>
     <li><a href="forbidden.html" aria-current="page">forbidden</a></li>
+    <li><a href="artist-cancelled.html">artist-cancelled</a></li>
+    <li><a href="balance-due.html">balance-due</a></li>
+    <li><a href="held.html">held</a></li>
+    <li><a href="balance-failed.html">balance-failed</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>

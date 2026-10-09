@@ -18,19 +18,20 @@
 
 <!-- The page underneath is inert while the dialog is open. -->
 <div inert aria-hidden="true">
-<header class="topbar topbar--artist">
+<header class="topbar topbar--workspace">
   <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   <a class="topbar__brand" href="../../pages/dashboard/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
   <span class="topbar__role">Artists</span>
   <nav class="topbar__nav" aria-label="Primary">
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
-    <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
+    <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count">3<span class="visually-hidden"> awaiting reply</span></span></a>
     <a class="nav-link" href="../../pages/availability/default.html" aria-current="page">Availability</a>
    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
     <a class="nav-link" href="../../pages/edit-profile/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
 </header>
 <main id="main">
@@ -42,7 +43,7 @@
       </div>
       <div class="cluster">
         <a class="btn btn--primary" href="../../dialogs/block-dates/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/></svg>Mark dates unavailable</a>
-        <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5a14 14 0 0 1 14 14M5 11a8 8 0 0 1 8 8M6 18.5v.5"/></svg>Subscribe in your calendar</button>
+        <a class="btn" href="../../dialogs/calendar-feed/default.html"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5a14 14 0 0 1 14 14M5 11a8 8 0 0 1 8 8M6 18.5v.5"/></svg>Subscribe in your calendar</a>
       </div>
     </header>
     <div class="page-body">
@@ -120,7 +121,7 @@
         <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">5</span></span></div>
       </div>
       </div>
-      <p class="text-caption">Your calendar runs 18 months ahead, October 2026 to March 2028.</p>
+      <p class="text-caption">Your calendar runs 18 months ahead, to Sun 9 Apr 2028, the last date churches can ask for.</p>
     </section>
       <section class="stack" aria-labelledby="month-title">
         <h2 id="month-title">In November</h2>
@@ -128,7 +129,7 @@
         <li><span class="tour-dates__day"><small>Sun</small>1 Nov</span><span><strong>Harvest Point Church</strong><br><span class="tour-dates__note">Sunday service, Milton</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
         <li><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span><strong><a href="../../pages/request-detail/default.html">Riverside Community Church</a></strong><br><span class="tour-dates__note">Requested · 1 · Worship night · reply by Mon 12 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
         <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span><strong>Lakeshore Alliance Church</strong><br><span class="tour-dates__note">Sunday service, Oakville</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
-        <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Women’s conference, Mississauga</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
+        <li><span class="tour-dates__day"><small>Sat</small>21 Nov</span><span><strong>Kingdom Life Centre</strong><br><span class="tour-dates__note">Conference or retreat, Mississauga</span></span><span class="stamp stamp--confirmed">Confirmed</span></li>
         <li><span class="tour-dates__day"><small>Sun</small>22 Nov</span><span><strong><a href="../../pages/request-detail/default.html">St. Brendan’s Anglican</a></strong><br><span class="tour-dates__note">Requested · 1 · Sunday service · reply by Sun 11 Oct</span></span><span class="stamp stamp--requested">Requested</span></li>
         <li><span class="tour-dates__day"><small>Thu</small>26 Nov</span><span><strong>Studio</strong><br><span class="tour-dates__note">Through Fri 27 Nov</span></span><span class="badge">Unavailable</span></li>
         </ul>
@@ -178,11 +179,11 @@
         <h2 class="dialog__title" id="weekly-title">Weekly default</h2>
         <p id="weekly-desc" class="text-muted" style="margin-top: var(--space-1);">Pick the weekdays you’re never free. Churches won’t find you on them.</p>
       </div>
-      <button class="close" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <button class="close" type="button" aria-label="Close"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
     <div class="dialog__body">
       <fieldset class="fieldset">
-        <legend>Unavailable every <span class="optional">(choose any)</span></legend>
+        <legend>Unavailable every <span class="field__optional">(choose any)</span></legend>
         <label class="choice"><input type="checkbox" name="days" value="sun" id="weekly-sun" autofocus><span class="choice__text">Sunday</span></label>
         <label class="choice"><input type="checkbox" name="days" value="mon" id="weekly-mon" checked><span class="choice__text">Monday</span></label>
         <label class="choice"><input type="checkbox" name="days" value="tue" id="weekly-tue"><span class="choice__text">Tuesday</span></label>
@@ -200,7 +201,7 @@
   </form>
 </dialog>
 
-<p class="mock-note" style="top: 6rem; right: 1rem;">Under 640 px the dialog fills the screen with Close in view. Focus is trapped inside, Escape closes it and focus returns to the button that opened it.</p>
+<p class="mock-note" style="top: 6rem; right: 1rem;">Under 576 px (XS) the dialog fills the screen with Close in view. Focus is trapped inside, Escape closes it and focus returns to the button that opened it.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">

@@ -7,8 +7,8 @@
 <meta name="mock:kind" content="page">
 <meta name="mock:screen" content="artist">
 <meta name="mock:state" content="loading">
-<meta name="mock:requirements" content="L2-012 L2-013 L2-014 L2-015 L2-016 L2-017 L2-018 L2-019 L2-020 L2-021 L2-098 L2-105 L2-107">
-<meta name="description" content="Profile loading: the poster name, sections and the ticket stub appear as skeletons in their final positions.">
+<meta name="mock:requirements" content="L2-012 L2-013 L2-014 L2-015 L2-016 L2-017 L2-018 L2-019 L2-020 L2-021 L2-060 L2-083 L2-098 L2-105 L2-107 L2-112 L2-113">
+<meta name="description" content="Profile loading: the poster name, the setlist strip, sections and the ticket stub appear as skeletons in their final positions.">
 <link rel="stylesheet" href="../../assets/tokens.css">
 <link rel="stylesheet" href="../../assets/ui.css">
 <link rel="stylesheet" href="../../assets/mock.css">
@@ -26,8 +26,9 @@
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__saved" href="../saved/default.html">
-    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span>
   </a>
+  <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false" data-theme-toggle="product"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -43,6 +44,7 @@
       <p class="visually-hidden" role="status">Loading the artist’s profile…</p>
     </div>
   </section>
+  <div class="skeleton skeleton--strip" aria-hidden="true"></div>
   <div class="container profile-layout" aria-hidden="true">
     <div class="stack stack--lg">
       <div class="stack"><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text skeleton--long"></span><span class="skeleton skeleton--text skeleton--long"></span><span class="skeleton skeleton--text skeleton--medium"></span></div>
@@ -85,7 +87,7 @@
   </div>
 </footer>
 
-<p class="mock-note" style="top: 20rem; right: 1rem;">The name skeleton is poster-sized so nothing jumps when “ABIGAIL MENSAH” lands.</p>
+<p class="mock-note" style="top: 20rem; right: 1rem;">The name skeleton is poster-sized and the strip skeleton is the song strip’s height, so nothing jumps when “ABIGAIL MENSAH” and her songs land.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>
 
 <nav class="mock-bar" aria-label="Mock navigation">
@@ -96,6 +98,8 @@
     <li><a href="loading.html" aria-current="page">loading</a></li>
     <li><a href="empty.html">empty</a></li>
     <li><a href="error.html">error</a></li>
+    <li><a href="booked-date.html">booked-date</a></li>
+    <li><a href="no-photos.html">no-photos</a></li>
   </ul>
   <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
   <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
