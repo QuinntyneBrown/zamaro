@@ -35,7 +35,8 @@ zamaro/
 ├── GEMINI.md
 ├── .agents/skills/                # agent skills (mirrored in .claude/skills/)
 ├── .claude/skills/
-├── .ci/                           # pipeline: lint, tests, scans, budgets, contract, build, migrate, rollout
+├── .ci/                           # pipeline: lint, tests, scans, budgets, perf test, contract, build,
+│                                  # migrate, rollout
 ├── .github/
 │   └── copilot-instructions.md
 ├── .husky/                        # pre-commit hook that fixes staged frontend files
@@ -227,17 +228,30 @@ base branch.
   their own scenario: an artist ticket in the Discover results, the profile
   setlist, the availability calendar month, the requests inbox row, and the
   dark theme (`data-theme="dark"`) wrapper. Add one whenever a new composition repeats on a screen.
-- **Measure before you merge.** A change to a component's template, inputs,
-  styles, or change detection MUST run the perf test against the base branch and
-  read the report. Every row flagged **Possible regression** is either fixed or
-  explained in the pull request with what the profile shows.
+- **Measure before you push.** A change to a component's template, inputs,
+  styles, or change detection MUST run the perf test locally against the base
+  branch with `--fail-on-regression`, and pass, before it is pushed.
 - **Keep scenarios honest.** Tune a scenario's iterations in
   `e2e/perf-test/config/scenario-iterations.mjs` so it renders in roughly
-  100–300 ms. Never delete, exclude, or shrink a scenario to clear a flag.
-- **The pipeline runs it on every pull request** that touches `frontend/` or
-  `e2e/perf-test/`: it builds this branch and the base branch with
-  `NG_BUILD_MANGLE=0`, publishes the comparison table in the job summary, and
-  uploads the `.cpuprofile` files.
+  100–300 ms. Never delete, exclude, or shrink a scenario, lower its iterations,
+  or loosen a threshold in `e2e/perf-test/config/` to clear a flag.
+- **The perf test is a required check.** The pipeline runs it on every pull
+  request that touches `frontend/` or `e2e/perf-test/`: it builds this branch and
+  the base branch with `NG_BUILD_MANGLE=0`, runs the runner with
+  `--fail-on-regression`, publishes the comparison table in the job summary, and
+  uploads the `.cpuprofile` files. A row flagged **Possible regression** (median
+  render more than 10% and at least 1 ms slower, with no overlap between the
+  pull request's runs and the base branch's runs) or a scenario that fails to
+  render fails the check, and the pull request cannot merge.
+- **Fix a flagged row; don't argue with it.** Open the scenario's profile, find
+  the cost, and fix it. "Flaky" is not a diagnosis: the overlap rule already
+  absorbs runner noise, so re-run the job at most once, and a second flag is real.
+- **Intended cost needs a person.** When the extra render cost is the point of the
+  change (a component that now renders more because the mock says so), say so in
+  the pull request with the before and after numbers and what the profile shows.
+  Only a maintainer may accept it, by adding the `perf-regression-accepted` label,
+  which the pipeline honours for that pull request only. Agents never add that
+  label.
 
 Run it locally:
 
@@ -245,7 +259,7 @@ Run it locally:
 cd frontend
 NG_BUILD_MANGLE=0 npx ng build perf-test
 cd ../e2e
-npm run perf-test -- --baseline <base-branch dist>   # --scenarios Button,Ticket to narrow
+npm run perf-test -- --baseline <base-branch dist> --fail-on-regression   # --scenarios Button,Ticket to narrow
 ```
 
 These are measurements, not tests: they assert no behavior, so they do not count
