@@ -1276,3 +1276,22 @@ button.banner__action { min-height: var(--target-min); padding: 0; border: 0; ba
 .upload-list__text { flex: 1; display: grid; min-width: 0; font: var(--text-body-sm); }
 .upload-list__text span { color: var(--color-fg-muted); overflow-wrap: anywhere; }
 .input[type="file"] { padding: var(--space-2); cursor: pointer; }
+
+/* ---------- Slice C: account ----------------------------------------------
+   Saved-ticket actions above the whole-ticket link, an editable setlist,
+   a focus ring for file-upload labels, and a quiet disabled danger button. */
+.ticket__actions { position: relative; z-index: var(--z-raised); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.setlist--edit li { grid-template-columns: 3rem minmax(0, 1fr); align-items: center; }
+.setlist__controls { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1); }
+.setlist__controls .select { width: auto; min-width: 9rem; }
+@media (min-width: 48rem) {
+  .setlist--edit { grid-template-columns: minmax(0, 1fr); }
+  .setlist--edit li { grid-template-columns: 3rem minmax(0, 1fr) auto; }
+  .setlist__controls { grid-column: auto; }
+}
+.upload:focus-within { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
+.btn--danger:disabled { background: var(--color-bg-subtle); }
+.device-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.device-list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: var(--space-3); border-bottom: var(--border-width-hairline) solid var(--color-border-default); }
+.device-list li > span:first-child { display: grid; gap: var(--space-0-5); font: var(--text-body-sm); }
+.device-list strong { font: var(--text-label); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide); }

@@ -437,6 +437,173 @@
         "persistent"
       ],
       "not_applicable": {}
+    },
+    {
+      "id": "saved",
+      "kind": "page",
+      "title": "Saved artists",
+      "route": "/saved",
+      "requirements": [
+        "L2-026",
+        "L2-027",
+        "L2-105"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error"
+      ]
+    },
+    {
+      "id": "account",
+      "kind": "page",
+      "title": "Account settings",
+      "route": "/account",
+      "requirements": [
+        "L2-024",
+        "L2-025",
+        "L2-065",
+        "L2-072",
+        "L2-080",
+        "L2-081",
+        "L2-082",
+        "L2-105",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error",
+        "invalid",
+        "submitting",
+        "success"
+      ],
+      "not_applicable": {
+        "empty": "Account settings always has the signed-in person’s values; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "delete-account",
+      "kind": "dialog",
+      "title": "Delete account",
+      "opens_from": "account",
+      "requirements": [
+        "L2-082",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "blocked",
+        "failed"
+      ]
+    },
+    {
+      "id": "account-menu",
+      "kind": "dialog",
+      "title": "Account menu",
+      "opens_from": "discover",
+      "requirements": [
+        "L2-023",
+        "L2-024",
+        "L2-099",
+        "L2-101"
+      ],
+      "states": [
+        "default",
+        "artist"
+      ],
+      "not_applicable": {
+        "busy": "A menu of links; nothing is submitted, so it is never busy.",
+        "invalid": "A menu has no inputs to validate."
+      }
+    },
+    {
+      "id": "menu",
+      "kind": "dialog",
+      "title": "Menu",
+      "opens_from": "discover",
+      "requirements": [
+        "L2-099",
+        "L2-101"
+      ],
+      "states": [
+        "default",
+        "artist"
+      ],
+      "not_applicable": {
+        "busy": "A navigation drawer of links; nothing is submitted, so it is never busy.",
+        "invalid": "A navigation drawer has no inputs to validate."
+      }
+    },
+    {
+      "id": "saved-toast",
+      "kind": "notification",
+      "title": "Saved toast",
+      "opens_from": "discover",
+      "requirements": [
+        "L2-026",
+        "L2-109"
+      ],
+      "states": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "with-action"
+      ],
+      "not_applicable": {
+        "stacked": "Three stacked toasts are shown on booking-toast; a save produces one toast at a time."
+      }
+    },
+    {
+      "id": "edit-profile",
+      "kind": "page",
+      "title": "Edit profile",
+      "route": "/artist/profile",
+      "requirements": [
+        "L2-049",
+        "L2-050",
+        "L2-051",
+        "L2-052",
+        "L2-053",
+        "L2-054",
+        "L2-055",
+        "L2-105",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "invalid",
+        "submitting",
+        "success"
+      ]
+    },
+    {
+      "id": "add-video",
+      "kind": "dialog",
+      "title": "Add video",
+      "opens_from": "edit-profile",
+      "requirements": [
+        "L2-052",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed",
+        "limit"
+      ]
     }
   ]
 }
