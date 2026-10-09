@@ -10,9 +10,9 @@ return [
         'base_uri' => env('ZAMARO_PROBLEM_BASE_URI', rtrim(env('APP_URL', 'http://localhost'), '/').'/problems'),
     ],
 
-    'health' => [
-        // Connect and read timeout for each readiness check.
-        'timeout_ms' => (int) env('ZAMARO_HEALTH_TIMEOUT_MS', 500),
+    'i18n' => [
+        // One directory per locale, one JSON file per namespace (L2-111).
+        'path' => env('ZAMARO_I18N_PATH', resource_path('i18n')),
     ],
 
 ];
