@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Index and share a profile
+
+Person(visitor, "Guest, booker or crawler", "Reads or shares a profile")
+System_Ext(cdn, "CDN", "Caches public pages for up to 60 s")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR on Node.js", "Server-rendered pages, metadata, robots.txt, /sitemap.xml proxy")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Profile and sitemap endpoints with ETag")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Runs PurgeProfileCache")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists and profile content")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Sitemap cache and job queue")
+}
+Rel(visitor, cdn, "Requests pages", "HTTPS")
+Rel(cdn, web, "Forwards misses and revalidations", "HTTPS")
+Rel(web, api, "GET /api/v1/artists/{slug}, /api/v1/sitemap", "JSON or XML/HTTPS")
+Rel(api, db, "Reads public profiles", "SQL")
+Rel(api, cache, "Caches sitemap; queues purge jobs", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, cdn, "Purges profile paths", "HTTPS")
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Sort and filter results
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+
+Rel(guest, zamaro, "Sorts, filters and shares searches using", "HTTPS")
+Rel(booker, zamaro, "Sorts, filters and shares searches using", "HTTPS")
+Rel(zamaro, routing, "Requests driving distances for filtered candidates from", "HTTPS/JSON")
+@enduml

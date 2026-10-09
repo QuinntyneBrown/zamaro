@@ -1,0 +1,81 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Index and share a profile
+
+package "Zamaro Web (Angular)" {
+  class ProfileMetadata <<interface>> {
+    +title: string
+    +description: string
+    +canonicalUrl: string
+    +imageUrl: string | null
+    +jsonLd: object
+  }
+  class ProfileSeoService {
+    -title: Title
+    -meta: Meta
+    -document: Document
+    +apply(profile: ArtistProfile): void
+    -toMetadata(profile: ArtistProfile): ProfileMetadata
+  }
+  class ProfileJsonLdBuilder {
+    +build(profile: ArtistProfile, canonicalUrl: string): object
+    -schemaType(actType: string): 'MusicGroup'|'Person'
+  }
+  class ShareButtonComponent {
+    +url: InputSignal<string>
+    +title: InputSignal<string>
+    +share(): Promise<void>
+  }
+  class Clipboard <<CDK>> {
+    +copy(text: string): boolean
+  }
+  class ToastService {
+    +show(message: string): void
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SitemapController {
+    +__invoke(): Response
+  }
+  class PrivateNoStore <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class ArtistProfileUpdated <<event>> {
+    +int artistId
+    +string slug
+    +?string previousSlug
+  }
+  class QueueProfileCachePurge <<listener>> {
+    +handle(event: ArtistProfileUpdated): void
+  }
+  class PurgeProfileCache <<job>> {
+    +int artistId
+    +string[] paths
+    +int tries = 5
+    +handle(purger: CdnPurger, cache: Repository): void
+  }
+  interface CdnPurger {
+    +purge(paths: string[]): void
+  }
+}
+
+ProfileSeoService ..> ProfileMetadata : builds
+ProfileSeoService --> ProfileJsonLdBuilder
+ShareButtonComponent --> Clipboard : fallback
+ShareButtonComponent --> ToastService : "Link copied"
+QueueProfileCachePurge ..> ArtistProfileUpdated : handles
+QueueProfileCachePurge ..> PurgeProfileCache : dispatches
+PurgeProfileCache --> CdnPurger
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Crawler renders a profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Search engine or link preview" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SSR server" as ssr
+  participant "ArtistProfilePage" as page
+  participant "ProfileSeoService" as seo
+  participant "ProfileJsonLdBuilder" as jsonld
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "cache.headers middleware" as etag
+  participant "ArtistProfileController" as controller
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CDN" as cdn
+end box
+
+actor -> cdn : GET /artists/abigail-mensah
+alt cached copy younger than 60 s
+  cdn --> actor : 200 cached HTML
+else cache miss or expired
+  cdn -> ssr : GET /artists/abigail-mensah
+  ssr -> page : Render route on the server
+  page -> etag : GET /api/v1/artists/abigail-mensah (If-None-Match when held)
+  alt ETag matches
+    etag --> page : 304 Not Modified; reuse held profile (L2-089)
+  else changed
+    etag -> controller : show(slug)
+    controller --> etag : Public profile JSON
+    etag --> page : 200 with ETag, Cache-Control public, s-maxage=60 (L2-089)
+  end
+  page -> seo : apply(profile)
+  seo -> seo : Title "Abigail Mensah · Worship artist in Brampton · Zamaro", description, canonical (L2-112)
+  seo -> seo : og:title, og:description, og:image, twitter:card (L2-113)
+  seo -> jsonld : build(profile, canonical URL)
+  jsonld --> seo : Person (solo act) with aggregateRating when reviews exist (L2-112)
+  page --> ssr : Complete HTML with TransferState
+  ssr --> cdn : 200 HTML, ETag, s-maxage=60
+  cdn --> actor : Full content in server-rendered HTML (L2-112)
+end
+@enduml

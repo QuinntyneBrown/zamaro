@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Pick a date and start booking
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+
+Rel(guest, zamaro, "Checks dates and starts a request using", "HTTPS")
+Rel(booker, zamaro, "Checks dates and starts a request using", "HTTPS")
+Rel(artist, zamaro, "Keeps availability current in")
+@enduml

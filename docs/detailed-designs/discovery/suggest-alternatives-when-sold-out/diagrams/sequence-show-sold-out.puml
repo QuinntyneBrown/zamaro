@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Show the sold-out state
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "DiscoverPage" as page
+  participant "SearchStore" as store
+  participant "SearchApi" as client
+  participant "SoldOutComponent" as soldout
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SearchAlternativesController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "FindSearchAlternatives" as action
+  participant "DistanceService" as dist
+  participant "AvailabilityService" as avail
+  participant "SoldOutExplainer" as explain
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Activate "Show the lineup" for Thu 24 Dec, 40 km, Gospel choir
+page -> store : search(criteria)
+store -> client : search(criteria)
+client --> store : Lineup with total = 0
+store -> soldout : Show "Nobody's free Christmas Eve within 40 km" with skeleton rows (L2-011)
+store -> client : alternatives(criteria)
+client -> controller : GET /api/v1/search/alternatives?date&kind&lat&lng&radius&styles
+controller -> controller : Rate-limit and validate SearchArtistsRequest
+controller -> action : handle(SearchCriteria)
+action -> db : Filtered candidates inside bounding box of largest wider radius
+db --> action : Candidates
+loop each candidate
+  action -> dist : between(artist base, church location)
+  dist -> cache : Get cached pair
+  cache --> dist : Distance (or provider call on miss)
+  dist --> action : Distance
+end
+action -> avail : freeArtistIdsByDate(candidates, 7 days either side)
+avail -> db : Rules, overrides, Confirmed bookings, VSC for the range
+db --> avail : Blocking dates
+avail --> action : Free IDs per date
+action -> action : Count travel-matched free artists per date; drop zero counts; closest 3 dates (L2-011)
+action -> action : Count per wider radius on the searched date; keep smallest non-zero (L2-011)
+action -> explain : explain(criteria, alternatives)
+explain --> action : "Every gospel choir near Burlington is booked for Christmas Eve. ..."
+action --> controller : SearchAlternatives
+controller --> client : 200 SearchAlternativesResource
+client --> store : SearchAlternatives
+store -> soldout : Render nearby dates, "Search within 120 km · 2 free", "Show all styles"
+soldout --> actor : Sold-out state with ways forward
+@enduml

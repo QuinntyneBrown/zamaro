@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Take an alternative
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SoldOutComponent" as soldout
+  participant "SearchStore" as store
+  participant "SearchQueryCodec" as codec
+  participant "DiscoverPage" as page
+  participant "SearchApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SearchController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SearchAvailableArtists" as action
+end box
+
+alt nearby date activated
+  actor -> soldout : Activate "Sun 20 Dec · 2 choirs free"
+  soldout -> store : pickNearbyDate(2026-12-20)
+  store -> codec : toParams(state with date = 2026-12-20)
+else wider radius activated
+  actor -> soldout : Activate "Search within 120 km · 2 free"
+  soldout -> store : widenRadius(120)
+  store -> codec : toParams(state with radius = 120)
+else "Show all styles" activated
+  actor -> soldout : Activate "Show all styles"
+  soldout -> store : clearFilters()
+  store -> codec : toParams(state with no styles and no price chip) (L2-011)
+end
+codec --> store : Params; other inputs unchanged
+store -> page : Router navigates with new query params
+page -> page : Update date field and poster headline (L2-011)
+page -> store : restoreOrSearch(state)
+store -> client : search(criteria)
+client -> controller : GET /api/v1/search
+controller -> action : handle(SearchCriteria)
+action --> controller : Lineup
+controller --> client : 200 LineupResource
+client --> store : Lineup
+store --> page : Render lineup and summary line
+page --> actor : Lineup for the chosen alternative
+@enduml

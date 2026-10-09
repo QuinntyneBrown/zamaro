@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Index and share a profile
+
+Person(visitor, "Guest, booker or crawler", "Reads or shares a profile")
+System_Ext(cdn, "CDN", "Caches public pages")
+Container_Boundary(web, "Zamaro Web") {
+  Component(ssr, "SSR server", "Angular SSR on Node.js", "Renders HTML; serves robots.txt; proxies /sitemap.xml")
+  Component(seo, "ProfileSeoService", "Angular service", "Title, description, canonical, Open Graph, Twitter card")
+  Component(jsonld, "ProfileJsonLdBuilder", "Angular service", "MusicGroup or Person with aggregateRating")
+  Component(share, "ShareButtonComponent", "Angular component", "Web Share API or clipboard + toast")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ArtistProfileController", "Laravel controller", "Public profile")
+  Component(etag, "cache.headers", "Laravel middleware", "ETag, 304, public s-maxage=60")
+  Component(nostore, "PrivateNoStore", "Laravel middleware", "private, no-store on personal data")
+  Component(sitemap, "SitemapController", "Laravel controller", "Published profiles only")
+  Component(listener, "ArtistProfileUpdated listener", "Event listener", "Dispatches PurgeProfileCache")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(job, "PurgeProfileCache", "Queued job", "Purges profile paths via CdnPurger")
+}
+Rel(visitor, share, "Activates Share")
+Rel(cdn, ssr, "Forwards misses", "HTTPS")
+Rel(ssr, seo, "Runs during render")
+Rel(seo, jsonld, "Adds JSON-LD with")
+Rel(ssr, etag, "GET /api/v1/artists/{slug} with If-None-Match", "JSON/HTTPS")
+Rel(etag, ctrl, "Wraps")
+Rel(ssr, sitemap, "GET /api/v1/sitemap", "XML/HTTPS")
+Rel(listener, job, "Queues")
+Rel(job, cdn, "Purges", "HTTPS")
+@enduml

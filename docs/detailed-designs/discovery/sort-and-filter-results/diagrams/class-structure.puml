@@ -1,0 +1,123 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Sort and filter results
+
+package "Zamaro Web (Angular)" {
+  class SearchState <<interface>> {
+    +date: string
+    +kind: GatheringKind
+    +lat: number
+    +lng: number
+    +place: string
+    +radiusKm: 40|80|120|200
+    +sort: 'closest'|'rating'|'price'
+    +styles: Style[]
+    +underPrice: boolean
+  }
+  class SearchQueryCodec {
+    +toParams(state: SearchState): Params
+    +fromParams(params: ParamMap): SearchState
+    +key(state: SearchState): string
+    -roundCoordinate(value: number): number
+  }
+  class SearchStore {
+    +sort: Signal<SearchSort>
+    +filters: Signal<LineupFilter>
+    +lineup: Signal<Lineup | null>
+    +summary: Signal<string>
+    -cache: Map<string, Lineup>
+    +applySort(sort: SearchSort): void
+    +toggleFilter(chip: Style | 'under-800'): void
+    +restoreOrSearch(state: SearchState): void
+  }
+  class SortControlComponent {
+    +value: InputSignal<SearchSort>
+    +changed: OutputEmitterRef<SearchSort>
+  }
+  class StyleFilterComponent {
+    +selected: InputSignal<LineupFilter>
+    +toggled: OutputEmitterRef<string>
+  }
+  class SummaryLineComponent {
+    +text: InputSignal<string>
+    -announcer: LiveAnnouncer
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SearchArtistsRequest {
+    +rules(): array
+    +toCriteria(): SearchCriteria
+  }
+  class SearchCriteria <<value object>> {
+    +CarbonImmutable eventDate
+    +GatheringKind kind
+    +float latitude
+    +float longitude
+    +int radiusKm
+    +SearchSort sort
+    +LineupFilter filter
+    +?string cursor
+  }
+  enum SearchSort {
+    Closest
+    HighestRated
+    PriceLowToHigh
+  }
+  class LineupFilter <<value object>> {
+    +Style[] styles
+    +?int maxPriceCentsExclusive
+    +isEmpty(): bool
+    +applyTo(query: Builder): Builder
+  }
+  enum Style {
+    Band
+    SoloVocalist
+    GospelChoir
+    Acoustic
+    Hymns
+    Spanish
+  }
+  class SearchAvailableArtists <<action>> {
+    +handle(criteria: SearchCriteria): Lineup
+  }
+  class LineupSorter {
+    +sort(cards: LineupCard[], sort: SearchSort): LineupCard[]
+    -closest(a: LineupCard, b: LineupCard): int
+    -highestRated(a: LineupCard, b: LineupCard): int
+    -priceLowToHigh(a: LineupCard, b: LineupCard): int
+  }
+  class Lineup <<value object>> {
+    +LineupCard[] cards
+    +int total
+    +SearchSort sort
+    +LineupFilter filter
+    +?string nextCursor
+  }
+}
+
+StyleFilterComponent ..> SearchStore : toggleFilter()
+SortControlComponent ..> SearchStore : applySort()
+SummaryLineComponent ..> SearchStore : reads summary
+SearchStore --> SearchQueryCodec
+SearchQueryCodec ..> SearchState : encodes / decodes
+SearchStore ..> SearchArtistsRequest : GET /api/v1/search
+SearchArtistsRequest ..> SearchCriteria : creates
+SearchCriteria --> SearchSort
+SearchCriteria *-- LineupFilter
+LineupFilter --> "0..6" Style
+SearchAvailableArtists ..> SearchCriteria : handles
+SearchAvailableArtists --> LineupSorter
+SearchAvailableArtists ..> Lineup : builds
+@enduml

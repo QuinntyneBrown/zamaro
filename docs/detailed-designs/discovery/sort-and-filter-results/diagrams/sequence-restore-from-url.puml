@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Restore a search from the URL
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Router" as router
+  participant "DiscoverPage" as page
+  participant "SearchStore" as store
+  participant "SearchQueryCodec" as codec
+  participant "SearchApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SearchController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SearchAvailableArtists" as action
+end box
+
+alt link pasted into a new browser
+  actor -> router : Open /?date=2026-11-14&kind=sunday-service&lat=43.325&lng=-79.799&place=Burlington&radius=999&sort=rating
+  router -> page : Activate with queryParamMap
+  page -> codec : fromParams(params)
+  codec -> codec : Validate each parameter alone; radius=999 falls back to 120 (L2-009)
+  codec --> page : SearchState
+  page -> store : restoreOrSearch(state)
+  store -> store : No cached lineup for key
+  store -> client : search(criteria)
+  client -> controller : GET /api/v1/search
+  controller -> action : handle(SearchCriteria)
+  action --> controller : Lineup
+  controller --> client : 200 LineupResource
+  client --> store : Lineup
+  store --> page : Same inputs, sort, filters and results (L2-009)
+  page --> actor : Lineup shown
+else Back from an artist profile
+  actor -> router : Browser Back
+  router -> page : Activate with the previous queryParamMap
+  page -> codec : fromParams(params)
+  codec --> page : SearchState
+  page -> store : restoreOrSearch(state)
+  store -> store : Cached lineup matches key; no request
+  store --> page : Render cached cards and loaded pages
+  router -> router : Restore scroll position (withInMemoryScrolling)
+  page --> actor : Same results at the same scroll position (L2-009)
+end
+@enduml

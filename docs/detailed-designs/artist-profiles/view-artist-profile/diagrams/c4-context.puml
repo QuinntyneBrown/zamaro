@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — View an artist profile
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(cdn, "CDN", "Serves web assets, images and video")
+
+Rel(guest, zamaro, "Reads artist profiles using", "HTTPS")
+Rel(booker, zamaro, "Reads artist profiles using", "HTTPS")
+Rel(guest, cdn, "Loads photos and streams videos from", "HTTPS")
+Rel(booker, cdn, "Loads photos and streams videos from", "HTTPS")
+Rel(zamaro, cdn, "Publishes media URLs served by")
+@enduml

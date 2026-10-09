@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Invalidate cached profiles after an edit
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfileEditorPage" as editor
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileSettingsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UpdateArtistProfile" as action
+  participant "QueueProfileCachePurge" as listener
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "PurgeProfileCache" as job
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as redis
+  participant "CDN" as cdn
+end box
+
+actor -> editor : Save profile changes on /artist/profile
+editor -> controller : PATCH profile (authenticated)
+controller -> action : handle(artist, changes)
+action -> db : Save in one transaction
+action -> listener : ArtistProfileUpdated after commit
+action --> controller : Updated profile
+controller --> editor : Response carries Cache-Control: private, no-store (L2-089)
+listener -> redis : Forget sitemap cache; queue PurgeProfileCache
+job -> redis : Take job
+job -> cdn : Purge /artists/{slug} and /api/v1/artists/{slug}
+alt purge succeeds
+  cdn --> job : Purged; next request renders fresh (L2-089)
+else purge fails
+  job -> job : Retry with backoff up to 5 times (L2-092)
+  job -> job : s-maxage=60 still expires cached copies within 60 s (L2-089)
+end
+@enduml

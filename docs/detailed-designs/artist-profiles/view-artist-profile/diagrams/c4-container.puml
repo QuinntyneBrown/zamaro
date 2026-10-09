@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — View an artist profile
+
+Person(visitor, "Booker or guest", "Considers an artist")
+System_Ext(cdn, "CDN", "Serves images and video")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR on Node.js", "Profile route /artists/:slug")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Profile endpoint under /api/v1")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, photos, videos, setlist, reviews")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Image renditions, video streams, captions")
+}
+Rel(visitor, web, "Opens /artists/{slug}", "HTTPS")
+Rel(web, api, "GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(api, db, "Reads public profile data", "Eloquent / SQL")
+Rel(visitor, cdn, "Fetches images and streams video", "HTTPS")
+Rel(cdn, storage, "Pulls media from", "HTTPS")
+@enduml

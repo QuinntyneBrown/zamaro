@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Pick a date and start booking
+
+Person(visitor, "Booker or guest", "Chooses a date on a profile")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "On tour list and booking stub")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Date check and tour-dates endpoints")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Availability rules, overrides, Confirmed bookings")
+}
+Rel(visitor, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/artists/{slug}/availability and /tour-dates", "JSON/HTTPS")
+Rel(api, db, "Reads availability and Confirmed bookings", "Eloquent / SQL")
+@enduml

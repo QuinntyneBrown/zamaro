@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Index and share a profile
+
+Person(visitor, "Guest or booker", "Shares artist profiles")
+Person(artist, "Artist", "Edits their profile")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(crawlers, "Search engines and link previews", "Crawlers and social/messaging unfurlers")
+System_Ext(cdn, "CDN", "Caches public pages, assets and media")
+
+Rel(visitor, cdn, "Opens and shares profile links through", "HTTPS")
+Rel(crawlers, cdn, "Fetches profiles, sitemap and robots.txt through", "HTTPS")
+Rel(cdn, zamaro, "Forwards cache misses and revalidations to", "HTTPS")
+Rel(artist, zamaro, "Edits profile in")
+Rel(zamaro, cdn, "Purges changed profiles in", "HTTPS")
+@enduml
