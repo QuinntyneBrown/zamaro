@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Redirect an old profile address
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Angular SSR server" as ssr
+  participant "artistProfileResolver" as resolver
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "PublicArtistProfileController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ArtistSlugResolver" as slugs
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> ssr : GET /artists/abby-mensah-music
+ssr -> resolver : Resolve route data
+resolver -> controller : GET /api/v1/artists/abby-mensah-music
+controller -> slugs : resolve(slug)
+slugs -> db : artists.slug = ?
+alt current slug
+  db --> slugs : Artist
+else not current
+  slugs -> db : slug_histories.slug = ? joined to artist
+  db --> slugs : Artist or none
+end
+alt no artist, or artist suspended or deleted
+  slugs --> controller : null
+  controller --> resolver : 404
+  resolver --> ssr : Not found page (L2-021)
+  ssr --> actor : 404
+else artist found
+  slugs --> controller : Artist with current slug abigail-mensah
+  controller --> resolver : 200 PublicProfileResource with slug
+  alt requested slug differs from current slug
+    resolver -> ssr : Set status 301 and Location via RESPONSE_INIT
+    ssr --> actor : 301 Location: /artists/abigail-mensah (L2-055, L2-021)
+    note right of actor : One hop even after several renames
+  else requested slug is current
+    resolver --> ssr : Render profile
+    ssr --> actor : 200 server-rendered profile
+  end
+end
+@enduml

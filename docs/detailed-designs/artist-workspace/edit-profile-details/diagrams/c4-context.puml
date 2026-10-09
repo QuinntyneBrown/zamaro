@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Edit profile details
+
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(geo, "Geocoding provider", "Address to latitude and longitude")
+System_Ext(routing, "Routing provider", "Driving distance for the service-area check")
+System_Ext(cdn, "CDN", "Caches public profile pages")
+
+Rel(artist, zamaro, "Edits and previews profile details using", "HTTPS")
+Rel(zamaro, geo, "Geocodes a changed base city with", "HTTPS/JSON")
+Rel(zamaro, routing, "Checks the base city is inside the service area with", "HTTPS/JSON")
+Rel(zamaro, cdn, "Invalidates cached profile copies on", "HTTPS")
+@enduml

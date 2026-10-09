@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Manage setlist
+
+Container(web, "Zamaro Web", "Angular", "SetlistEditorPage, SetlistStore, SetlistApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(songs, "SetlistSongController", "Laravel controller", "index, store, update, destroy")
+  Component(order, "SetlistOrderController", "Invokable controller", "PUT /api/v1/artist/setlist/order")
+  Component(req, "SetlistSongRequest", "FormRequest", "Title 1-100, writer up to 100, key")
+  Component(add, "AddSetlistSong", "Action", "Applies the 50-song limit and appends")
+  Component(reorder, "ReorderSetlist", "Action", "Rewrites positions from a full ordered list")
+  Component(remove, "RemoveSetlistSong", "Action", "Deletes and closes the gap in positions")
+  Component(key, "MusicalKey", "Enum", "24 major and minor keys and Any key")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "setlist_songs with deferred unique position")
+}
+Rel(web, songs, "Calls", "JSON/HTTPS")
+Rel(web, order, "Calls", "JSON/HTTPS")
+Rel(songs, req, "Validates with")
+Rel(req, key, "Checks key against")
+Rel(songs, add, "Calls on store")
+Rel(songs, remove, "Calls on destroy")
+Rel(order, reorder, "Calls")
+Rel(add, db, "Counts and inserts", "SQL")
+Rel(reorder, db, "Updates positions", "SQL")
+Rel(remove, db, "Deletes and renumbers", "SQL")
+@enduml

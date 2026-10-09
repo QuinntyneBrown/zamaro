@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Preview profile with unsaved changes
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfileEditorPage" as page
+  participant "ArtistProfileEditorStore" as store
+  participant "ProfilePreviewPage" as preview
+  participant "ArtistProfileApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfilePreviewController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BuildProfilePreview" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Activate "Preview"
+page -> store : Keep current form values as draft
+page -> preview : Navigate to /artist/profile/preview
+preview -> store : preview()
+store -> client : preview(draft)
+client -> controller : POST /api/v1/artist/profile/preview
+controller -> controller : EnsureArtistRole and UpdateArtistProfileRequest rules
+alt draft invalid
+  controller --> client : 422 per-field errors
+  client --> store : Field errors
+  store --> page : Return to editor with inline errors
+else draft valid
+  controller -> action : handle(artist, ArtistProfileData)
+  action -> db : Read saved profile, Live photos and videos, setlist, reviews
+  db --> action : Saved state
+  action -> action : Overlay unsaved values; persist nothing (L2-054)
+  action --> controller : PublicProfile
+  controller --> client : 200 PublicProfileResource, Cache-Control: no-store
+  client --> store : PublicProfile
+  store --> preview : Profile data
+  preview --> actor : Public profile layout with banner "This is a preview" (L2-054)
+  actor -> preview : Activate "Back to editing"
+  preview --> page : Editor with draft intact
+end
+@enduml

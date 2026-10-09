@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Upload photos
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(cdn, "CDN", "Media domain")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Photos manager under /artist/photos")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Photo endpoints under /api/v1/artist/photos")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Strips metadata and builds renditions")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artist_photos")
+  ContainerQueue(queue, "Cache and queue", "Redis", "ProcessArtistPhoto jobs")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Quarantined originals and public renditions")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "POST multipart, GET, PATCH, PUT, DELETE", "JSON/HTTPS")
+Rel(api, scanner, "Scans the received file", "HTTPS")
+Rel(api, storage, "Writes the original under a random name", "S3 API")
+Rel(api, db, "Creates and updates photo rows", "SQL")
+Rel(api, queue, "Dispatches ProcessArtistPhoto", "RESP")
+Rel(worker, queue, "Takes jobs from", "RESP")
+Rel(worker, storage, "Reads original, writes renditions, deletes original", "S3 API")
+Rel(worker, db, "Marks photo Ready or Failed", "SQL")
+Rel(cdn, storage, "Pulls renditions from", "HTTPS")
+@enduml

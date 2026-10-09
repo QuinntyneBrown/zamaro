@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Edit profile details
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(geo, "Geocoding provider", "Address to latitude and longitude")
+System_Ext(routing, "Routing provider", "Driving distance")
+System_Ext(cdn, "CDN", "Caches public profile pages")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Profile editor and preview under /artist/profile")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Artist profile endpoints under /api/v1/artist/profile")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Runs the queued cache invalidation listener")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, styles, bookings")
+  ContainerDb(cache, "Cache and queue", "Redis", "Queue and distance cache")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "GET, PUT /api/v1/artist/profile; POST /preview", "JSON/HTTPS")
+Rel(api, db, "Reads and updates the artist row and styles", "Eloquent / SQL")
+Rel(api, geo, "Geocodes a changed base city", "HTTPS/JSON")
+Rel(api, routing, "Measures distance to Toronto City Hall", "HTTPS/JSON")
+Rel(api, cache, "Queues ArtistProfileUpdated listeners", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, cdn, "Purges the public profile URL", "HTTPS")
+@enduml

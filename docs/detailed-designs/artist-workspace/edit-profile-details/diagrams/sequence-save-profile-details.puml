@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Save profile details
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfileEditorPage" as page
+  participant "ArtistProfileEditorStore" as store
+  participant "ArtistProfileApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as controller
+  participant "UpdateArtistProfileRequest" as req
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UpdateArtistProfile" as action
+  participant "ServiceArea" as area
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Geocoder" as geo
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Activate Save
+page -> page : Client-side checks of lengths and ranges (L2-050)
+page -> store : save(draft)
+store -> client : update(draft)
+client -> controller : PUT /api/v1/artist/profile
+controller -> controller : EnsureArtistRole; non-artists receive 404 (L2-074)
+controller -> req : Validate every field (L2-050, L2-075)
+opt base city differs from the saved one
+  req -> geo : geocode(baseCity)
+  geo --> req : Coordinates or none
+  req -> area : contains(coordinates) (L2-001)
+  area --> req : Inside or outside
+end
+alt any field invalid or base city outside the service area
+  req --> controller : Per-field errors
+  controller --> client : 422 problem details with errors
+  client --> store : Field errors
+  store --> page : status = invalid, nothing saved
+  page --> actor : Inline error on each invalid field, focus first one (L2-050)
+else all fields valid
+  req --> controller : ArtistProfileData with coordinates
+  controller -> action : handle(artist, data)
+  action -> db : BEGIN; update artist row and artist_styles
+  note right of action : Bookings are not touched; each keeps its quotedPriceCents (L2-050)
+  action -> db : COMMIT
+  action -> cache : Queue ArtistProfileUpdated listener for cache purge (L2-089)
+  action --> controller : Artist
+  controller --> client : 200 ArtistProfileResource
+  client --> store : ArtistProfile
+  store --> page : status = saved
+  page --> actor : Confirmation toast (copy <TO SUPPLY>)
+end
+@enduml

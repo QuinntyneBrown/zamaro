@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Upload photos
+
+Person(artist, "Artist", "Approved worship artist")
+Person(guest, "Guest", "Views the published gallery")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(cdn, "CDN", "Serves photo renditions from the media domain")
+
+Rel(artist, zamaro, "Uploads, describes, orders and removes photos using", "HTTPS")
+Rel(zamaro, scanner, "Scans each received file with", "HTTPS")
+Rel(zamaro, cdn, "Publishes renditions through")
+Rel(guest, cdn, "Loads gallery images from", "HTTPS")
+@enduml

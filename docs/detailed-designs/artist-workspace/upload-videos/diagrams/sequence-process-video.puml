@@ -1,0 +1,86 @@
+@startuml
+title UML sequence behaviour — Inspect, scan and transcode a video
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VideosManagerPage" as page
+  participant "ArtistVideosStore" as store
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistVideoController" as vctrl
+  participant "VideoProcessingWebhookController" as hook
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "InspectArtistVideo" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UploadInspector" as insp
+  participant "RecordVideoProcessingResult" as record
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Object storage" as storage
+  participant "Malware scanner" as scanner
+  participant "VideoProbe (ffprobe)" as probe
+  participant "Video processing service" as vps
+  database "Zamaro database" as db
+end box
+
+note over job : Taken from the queue after CompleteVideoUpload
+job -> storage : Ranged GET of the leading bytes
+job -> insp : inspect(bytes, Video) (L2-076)
+alt not MP4, MOV or WebM by content
+  insp --> job : Rejected
+  job -> storage : Delete source
+  job -> db : Failed, reason "file type"
+else allowed type
+  job -> scanner : Scan source before processing (L2-076)
+  alt infected
+    scanner --> job : Infected
+    job -> storage : Delete source
+    job -> job : RecordSecurityEvent (L2-076)
+    job -> db : Failed, reason "rejected by security scan"
+  else clean
+    job -> probe : Duration and height via short-lived source URL
+    alt longer than 15 minutes
+      probe --> job : Duration > 900 s
+      job -> storage : Delete source
+      job -> db : Failed, reason "longer than 15 minutes" (L2-052)
+    else within limit
+      job -> vps : Submit 360p, 720p, 1080p where source allows, poster frame (L2-052)
+      vps --> job : Processor job ID
+      job -> db : Store processor_job_id
+      vps -> storage : Write adaptive renditions and poster under random keys
+      vps -> hook : POST /api/v1/webhooks/video-processing (signed)
+      hook -> hook : Verify signature; reject replays
+      hook -> record : handle(result)
+      record -> db : Idempotent per processor job ID
+      alt transcode succeeded
+        record -> db : Live; manifest, poster, duration
+      else transcode failed
+        record -> db : Failed with processor reason
+      end
+      hook --> vps : 204
+    end
+  end
+end
+loop every few seconds while Processing
+  store -> vctrl : GET /api/v1/artist/videos/{video}
+  vctrl -> db : Read status
+  vctrl --> store : ArtistVideoResource
+end
+store --> page : Status update
+page --> actor : "Live" or the failure reason (L2-052)
+@enduml

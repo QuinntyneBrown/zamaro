@@ -1,0 +1,136 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Edit profile details
+
+package "Zamaro Web (Angular)" {
+  class ArtistProfileEditorPage {
+    +store: ArtistProfileEditorStore
+    +form: FormGroup<ProfileDetailsForm>
+    +onSave(): void
+    +onPreview(): void
+  }
+  class ProfileDetailsFormComponent {
+    +form: input<FormGroup>
+    +fieldErrors: input<Record<string, string>>
+    +focusFirstInvalid(): void
+  }
+  class ArtistProfileEditorStore {
+    +profile: Signal<ArtistProfile | null>
+    +draft: Signal<ProfileDetailsDraft | null>
+    +status: Signal<'idle'|'saving'|'saved'|'invalid'|'error'>
+    +fieldErrors: Signal<Record<string, string>>
+    +load(): void
+    +save(draft: ProfileDetailsDraft): void
+    +preview(): Observable<PublicProfile>
+  }
+  class ArtistProfileApi {
+    +get(): Observable<ArtistProfile>
+    +update(draft: ProfileDetailsDraft): Observable<ArtistProfile>
+    +preview(draft: ProfileDetailsDraft): Observable<PublicProfile>
+  }
+  class ProfilePreviewPage {
+    +profile: Signal<PublicProfile | null>
+    +onBackToEditing(): void
+  }
+  class PreviewBannerComponent {
+    +text = "This is a preview"
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistProfileController {
+    +show(request: Request): ArtistProfileResource
+    +update(request: UpdateArtistProfileRequest): ArtistProfileResource
+  }
+  class ArtistProfilePreviewController {
+    +__invoke(request: UpdateArtistProfileRequest): PublicProfileResource
+  }
+  class UpdateArtistProfileRequest {
+    +rules(): array
+    +toData(): ArtistProfileData
+  }
+  class ArtistProfileData <<value object>> {
+    +string displayName
+    +Pronoun pronoun
+    +?string headline
+    +string bio
+    +string baseCity
+    +int[] styleIds
+    +string[] languages
+    +int maxDriveKm
+    +int fromPriceDollars
+  }
+  class UpdateArtistProfile <<action>> {
+    +handle(artist: Artist, data: ArtistProfileData): Artist
+  }
+  class BuildProfilePreview <<action>> {
+    +handle(artist: Artist, data: ArtistProfileData): PublicProfile
+  }
+  class ServiceArea {
+    +contains(point: Coordinates): bool
+  }
+  interface Geocoder {
+    +geocode(query: string): ?Coordinates
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +string slug
+    +string displayName
+    +Pronoun pronoun
+    +ActType actType
+    +string headline
+    +string bio
+    +string baseCity
+    +float baseLatitude
+    +float baseLongitude
+    +array languages
+    +int maxDriveKm
+    +int fromPriceCents
+    +ArtistStatus status
+    +isGroup(): bool
+  }
+  class Booking <<Eloquent>> {
+    +int quotedPriceCents
+    +BookingStatus status
+  }
+  enum Pronoun {
+    She
+    He
+    They
+  }
+  class ArtistProfileUpdated <<event>> {
+    +int artistId
+  }
+}
+
+ArtistProfileEditorPage --> ArtistProfileEditorStore
+ArtistProfileEditorPage *-- ProfileDetailsFormComponent
+ProfilePreviewPage --> ArtistProfileEditorStore
+ProfilePreviewPage *-- PreviewBannerComponent
+ArtistProfileEditorStore --> ArtistProfileApi
+ArtistProfileApi ..> ArtistProfileController : GET, PUT /api/v1/artist/profile
+ArtistProfileApi ..> ArtistProfilePreviewController : POST /api/v1/artist/profile/preview
+ArtistProfileController ..> UpdateArtistProfileRequest : validates
+ArtistProfilePreviewController ..> UpdateArtistProfileRequest : validates
+UpdateArtistProfileRequest ..> ArtistProfileData : creates
+ArtistProfileController --> UpdateArtistProfile
+ArtistProfilePreviewController --> BuildProfilePreview
+UpdateArtistProfileRequest --> Geocoder
+UpdateArtistProfileRequest --> ServiceArea
+UpdateArtistProfile --> Artist : updates
+UpdateArtistProfile ..> ArtistProfileUpdated : dispatches
+BuildProfilePreview ..> Artist : reads
+Artist --> Pronoun
+Artist "1" --> "*" Booking : quoted price locked
+@enduml

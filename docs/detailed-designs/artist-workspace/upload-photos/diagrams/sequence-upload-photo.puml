@@ -1,0 +1,88 @@
+@startuml
+title UML sequence behaviour — Upload a photo
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PhotosManagerPage" as page
+  participant "ArtistPhotosStore" as store
+  participant "ArtistPhotosApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistPhotoController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "StoreArtistPhoto" as action
+  participant "UploadInspector" as inspector
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ProcessArtistPhoto" as job
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Malware scanner" as scanner
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+actor -> page : Choose image and enter alt text
+page -> page : Pre-check size <= 15 MB, alt text 5-150, fewer than 12 photos
+page -> store : upload(file, altText)
+store -> client : upload(file, altText) with progress events
+client -> controller : POST /api/v1/artist/photos (multipart)
+controller -> controller : EnsureArtistRole; validate UploadArtistPhotoRequest (L2-051, L2-075)
+controller -> action : handle(artist, file, altText)
+action -> db : Count photos for artist
+alt 12 photos already
+  action --> controller : Limit reached
+  controller --> client : 422 "You can have up to 12 photos." (L2-051)
+else under the limit
+  action -> inspector : inspect(file) from magic bytes (L2-076)
+  alt not JPEG, PNG, WebP or HEIC by content, or SVG or HTML
+    inspector --> action : Rejected type
+    action --> controller : Reason: file type
+    controller --> client : 422 with the specific reason (L2-051)
+  else allowed type
+    action -> scanner : Scan file before processing (L2-076)
+    alt infected
+      scanner --> action : Infected
+      action -> action : Delete temporary file; RecordSecurityEvent (L2-076)
+      action --> controller : Rejected
+      controller --> client : 422 upload rejected
+    else clean
+      action -> action : Shortest side >= 800 px? (L2-051)
+      alt too small
+        action --> controller : Reason: dimensions
+        controller --> client : 422 with the specific reason
+      else valid
+        action -> db : BEGIN; lock artist; recount < 12
+        action -> storage : Put original in quarantine under a random name
+        action -> db : Insert artist_photos (Processing, last position, alt text); COMMIT
+        action -> job : Dispatch ProcessArtistPhoto (queued)
+        action --> controller : ArtistPhoto (Processing)
+        controller --> client : 201 ArtistPhotoResource (Processing)
+        job -> storage : Read original
+        job -> job : Orient, strip EXIF including GPS (L2-051)
+        job -> job : Render 400, 800, 1200, 1600 px in AVIF and WebP (L2-051)
+        job -> storage : Write renditions to media bucket, random keys, server-set Content-Type (L2-076)
+        job -> storage : Delete original
+        job -> db : Mark Ready; set primary when none exists
+      end
+    end
+  end
+end
+client --> store : Result or reason
+store --> page : Update grid and upload row
+page --> actor : Thumbnail with Processing then Ready, or reason inline
+@enduml
