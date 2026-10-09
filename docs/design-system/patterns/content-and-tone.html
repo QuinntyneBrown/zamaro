@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content &amp; tone — Zamaro design system</title>
+<meta name="description" content="How Zamaro writes: warm, plain and pastoral but practical; gig-poster words used sparingly; sentence case in the source; button verbs; formats for dates, money and distance; the error formula; and a library of real microcopy.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Content &amp; tone</h1>
+      <p class="ds-lead">Zamaro talks like a worship coordinator who has booked a lot of Sundays: warm, plain and practical. The gig poster lives in the type and a handful of words, not in every sentence.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Canadian English</span><span class="ds-pill">Sentence case in source</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>The people reading are worship coordinators, pastors and volunteers, often on a phone, often booking for a service that matters to them. They want to know who is free, what it costs and what happens next. The voice has three traits:</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Trait</th><th scope="col">Means</th><th scope="col">Sounds like</th><th scope="col">Not like</th></tr></thead>
+        <tbody>
+          <tr><td><b>Warm</b></td><td>Speaks to one church about its event, by name and date.</td><td>“Seven artists are free that Saturday and will drive to Burlington.”</td><td>“7 results found.”</td></tr>
+          <tr><td><b>Plain</b></td><td>Short words, one idea per sentence, numbers as numerals.</td><td>“Nothing is charged until Abigail accepts.”</td><td>“No payment will be processed prior to artist confirmation.”</td></tr>
+          <tr><td><b>Pastoral but practical</b></td><td>Respects worship without preaching; always gives the next step.</td><td>“Book Miriam and your church can be the first to say how it went.”</td><td>“Bless your congregation with an anointed worship experience!”</td></tr>
+        </tbody>
+      </table></div>
+      <p>The general writing rules (sentence length, inclusive language, spelling) are in the <a href="../foundations/content.html">content foundation</a>. This page is the product voice and the copy itself. It applies to every component, from the <a href="../components/button.html">button</a> to the <a href="../components/empty-state.html">empty state</a> and the <a href="../components/toast.html">toast</a>.</p>
+    </section>
+
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+      <h3>Gig-poster vocabulary</h3>
+      <p>A few poster words give Zamaro its character. Use at most one per block, only where it fits, and never where the church needs exact meaning: money, dates, errors, status, policy.</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Word</th><th scope="col">Use for</th><th scope="col">Never for</th></tr></thead>
+        <tbody>
+          <tr><td>Lineup</td><td>The artists free on a searched date: “The lineup”, “Back to the lineup”</td><td>A church’s booking history (“Your requests”)</td></tr>
+          <tr><td>Headliner</td><td>The first artist of a search, earned by the sort and reviews</td><td>A paid placement</td></tr>
+          <tr><td>Setlist</td><td>Songs an artist leads: “The setlist · Songs Abigail leads”</td><td>The church’s order of service</td></tr>
+          <tr><td>On tour</td><td>The kicker over an artist’s upcoming dates</td><td>The artist’s travel radius (“Drives up to 120 km”)</td></tr>
+          <tr><td>Sold out</td><td>The empty-state stamp when nobody is free</td><td>Errors, or one artist being booked (“Booked”)</td></tr>
+          <tr><td>On the bill / Get on the bill</td><td>Inviting artists to join; “Fresh on the bill” for new artists</td><td>Billing or invoices</td></tr>
+          <tr><td>Opening night / Show postponed</td><td>Empty-state and error stamps (see <a href="empty-and-error-states.html">empty and error states</a>)</td><td>A real booking’s date or status</td></tr>
+          <tr><td>Admit one church</td><td>Decoration on the booking bar</td><td>Anything a screen reader must hear</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Plain words win when</h3>
+      <ul>
+        <li>The church is about to pay, cancel or commit: “Pay $162.50 deposit”, “Cancel booking”.</li>
+        <li>Something went wrong: “We lost the signal” is the furthest the metaphor goes, and the next sentence is literal.</li>
+        <li>A booking changes state: Requested, Accepted, Booked, Played, Declined, Cancelled.</li>
+        <li>The words are about faith itself. Name the gathering as the church does (“Sunday service”, “worship night”, “funeral or memorial”) and don’t dress it up.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+      <p>Most Zamaro blocks have the same four lines of copy: a kicker that sets the scene, a headline that says the point, one sentence of detail, and an action that starts with a verb.</p>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding: var(--space-6);">
+          <div class="on-stage stack" style="width: 100%; padding: var(--space-6);">
+            <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+            <p class="poster__title" style="font-size: var(--font-size-3xl);">Who’s free <span class="poster__date" style="font-size: var(--font-size-3xl);"><span>Sat</span> <span>14 Nov</span></span></p>
+            <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+            <div><button class="btn btn--primary" type="button">Show the lineup</button></div>
+          </div>
+          <span class="ds-callout" style="left: 4%; top: 17%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 4%; top: 37%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 4%; top: 58%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 4%; top: 80%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Kicker</b><small>Who or where, in a few words. Overline style; the dot (·) separates facts: “Sat 14 Nov · 7 free · within 120 km”.</small></div></li>
+          <li><div><b>Headline</b><small>The point, as the reader would say it. Written in sentence case; CSS sets it in capitals.</small></div></li>
+          <li><div><b>Detail</b><small>One sentence, two at most. Names the date, the place or the person.</small></div></li>
+          <li><div><b>Action</b><small>A verb first, four words or fewer before any dot: “Show the lineup”, “Request to book · Sat 14 Nov”.</small></div></li>
+        </ol>
+      </div>
+      <h3>Button verbs</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Verb</th><th scope="col">For</th><th scope="col">Label</th></tr></thead>
+        <tbody>
+          <tr><td>Show</td><td>Running a search or revealing more</td><td>“Show the lineup”, “Show 6 more”, “Show all styles”</td></tr>
+          <tr><td>Book / Request</td><td>Starting or sending a booking</td><td>“Book for Sat 14 Nov”, “Request to book · Sat 14 Nov”</td></tr>
+          <tr><td>Pick</td><td>Choosing another date</td><td>“Pick” (named “Pick Fri 20 Nov”)</td></tr>
+          <tr><td>Save / Remove</td><td>The save toggle</td><td>“Save”, “Saved”; named “Save Elijah Park to your saved artists”</td></tr>
+          <tr><td>Pay</td><td>Moving money</td><td>“Pay $162.50 deposit”</td></tr>
+          <tr><td>Cancel / Keep</td><td>Ending a booking, and the safe choice beside it</td><td>“Cancel booking”, “Keep booking”</td></tr>
+          <tr><td>Try again</td><td>Re-running what failed</td><td>“Try again”</td></tr>
+          <tr><td>Ask / Email</td><td>Reaching a person</td><td>“Ask Miriam for a recording”, “Email the Zamaro team”</td></tr>
+          <tr><td>Apply</td><td>Artists joining</td><td>“Apply as an artist”</td></tr>
+        </tbody>
+      </table></div>
+      <p>Never “Submit”, “OK”, “Yes”, “No”, “Click here” or “Learn more”.</p>
+      <h3>Formats</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Thing</th><th scope="col">Write</th><th scope="col">Not</th><th scope="col">Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Date in the interface</td><td>Sat 14 Nov</td><td>11/14/2026, 14.11.26, November 14th</td><td>Weekday first; the weekday matters for worship.</td></tr>
+          <tr><td>Date in a sentence or announcement</td><td>Saturday 14 November</td><td>Sat. Nov. 14</td><td>Full words read better aloud.</td></tr>
+          <tr><td>Year</td><td>Sun 7 Jun 2026</td><td>Always adding the year</td><td>Only when the date is not in the next 12 months.</td></tr>
+          <tr><td>Date range</td><td>Fri 20 – Sun 22 Nov</td><td>20-22 Nov</td><td>En dash with spaces.</td></tr>
+          <tr><td>Time</td><td>10:30 am, 7 pm</td><td>19:00, 7:00 PM</td><td>No “:00” on the hour.</td></tr>
+          <tr><td>Money</td><td>$650, $1,800, $162.50</td><td>$650.00, 1800 dollars, CAD 650</td><td>Cents only when there are cents. Prices are Canadian dollars.</td></tr>
+          <tr><td>Price from</td><td>From $650</td><td>$650+</td><td>“per service · travel included” under it.</td></tr>
+          <tr><td>Percent</td><td>25%, 8%</td><td>25 percent</td><td>No space.</td></tr>
+          <tr><td>Distance</td><td>44 km, 120 km · 1.5 hr</td><td>44km, 44 kilometres</td><td>Space before the unit.</td></tr>
+          <tr><td>Rating</td><td>★ 4.9 (38 churches)</td><td>4.9/5</td><td>Named “Rated 4.9 out of 5 by 38 churches”.</td></tr>
+          <tr><td>Counts</td><td>7 free, 3 saved artists</td><td>seven free</td><td>Numerals, except at the start of a sentence: “Seven artists are free…”.</td></tr>
+          <tr><td>Booking number</td><td>No. ZAM-0114</td><td>#ZAM0114</td><td>Read aloud as “Booking number ZAM-0114”.</td></tr>
+          <tr><td>Detail separator</td><td>Brampton · 44 km</td><td>Brampton - 44 km, Brampton | 44 km</td><td>A middle dot with spaces.</td></tr>
+          <tr><td>Quotes and apostrophes</td><td>Who’s free, “Way Maker”</td><td>Who's free, "Way Maker"</td><td>Curly marks in the source.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>The error formula</h3>
+      <p><b>What happened</b> + <b>what is safe</b> + <b>what to do</b>. One or two sentences and a button.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="alert alert--danger" role="alert">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button></div>
+          </div>
+          <div class="field" style="max-width: 24rem;"><label class="field__label" for="ct-church">Church</label><input class="input" id="ct-church" type="text" aria-invalid="true" aria-describedby="ct-church-err"><span class="field__error" id="ct-church-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name so Abigail knows who’s asking.</span></div>
+        </div>
+        <div class="ds-example__caption"><span>A region error: what happened, what is kept, Try again. A field error: what is missing and why it matters.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The same block changes its words with its state. Keep the shape; change the facts.</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Element</th><th scope="col">Default</th><th scope="col">Loading</th><th scope="col">Empty</th><th scope="col">Error</th></tr></thead>
+        <tbody>
+          <tr><td>Lineup kicker</td><td>Sat 14 Nov · 7 free · within 120 km</td><td>Sat 14 Nov · checking calendars</td><td>Thu 24 Dec · 0 free · within 40 km</td><td>Sat 14 Nov · lineup unavailable</td></tr>
+          <tr><td>Poster detail</td><td>Seven artists are free that Saturday and will drive to Burlington.</td><td>Checking the calendars of every artist who drives to Burlington…</td><td>Christmas Eve is the busiest night of the year for worship artists.</td><td>Seven praise and worship artists are usually free on a Saturday in November.</td></tr>
+          <tr><td>Search button</td><td>Show the lineup</td><td>Checking calendars…</td><td>Show the lineup</td><td>Show the lineup</td></tr>
+          <tr><td>Booking submit</td><td>Request to book · Sat 14 Nov</td><td>Sending request…</td><td>Not applicable</td><td>Try again</td></tr>
+          <tr><td>Profile headline</td><td>Abigail Mensah</td><td>Loading artist profile (announced only)</td><td>Miriam Haile, with “New to Zamaro” in the kicker</td><td>This profile didn’t load</td></tr>
+        </tbody>
+      </table></div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p>
+          <p class="overline section__kicker">Sat 14 Nov · checking calendars</p>
+          <p class="overline section__kicker">Thu 24 Dec · 0 free · within 40 km</p>
+          <p class="overline section__kicker">Sat 14 Nov · lineup unavailable</p>
+        </div>
+        <div class="ds-example__caption"><span>The lineup kicker in each state, as set in the mocks.</span></div>
+      </div>
+      <h3>Both themes</h3>
+      <p>Copy does not change with the theme. Check that no sentence relies on colour: “the yellow button” becomes “Show the lineup”.</p>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><p class="overline section__kicker">Sat 14 Nov · 7 free</p><p class="lead">Seven artists are free that Saturday.</p><p class="text-muted">Cancel free up to 14 days before your event.</p><div><button class="btn btn--primary" type="button">Show the lineup</button></div></div></div>
+        <div data-theme="dark"><div class="stack"><p class="overline section__kicker">Sat 14 Nov · 7 free</p><p class="lead">Seven artists are free that Saturday.</p><p class="text-muted">Cancel free up to 14 days before your event.</p><div><button class="btn btn--primary" type="button">Show the lineup</button></div></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Write for 360px first.</b> Button labels fit on one line at 360px; “Request to book · Sat 14 Nov” is the longest allowed.</li>
+        <li><b>Never truncate names</b> with an ellipsis. “Grace Tabernacle Mass Choir” and “Daniel &amp; Ruth Okonkwo” wrap; poster names may break anywhere rather than overflow.</li>
+        <li><b>Keep date groups together.</b> The poster wraps between “Sat” and “14 Nov”, never inside “14 Nov”.</li>
+        <li><b>Shorten by dropping detail, not words:</b> on phones Saved shows the heart and the count; its name stays “Saved artists, 3”.</li>
+        <li>Copy length does not change with the screen. If a sentence is too long for a phone, it is too long.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Content is the accessible name of most controls, so the rules here are accessibility rules: link text that makes sense alone (WCAG 2.4.4), visible labels that start the accessible name (2.5.3), error text that says how to fix it (3.3.3) and a page language (3.1.1).</p>
+      <h3>Keyboard</h3>
+      <p>Not applicable to copy itself. Keyboard hints, when needed, name the key: “Press Esc to close”.</p>
+      <h3>Focus</h3>
+      <p>Write the first words of a link or button so they make sense when focus lands on it: “Pick Fri 20 Nov”, not “Pick”.</p>
+      <h3>Labelling</h3>
+      <ul>
+        <li><b>Sentence case in the source.</b> Screen readers may spell out text typed in capitals, and copied text keeps its case. CSS adds the poster capitals.</li>
+        <li><b>Name the object:</b> “Save Elijah Park to your saved artists”, “Share Abigail Mensah’s profile”, “Account menu for Naomi Fraser”.</li>
+        <li><b>Mark dates up</b> with <code>&lt;time datetime="2026-11-14"&gt;Sat 14 Nov&lt;/time&gt;</code>.</li>
+        <li><b>Symbols need words:</b> ★ 4.9 is named “Rated 4.9 out of 5”; the marquee’s ✦ is hidden; the typed ✓ became an icon with text.</li>
+        <li><b>Other languages:</b> Twi and Spanish song titles carry <code>lang="tw"</code> or <code>lang="es"</code> so they are pronounced properly.</li>
+      </ul>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Body copy</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Secondary copy (meta, fine print)</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Placeholder examples</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Links in copy</span><span class="ds-pair__ratio" data-contrast="--color-fg-link|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Copy on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: secondary copy</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Copy never moves on its own. The marquee is a static strip; nothing scrolls text automatically.</p>
+      <h3>Touch</h3>
+      <p>Short labels keep buttons at one line and full height. Link text in a sentence is at least two words, so it is easy to hit.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <h3>Microcopy library</h3>
+      <p>Real strings from the mocks and the patterns. Reuse them before writing new ones.</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Where</th><th scope="col">Copy</th><th scope="col">Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Discover poster kicker</td><td>Worship artists within driving distance of Toronto</td><td>Sets the scope once.</td></tr>
+          <tr><td>Discover headline</td><td>Who’s free Sat 14 Nov</td><td>The date is the hero.</td></tr>
+          <tr><td>Search submit</td><td>Show the lineup</td><td>Busy: “Checking calendars…”</td></tr>
+          <tr><td>Loading status</td><td>Finding who’s free on Saturday 14 November…</td><td>After 8 s: “Still checking — thanks for waiting.”</td></tr>
+          <tr><td>Results kicker</td><td>Sat 14 Nov · 7 free · within 120 km</td><td>Updates with filters.</td></tr>
+          <tr><td>Headliner kicker</td><td>No. 01 · Most booked this autumn</td><td>Earned, never paid.</td></tr>
+          <tr><td>Save toggle names</td><td>Save Elijah Park to your saved artists / Remove Luz Viva from your saved artists</td><td>Says what pressing does.</td></tr>
+          <tr><td>Save toast</td><td>Saved Luz Viva · Undo</td><td>Error: “Couldn’t save Luz Viva” · Try again</td></tr>
+          <tr><td>Booking explainer</td><td>Pick your date · Send a request · Lock it in</td><td>“Three songs and you’re done”.</td></tr>
+          <tr><td>Cancellation line</td><td>Cancel free up to 14 days before your event.</td><td>Repeat wherever money is mentioned.</td></tr>
+          <tr><td>Profile action</td><td>Book for Sat 14 Nov</td><td>Jumps to the stub.</td></tr>
+          <tr><td>Availability</td><td>Abigail is free Sat 14 Nov</td><td>Booked: “Abigail is booked Sun 15 Nov. Fri 20 Nov is free.”</td></tr>
+          <tr><td>Booking submit</td><td>Request to book · Sat 14 Nov</td><td>Busy: “Sending request…”</td></tr>
+          <tr><td>Booking fine print</td><td>Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</td><td>Under every booking submit.</td></tr>
+          <tr><td>Field error</td><td>Enter your church’s name so Abigail knows who’s asking.</td><td>Why it matters, not “Required”.</td></tr>
+          <tr><td>Request sent</td><td>Request sent to Abigail. We’ll e-mail you when she answers.</td><td>Next step included.</td></tr>
+          <tr><td>Accepted banner</td><td>Abigail accepted Sat 14 Nov. Pay the $162.50 deposit to lock it in.</td><td>Stays until paid.</td></tr>
+          <tr><td>Cancel dialog</td><td>Cancel your booking with Abigail? · Cancel booking · Keep booking</td><td>Body gives the money.</td></tr>
+          <tr><td>No results</td><td>Nobody’s free Christmas Eve within 40 km</td><td>Stamp “Sold out”; nearby dates follow.</td></tr>
+          <tr><td>New artist, no videos</td><td>No videos yet · Ask Miriam for a recording</td><td>Stamp “Fresh on the bill”.</td></tr>
+          <tr><td>New artist, no reviews</td><td>No church reviews yet · Be her first booking</td><td>Stamp “Opening night”.</td></tr>
+          <tr><td>Region error</td><td>We lost the signal · Try again</td><td>“Your date, location and filters are kept.”</td></tr>
+          <tr><td>Page error</td><td>This profile didn’t load</td><td>“It’s on our side, not yours.” Stamp “Show postponed”.</td></tr>
+          <tr><td>Artist band</td><td>Lead worship? Get on the bill. · Apply as an artist</td><td>“Free to join; Zamaro keeps 8% when a church books you.”</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Rules of thumb</h3>
+      <ul>
+        <li>Canadian spelling: colour, centre, cheque, travelled, with -ize endings (organization).</li>
+        <li>“E-mail” with a hyphen in copy; “Email” as a verb on a button is fine (“Email the Zamaro team”).</li>
+        <li>Use first names after the first mention: “Abigail Mensah” on the ticket, “Abigail” in the stub.</li>
+        <li>“Church” for the booker, “artist” for the musician, “service” or “event” for the gathering. Not “client”, “talent” or “gig”.</li>
+        <li>No exclamation marks, no emoji, no “Oops”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Request to book · Sat 14 Nov</button></div><figcaption>A verb, the object and the date, typed in sentence case.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">SUBMIT</button></div><figcaption>“SUBMIT” typed in capitals says nothing about what is sent and may be spelled out letter by letter.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="alert__title">We lost the signal</p><p>Your date, location and filters are kept.</p></div><figcaption>Plain about what happened and what is safe.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="alert__title">Oops! Something went wrong :(</p><p>Please try again later.</p></div><figcaption>Cute, vague, and no word about the church’s search.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="overline">No. 01 · Most booked this autumn</p><p>She had the whole congregation singing in three-part harmony by the last verse.</p></div><figcaption>One poster word, then plain, specific praise from a church.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="overline">Headliner alert!</p><p>This sold-out superstar is on tour and ready to bring the fire to your stage!</p></div><figcaption>Every poster word at once, plus hype. It reads like a concert promoter, not a church.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ticket__price"><small>From</small>$1,800</p><p class="ticket__meta">Mississauga · 32 km from you</p></div><figcaption>“$1,800” and “32 km”, with a middle dot between facts.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="ticket__price">$1800.00</p><p class="ticket__meta">Mississauga - 32km away from your location</p></div><figcaption>Cents that aren’t there, a missing comma and space, a hyphen as a separator, extra words.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks and the cast in the <a href="../../mocks/index.html">mocks index</a>:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: poster copy, kicker formats, button verbs, steps, the artist band</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: loading copy and the “Still checking” note</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: the no-results formula and the “Sold out” stamp</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “We lost the signal” and what is kept</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: bio voice, setlist, tour dates, reviews, stub fine print, save and share names</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the announced “Loading artist profile”</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Fresh on the bill” and “Opening night”</li>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: “Show postponed” and “It’s on our side, not yours.”</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Field help “✓ Abigail is free Sat 14 Nov” used a typed ✓. It is now an <code>.inline-msg--success</code> with an icon, and the text alone carries the meaning.</li>
+        <li>The empty state’s “Search within 120 km · 2 choirs free” is too long for one line at 360px. The count moved into the sentence.</li>
+        <li>Seven inline display-font shorthands in the mocks are now role tokens (<code>--text-figure</code>, <code>--text-figure-lg</code>, <code>--text-h4</code>), so copy set in display type is styled the same everywhere.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

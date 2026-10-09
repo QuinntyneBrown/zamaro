@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navigation &amp; page structure — Zamaro design system</title>
+<meta name="description" content="The Zamaro page shell: top bar on the stage, poster hero, marquee, paper sections and the stage footer; breadcrumbs back to the search, Back that keeps the search, tabs versus sub-pages, and the phone menu.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Navigation &amp; page structure</h1>
+      <p class="ds-lead">Every Zamaro page is laid out like a gig poster: the charcoal top bar, a poster hero that names the date or the artist, a marquee strip, paper sections, and the stage footer. The search travels with you from page to page.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Landmarks <code>header</code> <code>nav</code> <code>main</code> <code>footer</code></span><span class="ds-pill">Composes 14 components</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Zamaro is small: find who is free, look at an artist, ask to book. The structure keeps those three steps one click apart and never makes a church re-enter its date.</p>
+      <ul>
+        <li><b>The shell is the same on every page:</b> skip link, top bar on the stage, <code>&lt;main&gt;</code>, footer on the stage. Only the poster and the sections change.</li>
+        <li><b>The poster is the page title.</b> Its <code>&lt;h1&gt;</code> is the date on Discover (“Who’s free Sat 14 Nov”) and the artist’s name on a profile.</li>
+        <li><b>The search is state, kept in the URL.</b> Date, place, kind of gathering, radius, filters and sort travel to the profile and back, through the breadcrumb or the browser’s Back.</li>
+        <li><b>The phone gets the same places,</b> behind a menu button in the top bar.</li>
+      </ul>
+      <p>Composes: <a href="../components/skip-link.html">skip link</a>, <a href="../components/top-bar.html">top bar</a>, <a href="../components/poster.html">poster hero</a>, <a href="../components/marquee.html">marquee</a>, <a href="../components/container.html">container &amp; stack</a>, <a href="../components/breadcrumb.html">breadcrumb</a>, <a href="../components/footer.html">footer</a>, <a href="../components/band.html">band</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/menu.html">menu</a>, <a href="../components/tabs.html">tabs</a>, <a href="../components/sidebar-navigation.html">sidebar navigation</a> and the <a href="../components/booking-form.html">booking ticket</a>.</p>
+    </section>
+
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+      <h3>Page types</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Page</th><th scope="col">Poster</th><th scope="col">Marquee</th><th scope="col">Body</th></tr></thead>
+        <tbody>
+          <tr><td>Discover</td><td>Kicker, “Who’s free” + the date, one sentence, the booking bar</td><td>Towns within driving distance</td><td>The lineup, How booking works (steps), the artist band</td></tr>
+          <tr><td>Artist profile</td><td>Breadcrumb, kicker, the name, facts, Book / Save / Share</td><td>Songs the artist leads</td><td><code>.profile-layout</code>: sections on the left, the booking stub pinned on the right</td></tr>
+          <tr><td>Page error</td><td>Breadcrumb, stamp kicker, plain headline</td><td>None</td><td>The alert in <code>.page-error</code></td></tr>
+          <tr><td>Account pages (not in the mocks yet)</td><td>Title only, no marquee</td><td>None</td><td>Sidebar navigation from 1024px; tabs inside a page</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Breadcrumb, tabs or a sub-page</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Need</th><th scope="col">Use</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>Get back to the search that led here</td><td><a href="../components/breadcrumb.html">Breadcrumb</a> carrying the search in its label and URL</td><td>“Discover · Sat 14 Nov / Abigail Mensah”</td></tr>
+          <tr><td>Switch between views of the same list</td><td><a href="../components/tabs.html">Tabs</a></td><td>Your requests: Waiting · Accepted · Past</td></tr>
+          <tr><td>Move between different tasks in an area</td><td>Sub-pages in <a href="../components/sidebar-navigation.html">sidebar navigation</a></td><td>Your requests · Saved artists · Church details</td></tr>
+          <tr><td>Move between the main areas</td><td>Top bar navigation</td><td>Discover · How booking works · For artists</td></tr>
+          <tr><td>Jump within a long page</td><td>An in-page link</td><td>“Book for Sat 14 Nov” jumps to the stub on phones</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Back behaviour</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Action</th><th scope="col">Where it goes</th><th scope="col">What is kept</th></tr></thead>
+        <tbody>
+          <tr><td>“Show the lineup”</td><td><code>/discover?date=2026-11-14&amp;near=burlington-on&amp;kind=sunday&amp;km=120</code></td><td>Writes the search to the URL; a new history entry</td></tr>
+          <tr><td>Press a chip or change the sort</td><td>Same URL, updated query (<code>&amp;style=choir&amp;sort=rating</code>)</td><td>Replaces the history entry, so Back doesn’t step through every chip</td></tr>
+          <tr><td>Open a ticket</td><td><code>/artists/abigail-mensah?date=2026-11-14&amp;…</code></td><td>The date fills the stub and the “Book for Sat 14 Nov” button</td></tr>
+          <tr><td>Breadcrumb “Discover · Sat 14 Nov”</td><td>The exact search URL</td><td>Date, place, filters, sort</td></tr>
+          <tr><td>Browser Back</td><td>The previous search</td><td>Results from cache and the scroll position, with the ticket they opened in view</td></tr>
+          <tr><td>Profile fails to load</td><td>Stays on the profile URL</td><td>Breadcrumb and “Back to the lineup” still carry the search</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+      <h3>The Discover shell</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <header class="topbar topbar--static" style="padding-inline: var(--space-5);">
+            <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+            <a class="topbar__brand" href="#structure"><span class="brand-mark" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <nav class="topbar__nav" aria-label="Primary, example">
+              <a class="nav-link" href="#structure" aria-current="page">Discover</a>
+              <a class="nav-link" href="#when">How booking works</a>
+              <a class="nav-link" href="#content">For artists</a>
+            </nav>
+            <span class="topbar__spacer"></span>
+            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span></button>
+            <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+          </header>
+          <div class="poster on-stage" style="padding-block: var(--space-10);">
+            <div class="container stack">
+              <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+              <p class="poster__title">Who’s free <span class="poster__date" style="font-size: var(--font-size-4xl);"><span>Sat</span> <span>14 Nov</span></span></p>
+              <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+            </div>
+          </div>
+          <div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton ✦</span><span>Markham ✦</span><span>Ajax ✦</span><span>Oshawa</span></div>
+          <div class="section section--tight">
+            <div class="container">
+              <div class="section__head" style="margin-bottom: var(--space-4);"><div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><p style="font: var(--text-h2); text-transform: uppercase;">The lineup</p></div></div>
+              <p class="text-muted">Headliner, then tickets. Then How booking works and the artist band.</p>
+            </div>
+          </div>
+          <footer class="footer footer--simple on-stage">
+            <div class="container cluster cluster--between"><span>Worship artists for churches around Toronto.</span><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></div>
+          </footer>
+        </div>
+        <div class="ds-example__caption"><span>Top bar, poster, marquee, a paper section, footer. The poster’s date is scaled down to fit this frame; in the product it is the largest type on the page.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;a class="skip-link" href="#main"&gt;Skip to content&lt;/a&gt;
+&lt;header class="topbar"&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__menu" aria-label="Open menu" aria-expanded="false" aria-controls="phone-menu"&gt;…&lt;/button&gt;
+  &lt;a class="topbar__brand" href="/"&gt;&lt;span class="brand-mark" aria-hidden="true"&gt;…&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class="topbar__nav" aria-label="Primary"&gt;&lt;a class="nav-link" href="/discover" aria-current="page"&gt;Discover&lt;/a&gt;…&lt;/nav&gt;
+  &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
+  &lt;button class="nav-link topbar__saved" …&gt;…&lt;/button&gt;
+  &lt;button class="avatar" aria-label="Account menu for Naomi Fraser" aria-expanded="false"&gt;NF&lt;/button&gt;
+&lt;/header&gt;
+&lt;main id="main"&gt;
+  &lt;section class="poster on-stage" aria-labelledby="hero-title"&gt;…&lt;h1 id="hero-title" class="poster__title"&gt;…&lt;/h1&gt;…&lt;/section&gt;
+  &lt;div class="marquee" aria-hidden="true"&gt;…&lt;/div&gt;
+  &lt;section class="section" aria-labelledby="lineup-title"&gt;…&lt;/section&gt;
+&lt;/main&gt;
+&lt;footer class="footer on-stage"&gt;…&lt;/footer&gt;</code></pre></details>
+      </div>
+      <ol>
+        <li><b>Skip link</b> to <code>#main</code>, the first thing in the page.</li>
+        <li><b>Top bar</b>, sticky, on the stage, with a 4px yellow rule: brand, primary navigation, Saved with its count, the account avatar. <code>--layout-topbar-height</code> is 68px.</li>
+        <li><b>Poster</b>: the page’s <code>&lt;h1&gt;</code>, on the stage in both themes, with the halftone corner.</li>
+        <li><b>Marquee</b>: a decorative yellow strip that repeats what the page is about (towns, songs). Hidden from assistive technology.</li>
+        <li><b>Sections</b>: <code>.section</code> blocks in a <code>.container</code>, divided by hairlines, each with a kicker and an <code>&lt;h2&gt;</code>.</li>
+        <li><b>Footer</b> on the stage: the Zamaro word, links for churches and artists, and the signed-in church.</li>
+      </ol>
+      <h3>The artist profile</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="poster on-stage" style="padding-block: var(--space-8) var(--space-10);">
+            <div class="container stack">
+              <nav aria-label="Breadcrumb, profile example"><ol class="breadcrumb"><li><a href="#when">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav>
+              <p class="overline poster__kicker">Headliner · Gospel &amp; contemporary vocalist</p>
+              <p class="artist-poster__name" style="font-size: var(--font-size-4xl);">Abigail Mensah</p>
+              <p class="artist-poster__facts"><strong>★ 4.9</strong><span>38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
+              <div class="cluster"><a class="btn btn--primary" href="#pf-stub">Book for Sat 14 Nov</a><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div>
+            </div>
+          </div>
+          <div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh</span></div>
+          <div class="container profile-layout" style="padding: var(--space-8) var(--space-6);">
+            <div>
+              <p class="overline section__kicker">About</p>
+              <p style="font: var(--text-h2); text-transform: uppercase;">Raised in the choir loft</p>
+              <p class="section__body">I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone.</p>
+            </div>
+            <div class="stub" id="pf-stub">
+              <div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+              <button class="btn btn--primary btn--lg btn--block" type="button">Request to book · Sat 14 Nov</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Breadcrumb back to the search, the name as the poster headline, songs in the marquee, sections beside the stub. From 1024px the stub is pinned while the profile scrolls.</span></div>
+      </div>
+      <h3>The phone menu</h3>
+      <p>Below 1024px the primary links move behind the menu button. It is a disclosure, not an ARIA menu: a list of links that opens under the top bar and pushes nothing else around.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+          <div style="width: 100%; max-width: 24rem; border: var(--border-width-thick) solid var(--color-border-strong);">
+            <div class="topbar topbar--static" style="padding-inline: var(--space-3); gap: var(--space-2);">
+              <button class="btn btn--ghost btn--icon" type="button" aria-label="Close menu" aria-expanded="true" aria-controls="ph-menu" style="--btn-bg: var(--color-bg-stage-raised);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              <a class="topbar__brand" href="#structure"><span class="brand-mark" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+              <span class="topbar__spacer"></span>
+              <button class="nav-link" type="button" aria-label="Saved artists, 3"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="badge badge--count" aria-hidden="true">3</span></button>
+            </div>
+            <nav id="ph-menu" class="on-stage" aria-label="Primary, phone example" style="padding: 0 var(--space-3) var(--space-4);">
+              <ul class="menu" role="list" style="min-width: 0;">
+                <li><a class="menu__item" href="#structure" aria-current="page"><b>Discover</b></a></li>
+                <li><a class="menu__item" href="#when">How booking works</a></li>
+                <li><a class="menu__item" href="#content">For artists</a></li>
+                <li class="menu__sep" aria-hidden="true"></li>
+                <li><a class="menu__item" href="#states">Your requests</a></li>
+                <li><a class="menu__item" href="#states">Account · Naomi Fraser</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Forced phone layout. The button becomes “Close menu” with <code>aria-expanded="true"</code>; Saved shows the heart and the count only.</span></div>
+      </div>
+      <h3>Account pages: sub-pages and tabs</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
+          <nav class="sidenav" aria-label="Account">
+            <ul class="sidenav__list">
+              <li><a class="sidenav__link" href="#structure" aria-current="page">Your requests <span class="badge badge--count" aria-label="1 needs action">1</span></a></li>
+              <li><a class="sidenav__link" href="#structure">Saved artists</a></li>
+              <li><a class="sidenav__link" href="#structure">Church details</a></li>
+              <li><a class="sidenav__link" href="#structure">E-mail preferences</a></li>
+            </ul>
+          </nav>
+          <div class="tabs" style="flex: 1 1 20rem; min-width: 0;">
+            <div class="tabs__list" role="tablist" aria-label="Your requests">
+              <button class="tabs__tab" type="button" role="tab" id="rq-t1" aria-selected="false" aria-controls="rq-p1" tabindex="-1">Waiting <span class="tabs__count">1</span></button>
+              <button class="tabs__tab" type="button" role="tab" id="rq-t2" aria-selected="true" aria-controls="rq-p2">Accepted <span class="tabs__count">1</span></button>
+              <button class="tabs__tab" type="button" role="tab" id="rq-t3" aria-selected="false" aria-controls="rq-p3" tabindex="-1">Past <span class="tabs__count">4</span></button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="rq-p1" aria-labelledby="rq-t1" hidden><p>Luz Viva · Sun 6 Dec · waiting for a reply.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="rq-p2" aria-labelledby="rq-t2"><p>Abigail Mensah accepted Sat 14 Nov. Pay the $162.50 deposit to lock it in.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="rq-p3" aria-labelledby="rq-t3" hidden><p>Four past bookings.</p></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Different tasks are sub-pages in the sidebar; views of the same list are tabs. Not in the mocks yet.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Element</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Current</th><th scope="col">Expanded</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Top bar link</th>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><a class="nav-link" href="#states">Discover</a></div></td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><a class="nav-link" href="#states" data-state="hover">Discover</a></div></td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><a class="nav-link" href="#states" data-state="focus">Discover</a></div></td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><a class="nav-link" href="#states" aria-current="page">Discover</a></div></td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><button class="nav-link" type="button" aria-expanded="true">Saved</button></div></td></tr>
+          <tr><th scope="row">Breadcrumb</th>
+            <td><div class="on-stage" style="padding: var(--space-3);"><ol class="breadcrumb"><li><a href="#states">Discover · Sat 14 Nov</a></li></ol></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><ol class="breadcrumb"><li><a href="#states" data-state="hover">Discover · Sat 14 Nov</a></li></ol></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><ol class="breadcrumb"><li><a href="#states" data-state="focus">Discover · Sat 14 Nov</a></li></ol></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><ol class="breadcrumb"><li aria-current="page">Abigail Mensah</li></ol></div></td>
+            <td>Not applicable</td></tr>
+          <tr><th scope="row">Menu button</th>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu, hover" aria-expanded="false" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu, focus" aria-expanded="false" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></td>
+            <td>Not applicable</td>
+            <td><div class="topbar topbar--static" style="min-height: 0; padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Close menu" aria-expanded="true" style="--btn-bg: var(--color-bg-stage-raised);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <p>The stage is charcoal in both themes, so the top bar, poster and footer look the same. In the dark theme the canvas is charcoal too, and the yellow rule under the top bar and above the footer is what separates the stage from the page.</p>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack">
+          <div class="topbar topbar--static"><a class="topbar__brand" href="#states"><span class="brand-mark" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div>
+          <div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington</span></div>
+          <p class="section__kicker overline">Sat 14 Nov · 7 free</p>
+        </div></div>
+        <div data-theme="dark"><div class="stack">
+          <div class="topbar topbar--static"><a class="topbar__brand" href="#states"><span class="brand-mark" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div>
+          <div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington</span></div>
+          <p class="section__kicker overline">Sat 14 Nov · 7 free</p>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Top bar:</b> below 1024px the primary links hide behind the menu button and Saved shows only the heart and the count. From 1024px the links and the word “Saved” show and the menu button hides. The bar is sticky at every size.</li>
+        <li><b>Poster:</b> one column on phones and tablets; from 1024px the Discover poster puts the headline and the booking bar side by side, and the profile poster puts the artwork to the right of the name.</li>
+        <li><b>Marquee:</b> a single clipped line at every size; it never wraps or scrolls on its own.</li>
+        <li><b>Profile layout:</b> from 1024px the stub sits in a 22rem column and stays pinned under the top bar. Below 1024px it follows the reviews, and “Book for Sat 14 Nov” jumps to it.</li>
+        <li><b>Breadcrumb:</b> wraps onto a second line rather than truncating; it only ever has two items.</li>
+        <li><b>Footer:</b> one column on phones, three from 768px, four from 1024px.</li>
+        <li><b>Sidebar navigation (account pages):</b> a column from 1024px; below that, the same links appear at the top of the page as a list, and tabs scroll sideways if they overflow.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Landmarks in this order: skip link, <code>&lt;header&gt;</code> with <code>&lt;nav aria-label="Primary"&gt;</code>, <code>&lt;main id="main"&gt;</code>, <code>&lt;footer&gt;</code>. One <code>&lt;h1&gt;</code> per page, in the poster; each section has an <code>&lt;h2&gt;</code>, tickets and headliner <code>&lt;h3&gt;</code>. The breadcrumb is <code>&lt;nav aria-label="Breadcrumb"&gt;</code> with <code>aria-current="page"</code> on the last item (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/">APG Breadcrumb</a>). The phone menu follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">APG Disclosure pattern</a> (<code>aria-expanded</code> + <code>aria-controls</code>), not the Menu pattern. The avatar opens a real account <a href="../components/menu.html">menu</a>. Account tabs follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/">APG Tabs pattern</a> with manual activation.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skip link, menu button (phones), brand, primary links, Saved, account, then the page.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Opens or closes the phone menu; follows links.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the phone menu and returns focus to the menu button.</td></tr>
+        <tr><td><kbd>←</kbd> <kbd>→</kbd></td><td>Moves between account tabs; <kbd>Enter</kbd> selects.</td></tr>
+        <tr><td><kbd>Alt</kbd>+<kbd>←</kbd></td><td>Browser Back returns to the same search and scroll position.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>On the stage the focus ring is yellow (<code>--color-accent-on-stage</code>). The sticky top bar never covers the focused element: <code>scroll-padding-top</code> is the bar height plus 16px (WCAG 2.4.11). After Back, focus returns to the ticket link the person opened. A newly loaded page starts at the top with focus on the document; the skip link is the first stop.</p>
+      <h3>Labelling</h3>
+      <p>Each <code>&lt;nav&gt;</code> has a distinct label: “Primary”, “Breadcrumb”, “Account”. The menu button’s name follows its state (“Open menu” / “Close menu”). Saved is “Saved artists, 3” when only the icon shows. The avatar is “Account menu for Naomi Fraser”. Page titles carry the search: “Who’s free Sat 14 Nov · Zamaro”, “Abigail Mensah · Zamaro”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Muted text on the stage (facts, poster sub)</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Kicker, current link, focus on the stage</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Marquee and count badge</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Current sidebar link</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: current sidebar link</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-accent-subtle" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The shell does not move. In-page jumps scroll smoothly, and instantly under <code>prefers-reduced-motion</code>. The marquee is static.</p>
+      <h3>Touch</h3>
+      <p>Top-bar links, the Saved button and phone-menu items are 44px tall (<code>--target-comfortable</code>); the menu button and avatar are 44px and 40px squares with 12px between them. Breadcrumb links are at least 24px tall.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Navigation labels</b> are short nouns or the task: “Discover”, “How booking works”, “For artists”, “Saved”.</li>
+        <li><b>The breadcrumb</b> names the search, not just the page: “Discover · Sat 14 Nov”. The current item is the artist’s name.</li>
+        <li><b>Poster kickers</b> set the scene in one line: “Worship artists within driving distance of Toronto”, “Headliner · Gospel &amp; contemporary vocalist”.</li>
+        <li><b>Section kickers</b> carry the live summary: “Sat 14 Nov · 7 free · within 120 km”.</li>
+        <li><b>Page titles</b>: the page’s point, then “· Zamaro”.</li>
+        <li><b>Marquee</b> copy repeats what is on the page (towns, song titles) and is never the only place something appears.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><nav aria-label="Breadcrumb, do example"><ol class="breadcrumb"><li><a href="#do-dont">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div><figcaption>The breadcrumb goes back to the exact search and says which date it was.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><a class="link--standalone" href="#do-dont">← Home</a></div><figcaption>A “Home” link that drops the date, place and filters, so the church has to search again.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span></button></div><figcaption>Saved is one <code>.nav-link</code> button; the class resets button styles itself.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link btn--ghost" type="button" style="background: none; border: 0; cursor: pointer;">Saved</button></div><figcaption>The mocks combined <code>.nav-link</code> with <code>.btn--ghost</code> and an inline style reset.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Jireh</span></div></div><figcaption>The marquee repeats the setlist as decoration and is hidden from screen readers.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee"><span>Free cancellation ends Sat 31 Oct ✦</span><span>Pay your deposit</span></div></div><figcaption>Real information only in the marquee, where it is clipped on phones and hidden from assistive technology.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the full shell: skip link, top bar with menu button, brand, primary links, Saved with count and avatar; poster with the date and booking bar; marquee of towns; lineup, steps and band sections; the footer</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: breadcrumb back to “Discover · Sat 14 Nov”, artist poster, marquee of songs, <code>.profile-layout</code> with the pinned stub; the note on the jump link below 1024px</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the breadcrumb and shell stay while the profile loads</li>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the breadcrumb is kept on a failed page</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The top-bar “Saved” button combined <code>.nav-link</code>, <code>.btn--ghost</code> and an inline style reset. <code>.nav-link</code> now resets buttons itself.</li>
+        <li><code>.brand-mark</code> was 1.9rem (30.4px, off the grid). It is now 2rem.</li>
+        <li>The brand mark, marquee, band, count badge and skip link read primitives (<code>--palette-ink</code>, <code>--palette-paper*</code>). They now use <code>--color-fg-on-accent</code>, <code>--color-border-on-accent</code> and stage tokens.</li>
+        <li>Badge count min-width was 1.4em; it is now 1.5em.</li>
+        <li>Tabs, sidebar navigation and the phone menu panel are not in the mocks yet; they are part of the core set for the account pages and phones.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video card — Zamaro design system</title>
+<meta name="description" content="A video card is a button that plays a live clip of an artist leading worship: a wide halftone thumbnail with a yellow “Play · 6:12” stamp and a caption, labelled with the song and its duration.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: ds.css adds space between every li in a section; the media grid uses gap instead. */
+.ds-section .media-grid > li + li { margin-top: 0; }
+.video-demo { width: 16rem; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Video card</h1>
+      <p class="ds-lead">Bookers want to see an artist lead a room before they book. A video card is a wide thumbnail with a yellow play stamp showing the running time; pressing it plays the clip.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;button&gt;</code></span><span class="ds-pill">Class <code>.video</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use video cards in the “Watch her lead” section of a profile, inside a <code>.media-grid</code>. Each card is one <code>&lt;button&gt;</code>: pressing it opens the clip in a <a href="dialog.html">dialog</a> player and does not leave the page. Never autoplay.</p>
+      <ul>
+        <li>The first card is the featured clip and spans the full row from 768px.</li>
+        <li>For still photos use the <a href="artwork.html">photo grid</a>; for a link to an external channel use a <a href="link.html">link</a>.</li>
+        <li>An artist with no videos keeps the section with a quiet <a href="empty-state.html">empty state</a> (“No videos yet”).</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure ds-example__canvas--canvas">
+          <div style="width: 100%;">
+            <button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"></span><span class="video__play">Play · 6:12</span></button><span class="video__caption">Way Maker — live at Bethel Pentecostal, Hamilton</span>
+          </div>
+          <span class="ds-callout" style="left: 50%; top: 12%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 9%; top: 62%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 9%; top: 86%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 92%; top: 40%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Thumbnail</b><small><code>.art.art--wide</code>: 16:9 halftone or a still from the clip.</small></div></li>
+          <li><div><b>Play stamp</b><small><code>.video__play</code>: yellow label with an ink rule, pinned 16px from the bottom-left. “Play · 6:12”.</small></div></li>
+          <li><div><b>Caption</b><small><code>.video__caption</code>: song and where it was filmed, 14px muted, outside the button.</small></div></li>
+          <li><div><b>Button</b><small><code>.video</code>: an unstyled full-width <code>&lt;button&gt;</code>; the whole thumbnail is the target.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>One component; the grid position and the thumbnail vary.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ul class="media-grid" role="list">
+            <li><button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"></span><span class="video__play">Play · 6:12</span></button><span class="video__caption">Way Maker — live at Bethel Pentecostal, Hamilton</span></li>
+            <li><button class="video" type="button" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist in a small chapel"></span><span class="video__play">Play · 4:40</span></button><span class="video__caption">Great Is Thy Faithfulness — acoustic</span></li>
+            <li><button class="video" type="button" aria-label="Play Twi praise medley, Harvest Sunday 2025, 8 minutes 5 seconds"><span class="art art--wide art--tilt" role="img" aria-label="A congregation dancing during a Ghanaian praise medley"></span><span class="video__play">Play · 8:05</span></button><span class="video__caption">Twi praise medley — Harvest Sunday 2025</span></li>
+            <li><button class="video" type="button" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail singing at a lakeside women’s retreat"></span><span class="video__play">Play · 5:30</span></button><span class="video__caption">Goodness of God — women’s retreat, Muskoka</span></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>Featured first (full row from 768px), then three across. Thumbnails vary by art modifier until a still is available.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="media-grid" role="list"&gt;
+  &lt;li&gt;
+    &lt;button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"&gt;
+      &lt;span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"&gt;&lt;/span&gt;
+      &lt;span class="video__play"&gt;Play · 6:12&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;span class="video__caption"&gt;Way Maker — live at Bethel Pentecostal, Hamilton&lt;/span&gt;
+  &lt;/li&gt;
+  …
+&lt;/ul&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Video cards have one size: they fill their grid cell at 16:9. The featured card is the same component spanning the row."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Video cards have one size: they fill their grid cell at 16:9. The featured card is the same component spanning the row.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover and active are forced with <code>data-state</code>; focus with <code>data-state="focus"</code> on the button. Real pages get them from <code>:hover</code>, <code>:active</code>, <code>:focus-visible</code> and <code>aria-busy</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Busy</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Halftone</th>
+            <td><button class="video video-demo" type="button" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
+            <td><button class="video video-demo" type="button" data-state="hover" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
+            <td><button class="video video-demo" type="button" data-state="focus" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
+            <td><button class="video video-demo" type="button" data-state="active" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
+            <td><button class="video video-demo" type="button" aria-busy="true" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td></tr>
+          <tr><th scope="row">Yellow</th>
+            <td><button class="video video-demo" type="button" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
+            <td><button class="video video-demo" type="button" data-state="hover" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
+            <td><button class="video video-demo" type="button" data-state="focus" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
+            <td><button class="video video-demo" type="button" data-state="active" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
+            <td><button class="video video-demo" type="button" aria-busy="true" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Loading, failed and none</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <div class="video-demo" aria-hidden="true"><span class="skeleton skeleton--wide"></span></div>
+          <div class="video-demo"><button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds" aria-describedby="err-1"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary"></span><span class="video__play">Play · 6:12</span></button><p class="inline-msg inline-msg--danger" id="err-1" style="margin-top: var(--space-2);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>This video didn’t load. Press play to try again.</p></div>
+          <div class="empty empty--quiet video-demo"><p class="empty__stamp">Fresh on the bill</p><p class="empty__title">No videos yet</p><p>Ask Miriam for a recording in your request.</p></div>
+        </div>
+        <div class="ds-example__caption"><span>While the profile loads, a <code>.skeleton--wide</code> holds each card’s place. If the player fails, an inline message under the card says so and the button tries again. With no videos, the section shows a quiet empty state.</span></div>
+      </div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><button class="video" type="button" data-state="hover" aria-label="Play Jireh, Sunday service, 7 minutes 2 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail and a choir"></span><span class="video__play">Play · 7:02</span></button><span class="video__caption">Jireh — Sunday service, Milton</span></div>
+        <div data-theme="dark"><button class="video" type="button" data-state="hover" aria-label="Play Jireh, Sunday service, 7 minutes 2 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail and a choir"></span><span class="video__play">Play · 7:02</span></button><span class="video__caption">Jireh — Sunday service, Milton</span></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> lifts the play stamp 4px up and left over a hard ink shadow; the thumbnail does not move.</li>
+        <li><b>Active</b> presses the stamp flat.</li>
+        <li><b>Focus</b> draws the ring around the whole thumbnail.</li>
+        <li><b>Busy</b> (<code>aria-busy="true"</code>) adds a spinner to the stamp while the player loads. The button keeps its label.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Under <code>--layout-breakpoint-md</code> (768px), cards stack one per row, full width.</li>
+        <li>From 768px, the first card spans the row and the rest sit three across.</li>
+        <li>The stamp stays the same size at every width; on a third-width card it still fits “Play · 12:45”.</li>
+        <li>The player opens in a full-screen sheet on phones and a centred dialog from 640px.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The stamp reads <code>--color-accent</code>, <code>--color-fg-on-accent</code> and <code>--color-border-on-accent</code>; its hover shadow is <code>--color-border-on-accent</code>, so it prints ink in both themes. The thumbnail follows <a href="artwork.html">artwork</a> tokens, and the caption reads <code>--color-fg-muted</code>.</p>
+      <p>No component tokens.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;button type="button"&gt;</code> (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button</a>) that opens a modal player (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/">APG Dialog</a>). Only phrasing elements (<code>&lt;span&gt;</code>) go inside the button. The caption is a sibling, outside the button.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>One stop per video.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Opens the player and moves focus to its play control.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>In the player: closes it and returns focus to the card.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The 3px ring wraps the whole 16:9 thumbnail, with a 3px offset so it is visible against both the halftone and the page.</p>
+      <h3>Labelling</h3>
+      <p>Children of a button are presentational, so the thumbnail’s own label is not read. The button’s <code>aria-label</code> carries the song, where it was filmed and the duration in words: “Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds”. It starts with “Play”, the visible word on the stamp, so voice users can say “click Play” (WCAG 2.5.3). The busy button keeps the same name; the player announces its own status. A failure message is linked with <code>aria-describedby</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Stamp label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Caption on the page</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on the page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="light"><span>Light: stamp rule against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: stamp label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: caption</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: focus ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The stamp lift takes <code>--duration-fast</code> and drops to instant under reduced motion. Videos never autoplay, and thumbnails never animate on hover. The busy spinner keeps turning because it reports status.</p>
+      <h3>Touch</h3>
+      <p>The whole thumbnail is the target: at least 180px tall at full width on a phone. Nothing depends on hover.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Stamp: “Play · ” and the duration as m:ss. Write it in sentence case; CSS uppercases it.</li>
+        <li>Caption: song title, an em dash, then the setting: “Way Maker — live at Bethel Pentecostal, Hamilton”.</li>
+        <li>Label: “Play {song}, {setting}, {m} minutes {s} seconds”.</li>
+        <li>Order: the clip that best shows the artist leading a congregation goes first, not the newest.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary"></span><span class="video__play">Play · 6:12</span></button><span class="video__caption">Way Maker — live at Bethel Pentecostal, Hamilton</span></div></div><figcaption>The button’s label names the song and duration and starts with the visible word “Play”.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" aria-label="Watch video"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary"></span><span class="video__play">Play · 6:12</span></button></div></div><figcaption>“Watch video” four times in a row, and the visible word “Play” is not in the name.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" data-state="hover" aria-label="Play Jireh, 7 minutes 2 seconds"><span class="art art--wide" role="img" aria-label="Abigail singing"></span><span class="video__play">Play · 7:02</span></button></div></div><figcaption>The hover shadow reads <code>--color-border-on-accent</code>, not a primitive.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="video-demo"><div class="art art--wide" role="img" aria-label="Abigail singing"><span class="video__play">Play · 7:02</span></div></div></div><figcaption>A play stamp on a plain <code>&lt;div&gt;</code> with a click handler: not focusable, not announced as a button.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Stamp fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Stamp label</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+          <tr><td>Stamp rule and hover shadow</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Caption</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Stamp offset / padding</td><td><code>--space-4</code> / <code>--space-2</code> <code>--space-3</code></td><td colspan="2"><span data-token="--space-4"></span> / <span data-token="--space-2"></span> <span data-token="--space-3"></span></td></tr>
+          <tr><td>Stamp lift</td><td><code>--transform-lift</code>, <code>--size-offset-1</code>, <code>--duration-fast</code></td><td colspan="2"><span data-token="--transform-lift"></span> · <span data-token="--duration-fast"></span></td></tr>
+          <tr><td>Stamp / caption type</td><td><code>--text-label</code> / <code>--text-body-sm</code></td><td colspan="2"><span data-token="--font-size-sm"></span> / <span data-token="--font-size-sm"></span></td></tr>
+          <tr><td>Busy spinner</td><td><code>--duration-loop</code></td><td colspan="2"><span data-token="--duration-loop"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;li&gt;
+  &lt;button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"&gt;
+    &lt;span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"&gt;&lt;/span&gt;
+    &lt;span class="video__play"&gt;Play · 6:12&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;span class="video__caption"&gt;Way Maker — live at Bethel Pentecostal, Hamilton&lt;/span&gt;
+&lt;/li&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.video</code></td><td>Unstyled full-width button around the thumbnail.</td></tr>
+        <tr><td><code>.video__play</code></td><td>Yellow stamp; lifts on hover, presses on active.</td></tr>
+        <tr><td><code>.video__caption</code></td><td>Muted caption under the card.</td></tr>
+        <tr><td><code>aria-label</code></td><td>Required: “Play {song}, {setting}, {duration in words}”.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>Spinner on the stamp while the player loads.</td></tr>
+        <tr><td><code>data-state="hover|active|focus"</code></td><td>Docs and mocks only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: four video cards in the media grid, “PLAY · 6:12”</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: a wide skeleton in place of the videos</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “No videos yet” empty state</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The stamp read <code>--palette-ink</code> for its label, rule and hover shadow. It now reads <code>--color-fg-on-accent</code> and <code>--color-border-on-accent</code>.</li>
+        <li>The hover read <code>--offset-1</code> and <code>--lift</code>. It now reads <code>--size-offset-1</code> and <code>--transform-lift</code>, and pressing flattens it.</li>
+        <li>No busy state existed. <code>aria-busy="true"</code> now adds a spinner to the stamp.</li>
+        <li>The mock typed “PLAY” in capitals. Source copy is now sentence case (“Play · 6:12”); CSS uppercases it.</li>
+        <li>The wide skeleton used an inline <code>aspect-ratio</code>. It now uses <code>.skeleton--wide</code>.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

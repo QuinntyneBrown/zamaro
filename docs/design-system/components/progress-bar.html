@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress bar — Zamaro design system</title>
+<meta name="description" content="Progress bars show how far a long task has gone: uploading a live video, the steps of a booking request. Determinate, indeterminate, success and danger, in both themes.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Progress bar</h1>
+      <p class="ds-lead">A ruled track that fills with yellow ink as a long task moves along. Use it when the booker or artist would otherwise wonder whether anything is happening, and how long is left.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="progressbar"</code></span><span class="ds-pill">Class <code>.progress</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a progress bar for tasks that take more than a few seconds and have a measurable end: an artist uploading a live video, a church working through the four parts of a booking request, an artist profile filling up. Show a percentage when you know it, steps when the task has steps.</p>
+      <ul>
+        <li><b>Determinate</b> (the default) fills to <code>--progress</code>, a percentage set inline.</li>
+        <li><b>Indeterminate</b> (<code>.progress--indeterminate</code>) slides a block along the track when the end can’t be measured yet, such as “Processing video”.</li>
+        <li><b>Success</b> and <b>danger</b> recolour the fill when the task ends, so the bar records how it finished.</li>
+      </ul>
+      <p>For waits under about 4 seconds with no measurable end, use a <a href="spinner.html">spinner</a>. While content loads into a known layout, use a <a href="skeleton.html">skeleton</a>. For the three “How booking works” steps on the home page, which are explanation rather than progress, use <a href="steps.html">steps</a>.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="progress" style="width: 100%;">
+            <div class="progress__head"><span id="an-label">Uploading “Goodness of God” · live</span><span class="progress__value">40%</span></div>
+            <div class="progress__track" role="progressbar" aria-labelledby="an-label" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 40%;"></div></div>
+          </div>
+          <span class="ds-callout" style="left: 10%; top: 18%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 86%; top: 18%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 70%; top: 66%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 22%; top: 66%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 41%; top: 66%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small><code>.progress__head</code>: mono overline, 12px, uppercase. Names the task; the progress bar is labelled by it.</small></div></li>
+          <li><div><b>Value</b><small><code>.progress__value</code>: percentage or “2 of 4” in tabular figures, so it doesn’t jitter as it counts.</small></div></li>
+          <li><div><b>Track</b><small><code>.progress__track</code>: 12px tall, paper fill, 2px <code>--color-border-strong</code> rule. Carries <code>role="progressbar"</code>.</small></div></li>
+          <li><div><b>Fill</b><small><code>.progress__bar</code>: yellow (<code>--progress-fill</code>), width from <code>--progress</code>.</small></div></li>
+          <li><div><b>Leading edge</b><small>A 2px ink rule (<code>--color-border-on-accent</code>) where the fill ends, so the yellow reads against paper.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>One track, four fills. The modifier goes on <code>.progress</code>; the value goes on <code>.progress__bar</code> as <code>style="--progress: 40%"</code>.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="progress">
+            <div class="progress__head"><span id="v1">Uploading “Goodness of God” · live</span><span class="progress__value">40%</span></div>
+            <div class="progress__track" role="progressbar" aria-labelledby="v1" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-valuetext="40%, about 2 minutes left"><div class="progress__bar" style="--progress: 40%;"></div></div>
+          </div>
+          <div class="progress progress--indeterminate">
+            <div class="progress__head"><span id="v2">Processing video</span><span class="progress__value">Up to 5 min</span></div>
+            <div class="progress__track" role="progressbar" aria-labelledby="v2" aria-valuemin="0" aria-valuemax="100" aria-valuetext="Processing"><div class="progress__bar"></div></div>
+          </div>
+          <div class="progress progress--success">
+            <div class="progress__head"><span id="v3">Uploaded · ready to publish</span><span class="progress__value">100%</span></div>
+            <div class="progress__track" role="progressbar" aria-labelledby="v3" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 100%;"></div></div>
+          </div>
+          <div class="progress progress--danger">
+            <div class="progress__head"><span id="v4">Upload stopped</span><span class="progress__value">62%</span></div>
+            <div class="progress__track" role="progressbar" aria-labelledby="v4" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-describedby="v4-msg"><div class="progress__bar" style="--progress: 62%;"></div></div>
+            <div class="cluster cluster--between">
+              <span class="inline-msg inline-msg--danger" id="v4-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>We lost the signal. The first 62% is kept.</span>
+              <button class="btn btn--sm" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Resume upload</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Determinate, indeterminate, success, danger. A failed bar keeps the point it reached and says what to do.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="progress"&gt;
+  &lt;div class="progress__head"&gt;&lt;span id="upload-label"&gt;Uploading “Goodness of God” · live&lt;/span&gt;&lt;span class="progress__value"&gt;40%&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="progress__track" role="progressbar" aria-labelledby="upload-label"
+       aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-valuetext="40%, about 2 minutes left"&gt;
+    &lt;div class="progress__bar" style="--progress: 40%;"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="progress progress--indeterminate"&gt;… no aria-valuenow …&lt;/div&gt;
+&lt;div class="progress progress--success"&gt;…&lt;/div&gt;
+&lt;div class="progress progress--danger"&gt;…&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Steps of a booking request</h3>
+      <p>When the task has named steps, count steps instead of percent and say which step the booker is on.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="stub" style="box-shadow: none;">
+            <div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+            <div class="progress">
+              <div class="progress__head"><span id="v5">Your church</span><span class="progress__value">2 of 4</span></div>
+              <div class="progress__track" role="progressbar" aria-labelledby="v5" aria-valuenow="2" aria-valuemin="0" aria-valuemax="4" aria-valuetext="Step 2 of 4: your church"><div class="progress__bar" style="--progress: 50%;"></div></div>
+            </div>
+            <p class="stub__fine">Next: songs, then review. Nothing is charged until Abigail accepts.</p>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>aria-valuemax="4"</code> and <code>aria-valuetext</code> name the step; the fill is still a percentage (2 of 4 = 50%).</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Progress bars have one size: a 12px track with a 2px rule. Width follows the container."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Progress bars have one size: a 12px track with a 2px rule. Width follows the container.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>A progress bar moves through a lifecycle rather than pointer states; it is never interactive. Each column below is a real attribute set: <code>aria-valuenow</code> and <code>--progress</code> while measurable, no <code>aria-valuenow</code> while indeterminate, a tone modifier when it ends.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Task</th><th scope="col">Queued</th><th scope="col">In progress</th><th scope="col">Working</th><th scope="col">Done</th><th scope="col">Failed</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Video upload</th>
+            <td><div class="progress" style="width: 10rem;"><div class="progress__head"><span>Queued</span><span class="progress__value">0%</span></div><div class="progress__track" role="progressbar" aria-label="Video upload, queued" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 0%;"></div></div></div></td>
+            <td><div class="progress" style="width: 10rem;"><div class="progress__head"><span>Uploading</span><span class="progress__value">40%</span></div><div class="progress__track" role="progressbar" aria-label="Video upload" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 40%;"></div></div></div></td>
+            <td><div class="progress progress--indeterminate" style="width: 10rem;"><div class="progress__head"><span>Processing</span><span class="progress__value">…</span></div><div class="progress__track" role="progressbar" aria-label="Video processing" aria-valuetext="Processing"><div class="progress__bar"></div></div></div></td>
+            <td><div class="progress progress--success" style="width: 10rem;"><div class="progress__head"><span>Uploaded</span><span class="progress__value">100%</span></div><div class="progress__track" role="progressbar" aria-label="Video upload, done" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 100%;"></div></div></div></td>
+            <td><div class="progress progress--danger" style="width: 10rem;"><div class="progress__head"><span>Stopped</span><span class="progress__value">62%</span></div><div class="progress__track" role="progressbar" aria-label="Video upload, stopped" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 62%;"></div></div></div></td></tr>
+          <tr><th scope="row">Booking request</th>
+            <td><div class="progress" style="width: 10rem;"><div class="progress__head"><span>Your event</span><span class="progress__value">1 of 4</span></div><div class="progress__track" role="progressbar" aria-label="Booking request" aria-valuenow="1" aria-valuemin="0" aria-valuemax="4" aria-valuetext="Step 1 of 4: your event"><div class="progress__bar" style="--progress: 25%;"></div></div></div></td>
+            <td><div class="progress" style="width: 10rem;"><div class="progress__head"><span>Songs</span><span class="progress__value">3 of 4</span></div><div class="progress__track" role="progressbar" aria-label="Booking request" aria-valuenow="3" aria-valuemin="0" aria-valuemax="4" aria-valuetext="Step 3 of 4: songs"><div class="progress__bar" style="--progress: 75%;"></div></div></div></td>
+            <td><div class="progress progress--indeterminate" style="width: 10rem;"><div class="progress__head"><span>Sending</span><span class="progress__value">…</span></div><div class="progress__track" role="progressbar" aria-label="Sending booking request" aria-valuetext="Sending"><div class="progress__bar"></div></div></div></td>
+            <td><div class="progress progress--success" style="width: 10rem;"><div class="progress__head"><span>Sent</span><span class="progress__value">4 of 4</span></div><div class="progress__track" role="progressbar" aria-label="Booking request, sent" aria-valuenow="4" aria-valuemin="0" aria-valuemax="4" aria-valuetext="Sent"><div class="progress__bar" style="--progress: 100%;"></div></div></div></td>
+            <td><div class="progress progress--danger" style="width: 10rem;"><div class="progress__head"><span>Not sent</span><span class="progress__value">4 of 4</span></div><div class="progress__track" role="progressbar" aria-label="Booking request, not sent" aria-valuenow="4" aria-valuemin="0" aria-valuemax="4" aria-valuetext="Not sent"><div class="progress__bar" style="--progress: 100%;"></div></div></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack">
+          <div class="progress"><div class="progress__head"><span>Uploading</span><span class="progress__value">40%</span></div><div class="progress__track" role="progressbar" aria-label="Upload, light theme" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 40%;"></div></div></div>
+          <div class="progress progress--indeterminate"><div class="progress__head"><span>Processing</span></div><div class="progress__track" role="progressbar" aria-label="Processing, light theme" aria-valuetext="Processing"><div class="progress__bar"></div></div></div>
+          <div class="progress progress--success"><div class="progress__head"><span>Uploaded</span><span class="progress__value">100%</span></div><div class="progress__track" role="progressbar" aria-label="Uploaded, light theme" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 100%;"></div></div></div>
+          <div class="progress progress--danger"><div class="progress__head"><span>Stopped</span><span class="progress__value">62%</span></div><div class="progress__track" role="progressbar" aria-label="Stopped, light theme" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 62%;"></div></div></div>
+        </div></div>
+        <div data-theme="dark"><div class="stack">
+          <div class="progress"><div class="progress__head"><span>Uploading</span><span class="progress__value">40%</span></div><div class="progress__track" role="progressbar" aria-label="Upload, dark theme" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 40%;"></div></div></div>
+          <div class="progress progress--indeterminate"><div class="progress__head"><span>Processing</span></div><div class="progress__track" role="progressbar" aria-label="Processing, dark theme" aria-valuetext="Processing"><div class="progress__bar"></div></div></div>
+          <div class="progress progress--success"><div class="progress__head"><span>Uploaded</span><span class="progress__value">100%</span></div><div class="progress__track" role="progressbar" aria-label="Uploaded, dark theme" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 100%;"></div></div></div>
+          <div class="progress progress--danger"><div class="progress__head"><span>Stopped</span><span class="progress__value">62%</span></div><div class="progress__track" role="progressbar" aria-label="Stopped, dark theme" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 62%;"></div></div></div>
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Queued</b>: the track shows empty at 0%. Say what it is waiting for if it waits more than a second.</li>
+        <li><b>In progress</b>: update <code>--progress</code> and <code>aria-valuenow</code> together. The fill eases to each new value over <code>--duration-slow</code>.</li>
+        <li><b>Working</b>: switch to <code>.progress--indeterminate</code> and remove <code>aria-valuenow</code> when the server takes over and can’t report a percentage.</li>
+        <li><b>Done</b>: <code>.progress--success</code> at 100%, plus a status message. Remove the bar after a few seconds or replace it with the result.</li>
+        <li><b>Failed</b>: <code>.progress--danger</code> keeps the fill where it stopped; an <a href="inline-message.html">inline message</a> or <a href="alert.html">alert</a> says what happened and offers Resume or Try again.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The bar takes the full width of its container at every breakpoint; it never has a fixed width.</li>
+        <li>The head is a flex row with the label on the left and the value on the right. A long label wraps; the value stays on the right of the first line.</li>
+        <li>On phones, keep labels to about 30 characters so they fit on one line beside the value: “Uploading ‘Goodness of God’” rather than the full file name.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The track reads <code>--color-bg-surface</code> and <code>--color-border-strong</code>. The fill reads the component token <code>--progress-fill</code> (default <code>--color-accent</code>; success <code>--color-success-solid</code>; danger <code>--color-danger-solid</code>) and its width from <code>--progress</code>. The leading edge is <code>--color-border-on-accent</code>, the same ink rule that outlines every yellow fill.</p>
+      <pre><code>/* Value: set per instance */
+&lt;div class="progress__bar" style="--progress: 40%;"&gt;&lt;/div&gt;
+/* Tone: re-map the fill token */
+.progress--success .progress__bar { --progress-fill: var(--color-success-solid); }</code></pre>
+      <p>In the dark theme the track becomes a charcoal surface with a light rule and the yellow fill glows against it. Progress bars don’t sit on the stage or the yellow band; if one must, place it in a paper island (<code>data-theme="light"</code>).</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>The track has <code>role="progressbar"</code> with <code>aria-valuemin</code>, <code>aria-valuemax</code> and <code>aria-valuenow</code> (<a href="https://www.w3.org/TR/wai-aria-1.2/#progressbar">WAI-ARIA progressbar role</a>; the APG has no separate widget pattern for it). Indeterminate bars omit <code>aria-valuenow</code>. Use <code>aria-valuetext</code> when a number alone is unclear: “Step 2 of 4: your church”, “40%, about 2 minutes left”. Mark the region being filled with <code>aria-busy="true"</code> until it is done. A native <code>&lt;progress&gt;</code> works too, but can’t carry the ink edge in every browser.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Not focusable. Focus stays on the control that started the task, or on Cancel or Resume next to the bar.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Never move focus to the bar. When the task finishes, keep focus where it is and announce the result; if the bar is replaced by new content, move focus to that content’s heading only when the booker asked for it (pressed Upload).</p>
+      <h3>Labelling</h3>
+      <p>Label the bar with its visible head through <code>aria-labelledby</code>, or with <code>aria-label</code> when there is no visible label. Screen readers don’t announce every value change, and they shouldn’t: put milestones (“Upload complete”, “Upload stopped at 62%”) in a <code>role="status"</code> region.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Label and value</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Track rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="light"><span>Light: leading edge on the empty track</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Success fill</span><span class="ds-pair__ratio" data-contrast="--color-success-solid|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Danger fill</span><span class="ds-pair__ratio" data-contrast="--color-danger-solid|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: yellow fill on the track</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: track rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: success fill</span><span class="ds-pair__ratio" data-contrast="--color-success-solid|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <p>On light paper the yellow fill alone is too pale to count as a graphic (WCAG 1.4.11), so the ink leading edge and the printed value carry the meaning. In the dark theme it is the other way round: the yellow fill stands out from the charcoal track and the ink edge is decorative.</p>
+      <h3>Motion</h3>
+      <p>The fill eases to each new width over <code>--duration-slow</code>. The indeterminate block slides across the track every 1.4 seconds. Under <code>prefers-reduced-motion</code> the width changes instantly, and the indeterminate bar stops sliding and shows a full, half-opacity fill instead.</p>
+      <h3>Touch</h3>
+      <p>Not a target. Controls beside it (Cancel, Resume upload) follow the button sizes and sit at least 8px away.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Label with a present-tense verb and the object: “Uploading ‘Goodness of God’”, “Processing video”, “Sending request to Abigail”.</li>
+        <li>Value: a whole percentage (“40%”), or steps (“2 of 4”). Add time left only when you can estimate it honestly (“about 2 minutes left”).</li>
+        <li>When done, say what is ready: “Uploaded · ready to publish”. When failed, say what is kept: “The first 62% is kept.”</li>
+        <li>Indeterminate labels set expectations: “Processing video · up to 5 min”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="progress"><div class="progress__head"><span>Uploading “Goodness of God”</span><span class="progress__value">40%</span></div><div class="progress__track" role="progressbar" aria-label="Do: labelled upload" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 40%;"></div></div></div></div><figcaption>Name the task and show the number. The ink edge marks where the fill stops.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="progress__track"><div class="progress__bar" style="--progress: 40%; border-right: 0;"></div></div></div><figcaption>A bare yellow bar with no label, no value and no ink edge: on paper it is barely visible and says nothing to a screen reader.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster"><button class="btn btn--primary" type="button" aria-busy="true">Checking calendars…</button></div></div><figcaption>A short search with no measurable end uses the busy button, as the loading mock does.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="progress progress--indeterminate"><div class="progress__head"><span>Checking calendars</span></div><div class="progress__track" role="progressbar" aria-label="Don't: progress bar for a short search" aria-valuetext="Checking"><div class="progress__bar"></div></div></div></div><figcaption>A progress bar for a two-second search draws more attention than the wait deserves.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Fill</td><td><code>--progress-fill</code> → <code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Fill, success</td><td><code>--color-success-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-solid" data-swatch></i><span data-token="--color-success-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-solid" data-swatch></i><span data-token="--color-success-solid"></span></span></td></tr>
+          <tr><td>Fill, danger</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+          <tr><td>Leading edge</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Track fill / rule</td><td><code>--color-bg-surface</code> / <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Track height</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr>
+          <tr><td>Rules</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Head</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--text-overline"></span></td></tr>
+          <tr><td>Fill transition</td><td><code>--duration-slow</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-slow"></span></td></tr>
+          <tr><td>Indeterminate cycle</td><td><code>--duration-loop</code> × 1.6</td><td colspan="2"><span data-token="--duration-loop"></span> × 1.6</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section aria-labelledby="videos-title" aria-busy="true"&gt;
+  …
+  &lt;div class="progress"&gt;
+    &lt;div class="progress__head"&gt;
+      &lt;span id="upload-label"&gt;Uploading “Goodness of God” · live&lt;/span&gt;
+      &lt;span class="progress__value"&gt;40%&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="progress__track" role="progressbar" aria-labelledby="upload-label"
+         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"&gt;
+      &lt;div class="progress__bar" style="--progress: 40%;"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;p class="visually-hidden" role="status"&gt;&lt;/p&gt; &lt;!-- "Upload complete" goes here --&gt;
+&lt;/section&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.progress</code></td><td>Wrapper: head above, track below, 4px apart.</td></tr>
+        <tr><td><code>.progress__head</code> <code>.progress__value</code></td><td>Label row; value in tabular figures on the right.</td></tr>
+        <tr><td><code>.progress__track</code> + <code>role="progressbar"</code></td><td>Ruled 12px track; the accessible progress bar.</td></tr>
+        <tr><td><code>.progress__bar</code> + <code>style="--progress: N%"</code></td><td>The fill and its width.</td></tr>
+        <tr><td><code>.progress--indeterminate</code></td><td>Sliding block; omit <code>aria-valuenow</code>.</td></tr>
+        <tr><td><code>.progress--success</code> <code>.progress--danger</code></td><td>Recolours the fill when the task ends.</td></tr>
+        <tr><td><code>aria-valuenow/min/max</code>, <code>aria-valuetext</code></td><td>Value for assistive tech; text for steps or time left.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The closest mock is <a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, where a short search uses a busy button and a <code>role="status"</code> line instead (correctly: there is no measurable end). The product will need progress bars for:</p>
+      <ul>
+        <li>Artists uploading live videos to their profile (the “Watch her lead” section on <a href="../../mocks/pages/artist/default.html">pages/artist/default</a>, and Miriam’s first upload after <a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>).</li>
+        <li>The multi-step booking request that follows “Request to book · Sat 14 Nov” in the stub.</li>
+      </ul>
+      <p>Drift fixed during extraction: none, because no mock uses it. The yellow fill was given an ink leading edge from the start so it passes non-text contrast on paper.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

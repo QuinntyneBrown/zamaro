@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Save toggle — Zamaro design system</title>
+<meta name="description" content="The round heart on every ticket that adds an artist to the booker’s saved list. A toggle button with aria-pressed, a changing label, busy and disabled states.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Actions</p>
+      <h1>Save toggle</h1>
+      <p class="ds-lead">The round heart on a ticket saves an artist to Naomi’s shortlist. One press saves, another removes, and the yellow fill shows which artists are saved.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Toggle <code>aria-pressed</code></span><span class="ds-pill">Class <code>.save</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use the save toggle on tickets and on the headliner, where there is room for a 44px circle but not for a label. It adds the artist to the booker’s saved list and bumps the count on the top bar’s “Saved” button.</p>
+      <ul>
+        <li><b>Off</b>: a paper circle with an outlined heart. Pressing it saves the artist.</li>
+        <li><b>On</b>: a yellow circle with a filled heart. Pressing it removes the artist from saved.</li>
+      </ul>
+      <p>On the artist profile there is room for words, so the same action is a labelled toggle button, “Save” / “Saved”: see <a href="button.html#variants">Button</a>. Do not use the save toggle for anything but saving artists; the heart means one thing across Zamaro.</p>
+      <p>Saving is instant and reversible, so it never asks for confirmation. A polite <a href="toast.html">toast</a> confirms it (“Saved Luz Viva”, with Undo), and the top-bar count updates.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="cluster cluster--lg">
+            <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+            <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          </div>
+          <span class="ds-callout" style="left: calc(50% - 4.75rem); top: calc(50% - 2.25rem);" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: calc(50% - 2.75rem); top: calc(50% + 1rem);" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: calc(50% + 2.5rem); top: calc(50% - 2.5rem);" aria-hidden="true">3</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Circle</b><small>44px (<code>--target-comfortable</code>), fully round, 2px rule. The one round control in a square system, so a save toggle is recognisable at a glance on every ticket.</small></div></li>
+          <li><div><b>Heart icon</b><small>20px stroke heart, <code>aria-hidden</code>. Outlined when off, filled when on.</small></div></li>
+          <li><div><b>Pressed fill</b><small>Butter yellow with an ink rule and an ink heart (<code>--color-accent</code>, <code>--color-fg-on-accent</code>). The same pressed look as the “Saved” button.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>There is one control with two values. What changes is where it sits.</p>
+      <h3>Off and on</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+  <div class="ds-example__caption"><span>The label says what pressing will do and names the artist: “Save Elijah Park to your saved artists”, “Remove Abigail Mensah from your saved artists”.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;&lt;/button&gt;</code></pre></details>
+</div>
+      <h3>In a ticket stub</h3>
+      <p>The ticket’s name link stretches over the whole card. The save toggle sits above that link (<code>z-index: var(--z-raised)</code>), so pressing the heart saves instead of opening the profile.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+    <ol class="lineup" role="list" aria-label="Example lineup" style="grid-template-columns: minmax(0, 1fr); max-width: 44rem;">
+      <li class="ticket">
+        <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+        <div class="ticket__body">
+          <span class="ticket__no">No. 05 · ★ 5.0</span>
+          <h3 class="ticket__name"><a href="#variants">Luz Viva</a></h3>
+          <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
+        </div>
+        <div class="ticket__stub">
+          <p class="ticket__price"><small>From</small>$900</p>
+          <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+        </div>
+      </li>
+    </ol>
+  </div>
+  <div class="ds-example__caption"><span>From the Discover lineup. On phones the stub runs along the bottom; from 640px it is a column on the right.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="lineup" role="list" aria-label="Example lineup" style="grid-template-columns: minmax(0, 1fr); max-width: 44rem;"&gt;
+  &lt;li class="ticket"&gt;
+    &lt;div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"&gt;&lt;/div&gt;
+    &lt;div class="ticket__body"&gt;
+      &lt;span class="ticket__no"&gt;No. 05 · ★ 5.0&lt;/span&gt;
+      &lt;h3 class="ticket__name"&gt;&lt;a href="#variants"&gt;Luz Viva&lt;/a&gt;&lt;/h3&gt;
+      &lt;p class="ticket__meta"&gt;Band · Spanish &amp;amp; English worship&lt;br&gt;North York · 63 km from you&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="ticket__stub"&gt;
+      &lt;p class="ticket__price"&gt;&lt;small&gt;From&lt;/small&gt;$900&lt;/p&gt;
+      &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+</div>
+      <h3>Next to the headliner’s actions</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <div class="cluster">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#variants">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>It comes last in the cluster, after the main link, so the tab order reads “profile, then save”.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="cluster"&gt;
+  &lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;
+  &lt;a class="btn btn--ink" href="#variants"&gt;See Abigail’s profile &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;&lt;/a&gt;
+  &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Try it</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists" data-save-demo data-artist="Elijah Park"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+          <p id="save-demo-status" role="status" class="text-muted">Press the heart to save Elijah Park.</p>
+        </div>
+        <div class="ds-example__caption"><span>The toggle flips at once, pulses while the request is out (<code>aria-busy</code>), then a status message confirms it. The product uses a toast for that message.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The save toggle has one size: a 44px circle, the comfortable touch target."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The save toggle has one size: a 44px circle, the comfortable touch target.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover, focus and active are forced with <code>data-state</code>. Busy and disabled use the real attributes.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Value</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Busy</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Off</th>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, hover example" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, focus example" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, active example" data-state="active"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-label="Save Elijah Park to your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" disabled aria-label="Save Elijah Park to your saved artists, disabled example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
+          <tr><th scope="row">On</th>
+            <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, hover example" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, focus example" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, active example" data-state="active"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Abigail Mensah from your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" disabled aria-label="Remove Abigail Mensah from your saved artists, disabled example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster cluster--lg"><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park, light theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah, light theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Hover, light theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Focus, light theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" disabled aria-label="Disabled, light theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div>
+        <div data-theme="dark"><div class="cluster cluster--lg"><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park, dark theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah, dark theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Hover, dark theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Focus, dark theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" disabled aria-label="Disabled, dark theme example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> grows the circle by 8% on the spring easing. It does not lift or cast a shadow, so it does not compete with the ticket’s own lift.</li>
+        <li><b>Active</b> squeezes it to 94%, like pressing a rubber stamp.</li>
+        <li><b>Busy</b> sets <code>aria-busy="true"</code> while the save is sent. The heart pulses and clicks are ignored. The value has already flipped (optimistic update); if the request fails, flip it back and show a danger toast: “Couldn’t save Luz Viva. Try again.”</li>
+        <li><b>Disabled</b> is rare: only while the lineup itself is loading. A signed-out visitor gets an enabled toggle that asks them to sign in.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The toggle is the same 44px at every width. It never shrinks inside a cramped stub.</li>
+        <li>In a ticket it moves with the stub: bottom-right on phones, bottom of the right-hand stub column from 640px (<code>--layout-breakpoint-sm</code>).</li>
+        <li>It keeps at least 8px from the price and from the ticket edge, so a thumb aimed at the heart does not open the profile.</li>
+        <li>Touch devices get no hover growth; the pressed fill is the only feedback they need.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The toggle has three component tokens: <code>--save-bg</code> (default <code>--color-bg-surface</code>), <code>--save-fg</code> (<code>--color-fg-default</code>) and <code>--save-border</code> (<code>--color-border-strong</code>). Pressed sets them to <code>--color-accent</code>, <code>--color-fg-on-accent</code> and <code>--color-border-on-accent</code>; disabled to <code>--color-bg-subtle</code> and <code>--color-fg-disabled</code>. A surface that needs a different look overrides the three tokens, not the rules.</p>
+<pre><code>.save { --save-bg: var(--color-bg-surface); --save-fg: var(--color-fg-default); --save-border: var(--color-border-strong); }
+.save[aria-pressed="true"] { --save-bg: var(--color-accent); --save-fg: var(--color-fg-on-accent); --save-border: var(--color-border-on-accent); }</code></pre>
+      <p>In dark mode the off toggle is a charcoal circle with a light rule. The pressed toggle keeps the butter yellow and the ink heart in both themes, so a saved artist looks the same on paper and on the stage.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;button type="button"&gt;</code> with <code>aria-pressed</code>, the toggle form of the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button pattern</a>. It is never a checkbox: saving is an action that takes effect at once, not a form value.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves to the toggle. On a ticket it comes after the artist’s name link.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Saves or removes the artist. Focus stays on the toggle.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The shared 3px ring with a 3px offset, ink on paper and yellow in dark mode. It follows the square outline box around the circle. When the toggle is inside a ticket, the ticket also lifts (<code>:focus-within</code>), which helps keyboard users see which artist they are on.</p>
+      <h3>Labelling</h3>
+      <p>The icon is <code>aria-hidden</code>, so the <code>aria-label</code> is the only name, and it must name the artist. The label changes with the value: “Save Elijah Park to your saved artists” when off, “Remove Abigail Mensah from your saved artists” when on. With <code>aria-pressed</code> a screen reader adds the state: “Remove Abigail Mensah from your saved artists, toggle button, pressed”. The APG prefers a label that stays the same when pressed; if usability testing shows the changing label confuses people, keep “Save Abigail Mensah” and let “pressed” carry the state. The result is announced politely by the toast (“Saved Luz Viva”), and the top-bar count’s label updates (“4 saved artists”).</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Circle rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Heart on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Heart on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair"><span>Pressed rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: circle rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: heart on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+      </div>
+      <p>The state never relies on colour alone: the heart is outlined when off and filled when on.</p>
+      <h3>Motion</h3>
+      <p>The grow and squeeze take <code>--duration-fast</code> on <code>--ease-spring</code>; the busy pulse loops on <code>--duration-loop</code>. Under <code>prefers-reduced-motion</code> the scale changes are instant. The pulse keeps running because it reports status, but it only fades opacity and never moves.</p>
+      <h3>Touch</h3>
+      <p>44 × 44px, the comfortable target. In a ticket stub it keeps 8px clear of the price and the card edge. Nothing depends on hover.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Off: “Save {artist} to your saved artists”. On: “Remove {artist} from your saved artists”. Use the artist’s full display name, with “and” for “&amp;” (“Daniel and Ruth Okonkwo”).</li>
+        <li>The confirmation toast is short and past tense: “Saved Luz Viva”, “Removed Luz Viva from saved”, with an Undo action.</li>
+        <li>Never add a visible label next to the circle. If the space allows a label, use the “Save” / “Saved” button instead.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>Every toggle names its artist, so a screen-reader list of buttons on the lineup is not seven identical “Save” buttons.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="true" aria-label="Save"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>A bare “Save”. Out of context, nobody can tell which artist it saves.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-label="Save Marcus Bell Trio to your saved artists, busy"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><figcaption>While saving, the toggle reports busy and ignores extra presses, so a double tap does not save and unsave.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists, confirm example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="text-caption">“Are you sure you want to save?”</span></div><figcaption>Asking for confirmation. Saving is instant and undoable; a toast with Undo is enough.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Fill (off)</td><td><code>--save-bg</code> → <code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Rule (off)</td><td><code>--save-border</code> → <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Heart (off)</td><td><code>--save-fg</code> → <code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Fill (on)</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Heart and rule (on)</td><td><code>--color-fg-on-accent</code> / <code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Disabled fill / heart</td><td><code>--color-bg-subtle</code> / <code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+          <tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+          <tr><td>Size</td><td><code>--target-comfortable</code>, <code>--radius-full</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+          <tr><td>Rule width</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Grow and squeeze</td><td><code>--duration-fast</code>, <code>--ease-spring</code></td><td colspan="2"><span data-token="--duration-fast"></span> · <span data-token="--ease-spring"></span></td></tr>
+          <tr><td>Busy pulse</td><td><code>--duration-loop</code></td><td colspan="2"><span data-token="--duration-loop"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- after a press: flipped at once, busy until the server confirms --&gt;
+&lt;button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Elijah Park from your saved artists"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.save</code></td><td>The round 44px toggle.</td></tr>
+        <tr><td><code>aria-pressed="true|false"</code></td><td>On = yellow fill, filled heart. Always present.</td></tr>
+        <tr><td><code>aria-label</code></td><td>Required. Names the action and the artist; changes with the value.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>Saving: heart pulses, clicks ignored.</td></tr>
+        <tr><td><code>disabled</code></td><td>Greyed and not focusable. Only while the lineup loads.</td></tr>
+        <tr><td><code>.ticket .save</code></td><td>Raised above the ticket’s stretched name link.</td></tr>
+        <tr><td><code>data-state="hover|focus|active"</code></td><td>Documentation and mocks only: forces the state.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: a save toggle on every ticket stub and on the headliner, three of them pressed (Abigail Mensah, Hosanna Collective, Luz Viva), and the mock note that promises a “Saved Luz Viva” toast</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: the lineup while it loads, when toggles cannot act yet</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the labelled “Saved” toggle button the circle stands in for on tickets</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The mock note promised a “Saved Luz Viva” toast, but no toast existed and the toast region sat high to clear the mock bar. There is now a <a href="toast.html">toast</a> component, and the region sits at <code>--space-6</code>.</li>
+        <li>The profile’s <code>aria-pressed="true"</code> “Saved” button had no pressed style. It now matches the circle: yellow fill, filled heart.</li>
+        <li>Busy and disabled states did not exist in the mocks. They were added so a double tap cannot save and unsave, and so the toggle is inert while the lineup loads.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>/* Live demo of the save toggle for this page only: optimistic flip, busy while "saving", polite announcement. */
+document.querySelectorAll('[data-save-demo]').forEach(function (button) {
+  var name = button.getAttribute('data-artist');
+  var status = document.getElementById('save-demo-status');
+  button.addEventListener('click', function () {
+    var on = button.getAttribute('aria-pressed') !== 'true';
+    button.setAttribute('aria-pressed', on ? 'true' : 'false');
+    button.setAttribute('aria-label', on ? 'Remove ' + name + ' from your saved artists' : 'Save ' + name + ' to your saved artists');
+    button.setAttribute('aria-busy', 'true');
+    setTimeout(function () {
+      button.removeAttribute('aria-busy');
+      if (status) status.textContent = on ? 'Saved ' + name : 'Removed ' + name + ' from saved';
+    }, 700);
+  });
+});</script>
+</body>
+</html>

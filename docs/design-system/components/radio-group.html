@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radio group — Zamaro design system</title>
+<meta name="description" content="One choice from a few visible options: native radios stacked or inline, and choice cards for “Kind of gathering”. Round dots by convention, the one deliberate exception to the square system.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Radio group</h1>
+      <p class="ds-lead">A radio group asks for exactly one answer and shows every option: what sound the church has, or what kind of gathering it is. Pick one and the others let go.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;input type="radio"&gt;</code></span><span class="ds-pill">Classes <code>.radio</code> <code>.choice-card</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a radio group when Naomi must pick exactly one of two to six options and seeing them side by side helps her choose. With more options, or options that need no comparison, use a <a href="select.html">select</a>. For yes/no settings use a <a href="switch.html">switch</a> or a single <a href="checkbox.html">checkbox</a>.</p>
+      <ul>
+        <li><b>Vertical</b> (<code>.choice-group</code>): the default. Options can carry a one-line description.</li>
+        <li><b>Inline</b> (<code>.choice-group--inline</code>): two to four one- or two-word options.</li>
+        <li><b>Choice cards</b> (<code>.choice-card</code>): bigger targets with a title and a detail line, for a choice that shapes the rest of the form, like “Kind of gathering” at the start of a request.</li>
+      </ul>
+      <p><b>Radios are round.</b> Everything else in Zamaro is square, but a round dot is how people everywhere recognise “pick one”, and a square radio reads as a checkbox. This is a deliberate exception, shared only with the <a href="save-toggle.html">save toggle</a>, the <a href="switch.html">switch</a> track and the <a href="avatar.html">avatar</a>.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <fieldset class="choice-group">
+            <legend>Sound at your church</legend>
+            <label class="radio"><input type="radio" name="ana-sound" checked><span class="radio__dot"></span><span class="radio__text">Sound system and a technician<span class="radio__desc">Abigail plugs in and sings.</span></span></label>
+            <label class="radio"><input type="radio" name="ana-sound"><span class="radio__dot"></span><span class="radio__text">No sound system</span></label>
+          </fieldset>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.25rem)); top: 2.2rem;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.25rem)); top: 4.5rem;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: min(calc(50% + 9.25rem), calc(100% - 2rem)); top: 4.2rem;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: min(calc(50% + 9.25rem), calc(100% - 2rem)); top: 5.9rem;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Legend</b><small>The question, as a stamped overline. It names the group and is read before each option.</small></div></li>
+          <li><div><b>Dot</b><small>24px circle, 2px charcoal rule. Selected: yellow fill, ink rule, 10px ink centre.</small></div></li>
+          <li><div><b>Label</b><small>Body text; the whole row is the target.</small></div></li>
+          <li><div><b>Description (optional)</b><small>Body small, muted. One sentence.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Vertical, with descriptions</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <fieldset class="choice-group">
+      <legend>Sound at your church</legend>
+      <label class="radio">
+        <input type="radio" name="sound" value="full" checked>
+        <span class="radio__dot"></span>
+        <span class="radio__text">Sound system and a technician<span class="radio__desc">The artist plugs in and sings.</span></span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="sound" value="system">
+        <span class="radio__dot"></span>
+        <span class="radio__text">Sound system, no technician<span class="radio__desc">The artist runs their own levels.</span></span>
+      </label>
+      <label class="radio">
+        <input type="radio" name="sound" value="none">
+        <span class="radio__dot"></span>
+        <span class="radio__text">No sound system<span class="radio__desc">The artist brings a small PA, if they have one.</span></span>
+      </label>
+    </fieldset>
+  </div>
+  <div class="ds-example__caption"><span>All radios share a <code>name</code>, which makes them one group for the browser and for arrow keys.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;Sound at your church&lt;/legend&gt;
+  &lt;label class="radio"&gt;
+    &lt;input type="radio" name="sound" value="full" checked&gt;
+    &lt;span class="radio__dot"&gt;&lt;/span&gt;
+    &lt;span class="radio__text"&gt;Sound system and a technician&lt;span class="radio__desc"&gt;The artist plugs in and sings.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class="radio"&gt;
+    &lt;input type="radio" name="sound" value="system"&gt;
+    &lt;span class="radio__dot"&gt;&lt;/span&gt;
+    &lt;span class="radio__text"&gt;Sound system, no technician&lt;span class="radio__desc"&gt;The artist runs their own levels.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class="radio"&gt;
+    &lt;input type="radio" name="sound" value="none"&gt;
+    &lt;span class="radio__dot"&gt;&lt;/span&gt;
+    &lt;span class="radio__text"&gt;No sound system&lt;span class="radio__desc"&gt;The artist brings a small PA, if they have one.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/fieldset&gt;</code></pre></details>
+</div>
+      <h3>Inline</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <fieldset class="choice-group choice-group--inline">
+      <legend>Indoors or outdoors?</legend>
+      <label class="radio"><input type="radio" name="venue" value="in" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label>
+      <label class="radio"><input type="radio" name="venue" value="out"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label>
+    </fieldset>
+  </div>
+  <div class="ds-example__caption"><span>Short options in a row that wraps on phones. 24px between options so each label clearly belongs to its own dot.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group choice-group--inline"&gt;
+  &lt;legend&gt;Indoors or outdoors?&lt;/legend&gt;
+  &lt;label class="radio"&gt;&lt;input type="radio" name="venue" value="in" checked&gt;&lt;span class="radio__dot"&gt;&lt;/span&gt;&lt;span class="radio__text"&gt;Indoors&lt;/span&gt;&lt;/label&gt;
+  &lt;label class="radio"&gt;&lt;input type="radio" name="venue" value="out"&gt;&lt;span class="radio__dot"&gt;&lt;/span&gt;&lt;span class="radio__text"&gt;Outdoors&lt;/span&gt;&lt;/label&gt;
+&lt;/fieldset&gt;</code></pre></details>
+</div>
+      <h3>Choice cards: kind of gathering</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--block">
+    <fieldset class="choice-group">
+      <legend>Kind of gathering</legend>
+      <div class="grid grid--cards">
+        <label class="choice-card">
+          <input type="radio" name="kind" value="sunday" checked>
+          <span class="stack stack--sm"><span class="choice-card__title">Sunday service</span><span class="choice-card__meta">Three or four songs · about 25 min</span></span>
+        </label>
+        <label class="choice-card">
+          <input type="radio" name="kind" value="night">
+          <span class="stack stack--sm"><span class="choice-card__title">Worship night</span><span class="choice-card__meta">A full set · 60 to 90 min</span></span>
+        </label>
+        <label class="choice-card">
+          <input type="radio" name="kind" value="youth">
+          <span class="stack stack--sm"><span class="choice-card__title">Youth event</span><span class="choice-card__meta">Loud and short · about 45 min</span></span>
+        </label>
+        <label class="choice-card">
+          <input type="radio" name="kind" value="memorial">
+          <span class="stack stack--sm"><span class="choice-card__title">Funeral or memorial</span><span class="choice-card__meta">Hymns and quiet songs · on short notice</span></span>
+        </label>
+      </div>
+    </fieldset>
+  </div>
+  <div class="ds-example__caption"><span>The card is the label. Selected: ink frame doubled on the inside and a subtle yellow fill. Hover lifts the card like a ticket.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;Kind of gathering&lt;/legend&gt;
+  &lt;div class="grid grid--cards"&gt;
+    &lt;label class="choice-card"&gt;
+      &lt;input type="radio" name="kind" value="sunday" checked&gt;
+      &lt;span class="stack stack--sm"&gt;&lt;span class="choice-card__title"&gt;Sunday service&lt;/span&gt;&lt;span class="choice-card__meta"&gt;Three or four songs · about 25 min&lt;/span&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class="choice-card"&gt;
+      &lt;input type="radio" name="kind" value="night"&gt;
+      &lt;span class="stack stack--sm"&gt;&lt;span class="choice-card__title"&gt;Worship night&lt;/span&gt;&lt;span class="choice-card__meta"&gt;A full set · 60 to 90 min&lt;/span&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class="choice-card"&gt;
+      &lt;input type="radio" name="kind" value="youth"&gt;
+      &lt;span class="stack stack--sm"&gt;&lt;span class="choice-card__title"&gt;Youth event&lt;/span&gt;&lt;span class="choice-card__meta"&gt;Loud and short · about 45 min&lt;/span&gt;&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class="choice-card"&gt;
+      &lt;input type="radio" name="kind" value="memorial"&gt;
+      &lt;span class="stack stack--sm"&gt;&lt;span class="choice-card__title"&gt;Funeral or memorial&lt;/span&gt;&lt;span class="choice-card__meta"&gt;Hymns and quiet songs · on short notice&lt;/span&gt;&lt;/span&gt;
+    &lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Radios have one size (a 24px dot). Choice cards size to their grid column."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Radios have one size (a 24px dot). Choice cards size to their grid column.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover and focus are forced with <code>data-state</code> on the label. Forced focus on a <code>.radio</code> row sets <code>outline: none</code> inline, so only the dot shows the ring, as it does in the product.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Value</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Radio, off</th>
+            <td><label class="radio"><input type="radio" name="m1"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label></td>
+            <td><label class="radio" data-state="hover"><input type="radio" name="m2"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label></td>
+            <td><label class="radio" data-state="focus" style="outline: none;"><input type="radio" name="m3"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label></td>
+            <td><label class="radio"><input type="radio" name="m4" aria-invalid="true"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label></td>
+            <td><label class="radio"><input type="radio" name="m5" disabled><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label></td></tr>
+          <tr><th scope="row">Radio, on</th>
+            <td><label class="radio"><input type="radio" name="m6" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label></td>
+            <td><label class="radio" data-state="hover"><input type="radio" name="m7" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label></td>
+            <td><label class="radio" data-state="focus" style="outline: none;"><input type="radio" name="m8" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label></td>
+            <td><label class="radio"><input type="radio" name="m9" checked aria-invalid="true"><span class="radio__dot"></span><span class="radio__text">Indoors</span></label></td>
+            <td><label class="radio"><input type="radio" name="m10" checked disabled><span class="radio__dot"></span><span class="radio__text">Indoors</span></label></td></tr>
+          <tr><th scope="row">Card, off</th>
+            <td><label class="choice-card" style="width: 9rem;"><input type="radio" name="m11"><span class="choice-card__title">Wedding</span></label></td>
+            <td><label class="choice-card" style="width: 9rem;" data-state="hover"><input type="radio" name="m12"><span class="choice-card__title">Wedding</span></label></td>
+            <td><label class="choice-card" style="width: 9rem;" data-state="focus"><input type="radio" name="m13"><span class="choice-card__title">Wedding</span></label></td>
+            <td><label class="choice-card" style="width: 9rem; --choice-border: var(--color-danger-border);"><input type="radio" name="m14" aria-invalid="true"><span class="choice-card__title">Wedding</span></label></td>
+            <td><label class="choice-card" style="width: 9rem; --choice-border: var(--color-fg-disabled); background: var(--color-bg-subtle); color: var(--color-fg-disabled); cursor: not-allowed;"><input type="radio" name="m15" disabled><span class="choice-card__title">Wedding</span></label></td></tr>
+          <tr><th scope="row">Card, on</th>
+            <td><label class="choice-card" style="width: 9rem;"><input type="radio" name="m16" checked><span class="choice-card__title">Sunday</span></label></td>
+            <td><label class="choice-card" style="width: 9rem;" data-state="hover"><input type="radio" name="m17" checked><span class="choice-card__title">Sunday</span></label></td>
+            <td><label class="choice-card" style="width: 9rem;" data-state="focus"><input type="radio" name="m18" checked><span class="choice-card__title">Sunday</span></label></td>
+            <td><span class="text-caption">Not invalid once chosen</span></td>
+            <td><label class="choice-card" style="width: 9rem; color: var(--color-fg-disabled); cursor: not-allowed;"><input type="radio" name="m20" checked disabled><span class="choice-card__title">Sunday</span></label></td></tr>
+        </tbody>
+      </table></div>
+      <p>Choice cards have no invalid or disabled style in <code>components.css</code> yet; those cells use token inline styles to show the intended look.</p>
+      <h3>Nothing chosen, required</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <fieldset class="choice-group" aria-describedby="venue-err">
+      <legend>Indoors or outdoors?</legend>
+      <div class="choice-group choice-group--inline">
+        <label class="radio"><input type="radio" name="venue-err" value="in" aria-invalid="true" required><span class="radio__dot"></span><span class="radio__text">Indoors</span></label>
+        <label class="radio"><input type="radio" name="venue-err" value="out" aria-invalid="true"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label>
+      </div>
+      <p class="field__error" id="venue-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Choose indoors or outdoors so the artist can plan for sound.</p>
+    </fieldset>
+  </div>
+  <div class="ds-example__caption"><span>Every radio in the group gets <code>aria-invalid</code>; the fieldset is described by the error.</span></div>
+</div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack">
+          <div class="choice-group">
+            <label class="radio"><input type="radio" name="tl-1" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label>
+            <label class="radio" data-state="hover"><input type="radio" name="tl-1"><span class="radio__dot"></span><span class="radio__text">Outdoors (hover)</span></label>
+            <label class="radio" data-state="focus" style="outline: none;"><input type="radio" name="tl-2"><span class="radio__dot"></span><span class="radio__text">Tent (focus)</span></label>
+          </div>
+          <label class="choice-card"><input type="radio" name="tl-3" checked><span class="stack stack--sm"><span class="choice-card__title">Sunday service</span><span class="choice-card__meta">Three or four songs</span></span></label>
+          <label class="choice-card"><input type="radio" name="tl-3"><span class="stack stack--sm"><span class="choice-card__title">Worship night</span><span class="choice-card__meta">A full set</span></span></label>
+        </div></div>
+        <div data-theme="dark"><div class="stack">
+          <div class="choice-group">
+            <label class="radio"><input type="radio" name="td-1" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label>
+            <label class="radio" data-state="hover"><input type="radio" name="td-1"><span class="radio__dot"></span><span class="radio__text">Outdoors (hover)</span></label>
+            <label class="radio" data-state="focus" style="outline: none;"><input type="radio" name="td-2"><span class="radio__dot"></span><span class="radio__text">Tent (focus)</span></label>
+          </div>
+          <label class="choice-card"><input type="radio" name="td-3" checked><span class="stack stack--sm"><span class="choice-card__title">Sunday service</span><span class="choice-card__meta">Three or four songs</span></span></label>
+          <label class="choice-card"><input type="radio" name="td-3"><span class="stack stack--sm"><span class="choice-card__title">Worship night</span><span class="choice-card__meta">A full set</span></span></label>
+        </div></div>
+      </div>
+      <p><b>Known issue in dark mode:</b> the selected choice card’s frame uses <code>--color-border-on-accent</code> (ink), which nearly disappears on the dark surface (about 1.2:1), and its amber fill is also close to the surface. Until it is fixed, the selected card in dark mode relies on its fill alone. See <a href="#theming">Theming</a> for the proposed token.</p>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Vertical groups are the same at every width. Inline groups wrap; if they wrap at 360px, make them vertical.</li>
+        <li>Choice cards sit in <code>.grid--cards</code>: one column on phones, as many 18rem columns as fit above that.</li>
+        <li>Card titles wrap; keep them to two or three words so a row of cards has even heights.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The dot shares the checkbox’s component tokens: <code>--control-bg</code>, <code>--control-border</code> and <code>--control-fg</code>. Selected sets <code>--control-bg</code> to <code>--color-accent</code> and the border to <code>--color-border-on-accent</code>; the centre is <code>currentColor</code> of the dot, ink on yellow in both themes.</p>
+      <p>Choice cards have one component token, <code>--choice-border</code> (<code>--color-border-strong</code>), set to <code>--color-border-on-accent</code> when selected, plus a <code>--color-accent-subtle</code> fill. In dark mode both are too close to the charcoal surface. Proposed fix: a theme-aware <code>--color-border-selected</code> token (ink <code>--palette-ink-750</code> on paper, yellow <code>--palette-signal-500</code> on the stage) used for <code>--choice-border</code> and the inset ring of selected cards.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;input type="radio"&gt;</code> with a shared <code>name</code>, in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>. This gives the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">APG Radio Group pattern</a> without ARIA. Choice cards are the same radios with a larger label.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves into the group (to the selected radio, or the first if none) and out of it. The group is one tab stop.</td></tr>
+        <tr><td><kbd>↓</kbd> / <kbd>→</kbd></td><td>Selects the next radio, wrapping to the first.</td></tr>
+        <tr><td><kbd>↑</kbd> / <kbd>←</kbd></td><td>Selects the previous radio, wrapping to the last.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Selects the focused radio when none is selected yet.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The ring is drawn on the dot (<code>input:focus-visible + .radio__dot</code>), and around the whole card for choice cards (<code>.choice-card:has(&gt; input:focus-visible)</code>). Arrow keys move focus and selection together, so the ring always sits on the selected option.</p>
+      <h3>Labelling</h3>
+      <p>The legend names the group; each label names its option. Descriptions are inside the label and part of the name. A group-level error is linked from the fieldset with <code>aria-describedby</code>, and every radio gets <code>aria-invalid</code>. Do not put <code>required</code> on more than the first radio; the browser treats the group as one.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Dot rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Selected centre on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair"><span>Card title on selected fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Card detail on selected fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected card frame</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: dot rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: card detail on selected fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: selected card frame (known issue)</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The dot fills over <code>--duration-fast</code>. Cards lift on hover over <code>--duration-fast</code>; under reduced motion both are instant.</p>
+      <h3>Touch</h3>
+      <p>Each row is a full-width label, at least 24px tall and 12px from the next. The whole choice card is the target. Inline options are 24px apart.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>The legend asks the question: “Indoors or outdoors?”, “Kind of gathering”.</li>
+        <li>Options are parallel and mutually exclusive. If two could both be true, it is a checkbox group.</li>
+        <li>Pre-select the most common answer when it is safe (Sunday service). Leave the group empty when a guess could cost the church money.</li>
+        <li>Card detail lines use a middle dot: “Three or four songs · about 25 min”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><fieldset class="choice-group choice-group--inline"><legend>Indoors or outdoors?</legend><label class="radio"><input type="radio" name="dd-r1" checked><span class="radio__dot"></span><span class="radio__text">Indoors</span></label><label class="radio"><input type="radio" name="dd-r1"><span class="radio__dot"></span><span class="radio__text">Outdoors</span></label></fieldset></div><figcaption>Round dots for one-of-many, as people expect.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><fieldset class="choice-group choice-group--inline"><legend>Indoors or outdoors?</legend><label class="check"><input type="radio" name="dd-r2" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Indoors</span></label><label class="check"><input type="radio" name="dd-r2"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Outdoors</span></label></fieldset></div><figcaption>Square “radios” to match the poster style. They read as checkboxes, so people try to tick both.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><label class="choice-card"><input type="radio" name="dd-r3" checked><span class="stack stack--sm"><span class="choice-card__title">Sunday service</span><span class="choice-card__meta">Three or four songs · about 25 min</span></span></label></div><figcaption>A choice card when the option needs a title and a detail.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="cluster"><button class="btn" type="button" aria-pressed="true">Sunday</button><button class="btn" type="button" aria-pressed="false">Worship night</button></div></div><figcaption>Toggle buttons as a form value. They are not a group for screen readers and do not submit with the form.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Dot fill / rule</td><td><code>--control-bg</code>, <code>--control-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Selected dot fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Selected centre and rule</td><td><code>--color-fg-on-accent</code> / <code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Hover fill</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Card frame</td><td><code>--choice-border</code> → <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Card selected fill</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Card hover</td><td><code>--shadow-1</code>, <code>--transform-lift</code></td><td><span data-theme="light" data-token="--shadow-1"></span></td><td><span data-theme="dark" data-token="--shadow-1"></span></td></tr>
+          <tr><td>Invalid rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Dot size / radius</td><td><code>--target-min</code>, <code>--radius-full</code></td><td colspan="2"><span data-token="--target-min"></span></td></tr>
+          <tr><td>Card padding / title</td><td><code>--space-4</code>, <code>--text-h4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr>
+          <tr><td>Inline gap</td><td><code>--space-3</code> × <code>--space-6</code></td><td colspan="2"><span data-token="--space-3"></span> × <span data-token="--space-6"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;Kind of gathering&lt;/legend&gt;
+  &lt;div class="grid grid--cards"&gt;
+    &lt;label class="choice-card"&gt;
+      &lt;input type="radio" name="kind" value="sunday" checked&gt;
+      &lt;span class="stack stack--sm"&gt;
+        &lt;span class="choice-card__title"&gt;Sunday service&lt;/span&gt;
+        &lt;span class="choice-card__meta"&gt;Three or four songs · about 25 min&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/label&gt;
+    &lt;!-- … --&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;
+
+&lt;label class="radio"&gt;
+  &lt;input type="radio" name="venue" value="in" checked&gt;
+  &lt;span class="radio__dot"&gt;&lt;/span&gt;
+  &lt;span class="radio__text"&gt;Indoors&lt;/span&gt;
+&lt;/label&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.radio</code>, <code>.radio__dot</code>, <code>.radio__text</code>, <code>.radio__desc</code></td><td>Row with a hidden input, the drawn dot, label and description.</td></tr>
+        <tr><td><code>.choice-group</code> / <code>--inline</code></td><td>Reset fieldset, stacked or in a wrapping row.</td></tr>
+        <tr><td><code>.choice-card</code>, <code>__title</code>, <code>__meta</code></td><td>Card-sized radio label; selected via <code>:has(&gt; input:checked)</code>.</td></tr>
+        <tr><td><code>checked</code>, <code>disabled</code>, <code>aria-invalid</code></td><td>Native state; invalid red rule on dots.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The mocks ask “Kind of gathering” with a select in the booking bar and stub; the full booking request will use choice cards for it, and radios for sound and venue questions.</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Kind of gathering” as a select in the booking bar, with the six options the cards come from</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the same question in the stub</li>
+      </ul>
+      <p>Drift fixed during extraction: none in the mocks. Found while documenting: choice cards have no disabled or invalid style, and the selected card frame fails contrast in dark mode. Both are listed above with proposed fixes.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

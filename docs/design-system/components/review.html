@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review — Zamaro design system</title>
+<meta name="description" content="A review is a church’s words about an artist: a figure with a quote, a yellow quote mark, star rating with a text alternative, and who said it, in a two-up grid.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: ds.css adds space between every li in a section; the review grid uses gap instead. */
+.ds-section .reviews > li + li { margin-top: 0; }
+.ds-matrix .review { min-width: 15rem; max-width: 18rem; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Review</h1>
+      <p class="ds-lead">A review is what a church said after the service, in its own words: a quote under a yellow quote mark, the stars, and who said it.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;figure&gt;</code> + <code>&lt;blockquote&gt;</code></span><span class="ds-pill">Classes <code>.reviews</code> <code>.review</code> <code>.stars</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use reviews in the “What churches say” section of an artist profile, in a <code>.reviews</code> grid, newest first. Each review is one church’s experience with that artist, written after a completed booking.</p>
+      <ul>
+        <li>For the overall score (“★ 4.9 · 38 reviews”), use the <a href="rating.html">rating</a> component in the section head.</li>
+        <li>For a single pull quote inside another component, such as the <a href="headliner.html">headliner</a>, use a plain paragraph with the reviewer muted after a dash, not a full review card.</li>
+        <li>When there are no reviews yet, keep the section and show a quiet <a href="empty-state.html">empty state</a>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure ds-example__canvas--canvas">
+          <figure class="review" style="width: 100%; max-width: 26rem;"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure>
+          <span class="ds-callout" style="left: 6%; top: 16%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 6%; top: 38%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 6%; top: 64%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 6%; top: 73%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 6%; top: 82%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 92%; top: 10%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Quote mark</b><small>A “ on a yellow block, drawn by <code>blockquote::before</code> in <code>--text-figure-lg</code>.</small></div></li>
+          <li><div><b>Quote</b><small><code>&lt;blockquote&gt;&lt;p&gt;</code> in <code>--text-body-lg</code>. Titles of songs in <code>&lt;em&gt;</code>.</small></div></li>
+          <li><div><b>Stars</b><small><code>.stars</code>: five characters in the stub font, <code>role="img"</code> with “5 out of 5 stars”.</small></div></li>
+          <li><div><b>Reviewer</b><small>Name in the stub font, uppercase from CSS.</small></div></li>
+          <li><div><b>Church and date</b><small>A <code>&lt;span&gt;</code> in the caption: church, town · month and year, muted, sentence case.</small></div></li>
+          <li><div><b>Card</b><small>Paper surface, 2px charcoal frame, 24px padding, 16px between parts.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Review grid</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ul class="reviews" role="list">
+            <li><figure class="review"><blockquote><p>She had the whole congregation singing <em>Great Is Thy Faithfulness</em> in three-part harmony by the last verse.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Rev. Janet Clarke<span>St. Brendan’s Anglican, Oshawa · September 2026</span></figcaption></figure></li>
+            <li><figure class="review"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure></li>
+            <li><figure class="review"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure></li>
+            <li><figure class="review"><blockquote><p>Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>One column on phones, two from 768px. Cards in a row stretch to the same height.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="reviews" role="list"&gt;
+  &lt;li&gt;
+    &lt;figure class="review"&gt;
+      &lt;blockquote&gt;&lt;p&gt;She had the whole congregation singing &lt;em&gt;Great Is Thy Faithfulness&lt;/em&gt; in three-part harmony by the last verse.&lt;/p&gt;&lt;/blockquote&gt;
+      &lt;figcaption&gt;
+        &lt;span class="stars" role="img" aria-label="5 out of 5 stars"&gt;★★★★★&lt;/span&gt;Rev. Janet Clarke
+        &lt;span&gt;St. Brendan’s Anglican, Oshawa · September 2026&lt;/span&gt;
+      &lt;/figcaption&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+  …
+&lt;/ul&gt;</code></pre></details>
+      </div>
+      <h3>Single review</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+          <figure class="review" style="max-width: 28rem;"><blockquote><p>Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Naomi Fraser<span>Riverside Community Church, Burlington · June 2026</span></figcaption></figure>
+        </div>
+        <div class="ds-example__caption"><span>One review on its own, for example the most recent one under a booking confirmation. Keep it on the page canvas or a paper surface: <code>.review</code> sets no text colour, so on the stage it would inherit paper-coloured text on its paper card.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Reviews have one size; the grid sets their width. Keep quotes short instead of shrinking the type."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Reviews have one size; the grid sets their width. Keep quotes short instead of shrinking the type.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>A review is static text with no interactive parts, so it has no hover, focus or disabled state. It changes with its data and the list’s loading state.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Lower rating</th><th scope="col">Loading</th><th scope="col">No reviews yet</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Review</th>
+            <td><figure class="review"><blockquote><p>She made our volunteers sound like pros.</p></blockquote><figcaption><span class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</span>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure></td>
+            <td><figure class="review"><blockquote><p>Gracious about our tiny sound desk.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></td>
+            <td><div class="review" aria-hidden="true"><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--text skeleton--long"></span><span class="skeleton skeleton--text skeleton--short"></span></div></td>
+            <td><div class="empty empty--quiet"><p class="empty__stamp">Opening night</p><p class="empty__title">No church reviews yet</p><p>Book Miriam and your church can be the first to say how it went.</p></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><figure class="review"><blockquote><p>Wonderful voice and a real pastor’s heart.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></div>
+        <div data-theme="dark"><figure class="review"><blockquote><p>Wonderful voice and a real pastor’s heart.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></div>
+      </div>
+      <ul>
+        <li><b>Lower rating</b>: empty stars are outline characters (☆), and the label says the number. There is no colour change: a 4-star review is not a warning.</li>
+        <li><b>Loading</b>: review-shaped skeleton cards, <code>aria-hidden</code>, while the section has <code>aria-busy="true"</code>.</li>
+        <li><b>No reviews yet</b>: the section stays, with a quiet empty state and a way to become the first booking.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><code>.reviews</code> is one column under <code>--layout-breakpoint-md</code> (768px) and two columns from 768px, 24px apart.</li>
+        <li>Cards in the same row stretch to the same height; the caption stays under the quote, not pinned to the bottom.</li>
+        <li>The church and date line wraps; the stars never wrap.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The card reads <code>--color-bg-surface</code>, <code>--color-border-strong</code> and <code>--color-fg-default</code>; the church and date line reads <code>--color-fg-muted</code>. The quote mark is a yellow fill (<code>--color-accent</code>) with ink type (<code>--color-fg-on-accent</code>) in both themes. The stars inherit the text colour, so they are ink on paper and paper on charcoal.</p>
+      <p>No component tokens.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Each review is a <code>&lt;figure&gt;</code> with a <code>&lt;blockquote&gt;</code> and a <code>&lt;figcaption&gt;</code>, which ties the quote to its source. The attribution is in the caption, not inside the blockquote, because it is not part of what was said. The reviews sit in a <code>&lt;ul role="list"&gt;</code> so the count is announced.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skips reviews; nothing in them is focusable. Screen reader users move through them by list item or with the reading keys.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>No focus style of its own.</p>
+      <h3>Labelling</h3>
+      <p>The star characters mean nothing when read one by one (“black star, black star…”), so <code>.stars</code> takes <code>role="img"</code> and an <code>aria-label</code> such as “4 out of 5 stars”. An <code>aria-label</code> on a plain <code>&lt;span&gt;</code> without a role is ignored by many screen readers. The quote mark is CSS content; some screen readers read it as “left double quotation mark”, which is accurate.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Quote, stars and reviewer</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Church and date</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Quote mark on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair"><span>Card frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: quote, stars and reviewer</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: church and date</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: card frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None. Loading skeletons stop shimmering under <code>prefers-reduced-motion</code>.</p>
+      <h3>Touch</h3>
+      <p>Nothing to tap.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Quote the church’s words, trimmed to one to three sentences about something that happened (“rehearsed with our volunteer band on Saturday”), not adjectives alone.</li>
+        <li>Song titles in <code>&lt;em&gt;</code>. Do not add quotation marks inside: the block already has one.</li>
+        <li>Reviewer: name with title as they gave it (“Rev. Janet Clarke”, “Pastor Femi Adebayo”).</li>
+        <li>Caption line: church, town · month and year: “St. Brendan’s Anglican, Oshawa · September 2026”.</li>
+        <li>Stars: whole numbers, filled ★ then empty ☆, five in total. The label states the same number.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><figure class="review"><blockquote><p>Gracious about our tiny sound desk.</p></blockquote><figcaption><span class="stars" role="img" aria-label="4 out of 5 stars">★★★★☆</span>Pastor Femi Adebayo<span>Living Waters Fellowship, Brampton · May 2026</span></figcaption></figure></div><figcaption>Stars with <code>role="img"</code> and a label; only the church line is muted.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><figure class="review"><blockquote><p>Gracious about our tiny sound desk.</p></blockquote><figcaption><span class="stars" style="display: block; font: var(--text-caption); color: var(--color-fg-muted);">★★★★☆</span>Pastor Femi Adebayo</figcaption></figure></div><figcaption>The mock’s caption rule also caught the stars span and turned the stars into small muted text. The rule now skips <code>.stars</code>.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><figure class="review"><blockquote><p>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.</p></blockquote><figcaption>Tomi Oduya<span>Harvest Point Church, Milton · August 2026</span></figcaption></figure></div><figcaption>Something specific that happened, with who said it and when.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><figure class="review"><blockquote><p>Amazing!!! Highly recommend!!!</p></blockquote><figcaption>Anonymous</figcaption></figure></div><figcaption>Praise with nothing a coordinator can picture, and no church to trust it.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Card</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Frame</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Quote, stars, reviewer</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Church and date</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Quote mark block</td><td><code>--color-accent</code> / <code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Quote / caption / stars</td><td><code>--text-body-lg</code> / <code>--text-caption</code> / <code>--text-stub</code></td><td colspan="2"><span data-token="--font-size-lg"></span> / <span data-token="--font-size-xs"></span> / <span data-token="--font-size-sm"></span></td></tr>
+          <tr><td>Quote mark</td><td><code>--text-figure-lg</code></td><td colspan="2"><span data-token="--font-size-3xl"></span></td></tr>
+          <tr><td>Padding / gap / grid gap</td><td><code>--space-6</code> / <code>--space-4</code> / <code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-4"></span> / <span data-token="--space-6"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;ul class="reviews" role="list"&gt;
+  &lt;li&gt;
+    &lt;figure class="review"&gt;
+      &lt;blockquote&gt;&lt;p&gt;Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.&lt;/p&gt;&lt;/blockquote&gt;
+      &lt;figcaption&gt;
+        &lt;span class="stars" role="img" aria-label="4 out of 5 stars"&gt;★★★★☆&lt;/span&gt;Pastor Femi Adebayo
+        &lt;span&gt;Living Waters Fellowship, Brampton · May 2026&lt;/span&gt;
+      &lt;/figcaption&gt;
+    &lt;/figure&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.reviews</code></td><td>Grid of reviews; two columns from 768px.</td></tr>
+        <tr><td><code>.review</code></td><td>Framed card; yellow quote mark before the blockquote.</td></tr>
+        <tr><td><code>.review figcaption</code> and its <code>&lt;span&gt;</code></td><td>Reviewer in the stub font; the plain span is the muted church and date line.</td></tr>
+        <tr><td><code>.stars</code></td><td>Star characters in the stub font; on its own line inside a review.</td></tr>
+        <tr><td><code>role="img"</code> + <code>aria-label</code> on <code>.stars</code></td><td>Reads the rating as one phrase.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: four reviews of Abigail Mensah and the “★★★★★ 4.9 · 38 reviews” summary</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “No church reviews yet” for Miriam Haile</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the same quote as a pull quote in the headliner</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li><code>.review figcaption span</code> also restyled the stars span (small, muted, block). It is now scoped to <code>span:not(.stars)</code>.</li>
+        <li>The quote mark declared <code>color</code> twice and used an inline display-font shorthand. It now reads <code>--color-fg-on-accent</code> once and <code>--text-figure-lg</code>.</li>
+        <li>The stars carried <code>aria-label</code> on a plain <code>&lt;span&gt;</code>. This page adds <code>role="img"</code> so the label is announced.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

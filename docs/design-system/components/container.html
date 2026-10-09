@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Container &amp; stack — Zamaro design system</title>
+<meta name="description" content="The layout primitives every Zamaro page is built from: container, stack, cluster, the 4/8/12-column grid, card grid, page sections and the two-column profile layout.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: visible boxes for layout specimens. Tokens only. */
+  .ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; }
+  .ds-cell--tall { min-height: var(--space-24); }
+  .ds-cell--quiet { background: var(--color-bg-subtle); }
+  .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); }
+  .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); }
+  .ds-span-8 { grid-column: span 8; }
+  .ds-span-4 { grid-column: span 4; }
+  @media (max-width: 47.99rem) { .ds-span-8 { grid-column: 1 / -1; } }
+  .ds-matrix { position: relative; }
+  :is(.ds-example, .ds-themes, .ds-do, .ds-dont) li + li { margin-top: 0; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers &amp; overlays</p>
+      <h1>Container &amp; stack</h1>
+      <p class="ds-lead">The layout primitives every page is built from. A container sets the page width and margins, stacks and clusters set the space between things, and the grid lines them up in 4, 8 or 12 columns.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Layout only, no role</span><span class="ds-pill">Classes <code>.container</code> <code>.stack</code> <code>.cluster</code> <code>.grid</code> <code>.section</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use these classes for layout instead of writing margins and widths on components. Components then stay free of outer spacing and can be dropped into any page.</p>
+      <ul>
+        <li><b><code>.container</code></b> centres content, caps it at 1216px and adds the page margin (20, 40 or 64px by breakpoint).</li>
+        <li><b><code>.stack</code></b> puts children in a column with one gap between them. <b><code>.cluster</code></b> puts them in a wrapping row, such as a row of buttons or badges.</li>
+        <li><b><code>.grid</code></b> is the column grid; <b><code>.grid--cards</code></b> fills a row with as many 288px-minimum cards as fit.</li>
+        <li><b><code>.section</code></b> is a band of the page with generous top and bottom padding and a hairline between neighbours. <code>.section__head</code> holds its kicker, heading and an optional aside.</li>
+        <li><b><code>.profile-layout</code></b> is the artist page: content on the left, the booking ticket in a 352px column on the right that stays in view.</li>
+      </ul>
+      <p>Spacing between and around things comes from the <a href="../foundations/spacing.html">spacing</a> scale; columns, gutters and margins from the <a href="../foundations/layout.html">layout</a> foundation.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy" style="grid-template-columns: minmax(0, 1fr);">
+        <figure class="ds-anatomy__figure" style="padding: var(--space-8) 0; place-items: stretch; grid-template-columns: minmax(0, 1fr);">
+          <div class="ds-frame">
+            <div class="container stack" style="padding-block: var(--space-4);">
+              <div class="section__head" style="margin-bottom: 0;"><div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><p class="ds-cell ds-cell--quiet" style="min-height: var(--space-8);">Section heading</p></div><div class="ds-cell ds-cell--quiet" style="min-height: var(--space-8);">Sort</div></div>
+              <div class="grid"><span class="ds-cell">1</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">4</span><span class="ds-cell">5</span><span class="ds-cell">6</span><span class="ds-cell">7</span><span class="ds-cell">8</span><span class="ds-cell">9</span><span class="ds-cell">10</span><span class="ds-cell">11</span><span class="ds-cell">12</span></div>
+            </div>
+          </div>
+          <span class="ds-callout" style="left: 1%; top: 50%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 46%; top: 8%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 46%; top: 40%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 46%; top: 82%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Margin</b><small>The container’s side padding, <code>--layout-margin</code>: 20px on phones, 40px from 768px, 64px from 1024px. The dashed outline is the container.</small></div></li>
+          <li><div><b>Section head</b><small><code>.section__head</code>: kicker and heading on the left, an aside (sort, a note) on the right; wraps on phones.</small></div></li>
+          <li><div><b>Stack gap</b><small>The space between the head and the grid: <code>.stack</code> is 16px, <code>.stack--lg</code> 40px.</small></div></li>
+          <li><div><b>Columns and gutters</b><small><code>--layout-columns</code> (4, 8, 12) separated by <code>--layout-gutter</code> (16, 24, 32px). Resize the window: the numbered cells re-flow.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Grid with numbered cells</h3>
+      <p>Twelve cells in the live <code>.grid</code>. At this width the grid has 12 columns; on a tablet it has 8 and on a phone 4, so the same twelve cells take one, two or three rows.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas">
+          <div class="grid">
+            <span class="ds-cell">1</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">4</span><span class="ds-cell">5</span><span class="ds-cell">6</span><span class="ds-cell">7</span><span class="ds-cell">8</span><span class="ds-cell">9</span><span class="ds-cell">10</span><span class="ds-cell">11</span><span class="ds-cell">12</span>
+            <span class="ds-cell ds-span-8">span 8 · content</span><span class="ds-cell ds-span-4">span 4 · aside</span>
+            <span class="ds-cell span-full">.span-full</span>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>A span wider than the current column count adds columns the grid does not have, so below 768px the 8-column span switches to <code>grid-column: 1 / -1</code> (as <code>.span-full</code> does).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="grid"&gt;
+  &lt;div class="content"&gt;…&lt;/div&gt;   /* span 8 from 768px, 1 / -1 below */
+  &lt;aside class="aside"&gt;…&lt;/aside&gt;  /* span 4 */
+  &lt;div class="span-full"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Card grid</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas">
+          <ul class="grid grid--cards" role="list" style="list-style: none; padding: 0;">
+            <li class="ds-cell ds-cell--tall">Grace Tabernacle Mass Choir</li>
+            <li class="ds-cell ds-cell--tall">Luz Viva</li>
+            <li class="ds-cell ds-cell--tall">Daniel &amp; Ruth Okonkwo</li>
+            <li class="ds-cell ds-cell--tall">Marcus Bell Trio</li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span><code>.grid--cards</code>: <code>repeat(auto-fill, minmax(min(100%, 18rem), 1fr))</code>. Two across in this 750px frame, three or four on a full page, one on a phone.</span></div>
+      </div>
+
+      <h3>Stack and cluster</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <div class="stack" style="flex: 1 1 14rem;">
+            <span class="ds-cell">Kicker</span><span class="ds-cell">Heading</span><span class="ds-cell">Paragraph</span>
+          </div>
+          <div class="stack" style="flex: 1 1 18rem;">
+            <div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><span class="badge">Gospel</span><span class="badge">Twi</span></div>
+            <div class="cluster cluster--between" style="border: var(--border-width-hairline) dashed var(--color-border-strong); padding: var(--space-2);"><span class="ticket__price">$650</span><button class="btn btn--sm" type="button">Pick</button></div>
+            <div class="cluster cluster--lg"><a class="btn btn--primary" href="#variants">Book for Sat 14 Nov</a><button class="btn" type="button">Share</button></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Left: <code>.stack</code>. Right: <code>.cluster</code> (8px), <code>.cluster--between</code> (ends apart) and <code>.cluster--lg</code> (16px).</span></div>
+      </div>
+
+      <h3>Section</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <section class="section section--tight" aria-labelledby="ds-sec-how">
+            <div class="container">
+              <div class="section__head">
+                <div><p class="overline section__kicker">Three songs and you’re done</p><h4 id="ds-sec-how" style="font: var(--text-h2);">How booking works</h4></div>
+                <p class="text-muted">Cancel free up to 14 days before your event.</p>
+              </div>
+              <p class="lead">Pick your date, send a request, lock it in with a 25% deposit.</p>
+            </div>
+          </section>
+          <section class="section section--tight" aria-labelledby="ds-sec-about">
+            <div class="container">
+              <p class="overline section__kicker">About</p>
+              <h4 id="ds-sec-about" style="font: var(--text-h2);">Raised in the choir loft</h4>
+              <p class="section__body">I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone.</p>
+            </div>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>Two <code>.section--tight</code> bands; the hairline between them comes from <code>.section + .section</code>. <code>.section__body</code> replaces the mocks’ inline margin.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="section" aria-labelledby="how-title"&gt;
+  &lt;div class="container"&gt;
+    &lt;div class="section__head"&gt;
+      &lt;div&gt;&lt;p class="overline section__kicker"&gt;Three songs and you’re done&lt;/p&gt;&lt;h2 id="how-title"&gt;How booking works&lt;/h2&gt;&lt;/div&gt;
+      &lt;p class="text-muted"&gt;Cancel free up to 14 days before your event.&lt;/p&gt;
+    &lt;/div&gt;
+    …
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+
+      <h3>Profile layout</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="container profile-layout" style="padding-block: var(--space-6);">
+            <div class="stack"><span class="ds-cell ds-cell--tall">About · Videos · Photos · Setlist · Dates · Reviews</span><span class="ds-cell">…the profile scrolls</span></div>
+            <aside aria-label="Booking ticket placeholder"><span class="ds-cell ds-cell--tall">Booking ticket (sticky)</span></aside>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>.profile-layout</code>: one column on phones and tablets; from 1024px, content plus a <code>--layout-sidebar-width</code> (22rem) column whose <code>&lt;aside&gt;</code> sticks below the top bar.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Stacks and clusters come in sizes; pick by how related the children are. Closely related things sit closer.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <div class="stack stack--sm" style="flex: 1 1 8rem;"><span class="ds-cell">sm</span><span class="ds-cell">8px</span><span class="ds-cell">label + field</span></div>
+          <div class="stack" style="flex: 1 1 8rem;"><span class="ds-cell">default</span><span class="ds-cell">16px</span><span class="ds-cell">paragraphs</span></div>
+          <div class="stack stack--lg" style="flex: 1 1 8rem;"><span class="ds-cell">lg</span><span class="ds-cell">40px</span><span class="ds-cell">blocks</span></div>
+        </div>
+        <div class="ds-example__caption"><span><code>.stack--sm</code> <code>--space-2</code> · <code>.stack</code> <code>--space-4</code> · <code>.stack--lg</code> <code>--space-10</code>. Clusters: <code>--space-2</code> and <code>.cluster--lg</code> <code>--space-4</code>.</span></div>
+      </div>
+      <p>Sections have two sizes: <code>.section</code> (64px top and bottom, 80px from 1024px) and <code>.section--tight</code> (40px) for short bands such as the call-to-action band.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Layout primitives have no interactive states. What changes is the breakpoint: the same markup takes these values as the viewport grows.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Primitive</th><th scope="col">Phone (base)</th><th scope="col">Tablet (768px)</th><th scope="col">Desktop (1024px)</th><th scope="col">Wide (1280px+)</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>.container</code></th><td>full width, 20px margin</td><td>40px margin</td><td>64px margin</td><td>capped at 1216px, centred</td></tr>
+          <tr><th scope="row"><code>.grid</code></th><td>4 columns, 16px gutter</td><td>8 columns, 24px gutter</td><td>12 columns, 32px gutter</td><td>12 columns, 32px gutter</td></tr>
+          <tr><th scope="row"><code>.grid--cards</code></th><td>1 per row</td><td>2 per row</td><td>3 per row</td><td>3–4 per row</td></tr>
+          <tr><th scope="row"><code>.section</code></th><td>64px padding</td><td>64px padding</td><td>80px padding</td><td>80px padding</td></tr>
+          <tr><th scope="row"><code>.section__head</code></th><td>stacked</td><td>side by side if it fits</td><td>side by side</td><td>side by side</td></tr>
+          <tr><th scope="row"><code>.profile-layout</code></th><td>one column, ticket last</td><td>one column, ticket last</td><td>two columns, ticket sticky</td><td>two columns, ticket sticky</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="grid" style="--layout-columns: 4; --layout-gutter: var(--space-4);"><span class="ds-cell">1</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">4</span></div><div class="section__head" style="margin: var(--space-6) 0 0;"><div><p class="overline section__kicker">On tour</p><p style="font: var(--text-h3); text-transform: uppercase;">Upcoming dates</p></div><p class="text-muted">Pick a free date.</p></div></div>
+        <div data-theme="dark"><div class="grid" style="--layout-columns: 4; --layout-gutter: var(--space-4);"><span class="ds-cell">1</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">4</span></div><div class="section__head" style="margin: var(--space-6) 0 0;"><div><p class="overline section__kicker">On tour</p><p style="font: var(--text-h3); text-transform: uppercase;">Upcoming dates</p></div><p class="text-muted">Pick a free date.</p></div></div>
+      </div>
+      <p>The primitives draw nothing themselves except the section hairline (<code>--color-border-default</code>), which follows the theme.</p>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Mobile first: base styles are for 360px; <code>tokens.css</code> raises <code>--layout-columns</code>, <code>--layout-gutter</code> and <code>--layout-margin</code> at 48rem and 64rem. Components read the tokens rather than writing their own media queries.</li>
+        <li>Containers never cause sideways scrolling: grid tracks are <code>minmax(0, 1fr)</code>, and card minimums are <code>min(100%, 18rem)</code> so a card is never wider than a phone.</li>
+        <li>Clusters wrap; stacks never do. A cluster of buttons becomes two rows on a phone rather than shrinking buttons.</li>
+        <li>On the profile, the ticket follows the reviews below 1024px; “Book for Sat 14 Nov” in the poster jumps to it.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>No colours. The primitives read layout and spacing tokens only: <code>--layout-container-max</code>, <code>--layout-margin</code>, <code>--layout-columns</code>, <code>--layout-gutter</code>, <code>--layout-sidebar-width</code>, <code>--layout-topbar-height</code> (for the sticky ticket’s offset) and <code>--space-*</code>. The only colour is the hairline between sections, <code>--color-border-default</code>.</p>
+      <p>To change the grid inside one region, override the tokens on that element, as the “Both themes” specimens above do: <code>style="--layout-columns: 4"</code>. Do not edit the classes.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>None: these are presentational <code>&lt;div&gt;</code> wrappers. Meaning comes from the elements you put them on: <code>&lt;section aria-labelledby&gt;</code> for page sections, <code>&lt;aside&gt;</code> for the booking ticket, <code>&lt;ul role="list"&gt;</code> for a grid of tickets. No APG pattern applies.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Follows DOM order. Layout must not reorder content visually (no <code>order</code>, no grid placement that moves things out of source order), so the tab order matches what people see.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The sticky ticket in <code>.profile-layout</code> sits below the top bar (<code>top: calc(--layout-topbar-height + --space-6)</code>), and the page sets <code>scroll-padding-top</code>, so focused fields are never hidden behind either (WCAG 2.4.11).</p>
+      <h3>Labelling</h3>
+      <p>Each <code>.section</code> is a <code>&lt;section&gt;</code> labelled by its heading (<code>aria-labelledby</code>), which makes it a region landmark. Kickers (“About”, “Live”) are plain paragraphs before the heading; they are read first, so keep them short.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Text in a section</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Section aside (muted)</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Hairline between sections (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-border-default|--color-bg-surface" data-min="1"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: text in a section</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: section aside (muted)</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None. Layout changes at breakpoints are instant.</p>
+      <h3>Touch</h3>
+      <p>Clusters keep at least 8px between targets; button rows use <code>.cluster--lg</code> (16px). At 200% and 400% zoom the grid drops to 4 columns, so nothing needs two-dimensional scrolling (WCAG 1.4.10).</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Section kickers are short labels in the stub style: “About”, “Live”, “On tour”, “Word of mouth”, or the search context “Sat 14 Nov · 7 free · within 120 km”.</li>
+        <li>Section headings say something specific: “Raised in the choir loft”, “Watch her lead”, not “Biography”, “Videos”.</li>
+        <li>The aside in <code>.section__head</code> is one short sentence or one control: “Cancel free up to 14 days before your event.” or the sort field.</li>
+        <li>Prose inside a section stays under <code>--layout-measure</code> (58 characters) per line; paragraphs do this by default.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><p class="overline section__kicker">About</p><p style="font: var(--text-h3); text-transform: uppercase;">Raised in the choir loft</p><p class="section__body">I lead in English and Twi.</p></div><figcaption>Space the body from the heading with <code>.section__body</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><p class="overline section__kicker">About</p><p style="font: var(--text-h3); text-transform: uppercase;">Raised in the choir loft</p><p style="margin-top: var(--space-4);">I lead in English and Twi.</p></div><figcaption>The artist mock’s inline <code>style="margin-top: var(--space-4)"</code>. Every page re-invents the gap.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="section__head" style="margin: 0;"><span class="ds-cell ds-cell--quiet">The lineup</span><label class="field field--inline"><span class="field__label">Sort</span><select class="select"><option>Closest first</option></select></label></div></div><figcaption>The sort field in the section head uses <code>.field--inline</code> for its minimum width.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="section__head" style="margin: 0;"><span class="ds-cell ds-cell--quiet">The lineup</span><label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span><select class="select"><option>Closest first</option></select></label></div></div><figcaption><code>style="min-width: 12rem"</code> on the sort field, repeated in four mocks.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="ds-frame"><div class="container"><span class="ds-cell">One container per band</span></div></div></div><figcaption>One <code>.container</code> per section; everything inside aligns to the same margins.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="ds-frame"><div class="container"><div class="container"><span class="ds-cell">Nested containers</span></div></div></div></div><figcaption>A container inside a container doubles the margin and the content no longer lines up with the top bar.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Container max width</td><td><code>--layout-container-max</code></td><td colspan="2"><span data-token="--layout-container-max"></span></td></tr>
+          <tr><td>Page margin (now)</td><td><code>--layout-margin</code></td><td colspan="2"><span data-token="--layout-margin"></span> at this width (20 / 40 / 64px)</td></tr>
+          <tr><td>Columns (now)</td><td><code>--layout-columns</code></td><td colspan="2"><span data-token="--layout-columns"></span> at this width (4 / 8 / 12)</td></tr>
+          <tr><td>Gutter (now)</td><td><code>--layout-gutter</code></td><td colspan="2"><span data-token="--layout-gutter"></span> at this width (16 / 24 / 32px)</td></tr>
+          <tr><td>Stack sm / default / lg</td><td><code>--space-2</code> / <code>--space-4</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-2"></span> / <span data-token="--space-4"></span> / <span data-token="--space-10"></span></td></tr>
+          <tr><td>Section padding / desktop / tight</td><td><code>--space-16</code> / <code>--space-20</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-16"></span> / <span data-token="--space-20"></span> / <span data-token="--space-10"></span></td></tr>
+          <tr><td>Section head gap / margin</td><td><code>--space-4</code> <code>--space-8</code></td><td colspan="2"><span data-token="--space-4"></span> × <span data-token="--space-8"></span></td></tr>
+          <tr><td>Ticket column</td><td><code>--layout-sidebar-width</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span></td></tr>
+          <tr><td>Prose measure</td><td><code>--layout-measure</code></td><td colspan="2"><span data-token="--layout-measure"></span></td></tr>
+          <tr><td>Section hairline</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section id="lineup" class="section" aria-labelledby="lineup-title"&gt;
+  &lt;div class="container stack stack--lg"&gt;
+    &lt;div class="section__head"&gt;
+      &lt;div&gt;&lt;p class="overline section__kicker"&gt;Sat 14 Nov · 7 free · within 120 km&lt;/p&gt;&lt;h2 id="lineup-title"&gt;The lineup&lt;/h2&gt;&lt;/div&gt;
+      &lt;label class="field field--inline"&gt;&lt;span class="field__label"&gt;Sort&lt;/span&gt;&lt;select class="select"&gt;…&lt;/select&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;ol class="lineup" role="list"&gt;…&lt;/ol&gt;
+  &lt;/div&gt;
+&lt;/section&gt;
+
+&lt;div class="container profile-layout"&gt;
+  &lt;div&gt;&lt;section class="section" aria-labelledby="about-title"&gt;…&lt;/section&gt;…&lt;/div&gt;
+  &lt;aside aria-labelledby="book-title"&gt;&lt;form class="stub"&gt;…&lt;/form&gt;&lt;/aside&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.container</code></td><td>Centred, max 1216px, page margin as side padding.</td></tr>
+        <tr><td><code>.stack</code> <code>.stack--sm</code> <code>.stack--lg</code></td><td>Column with a 16 / 8 / 40px gap.</td></tr>
+        <tr><td><code>.cluster</code> <code>.cluster--between</code> <code>.cluster--lg</code></td><td>Wrapping row, 8px gap; ends apart; 16px gap.</td></tr>
+        <tr><td><code>.grid</code> <code>.span-full</code></td><td>4/8/12-column grid; a child spanning every column.</td></tr>
+        <tr><td><code>.grid--cards</code></td><td>Auto-filling cards, 288px minimum.</td></tr>
+        <tr><td><code>.section</code> <code>.section--tight</code></td><td>Page band, 64–80px or 40px padding; hairline between bands.</td></tr>
+        <tr><td><code>.section__head</code> <code>.section__kicker</code> <code>.section__body</code></td><td>Heading row with aside; kicker above the heading; 16px before the body.</td></tr>
+        <tr><td><code>.profile-layout</code></td><td>Content plus a sticky 22rem aside from 1024px.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: <code>.container</code>, <code>.stack--lg</code>, <code>.section__head</code> with the sort field, <code>.section + .section</code> bands, the cluster of filter chips</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a> and <a href="../../mocks/pages/discover/empty.html">empty</a>: the same section skeleton while results load or when none match</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: <code>.profile-layout</code> with the sticky ticket, section kickers (“About”, “Live”, “On tour”)</li>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the page keeps its container and margins around the error</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>About copy used <code>style="margin-top: var(--space-4)"</code> → <code>.section__body</code>.</li>
+        <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks → <code>.field--inline</code>.</li>
+        <li>The artist error used inline <code>padding-block</code> → <code>.page-error</code>; layout spacing now only comes from these classes.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

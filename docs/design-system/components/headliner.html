@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Headliner — Zamaro design system</title>
+<meta name="description" content="The headliner is the top of the bill on Discover: one artist in a 4px frame with yellow halftone art, a display-size name, a church’s quote, a free badge, an ink profile button and a save toggle.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: ds.css restyles every h3 in a section, and the display size is clamp()ed to the
+   viewport while specimens sit in the narrower docs column. Restore the type, scaled to fit. */
+.ds-section .headliner__name { font: var(--text-display); font-size: clamp(2.5rem, 4vw, 3.75rem); margin: 0; }
+/* Docs only: the headliner needs the width of the product's lineup column, so this page stacks
+   the anatomy, theme and do/don't grids instead of putting specimens side by side. */
+.ds-section .ds-anatomy, .ds-section .ds-themes { grid-template-columns: minmax(0, 1fr); }
+/* Docs only: forced hover for the name link (no data-state hook in components.css yet). */
+.headliner__name a.is-hover { background: var(--color-accent); color: var(--color-fg-on-accent); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Headliner</h1>
+      <p class="ds-lead">The headliner is the top of the bill: the best match for the booker’s date, shown larger than the rest of the lineup, with a church’s own words about why.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;article&gt;</code> labelled by the name</span><span class="ds-pill">Class <code>.headliner</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use one headliner at the top of a lineup, above the <a href="ticket.html">tickets</a>. It is “No. 01”: the artist Zamaro would book first for that date and place, usually the most-booked artist who is free. It answers two questions before the booker scrolls: is someone good free, and what do churches say about them.</p>
+      <ul>
+        <li>Only one per page. If no artist is free, there is no headliner; show the <a href="empty-state.html">empty state</a> instead.</li>
+        <li>Not for ads or sponsored artists. The headliner is earned by availability, distance and reviews.</li>
+        <li>Not on the profile page: the profile already has the <a href="poster.html">artist poster</a>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure ds-example__canvas--canvas">
+          <article class="headliner" aria-labelledby="a-name" style="width: 100%;">
+            <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+            <div class="stack">
+              <p class="overline">No. 01 · Most booked this autumn</p>
+              <h3 id="a-name" class="headliner__name"><a href="#anatomy">Abigail Mensah</a></h3>
+              <div class="headliner__meta"><span>Gospel &amp; contemporary vocalist</span><span>Brampton · 44 km</span><span>★ 4.9 (38 churches)</span><span>From $650</span></div>
+              <p>“She had the whole congregation singing in three-part harmony by the last verse.” <span class="text-muted">— Rev. Janet Clarke, Oshawa</span></p>
+              <div class="cluster">
+                <span class="badge badge--free">Free Sat 14 Nov</span>
+                <a class="btn btn--ink" href="#anatomy">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </div>
+          </article>
+          <span class="ds-callout" style="left: 10%; top: 26%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 23%; top: 81%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 50%; top: 13%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 50%; top: 28%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 50%; top: 40%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 50%; top: 56%;" aria-hidden="true">6</span>
+          <span class="ds-callout" style="left: 50%; top: 74%;" aria-hidden="true">7</span>
+          <span class="ds-callout" style="left: 92%; top: 4%;" aria-hidden="true">8</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Art</b><small><code>.art.art--yellow</code>: the only yellow halftone in the lineup, 4:5 portrait. <code>role="img"</code> with a description.</small></div></li>
+          <li><div><b>Tag</b><small><code>.art__tag</code> “Headliner”: ink label on the art, mono overline.</small></div></li>
+          <li><div><b>Number and reason</b><small><code>.overline</code>: “No. 01 · Most booked this autumn”.</small></div></li>
+          <li><div><b>Name</b><small><code>.headliner__name</code>: <code>--text-display</code> (64–160px), the link to the profile. Hover fills it yellow.</small></div></li>
+          <li><div><b>Meta</b><small><code>.headliner__meta</code>: four stub-font facts: style, town and distance, rating, price.</small></div></li>
+          <li><div><b>Quote</b><small>One review sentence in curly quotes, with the reviewer muted after a dash.</small></div></li>
+          <li><div><b>Actions</b><small>Free <a href="badge.html">badge</a>, ink <a href="button.html">button</a> to the profile, <a href="save-toggle.html">save toggle</a>.</small></div></li>
+          <li><div><b>Frame</b><small>Paper surface, 4px <code>--border-width-poster</code> frame, hard 8px <code>--shadow-3</code>, 32–40px padding.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>The headliner has one layout. It varies by what is known about the artist: a halftone placeholder or a real photo, and whether the booker has saved them.</p>
+      <h3>Placeholder art</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <article class="headliner" aria-labelledby="v1-name">
+            <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+            <div class="stack">
+              <p class="overline">No. 01 · Most booked this autumn</p>
+              <h3 id="v1-name" class="headliner__name"><a href="#v1-name">Abigail Mensah</a></h3>
+              <div class="headliner__meta"><span>Gospel &amp; contemporary vocalist</span><span>Brampton · 44 km</span><span>★ 4.9 (38 churches)</span><span>From $650</span></div>
+              <p>“She had the whole congregation singing in three-part harmony by the last verse.” <span class="text-muted">— Rev. Janet Clarke, Oshawa</span></p>
+              <div class="cluster">
+                <span class="badge badge--free">Free Sat 14 Nov</span>
+                <a class="btn btn--ink" href="#v1-name">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="ds-example__caption"><span>As in the Discover mock: saved, with the yellow halftone standing in for the photo.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;article class="headliner" aria-labelledby="headliner-name"&gt;
+  &lt;div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"&gt;&lt;span class="art__tag"&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="stack"&gt;
+    &lt;p class="overline"&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 id="headliner-name" class="headliner__name"&gt;&lt;a href="/artists/abigail-mensah"&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class="headliner__meta"&gt;&lt;span&gt;Gospel &amp;amp; contemporary vocalist&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;★ 4.9 (38 churches)&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
+    &lt;p&gt;“She had the whole congregation singing in three-part harmony by the last verse.” &lt;span class="text-muted"&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
+    &lt;div class="cluster"&gt;
+      &lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class="btn btn--ink" href="/artists/abigail-mensah"&gt;See Abigail’s profile &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;&lt;/a&gt;
+      &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre></details>
+      </div>
+      <h3>Real photo, not saved</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <article class="headliner" aria-labelledby="v2-name">
+            <div class="art art--yellow"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='12' cy='20' r='5' fill-opacity='.55'/%3E%3Ccircle cx='28' cy='18' r='5' fill-opacity='.55'/%3E%3Cpath d='M0 50c0-12 5-22 12-22s10 6 10 12c0-8 3-14 6-14 7 0 12 10 12 24z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"><span class="art__tag">Headliner</span></div>
+            <div class="stack">
+              <p class="overline">No. 01 · Five stars from every church</p>
+              <h3 id="v2-name" class="headliner__name"><a href="#v2-name">Luz Viva</a></h3>
+              <div class="headliner__meta"><span>Spanish &amp; English band</span><span>North York · 63 km</span><span>★ 5.0 (24 churches)</span><span>From $900</span></div>
+              <p>“They led half the set in Spanish and the whole room sang along.” <span class="text-muted">— Tomi Oduya, Milton</span></p>
+              <div class="cluster">
+                <span class="badge badge--free">Free Sat 14 Nov</span>
+                <a class="btn btn--ink" href="#v2-name">See Luz Viva’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+                <button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <div class="ds-example__caption"><span>A real photo goes inside <code>.art</code> as an <code>&lt;img alt&gt;</code>; it is printed grey and multiplied onto the yellow. (A simple shape stands in for the photo here.)</span></div>
+      </div>
+      <h3>Loading</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <div class="headliner" aria-hidden="true">
+            <span class="skeleton skeleton--portrait"></span>
+            <div class="stack"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--text"></span><span class="skeleton skeleton--text skeleton--long"></span></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>While the lineup loads, the headliner frame holds skeletons sized like the real parts, so nothing jumps. It is a <code>&lt;div&gt;</code> with <code>aria-hidden</code>, not an article.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="headliner" aria-hidden="true"&gt;
+  &lt;span class="skeleton skeleton--portrait"&gt;&lt;/span&gt;
+  &lt;div class="stack"&gt;
+    &lt;span class="skeleton skeleton--text skeleton--short"&gt;&lt;/span&gt;
+    &lt;span class="skeleton skeleton--poster"&gt;&lt;/span&gt;
+    &lt;span class="skeleton skeleton--text"&gt;&lt;/span&gt;
+    &lt;span class="skeleton skeleton--text skeleton--long"&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The headliner has one size: it spans the lineup column, and its type scales with the viewport through clamp() tokens."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The headliner has one size: it spans the lineup column, and its type scales with the viewport through clamp() tokens.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The frame itself does not react to the pointer; its three controls do. Hover and focus are forced with <code>data-state</code> (the name’s hover with a docs-only class).</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active / on</th><th scope="col">Busy</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Name link</th>
+            <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states">Abigail</a></p></td>
+            <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states" class="is-hover">Abigail</a></p></td>
+            <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states" data-state="focus">Abigail</a></p></td>
+            <td><span class="text-caption">—</span></td>
+            <td><span class="text-caption">—</span></td></tr>
+          <tr><th scope="row">Profile button</th>
+            <td><a class="btn btn--ink" href="#states">See profile</a></td>
+            <td><a class="btn btn--ink" href="#states" data-state="hover">See profile</a></td>
+            <td><a class="btn btn--ink" href="#states" data-state="focus">See profile</a></td>
+            <td><a class="btn btn--ink" href="#states" data-state="active">See profile</a></td>
+            <td><span class="text-caption">—</span></td></tr>
+          <tr><th scope="row">Save toggle</th>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" data-state="focus" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
+          <tr><th scope="row">Free badge</th>
+            <td><span class="badge badge--free">Free Sat 14 Nov</span></td>
+            <td colspan="4"><span class="text-caption">Static. If the date fills while the page is open, it becomes <span class="badge badge--booked">Booked Sat 14 Nov</span> and the artist drops out of the headliner slot on the next search.</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><article class="headliner" aria-labelledby="t1-name"><div class="art art--yellow art--square" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div><div class="stack"><p class="overline">No. 01</p><h3 id="t1-name" class="headliner__name"><a href="#states">Abigail</a></h3><div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--ink btn--sm" href="#states">Profile</a></div></div></article></div>
+        <div data-theme="dark"><article class="headliner" aria-labelledby="t2-name"><div class="art art--yellow art--square" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div><div class="stack"><p class="overline">No. 01</p><h3 id="t2-name" class="headliner__name"><a href="#states">Abigail</a></h3><div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--ink btn--sm" href="#states">Profile</a></div></div></article></div>
+      </div>
+      <ul>
+        <li><b>Name hover</b> fills the name yellow with ink type, like a highlighter on the poster. Focus shows the 3px ring.</li>
+        <li><b>Saved</b> fills the round toggle yellow with a filled heart. <b>Saving</b> pulses the heart while the request is in flight.</li>
+        <li><b>Loading</b>: the skeleton frame shown above. <b>Empty</b> and <b>error</b>: there is no headliner; the empty state or alert takes the lineup’s place.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Under 768px</b>: art on top (full width, 4:5), copy below, 32px padding.</li>
+        <li><b>From <code>--layout-breakpoint-md</code> (768px)</b>: two columns, art at 16rem and copy bottom-aligned beside it.</li>
+        <li><b>From <code>--layout-breakpoint-lg</code> (1024px)</b>: art at 20rem, 40px padding and gap.</li>
+        <li>The name breaks anywhere (<code>overflow-wrap: anywhere</code>) rather than scroll sideways. Meta facts and actions wrap as units.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The frame reads <code>--color-bg-surface</code>, <code>--color-border-strong</code> and <code>--shadow-3</code>, so in the dark theme it becomes a charcoal panel with a light frame and a yellow print shadow. The yellow art reads <code>--color-accent</code> with <code>--color-border-on-accent</code> dots, and the tag the inverse pair, so they look the same in both themes. The ink button uses the inverse pair too, which makes it paper-coloured in the dark theme.</p>
+      <p>No component tokens. The name hover reads <code>--color-accent</code> and <code>--color-fg-on-accent</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>An <code>&lt;article&gt;</code> labelled by the name’s heading (<code>aria-labelledby</code>). The name is an <code>&lt;h3&gt;</code> under the lineup’s <code>&lt;h2&gt;</code>, at the same level as the ticket names that follow. It contains two links to the same profile (name and button): that is deliberate, because the button gives a large target and a clear label, and both have distinct text. The save toggle follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button pattern</a> with <code>aria-pressed</code>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Three stops: the name, “See Abigail’s profile”, the save toggle.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows either link; toggles save.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Toggles save.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Each control shows the 3px ink ring (yellow in the dark theme). The name’s ring hugs the text, so a two-line name shows a ring per line.</p>
+      <h3>Labelling</h3>
+      <p>The art is <code>role="img"</code> with a description of the photo; the “Headliner” tag inside it is part of that image and is not read separately. With a real photo, the <code>&lt;img alt&gt;</code> carries the description and the wrapper has no role. The quote’s reviewer is plain text after a dash. The save toggle names the artist.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Name, meta, quote</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Reviewer</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Tag and ink button</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Free badge, name hover</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: name, meta, quote</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: reviewer</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: tag and ink button</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The ink button lifts on hover (<code>--duration-fast</code>) and the save toggle snaps (<code>--ease-spring</code>); both drop to instant under <code>prefers-reduced-motion</code>. The frame never moves.</p>
+      <h3>Touch</h3>
+      <p>The button and toggle are 44px, 8px apart. The name is a large target on its own at display size.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Number line</b>: “No. 01 · ” and why this artist leads: “Most booked this autumn”, “Closest band with five stars”. Never “Featured” or “Sponsored”.</li>
+        <li><b>Meta</b>: style, town · distance, rating (churches), “From” price. Four facts, no more.</li>
+        <li><b>Quote</b>: one sentence from a real review, in curly quotes, naming something specific that happened. Attribute with name and town.</li>
+        <li><b>Button</b>: “See {first name}’s profile”. For groups use the full name: “See Luz Viva’s profile”.</li>
+        <li><b>Badge</b>: “Free Sat 14 Nov”, the date the booker searched.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--ink" href="#do-dont">See Abigail’s profile</a></div></div><figcaption>An ink button beside the yellow badge. The only yellow fill on the frame is information.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--primary" href="#do-dont">See Abigail’s profile</a></div></div><figcaption>A primary button here competes with the booking bar’s “Show the lineup”, the page’s one primary action.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="art art--yellow art--square" role="img" aria-label="Abigail Mensah singing" style="width: 8rem;"><span class="art__tag">Headliner</span></div></div><figcaption>The tag reads the inverse tokens, so it stays legible in both themes.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="art art--square" role="img" aria-label="Abigail Mensah singing" style="width: 8rem;"><span class="art__tag">Headliner</span></div><div class="art art--yellow art--square" role="img" aria-label="Elijah Park singing" style="width: 8rem;"><span class="art__tag">Headliner</span></div></div><figcaption>Two headliners, or a headliner without the yellow art. There is one top of the bill, and yellow marks it.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Frame surface</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Frame rule</td><td><code>--color-border-strong</code>, <code>--border-width-poster</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Print shadow</td><td><code>--shadow-3</code> (<code>--color-shadow</code>)</td><td><span data-theme="light" data-token="--shadow-3"></span></td><td><span data-theme="dark" data-token="--shadow-3"></span></td></tr>
+          <tr><td>Yellow art, name hover, free badge</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Art dots, text on yellow</td><td><code>--color-border-on-accent</code> / <code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Tag and ink button</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Name / meta</td><td><code>--text-display</code> / <code>--text-stub</code></td><td colspan="2"><span data-token="--font-size-5xl"></span> / <span data-token="--font-size-sm"></span></td></tr>
+          <tr><td>Padding and gap (phone / desktop)</td><td><code>--space-8</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-8"></span> / <span data-token="--space-10"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;article class="headliner" aria-labelledby="headliner-name"&gt;
+  &lt;div class="art art--yellow" role="img" aria-label="…"&gt;&lt;span class="art__tag"&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="stack"&gt;
+    &lt;p class="overline"&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 id="headliner-name" class="headliner__name"&gt;&lt;a href="/artists/abigail-mensah"&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class="headliner__meta"&gt;&lt;span&gt;…&lt;/span&gt;…&lt;/div&gt;
+    &lt;p&gt;“…” &lt;span class="text-muted"&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
+    &lt;div class="cluster"&gt;
+      &lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class="btn btn--ink" href="/artists/abigail-mensah"&gt;See Abigail’s profile …&lt;/a&gt;
+      &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.headliner</code></td><td>Framed panel; two columns from 768px.</td></tr>
+        <tr><td><code>.art.art--yellow</code> + <code>.art__tag</code></td><td>Yellow halftone portrait with the “Headliner” tag.</td></tr>
+        <tr><td><code>.headliner__name</code></td><td>Display-size name; its link fills yellow on hover.</td></tr>
+        <tr><td><code>.headliner__meta</code></td><td>Row of stub-font facts that wraps.</td></tr>
+        <tr><td><code>.badge--free</code>, <code>.btn--ink</code>, <code>.save</code></td><td>The actions row.</td></tr>
+        <tr><td><code>aria-labelledby</code></td><td>Names the article after the artist.</td></tr>
+        <tr><td><code>aria-hidden="true"</code> on the loading frame</td><td>Hides skeletons; the section has <code>aria-busy</code>.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: Abigail Mensah as headliner, saved</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: headliner frame with skeletons</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: no headliner</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li><code>.art--yellow</code> dots and <code>.art__tag</code> read <code>--palette-ink</code> and <code>--palette-paper</code>. They now read <code>--color-border-on-accent</code> and the inverse pair.</li>
+        <li><code>.btn--ink</code> borrowed <code>--color-fg-default</code> and <code>--color-bg-canvas</code>. It now reads the inverse pair.</li>
+        <li>The loading frame’s skeletons were sized inline (<code>aspect-ratio: 4 / 5</code>, <code>width: 40%</code>, <code>width: 85%</code>). They now use <code>.skeleton--portrait</code>, <code>--short</code> and <code>--long</code>.</li>
+        <li>Still open: <code>.headliner__name a</code> has no <code>data-state="hover"</code> hook, so this page forces the hover with a docs-only class.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

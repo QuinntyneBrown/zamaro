@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Divider — Zamaro design system</title>
+<meta name="description" content="Dividers separate content with a printed rule: a hairline, a strong 2px rule, a perforated ticket-stub line, a vertical rule and a labelled rule.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: a paper card to show dividers in context. */
+  .ds-paper { width: 100%; padding: var(--space-6); background: var(--color-bg-surface); border: var(--border-width-thick) solid var(--color-border-strong); }
+  .ds-matrix { position: relative; }
+  .ds-matrix td { min-width: 10rem; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers &amp; overlays</p>
+      <h1>Divider</h1>
+      <p class="ds-lead">A printed rule between pieces of content. Thin when it just separates, strong when it closes a block, and dashed like a ticket’s tear line when what follows can be torn off: the price, the fine print, the actions.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;hr&gt;</code></span><span class="ds-pill">Class <code>.divider</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a divider when space alone does not show that two things are separate, for example inside a dense card or between a form and its fine print. Most separation in Zamaro comes from space (<a href="container.html">stacks and sections</a>) and from the rules built into components: the dashed stub on a <a href="ticket.html">ticket</a>, the dashed head of the <a href="booking-form.html">booking ticket</a>, the hairlines in a <a href="list.html">list</a>. Reach for <code>.divider</code> only where no component already draws the line.</p>
+      <ul>
+        <li><b>Hairline</b> (default): 1px <code>--color-border-default</code>. Decorative.</li>
+        <li><b>Strong</b>: 2px <code>--color-border-strong</code>, the same weight as card frames. Closes a block.</li>
+        <li><b>Perforated</b>: 2px dashed, the tear line of a ticket. Use it above a price, totals or fine print that belong to what is above.</li>
+        <li><b>Vertical</b>: a hairline between items in a row.</li>
+        <li><b>Label</b>: hairlines either side of a short mono label, such as “Or pick a nearby date”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="grid-template-columns: minmax(0, 1fr);">
+          <div class="ds-paper">
+            <p>Deposit (25%) · <b>$162.50</b></p>
+            <hr class="divider divider--perforated">
+            <p class="divider divider--label">Or pick a nearby date</p>
+          </div>
+          <span class="ds-callout" style="left: 50%; top: 42%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 12%; top: 66%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 50%; top: 66%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 50%; top: 18%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Rule</b><small>A top border on an <code>&lt;hr&gt;</code>: 1px hairline, or 2px solid or dashed. Full width of its container.</small></div></li>
+          <li><div><b>Label lines</b><small>In <code>.divider--label</code>, two flexible hairlines drawn by <code>::before</code> and <code>::after</code>.</small></div></li>
+          <li><div><b>Label</b><small>Mono 12px uppercase overline, muted, 12px from each line.</small></div></li>
+          <li><div><b>Spacing</b><small>24px (<code>--space-6</code>) above and below. Inside a stack, the stack gap sets it instead.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Horizontal</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="ds-paper">
+            <p class="overline">Hairline</p>
+            <hr class="divider">
+            <p class="overline">Strong</p>
+            <hr class="divider divider--strong">
+            <p class="overline">Perforated</p>
+            <hr class="divider divider--perforated">
+            <p class="divider divider--label">Or pick a nearby date</p>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>.divider</code>, <code>.divider--strong</code>, <code>.divider--perforated</code>, <code>.divider--label</code>.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;hr class="divider"&gt;
+&lt;hr class="divider divider--strong"&gt;
+&lt;hr class="divider divider--perforated"&gt;
+&lt;p class="divider divider--label"&gt;Or pick a nearby date&lt;/p&gt;</code></pre></details>
+      </div>
+
+      <h3>In context: a booking summary</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <div class="ds-paper" style="max-width: 24rem;">
+            <div class="cluster cluster--between"><span>Abigail Mensah · Sun 1 Nov</span><span>$650</span></div>
+            <div class="cluster cluster--between" style="margin-top: var(--space-2);"><span class="text-muted">Zamaro fee (8%)</span><span class="text-muted">included</span></div>
+            <hr class="divider divider--perforated">
+            <div class="cluster cluster--between"><b>Deposit due now (25%)</b><b>$162.50</b></div>
+            <p class="stub__fine" style="margin-top: var(--space-3);">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The perforation sits where a ticket would tear: above what you pay.</span></div>
+      </div>
+
+      <h3>Vertical</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <div class="cluster" style="flex-wrap: nowrap;"><span class="rating"><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>Brampton · 44 km</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>From $650</span></div>
+        </div>
+        <div class="ds-example__caption"><span><code>.divider--vertical</code> stretches to the row’s height. In text, prefer a middle dot (·); use the rule between blocks.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="divider divider--vertical" role="separator" aria-orientation="vertical"&gt;&lt;/span&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Each variant has one weight (1px or 2px). Spacing comes from the 24px default margin or the surrounding stack."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Each variant has one weight (1px or 2px). Spacing comes from the 24px default margin or the surrounding stack.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Dividers are not interactive and have no hover, focus or disabled states. What changes is the surface under them; each variant is shown on the three paper surfaces it sits on.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">On canvas</th><th scope="col">On a card</th><th scope="col">In a sunken well</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Hairline</th>
+            <td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><hr class="divider" style="margin-block: var(--space-2);"></div></td>
+            <td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><hr class="divider" style="margin-block: var(--space-2);"></div></td>
+            <td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><hr class="divider" style="margin-block: var(--space-2);"></div></td></tr>
+          <tr><th scope="row">Strong</th>
+            <td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><hr class="divider divider--strong" style="margin-block: var(--space-2);"></div></td>
+            <td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><hr class="divider divider--strong" style="margin-block: var(--space-2);"></div></td>
+            <td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><hr class="divider divider--strong" style="margin-block: var(--space-2);"></div></td></tr>
+          <tr><th scope="row">Perforated</th>
+            <td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><hr class="divider divider--perforated" style="margin-block: var(--space-2);"></div></td>
+            <td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><hr class="divider divider--perforated" style="margin-block: var(--space-2);"></div></td>
+            <td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><hr class="divider divider--perforated" style="margin-block: var(--space-2);"></div></td></tr>
+          <tr><th scope="row">Label</th>
+            <td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><p class="divider divider--label" style="margin: 0;">Or</p></div></td>
+            <td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><p class="divider divider--label" style="margin: 0;">Or</p></div></td>
+            <td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><p class="divider divider--label" style="margin: 0;">Or</p></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="ds-paper"><hr class="divider" style="margin-top: 0;"><hr class="divider divider--strong"><hr class="divider divider--perforated"><p class="divider divider--label" style="margin-bottom: 0;">Or pick a nearby date</p></div></div>
+        <div data-theme="dark"><div class="ds-paper"><hr class="divider" style="margin-top: 0;"><hr class="divider divider--strong"><hr class="divider divider--perforated"><p class="divider divider--label" style="margin-bottom: 0;">Or pick a nearby date</p></div></div>
+      </div>
+      <p>On the stage (top bar, poster, footer) do not use these dividers: the stage separates with the 4px yellow rule (<code>--border-width-poster</code>, <code>--color-accent</code>) instead.</p>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Horizontal dividers are always the full width of their container.</li>
+        <li>A vertical divider in a row that wraps on phones ends up at a line start; switch the row to a <a href="container.html">stack</a> below 640px and the vertical divider to a horizontal one, or drop it and rely on the gap.</li>
+        <li>The labelled divider’s text never wraps past one line at 360px; keep it under 30 characters.</li>
+        <li>On wide tickets the perforation turns vertical (the stub moves beside the body from 640px). That is the ticket’s own rule, not a <code>.divider</code>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Hairlines read <code>--color-border-default</code>; strong and perforated rules read <code>--color-border-strong</code>; the label reads <code>--color-fg-muted</code>. All three follow the theme: on the stage theme the hairline becomes a dim grey line on charcoal and the strong rule a light grey one. There are no component tokens; to tint a divider inside a component, set <code>border-color</code> from a semantic token in that component, as the ticket does with <code>--ticket-border</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A horizontal divider is a native <code>&lt;hr&gt;</code>, which has the <code>separator</code> role. A vertical divider is a <code>&lt;span role="separator" aria-orientation="vertical"&gt;</code>. Neither is focusable; a focusable separator (a splitter) is a different APG pattern that Zamaro does not use. When a rule is pure decoration inside a component, draw it with a border, not an element.</p>
+      <p>The labelled divider is a <code>&lt;p&gt;</code>, not a separator: a separator’s content is not read, and “Or pick a nearby date” must be.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skips dividers. They are never focusable.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Not focusable. Keep 24px between a divider and the next control so its focus ring never overlaps the rule.</p>
+      <h3>Labelling</h3>
+      <p>Screen readers announce an <code>&lt;hr&gt;</code> as a separator. Use it between groups of content, not between every list item; lists already announce their items.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Hairline (decorative, exempt)</span><span class="ds-pair__ratio" data-contrast="--color-border-default|--color-bg-surface" data-min="1"></span></div>
+        <div class="ds-pair"><span>Strong and perforated rules</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Label</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: strong and perforated rules</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: label</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <p>Hairlines carry no information on their own, so WCAG 1.4.11 does not apply. When a rule does carry meaning (the perforation that says “this part is the payment”), use the strong or perforated variant, which clears 3:1.</p>
+      <h3>Motion</h3>
+      <p>None.</p>
+      <h3>Touch</h3>
+      <p>Not a target. Dividers between targets must not shrink the 8px minimum gap between them.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Labelled dividers name the alternative that follows, in a few words: “Or pick a nearby date”, “Or send your own list”.</li>
+        <li>Sentence case in the source; the overline style uppercases it.</li>
+        <li>Do not use a divider to replace a heading. If the next block needs a name, give it a heading.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="ds-paper"><div class="cluster cluster--between"><span>Abigail Mensah</span><span>$650</span></div><hr class="divider divider--perforated"><div class="cluster cluster--between"><b>Deposit</b><b>$162.50</b></div></div></div><figcaption>One perforation above the amount due.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="ds-paper"><span>Abigail Mensah</span><hr class="divider divider--perforated"><span>Sun 1 Nov</span><hr class="divider divider--perforated"><span>$650</span><hr class="divider divider--perforated"><b>$162.50</b></div></div><figcaption>A tear line between every row. The ticket stops looking like a ticket and nothing stands out.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ul class="list list--divided" style="width: 100%;"><li class="list__item">Way Maker</li><li class="list__item">Goodness of God</li></ul></div><figcaption>Lists draw their own hairlines with <code>.list--divided</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div style="width: 100%;"><p>Way Maker</p><hr class="divider" style="margin-block: var(--space-2);"><p>Goodness of God</p></div></div><figcaption><code>&lt;hr&gt;</code> between items instead of a list: screen readers hear “separator” after every song and no item count.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Hairline, label lines, vertical</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Strong, perforated</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Label text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Hairline / rule width</td><td><code>--border-width-hairline</code> / <code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-hairline"></span> / <span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Spacing</td><td><code>--space-6</code> (block), <code>--space-2</code> (vertical), <code>--space-3</code> (label gap)</td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-2"></span> / <span data-token="--space-3"></span></td></tr>
+          <tr><td>Label type</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--text-overline"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;hr class="divider divider--perforated"&gt;
+&lt;p class="divider divider--label"&gt;Or pick a nearby date&lt;/p&gt;
+&lt;div class="cluster"&gt;
+  &lt;span&gt;★ 4.9&lt;/span&gt;
+  &lt;span class="divider divider--vertical" role="separator" aria-orientation="vertical"&gt;&lt;/span&gt;
+  &lt;span&gt;Brampton · 44 km&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.divider</code></td><td>1px hairline, full width, 24px above and below.</td></tr>
+        <tr><td><code>.divider--strong</code></td><td>2px solid charcoal.</td></tr>
+        <tr><td><code>.divider--perforated</code></td><td>2px dashed charcoal: a tear line.</td></tr>
+        <tr><td><code>.divider--vertical</code></td><td>1px vertical hairline in a row; stretches to the row height.</td></tr>
+        <tr><td><code>.divider--label</code></td><td>Mono label between two hairlines; use on a <code>&lt;p&gt;</code>.</td></tr>
+        <tr><td><code>role="separator"</code> + <code>aria-orientation</code></td><td>For a vertical divider (an <code>&lt;hr&gt;</code> has the role already).</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>The mocks use no standalone <code>&lt;hr&gt;</code>; the divider standardises rules that the mocks drew inside components:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the hairline between page sections, the dashed stub on every ticket, the dashed title rule of the booking bar</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the dashed head of the booking ticket (“Book Abigail · No. ZAM-0114”), the hairlines between setlist songs and tour dates</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: nearby dates offered as an alternative (“Try a nearby date, or widen the radius”), where a labelled divider can introduce the date list</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>No standalone divider existed, so “Or pick a nearby date” in the empty state had to be a heading or nothing. <code>.divider--label</code> fills that gap. All rules now share two widths (<code>--border-width-hairline</code>, <code>--border-width-thick</code>) and two colours (<code>--color-border-default</code>, <code>--color-border-strong</code>).</li>
+        <li>The ticket notch, which sits on the perforation, always painted <code>--color-bg-canvas</code>; it now reads <code>--ticket-notch-bg</code> so the tear line works on any surface.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

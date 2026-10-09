@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility — Zamaro design system</title>
+<meta name="description" content="Zamaro accessibility commitments: WCAG 2.2 AA checklist, focus and target-size tokens, the component contract and the testing procedure.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation</p>
+      <h1>Accessibility</h1>
+      <p class="ds-lead">Church bookers include volunteers in their seventies on old phones. Every component meets WCAG 2.2 AA by construction, and the checkers enforce what they can.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Focus 3px</span><span class="ds-pill">Targets 24 / 44px</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#focus">Focus and targets</a></li><li><a href="#checklist">WCAG 2.2 AA checklist</a></li><li><a href="#contract">Component contract</a></li><li><a href="#testing">Testing</a></li><li><a href="#tokens">Tokens</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Accessibility is built into the tokens (contrast, focus, targets, motion) and documented on every component page in the same seven parts. This page lists the commitments and how to test them.</p>
+    </section>
+
+    <section class="ds-section" id="focus"><h2><a href="#focus">Focus and targets</a></h2>
+<div class="ds-themes">
+<div data-theme="light"><div class="cluster cluster--lg"><button class="btn" type="button" data-state="focus">Share</button><button class="btn btn--primary" type="button" data-state="focus">Book</button><input class="input" type="text" aria-label="Church location" value="Burlington, ON" data-state="focus" style="max-width: 12rem;"></div></div>
+<div data-theme="dark"><div class="cluster cluster--lg"><button class="btn" type="button" data-state="focus">Share</button><button class="btn btn--primary" type="button" data-state="focus">Book</button><input class="input" type="text" aria-label="Church location (dark)" value="Burlington, ON" data-state="focus" style="max-width: 12rem;"></div></div>
+</div>
+<ul><li>Buttons, links and chips: a <code>--focus-ring-width</code> outline in <code>--color-focus-ring</code> at <code>--focus-ring-offset</code>, on <code>:focus-visible</code> only.</li><li>Text fields: <code>--shadow-focus</code>, a double ring (yellow inside, ink outside on newsprint; charcoal inside, yellow outside on the stage), so the ring shows against both the field and the page.</li><li>Targets: <code>--target-min</code> (24px) is the floor; <code>--target-comfortable</code> (44px) for anything tapped often.</li></ul>
+<div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+<div class="ds-pair"><span>Focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+<div class="ds-pair"><span>Inner ring vs outer ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring-offset|--color-focus-ring" data-min="3"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div></div>
+    </section>
+
+    <section class="ds-section" id="checklist"><h2><a href="#checklist">WCAG 2.2 AA checklist</a></h2>
+<h3>Perceivable</h3><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">SC</th><th scope="col">Requirement</th><th scope="col">How Zamaro meets it</th></tr></thead><tbody><tr><td>1.4.3</td><td>Text contrast</td><td>All text pairs at least 4.5:1 in both themes; 149 checks pass. Body is 11:1.</td></tr><tr><td>1.4.11</td><td>Non-text contrast</td><td>Control rules 9:1; yellow fills on paper always carry an ink outline; focus ring at least 3:1.</td></tr><tr><td>1.4.1</td><td>Use of colour</td><td>Booked is struck through, free is labelled, errors have icon and text, links are underlined.</td></tr><tr><td>1.4.4, 1.4.10</td><td>Resize and reflow</td><td>rem everywhere; one column at 320px; only tables and tabs scroll inside themselves.</td></tr><tr><td>1.4.12</td><td>Text spacing</td><td>No fixed-height text boxes; display names break anywhere.</td></tr><tr><td>1.1.1</td><td>Images</td><td>Artwork placeholders are role=&quot;img&quot; with a description; icons are aria-hidden; the marquee is aria-hidden and repeats content found elsewhere.</td></tr><tr><td>1.3.4, 2.3.3</td><td>Orientation and motion</td><td>No orientation lock; durations zeroed under reduced motion; no auto-scrolling marquee.</td></tr><tr><td>1.3.5</td><td>Input purpose</td><td>autocomplete on church location, name, email and phone.</td></tr></tbody></table></div><h3>Operable</h3><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">SC</th><th scope="col">Requirement</th><th scope="col">How Zamaro meets it</th></tr></thead><tbody><tr><td>2.1.1, 2.1.2</td><td>Keyboard</td><td>Native controls first; the menu, tabs and dialog follow the APG keyboard models; only modal dialogs trap focus, and Escape releases them.</td></tr><tr><td>2.4.7, 2.4.11</td><td>Focus visible and not obscured</td><td>3px ring at 3px offset: ink on newsprint, yellow on the stage; scroll-padding clears the sticky top bar.</td></tr><tr><td>2.4.3</td><td>Focus order</td><td>DOM order matches visual order; the booking stub follows the reviews on phones in both the DOM and the layout.</td></tr><tr><td>2.5.8</td><td>Target size</td><td>24px minimum; 44px for chips, save toggles, nav links and medium buttons.</td></tr><tr><td>2.2.1</td><td>Timing</td><td>Toasts last at least 8 s, pause on hover and focus; errors persist.</td></tr><tr><td>2.4.1</td><td>Bypass blocks</td><td>A skip link to #main on every page; header, nav, main and footer landmarks.</td></tr><tr><td>2.4.4</td><td>Link purpose</td><td>“See Abigail’s profile”, not “More”; ticket names are the links.</td></tr><tr><td>2.5.3</td><td>Label in name</td><td>Visible “Pick” is extended to “Pick Fri 20 Nov”, which keeps the visible word first.</td></tr></tbody></table></div><h3>Understandable</h3><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">SC</th><th scope="col">Requirement</th><th scope="col">How Zamaro meets it</th></tr></thead><tbody><tr><td>3.3.2</td><td>Labels</td><td>Visible mono labels above every control; placeholders are hints only; “(optional)” instead of asterisks.</td></tr><tr><td>3.3.1, 3.3.3</td><td>Errors</td><td>The error names the field and the fix; aria-invalid and aria-describedby; a summary on submit.</td></tr><tr><td>3.3.4</td><td>Error prevention</td><td>Nothing is charged until the artist accepts; cancelling a booking confirms in a dialog.</td></tr><tr><td>3.3.7</td><td>Redundant entry</td><td>The date, location and gathering from the search pre-fill the booking stub.</td></tr><tr><td>3.2.3, 3.2.4</td><td>Consistency</td><td>The same top bar, footer and names on every page; the heart always means saved.</td></tr><tr><td>3.2.2</td><td>On input</td><td>Changing sort or a filter chip updates results in place and announces the count; it never navigates.</td></tr></tbody></table></div><h3>Robust</h3><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">SC</th><th scope="col">Requirement</th><th scope="col">How Zamaro meets it</th></tr></thead><tbody><tr><td>4.1.2</td><td>Name, role, value</td><td>aria-pressed on save toggles and chips; aria-current on nav, breadcrumb and the booker’s date; aria-expanded on menus.</td></tr><tr><td>4.1.3</td><td>Status messages</td><td>Loading copy and result counts in role=&quot;status&quot;; load failures in role=&quot;alert&quot;.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="contract"><h2><a href="#contract">Component contract</a></h2>
+<p>Every component page has an <code>#accessibility</code> section with the same seven parts:</p>
+<ol><li><b>Role and pattern</b>: the native element or the WAI-ARIA APG pattern, linked.</li><li><b>Keyboard</b>: a table of keys and effects.</li><li><b>Focus</b>: where focus starts, where it goes, what the ring looks like.</li><li><b>Labelling</b>: what must be named, how, and what is announced.</li><li><b>Contrast</b>: the token pairs with live ratios in both themes.</li><li><b>Motion</b>: what moves and what reduced motion does.</li><li><b>Touch</b>: target sizes and hover alternatives.</li></ol>
+    </section>
+
+    <section class="ds-section" id="testing"><h2><a href="#testing">Testing</a></h2>
+<ul class="ds-checklist">
+<li><code>check_contrast.py tokens/tokens.css</code>: every declared pair, both themes.</li>
+<li><code>check_design_system.py docs/design-system</code>: labels, names, alt text, landmarks, one h1, links, no raw colours.</li>
+<li>Tab through each component page’s examples; check order and visible focus.</li>
+<li>Screen reader pass on the booking stub (form), a dialog and the lineup (list of tickets) with VoiceOver and NVDA.</li>
+<li>Zoom to 200% and 400%; emulate <code>prefers-reduced-motion</code>, <code>prefers-contrast: more</code> and <code>forced-colors</code>.</li>
+<li>Screenshots at 360 and 1280px in both themes.</li></ul>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><caption class="visually-hidden">Accessibility tokens</caption><thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>--target-min</code> <button class="ds-copy" type="button" data-copy="--target-min" aria-label="Copy --target-min">Copy</button></td><td colspan="2"><span data-token="--target-min"></span></td><td>24px  WCAG 2.5.8 minimum</td></tr>
+<tr><td><code>--target-comfortable</code> <button class="ds-copy" type="button" data-copy="--target-comfortable" aria-label="Copy --target-comfortable">Copy</button></td><td colspan="2"><span data-token="--target-comfortable"></span></td><td>44px  chips, save toggle, nav links</td></tr>
+<tr><td><code>--focus-ring-width</code> <button class="ds-copy" type="button" data-copy="--focus-ring-width" aria-label="Copy --focus-ring-width">Copy</button></td><td colspan="2"><span data-token="--focus-ring-width"></span></td><td></td></tr>
+<tr><td><code>--focus-ring-offset</code> <button class="ds-copy" type="button" data-copy="--focus-ring-offset" aria-label="Copy --focus-ring-offset">Copy</button></td><td colspan="2"><span data-token="--focus-ring-offset"></span></td><td></td></tr></tbody></table></div>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

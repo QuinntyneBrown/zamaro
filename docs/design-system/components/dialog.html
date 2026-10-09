@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dialog — Zamaro design system</title>
+<meta name="description" content="Modal dialogs ask for a decision before something important happens: sending a booking request, cancelling a booking. Built on the native dialog element. Confirm, destructive and form variants, three sizes, busy and failed states, and a bottom sheet on phones.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: a 360px phone frame that shows the bottom sheet the product gets below 640px. */
+  .ds-phone { width: min(100%, 22.5rem); min-height: 34rem; display: flex; flex-direction: column; justify-content: flex-end; background: var(--color-bg-backdrop); border: var(--border-width-thick) solid var(--color-border-strong); }
+  .ds-phone .dialog { width: 100%; max-width: none; margin: 0; border-inline: 0; border-bottom: 0; box-shadow: none; }
+  .ds-phone .dialog__footer > .btn { flex: 1 1 auto; }
+  .ds-matrix { position: relative; }
+  .ds-matrix td { background: var(--color-bg-surface-raised); }
+  :is(.ds-example, .ds-themes, .ds-do, .ds-dont) li + li { margin-top: 0; }
+  .dialog-stage { min-height: 0; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers &amp; overlays</p>
+      <h1>Dialog</h1>
+      <p class="ds-lead">A modal dialog stops the page to ask one question before something important happens: send this request, cancel this booking. It is a paper card on a dimmed page, with a dashed tear line under its title.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill ds-pill--warn">Status: ready, not in the mocks yet</span><span class="ds-pill">APG Dialog (modal) · native <code>&lt;dialog&gt;</code></span><span class="ds-pill">Class <code>.dialog</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a dialog when the booker must decide before the product goes on, and the decision has consequences: sending a request an artist will see, cancelling a booking and its deposit, removing something they cannot get back. Keep everything else on the page.</p>
+      <ul>
+        <li><b>Confirm</b>: one question, a short summary of what will happen, a yellow primary action and a way back.</li>
+        <li><b>Destructive</b> (<code>.dialog--danger</code>): a red rule across the top, a warning icon in the title and a red <a href="button.html">danger button</a> that names what is lost.</li>
+        <li><b>Form</b>: a few fields that belong to one small task, such as messaging an artist, so the booker does not lose their place on the page.</li>
+      </ul>
+      <p>Do not use a dialog for success messages (use a <a href="toast.html">toast</a>), for errors on the page (use an <a href="alert.html">alert</a>), for help text (use a <a href="tooltip.html">tooltip</a> or inline copy) or for long flows such as the booking itself, which is a page. Never open a dialog the person did not ask for.</p>
+      <p>Try the real thing: <button class="btn btn--primary btn--sm" type="button" data-open="live-dialog">Send request to Abigail</button></p>
+      <dialog class="dialog" id="live-dialog" aria-labelledby="live-title" aria-describedby="live-desc">
+        <form method="dialog">
+          <div class="dialog__header">
+            <div><span class="overline dialog__kicker">Abigail Mensah · Sat 14 Nov</span><h2 class="dialog__title" id="live-title">Send request to Abigail?</h2></div>
+            <button class="btn btn--ghost btn--icon" value="close" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+          <div class="dialog__body"><p id="live-desc">She’ll get your message and reply by email. Nothing is charged until she accepts; then you pay a 25% deposit of $162.50.</p></div>
+          <div class="dialog__footer">
+            <button class="btn btn--primary" value="send" autofocus>Send request</button>
+            <button class="btn" value="cancel">Keep editing</button>
+          </div>
+        </form>
+      </dialog>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding: 0; grid-template-columns: minmax(0, 1fr);">
+          <div class="dialog-stage" style="width: 100%;">
+            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="an-title" aria-describedby="an-desc">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">Abigail Mensah · Sat 14 Nov</span><h2 class="dialog__title" id="an-title">Send request to Abigail?</h2></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body"><p id="an-desc">Nothing is charged until she accepts; then you pay a 25% deposit of $162.50.</p></div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button">Send request</button><button class="btn" type="button">Keep editing</button></div>
+            </div>
+          </div>
+          <span class="ds-callout" style="left: 4%; top: 6%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 18%; top: 22%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 18%; top: 33%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 84%; top: 22%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 50%; top: 44%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 18%; top: 58%;" aria-hidden="true">6</span>
+          <span class="ds-callout" style="left: 18%; top: 76%;" aria-hidden="true">7</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Backdrop</b><small><code>::backdrop</code> in <code>--color-bg-backdrop</code>. The page behind is inert.</small></div></li>
+          <li><div><b>Kicker (optional)</b><small><code>.dialog__kicker</code>: the context in the mono overline, “Abigail Mensah · Sat 14 Nov”.</small></div></li>
+          <li><div><b>Title</b><small><code>.dialog__title</code>: an <code>&lt;h2&gt;</code> question in the display face, 28px. It names the dialog.</small></div></li>
+          <li><div><b>Close</b><small>A ghost icon button labelled “Close”. Same as pressing <kbd>Esc</kbd> or the secondary action.</small></div></li>
+          <li><div><b>Tear line</b><small>A 2px dashed rule under the header, the dialog’s ticket perforation.</small></div></li>
+          <li><div><b>Body</b><small><code>.dialog__body</code>: what will happen, in one or two sentences. Scrolls if it must; the header and footer do not.</small></div></li>
+          <li><div><b>Footer</b><small><code>.dialog__footer</code>: primary action first, then the way back, right-aligned with 12px between.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Static examples sit in <code>.dialog-stage</code> with <code>.dialog--static</code> so they can be read in place; the product always uses <code>&lt;dialog&gt;</code> and <code>showModal()</code>.</p>
+      <h3>Confirm</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage">
+            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="v-confirm-title" aria-describedby="v-confirm-desc">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">Abigail Mensah · Sat 14 Nov</span><h2 class="dialog__title" id="v-confirm-title">Send request to Abigail?</h2></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body">
+                <p id="v-confirm-desc">She’ll get your message and reply by email. Nothing is charged until she accepts; then you pay a 25% deposit of $162.50.</p>
+                <dl class="dl dl--horizontal">
+                  <div><dt>Gathering</dt><dd>Sunday service</dd></div>
+                  <div><dt>Church</dt><dd>Riverside Community Church, Burlington</dd></div>
+                  <div><dt>Fee</dt><dd>$650 · travel included</dd></div>
+                </dl>
+              </div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button">Send request</button><button class="btn" type="button">Keep editing</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Opened from “Request to book · Sat 14 Nov” on the booking ticket. Focus starts on “Send request”.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dialog class="dialog" id="confirm-request" aria-labelledby="confirm-title" aria-describedby="confirm-desc"&gt;
+  &lt;form method="dialog"&gt;
+    &lt;div class="dialog__header"&gt;
+      &lt;div&gt;&lt;span class="overline dialog__kicker"&gt;Abigail Mensah · Sat 14 Nov&lt;/span&gt;
+        &lt;h2 class="dialog__title" id="confirm-title"&gt;Send request to Abigail?&lt;/h2&gt;&lt;/div&gt;
+      &lt;button class="btn btn--ghost btn--icon" value="cancel" aria-label="Close"&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="dialog__body"&gt;&lt;p id="confirm-desc"&gt;…&lt;/p&gt;&lt;/div&gt;
+    &lt;div class="dialog__footer"&gt;
+      &lt;button class="btn btn--primary" value="send" autofocus&gt;Send request&lt;/button&gt;
+      &lt;button class="btn" value="cancel"&gt;Keep editing&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre></details>
+      </div>
+
+      <h3>Destructive</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage">
+            <div class="dialog dialog--static dialog--danger" role="dialog" aria-modal="true" aria-labelledby="v-danger-title" aria-describedby="v-danger-desc">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">No. ZAM-0114 · Sun 1 Nov</span><h2 class="dialog__title" id="v-danger-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel your booking?</h2></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body"><p id="v-danger-desc">Abigail Mensah will be told today and the date goes back on her calendar. You’re more than 14 days out, so your $162.50 deposit comes back in full.</p></div>
+              <div class="dialog__footer"><button class="btn btn--danger" type="button">Cancel booking</button><button class="btn" type="button">Keep booking</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>.dialog--danger</code>: red top rule, warning icon, danger button. Focus starts on “Keep booking”, the safe choice.</span></div>
+      </div>
+
+      <h3>Form</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage">
+            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="v-form-title">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">Request to Luz Viva</span><h2 class="dialog__title" id="v-form-title">Suggest another date</h2></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body">
+                <label class="field"><span class="field__label">New date</span><input class="input" type="date" value="2026-11-21" min="2026-10-09"></label>
+                <label class="field"><span class="field__row"><span class="field__label">Message</span><span class="field__optional">Optional</span></span><textarea class="textarea" placeholder="Why the change, and anything Luz Viva should know."></textarea></label>
+              </div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button">Send new date</button><button class="btn" type="button">Cancel</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>A small task that belongs to one request. Focus starts in the first field.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Medium (32rem, 512px) is the default. Small (<code>.dialog--sm</code>, 24rem) is for a one-line question. Large (<code>.dialog--lg</code>, 44rem) is for reading, such as the booking terms; its body scrolls. Every size leaves 16px of backdrop on each side and becomes a bottom sheet below 640px.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage" style="gap: var(--space-8);">
+            <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="s-sm-title">
+              <div class="dialog__header"><h2 class="dialog__title" id="s-sm-title">Remove Luz Viva from saved?</h2></div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button">Remove</button><button class="btn" type="button">Keep</button></div>
+            </div>
+            <div class="dialog dialog--static dialog--lg" role="dialog" aria-modal="true" aria-labelledby="s-lg-title" style="max-height: 24rem;">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">Before you book</span><h2 class="dialog__title" id="s-lg-title">Booking terms</h2></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body" tabindex="0" aria-label="Booking terms text">
+                <p><b>Deposit.</b> When an artist accepts, you pay 25% of their fee. The rest is due after the event.</p>
+                <p><b>Zamaro’s fee.</b> Artists pay Zamaro 8% of the fee. Churches pay nothing extra; the price you see is the price you pay.</p>
+                <p><b>Cancelling.</b> Cancel free up to 14 days before your event and your deposit comes back in full.</p>
+                <p><b>Nothing is charged</b> until an artist accepts your request.</p>
+              </div>
+              <div class="dialog__footer"><button class="btn" type="button">Close</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>.dialog--sm</code> (24rem) and <code>.dialog--lg</code> (44rem, scrolling body). Width is <code>min(100% − 2rem, --dialog-width)</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The controls inside a dialog have the usual states; hover and focus are forced with <code>data-state</code>. The dialog itself can be busy (<code>aria-busy="true"</code>), invalid or failed.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Control</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Busy</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Primary</th>
+            <td><button class="btn btn--primary" type="button">Send request</button></td>
+            <td><button class="btn btn--primary" type="button" data-state="hover">Send request</button></td>
+            <td><button class="btn btn--primary" type="button" data-state="focus">Send request</button></td>
+            <td><button class="btn btn--primary" type="button" aria-busy="true">Sending…</button></td>
+            <td><button class="btn btn--primary" type="button" disabled>Send request</button></td></tr>
+          <tr><th scope="row">Danger</th>
+            <td><button class="btn btn--danger" type="button">Cancel booking</button></td>
+            <td><button class="btn btn--danger" type="button" data-state="hover">Cancel booking</button></td>
+            <td><button class="btn btn--danger" type="button" data-state="focus">Cancel booking</button></td>
+            <td><button class="btn btn--danger" type="button" aria-busy="true">Cancelling…</button></td>
+            <td><button class="btn btn--danger" type="button" disabled>Cancel booking</button></td></tr>
+          <tr><th scope="row">Close</th>
+            <td><button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td>
+            <td><button class="btn btn--ghost btn--icon" type="button" aria-label="Close" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td>
+            <td><button class="btn btn--ghost btn--icon" type="button" aria-label="Close" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td>
+            <td><button class="btn btn--ghost btn--icon" type="button" aria-label="Close" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td>
+            <td><button class="btn btn--ghost btn--icon" type="button" aria-label="Close" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Busy, invalid and failed</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage" style="gap: var(--space-8);">
+            <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="st-busy-title" aria-busy="true">
+              <div class="dialog__header"><h2 class="dialog__title" id="st-busy-title">Send request to Abigail?</h2></div>
+              <div class="dialog__body"><p>Nothing is charged until she accepts.</p></div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button" aria-busy="true">Sending request…</button><button class="btn" type="button" disabled>Keep editing</button></div>
+            </div>
+            <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="st-inv-title">
+              <div class="dialog__header"><h2 class="dialog__title" id="st-inv-title">Suggest another date</h2></div>
+              <div class="dialog__body">
+                <label class="field"><span class="field__label">New date</span><input class="input" type="date" value="2026-10-04" aria-invalid="true" aria-describedby="st-inv-err"><span class="field__error" id="st-inv-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Pick a date after today, Fri 9 Oct.</span></label>
+              </div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button">Send new date</button><button class="btn" type="button">Cancel</button></div>
+            </div>
+            <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="st-fail-title">
+              <div class="dialog__header"><h2 class="dialog__title" id="st-fail-title">Send request to Abigail?</h2></div>
+              <div class="dialog__body"><div class="alert alert--danger alert--compact" role="alert"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="alert__title">Not sent</p><p>We couldn’t reach Zamaro. Your message is saved here; try again.</p></div></div></div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button><button class="btn" type="button">Keep editing</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Busy: the body dims, the primary shows a spinner, the way back is disabled until the request settles. Invalid: field error inside the dialog. Failed: a compact danger alert above the footer; the dialog stays open.</span></div>
+      </div>
+
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="dialog-stage" style="padding: var(--space-4);"><div class="dialog dialog--static dialog--danger" role="dialog" aria-modal="true" aria-labelledby="th-l-title"><div class="dialog__header"><h2 class="dialog__title" id="th-l-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel your booking?</h2></div><div class="dialog__body"><p>Your $162.50 deposit comes back in full.</p></div><div class="dialog__footer"><button class="btn btn--danger" type="button">Cancel booking</button><button class="btn" type="button" data-state="focus">Keep booking</button></div></div></div></div>
+        <div data-theme="dark"><div class="dialog-stage" style="padding: var(--space-4);"><div class="dialog dialog--static dialog--danger" role="dialog" aria-modal="true" aria-labelledby="th-d-title"><div class="dialog__header"><h2 class="dialog__title" id="th-d-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel your booking?</h2></div><div class="dialog__body"><p>Your $162.50 deposit comes back in full.</p></div><div class="dialog__footer"><button class="btn btn--danger" type="button">Cancel booking</button><button class="btn" type="button" data-state="focus">Keep booking</button></div></div></div></div>
+      </div>
+      <ul>
+        <li><b>Open</b>: fades in and rises 16px over <code>--duration-slow</code>; the backdrop dims the page.</li>
+        <li><b>Busy</b> (<code>aria-busy="true"</code> on the dialog): the body drops to 60% opacity and ignores clicks; <kbd>Esc</kbd> and the way back are held until the request settles, so a request is never half-sent.</li>
+        <li><b>Invalid</b>: errors appear under their fields with <code>aria-invalid</code> and <code>aria-describedby</code>; focus moves to the first invalid field.</li>
+        <li><b>Failed</b>: the dialog stays open with an alert that says what happened, that the input is safe, and what to do. Focus moves to “Try again”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <p>From 640px the dialog is centred with at least 16px of backdrop around it. Below 640px it becomes a bottom sheet: full width, flush with the bottom edge, no side frame or shadow, up to 92% of the screen tall. The footer sticks to the bottom with the safe-area inset, and its buttons stretch to equal widths.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="justify-content: center;">
+          <div class="ds-phone">
+            <div class="dialog dialog--static dialog--danger" role="dialog" aria-modal="true" aria-labelledby="ph-title" aria-describedby="ph-desc">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">No. ZAM-0114 · Sun 1 Nov</span><h2 class="dialog__title" id="ph-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel your booking?</h2></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body"><p id="ph-desc">Abigail will be told today. Your $162.50 deposit comes back in full.</p></div>
+              <div class="dialog__footer"><button class="btn btn--danger" type="button">Cancel booking</button><button class="btn" type="button">Keep booking</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The bottom sheet at 360px, simulated in a frame. The product gets it from the <code>max-width: 39.99rem</code> rule in <code>components.css</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The dialog reads <code>--color-bg-surface-raised</code> and <code>--color-fg-default</code> for its paper, <code>--color-border-strong</code> for its frame and tear line, <code>--shadow-4</code> for the hard 12px print shadow and <code>--color-bg-backdrop</code> for the dim layer. The danger variant adds <code>--color-danger-solid</code> for the top rule and <code>--color-danger-icon</code> for the warning icon. One component token sets the width: <code>--dialog-width</code> (32rem; 24rem small; 44rem large).</p>
+      <p>In the dark theme the paper becomes a raised charcoal panel with a light frame, and the shadow turns yellow, like a stage light behind the card. The danger rule and icon switch to the lighter red of the dark palette, which keeps 3:1 against charcoal.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p><a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/">APG Dialog (Modal) pattern</a>, built on the native <code>&lt;dialog&gt;</code> element opened with <code>showModal()</code>. That gives the <code>dialog</code> role, a modal top layer, an inert page behind, <kbd>Esc</kbd> to close and focus return without extra code. Add <code>aria-labelledby</code> (the title) and, for confirmations, <code>aria-describedby</code> (the sentence that explains the consequence). The static documentation copies use <code>role="dialog" aria-modal="true"</code> on a <code>&lt;div&gt;</code> only so they can be shown in place.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through the dialog’s controls only; the page behind cannot be reached.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the dialog, the same as “Keep editing” or Close. Ignored while busy.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Activates the focused button; in a form dialog, submits from a single-line field.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Activates the focused button.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>On open, focus goes to: the primary action in a confirm dialog; the safe action (“Keep booking”) in a destructive one; the first field in a form; the start of the body (with <code>tabindex="-1"</code>) when the body is long text. On close, focus returns to the button that opened it. If that button is gone (the booking was cancelled), move focus to the page’s <code>&lt;h1&gt;</code> or the list it was in.</p>
+      <h3>Labelling</h3>
+      <p>The title is a question or a task name, and it is the dialog’s accessible name. The close button is labelled “Close”. Busy and failed states are announced: the busy primary keeps its name and adds <code>aria-busy</code>, and the failure alert has <code>role="alert"</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Body text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Kicker and secondary text</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger rule against the card</span><span class="ds-pair__ratio" data-contrast="--color-danger-solid|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Frame against the card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: body text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: danger button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: focus ring on the card</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The dialog fades in and rises 16px (<code>dialog-in</code>, <code>--duration-slow</code>, <code>--ease-enter</code>). Under <code>prefers-reduced-motion</code> the duration drops to near zero and it simply appears. The backdrop does not animate.</p>
+      <h3>Touch</h3>
+      <p>Footer buttons are 44px tall; on phones they stretch to share the full width and sit within thumb reach in the bottom sheet. The close button is a 44px square. Tapping the backdrop does not close a dialog that is busy or holds unsent input.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Title: a direct question with the object: “Send request to Abigail?”, “Cancel your booking?”. Or a task name for forms: “Suggest another date”.</li>
+        <li>Body: what will happen and what it costs, in one or two sentences, with real numbers: “your $162.50 deposit comes back in full”.</li>
+        <li>Buttons: verbs that answer the title. “Send request” / “Keep editing”; “Cancel booking” / “Keep booking”. Never “OK” / “Cancel”, which is ambiguous when the action is itself a cancellation.</li>
+        <li>Failures follow the error formula: what happened, that the input is safe, what to do.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="dialog__footer" style="padding: 0;"><button class="btn btn--danger" type="button">Cancel booking</button><button class="btn" type="button">Keep booking</button></div></div><figcaption>Both buttons say what they do, so “cancel” is never ambiguous.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="dialog__footer" style="padding: 0;"><button class="btn btn--danger" type="button">OK</button><button class="btn" type="button">Cancel</button></div></div><figcaption>“Cancel” here keeps the booking and “OK” cancels it.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><span class="toast" style="animation: none;" role="status"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><span class="toast__title">Request sent</span><span class="toast__body">Abigail will reply by email.</span></span><span></span></span></div><figcaption>Confirm success with a toast after the dialog closes.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="dd-title" style="width: 100%;"><div class="dialog__header"><h2 class="dialog__title" id="dd-title">Request sent!</h2></div><div class="dialog__footer"><button class="btn btn--primary" type="button">OK</button></div></div></div><figcaption>A second dialog to say it worked. It interrupts again and has nothing to decide.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Paper</td><td><code>--color-bg-surface-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td></tr>
+          <tr><td>Frame, tear line</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Backdrop</td><td><code>--color-bg-backdrop</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-backdrop" data-swatch></i><span data-token="--color-bg-backdrop"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-backdrop" data-swatch></i><span data-token="--color-bg-backdrop"></span></span></td></tr>
+          <tr><td>Danger rule</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+          <tr><td>Danger icon</td><td><code>--color-danger-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-icon" data-swatch></i><span data-token="--color-danger-icon"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-icon" data-swatch></i><span data-token="--color-danger-icon"></span></span></td></tr>
+          <tr><td>Shadow</td><td><code>--shadow-4</code> (<code>--color-shadow</code>)</td><td><span data-theme="light" data-token="--shadow-4"></span></td><td><span data-theme="dark" data-token="--shadow-4"></span></td></tr>
+          <tr><td>Width md / sm / lg</td><td><code>--dialog-width</code></td><td colspan="2">32rem / 24rem / 44rem</td></tr>
+          <tr><td>Padding</td><td><code>--space-6</code> (sides), <code>--space-5</code> (body), <code>--space-4</code> (gaps)</td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-5"></span> / <span data-token="--space-4"></span></td></tr>
+          <tr><td>Rules</td><td><code>--border-width-thick</code>, <code>--border-width-poster</code> (danger)</td><td colspan="2"><span data-token="--border-width-thick"></span> / <span data-token="--border-width-poster"></span></td></tr>
+          <tr><td>Title</td><td><code>--text-h3</code></td><td colspan="2"><span data-token="--text-h3"></span></td></tr>
+          <tr><td>Enter motion</td><td><code>--duration-slow</code>, <code>--ease-enter</code></td><td colspan="2"><span data-token="--duration-slow"></span></td></tr>
+        </tbody>
+      </table></div>
+      <p>The native dialog renders in the browser’s top layer, so it needs no z-index. A non-native fallback would use <code>--z-modal</code> (<span data-token="--z-modal"></span>) over <code>--z-overlay</code> for its backdrop.</p>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>const dialog = document.getElementById('confirm-request');
+document.querySelector('[data-confirm-request]').addEventListener('click', () =&gt; dialog.showModal());
+
+dialog.addEventListener('close', async () =&gt; {
+  if (dialog.returnValue !== 'send') return;           // "Keep editing", Close or Esc
+  // In the product, keep it open while sending: preventDefault the submit, set aria-busy, then close.
+});
+
+dialog.addEventListener('cancel', (e) =&gt; {             // Esc
+  if (dialog.getAttribute('aria-busy') === 'true') e.preventDefault();
+});</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.dialog</code> on <code>&lt;dialog&gt;</code></td><td>Paper card, frame, hard shadow, backdrop, enter motion.</td></tr>
+        <tr><td><code>.dialog__header</code> <code>.dialog__kicker</code> <code>.dialog__title</code></td><td>Header with context, title and close; dashed rule under it.</td></tr>
+        <tr><td><code>.dialog__body</code> <code>.dialog__footer</code></td><td>Scrolling body; actions, right-aligned (sticky on phones).</td></tr>
+        <tr><td><code>.dialog--danger</code></td><td>Red top rule, icon in the title.</td></tr>
+        <tr><td><code>.dialog--sm</code> <code>.dialog--lg</code></td><td>24rem or 44rem wide.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>Dims the body and ignores clicks while a request runs.</td></tr>
+        <tr><td><code>aria-labelledby</code>, <code>aria-describedby</code></td><td>Name from the title; description from the consequence sentence.</td></tr>
+        <tr><td><code>.dialog-stage</code> + <code>.dialog--static</code></td><td>Documentation and mocks only: shows a dialog in place on a backdrop.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The product will need it for:</p>
+      <ul>
+        <li>Confirming “Request to book · Sat 14 Nov” from the booking ticket in <a href="../../mocks/pages/artist/default.html">pages/artist/default</a>, where the fine print (“Nothing is charged until Abigail accepts. Cancel free up to 14 days before.”) becomes the dialog body.</li>
+        <li>Cancelling a booking and withdrawing a request in the booker’s account; declining a request in the artist dashboard.</li>
+        <li>Booking terms (deposit 25%, Zamaro fee 8%, free cancellation up to 14 days), linked from the ticket’s fine print.</li>
+      </ul>
+      <p>Drift fixed during extraction: none in the dialog itself. It uses the danger button, which the button page reserves for confirmation dialogs, and the 4px/6px shadow steps that replaced the mocks’ 3px/5px offsets.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>
+  /* Docs demo: open the native dialog; it returns focus to the opener on close. */
+  document.querySelectorAll('[data-open]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var dialog = document.getElementById(button.getAttribute('data-open'));
+      if (dialog && dialog.showModal) dialog.showModal();
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data tables &amp; lists — Zamaro design system</title>
+<meta name="description" content="How Zamaro shows collections: a lineup of tickets for choosing artists, lists for dates and saved artists, tables for comparing booking requests; sorting and filtering with chips and the sort select; show more versus pagination; and responsive tables.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Data tables &amp; lists</h1>
+      <p class="ds-lead">Most Zamaro collections are a lineup of tickets, because churches choose artists by face, place and price. Use a table only when people compare numbers across rows and act on them, like their own booking requests.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Classes <code>.lineup</code> <code>.list</code> <code>.table</code></span><span class="ds-pill">Composes 13 components</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>A search for Sat 14 Nov within 120 km of Burlington returns seven artists. That is a short list of very different things (a soloist, a 30-voice choir, a piano trio) and the church decides by looking. So the lineup is a set of admission tickets: artwork, name, style, distance and the price on the stub, the headliner first. Tables appear later, in the church’s own records, where rows are alike and numbers matter.</p>
+      <ul>
+        <li><b>Filter with chips</b> that toggle on and off, and <b>sort with one native select</b>. Both re-order in place and keep the date.</li>
+        <li><b>Show everything up to 12.</b> Past that, “Show 6 more”. Numbered pages only for records people return to.</li>
+        <li><b>Tables scroll inside their frame</b> on phones, with the first column pinned, unless they are four columns or fewer and can become a list.</li>
+      </ul>
+      <p>Composes: <a href="../components/ticket.html">ticket card</a>, <a href="../components/headliner.html">headliner</a>, <a href="../components/chip.html">chip</a>, <a href="../components/select.html">select</a>, <a href="../components/list.html">list</a>, <a href="../components/tour-dates.html">tour dates</a>, <a href="../components/setlist.html">setlist</a>, <a href="../components/table.html">table</a>, <a href="../components/pagination.html">pagination</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/save-toggle.html">save toggle</a> and <a href="../components/skeleton.html">skeleton</a>.</p>
+    </section>
+
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Collection</th><th scope="col">Use</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+          <tr><td>Artists free on a date</td><td>Lineup of <a href="../components/ticket.html">tickets</a>, <a href="../components/headliner.html">headliner</a> first</td><td>People compare pictures, styles and prices; every artist is different.</td></tr>
+          <tr><td>An artist’s upcoming dates</td><td><a href="../components/tour-dates.html">Tour dates</a> list</td><td>One fact per row (free or booked) and one action (“Pick”).</td></tr>
+          <tr><td>Songs an artist leads</td><td><a href="../components/setlist.html">Setlist</a></td><td>A numbered list with a key per song.</td></tr>
+          <tr><td>Saved artists, menu-sized lists</td><td><a href="../components/list.html">List</a> with avatar and meta</td><td>Short, scannable, one link per row.</td></tr>
+          <tr><td>A church’s booking requests; an artist’s payouts</td><td><a href="../components/table.html">Table</a></td><td>Rows are alike; people sort by date, read status and money across, and act on one row.</td></tr>
+          <tr><td>Facts about one booking</td><td><a href="../components/description-list.html">Description list</a></td><td>Pairs of label and value, not rows.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Pagination or “show more”</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Size and use</th><th scope="col">Pattern</th></tr></thead>
+        <tbody>
+          <tr><td>Up to 12 items</td><td>Show them all. A search on one date rarely passes this.</td></tr>
+          <tr><td>More than 12, browsed once</td><td>“Show 6 more” below the list, with “Showing 12 of 18”. Focus moves to the first new item.</td></tr>
+          <tr><td>Records people come back to (requests, payouts)</td><td>Numbered <a href="../components/pagination.html">pagination</a>, 20 per page, page number in the URL.</td></tr>
+          <tr><td>Never</td><td>Infinite scroll: it hides the footer, loses the place on Back and gives keyboard users no end.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Filtering and sorting</h3>
+      <ul>
+        <li><b>Chips</b> are toggle buttons in a <code>&lt;fieldset class="filters"&gt;</code> with a legend. Styles combine with “or” (Band or Gospel choir); price combines with “and”. Each chip shows how many artists it would match.</li>
+        <li><b>The sort</b> is a native <code>&lt;select&gt;</code> in a <code>.field--inline</code>: “Closest first” (default), “Highest rated”, “Price, low to high”. Changing it re-orders the lineup in place; focus stays on the select.</li>
+        <li><b>The count</b> in the section kicker updates and is announced: “Sat 14 Nov · 3 free under $800 · within 120 km”.</li>
+        <li>Filters and sort are part of the search, so they live in the URL and survive Back (see <a href="navigation-and-page-structure.html">navigation</a>).</li>
+        <li>When filters rule everyone out, the <a href="empty-and-error-states.html">empty state</a> offers “Show all styles”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+      <h3>The lineup with filters and sort</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <div class="stack stack--lg">
+            <div class="section__head" style="margin-bottom: 0;">
+              <div><p class="overline section__kicker">Sat 14 Nov · 3 free under $800 · within 120 km</p><p style="font: var(--text-h2); text-transform: uppercase;">The lineup</p></div>
+              <div class="field field--inline"><label class="field__label" for="dt-sort">Sort</label><select class="select" id="dt-sort"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></div>
+            </div>
+            <fieldset class="filters">
+              <legend>Filter by style</legend>
+              <button class="chip" type="button" aria-pressed="false">Band <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false">Solo vocalist <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false">Gospel choir <span class="chip__count">1<span class="visually-hidden"> artist</span></span></button><button class="chip" type="button" aria-pressed="false">Hymns <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="true">Under $800 <span class="chip__count">3<span class="visually-hidden"> artists</span></span></button>
+            </fieldset>
+            <p class="visually-hidden" role="status">3 artists free under $800</p>
+            <ol class="lineup" role="list" aria-label="Artists free Saturday 14 November under $800" style="grid-template-columns: minmax(0, 1fr);">
+              <li class="ticket">
+                <div class="art ticket__art" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+                <div class="ticket__body">
+                  <span class="ticket__no">No. 03 · ★ 4.7</span>
+                  <p class="ticket__name"><a href="#structure">Elijah Park</a></p>
+                  <p class="ticket__meta">Solo vocalist · Acoustic guitar<br>Markham · 74 km from you</p>
+                </div>
+                <div class="ticket__stub">
+                  <p class="ticket__price"><small>From</small>$350</p>
+                  <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+                </div>
+              </li>
+              <li class="ticket">
+                <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
+                <div class="ticket__body">
+                  <span class="ticket__no">No. 06 · ★ 4.9</span>
+                  <p class="ticket__name"><a href="#structure">Daniel &amp; Ruth Okonkwo</a></p>
+                  <p class="ticket__meta">Duo · Hymns &amp; acoustic<br>Ajax · 97 km from you</p>
+                </div>
+                <div class="ticket__stub">
+                  <p class="ticket__price"><small>From</small>$700</p>
+                  <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Head with live count and sort, filter chips with counts, then tickets in sort order. Abigail Mensah (44 km, $650) is the headliner above and is not repeated.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="section__head"&gt;
+  &lt;div&gt;&lt;p class="overline section__kicker"&gt;Sat 14 Nov · 3 free under $800 · within 120 km&lt;/p&gt;&lt;h2 id="lineup-title"&gt;The lineup&lt;/h2&gt;&lt;/div&gt;
+  &lt;div class="field field--inline"&gt;&lt;label class="field__label" for="sort"&gt;Sort&lt;/label&gt;&lt;select class="select" id="sort"&gt;…&lt;/select&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;fieldset class="filters"&gt;
+  &lt;legend&gt;Filter by style&lt;/legend&gt;
+  &lt;button class="chip" type="button" aria-pressed="true"&gt;Under $800 &lt;span class="chip__count"&gt;3&lt;span class="visually-hidden"&gt; artists&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;
+&lt;/fieldset&gt;
+&lt;ol class="lineup" role="list" aria-label="Artists free Saturday 14 November under $800"&gt;
+  &lt;li class="ticket"&gt;… &lt;h3 class="ticket__name"&gt;&lt;a href="/artists/elijah-park?date=2026-11-14"&gt;Elijah Park&lt;/a&gt;&lt;/h3&gt; …&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3>Show more</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="cluster cluster--between"><p class="pagination__status" role="status">Showing 12 of 18</p><button class="btn" type="button">Show 6 more</button></div>
+        </div>
+        <div class="ds-example__caption"><span>Under the last ticket when a wide search (200 km) returns more than 12 artists.</span></div>
+      </div>
+      <h3>Lists: saved artists and tour dates</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
+          <ul class="list list--divided list--interactive" aria-label="Saved artists" style="flex: 1 1 20rem;">
+            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Gospel &amp; contemporary · Brampton · from $650</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
+            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">HC</span><span class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Five-piece band · Mississauga · from $1,800</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
+            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Spanish &amp; English band · North York · from $900</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
+          </ul>
+          <ul class="tour-dates" role="list" aria-label="Abigail Mensah’s upcoming dates" style="flex: 1 1 20rem;">
+            <li aria-current="date"><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span class="cluster"><span class="tour-dates__note">Your date</span></span><span class="badge badge--free">Free</span></li>
+            <li><span class="tour-dates__day"><small>Sun</small>15 Nov</span><span class="cluster"><span class="tour-dates__note">Sunday service, Oakville</span></span><span class="badge badge--booked">Booked</span></li>
+            <li><span class="tour-dates__day"><small>Fri</small>20 Nov</span><span class="cluster"><span class="badge badge--free">Free</span><span class="tour-dates__note">Open all day</span></span><button class="btn btn--sm" type="button" aria-label="Pick Fri 20 Nov">Pick</button></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>A list is one link per row; tour dates are one fact and at most one action per row.</span></div>
+      </div>
+      <h3>A table: Your booking requests</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Your booking requests, scrolls sideways">
+            <table class="table">
+              <caption>Your booking requests</caption>
+              <thead><tr>
+                <th scope="col" class="table__first">Artist</th>
+                <th scope="col">No.</th>
+                <th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th>
+                <th scope="col">Status</th>
+                <th scope="col" class="table__num">Fee</th>
+                <th scope="col" class="table__actions"><span class="visually-hidden">Actions</span></th>
+              </tr></thead>
+              <tbody>
+                <tr><th scope="row" class="table__first">Marcus Bell Trio</th><td>ZAM-0087</td><td>Sun 7 Jun</td><td><span class="badge">Played</span></td><td class="table__num">$950</td><td class="table__actions"><button class="btn btn--sm" type="button" aria-label="Write a review for Marcus Bell Trio">Write a review</button></td></tr>
+                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>ZAM-0114</td><td>Sat 14 Nov</td><td><span class="badge badge--success">Accepted</span></td><td class="table__num">$650</td><td class="table__actions"><button class="btn btn--sm btn--primary" type="button" aria-label="Pay deposit for Abigail Mensah, Sat 14 Nov">Pay deposit</button></td></tr>
+                <tr data-state="hover"><th scope="row" class="table__first">Luz Viva</th><td>ZAM-0121</td><td>Sun 6 Dec</td><td><span class="badge badge--info">Waiting</span></td><td class="table__num">$900</td><td class="table__actions"><button class="btn btn--sm" type="button" aria-label="Withdraw request to Luz Viva">Withdraw</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <nav class="pagination" aria-label="Pagination, booking requests">
+            <p class="pagination__status">Page 1 of 2 · 23 requests</p>
+            <ul class="pagination__list">
+              <li><a class="pagination__link" role="link" aria-disabled="true" aria-label="Previous page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></a></li>
+              <li><a class="pagination__link" href="#structure" aria-current="page" aria-label="Page 1">1</a></li>
+              <li><a class="pagination__link" href="#structure" aria-label="Page 2">2</a></li>
+              <li><a class="pagination__link" href="#structure" aria-label="Next page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="ds-example__caption"><span>Caption, row headers, a sortable date column (<code>aria-sort</code>), status as badges, money right-aligned, one action per row, numbered pages. The third row is hovered. Not in the mocks yet.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">State</th><th scope="col">Lineup</th><th scope="col">Table</th></tr></thead>
+        <tbody>
+          <tr><td>Loading</td><td>Ticket skeletons, chips disabled, status line, region <code>aria-busy</code></td><td>Five skeleton rows under the real header; caption and header stay</td></tr>
+          <tr><td>Filtered</td><td>Pressed chips, kicker count, announced count</td><td>Filter chips above the table; caption says “Your booking requests · Waiting”</td></tr>
+          <tr><td>Sorted</td><td>Select value; order changes in place</td><td><code>aria-sort</code> on one header; icon solid and pointing the way</td></tr>
+          <tr><td>Empty</td><td>“Sold out” <a href="empty-and-error-states.html">empty state</a> with nearby dates</td><td>A quiet empty state in the table’s frame: “No requests yet” + “Find who’s free”</td></tr>
+          <tr><td>Error</td><td>Alert in the lineup’s place, filters kept</td><td>Alert in the table’s frame, header kept</td></tr>
+          <tr><td>Partial</td><td>“Showing 12 of 18” + “Show 6 more”</td><td>“Page 1 of 2”</td></tr>
+          <tr><td>Row hover / selected</td><td>Ticket lifts and tilts</td><td>Subtle fill; selected rows (<code>aria-selected</code>) get the yellow tint and a bulk bar</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Controls</h3>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Control</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Pressed / current</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Filter chip</th><td><button class="chip" type="button" aria-pressed="false">Hymns</button></td><td><button class="chip" type="button" aria-pressed="false" data-state="hover">Hymns</button></td><td><button class="chip" type="button" aria-pressed="false" data-state="focus">Hymns</button></td><td><button class="chip" type="button" aria-pressed="true">Hymns</button></td><td><button class="chip" type="button" aria-pressed="false" disabled>Hymns</button></td></tr>
+          <tr><th scope="row">Page link</th><td><a class="pagination__link" href="#states" aria-label="Page 2, default">2</a></td><td><a class="pagination__link" href="#states" data-state="hover" aria-label="Page 2, hover">2</a></td><td><a class="pagination__link" href="#states" data-state="focus" aria-label="Page 2, focus">2</a></td><td><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, current">1</a></td><td><a class="pagination__link" role="link" aria-disabled="true" aria-label="Previous page, disabled"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></a></td></tr>
+          <tr><th scope="row">Sort header</th><td><table class="table"><thead><tr><th scope="col"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th></tr></thead></table></td><td>Not applicable</td><td><table class="table"><thead><tr><th scope="col"><button class="table__sort" type="button" data-state="focus">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th></tr></thead></table></td><td><table class="table"><thead><tr><th scope="col" aria-sort="descending"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th></tr></thead></table></td><td>Not applicable</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, light theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, light theme">2</a></div><span class="badge badge--success">Accepted</span></div></div>
+        <div data-theme="dark"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, dark theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, dark theme">2</a></div><span class="badge badge--success">Accepted</span></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Lineup:</b> one ticket per row on phones and tablets, two from 1024px. Below 640px the price stub moves under the body, with the perforation across.</li>
+        <li><b>Section head:</b> the sort sits beside the title when there is room and wraps under it on phones. Chips wrap onto as many lines as they need; they never scroll sideways.</li>
+        <li><b>Tables with five columns or more</b> scroll inside <code>.table-wrap</code>; the first column (<code>.table__first</code>, the artist) stays pinned so each row keeps its name. The page itself never scrolls sideways.</li>
+        <li><b>Tables with four columns or fewer</b> become a list below 768px: each row a <code>.list__item</code> with the first column as the title and the rest as meta.</li>
+        <li><b>Pagination</b> wraps; the status line goes above the page links on phones.</li>
+        <li><b>Tour dates</b> keep three columns down to 360px; long notes wrap under the date.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>The lineup is an <code>&lt;ol role="list"&gt;</code> (its order is the sort) with an <code>aria-label</code> that names the date. Each ticket has one link, on the name, stretched over the card; the save toggle sits above it. Chips are toggle buttons (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button</a>) in a fieldset with a legend. Tables use <code>&lt;caption&gt;</code>, <code>scope</code> on headers and a row header per row; sortable columns follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/table/examples/sortable-table/">APG Sortable Table</a> example with a button in the header and <code>aria-sort</code> on the <code>&lt;th&gt;</code>. Pagination is a <code>&lt;nav&gt;</code> with <code>aria-current="page"</code>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Sort, each chip, then per ticket: the name link, then the save toggle.</td></tr>
+        <tr><td><kbd>Space</kbd> / <kbd>Enter</kbd></td><td>Toggles a chip; sorts by a column (again to reverse); activates “Show 6 more”.</td></tr>
+        <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>Changes the sort select; the lineup re-orders without moving focus.</td></tr>
+        <tr><td><kbd>Shift</kbd>+<kbd>Scroll</kbd> or arrows in the table frame</td><td>Scrolls a wide table sideways; the frame is focusable (<code>tabindex="0"</code>) when it overflows.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Filtering and sorting keep focus where it is. “Show 6 more” moves focus to the first new ticket’s link. After a column sort, focus stays on the header button. A ticket lifts on <code>:focus-within</code> so a keyboard user sees which card the link belongs to.</p>
+      <h3>Labelling</h3>
+      <p>Chip names include their count with a hidden noun: “Under $800, 3 artists”. Row actions repeat the row’s name: “Pay deposit for Abigail Mensah, Sat 14 Nov”, with the visible label first (WCAG 2.5.3). The empty actions header is labelled “Actions” for screen readers. Result counts are announced through <code>role="status"</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Pressed chip, current page</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Hovered chip label</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Table header on sunken fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Ticket meta</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Free badge</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Chip and ticket edge</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: pressed chip</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: ticket meta</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Tickets lift and tilt slightly on hover and focus over <code>--duration-base</code>; under reduced motion they change shadow without moving. Re-sorting does not animate the order.</p>
+      <h3>Touch</h3>
+      <p>Chips are 44px tall with 8px between them. Page links are 44px squares. The whole ticket is the link target, and the save toggle is a separate 44px circle in the stub. Small “Pick” buttons sit in 44px-plus rows.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Column headers</b> are one or two words: “Artist”, “Date”, “Status”, “Fee”. No units in cells when the header has them.</li>
+        <li><b>Numbers</b> are tabular and right-aligned: “$1,800”, “$650”. Distances read “74 km from you”.</li>
+        <li><b>Status words</b> are a fixed set, with a badge tone each: Waiting (info), Accepted (success), Booked, Played, Declined, Cancelled. Never “Pending approval”.</li>
+        <li><b>Sort options</b> say the order: “Closest first”, “Highest rated”, “Price, low to high”.</li>
+        <li><b>Chip labels</b> are styles and limits people use: “Gospel choir”, “Hymns”, “Spanish”, “Under $800”.</li>
+        <li><b>Counts</b> use numerals: “Showing 12 of 18”, “Page 1 of 2 · 23 requests”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field field--inline"><label class="field__label" for="dd-sort">Sort</label><select class="select" id="dd-sort"><option>Closest first</option></select></div></div><figcaption>The sort field takes its width from <code>.field--inline</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span><select class="select"><option>Closest first</option></select></label></div><figcaption>Four mocks set <code>style="min-width: 12rem"</code> inline on the sort field.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Hymns <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false" disabled>Band</button></div><figcaption>The count is full-colour text; disabled chips look disabled.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Hymns <span class="chip__count" style="opacity: 0.75;">2</span></button></div><figcaption>The count faded with <code>opacity: .75</code> dropped below 4.5:1 on the pressed chip.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster cluster--between"><p class="pagination__status">Showing 12 of 18</p><button class="btn btn--sm" type="button">Show 6 more</button></div></div><figcaption>Say how many are left and let the person ask for them.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="table-wrap"><table class="table table--dense"><caption>Artists</caption><thead><tr><th scope="col">Name</th><th scope="col" class="table__num">Price</th><th scope="col" class="table__num">km</th></tr></thead><tbody><tr><td>Elijah Park</td><td class="table__num">350</td><td class="table__num">74</td></tr></tbody></table></div></div><figcaption>A table of artists strips out the pictures and styles churches choose by.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the lineup as an ordered list of tickets with the headliner first, the sort select, the style chips, the kicker “Sat 14 Nov · 7 free · within 120 km”</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: disabled chips and ticket skeletons</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: a pressed chip (“Gospel choir”) that leads to an empty lineup</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: tour dates with Free and Booked badges and “Pick”, the setlist, the reviews list</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks. It is now <code>.field--inline</code>.</li>
+        <li>Disabled chips (discover/loading) had no disabled style. <code>.chip:disabled</code> now greys them out.</li>
+        <li><code>.chip__count</code> used <code>opacity: .75</code>, a contrast risk. It now uses the full text colour.</li>
+        <li>Pressed chips borrowed <code>--color-fg-default</code> and <code>--color-bg-canvas</code>. They now use the inverse pair.</li>
+        <li>Ticket notches always painted <code>--color-bg-canvas</code>; they now read <code>--ticket-notch-bg</code>, so tickets on a card show the right colour. The notch grew from 0.9rem to 1rem.</li>
+        <li>Tables, pagination and “Show more” are not in the mocks yet; they are part of the core set and the product needs them for booking requests and artist payouts.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

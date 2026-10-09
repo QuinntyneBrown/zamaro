@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>List — Zamaro design system</title>
+<meta name="description" content="Lists stack records that are read one at a time: saved artists, requests on a phone, account links. Static or interactive, with avatars, meta lines and trailing details.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>List</h1>
+      <p class="ds-lead">A list stacks short records that are read one at a time: Naomi’s saved artists, her requests on a phone, the links in her account.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;ul&gt;</code></span><span class="ds-pill">Class <code>.list</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a list for a handful of records with one title and one line of detail each. People read down the list and pick one; they don’t compare columns.</p>
+      <ul>
+        <li><b>Static</b> lists show facts: who is on the bill, what a booking includes.</li>
+        <li><b>Interactive</b> lists (<code>.list--interactive</code>) make each whole row a link or button: open a saved artist, switch between requests.</li>
+        <li>Use a <a href="table.html">table</a> when people compare three or more facts across rows, and <a href="ticket.html">ticket cards</a> when they browse artists with pictures and prices.</li>
+        <li>The <a href="setlist.html">setlist</a> and <a href="tour-dates.html">tour dates</a> are specialised lists with their own pages.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <ul class="list list--divided" role="list" style="width: 100%;">
+            <li class="list__item"><span class="avatar" aria-hidden="true">AM</span><div class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Brampton · 44 km</span></div><span class="list__trail"><span class="badge badge--free">Free</span></span></li>
+            <li class="list__item"><span class="avatar" aria-hidden="true">LV</span><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York · 63 km</span></div><span class="list__trail"><span class="badge badge--booked">Booked</span></span></li>
+          </ul>
+          <span class="ds-callout" style="left: 4%; top: 22%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 34%; top: 22%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 40%; top: 48%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 92%; top: 22%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 60%; top: 56%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Leading avatar or icon (optional)</b><small>A 40px <a href="avatar.html">avatar</a>. Hidden from assistive technology when the name sits beside it.</small></div></li>
+          <li><div><b>Title</b><small><code>.list__title</code>: bold sans 14px. The name of the record.</small></div></li>
+          <li><div><b>Meta</b><small><code>.list__meta</code>: one line of detail in muted 14px, parts separated by middle dots.</small></div></li>
+          <li><div><b>Trail (optional)</b><small><code>.list__trail</code>: pushed to the end; a badge, a price or, in static lists only, a small button.</small></div></li>
+          <li><div><b>Divider</b><small><code>.list--divided</code>: a hairline between items, not above the first.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Start with the simplest list that carries the content. Add an avatar only when it helps people recognise the record, and dividers only when items have two lines.</p>
+      <h3>Simple and two-line</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="stack stack--lg">
+            <ul class="list" role="list">
+              <li class="list__item"><div class="list__content"><span class="list__title">Sound check 90 minutes before the service</span></div></li>
+              <li class="list__item"><div class="list__content"><span class="list__title">Two vocal microphones and one DI box</span></div></li>
+              <li class="list__item"><div class="list__content"><span class="list__title">Travel within 120 km included</span></div></li>
+            </ul>
+            <ul class="list list--divided" role="list">
+              <li class="list__item"><div class="list__content"><span class="list__title">Riverside Community Church</span><span class="list__meta">Burlington, ON · Naomi Fraser, worship coordinator</span></div></li>
+              <li class="list__item"><div class="list__content"><span class="list__title">Sunday service</span><span class="list__meta">Sat 14 Nov · 10:30 am · about 45 minutes of worship</span></div></li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Single-line items for what a booking includes; two-line items with dividers for the booking’s details.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="list list--divided" role="list"&gt;
+  &lt;li class="list__item"&gt;
+    &lt;div class="list__content"&gt;
+      &lt;span class="list__title"&gt;Riverside Community Church&lt;/span&gt;
+      &lt;span class="list__meta"&gt;Burlington, ON · Naomi Fraser, worship coordinator&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre></details>
+      </div>
+
+      <h3>With avatar and trail</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <ul class="list list--divided" role="list" aria-label="Naomi’s saved artists">
+            <li class="list__item"><span class="avatar" aria-hidden="true">AM</span><div class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Brampton · 44 km · from $650</span></div><span class="list__trail"><span class="badge badge--free">Free Sat 14 Nov</span></span></li>
+            <li class="list__item"><span class="avatar" aria-hidden="true">LV</span><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York · 63 km · from $900</span></div><span class="list__trail"><span class="badge badge--free">Free Sat 14 Nov</span></span></li>
+            <li class="list__item"><span class="avatar avatar--ink" aria-hidden="true">HC</span><div class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Mississauga · 32 km · from $1,800</span></div><span class="list__trail"><span class="badge badge--booked">Booked</span></span></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>Naomi’s three saved artists with their availability for her date. Avatars are decorative here because the name follows.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;li class="list__item"&gt;
+  &lt;span class="avatar" aria-hidden="true"&gt;AM&lt;/span&gt;
+  &lt;div class="list__content"&gt;
+    &lt;span class="list__title"&gt;Abigail Mensah&lt;/span&gt;
+    &lt;span class="list__meta"&gt;Brampton · 44 km · from $650&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;span class="list__trail"&gt;&lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;&lt;/span&gt;
+&lt;/li&gt;</code></pre></details>
+      </div>
+
+      <h3>Interactive</h3>
+      <p>In <code>.list--interactive</code> each item holds one <code>.list__link</code>, an <code>&lt;a&gt;</code> or <code>&lt;button&gt;</code> that fills the row. The open item carries <code>aria-current="true"</code> and turns ink.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <nav aria-label="Your requests">
+            <ul class="list list--interactive list--divided" role="list">
+              <li class="list__item"><a class="list__link" href="#variants"><span class="avatar" aria-hidden="true">EP</span><span class="list__content"><span class="list__title">Elijah Park</span><span class="list__meta">Wed 4 Nov · Midweek prayer night</span></span><span class="list__trail"><span class="badge badge--warning">Deposit due</span></span></a></li>
+              <li class="list__item"><a class="list__link" href="#variants" aria-current="true"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sat 14 Nov · Sunday service</span></span><span class="list__trail"><span class="badge badge--info">Requested</span></span></a></li>
+              <li class="list__item"><a class="list__link" href="#variants"><span class="avatar avatar--ink" aria-hidden="true">MB</span><span class="list__content"><span class="list__title">Marcus Bell Trio</span><span class="list__meta">Sun 29 Nov · Advent carol night</span></span><span class="list__trail"><span class="badge badge--success">Accepted</span></span></a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="ds-example__caption"><span>The request list beside the open request. Abigail’s request is open (<code>aria-current="true"</code>). On phones this list replaces the requests table.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;nav aria-label="Your requests"&gt;
+  &lt;ul class="list list--interactive list--divided" role="list"&gt;
+    &lt;li class="list__item"&gt;
+      &lt;a class="list__link" href="/bookings/zam-0114" aria-current="true"&gt;
+        &lt;span class="avatar" aria-hidden="true"&gt;AM&lt;/span&gt;
+        &lt;span class="list__content"&gt;
+          &lt;span class="list__title"&gt;Abigail Mensah&lt;/span&gt;
+          &lt;span class="list__meta"&gt;Sat 14 Nov · Sunday service&lt;/span&gt;
+        &lt;/span&gt;
+        &lt;span class="list__trail"&gt;&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Lists have one size. Height follows the content: one line, two lines, or a 40px avatar."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Lists have one size. Height follows the content: one line, two lines, or a 40px avatar.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Static items have no states. Interactive items react to the pointer, keyboard focus and being the open item. Hover and focus are forced with <code>data-state</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Current</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Link item</th>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states"><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York</span></span></a></li></ul></td>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states" data-state="hover"><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York</span></span></a></li></ul></td>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states" data-state="focus"><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York</span></span></a></li></ul></td>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states" aria-current="true"><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York</span></span></a></li></ul></td></tr>
+          <tr><th scope="row">With avatar</th>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states"><span class="avatar avatar--sm" aria-hidden="true">EP</span><span class="list__content"><span class="list__title">Elijah Park</span></span></a></li></ul></td>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states" data-state="hover"><span class="avatar avatar--sm" aria-hidden="true">EP</span><span class="list__content"><span class="list__title">Elijah Park</span></span></a></li></ul></td>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states" data-state="focus"><span class="avatar avatar--sm" aria-hidden="true">EP</span><span class="list__content"><span class="list__title">Elijah Park</span></span></a></li></ul></td>
+            <td><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#states" aria-current="true"><span class="avatar avatar--sm" aria-hidden="true">EP</span><span class="list__content"><span class="list__title">Elijah Park</span></span></a></li></ul></td></tr>
+          <tr><th scope="row">Static item</th>
+            <td><ul class="list" role="list"><li class="list__item"><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York</span></div></li></ul></td>
+            <td><span class="text-muted">No change</span></td><td><span class="text-muted">Not focusable</span></td><td><span class="text-muted">—</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Hover</b> fills the row with the soft yellow highlighter (<code>--color-accent-subtle</code>), the same as a hovered link.</li>
+        <li><b>Focus</b> draws the shared ring around the whole row.</li>
+        <li><b>Current</b> inverts the row to ink with paper text, like a pressed chip, and the meta line goes full strength so it stays readable.</li>
+        <li><b>Empty</b>: never render an empty list. Show a quiet <a href="empty-state.html">empty state</a> such as “No saved artists yet. Tap the heart on any ticket to keep it here.”</li>
+        <li><b>Loading</b>: render three items with a <code>.skeleton--circle</code> and two <code>.skeleton--text</code> lines in their final positions.</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><ul class="list list--interactive list--divided" role="list"><li class="list__item"><a class="list__link" href="#states"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Brampton · 44 km</span></span></a></li><li class="list__item"><a class="list__link" href="#states" data-state="hover"><span class="avatar" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York · 63 km</span></span></a></li><li class="list__item"><a class="list__link" href="#states" aria-current="true"><span class="avatar avatar--ink" aria-hidden="true">HC</span><span class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Mississauga · 32 km</span></span></a></li></ul></div>
+        <div data-theme="dark"><ul class="list list--interactive list--divided" role="list"><li class="list__item"><a class="list__link" href="#states"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Brampton · 44 km</span></span></a></li><li class="list__item"><a class="list__link" href="#states" data-state="hover"><span class="avatar" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York · 63 km</span></span></a></li><li class="list__item"><a class="list__link" href="#states" aria-current="true"><span class="avatar avatar--ink" aria-hidden="true">HC</span><span class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Mississauga · 32 km</span></span></a></li></ul></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Items are a single flex row at every width. The content column shrinks and wraps (<code>min-width: 0</code>); the avatar and the trail never shrink.</li>
+        <li>At 360px a badge trail such as “Free Sat 14 Nov” still fits beside a two-line title. If a trail is longer than about 16 characters, move it into the meta line instead.</li>
+        <li>Below <code>--layout-breakpoint-md</code> (768px) a short table can turn into an interactive list: the first column becomes the title, the next one or two become the meta line, the status becomes the trail.</li>
+        <li>In a side panel the list fills the panel’s width; it has no width of its own.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The list has no component tokens: it reads semantic tokens directly. Text is <code>--color-fg-default</code> and <code>--color-fg-muted</code>, dividers are <code>--color-border-default</code>, hover is <code>--color-accent-subtle</code>, and the current item is the inverse pair <code>--color-bg-inverse</code> / <code>--color-fg-inverse</code>. Avatars inside bring their own tokens (see <a href="avatar.html">Avatar</a>).</p>
+      <p>In the dark theme the highlighter turns deep amber and the current item flips to a paper fill with charcoal text, so “current” still reads as the strongest row on the stage.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;ul&gt;</code> (or <code>&lt;ol&gt;</code> when order matters) with <code>role="list"</code>, because <code>list-style: none</code> makes Safari drop list semantics. Interactive rows are ordinary links or buttons inside each <code>&lt;li&gt;</code>; this is not the APG Listbox pattern, so there is no arrow-key selection. A list of navigation links sits in a <code>&lt;nav&gt;</code> with an <code>aria-label</code>. For links the current item uses <code>aria-current="true"</code> (or <code>"page"</code> when the link is the page itself).</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves from one interactive row to the next. Static lists are skipped.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows the row’s link or activates its button.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Activates a row that is a <code>&lt;button&gt;</code>; scrolls the page on a link.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The ring wraps the whole <code>.list__link</code>, 3px with a 3px offset, so it stays visible on the ink current item. Opening an item moves focus to the opened content’s heading; going back returns focus to the same row.</p>
+      <h3>Labelling</h3>
+      <p>The row’s accessible name is its text: title, meta and trail, in that order (“Abigail Mensah Sat 14 Nov · Sunday service Requested”). Keep it short for that reason. Avatars next to a name are <code>aria-hidden="true"</code>. Label the list itself when there is more than one on the page (“Naomi’s saved artists”).</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Title on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Meta on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Title on hover highlight</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Current item text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on paper</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: meta on surface</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: current item text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: title on hover highlight</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+      </div>
+      <p>Dividers are decorative and exempt from 1.4.11.</p>
+      <h3>Motion</h3>
+      <p>The hover fill changes instantly; nothing moves. Loading skeletons stop shimmering under <code>prefers-reduced-motion</code>.</p>
+      <h3>Touch</h3>
+      <p>Each <code>.list__link</code> is at least 44px tall (<code>--target-comfortable</code>) and spans the full width, so the whole row is the target. Rows have no gap between them; the divider marks the boundary.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>The title is the name people scan for: the artist, the church, the gathering. Don’t start it with a status or a date.</li>
+        <li>Meta is one line, most useful first, joined with middle dots: “Brampton · 44 km · from $650”.</li>
+        <li>Trails are short: one badge, one price or one small button. If you need two, the record wants a table or a card.</li>
+        <li>Sort by what people look for: saved artists by distance, requests by date.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#do-dont"><span class="avatar avatar--sm" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York · 63 km</span></span></a></li></ul></div><figcaption>One link per row that fills the row. The avatar is decoration because the name follows.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><ul class="list" role="list"><li class="list__item"><span class="avatar avatar--sm" aria-hidden="true">LV</span><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">North York · 63 km</span></div><span class="list__trail cluster"><a href="#do-dont">Profile</a><button class="btn btn--sm" type="button">Remove</button><button class="btn btn--sm" type="button">Share</button></span></li></ul></div><figcaption>Several small actions on one row. People miss them and the row becomes a toolbar; use a menu or open the record.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ul class="list list--interactive" role="list"><li class="list__item"><a class="list__link" href="#do-dont"><span class="list__content"><span class="list__title">Abigail Mensah</span></span><span class="list__trail"><span class="badge badge--free">Free</span></span></a></li></ul></div><figcaption>Trail content inside a link is plain text or a badge.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><span class="list__link" style="border: var(--border-width-hairline) dashed var(--color-danger-border);"><span class="list__content"><span class="list__title">Abigail Mensah</span></span><span class="list__trail"><span class="btn btn--sm">Book</span></span></span></div><figcaption>A button inside a row link: nested interactive controls are invalid HTML and only one of them can receive focus.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Title</td><td><code>--color-fg-default</code>, <code>--text-label</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Meta</td><td><code>--color-fg-muted</code>, <code>--text-body-sm</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Divider</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Hover</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Current fill / text</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Item padding / gap</td><td><code>--space-3</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-4"></span></td></tr>
+          <tr><td>Row height (interactive)</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+          <tr><td>Divider width</td><td><code>--border-width-hairline</code></td><td colspan="2"><span data-token="--border-width-hairline"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;ul class="list list--divided" role="list" aria-label="Naomi’s saved artists"&gt;
+  &lt;li class="list__item"&gt;
+    &lt;span class="avatar" aria-hidden="true"&gt;AM&lt;/span&gt;
+    &lt;div class="list__content"&gt;
+      &lt;span class="list__title"&gt;Abigail Mensah&lt;/span&gt;
+      &lt;span class="list__meta"&gt;Brampton · 44 km · from $650&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;span class="list__trail"&gt;&lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.list</code> + <code>role="list"</code></td><td>Unstyled list; keeps list semantics in Safari.</td></tr>
+        <tr><td><code>.list--divided</code></td><td>Hairline between items.</td></tr>
+        <tr><td><code>.list__item</code></td><td>Flex row: leading, content, trail; 12px block padding.</td></tr>
+        <tr><td><code>.list__content</code>, <code>.list__title</code>, <code>.list__meta</code></td><td>Text column that shrinks and wraps; bold title; muted meta.</td></tr>
+        <tr><td><code>.list__trail</code></td><td>Pushed to the end, never shrinks.</td></tr>
+        <tr><td><code>.list--interactive</code> + <code>.list__link</code></td><td>Row-filling link or button, 44px minimum, highlighter hover.</td></tr>
+        <tr><td><code>aria-current="true"</code> / <code>aria-selected="true"</code> on <code>.list__link</code></td><td>Current (or selected) row: inverse fill.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The product will need it for the Saved panel behind the top-bar “Saved 3” button, the account menu behind Naomi’s avatar, and the requests view on phones. Related mock parts:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the top-bar “Saved” button with its count and the “NF” account avatar that open these lists</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: Free and Booked badges used as trails</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The top-bar “Saved” button combined <code>.nav-link</code>, <code>.btn--ghost</code> and an inline style reset. <code>.nav-link</code> now resets buttons itself, so the trigger for this list is one class.</li>
+        <li>The avatar read <code>--palette-ink</code> directly for its outline. It now uses <code>--color-border-on-accent</code>, so avatars in list rows follow the theme.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

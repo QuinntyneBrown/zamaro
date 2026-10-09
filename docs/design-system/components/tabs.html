@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabs — Zamaro design system</title>
+<meta name="description" content="Tabs switch between views of the same thing without leaving the page, such as a booker’s Requests, Upcoming and Past bookings. Underline and stamp variants, counts, two sizes, automatic and manual activation.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: keep ds.css prose list spacing out of product specimens. */
+  :is(.ds-example, .ds-themes, .ds-anatomy__figure, .ds-do, .ds-dont, .ds-matrix) li + li { margin-top: 0; }
+  .ds-matrix { position: relative; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Navigation</p>
+      <h1>Tabs</h1>
+      <p class="ds-lead">Tabs show one of several views of the same thing in place: a booker’s requests, upcoming bookings and past bookings. The selected tab gets a yellow underline, or turns solid ink in the stamp style.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill ds-pill--warn">Status: ready, not in the mocks yet</span><span class="ds-pill">APG Tabs, automatic activation</span><span class="ds-pill">Class <code>.tabs</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use tabs when the views are siblings, the person wants one at a time, and switching should not change the URL’s page. Naomi Fraser’s bookings page has three: requests waiting for an artist’s reply, upcoming confirmed bookings, and past ones she can review.</p>
+      <ul>
+        <li><b>Underline</b> is the default: quiet, sits on a 2px rule, the selected tab gets a 4px yellow underline.</li>
+        <li><b>Stamp</b> (<code>.tabs--stamp</code>) frames each tab and fills the selected one with ink. Use it for a short set (two to four) inside a card or a dashboard panel.</li>
+        <li><b>Counts</b> (<code>.tabs__count</code>) say how many items each view holds. The selected tab’s count turns yellow.</li>
+      </ul>
+      <p>Do not use tabs to move between pages (use <a href="sidebar-navigation.html">sidebar navigation</a> or <a href="top-bar.html">top-bar links</a>), to filter a list by style (use <a href="chip.html">chips</a>), or for steps that must be done in order (use <a href="steps.html">steps</a>).</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="grid-template-columns: minmax(0, 1fr);">
+          <div class="tabs" style="width: 100%;">
+            <div class="tabs__list" role="tablist" aria-label="Your bookings (anatomy example)">
+              <button class="tabs__tab" role="tab" type="button" id="an-tab-1" aria-selected="true" aria-controls="an-panel-1">Requests <span class="tabs__count">2</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="an-tab-2" aria-selected="false" aria-controls="an-panel-2" tabindex="-1">Upcoming <span class="tabs__count">1</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="an-tab-3" aria-selected="false" aria-controls="an-panel-3" tabindex="-1">Past</button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="an-panel-1" aria-labelledby="an-tab-1" tabindex="0"><p class="text-muted">Two requests are waiting for a reply.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="an-panel-2" aria-labelledby="an-tab-2" tabindex="0" hidden><p>One booking is coming up.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="an-panel-3" aria-labelledby="an-tab-3" tabindex="0" hidden><p>Past bookings.</p></div>
+          </div>
+          <span class="ds-callout" style="left: 14%; top: 16%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 32%; top: 16%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 18%; top: 50%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 88%; top: 50%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 60%; top: 76%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Tab</b><small><code>&lt;button role="tab"&gt;</code>: bold 14px uppercase label, 44px tall, 16px side padding. Unselected tabs are muted.</small></div></li>
+          <li><div><b>Count (optional)</b><small><code>.tabs__count</code>: mono 12px on a subtle chip; yellow with ink text on the selected tab.</small></div></li>
+          <li><div><b>Selected marker</b><small>A 4px <code>--color-accent</code> underline that sits over the list rule.</small></div></li>
+          <li><div><b>Tab list</b><small><code>role="tablist"</code> with a 2px charcoal rule. Scrolls sideways when tabs do not fit; never wraps.</small></div></li>
+          <li><div><b>Panel</b><small><code>role="tabpanel"</code>, labelled by its tab, 24px below the list. Only one is shown.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>The examples below are live: click a tab, or focus one and use the arrow keys.</p>
+      <h3>Underline with counts (booker’s bookings)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="tabs" data-tabs="automatic">
+            <div class="tabs__list" role="tablist" aria-label="Your bookings">
+              <button class="tabs__tab" role="tab" type="button" id="bk-tab-req" aria-selected="true" aria-controls="bk-panel-req">Requests <span class="tabs__count">2</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="bk-tab-up" aria-selected="false" aria-controls="bk-panel-up" tabindex="-1">Upcoming <span class="tabs__count">1</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="bk-tab-past" aria-selected="false" aria-controls="bk-panel-past" tabindex="-1">Past <span class="tabs__count">4</span></button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="bk-panel-req" aria-labelledby="bk-tab-req" tabindex="0">
+              <ul class="list list--divided">
+                <li class="list__item"><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Sat 14 Nov · Sunday service · sent Thu 8 Oct</span></div><span class="list__trail badge badge--warning">Awaiting reply</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Sun 20 Dec · Christmas service · sent Tue 6 Oct</span></div><span class="list__trail badge badge--warning">Awaiting reply</span></li>
+              </ul>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="bk-panel-up" aria-labelledby="bk-tab-up" tabindex="0" hidden>
+              <ul class="list list--divided">
+                <li class="list__item"><div class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sun 1 Nov · Sunday service · No. ZAM-0114 · deposit $162.50 paid</span></div><span class="list__trail badge badge--success">Confirmed</span></li>
+              </ul>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="bk-panel-past" aria-labelledby="bk-tab-past" tabindex="0" hidden>
+              <ul class="list list--divided">
+                <li class="list__item"><div class="list__content"><span class="list__title">Elijah Park</span><span class="list__meta">Sun 13 Sep · Sunday service</span></div><a class="list__trail" href="#variants">Write a review</a></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Daniel &amp; Ruth Okonkwo</span><span class="list__meta">Sun 16 Aug · Memorial service</span></div><span class="list__trail text-caption">Reviewed</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Marcus Bell Trio</span><span class="list__meta">Fri 3 Jul · Worship night</span></div><span class="list__trail text-caption">Reviewed</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Grace Tabernacle Mass Choir</span><span class="list__meta">Sun 12 Apr · Easter service</span></div><span class="list__trail text-caption">Reviewed</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Automatic activation: the arrow keys move focus and show the panel at once.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="tabs"&gt;
+  &lt;div class="tabs__list" role="tablist" aria-label="Your bookings"&gt;
+    &lt;button class="tabs__tab" role="tab" type="button" id="tab-requests"
+            aria-selected="true" aria-controls="panel-requests"&gt;Requests &lt;span class="tabs__count"&gt;2&lt;/span&gt;&lt;/button&gt;
+    &lt;button class="tabs__tab" role="tab" type="button" id="tab-upcoming"
+            aria-selected="false" aria-controls="panel-upcoming" tabindex="-1"&gt;Upcoming &lt;span class="tabs__count"&gt;1&lt;/span&gt;&lt;/button&gt;
+    &lt;button class="tabs__tab" role="tab" type="button" id="tab-past"
+            aria-selected="false" aria-controls="panel-past" tabindex="-1"&gt;Past &lt;span class="tabs__count"&gt;4&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="panel-requests" aria-labelledby="tab-requests" tabindex="0"&gt;…&lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="panel-upcoming" aria-labelledby="tab-upcoming" tabindex="0" hidden&gt;…&lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="panel-past" aria-labelledby="tab-past" tabindex="0" hidden&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Stamp (artist payouts)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="tabs tabs--stamp" data-tabs="manual">
+            <div class="tabs__list" role="tablist" aria-label="Payouts by period">
+              <button class="tabs__tab" role="tab" type="button" id="po-tab-oct" aria-selected="true" aria-controls="po-panel-oct">October</button>
+              <button class="tabs__tab" role="tab" type="button" id="po-tab-sep" aria-selected="false" aria-controls="po-panel-sep" tabindex="-1">September</button>
+              <button class="tabs__tab" role="tab" type="button" id="po-tab-2026" aria-selected="false" aria-controls="po-panel-2026" tabindex="-1">All of 2026</button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="po-panel-oct" aria-labelledby="po-tab-oct" tabindex="0">
+              <ul class="list list--divided">
+                <li class="list__item"><div class="list__content"><span class="list__title">Bethel Pentecostal, Hamilton</span><span class="list__meta">Sun 4 Oct · paid Mon 5 Oct</span></div><span class="list__trail ticket__price">$598</span></li>
+              </ul>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="po-panel-sep" aria-labelledby="po-tab-sep" tabindex="0" hidden>
+              <ul class="list list--divided">
+                <li class="list__item"><div class="list__content"><span class="list__title">St. Brendan’s Anglican, Oshawa</span><span class="list__meta">Sun 27 Sep · paid Mon 28 Sep</span></div><span class="list__trail ticket__price">$598</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Women’s retreat, Muskoka</span><span class="list__meta">Sat 12 Sep · paid Mon 14 Sep</span></div><span class="list__trail ticket__price">$598</span></li>
+              </ul>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="po-panel-2026" aria-labelledby="po-tab-2026" tabindex="0" hidden>
+              <p>21 payouts this year · $12,558 after Zamaro’s 8%.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Manual activation: each period loads from the server, so arrow keys only move focus and <kbd>Enter</kbd> or <kbd>Space</kbd> shows the panel.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="tabs tabs--stamp"&gt;
+  &lt;div class="tabs__list" role="tablist" aria-label="Payouts by period"&gt;
+    &lt;button class="tabs__tab" role="tab" type="button" aria-selected="true" …&gt;October&lt;/button&gt; …
+  &lt;/div&gt;
+  …
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Disabled tab</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="tabs" data-tabs="automatic">
+            <div class="tabs__list" role="tablist" aria-label="Miriam Haile’s profile">
+              <button class="tabs__tab" role="tab" type="button" id="mh-tab-about" aria-selected="true" aria-controls="mh-panel-about">About</button>
+              <button class="tabs__tab" role="tab" type="button" id="mh-tab-videos" aria-selected="false" aria-controls="mh-panel-videos" tabindex="-1">Videos <span class="tabs__count">0</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="mh-tab-reviews" aria-selected="false" aria-controls="mh-panel-reviews" tabindex="-1" disabled>Reviews <span class="tabs__count">0</span></button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="mh-panel-about" aria-labelledby="mh-tab-about" tabindex="0"><p>Miriam is new to Zamaro. She leads acoustic worship in Etobicoke, from $300.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="mh-panel-videos" aria-labelledby="mh-tab-videos" tabindex="0" hidden><p class="text-muted">No videos yet. Miriam can add them from her dashboard.</p></div>
+            <div class="tabs__panel" role="tabpanel" id="mh-panel-reviews" aria-labelledby="mh-tab-reviews" tabindex="0" hidden><p class="text-muted">No reviews yet.</p></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Prefer an enabled tab with an empty panel (“Videos 0”). Disable a tab only when its view cannot exist yet; arrow keys skip it.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Medium (44px) is the default and the only size for page-level tabs. Small (<code>.tabs--sm</code>, 36px, 12px labels) is for tabs inside a card or a list row, where 44px tabs would outweigh the content.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="tabs" data-tabs="automatic">
+            <div class="tabs__list" role="tablist" aria-label="Size medium example">
+              <button class="tabs__tab" role="tab" type="button" id="sz-md-1" aria-selected="true" aria-controls="sz-md-p1">Details</button>
+              <button class="tabs__tab" role="tab" type="button" id="sz-md-2" aria-selected="false" aria-controls="sz-md-p2" tabindex="-1">Messages <span class="tabs__count">3</span></button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="sz-md-p1" aria-labelledby="sz-md-1" tabindex="0"><p class="text-caption">Medium · 44px · <code>--target-comfortable</code></p></div>
+            <div class="tabs__panel" role="tabpanel" id="sz-md-p2" aria-labelledby="sz-md-2" tabindex="0" hidden><p class="text-caption">Three messages with Luz Viva.</p></div>
+          </div>
+          <div class="tabs tabs--sm" data-tabs="automatic">
+            <div class="tabs__list" role="tablist" aria-label="Size small example">
+              <button class="tabs__tab" role="tab" type="button" id="sz-sm-1" aria-selected="true" aria-controls="sz-sm-p1">Details</button>
+              <button class="tabs__tab" role="tab" type="button" id="sz-sm-2" aria-selected="false" aria-controls="sz-sm-p2" tabindex="-1">Messages <span class="tabs__count">3</span></button>
+            </div>
+            <div class="tabs__panel" role="tabpanel" id="sz-sm-p1" aria-labelledby="sz-sm-1" tabindex="0"><p class="text-caption">Small · 36px · <code>--control-height-sm</code></p></div>
+            <div class="tabs__panel" role="tabpanel" id="sz-sm-p2" aria-labelledby="sz-sm-2" tabindex="0" hidden><p class="text-caption">Three messages with Luz Viva.</p></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Heights <code>--target-comfortable</code> / <code>--control-height-sm</code>; side padding <code>--space-4</code> / <code>--space-3</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover and focus are forced with <code>data-state</code>. Selected comes from <code>aria-selected="true"</code>; disabled from the native <code>disabled</code> attribute.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Selected</th><th scope="col">Selected, focus</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Underline</th>
+            <td><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Underline, default"><button class="tabs__tab" role="tab" type="button" aria-selected="false">Past <span class="tabs__count">4</span></button></div></div></td>
+            <td><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Underline, hover"><button class="tabs__tab" role="tab" type="button" aria-selected="false" data-state="hover">Past <span class="tabs__count">4</span></button></div></div></td>
+            <td><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Underline, focus"><button class="tabs__tab" role="tab" type="button" aria-selected="false" data-state="focus">Past <span class="tabs__count">4</span></button></div></div></td>
+            <td><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Underline, selected"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Past <span class="tabs__count">4</span></button></div></div></td>
+            <td><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Underline, selected and focused"><button class="tabs__tab" role="tab" type="button" aria-selected="true" data-state="focus">Past <span class="tabs__count">4</span></button></div></div></td>
+            <td><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Underline, disabled"><button class="tabs__tab" role="tab" type="button" aria-selected="false" disabled>Past <span class="tabs__count">4</span></button></div></div></td></tr>
+          <tr><th scope="row">Stamp</th>
+            <td><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Stamp, default"><button class="tabs__tab" role="tab" type="button" aria-selected="false">October</button></div></div></td>
+            <td><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Stamp, hover"><button class="tabs__tab" role="tab" type="button" aria-selected="false" data-state="hover">October</button></div></div></td>
+            <td><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Stamp, focus"><button class="tabs__tab" role="tab" type="button" aria-selected="false" data-state="focus">October</button></div></div></td>
+            <td><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Stamp, selected"><button class="tabs__tab" role="tab" type="button" aria-selected="true">October</button></div></div></td>
+            <td><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Stamp, selected and focused"><button class="tabs__tab" role="tab" type="button" aria-selected="true" data-state="focus">October</button></div></div></td>
+            <td><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Stamp, disabled"><button class="tabs__tab" role="tab" type="button" aria-selected="false" disabled>October</button></div></div></td></tr>
+          <tr><th scope="row">Small</th>
+            <td><div class="tabs tabs--sm"><div class="tabs__list" role="tablist" aria-label="Small, default"><button class="tabs__tab" role="tab" type="button" aria-selected="false">Messages</button></div></div></td>
+            <td><div class="tabs tabs--sm"><div class="tabs__list" role="tablist" aria-label="Small, hover"><button class="tabs__tab" role="tab" type="button" aria-selected="false" data-state="hover">Messages</button></div></div></td>
+            <td><div class="tabs tabs--sm"><div class="tabs__list" role="tablist" aria-label="Small, focus"><button class="tabs__tab" role="tab" type="button" aria-selected="false" data-state="focus">Messages</button></div></div></td>
+            <td><div class="tabs tabs--sm"><div class="tabs__list" role="tablist" aria-label="Small, selected"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Messages</button></div></div></td>
+            <td><div class="tabs tabs--sm"><div class="tabs__list" role="tablist" aria-label="Small, selected and focused"><button class="tabs__tab" role="tab" type="button" aria-selected="true" data-state="focus">Messages</button></div></div></td>
+            <td><div class="tabs tabs--sm"><div class="tabs__list" role="tablist" aria-label="Small, disabled"><button class="tabs__tab" role="tab" type="button" aria-selected="false" disabled>Messages</button></div></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light">
+          <div class="tabs"><div class="tabs__list" role="tablist" aria-label="Light theme, underline"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Requests <span class="tabs__count">2</span></button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-state="hover">Upcoming <span class="tabs__count">1</span></button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Past</button></div></div>
+          <div class="tabs tabs--stamp" style="margin-top: var(--space-6);"><div class="tabs__list" role="tablist" aria-label="Light theme, stamp"><button class="tabs__tab" role="tab" type="button" aria-selected="true">October</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">September</button></div></div>
+        </div>
+        <div data-theme="dark">
+          <div class="tabs"><div class="tabs__list" role="tablist" aria-label="Dark theme, underline"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Requests <span class="tabs__count">2</span></button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-state="hover">Upcoming <span class="tabs__count">1</span></button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Past</button></div></div>
+          <div class="tabs tabs--stamp" style="margin-top: var(--space-6);"><div class="tabs__list" role="tablist" aria-label="Dark theme, stamp"><button class="tabs__tab" role="tab" type="button" aria-selected="true">October</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">September</button></div></div>
+        </div>
+      </div>
+      <ul>
+        <li><b>Hover</b> darkens the label to <code>--color-fg-default</code> and fills the tab with <code>--color-bg-subtle</code>. Tabs do not lift.</li>
+        <li><b>Selected</b> is marked by the yellow underline (or the ink fill in the stamp style), full-strength text and a yellow count, never by colour alone.</li>
+        <li><b>Focus</b> draws the ring inside the tab (negative offset), so it is not clipped by the scrolling tab list.</li>
+        <li><b>Disabled</b> greys the label; arrow keys skip the tab. Explain why next to the tabs if it is not obvious.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Tabs never wrap onto two rows. When they do not fit, <code>.tabs__list</code> scrolls sideways inside its own box (thin scrollbar), and the page does not.</li>
+        <li>At 360px, “Requests 2 · Upcoming 1 · Past 4” fits in one row. Keep labels to one word so typical sets fit on phones without scrolling.</li>
+        <li>When the selected tab is off-screen on load, scroll it into view (<code>scrollIntoView({ inline: "nearest" })</code>).</li>
+        <li>The stamp style keeps an 8px gap between frames at every width. Panels always take the full width under the list.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Each tab reads one component token, <code>--tab-fg</code>, which defaults to <code>--color-fg-muted</code> and becomes <code>--color-fg-default</code> on hover and when selected, and <code>--color-fg-disabled</code> when disabled. Everything else is semantic: the list rule is <code>--color-border-strong</code>, the selected underline <code>--color-accent</code>, the hover fill <code>--color-bg-subtle</code>, and the selected stamp <code>--color-bg-inverse</code> with <code>--tab-fg: var(--color-fg-inverse)</code>.</p>
+      <p>In the dark theme the yellow underline stays the same butter yellow and reads even louder on charcoal. The stamp’s inverse fill flips to paper with charcoal text, so the selected stamp is the lightest thing in the row in both themes.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p><a href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/">APG Tabs pattern</a>: <code>role="tablist"</code> with an <code>aria-label</code>, <code>&lt;button role="tab"&gt;</code> with <code>aria-selected</code> and <code>aria-controls</code>, and <code>role="tabpanel"</code> with <code>aria-labelledby</code>. Hidden panels use the <code>hidden</code> attribute.</p>
+      <p><b>Activation is automatic</b> for Zamaro’s page tabs. The three booking lists arrive with the page (the counts in the tabs already need them), so showing a panel costs nothing and a keyboard user can preview each list with the arrow keys. <b>Use manual activation</b> when a panel loads on demand, such as the artist’s payouts by period: arrow keys then only move focus, and <kbd>Enter</kbd> or <kbd>Space</kbd> shows the panel, so moving across three tabs does not fire three requests.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Moves into the tab list onto the selected tab, then out to the panel.</td></tr>
+        <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Moves to the previous or next tab, wrapping at the ends and skipping disabled tabs. Automatic: also shows its panel.</td></tr>
+        <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>Moves to the first or last tab.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Manual activation: shows the focused tab’s panel.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Roving tabindex: only the selected tab has <code>tabindex="0"</code>, the others <code>-1</code>. Each panel has <code>tabindex="0"</code> so a keyboard user can reach a panel that has no focusable content. The ring is drawn inside the tab so the scrolling list never clips it.</p>
+      <h3>Labelling</h3>
+      <p>The tab list names the set (“Your bookings”). A tab’s name is its label plus its count (“Requests 2”); add visually hidden words when the number alone is ambiguous. Each panel is labelled by its tab, so screen readers announce “Requests 2, tab panel”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Unselected tab label</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected or hovered label</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected stamp</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected count</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Tab list rule and stamp frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: unselected tab label</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: selected underline on the page</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: selected stamp</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+      </div>
+      <p>On newsprint the yellow underline is decoration (yellow on paper is under 3:1); the selected state is also carried by the darker label, the yellow count and <code>aria-selected</code>.</p>
+      <h3>Motion</h3>
+      <p>Nothing animates: the underline and the panel switch instantly. If a panel loads, show a <a href="skeleton.html">skeleton</a> inside it with <code>aria-busy="true"</code> on the panel.</p>
+      <h3>Touch</h3>
+      <p>Medium tabs are 44px tall and at least 64px wide; small tabs are 36px tall with 12px side padding. Tabs sit 4px apart (8px in the stamp style). The list scrolls with a swipe.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>One or two words per tab, nouns for what the panel holds: “Requests”, “Upcoming”, “Past”. Sentence case in the source; CSS adds the uppercase.</li>
+        <li>Put the most-used view first and select it by default. For bookers that is “Requests”, because those need action.</li>
+        <li>Counts are plain numbers (“2”, “14”). Show “0” rather than hiding the count, so the tab set keeps its shape.</li>
+        <li>Two to five tabs. More than five is a sign the views should be pages in a sidebar.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Do: short labels"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Requests <span class="tabs__count">2</span></button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Upcoming</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Past</button></div></div></div><figcaption>Short nouns that fit in one row at 360px.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Don't: long labels"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Requests you’ve sent</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Bookings coming up</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Bookings in the past</button></div></div></div><figcaption>Long labels force the list to scroll on phones and hide the third view.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Gospel choir</button><button class="chip" type="button" aria-pressed="false">Acoustic</button><button class="chip" type="button" aria-pressed="false">Hymns</button></div><figcaption>Filtering the lineup by style uses toggle <a href="chip.html">chips</a>, which can combine.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="tabs tabs--stamp"><div class="tabs__list" role="tablist" aria-label="Don't: tabs as filters"><button class="tabs__tab" role="tab" type="button" aria-selected="true">Gospel choir</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Acoustic</button><button class="tabs__tab" role="tab" type="button" aria-selected="false" tabindex="-1">Hymns</button></div></div></div><figcaption>Tabs used as filters. Only one can be on, and there is no panel, so the tab role lies.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Unselected label (<code>--tab-fg</code>)</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Selected / hover label</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Selected underline, selected count</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>List rule, stamp frame</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Hover fill, count chip</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Selected stamp</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Disabled label</td><td><code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+          <tr><td>Height md / sm</td><td><code>--target-comfortable</code> / <code>--control-height-sm</code></td><td colspan="2"><span data-token="--target-comfortable"></span> / <span data-token="--control-height-sm"></span></td></tr>
+          <tr><td>Rule / underline width</td><td><code>--border-width-thick</code> / <code>--border-width-poster</code></td><td colspan="2"><span data-token="--border-width-thick"></span> / <span data-token="--border-width-poster"></span></td></tr>
+          <tr><td>Panel offset</td><td><code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span></td></tr>
+          <tr><td>Label / count type</td><td><code>--text-label</code> / <code>--text-overline</code></td><td colspan="2"><span data-token="--text-label"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>// Automatic activation (APG): arrows move focus and select.
+tablist.addEventListener('keydown', (e) =&gt; {
+  const tabs = [...tablist.querySelectorAll('[role="tab"]:not(:disabled)')];
+  const i = tabs.indexOf(document.activeElement);
+  const next = { ArrowRight: tabs[(i + 1) % tabs.length], ArrowLeft: tabs[(i - 1 + tabs.length) % tabs.length],
+                 Home: tabs[0], End: tabs[tabs.length - 1] }[e.key];
+  if (!next) return;
+  e.preventDefault();
+  select(next);        // set aria-selected, tabindex and hidden; manual activation calls next.focus() instead
+  next.focus();
+});</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.tabs</code></td><td>Wrapper; carries the variant and size.</td></tr>
+        <tr><td><code>.tabs__list</code> + <code>role="tablist"</code></td><td>The row of tabs; scrolls sideways, never wraps.</td></tr>
+        <tr><td><code>.tabs__tab</code> + <code>role="tab"</code></td><td>A tab button.</td></tr>
+        <tr><td><code>.tabs__count</code></td><td>Number after the label; yellow when selected.</td></tr>
+        <tr><td><code>.tabs__panel</code> + <code>role="tabpanel"</code></td><td>The view; <code>hidden</code> when not selected.</td></tr>
+        <tr><td><code>.tabs--stamp</code></td><td>Framed tabs; selected is solid ink.</td></tr>
+        <tr><td><code>.tabs--sm</code></td><td>36px tabs for cards and rows.</td></tr>
+        <tr><td><code>aria-selected="true"</code></td><td>Selected tab.</td></tr>
+        <tr><td><code>disabled</code></td><td>Disabled tab; skipped by arrow keys.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation only: forces a state.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The eight mock pages show public screens with no tabbed views. The product will need tabs for:</p>
+      <ul>
+        <li>The booker’s bookings page: “Requests · Upcoming · Past”, reached from “Saved artists (3)” and the account menu in <a href="../../mocks/pages/discover/default.html">pages/discover/default</a>.</li>
+        <li>The artist dashboard: payouts by period, and a request’s “Details · Messages”.</li>
+        <li>Possibly the artist profile on phones, if “Watch her lead”, “Photos” and “Songs Abigail leads” in <a href="../../mocks/pages/artist/default.html">pages/artist/default</a> become too long to scroll. Today they are sections, which is better for search and for reading top to bottom.</li>
+      </ul>
+      <p>Drift fixed during extraction: none, since no mock uses it. <code>.tabs__count</code> uses full-strength text from the start, avoiding the <code>opacity: .75</code> contrast risk the mocks had on <code>.chip__count</code>.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>
+  /* Docs demo: APG tabs. data-tabs="automatic" selects on arrow keys; "manual" only moves focus. */
+  document.querySelectorAll('[data-tabs]').forEach(function (root) {
+    var manual = root.getAttribute('data-tabs') === 'manual';
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(tab) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(t.getAttribute('aria-controls'));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    root.addEventListener('click', function (e) {
+      var t = e.target.closest('[role="tab"]');
+      if (t && !t.disabled) select(t);
+    });
+    root.addEventListener('keydown', function (e) {
+      var enabled = tabs.filter(function (t) { return !t.disabled; });
+      var i = enabled.indexOf(document.activeElement);
+      if (i < 0) return;
+      var map = { ArrowRight: enabled[(i + 1) % enabled.length], ArrowLeft: enabled[(i - 1 + enabled.length) % enabled.length], Home: enabled[0], End: enabled[enabled.length - 1] };
+      var next = map[e.key];
+      if (!next) return;
+      e.preventDefault();
+      if (manual) { tabs.forEach(function (t) { t.tabIndex = t === next ? 0 : -1; }); next.focus(); }
+      else { select(next); next.focus(); }
+    });
+  });
+</script>
+</body>
+</html>

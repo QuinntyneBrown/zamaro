@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Table — Zamaro design system</title>
+<meta name="description" content="Tables compare booking requests row by row: sortable columns, numeric alignment, selectable rows with a bulk bar, dense and sticky variants, and loading, empty and error states.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>Table</h1>
+      <p class="ds-lead">A table lines up booking requests so a coordinator can compare them: who, when, which gathering, what it costs and where it stands.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;table&gt;</code></span><span class="ds-pill">Class <code>.table</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a table when people compare the same facts across many records: Naomi’s booking requests, an artist’s incoming requests, payouts. Each row is one record and each column is one fact.</p>
+      <ul>
+        <li>Use a <a href="list.html">list</a> when each record is read on its own and has no more than two or three facts, such as saved artists.</li>
+        <li>Use a <a href="description-list.html">description list</a> for the facts of a single record, such as one booking summary.</li>
+        <li>Use <a href="ticket.html">ticket cards</a> to browse artists. A table is for managing bookings, not for choosing who to book.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="table-wrap" style="width: 100%;">
+            <table class="table">
+              <caption>Booking requests</caption>
+              <thead><tr><th scope="col">Artist</th><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td></tr>
+                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <span class="ds-callout" style="left: 12%; top: 18%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 46%; top: 36%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 10%; top: 60%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 64%; top: 60%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 92%; top: 60%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 4%; top: 84%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Caption</b><small><code>&lt;caption&gt;</code> in <code>--text-h4</code>, uppercase, ruled off with a 2px line. It names the table for screen readers.</small></div></li>
+          <li><div><b>Column header</b><small><code>&lt;th scope="col"&gt;</code> on a sunken fill, mono overline, 2px rule below. Sortable headers hold a <code>.table__sort</code> button.</small></div></li>
+          <li><div><b>Row header</b><small><code>&lt;th scope="row"&gt;</code>: the artist name, bold, so each cell is announced with its row.</small></div></li>
+          <li><div><b>Numeric cell</b><small><code>.table__num</code>: right-aligned, tabular figures, so dollars line up.</small></div></li>
+          <li><div><b>Status</b><small>A <a href="badge.html">badge</a> with a tone and a word. Never colour alone.</small></div></li>
+          <li><div><b>Wrapper</b><small><code>.table-wrap</code>: paper surface, 2px charcoal rule, scrolls sideways on narrow screens.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>All variants share one markup. Add sorting when a list is longer than a screen, selection only when there is a bulk action, and sticky parts only when the table scrolls inside a fixed height.</p>
+      <h3>Default with sorting and row actions</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="table-wrap" style="position: relative;">
+            <table class="table">
+              <caption>Naomi’s booking requests</caption>
+              <thead><tr>
+                <th scope="col"><button class="table__sort" type="button">Artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th>
+                <th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th>
+                <th scope="col">Gathering</th>
+                <th scope="col" class="table__num"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th>
+                <th scope="col">Status</th>
+                <th scope="col" class="table__actions"><span class="visually-hidden">Actions</span></th>
+              </tr></thead>
+              <tbody>
+                <tr><th scope="row">Elijah Park</th><td>Wed&nbsp;4&nbsp;Nov</td><td>Midweek prayer night</td><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="Pay deposit for Elijah Park, Wed 4 Nov">Pay deposit</a></td></tr>
+                <tr><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td>Sunday service</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Abigail Mensah, Sat 14 Nov">View</a></td></tr>
+                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td>Advent carol night</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Marcus Bell Trio, Sun 29 Nov">View</a></td></tr>
+                <tr><th scope="row">Grace Tabernacle Mass Choir</th><td>Sun&nbsp;13&nbsp;Dec</td><td>Christmas concert</td><td class="table__num">$2,400</td><td><span class="badge badge--danger">Declined</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Grace Tabernacle Mass Choir, Sun 13 Dec">View</a></td></tr>
+                <tr><th scope="row">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td>Carol service</td><td class="table__num">$700</td><td><span class="badge badge--info">Requested</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Daniel &amp; Ruth Okonkwo, Sun 20 Dec">View</a></td></tr>
+                <tr><th scope="row">Hosanna Collective</th><td>Sat&nbsp;16&nbsp;Jan</td><td>Youth worship night</td><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Hosanna Collective, Sat 16 Jan">View</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Sorted by date, soonest first (<code>aria-sort="ascending"</code> on the Date header). Fees are right-aligned. Each row has one action, named with the artist and date.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="table-wrap"&gt;
+  &lt;table class="table"&gt;
+    &lt;caption&gt;Naomi’s booking requests&lt;/caption&gt;
+    &lt;thead&gt;&lt;tr&gt;
+      &lt;th scope="col" aria-sort="ascending"&gt;&lt;button class="table__sort" type="button"&gt;Date &lt;svg class="icon" aria-hidden="true" …/&gt;&lt;/button&gt;&lt;/th&gt;
+      &lt;th scope="col" class="table__num"&gt;…Fee…&lt;/th&gt;
+      &lt;th scope="col" class="table__actions"&gt;&lt;span class="visually-hidden"&gt;Actions&lt;/span&gt;&lt;/th&gt;
+    &lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;th scope="row"&gt;Abigail Mensah&lt;/th&gt;&lt;td&gt;Sat 14 Nov&lt;/td&gt;…
+        &lt;td class="table__num"&gt;$650&lt;/td&gt;
+        &lt;td&gt;&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;&lt;/td&gt;
+        &lt;td class="table__actions"&gt;&lt;a class="btn btn--sm" href="/bookings/zam-0114" aria-label="View request: Abigail Mensah, Sat 14 Nov"&gt;View&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Selectable rows with a bulk bar</h3>
+      <p>A checkbox column appears only when there is something to do with several rows at once. Checking a row sets <code>aria-selected="true"</code> on the <code>&lt;tr&gt;</code>, which tints it soft yellow. The bulk bar sits directly above the table, says how many rows are selected and holds the bulk actions.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="bulk-bar"><p role="status"><b>2 requests selected</b></p><div class="cluster"><button class="btn btn--sm" type="button">Withdraw requests</button><button class="btn btn--sm" type="button">Clear selection</button></div></div>
+          <div class="table-wrap">
+            <table class="table">
+              <caption>Open requests</caption>
+              <thead><tr>
+                <th scope="col"><label class="check"><input type="checkbox" aria-label="Select all open requests" data-indeterminate><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span></label></th>
+                <th scope="col">Artist</th><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th>
+              </tr></thead>
+              <tbody>
+                <tr aria-selected="true"><td><label class="check"><input type="checkbox" checked aria-label="Select Abigail Mensah, Sat 14 Nov"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td></tr>
+                <tr aria-selected="false"><td><label class="check"><input type="checkbox" aria-label="Select Marcus Bell Trio, Sun 29 Nov"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td></tr>
+                <tr aria-selected="true"><td><label class="check"><input type="checkbox" checked aria-label="Select Daniel &amp; Ruth Okonkwo, Sun 20 Dec"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td class="table__num">$700</td><td><span class="badge badge--info">Requested</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The header checkbox is indeterminate while some rows are checked. The count lives in <code>role="status"</code> so it is announced when it changes.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="bulk-bar"&gt;
+  &lt;p role="status"&gt;&lt;b&gt;2 requests selected&lt;/b&gt;&lt;/p&gt;
+  &lt;div class="cluster"&gt;&lt;button class="btn btn--sm" type="button"&gt;Withdraw requests&lt;/button&gt;…&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="table-wrap"&gt;&lt;table class="table"&gt;
+  …
+  &lt;tr aria-selected="true"&gt;
+    &lt;td&gt;&lt;label class="check"&gt;
+      &lt;input type="checkbox" checked aria-label="Select Abigail Mensah, Sat 14 Nov"&gt;
+      &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" aria-hidden="true" …/&gt;&lt;/span&gt;
+    &lt;/label&gt;&lt;/td&gt;
+    &lt;th scope="row"&gt;Abigail Mensah&lt;/th&gt;…
+  &lt;/tr&gt;
+&lt;/table&gt;&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Sticky header and sticky first column</h3>
+      <p>When a table scrolls inside a fixed height (an admin view, a dialog), <code>.table--sticky</code> pins the header row. When it scrolls sideways on a phone, <code>.table__first</code> on the row headers keeps the artist name in view. Do not combine a sticky first column with a checkbox column: only one column can stick.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="table-wrap" style="max-height: 15rem;">
+            <table class="table table--sticky">
+              <caption>All requests · Nov to Jan</caption>
+              <thead><tr><th scope="col" class="table__first">Artist</th><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th><th scope="col">Gathering</th><th scope="col">Home base</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                <tr><th scope="row" class="table__first">Elijah Park</th><td>Wed&nbsp;4&nbsp;Nov</td><td>Midweek prayer night</td><td>Markham · 74&nbsp;km</td><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td></tr>
+                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td>Sunday service</td><td>Brampton · 44&nbsp;km</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td></tr>
+                <tr><th scope="row" class="table__first">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td>Advent carol night</td><td>Hamilton · 14&nbsp;km</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td></tr>
+                <tr><th scope="row" class="table__first">Grace Tabernacle Mass Choir</th><td>Sun&nbsp;13&nbsp;Dec</td><td>Christmas concert</td><td>Scarborough · 81&nbsp;km</td><td class="table__num">$2,400</td><td><span class="badge badge--danger">Declined</span></td></tr>
+                <tr><th scope="row" class="table__first">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td>Carol service</td><td>Ajax · 97&nbsp;km</td><td class="table__num">$700</td><td><span class="badge badge--info">Requested</span></td></tr>
+                <tr><th scope="row" class="table__first">Hosanna Collective</th><td>Sat&nbsp;16&nbsp;Jan</td><td>Youth worship night</td><td>Mississauga · 32&nbsp;km</td><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Scroll inside the frame: the header stays on top; on a phone the artist column stays on the left. The 15rem height is set by the page, not by the component.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="table-wrap" style="max-height: 15rem;"&gt;
+  &lt;table class="table table--sticky"&gt;
+    &lt;thead&gt;&lt;tr&gt;&lt;th scope="col" class="table__first"&gt;Artist&lt;/th&gt;…&lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody&gt;&lt;tr&gt;&lt;th scope="row" class="table__first"&gt;Elijah Park&lt;/th&gt;…&lt;/tr&gt;&lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Default cells are 12 × 16px (<code>--space-3</code> × <code>--space-4</code>), which leaves room for a 36px small button in each row. <code>.table--dense</code> drops to 8 × 12px for long, read-only tables such as an artist’s payout history. Dense tables hold text and badges only: no buttons, no checkboxes.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="table-wrap">
+            <table class="table table--dense">
+              <caption>Deposits paid</caption>
+              <thead><tr><th scope="col">Artist</th><th scope="col">Date</th><th scope="col">Booking</th><th scope="col" class="table__num">Deposit 25%</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td>No. ZAM-0108</td><td class="table__num">$237.50</td></tr>
+                <tr><th scope="row">Hosanna Collective</th><td>Sat&nbsp;16&nbsp;Jan</td><td>No. ZAM-0121</td><td class="table__num">$450.00</td></tr>
+                <tr><th scope="row">Luz Viva</th><td>Sun&nbsp;7&nbsp;Jun</td><td>No. ZAM-0062</td><td class="table__num">$225.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Dense: <code>--space-2</code> × <code>--space-3</code> cells. Use it when people scan more than about 20 rows.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Rows react to the pointer and to selection; the table as a whole can be loading, empty or failed. Hover and focus are forced here with <code>data-state</code>; real pages get them from <code>:hover</code> and <code>:focus-visible</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Selected · sorted</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Row</th>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><tbody><tr><th scope="row">Luz Viva</th><td class="table__num">$900</td></tr></tbody></table></td>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><tbody><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td></tr></tbody></table></td>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><tbody><tr><th scope="row">Luz Viva</th><td class="table__actions"><a class="btn btn--sm" href="#states" data-state="focus" aria-label="View request: Luz Viva, Sun 7 Jun">View</a></td></tr></tbody></table></td>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><tbody><tr aria-selected="true"><th scope="row">Luz Viva</th><td class="table__num">$900</td></tr></tbody></table></td></tr>
+          <tr><th scope="row">Sort</th>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><thead><tr><th scope="col"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th></tr></thead></table></td>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><thead><tr><th scope="col"><button class="table__sort" type="button" data-state="hover">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th></tr></thead></table></td>
+            <td><table class="table table--dense" style="width: auto; min-width: 0;"><thead><tr><th scope="col"><button class="table__sort" type="button" data-state="focus">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th></tr></thead></table></td>
+            <td><div class="cluster"><table class="table table--dense" style="width: auto; min-width: 0;"><thead><tr><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th></tr></thead></table><table class="table table--dense" style="width: auto; min-width: 0;"><thead><tr><th scope="col" aria-sort="descending"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th></tr></thead></table></div></td></tr>
+          <tr><th scope="row">Checkbox</th>
+            <td><label class="check"><input type="checkbox" aria-label="Select Luz Viva, Sun 7 Jun"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td>
+            <td><label class="check" data-state="hover"><input type="checkbox" aria-label="Select Luz Viva, Sun 7 Jun"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td>
+            <td><label class="check" data-state="focus"><input type="checkbox" aria-label="Select Luz Viva, Sun 7 Jun"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td>
+            <td><label class="check"><input type="checkbox" checked aria-label="Select Luz Viva, Sun 7 Jun"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Hover</b> fills the row with <code>--color-bg-subtle</code> so the eye can follow it across. It is a reading aid, not a sign that the row is clickable.</li>
+        <li><b>Selected</b> (<code>aria-selected="true"</code>, checkbox checked) fills the row with soft yellow. Selection survives sorting and paging until the bulk action runs or the person clears it.</li>
+        <li><b>Sorted</b> shows the arrow at full strength: up for ascending, turned down for descending. Unsorted columns show a faint arrow so people know they can sort.</li>
+      </ul>
+
+      <h3>Loading, empty and error</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="table-wrap" style="position: relative;">
+            <table class="table" aria-busy="true">
+              <caption>Naomi’s booking requests <span class="visually-hidden">(loading)</span></caption>
+              <thead><tr><th scope="col">Artist</th><th scope="col">Date</th><th scope="col">Gathering</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                <tr><td><span class="skeleton skeleton--long"></span></td><td><span class="skeleton skeleton--medium"></span></td><td><span class="skeleton skeleton--long"></span></td><td><span class="skeleton skeleton--short" style="margin-left: auto;"></span></td><td><span class="skeleton skeleton--medium"></span></td></tr>
+                <tr><td><span class="skeleton skeleton--medium"></span></td><td><span class="skeleton skeleton--medium"></span></td><td><span class="skeleton skeleton--long"></span></td><td><span class="skeleton skeleton--short" style="margin-left: auto;"></span></td><td><span class="skeleton skeleton--medium"></span></td></tr>
+                <tr><td><span class="skeleton skeleton--long"></span></td><td><span class="skeleton skeleton--medium"></span></td><td><span class="skeleton skeleton--medium"></span></td><td><span class="skeleton skeleton--short" style="margin-left: auto;"></span></td><td><span class="skeleton skeleton--medium"></span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Loading: caption and headers are real, three skeleton rows hold the shape, the table has <code>aria-busy="true"</code>. The page’s status region says “Loading your requests”.</span></div>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="empty empty--quiet">
+            <p class="empty__title">No booking requests yet</p>
+            <p>When you ask an artist to lead worship, the request shows here with its status.</p>
+            <div class="cluster"><a class="btn btn--primary" href="#states">Find an artist</a></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Empty: no table at all, a quiet empty state in its place that says what will appear and how to start.</span></div>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="alert alert--danger">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm">
+              <p class="alert__title">Your requests didn’t load</p>
+              <p>Nothing has changed with your bookings. Check your connection and try again.</p>
+            </div>
+            <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Error: a danger alert replaces the table. In the product it has <code>role="alert"</code>; focus stays where it was.</span></div>
+      </div>
+
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td></tr><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td><td><span class="badge badge--info">Requested</span></td></tr><tr aria-selected="true"><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td></tr></tbody></table></div></div>
+        <div data-theme="dark"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td></tr><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td><td><span class="badge badge--info">Requested</span></td></tr><tr aria-selected="true"><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td></tr></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The table never squeezes its columns below their content. <code>.table-wrap</code> scrolls sideways instead, so the page itself never scrolls horizontally at 360px. This is the one allowed two-dimensional scroll (WCAG 1.4.10 exempts data tables).</li>
+        <li>On phones, put <code>.table__first</code> on the row headers so the artist name stays visible while the other columns scroll past.</li>
+        <li>Header labels do not wrap (<code>white-space: nowrap</code>); keep them to one or two words. Body cells wrap normally, except row actions.</li>
+        <li>Below <code>--layout-breakpoint-md</code> (768px), a table with four columns or fewer can become a <a href="list.html">list</a> of rows, one record per item. Decide per page and say so in its spec; never hide columns silently.</li>
+        <li>The bulk bar wraps: the count goes first, actions drop below it on narrow screens.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The table has no component tokens yet: it reads semantic tokens directly. The wrapper is <code>--color-bg-surface</code> with a <code>--color-border-strong</code> rule, the header is <code>--color-bg-surface-sunken</code>, row rules are <code>--color-border-default</code>, hover is <code>--color-bg-subtle</code> and selected is <code>--color-accent-subtle</code>. The bulk bar uses the inverse pair and re-maps its buttons through <code>--btn-bg</code>, <code>--btn-fg</code> and <code>--btn-border</code>, like the toast.</p>
+      <p>In the dark theme the paper turns charcoal, rules turn into light outlines and the selected tint becomes a deep amber, so the label stays at full contrast. Badges keep their word and tone in both themes.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;table&gt;</code> with a <code>&lt;caption&gt;</code>, <code>&lt;th scope="col"&gt;</code> for column headers and <code>&lt;th scope="row"&gt;</code> for the artist in each row. It follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/table/">APG Table pattern</a> and its sortable table example. It is not a grid: cells are not focusable and arrow keys do nothing special. Sort controls, checkboxes and row actions are ordinary buttons, inputs and links in the Tab order.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through sort buttons, then each row’s checkbox and action, in reading order.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>On a sort button: sorts by that column, or reverses the order if it is already sorted.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>On a checkbox: selects or clears that row. On the header checkbox: selects or clears every row on the page.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>On a row action: opens the request or runs the action.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The shared 3px ring appears on the sort button, checkbox box or row button. Rows themselves are never focusable. After sorting, focus stays on the same sort button. After a bulk action, focus moves to the status message or the first remaining row, never to the top of the page.</p>
+      <h3>Labelling</h3>
+      <p>The caption names the table. <code>aria-sort</code> sits on the sorted <code>&lt;th&gt;</code> only, never on the button, and only one column carries it. Each checkbox has an <code>aria-label</code> that names the row (“Select Abigail Mensah, Sat 14 Nov”); the header checkbox is “Select all open requests”. Row actions repeat the visible verb first and add the row (“View request: Abigail Mensah, Sat 14 Nov”) to meet WCAG 2.5.3 Label in Name. An actions column with no visible header gets a visually hidden “Actions”. <code>aria-selected</code> on the row drives the tint; the checked checkbox is what assistive technology announces. The bulk count is a <code>role="status"</code> message.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Cell text on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Header text on sunken fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Text on hovered row</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Text on selected row</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Bulk bar text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Wrapper rule on paper</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: text on selected row</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: header text on sunken fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: wrapper rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <p>Row dividers (<code>--color-border-default</code>) are decorative and exempt from 1.4.11: rows are separated by their content and by the hover fill.</p>
+      <h3>Motion</h3>
+      <p>Nothing animates except the skeleton shimmer while loading, which stops under <code>prefers-reduced-motion</code>. Sorting re-orders rows instantly; it never animates rows into place.</p>
+      <h3>Touch</h3>
+      <p>Checkbox boxes are 24px inside a 44px-plus row; small row buttons are 36px with 12px of cell padding above and below. Sort buttons are at least 24px tall and span the header label. Nothing depends on hover.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Caption: say whose records and which set, in sentence case: “Naomi’s booking requests”, “Deposits paid”.</li>
+        <li>Headers are one or two nouns: “Artist”, “Date”, “Gathering”, “Fee”, “Status”. Put the unit in the header, not in every cell, when it helps (“Deposit 25%”).</li>
+        <li>Dates as “Sat 14 Nov”; add the year only when the table spans years. Money as “$1,800”, with cents only where cents exist (deposits).</li>
+        <li>Status is one badge word from the fixed set: Requested, Accepted, Deposit due, Declined. See <a href="badge.html">Badge</a>.</li>
+        <li>One row action, a verb: “View”, “Pay deposit”. More than two actions per row belong in a <a href="menu.html">menu</a>.</li>
+        <li>Bulk counts name the thing: “2 requests selected”, not “2 selected”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="table-wrap"><table class="table"><caption>Fees</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td></tr><tr><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td></tr></tbody></table></div></div><figcaption>Right-align money with <code>.table__num</code> so digits line up and amounts compare at a glance.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="table-wrap"><table class="table"><caption>Fees</caption><thead><tr><th scope="col">Artist</th><th scope="col">Fee</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td>$350</td></tr><tr><th scope="row">Hosanna Collective</th><td>$1,800</td></tr></tbody></table></div></div><figcaption>Left-aligned fees put $350 and $1,800 at the same visual weight.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><span class="badge badge--danger">Declined</span><span class="badge badge--success">Accepted</span></div><figcaption>Status is a badge with a word and a tone, readable in grayscale and by screen readers.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><span style="display: inline-block; width: var(--space-3); height: var(--space-3); background: var(--color-danger-solid);" aria-hidden="true"></span><span style="display: inline-block; width: var(--space-3); height: var(--space-3); background: var(--color-success-solid);" aria-hidden="true"></span></div><figcaption>A coloured square alone fails WCAG 1.4.1: red and green read the same to many people.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="empty empty--quiet"><p class="empty__title">No booking requests yet</p><p>Requests you send show here.</p></div></div><figcaption>Replace an empty table with an empty state that says what will appear.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col">Date</th><th scope="col">Status</th></tr></thead><tbody><tr><td colspan="3">&nbsp;</td></tr></tbody></table></div></div><figcaption>Headers over nothing. Screen readers announce a table with zero data and no explanation.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Wrapper fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Wrapper, caption and header rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Header fill</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Row divider</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Row hover</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Row selected</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Bulk bar fill / text</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Cell padding / dense</td><td><code>--space-3</code> × <code>--space-4</code> / <code>--space-2</code> × <code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span> × <span data-token="--space-4"></span> / <span data-token="--space-2"></span> × <span data-token="--space-3"></span></td></tr>
+          <tr><td>Caption / header / body font</td><td><code>--text-h4</code> / <code>--text-overline</code> / <code>--text-body-sm</code></td><td colspan="2"><span data-token="--text-body-sm"></span></td></tr>
+          <tr><td>Rules</td><td><code>--border-width-thick</code>, <code>--border-width-hairline</code></td><td colspan="2"><span data-token="--border-width-thick"></span> / <span data-token="--border-width-hairline"></span></td></tr>
+          <tr><td>Sticky layer</td><td><code>--z-raised</code></td><td colspan="2"><span data-token="--z-raised"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class="table-wrap"&gt;
+  &lt;table class="table table--sticky"&gt;
+    &lt;caption&gt;Naomi’s booking requests&lt;/caption&gt;
+    &lt;thead&gt;&lt;tr&gt;
+      &lt;th scope="col" class="table__first"&gt;Artist&lt;/th&gt;
+      &lt;th scope="col" aria-sort="ascending"&gt;
+        &lt;button class="table__sort" type="button"&gt;Date &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 19V5M6 11l6-6 6 6"/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;/th&gt;
+      &lt;th scope="col" class="table__num"&gt;Fee&lt;/th&gt;
+      &lt;th scope="col"&gt;Status&lt;/th&gt;
+    &lt;/tr&gt;&lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;th scope="row" class="table__first"&gt;Abigail Mensah&lt;/th&gt;&lt;td&gt;Sat 14 Nov&lt;/td&gt;
+        &lt;td class="table__num"&gt;$650&lt;/td&gt;&lt;td&gt;&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.table-wrap</code></td><td>Paper surface, 2px rule, horizontal scroll container.</td></tr>
+        <tr><td><code>.table</code></td><td>Full width, collapsed borders, tabular figures, 12 × 16px cells.</td></tr>
+        <tr><td><code>&lt;caption&gt;</code>, <code>scope="col|row"</code></td><td>Required: name the table and tie cells to their headers.</td></tr>
+        <tr><td><code>.table__sort</code> + <code>aria-sort</code> on the <code>&lt;th&gt;</code></td><td>Sort button; the arrow is full strength when sorted, turned for descending.</td></tr>
+        <tr><td><code>.table__num</code></td><td>Right-aligned numeric cell or header.</td></tr>
+        <tr><td><code>.table__actions</code></td><td>Right-aligned, non-wrapping action cell.</td></tr>
+        <tr><td><code>tr[aria-selected="true"]</code></td><td>Selected row tint; pair it with a checked <code>.check</code>.</td></tr>
+        <tr><td><code>.bulk-bar</code></td><td>Inverse bar above the table with the count and bulk actions.</td></tr>
+        <tr><td><code>.table--dense</code></td><td>8 × 12px cells for long read-only tables.</td></tr>
+        <tr><td><code>.table--sticky</code></td><td>Header row sticks to the top of the scrolling wrapper.</td></tr>
+        <tr><td><code>.table__first</code></td><td>Sticky left column (row headers).</td></tr>
+        <tr><td><code>aria-busy="true"</code> on <code>&lt;table&gt;</code></td><td>Loading; fill the body with <code>.skeleton</code> rows.</td></tr>
+        <tr><td><code>data-state="hover"</code> on <code>&lt;tr&gt;</code></td><td>Documentation and mocks only: forces the hover fill.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The product will need it for Naomi’s bookings page (requests and their statuses), an artist’s incoming requests and an artist’s payout history. Its parts come from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: Free and Booked badges in the tour dates, small “Pick” buttons for row actions</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: skeletons in the final positions of the content</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: an empty state that explains and offers a next step</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the alert that replaces failed content and keeps the person’s inputs</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Skeleton widths and heights were inline styles in the loading mocks. Skeleton rows here use <code>.skeleton--short/medium/long</code>, and the base height is 1rem instead of 0.9rem.</li>
+        <li><code>.alert</code> was danger-only by default. The error state uses <code>alert alert--danger</code> explicitly.</li>
+        <li>The count badge’s minimum width grew from 1.4em to 1.5em, which matters when counts sit in table headers or the bulk bar.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script>document.querySelectorAll('input[data-indeterminate]').forEach(function (i) { i.indeterminate = true; });</script>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

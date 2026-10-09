@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empty state — Zamaro design system</title>
+<meta name="description" content="Empty states explain why there is nothing to show and offer the next move: nobody free on Christmas Eve, no videos yet, no church reviews yet. Full and compact sizes, date swaps, in both themes.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Empty state</h1>
+      <p class="ds-lead">A dashed, blank ticket with a rubber stamp across it: “Sold out”, “Fresh on the bill”. It says why there is nothing here and gives the booker one good next move.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="status"</code> after a search</span><span class="ds-pill">Class <code>.empty</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use an empty state wherever a list or section can come back with nothing in it. It replaces the content in the same place, keeps the controls that led there (the search, the filters), and offers a way out.</p>
+      <ul>
+        <li><b>No results</b>: a search found nobody. Say which part of the search is the problem and offer nearby alternatives, such as other dates with the <code>.date-swap</code> list.</li>
+        <li><b>Filtered out</b>: the filters hide everyone. Offer to clear the filter that matters.</li>
+        <li><b>First run</b>: the booker hasn’t done this yet (no requests sent). Explain what will appear and how to start.</li>
+        <li><b>Nothing yet</b>: an artist is new and a section has no content (no videos, no reviews). Use the quiet size so the profile doesn’t look broken.</li>
+      </ul>
+      <p>If the content failed to load, that is an error, not an empty state: use an <a href="alert.html">alert</a> or the <a href="error-page.html">error page</a>. While it is still loading, use a <a href="skeleton.html">skeleton</a>.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding-inline: var(--space-4);">
+          <div class="empty empty--quiet" style="width: 100%;">
+            <p class="empty__stamp" aria-hidden="true">Opening night</p>
+            <p class="empty__title">No church reviews yet</p>
+            <p>Book Miriam and your church can be the first to say how it went.</p>
+            <a class="btn btn--primary" href="#anatomy">Be her first booking</a>
+          </div>
+          <span class="ds-callout" style="left: 46%; top: 16%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 76%; top: 34%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 86%; top: 50%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 62%; top: 72%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 4%; top: 88%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Stamp</b><small><code>.empty__stamp</code>: a 2px-ruled rubber stamp in the display face, tilted 3°. Two or three words of poster voice. Decorative.</small></div></li>
+          <li><div><b>Title</b><small><code>.empty__title</code>: what is missing, in plain words. 40px (<code>--text-h2</code>) full, 22px (<code>--text-h4</code>) quiet. Use a heading at the right level.</small></div></li>
+          <li><div><b>Explanation</b><small>One or two sentences: why it is empty and what to try.</small></div></li>
+          <li><div><b>Action</b><small>One primary button, plus at most one secondary. Date swaps go above the buttons.</small></div></li>
+          <li><div><b>Container</b><small>Paper surface with a 2px dashed <code>--color-border-strong</code> rule, like an unused ticket. 40×32px padding full, 24px quiet.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>No results, with date swaps</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="empty" role="status">
+            <p class="empty__stamp" aria-hidden="true">Sold out</p>
+            <p class="empty__title">Nobody’s free Christmas Eve within 40 km</p>
+            <p>Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby date, or widen the radius.</p>
+            <div class="stack">
+              <p class="card__title" style="font: var(--text-h4);">Nearby dates with choirs free</p>
+              <ul class="date-swap" role="list">
+                <li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li>
+                <li><button type="button"><strong>Wed 23 Dec</strong> 1 choir free</button></li>
+                <li><button type="button"><strong>Sun 27 Dec</strong> 3 choirs free</button></li>
+              </ul>
+            </div>
+            <div class="cluster">
+              <button class="btn btn--primary" type="button">Search within 120 km <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+              <button class="btn" type="button">Show all styles</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>From the discover empty mock. Each date swap is a button that re-runs the search for that date.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="empty" role="status"&gt;
+  &lt;p class="empty__stamp" aria-hidden="true"&gt;Sold out&lt;/p&gt;
+  &lt;h3 class="empty__title"&gt;Nobody’s free Christmas Eve within 40 km&lt;/h3&gt;
+  &lt;p&gt;Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby date, or widen the radius.&lt;/p&gt;
+  &lt;div class="stack"&gt;
+    &lt;h4&gt;Nearby dates with choirs free&lt;/h4&gt;
+    &lt;ul class="date-swap" role="list"&gt;
+      &lt;li&gt;&lt;button type="button"&gt;&lt;strong&gt;Sun 20 Dec&lt;/strong&gt; 2 choirs free&lt;/button&gt;&lt;/li&gt;
+      …
+    &lt;/ul&gt;
+  &lt;/div&gt;
+  &lt;div class="cluster"&gt;
+    &lt;button class="btn btn--primary" type="button"&gt;Search within 120 km …arrow…&lt;/button&gt;
+    &lt;button class="btn" type="button"&gt;Show all styles&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Filtered out</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="empty" role="status">
+            <p class="empty__stamp" aria-hidden="true">No match</p>
+            <p class="empty__title">Nobody free leads hymns in Spanish</p>
+            <p>Luz Viva sings in Spanish and Daniel &amp; Ruth Okonkwo lead hymns, but nobody does both on Sat 14 Nov. Remove a filter to see them.</p>
+            <div class="cluster">
+              <button class="btn btn--primary" type="button">Remove “Hymns”</button>
+              <button class="btn" type="button">Clear all filters</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Name the filters that cause it and offer to remove the one that matters most.</span></div>
+      </div>
+
+      <h3>First run</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="empty">
+            <p class="empty__stamp" aria-hidden="true">Doors open</p>
+            <p class="empty__title">No requests sent yet</p>
+            <p>When you ask an artist to lead worship, the request shows here with its booking code. Nothing is charged until they accept.</p>
+            <div class="cluster"><a class="btn btn--primary" href="#variants">Find who’s free <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Present at page load, so no live role. Explain what will fill the space.</span></div>
+      </div>
+
+      <h3>Nothing yet (new artist)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="empty empty--quiet">
+            <p class="empty__stamp" aria-hidden="true">Fresh on the bill</p>
+            <p class="empty__title">No videos yet</p>
+            <p>Miriam is filming her first live set this month. Until then, ask her for a recording in your request.</p>
+            <a class="btn" href="#variants">Ask Miriam for a recording</a>
+          </div>
+          <div class="empty empty--quiet">
+            <p class="empty__stamp" aria-hidden="true">Opening night</p>
+            <p class="empty__title">No church reviews yet</p>
+            <p>Book Miriam and your church can be the first to say how it went.</p>
+            <a class="btn btn--primary" href="#variants">Be her first booking</a>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>From Miriam Haile’s profile. Only one section per page gets the yellow button; the other uses a secondary.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Use the full size when the empty state replaces the main content of a page (the lineup). Use the quiet size (<code>.empty--quiet</code>) inside a section of a larger page (videos and reviews on a profile), inside the booking stub, or in a dialog.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="empty">
+            <p class="empty__stamp" aria-hidden="true">Sold out</p>
+            <p class="empty__title">Nobody’s free Christmas Eve</p>
+            <p>Try a nearby date, or widen the radius.</p>
+          </div>
+        </div>
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="empty empty--quiet">
+            <p class="empty__stamp" aria-hidden="true">Sold out</p>
+            <p class="empty__title">Nobody’s free Christmas Eve</p>
+            <p>Try a nearby date, or widen the radius.</p>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Full: 40px top and bottom, 32px sides, 24px gaps, <code>--text-h2</code> title. Quiet: 24px padding, 16px gaps, <code>--text-h4</code> title.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The empty state itself is static. Its date swaps and buttons are interactive; their pointer and focus states are forced here with <code>data-state</code>. A date swap lifts and fills yellow on hover, like a primary button.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Searching</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Date swap</th>
+            <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li></ul></td>
+            <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" data-state="hover"><strong>Sun 20 Dec</strong> 2 choirs free</button></li></ul></td>
+            <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" data-state="focus"><strong>Sun 20 Dec</strong> 2 choirs free</button></li></ul></td>
+            <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" aria-busy="true"><strong>Sun 20 Dec</strong> Checking…</button></li></ul></td></tr>
+          <tr><th scope="row">Primary action</th>
+            <td><button class="btn btn--primary" type="button">Search within 120 km</button></td>
+            <td><button class="btn btn--primary" type="button" data-state="hover">Search within 120 km</button></td>
+            <td><button class="btn btn--primary" type="button" data-state="focus">Search within 120 km</button></td>
+            <td><button class="btn btn--primary" type="button" aria-busy="true">Checking calendars…</button></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Sold out</p><p class="empty__title">Nobody’s free Christmas Eve</p><ul class="date-swap" role="list"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li><li><button type="button" data-state="hover"><strong>Wed 23 Dec</strong> 1 choir free</button></li></ul><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km</button></div></div></div>
+        <div data-theme="dark"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Sold out</p><p class="empty__title">Nobody’s free Christmas Eve</p><ul class="date-swap" role="list"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li><li><button type="button" data-state="hover"><strong>Wed 23 Dec</strong> 1 choir free</button></li></ul><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km</button></div></div></div>
+      </div>
+      <ul>
+        <li><b>Appearing after a search</b>: the empty state replaces the skeletons in a container with <code>role="status"</code>, so its title and sentence are announced.</li>
+        <li><b>Searching again</b>: pressing a date swap or the primary action puts the lineup back into its loading state (skeletons, busy button). The empty state is removed, not hidden.</li>
+        <li><b>Becoming non-empty</b>: when content arrives (a first review), the empty state is replaced by the list; never show both.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The empty state fills its container’s width and stacks its parts in one column at every breakpoint. Text stays left-aligned, like the rest of the poster.</li>
+        <li>Date swaps form a grid of 9rem-minimum cells: one column on narrow phones, two or three across on wider screens.</li>
+        <li>Action buttons wrap onto a new line. A label that is too long wraps inside the button rather than overflowing, which looks broken on a poster button, so keep labels short. The full size’s 32px side padding leaves about 260px at 360px: even “Search within 120 km” with its arrow wraps there, and the mock’s “Search within 120 km · 2 choirs free” wraps to three lines. Proposed fix: 20px side padding below 640px.</li>
+        <li>The full size keeps 32px side padding on phones, which leaves about 260px for the title and buttons at 360px. Prefer the quiet size inside narrow columns such as the profile sidebar.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The container reads <code>--color-bg-surface</code> and a dashed <code>--color-border-strong</code> rule; text is <code>--color-fg-default</code>; the stamp is <code>currentColor</code>. Date swaps are paper buttons with a <code>--color-border-strong</code> rule that turn <code>--color-accent</code> with an ink label, <code>--shadow-1</code> and <code>--transform-lift</code> on hover. There are no component tokens; re-skin through the semantic tokens.</p>
+      <p>In the dark theme the empty ticket is a charcoal surface with a light dashed rule and the hovered date swap glows yellow with a yellow hard shadow. The stamp follows the text colour, so it reads as pale ink on the stage.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A plain container. When it appears as the result of something the booker did (a search, a filter), give the container <code>role="status"</code> so the title and sentence are read out, as the discover mock does. When it is part of the page at load (first run, a new artist’s reviews), it needs no role. The title is a real heading at the next level down from its section (<code>&lt;h3&gt;</code> under the lineup’s <code>&lt;h2&gt;</code>). Date swaps are native buttons in a list. No APG widget pattern applies.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through the date swaps, then the actions, in DOM order.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Runs the search for that date, or activates the action.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Don’t move focus into the empty state when it appears; the status announcement is enough, and focus stays on the search or filter the booker just used. After a date swap is pressed, focus moves to the lineup heading once results load.</p>
+      <h3>Labelling</h3>
+      <p>The stamp is decoration and repeats the title’s meaning in poster slang (“Sold out”, “Opening night”), so hide it with <code>aria-hidden="true"</code>. Each date swap’s name must read naturally: keep a space between the date and the count (<code>&lt;strong&gt;Sun 20 Dec&lt;/strong&gt; 2 choirs free</code>) so it isn’t read as “Dec2”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Title and text on the empty ticket</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Dashed rule and date-swap rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Hovered date swap label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on the ticket</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: title and text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: dashed rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: hovered date swap label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The empty state appears without animation. Date swaps lift 4px on hover over <code>--duration-fast</code>; reduced motion removes the movement and keeps the colour change.</p>
+      <h3>Touch</h3>
+      <p>Date swaps are at least 64px tall and 9rem wide, 12px apart. Action buttons are 44px. Hover is never required: every date swap shows its date and count at rest.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Title</b>: what isn’t there, with the specifics the booker chose: “Nobody’s free Christmas Eve within 40 km”, “No videos yet”, “No church reviews yet”.</li>
+        <li><b>Sentence</b>: why, and what to try. “Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby date, or widen the radius.”</li>
+        <li><b>Action</b>: a verb with the outcome: “Search within 120 km”, “Be her first booking”, “Remove ‘Hymns’”. One primary.</li>
+        <li><b>Stamp</b>: two or three words of gig-poster voice (“Sold out”, “Fresh on the bill”, “Opening night”, “Doors open”). Skip it if a pun would sound flippant, such as on a funeral booking.</li>
+        <li>Never blame the booker (“You have no…”) and never leave an empty state without a next step.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">Nobody’s free Christmas Eve within 40 km</p><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km</button></div></div></div><figcaption>A short action label; the count of free choirs lives in the date swaps.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">Nobody’s free Christmas Eve within 40 km</p><p class="text-caption">Button: “Search within 120 km · 2 choirs free →”</p></div></div><figcaption>The mock’s 36-character label with an arrow wraps to three lines inside the empty state at 360px.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Fresh on the bill</p><p class="empty__title">No videos yet</p><a class="btn" href="#do-dont">Ask Miriam for a recording</a></div></div><figcaption>A new artist’s empty section explains itself and turns into something the church can do.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="text-muted">No results.</p></div><figcaption>A bare “No results.” says nothing about why, keeps no tone, and leaves the booker stuck.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">No church reviews yet</p><a class="btn btn--primary" href="#do-dont">Be her first booking</a></div></div><figcaption>One yellow action per page, in the section where it matters most.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">We couldn’t load the lineup</p><button class="btn btn--primary" type="button">Try again</button></div></div><figcaption>A failed load dressed as an empty state. Errors use the danger <a href="alert.html">alert</a>, so the booker knows nothing is wrong with their search.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Ticket fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Dashed rule, date-swap rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Text and stamp</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Date swap, hover</td><td><code>--color-accent</code> / <code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Date swap hover shadow / lift</td><td><code>--shadow-1</code>, <code>--transform-lift</code></td><td><span data-theme="light" data-token="--shadow-1"></span></td><td><span data-theme="dark" data-token="--shadow-1"></span></td></tr>
+          <tr><td>Padding full / quiet</td><td><code>--space-10</code> <code>--space-8</code> / <code>--space-6</code></td><td colspan="2"><span data-token="--space-10"></span> <span data-token="--space-8"></span> / <span data-token="--space-6"></span></td></tr>
+          <tr><td>Title full / quiet</td><td><code>--text-h2</code> / <code>--text-h4</code></td><td colspan="2"><span data-token="--text-h2"></span></td></tr>
+          <tr><td>Stamp</td><td><code>--text-h4</code>, <code>--letter-spacing-wide</code>, <code>--border-width-thick</code></td><td colspan="2"><span data-token="--letter-spacing-wide"></span> · <span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Date in a swap</td><td><code>--text-figure</code></td><td colspan="2"><span data-token="--text-figure"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section class="section" aria-labelledby="videos-title"&gt;
+  &lt;h2 id="videos-title"&gt;Watch her lead&lt;/h2&gt;
+  &lt;div class="empty empty--quiet"&gt;
+    &lt;p class="empty__stamp" aria-hidden="true"&gt;Fresh on the bill&lt;/p&gt;
+    &lt;h3 class="empty__title"&gt;No videos yet&lt;/h3&gt;
+    &lt;p&gt;Miriam is filming her first live set this month. Until then, ask her for a recording in your request.&lt;/p&gt;
+    &lt;a class="btn" href="#message"&gt;Ask Miriam for a recording&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.empty</code></td><td>Full size: dashed paper ticket, one column, 24px gaps.</td></tr>
+        <tr><td><code>.empty--quiet</code></td><td>Compact size for sections, stubs and dialogs.</td></tr>
+        <tr><td><code>.empty__stamp</code></td><td>Tilted, ruled rubber stamp. Add <code>aria-hidden="true"</code>.</td></tr>
+        <tr><td><code>.empty__title</code></td><td>Display-face title; put it on a heading of the right level.</td></tr>
+        <tr><td><code>.date-swap</code> (on a <code>&lt;ul role="list"&gt;</code>)</td><td>Grid of date buttons; each <code>&lt;button&gt;</code> holds a <code>&lt;strong&gt;</code> date and a count.</td></tr>
+        <tr><td><code>role="status"</code></td><td>Announce an empty state that appears after a search or filter.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code> (on a date swap)</td><td>Documentation only: forces the pointer or focus state.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: “Sold out” stamp, “Nobody’s free Christmas Eve within 40 km”, three date swaps, primary and secondary actions, <code>role="status"</code></li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: Miriam Haile’s quiet empty states, “No videos yet” (Fresh on the bill) and “No church reviews yet” (Opening night)</li>
+      </ul>
+      <p>Drift fixed during extraction: none in the empty-state classes; they were already token-based. Two issues are still open in the mocks:</p>
+      <ul>
+        <li>The discover empty mock’s primary label “Search within 120 km · 2 choirs free” plus its arrow wraps to three lines at 360px. Shorten it to “Search within 120 km”.</li>
+        <li>Date swaps join the date and count with no space (<code>&lt;strong&gt;Sun 20 Dec&lt;/strong&gt;2 choirs free</code>), and the stamps are read aloud. Add the space and <code>aria-hidden</code> on the stamp.</li>
+      </ul>
+      <p>The filtered-out and first-run variants are not in the mocks yet; they are part of the core set. The product needs them for filter chips that exclude everyone and for a booker’s requests page before the first booking.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>
