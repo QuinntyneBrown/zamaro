@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Report and moderate a review
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Reports reviews using", "HTTPS")
+Rel(artist, zamaro, "Reports reviews of own profile using", "HTTPS")
+Rel(admin, zamaro, "Hides reviews or dismisses reports using", "HTTPS")
+Rel(zamaro, email, "Sends report alerts and hidden-review emails through", "HTTPS/JSON")
+@enduml

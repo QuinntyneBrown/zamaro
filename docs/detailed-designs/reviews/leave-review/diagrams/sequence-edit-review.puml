@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Edit a review
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingReviewStore" as store
+  participant "ReviewsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingReviewController" as controller
+  participant "ReviewPolicy" as policy
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "EditReview" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Activate Edit review
+page -> page : Show form only when review.canEdit (L2-059)
+actor -> page : Change stars or text, activate Save
+page -> store : update(reviewId, form)
+store -> client : update(reviewId, form)
+client -> controller : PATCH /api/v1/reviews/{review}
+controller -> controller : Validate UpdateReviewRequest
+controller -> db : Load review
+db --> controller : Review
+controller -> policy : update(user, review)
+alt review written by another user
+  policy --> controller : Deny as not found
+  controller --> client : 404 problem details (L2-074)
+else created 7 or more days ago
+  policy --> controller : Deny, review locked
+  controller --> client : 403 problem details (L2-059)
+  client --> store : Error
+  store --> page : Mark review locked
+  page --> actor : Review shown read-only
+else inside the 7-day edit window
+  policy --> controller : Allow
+  controller -> action : handle(review, stars, text)
+  action -> db : UPDATE stars, text, edited_at
+  db --> action : Updated
+  action -> queue : ReviewEdited dispatches RecalculateArtistRating (L2-060)
+  action --> controller : Review
+  controller --> client : 200 ReviewResource
+  client --> store : Review
+  store --> page : status = saved
+  page --> actor : Toast "Review updated"
+end
+@enduml

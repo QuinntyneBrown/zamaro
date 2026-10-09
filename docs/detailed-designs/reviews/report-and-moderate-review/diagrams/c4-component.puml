@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Report and moderate a review
+
+Container(web, "Zamaro Web", "Angular", "ReportReviewDialogComponent, AdminReviewReportsPage, HideReviewDialogComponent")
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(api, "Zamaro API") {
+  Component(rctrl, "ReviewReportsController", "Laravel controller", "POST /api/v1/reviews/{review}/reports")
+  Component(report, "ReportReview", "Action", "One report per user per review")
+  Component(mctrl, "Admin\\ReviewModerationController", "Laravel controller", "index, hide, dismiss under /api/v1/admin")
+  Component(hide, "HideReview", "Action", "Hides with reason, resolves reports")
+  Component(dismiss, "DismissReviewReport", "Action", "Closes a report, review stays visible")
+  Component(audit, "RecordAuditEntry", "Action", "Appends an audit entry")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(notifyAdmins, "NotifyAdministratorsOfReport", "Queued listener", "ReviewReportedNotification to administrators")
+  Component(notifyReviewer, "ReviewHiddenNotification", "Queued notification", "Emails the reviewer the reason")
+  Component(rating, "RecalculateArtistRating", "Queued job", "Excludes hidden reviews within 60 s")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "reviews, review_reports, audit_entries")
+
+Rel(web, rctrl, "Sends report", "JSON/HTTPS")
+Rel(web, mctrl, "Lists, hides, dismisses", "JSON/HTTPS")
+Rel(rctrl, report, "Calls")
+Rel(report, db, "Inserts review_report", "SQL")
+Rel(report, notifyAdmins, "Raises ReviewReported for")
+Rel(mctrl, hide, "Calls")
+Rel(mctrl, dismiss, "Calls")
+Rel(hide, db, "Stamps hidden_at, resolves reports", "SQL")
+Rel(hide, audit, "Calls in the same transaction")
+Rel(dismiss, audit, "Calls in the same transaction")
+Rel(audit, db, "Inserts audit_entry", "SQL")
+Rel(hide, notifyReviewer, "Raises ReviewHidden for")
+Rel(hide, rating, "Raises ReviewHidden for")
+Rel(notifyAdmins, email, "Sends through", "HTTPS/JSON")
+Rel(notifyReviewer, email, "Sends through", "HTTPS/JSON")
+@enduml

@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Edit a reply
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistReviewsPage" as page
+  participant "ArtistReviewsStore" as store
+  participant "ArtistReviewsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistReviewReplyController" as controller
+  participant "ReviewReplyPolicy" as policy
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "EditReviewReply" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Activate Edit reply
+actor -> page : Change text, activate Save
+page -> store : editReply(reviewId, text)
+store -> client : editReply(reviewId, text)
+client -> controller : PATCH /api/v1/artist/reviews/{review}/reply
+controller -> controller : Validate UpdateReviewReplyRequest (1–500 characters)
+controller -> db : Load reply with review
+db --> controller : ReviewReply
+controller -> policy : update(user, reply)
+alt reply created 7 or more days ago
+  policy --> controller : Deny, reply locked
+  controller --> client : 403 problem details (L2-061)
+  client --> store : Error
+  store --> page : Mark reply locked
+  page --> actor : Reply shown read-only
+else inside the 7-day edit window
+  policy --> controller : Allow
+  controller -> action : handle(reply, text)
+  action -> db : UPDATE text, edited_at
+  action -> cache : ReviewReplyEdited forgets cached profile (L2-089)
+  action --> controller : ReviewReply
+  controller --> client : 200 ReviewReplyResource
+  client --> store : Reply
+  store --> page : Updated reply
+  page --> actor : Toast "Reply updated"
+end
+@enduml

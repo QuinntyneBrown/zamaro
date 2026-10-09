@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Record the audit log
+
+Container(web, "Zamaro Web", "Angular", "AdminAuditLogPage, AdminAuditApi")
+Container_Boundary(api, "Zamaro API and Zamaro Worker") {
+  Component(actions, "Admin actions", "Actions", "SuspendArtist, HideReview, IssueRefund, ResolveHeldBooking, ...")
+  Component(authSub, "AuditAuthenticationEvents", "Event subscriber", "Sign-in, failed sign-in, password, MFA, role")
+  Component(payL, "AuditPaymentEvents", "Event listener", "Refund and payout results")
+  Component(mw, "AuditAdminRequests", "Terminable middleware", "Failed or denied admin requests")
+  Component(record, "RecordAuditEntry", "Action", "Single writer; redacts context")
+  Component(redactor, "LogRedactor", "Support class", "Strips secrets and message bodies")
+  Component(ctrl, "Admin\\AuditEntriesController", "Laravel controller", "GET /api/v1/admin/audit-entries only")
+  Component(prune, "PruneAuditEntries", "Scheduled job", "audit:prune, daily")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "audit_entries with UPDATE and DELETE trigger guard")
+
+Rel(actions, record, "Calls inside the business transaction")
+Rel(authSub, record, "Calls")
+Rel(payL, record, "Calls")
+Rel(mw, record, "Calls after a failed admin request")
+Rel(record, redactor, "Cleans context with")
+Rel(record, db, "INSERT", "SQL")
+Rel(web, ctrl, "Reads entries", "JSON/HTTPS")
+Rel(ctrl, db, "SELECT with filters and cursor", "SQL")
+Rel(prune, db, "DELETE older than 2 years", "SQL, retention role")
+@enduml

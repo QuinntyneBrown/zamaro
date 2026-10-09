@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Record the audit log
+
+Person(user, "Any signed-in user", "Booker, artist or administrator")
+Person(admin, "Administrator", "Reads the audit log")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Read-only audit log page")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Records entries for requests; read endpoint")
+  Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon and scheduler", "Records job outcomes; daily retention")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "audit_entries, append-only")
+}
+Rel(user, web, "Signs in, takes actions", "HTTPS")
+Rel(admin, web, "Uses /admin/audit", "HTTPS")
+Rel(web, api, "Calls /api/v1/..., GET /api/v1/admin/audit-entries", "JSON/HTTPS")
+Rel(api, db, "INSERT and SELECT only", "SQL, application role")
+Rel(worker, db, "INSERT for job outcomes", "SQL, application role")
+Rel(worker, db, "DELETE entries older than 2 years", "SQL, retention role")
+@enduml

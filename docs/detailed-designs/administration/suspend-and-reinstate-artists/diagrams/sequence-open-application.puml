@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Open an artist application
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminApplicationPage" as page
+  participant "AdminArtistsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\ApplicationsController" as ctrl
+  participant "Admin\\ApplicationDocumentsController" as docs
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+actor -> page : Open /admin/applications/{id}
+page -> client : application(id)
+client -> ctrl : GET /api/v1/admin/applications/{id} (admin only, L2-066)
+ctrl -> db : Applicant details, references, VSC record
+db --> ctrl : Application
+ctrl -> ctrl : Decrypt reference contacts for display (L2-079)
+ctrl --> client : AdminApplicationResource
+client --> page : Application view
+page --> actor : All details, references with checkboxes, VSC link if uploaded, Approve and Reject (L2-067)
+actor -> page : Tick a reference as verified
+page -> client : verifyReference(appId, refId, true)
+client -> ctrl : PATCH /api/v1/admin/applications/{id}/references/{ref}
+ctrl -> db : Set verified_at, verified_by
+ctrl -> audit : application_reference.verified (L2-069)
+ctrl --> client : 204
+opt VSC document uploaded
+  actor -> page : Open VSC document
+  page -> client : GET /api/v1/admin/applications/{id}/vsc-document
+  client -> docs : Request document
+  docs -> storage : Sign short-lived URL for a clean-scanned file (L2-076)
+  docs -> audit : vsc_document.viewed (L2-069)
+  docs --> page : Redirect to signed URL
+end
+page --> actor : Approve enabled once both references are verified (L2-048)
+@enduml

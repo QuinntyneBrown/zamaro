@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Reinstate an artist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminArtistPage" as page
+  participant "AdminArtistsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\ArtistSuspensionsController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReinstateArtist" as action
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "PurgeArtistVisibility" as purge
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+  participant "CDN" as cdn
+end box
+
+actor -> page : Activate Reinstate and confirm
+page -> client : reinstate(artistId)
+client -> ctrl : DELETE /api/v1/admin/artists/{artist}/suspension
+ctrl -> action : handle(artist, admin)
+action -> db : BEGIN; lock artist row
+alt artist not Suspended
+  action --> ctrl : InvalidArtistStatus
+  ctrl --> client : 409 problem details
+else Suspended
+  action -> db : status = Approved; set reinstated_by, reinstated_at
+  action -> audit : artist.reinstated (L2-069)
+  audit -> db : INSERT audit_entry; COMMIT
+  action -> purge : ArtistReinstated
+  purge -> cache : Forget profile and search entries
+  purge -> cdn : Purge /artists/{slug}
+  ctrl --> client : 204 No Content
+  client --> page : Status Approved
+  page --> actor : Profile and search visibility return (L2-067); declined requests stay Declined
+end
+@enduml

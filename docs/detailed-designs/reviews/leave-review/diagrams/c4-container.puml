@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Leave a review
+
+Person(booker, "Booker", "Signed-in church representative")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Booking page with the review form")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Review create and edit endpoints under /api/v1")
+  Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon and scheduler", "Review prompt schedule and queued emails")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Bookings, transitions, reviews, preferences")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Queued jobs and rate-limit counters")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "POST /api/v1/bookings/{number}/review, PATCH /api/v1/reviews/{review}", "JSON/HTTPS")
+Rel(api, db, "Reads bookings, writes reviews", "Eloquent / SQL")
+Rel(api, cache, "Queues rating recalculation", "RESP")
+Rel(worker, cache, "Consumes jobs", "RESP")
+Rel(worker, db, "Selects due bookings, stamps prompt columns", "Eloquent / SQL")
+Rel(worker, email, "Sends prompt and reminder emails", "HTTPS/JSON")
+@enduml

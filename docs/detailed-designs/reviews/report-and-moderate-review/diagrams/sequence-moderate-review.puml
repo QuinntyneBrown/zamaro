@@ -1,0 +1,72 @@
+@startuml
+title UML sequence behaviour — Hide or dismiss a reported review
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminReviewReportsPage" as page
+  participant "HideReviewDialogComponent" as dialog
+  participant "AdminReviewsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\ReviewModerationController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "HideReview" as hide
+  participant "DismissReviewReport" as dismiss
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ReviewHiddenNotification" as notify
+  participant "RecalculateArtistRating" as rating
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+actor -> page : Open /admin/reviews
+page -> client : openReports()
+client -> controller : GET /api/v1/admin/review-reports (admin only, L2-066)
+controller --> client : Reviews with open reports, oldest first
+client --> page : Moderation queue
+alt hide the review
+  actor -> dialog : Activate Hide, enter reason, activate Hide review
+  dialog -> dialog : Reason required (L2-062)
+  dialog -> client : hide(reviewId, reason)
+  client -> controller : POST /api/v1/admin/reviews/{review}/hide
+  controller -> controller : Validate HideReviewRequest
+  controller -> hide : handle(review, admin, reason)
+  hide -> db : BEGIN; stamp hidden_at, hidden_reason, hidden_by; resolve open reports as Hidden
+  hide -> audit : review.hidden by admin, target review, IP, outcome Succeeded (L2-069)
+  audit -> db : INSERT audit_entry; COMMIT
+  hide -> notify : ReviewHidden
+  notify -> email : Email the reviewer with the reason (L2-062)
+  hide -> rating : ReviewHidden
+  rating -> db : Recalculate without the hidden review within 60 s (L2-060)
+  controller --> client : 204 No Content
+  client --> page : Remove from queue; review gone from the profile (L2-062)
+else dismiss the report
+  actor -> page : Activate Dismiss
+  page -> client : dismiss(reportId)
+  client -> controller : POST /api/v1/admin/review-reports/{report}/dismiss
+  controller -> dismiss : handle(report, admin)
+  dismiss -> db : Resolve report as Dismissed
+  dismiss -> audit : review_report.dismissed (L2-069)
+  audit -> db : INSERT audit_entry
+  controller --> client : 204 No Content
+  client --> page : Remove report from queue; review stays visible
+end
+@enduml

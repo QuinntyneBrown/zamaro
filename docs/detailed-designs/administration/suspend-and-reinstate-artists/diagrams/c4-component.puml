@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Suspend and reinstate artists
+
+Container(web, "Zamaro Web", "Angular", "AdminApplicationPage, AdminArtistPage, SuspendArtistDialogComponent, BookingsToResolveComponent")
+Container_Boundary(api, "Zamaro API") {
+  Component(apps, "Admin\\ApplicationsController", "Laravel controller", "Application detail and reference verification")
+  Component(docs, "Admin\\ApplicationDocumentsController", "Laravel controller", "Signed URL for the VSC document")
+  Component(ctrl, "Admin\\ArtistSuspensionsController", "Laravel controller", "POST and DELETE /api/v1/admin/artists/{artist}/suspension")
+  Component(suspend, "SuspendArtist", "Action", "Suspends, declines open requests, lists Confirmed bookings")
+  Component(reinstate, "ReinstateArtist", "Action", "Returns the artist to Approved")
+  Component(sm, "BookingStateMachine", "Domain service", "Allowed booking transitions (L2-029)")
+  Component(audit, "RecordAuditEntry", "Action", "Appends audit entries")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(purge, "PurgeArtistVisibility", "Queued listener", "Forgets profile, search and CDN entries")
+  Component(notif, "BookingDeclinedNotification", "Queued notification", "Emails each affected booker")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artists, artist_suspensions, bookings, booking_transitions")
+ContainerDb(storage, "Object storage", "S3-compatible", "VSC documents")
+
+Rel(web, apps, "Opens application", "JSON/HTTPS")
+Rel(web, docs, "Opens VSC document", "JSON/HTTPS")
+Rel(web, ctrl, "Suspends or reinstates", "JSON/HTTPS")
+Rel(apps, db, "Reads applicant, references, VSC", "SQL")
+Rel(docs, storage, "Signs URL", "S3 API")
+Rel(ctrl, suspend, "Calls")
+Rel(ctrl, reinstate, "Calls")
+Rel(suspend, sm, "Declines each open request with")
+Rel(suspend, db, "Updates artist, writes suspension", "SQL")
+Rel(sm, db, "Writes booking and transition", "SQL")
+Rel(reinstate, db, "Updates artist, closes suspension", "SQL")
+Rel(suspend, audit, "Records artist.suspended")
+Rel(reinstate, audit, "Records artist.reinstated")
+Rel(suspend, purge, "Raises ArtistSuspended for")
+Rel(reinstate, purge, "Raises ArtistReinstated for")
+Rel(sm, notif, "Raises BookingDeclined for")
+@enduml

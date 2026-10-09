@@ -1,0 +1,121 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Support bookings and payments
+
+package "Zamaro Web (Angular)" {
+  class AdminBookingsPage {
+    +query: FormControl<string>
+    +heldOnly: FormControl<boolean>
+    +onSearch(): void
+  }
+  class AdminBookingPage {
+    +booking: Signal<AdminBookingView>
+    +onRefund(amountCents: number, reason: string): void
+    +onResolve(resolution: HoldResolution, amountCents: number | null, reason: string): void
+  }
+  class AdminBookingsStore {
+    +results: Signal<AdminBookingSummary[]>
+    +selected: Signal<AdminBookingView | null>
+    +busy: Signal<boolean>
+  }
+  class AdminBookingsApi {
+    +search(q: string, held: boolean, cursor?: string): Observable<AdminBookingPage>
+    +get(number: string): Observable<AdminBookingView>
+    +refund(number: string, amountCents: number, reason: string): Observable<RefundView>
+    +resolveHold(number: string, body: HoldResolutionBody): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SearchBookingsForSupport <<action>> {
+    +handle(q: string, heldOnly: bool, cursor: ?string): CursorPaginator
+  }
+  class IssueRefund <<action>> {
+    +handle(booking: Booking, amountCents: int, reason: string, admin: User): Refund
+  }
+  class ResolveHeldBooking <<action>> {
+    +handle(booking: Booking, resolution: HoldResolution, amountCents: ?int, reason: string, admin: User): BookingHold
+  }
+  interface PaymentGateway {
+    +refund(payment: Payment, amountCents: int, idempotencyKey: string): ProcessorRefund
+  }
+  class RefundableAmount <<value object>> {
+    +int chargedCents
+    +int refundedCents
+    +remainingCents(): int
+    +{static} for(booking: Booking): RefundableAmount
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventDate
+    +int quotedPriceCents
+  }
+  class Payment <<Eloquent>> {
+    +int id
+    +PaymentKind kind
+    +int amountCents
+    +string processorPaymentId
+    +PaymentStatus status
+    +string cardBrand
+    +string last4
+  }
+  class Refund <<Eloquent>> {
+    +int id
+    +int paymentId
+    +int amountCents
+    +string reason
+    +RefundStatus status
+    +string idempotencyKey
+    +int issuedBy
+  }
+  class BookingHold <<Eloquent>> {
+    +int id
+    +int bookingId
+    +CarbonImmutable reportedAt
+    +string problem
+    +?CarbonImmutable resolvedAt
+    +?int resolvedBy
+    +?HoldResolution resolution
+  }
+  enum HoldResolution {
+    ReleaseBalance
+    PartialRefund
+    FullRefund
+  }
+  enum RefundStatus {
+    Pending
+    Succeeded
+    Failed
+  }
+}
+
+AdminBookingsPage --> AdminBookingsStore
+AdminBookingPage --> AdminBookingsStore
+AdminBookingsStore --> AdminBookingsApi
+AdminBookingsApi ..> SearchBookingsForSupport : GET /api/v1/admin/bookings
+AdminBookingsApi ..> IssueRefund : POST .../refunds
+AdminBookingsApi ..> ResolveHeldBooking : POST .../hold/resolution
+IssueRefund ..> RefundableAmount : checks
+IssueRefund --> PaymentGateway
+IssueRefund ..> Refund : creates
+ResolveHeldBooking --> IssueRefund
+ResolveHeldBooking ..> BookingHold : resolves
+Booking "1" *-- "0..*" Payment
+Payment "1" *-- "0..*" Refund
+Booking "1" *-- "0..1" BookingHold
+BookingHold --> HoldResolution
+Refund --> RefundStatus
+@enduml

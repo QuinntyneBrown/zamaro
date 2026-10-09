@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Suspend and reinstate artists
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(cdn, "CDN", "Serves web pages, images and video")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+
+Rel(admin, zamaro, "Reviews applications, suspends and reinstates artists using", "HTTPS")
+Rel(zamaro, email, "Sends booking-declined emails through", "HTTPS/JSON")
+Rel(email, booker, "Delivers declined-request email to")
+Rel(zamaro, cdn, "Purges suspended profile pages from", "HTTPS")
+Rel(zamaro, scanner, "Relies on clean scan results for VSC documents from")
+@enduml

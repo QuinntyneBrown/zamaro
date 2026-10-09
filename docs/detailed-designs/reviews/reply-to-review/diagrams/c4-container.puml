@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Reply to a review
+
+Person(artist, "Artist", "Approved worship artist")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Artist workspace reviews page")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Artist reply endpoints under /api/v1/artist")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "reviews, review_replies")
+  ContainerDb(cache, "Cache and queue", "Redis", "Cached artist profiles")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "GET, POST, PATCH /api/v1/artist/reviews/...", "JSON/HTTPS")
+Rel(api, db, "Reads reviews, writes replies", "Eloquent / SQL")
+Rel(api, cache, "Forgets cached profile", "RESP")
+@enduml

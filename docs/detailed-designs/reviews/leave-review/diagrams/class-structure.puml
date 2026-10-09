@@ -1,0 +1,128 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Leave a review
+
+package "Zamaro Web (Angular)" {
+  class BookingDetailPage {
+    +reviewStore: BookingReviewStore
+    +onSubmitReview(form: ReviewForm): void
+  }
+  class ReviewFormComponent {
+    +stars: FormControl<number>
+    +text: FormControl<string>
+    +editableUntil: Input<string | null>
+    +submitted: Output<ReviewForm>
+  }
+  class BookingReviewStore {
+    +review: Signal<Review | null>
+    +eligibility: Signal<ReviewEligibility>
+    +status: Signal<'idle'|'saving'|'saved'|'error'>
+    +create(number: string, form: ReviewForm): void
+    +update(reviewId: number, form: ReviewForm): void
+  }
+  class ReviewsApi {
+    +create(number: string, form: ReviewForm): Observable<Review>
+    +update(reviewId: number, form: ReviewForm): Observable<Review>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class BookingReviewController {
+    +store(request: StoreReviewRequest, booking: Booking): ReviewResource
+    +update(request: UpdateReviewRequest, review: Review): ReviewResource
+  }
+  class StoreReviewRequest {
+    +rules(): array
+  }
+  class UpdateReviewRequest {
+    +rules(): array
+  }
+  class ReviewPolicy {
+    +create(user: User, booking: Booking): Response
+    +update(user: User, review: Review): Response
+  }
+  class ReviewEligibility <<value object>> {
+    +bool canCreate
+    +bool canEdit
+    +?CarbonImmutable editableUntil
+    +{static} for(booking: Booking, now: CarbonImmutable): ReviewEligibility
+  }
+  class LeaveReview <<action>> {
+    +handle(booking: Booking, stars: int, text: string): Review
+  }
+  class EditReview <<action>> {
+    +handle(review: Review, stars: int, text: string): Review
+  }
+  class SendReviewPrompts <<action>> {
+    +handle(now: CarbonImmutable): int
+  }
+  class Review <<Eloquent>> {
+    +int id
+    +int bookingId
+    +int artistId
+    +int bookerId
+    +int stars
+    +string text
+    +CarbonImmutable createdAt
+    +?CarbonImmutable editedAt
+    +?CarbonImmutable hiddenAt
+    +?string hiddenReason
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +string number
+    +int artistId
+    +int bookerId
+    +CarbonImmutable eventDate
+    +BookingStatus status
+    +?CarbonImmutable reviewPromptedAt
+    +?CarbonImmutable reviewRemindedAt
+    +completedAt(): ?CarbonImmutable
+  }
+  class ReviewPromptNotification <<notification>> {
+    +toMail(booker: User): MailMessage
+  }
+  class ReviewReminderNotification <<notification>> {
+    +toMail(booker: User): MailMessage
+  }
+  enum BookingStatus {
+    Requested
+    Accepted
+    Confirmed
+    Completed
+    Declined
+    Withdrawn
+    Expired
+    Cancelled
+  }
+}
+
+BookingDetailPage --> BookingReviewStore
+BookingDetailPage --> ReviewFormComponent
+BookingReviewStore --> ReviewsApi
+ReviewsApi ..> BookingReviewController : POST / PATCH
+BookingReviewController ..> StoreReviewRequest : validates
+BookingReviewController ..> UpdateReviewRequest : validates
+BookingReviewController ..> ReviewPolicy : authorises
+BookingReviewController --> LeaveReview
+BookingReviewController --> EditReview
+ReviewPolicy ..> ReviewEligibility : evaluates
+LeaveReview ..> Review : creates
+EditReview ..> Review : mutates
+Booking "1" -- "0..1" Review
+Booking --> BookingStatus
+SendReviewPrompts ..> Booking : selects and stamps
+SendReviewPrompts ..> ReviewPromptNotification : sends
+SendReviewPrompts ..> ReviewReminderNotification : sends
+@enduml

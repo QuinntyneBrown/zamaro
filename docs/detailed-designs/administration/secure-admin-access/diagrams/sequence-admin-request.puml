@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Request to the admin area
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "adminGuard" as guard
+  participant "NotFoundPage" as notfound
+  participant "AuthService" as auth
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EnsureAdministrator" as role
+  participant "EnsureMfaVerified" as mfa
+  participant "EnforceAdminIdleTimeout" as idle
+  participant "Admin controller" as ctrl
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as cache
+end box
+
+actor -> guard : Open /admin/... (SSR or client navigation)
+guard -> auth : currentUser()
+alt not an MFA-verified administrator
+  guard --> notfound : Route does not match
+  notfound --> actor : 404 page, HTTP status 404 during SSR (L2-066)
+else MFA-verified administrator
+  guard --> actor : Admin page loads and calls the API
+end
+actor -> role : GET or POST /api/v1/admin/... (direct or from the page)
+alt no Administrator role
+  role --> actor : 404 problem details, same for valid and invalid IDs (L2-066, L2-074)
+else Administrator role
+  role -> mfa : next
+  alt session not MFA-verified
+    mfa --> actor : 404 problem details (L2-066)
+  else MFA-verified
+    mfa -> idle : next
+    idle -> cache : Read last_activity_at
+    alt idle more than 30 minutes
+      idle -> cache : Invalidate session
+      idle --> auth : 401 problem details (L2-066)
+      auth --> actor : Route to sign-in with return URL
+    else active
+      idle -> cache : Stamp last_activity_at
+      idle -> ctrl : next
+      ctrl --> actor : Admin response
+    end
+  end
+end
+@enduml

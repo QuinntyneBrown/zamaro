@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — View the audit log
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminAuditLogPage" as page
+  participant "AdminAuditApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\AuditEntriesController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AuditEntry" as model
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /admin/audit, set filters
+page -> client : list(filters)
+client -> ctrl : GET /api/v1/admin/audit-entries?actor&action&target&outcome&from&to (admin only, L2-066)
+ctrl -> db : SELECT newest first with cursor (L2-095)
+db --> ctrl : Entries
+ctrl --> client : 200 AuditEntryResource collection
+client --> page : Entries
+page --> actor : Read-only table, no edit or delete controls (L2-069)
+opt any client sends PATCH or DELETE to /api/v1/admin/audit-entries/{id}
+  client -> ctrl : No such route
+  ctrl --> client : 404 problem details (L2-069)
+end
+opt application code attempts update or delete
+  model -> model : updating or deleting event throws ImmutableAuditEntry (L2-069)
+  note over db : Trigger and grants also reject UPDATE and DELETE from the application role
+end
+@enduml

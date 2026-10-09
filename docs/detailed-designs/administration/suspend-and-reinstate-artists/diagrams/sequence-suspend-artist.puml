@@ -1,0 +1,74 @@
+@startuml
+title UML sequence behaviour — Suspend an artist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminArtistPage" as page
+  participant "SuspendArtistDialogComponent" as dialog
+  participant "AdminArtistsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\ArtistSuspensionsController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SuspendArtist" as action
+  participant "BookingStateMachine" as sm
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "PurgeArtistVisibility" as purge
+  participant "BookingDeclinedNotification" as notif
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+  participant "CDN" as cdn
+end box
+
+actor -> page : Activate Suspend
+page -> dialog : Open
+actor -> dialog : Enter reason, activate Suspend artist
+dialog -> dialog : Reason required (L2-067)
+dialog -> client : suspend(artistId, reason)
+client -> ctrl : POST /api/v1/admin/artists/{artist}/suspension
+ctrl -> ctrl : Validate SuspendArtistRequest
+ctrl -> action : handle(artist, admin, reason)
+action -> db : BEGIN; lock artist row
+alt artist not Approved
+  action --> ctrl : InvalidArtistStatus
+  ctrl --> client : 409 problem details
+else Approved
+  action -> db : status = Suspended; insert artist_suspension
+  action -> db : Bookings in Requested or Accepted
+  loop each open request
+    action -> sm : transition(booking, Declined, admin) (L2-029, L2-067)
+    sm -> db : Update status, insert booking_transition
+  end
+  action -> db : Bookings in Confirmed
+  action -> audit : artist.suspended with reason (L2-069)
+  audit -> db : INSERT audit_entry; COMMIT
+  action -> purge : ArtistSuspended
+  purge -> cache : Forget profile, search and rating entries (L2-089)
+  purge -> cdn : Purge /artists/{slug}
+  action -> notif : BookingDeclined for each declined request
+  notif -> notif : Email each booker (L2-063)
+  action --> ctrl : SuspensionOutcome
+  ctrl --> client : 201 SuspensionOutcomeResource
+  client --> page : Declined count and Confirmed bookings
+  page --> actor : Bookings to resolve, each linking to /admin/bookings/{number} (L2-067)
+  note over page : Profile now returns 404 (L2-021) and search excludes the artist (L2-005)
+end
+@enduml

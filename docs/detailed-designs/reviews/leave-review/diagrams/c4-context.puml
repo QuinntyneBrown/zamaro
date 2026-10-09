@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Leave a review
+
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email with bounce webhooks")
+
+Rel(booker, zamaro, "Leaves and edits reviews of Completed bookings using", "HTTPS")
+Rel(zamaro, email, "Sends review prompts and reminders through", "HTTPS/JSON")
+Rel(email, booker, "Delivers review prompt to")
+@enduml

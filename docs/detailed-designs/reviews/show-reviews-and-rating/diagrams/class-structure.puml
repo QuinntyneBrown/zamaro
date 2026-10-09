@@ -1,0 +1,104 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show reviews and rating
+
+package "Zamaro Web (Angular)" {
+  class ReviewsSectionComponent {
+    +summary: Input<RatingSummary>
+    +initial: Input<ReviewView[]>
+    +onShowAll(): void
+  }
+  class ReviewComponent {
+    +review: Input<ReviewView>
+  }
+  class ProfileReviewsStore {
+    +reviews: Signal<ReviewView[]>
+    +nextCursor: Signal<string | null>
+    +status: Signal<'idle'|'loading'|'loaded'|'error'>
+    +loadMore(slug: string): void
+  }
+  class ArtistReviewsApi {
+    +list(slug: string, cursor?: string): Observable<ReviewPage>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistReviewsController {
+    +__invoke(slug: string, request: Request): AnonymousResourceCollection
+  }
+  class ListArtistReviews <<action>> {
+    +handle(artist: Artist, limit: int, cursor: ?string): CursorPaginator
+  }
+  class RecalculateArtistRating <<job>> {
+    +int artistId
+    +uniqueId(): string
+    +handle(): void
+  }
+  class QueueRatingRecalculation <<listener>> {
+    +handle(event: ReviewEvent): void
+  }
+  class RatingSummary <<value object>> {
+    +?float rating
+    +int reviewCount
+    +isNew(): bool
+  }
+  class ArtistRating <<Eloquent>> {
+    +int artistId
+    +?float rating
+    +int reviewCount
+    +CarbonImmutable recalculatedAt
+    +toSummary(): RatingSummary
+  }
+  class Review <<Eloquent>> {
+    +int id
+    +int bookingId
+    +int artistId
+    +int bookerId
+    +int stars
+    +string text
+    +CarbonImmutable createdAt
+    +?CarbonImmutable hiddenAt
+    +scopeVisible(query: Builder): Builder
+  }
+  class ReviewReply <<Eloquent>> {
+    +int id
+    +int reviewId
+    +string text
+    +CarbonImmutable createdAt
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +int churchId
+    +string churchNameSnapshot
+    +string churchCitySnapshot
+  }
+  class ReviewResource {
+    +toArray(request: Request): array
+  }
+}
+
+ReviewsSectionComponent --> ProfileReviewsStore
+ReviewsSectionComponent *-- "0..*" ReviewComponent
+ProfileReviewsStore --> ArtistReviewsApi
+ArtistReviewsApi ..> ArtistReviewsController : GET /api/v1/artists/{slug}/reviews
+ArtistReviewsController --> ListArtistReviews
+ArtistReviewsController ..> ReviewResource : returns
+ListArtistReviews ..> Review : reads visible
+Review "1" --> "0..1" ReviewReply
+Review "*" --> "1" Booking
+QueueRatingRecalculation ..> RecalculateArtistRating : dispatches
+RecalculateArtistRating ..> Review : aggregates
+RecalculateArtistRating ..> ArtistRating : upserts
+ArtistRating ..> RatingSummary : creates
+@enduml

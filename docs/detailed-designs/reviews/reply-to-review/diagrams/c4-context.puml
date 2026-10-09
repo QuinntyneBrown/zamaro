@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Reply to a review
+
+Person(artist, "Artist", "Approved worship artist")
+Person(reader, "Guest or booker", "Reads artist profiles")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+
+Rel(artist, zamaro, "Posts and edits replies to reviews using", "HTTPS")
+Rel(reader, zamaro, "Reads reviews and replies on profiles using", "HTTPS")
+@enduml

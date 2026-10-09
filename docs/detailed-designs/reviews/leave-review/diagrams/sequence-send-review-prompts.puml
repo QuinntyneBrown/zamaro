@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Send review prompts
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "reviews:send-prompts" as cmd
+  participant "ReviewPromptNotification\nReviewReminderNotification" as notif
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendReviewPrompts" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+cmd -> action : handle(now) on the hourly schedule
+action -> db : Completed bookings with no review whose booker allows review prompts (L2-065)
+db --> action : Candidate bookings
+loop each candidate booking
+  alt completed at least 1 day ago and review_prompted_at empty
+    action -> db : Stamp review_prompted_at in transaction (L2-092)
+    action -> notif : Queue ReviewPromptNotification (L2-059)
+  else completed at least 7 days ago and review_reminded_at empty
+    action -> db : Stamp review_reminded_at in transaction (L2-092)
+    action -> notif : Queue ReviewReminderNotification (L2-059)
+  else already prompted and reminded
+    action -> action : Skip
+  end
+end
+notif -> email : Send plain-text and HTML email with /bookings/{number}#review (L2-063)
+email --> notif : Accepted
+email -> actor : Email delivered
+actor -> page : Follow link to the review form
+@enduml

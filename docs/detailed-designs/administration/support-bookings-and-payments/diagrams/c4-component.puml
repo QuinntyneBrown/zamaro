@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Support bookings and payments
+
+Container(web, "Zamaro Web", "Angular", "AdminBookingsPage, AdminBookingPage, IssueRefundDialogComponent, ResolveHeldBookingDialogComponent")
+System_Ext(pay, "Payment processor", "Refunds and charges")
+Container_Boundary(api, "Zamaro API") {
+  Component(bctrl, "Admin\\BookingsController", "Laravel controller", "GET /api/v1/admin/bookings, /{number}")
+  Component(search, "SearchBookingsForSupport", "Query action", "Number, email, artist or church")
+  Component(rctrl, "Admin\\RefundsController", "Laravel controller", "POST /api/v1/admin/bookings/{number}/refunds")
+  Component(refund, "IssueRefund", "Action", "Guards refundable amount, calls the processor")
+  Component(hctrl, "Admin\\HeldBookingsController", "Laravel controller", "POST /api/v1/admin/bookings/{number}/hold/resolution")
+  Component(resolve, "ResolveHeldBooking", "Action", "Release balance, partial refund or full refund")
+  Component(gateway, "PaymentGateway", "Interface + adapter", "Processor API")
+  Component(audit, "RecordAuditEntry", "Action", "Appends audit entries")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(charge, "ChargeBalance", "Queued job", "Owned by payments/collect-balance")
+  Component(notif, "HeldBookingResolvedNotification", "Queued notification", "Emails booker and artist")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, booking_holds")
+
+Rel(web, bctrl, "Searches and opens bookings", "JSON/HTTPS")
+Rel(web, rctrl, "Issues refund", "JSON/HTTPS")
+Rel(web, hctrl, "Resolves hold", "JSON/HTTPS")
+Rel(bctrl, search, "Calls")
+Rel(search, db, "Queries bookings with payments", "SQL")
+Rel(rctrl, refund, "Calls")
+Rel(hctrl, resolve, "Calls")
+Rel(resolve, refund, "Calls for refund resolutions")
+Rel(resolve, charge, "Dispatches for Release balance")
+Rel(resolve, notif, "Raises HeldBookingResolved for")
+Rel(refund, db, "Locks payments, writes refund", "SQL")
+Rel(refund, gateway, "refund(payment, amount, key)")
+Rel(gateway, pay, "Calls", "HTTPS/JSON")
+Rel(refund, audit, "Records refund.issued")
+Rel(resolve, audit, "Records booking_hold.resolved")
+@enduml

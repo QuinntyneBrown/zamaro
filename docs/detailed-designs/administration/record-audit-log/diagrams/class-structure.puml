@@ -1,0 +1,103 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Record the audit log
+
+package "Zamaro Web (Angular)" {
+  class AdminAuditLogPage {
+    +filters: FormGroup<AuditFilters>
+    +entries: Signal<AuditEntryView[]>
+    +onFilter(): void
+    +onLoadMore(): void
+  }
+  class AdminAuditApi {
+    +list(filters: AuditFilters, cursor?: string): Observable<AuditEntryPage>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class RecordAuditEntry <<action>> {
+    +handle(actor: ?User, action: AuditAction, target: ?Model, outcome: AuditOutcome, context: array): AuditEntry
+  }
+  class LogRedactor {
+    +redact(context: array): array
+  }
+  class AuditAuthenticationEvents <<subscriber>> {
+    +handleLogin(event: Login): void
+    +handleFailed(event: Failed): void
+    +handlePasswordChanged(event: PasswordChanged): void
+    +handleMfaChanged(event: MfaEnabled | MfaDisabled): void
+    +handleRoleChanged(event: RoleChanged): void
+  }
+  class AuditPaymentEvents <<listener>> {
+    +handle(event: RefundSucceeded | RefundFailed | PayoutSent): void
+  }
+  class AuditAdminRequests <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+    +terminate(request: Request, response: Response): void
+  }
+  class "Admin\\AuditEntriesController" as AuditCtrl {
+    +index(request: Request): AnonymousResourceCollection
+  }
+  class PruneAuditEntries <<job>> {
+    +int retentionYears = 2
+    +handle(): void
+  }
+  class AuditEntry <<Eloquent>> {
+    +int id
+    +?int actorId
+    +?string actorRole
+    +AuditAction action
+    +?string targetType
+    +?int targetId
+    +CarbonImmutable occurredAt
+    +?string ipAddress
+    +AuditOutcome outcome
+    +array context
+    #booted(): void
+  }
+  enum AuditOutcome {
+    Succeeded
+    Failed
+    Denied
+  }
+  enum AuditAction {
+    AuthSignIn
+    AuthSignInFailed
+    AuthPasswordChanged
+    AuthMfaEnabled
+    AuthMfaDisabled
+    UserRoleChanged
+    RefundIssued
+    PayoutSent
+    ArtistSuspended
+    ArtistReinstated
+    ReviewHidden
+    BookingHoldResolved
+  }
+  class ImmutableAuditEntry <<exception>>
+}
+
+AdminAuditLogPage --> AdminAuditApi
+AdminAuditApi ..> AuditCtrl : GET /api/v1/admin/audit-entries
+AuditCtrl ..> AuditEntry : reads
+AuditAuthenticationEvents --> RecordAuditEntry
+AuditPaymentEvents --> RecordAuditEntry
+AuditAdminRequests --> RecordAuditEntry
+RecordAuditEntry --> LogRedactor
+RecordAuditEntry ..> AuditEntry : creates
+PruneAuditEntries ..> AuditEntry : deletes expired
+AuditEntry --> AuditAction
+AuditEntry --> AuditOutcome
+AuditEntry ..> ImmutableAuditEntry : throws on update or delete
+@enduml
