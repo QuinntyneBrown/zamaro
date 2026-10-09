@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artist profile · default — Zamaro Unplugged mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="artist">
+<meta name="mock:state" content="default">
+<meta name="description" content="Quiet profile: duotone portrait and name morph in from Discover, then a two-sentence bio, videos, a short setlist, dates, two reviews and a sticky booking stub.">
+<meta name="view-transition" content="same-origin">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+<script src="../../assets/palette.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+<div class="topbar-wrap">
+<header class="topbar">
+  <a class="brand" href="../discover/default.html"><span class="brand__dot" aria-hidden="true"></span>Zamaro <small>unplugged</small></a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../discover/default.html">Discover</a>
+    <a class="nav-link" href="../discover/default.html#how">How it works</a>
+    <a class="nav-link" href="../discover/default.html#join">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <button class="nav-link palette-btn" type="button" popovertarget="palette" aria-label="Palette"><span class="palette-btn__dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="nav-link__text">Palette</span></button>
+  <button class="nav-link" type="button" popovertarget="saved-pop"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="count" data-saved-count aria-label="3 saved artists">3</span></button>
+  <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser">NF</button>
+</header>
+</div>
+
+<div id="palette" class="pop" popover aria-labelledby="palette-title">
+  <div class="contrast-row"><h2 id="palette-title">Palette</h2><span class="badge" data-custom-label hidden>Custom</span></div>
+  <ul class="presets" role="list" aria-label="Preset palettes">
+      <li><button class="preset" type="button" data-preset="newsprint" aria-pressed="true"><span class="swatches" aria-hidden="true"><i style="background:#3b3a36"></i><i style="background:#f6f3ea"></i><i style="background:#f2d36b"></i><i style="background:#e9dcae"></i><i style="background:#d8d3c4"></i></span>Newsprint Soft</button></li>
+      <li><button class="preset" type="button" data-preset="sage" aria-pressed="false"><span class="swatches" aria-hidden="true"><i style="background:#34413a"></i><i style="background:#f3f0e7"></i><i style="background:#c9825f"></i><i style="background:#b9c4a7"></i><i style="background:#dcd3bf"></i></span>Sage & Linen</button></li>
+      <li><button class="preset" type="button" data-preset="rose" aria-pressed="false"><span class="swatches" aria-hidden="true"><i style="background:#4a3442"></i><i style="background:#f8f0ef"></i><i style="background:#d99aa5"></i><i style="background:#e8c6c4"></i><i style="background:#cdb8c6"></i></span>Dusty Rose</button></li>
+      <li><button class="preset" type="button" data-preset="harbour" aria-pressed="false"><span class="swatches" aria-hidden="true"><i style="background:#2f3b48"></i><i style="background:#f1f3f3"></i><i style="background:#c7a35a"></i><i style="background:#b7c6d3"></i><i style="background:#d9dcd6"></i></span>Harbour Fog</button></li>
+      <li><button class="preset" type="button" data-preset="clay" aria-pressed="false"><span class="swatches" aria-hidden="true"><i style="background:#47342a"></i><i style="background:#f5eee4"></i><i style="background:#a65a33"></i><i style="background:#e2c3a3"></i><i style="background:#b9b48f"></i></span>Clay Studio</button></li>
+      <li><button class="preset" type="button" data-preset="lavender" aria-pressed="false"><span class="swatches" aria-hidden="true"><i style="background:#3c3550"></i><i style="background:#f5f3f7"></i><i style="background:#d6b25e"></i><i style="background:#cdc3e3"></i><i style="background:#e3dccb"></i></span>Lavender Hour</button></li>
+  </ul>
+  <hr>
+  <div class="custom">
+    <label class="field"><input class="color-input" type="color" id="pal-ink" value="#3b3a36"><span class="field__label">Ink</span></label>
+    <label class="field"><input class="color-input" type="color" id="pal-paper" value="#f6f3ea"><span class="field__label">Paper</span></label>
+    <label class="field"><input class="color-input" type="color" id="pal-accent" value="#f2d36b"><span class="field__label">Accent</span></label>
+  </div>
+  <hr>
+  <label class="field"><span class="contrast-row"><span class="field__label">Contrast</span><output id="pal-contrast-out" for="pal-contrast" class="field__label">90</output></span>
+    <input class="range" type="range" id="pal-contrast" min="60" max="100" step="1" value="90"></label>
+  <div class="aa" aria-live="polite"><span class="badge" data-aa="body">Text</span><span class="badge" data-aa="muted">Muted</span></div>
+  <span class="visually-hidden" data-muted-probe style="color: var(--color-fg-muted);">muted</span>
+  <div class="pop__actions">
+    <button class="btn btn--sm" type="button" id="pal-surprise"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h3l10 10h3M4 17h3l3-3M14 10l3-3h3M18 4l3 3-3 3M18 14l3 3-3 3"/></svg>Surprise me</button>
+    <button class="btn btn--sm" type="button" id="pal-eyedrop" hidden><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="m14 6 4 4M4 20l2-5 8-8 3 3-8 8z"/></svg>Pick accent</button>
+    <button class="btn btn--sm btn--quiet" type="button" id="pal-copy">Copy CSS</button>
+    <button class="btn btn--sm btn--quiet" type="button" id="pal-reset">Reset</button>
+  </div>
+</div>
+
+<div id="saved-pop" class="pop" popover aria-label="Saved artists">
+  <h2>Saved</h2>
+  <ul class="setlist" role="list" style="margin-top: var(--space-3);">
+    <li><a class="setlist__song" href="../artist/default.html">Abigail Mensah</a><span class="setlist__key">$650</span></li>
+    <li><a class="setlist__song" href="../artist/default.html">Hosanna Collective</a><span class="setlist__key">$1,800</span></li>
+    <li><a class="setlist__song" href="../artist/default.html">Luz Viva</a><span class="setlist__key">$900</span></li>
+  </ul>
+</div>
+
+<main id="main">
+  <section class="hero" aria-labelledby="artist-name" style="padding-top: var(--space-6);">
+    <div class="container">
+      <nav aria-label="Breadcrumb" class="breadcrumb"><a href="../discover/default.html">← Sat 14 Nov lineup</a></nav>
+      <div class="profile-hero">
+        <figure class="photo photo--accent" style="view-transition-name: abigail-photo;"><img src="../../assets/img/abigail.jpg" alt="Portrait of a woman in soft blue light" loading="lazy" decoding="async"></figure>
+        <div class="stack">
+          <span class="badge badge--free" style="justify-self: start;">Free Sat 14 Nov</span>
+          <h1 id="artist-name" class="profile-hero__name" style="view-transition-name: abigail-name;">Abigail Mensah</h1>
+          <p class="facts"><span class="rating">4.9 · 38 churches</span><span>Brampton</span><span>Drives 120 km</span><span>English &amp; Twi</span></p>
+          <div class="cluster" style="margin-top: var(--space-4);">
+            <a class="btn btn--primary" href="#book">Book Sat 14 Nov</a>
+            <button class="save" type="button" data-save="Abigail Mensah" aria-pressed="true" aria-label="Remove Abigail Mensah from saved"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+            <button class="btn btn--icon" type="button" aria-label="Share profile"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container profile-layout">
+    <div>
+      <section class="section" aria-labelledby="about-title">
+        <h2 id="about-title" class="visually-hidden">About</h2>
+        <p class="reveal" style="font: var(--text-lead); max-width: 36rem;">I learned harmonies in my mother’s church in Brampton and have led worship for nine years. My heart is getting a congregation to stop watching and start singing.</p>
+      </section>
+
+      <section class="section" aria-labelledby="videos-title">
+        <div class="section__head"><h2 id="videos-title">Watch</h2></div>
+        <ul class="media-grid" role="list">
+        <li class="reveal"><button class="video" type="button" commandfor="player" command="show-modal" data-video-title="Way Maker — live, Hamilton" aria-label="Play Way Maker — live, Hamilton, 6:12"><figure class="photo  photo--wide"><img src="../../assets/img/hosanna.jpg" alt="Crowd with hands raised under purple stage lights" loading="lazy" decoding="async"></figure><span class="video__play"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>6:12</span></button><span class="video__caption">Way Maker — live, Hamilton</span></li>
+        <li class="reveal"><button class="video" type="button" commandfor="player" command="show-modal" data-video-title="Great Is Thy Faithfulness — acoustic" aria-label="Play Great Is Thy Faithfulness — acoustic, 4:40"><figure class="photo photo--b photo--wide"><img src="../../assets/img/marcus.jpg" alt="Hands playing an acoustic guitar" loading="lazy" decoding="async"></figure><span class="video__play"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>4:40</span></button><span class="video__caption">Great Is Thy Faithfulness — acoustic</span></li>
+        <li class="reveal"><button class="video" type="button" commandfor="player" command="show-modal" data-video-title="Twi praise medley — Harvest Sunday" aria-label="Play Twi praise medley — Harvest Sunday, 8:05"><figure class="photo photo--accent photo--wide"><img src="../../assets/img/choir.jpg" alt="Crowd silhouetted against warm stage light" loading="lazy" decoding="async"></figure><span class="video__play"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>8:05</span></button><span class="video__caption">Twi praise medley — Harvest Sunday</span></li>
+        <li class="reveal"><button class="video" type="button" commandfor="player" command="show-modal" data-video-title="Goodness of God — Muskoka retreat" aria-label="Play Goodness of God — Muskoka retreat, 5:30"><figure class="photo photo--b photo--wide"><img src="../../assets/img/okonkwo.jpg" alt="A microphone in warm, low light" loading="lazy" decoding="async"></figure><span class="video__play"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>5:30</span></button><span class="video__caption">Goodness of God — Muskoka retreat</span></li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="songs-title">
+        <div class="section__head"><h2 id="songs-title">Setlist</h2><p class="eyebrow">Song · key</p></div>
+        <ol class="setlist" role="list">
+          <li><span class="setlist__song">Way Maker</span><span class="setlist__key">E</span></li>
+          <li><span class="setlist__song">Goodness of God</span><span class="setlist__key">A</span></li>
+          <li><span class="setlist__song">Great Is Thy Faithfulness</span><span class="setlist__key">D</span></li>
+          <li><span class="setlist__song">Jireh</span><span class="setlist__key">B♭</span></li>
+        </ol>
+        <details class="more">
+          <summary>4 more songs</summary>
+          <ol class="setlist" role="list" start="5" style="counter-reset: song 4;">
+          <li><span class="setlist__song">Blessed Assurance</span><span class="setlist__key">D</span></li>
+          <li><span class="setlist__song">Build My Life</span><span class="setlist__key">G</span></li>
+          <li><span class="setlist__song">Oceans</span><span class="setlist__key">D</span></li>
+          <li><span class="setlist__song">Twi praise medley</span><span class="setlist__key">F</span></li>
+          </ol>
+        </details>
+      </section>
+
+      <section class="section" aria-labelledby="dates-title">
+        <div class="section__head"><h2 id="dates-title">Dates</h2></div>
+        <ul class="tour-dates" role="list">
+          <li aria-current="date"><span>Sat</span><span class="tour-dates__day">14 Nov</span><span>Your date</span></li>
+          <li class="is-booked"><span>Sun</span><span class="tour-dates__day">15 Nov</span><span>Booked</span></li>
+          <li><button type="button" aria-label="Pick Fri 20 Nov"><span>Fri</span><span class="tour-dates__day">20 Nov</span><span>Free</span></button></li>
+          <li class="is-booked"><span>Sat</span><span class="tour-dates__day">21 Nov</span><span>Booked</span></li>
+          <li><button type="button" aria-label="Pick Sun 22 Nov"><span>Sun</span><span class="tour-dates__day">22 Nov</span><span>Free</span></button></li>
+          <li><button type="button" aria-label="Pick Sat 28 Nov"><span>Sat</span><span class="tour-dates__day">28 Nov</span><span>Free</span></button></li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="reviews-title">
+        <div class="section__head"><h2 id="reviews-title">Churches say</h2><p class="rating">4.9 · 38 reviews</p></div>
+        <ul class="reviews" role="list">
+          <li class="reveal"><figure class="review"><blockquote><p>“She had the whole congregation singing <em>Great Is Thy Faithfulness</em> in three-part harmony by the last verse.”</p></blockquote><figcaption>Rev. Janet Clarke · St. Brendan’s Anglican, Oshawa</figcaption></figure></li>
+          <li class="reveal"><figure class="review"><blockquote><p>“Rehearsed with our volunteers on Saturday and made every one of them sound like pros on Sunday.”</p></blockquote><figcaption>Tomi Oduya · Harvest Point Church, Milton</figcaption></figure></li>
+        </ul>
+        <details class="more">
+          <summary>2 more reviews</summary>
+          <ul class="reviews" role="list" style="margin-top: var(--space-6);">
+          <li class="reveal"><figure class="review"><blockquote><p>“Our seniors asked for hymns and our youth asked for Jireh. She gave both, and it felt like one service.”</p></blockquote><figcaption>Naomi Fraser · Riverside Community Church, Burlington</figcaption></figure></li>
+          <li class="reveal"><figure class="review"><blockquote><p>“A real pastor’s heart. Sound check ran a little long, but she was gracious about our tiny desk.”</p></blockquote><figcaption>Pastor Femi Adebayo · Living Waters Fellowship, Brampton</figcaption></figure></li>
+          </ul>
+        </details>
+      </section>
+    </div>
+    <aside id="book" aria-labelledby="book-title">
+      <form class="stub" action="default.html">
+        <h2 id="book-title" class="visually-hidden">Book Abigail</h2>
+        <p><span class="stub__price">$650</span> <span class="muted">per service</span></p>
+        <label class="field"><span class="field__label">Date</span><input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-help"><span class="field__help" id="date-help">✓ Free that day</span></label>
+        <label class="field"><span class="field__label">Gathering</span><select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference</option><option>Wedding</option><option>Memorial</option></select></label>
+        <label class="field"><span class="field__label">Message</span><textarea class="textarea" name="message" rows="2" placeholder="The room, the people, the songs you love"></textarea></label>
+        <button class="btn btn--primary btn--lg btn--block" type="submit">Request Sat 14 Nov</button>
+        <p class="stub__fine">Nothing is charged until they accept.</p>
+      </form>
+    </aside>
+  </div>
+</main>
+
+<dialog id="player" class="player" aria-labelledby="player-title">
+  <div class="player__screen"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h11v10H4zM15 10l5-3v10l-5-3"/></svg></div>
+  <div class="player__bar"><span id="player-title">Video</span><button class="btn btn--icon btn--quiet" type="button" commandfor="player" command="close" aria-label="Close video"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+</dialog>
+<footer class="footer">
+  <div class="container">
+    <p>Zamaro · worship artists within a good drive of Toronto</p>
+    <nav aria-label="Footer"><a href="../discover/default.html#how">How it works</a><a href="../discover/default.html#join">For artists</a><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></nav>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 30rem; right: 1rem;">From Discover, Abigail’s photo and name morph into place (cross-document View Transition). Videos open in a dialog via invoker commands.</p>
+<div id="toast" class="toast" popover="manual" role="status"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All Unplugged mocks">⌂</a>
+  <span class="mock-bar__screen">Artist profile</span>
+  <ul class="mock-bar__states"><li><a href="default.html" aria-current="page">default</a></li><li><a href="loading.html">loading</a></li><li><a href="empty.html">empty</a></li><li><a href="error.html">error</a></li></ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>

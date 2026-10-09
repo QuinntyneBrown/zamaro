@@ -1,0 +1,533 @@
+/* ==========================================================================
+   Zamaro · Lakeshore — design tokens.
+   Direction: map-led and local. Lake blue for water, wayfinding and links;
+   warm sand for the land and the page; a coral accent for the things you act
+   on (pins, primary buttons, saves). Rounded, friendly shapes and a humanist
+   sans. Light is the default; dark is "the lake at night".
+
+   Tiers: primitives (--palette-*, --font-*) -> semantic (--color-*, --text-*,
+   --space-*, --radius-*, --shadow-*, --map-*) -> component (ui.css).
+   Contrast checked: body, muted and subtle text >= 4.5:1 on canvas and surface
+   in both themes; white on coral-600 4.9:1; coral-950 on coral-300 7.8:1.
+   ========================================================================== */
+
+:root {
+  /* ---------- Primitives: colour --------------------------------------- */
+  --palette-white: #ffffff;
+  --palette-black: #000000;
+
+  /* Lake: Lake Ontario on a clear morning */
+  --palette-lake-50: #eef6fa;
+  --palette-lake-100: #d7eaf3;
+  --palette-lake-200: #b0d4e6;
+  --palette-lake-300: #7fb8d4;
+  --palette-lake-400: #4f98bd;
+  --palette-lake-500: #2f7ea6;
+  --palette-lake-600: #23688c;
+  --palette-lake-700: #1c5574;
+  --palette-lake-800: #17445d;
+  --palette-lake-900: #12354a;
+  --palette-lake-950: #0b2232;
+
+  /* Sand: the beach at Sunnyside, and the neutral scale */
+  --palette-sand-25: #fffdf9;
+  --palette-sand-50: #f8f2e6;
+  --palette-sand-100: #f1e7d4;
+  --palette-sand-200: #e5d6ba;
+  --palette-sand-300: #d2bf9c;
+  --palette-sand-400: #b3a284;
+  --palette-sand-500: #7a6a55;
+  --palette-sand-600: #655645;
+  --palette-sand-700: #4c4135;
+  --palette-sand-800: #342c24;
+  --palette-sand-900: #231e19;
+  --palette-sand-950: #17130f;
+
+  /* Night lake: dark-theme neutrals with a blue cast */
+  --palette-night-950: #0f1a22;
+  --palette-night-900: #16242e;
+  --palette-night-850: #1b2b36;
+  --palette-night-800: #1e2f3b;
+  --palette-night-700: #2a3e4c;
+  --palette-night-600: #3b5162;
+  --palette-night-400: #8f9fab;
+
+  /* Coral: the warm accent */
+  --palette-coral-50: #fff0eb;
+  --palette-coral-100: #ffdcd1;
+  --palette-coral-200: #ffbca8;
+  --palette-coral-300: #ff9a80;
+  --palette-coral-400: #f2775a;
+  --palette-coral-500: #e05a3c;
+  --palette-coral-600: #c4472c;
+  --palette-coral-700: #a33a24;
+  --palette-coral-800: #80301f;
+  --palette-coral-900: #5c2416;
+  --palette-coral-950: #3a170e;
+
+  /* Pine: success, and the parks on the map */
+  --palette-pine-50: #eaf6ef;
+  --palette-pine-100: #d3ecdd;
+  --palette-pine-300: #84c9a0;
+  --palette-pine-500: #2f8a57;
+  --palette-pine-700: #1e6640;
+  --palette-pine-900: #113d26;
+  --palette-pine-950: #0b2819;
+
+  --palette-amber-50: #fff6e5;
+  --palette-amber-100: #ffe9c2;
+  --palette-amber-300: #f7c15c;
+  --palette-amber-500: #b26f00;
+  --palette-amber-700: #8a5300;
+  --palette-amber-900: #4d2f00;
+  --palette-amber-950: #2e1d05;
+
+  --palette-red-50: #fdecec;
+  --palette-red-100: #fbd5d4;
+  --palette-red-300: #f59b96;
+  --palette-red-500: #d93a30;
+  --palette-red-600: #c42c22;
+  --palette-red-700: #a0221b;
+  --palette-red-950: #3a110d;
+
+  /* ---------- Primitives: typography ----------------------------------- */
+  /* Humanist sans first; every fallback is a local system face (mocks open from disk). */
+  --font-family-sans: "Seravek", "Gill Sans Nova", "Segoe UI Variable Text", "Segoe UI", Ubuntu, "Fira Sans", Calibri, "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-family-display: "Seravek", "Gill Sans Nova", "Segoe UI Variable Display", "Segoe UI", Ubuntu, "Fira Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono: ui-monospace, "Cascadia Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.75rem;
+  --font-size-4xl: 2.125rem;
+  --font-size-5xl: 2.75rem;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.15;
+  --line-height-snug: 1.3;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
+  --letter-spacing-tight: -0.015em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.06em;
+
+  /* ---------- Semantic: colour (light) --------------------------------- */
+  --color-bg-canvas: var(--palette-sand-50);
+  --color-bg-surface: var(--palette-sand-25);
+  --color-bg-surface-raised: var(--palette-white);
+  --color-bg-surface-sunken: var(--palette-sand-100);
+  --color-bg-subtle: var(--palette-sand-100);
+  --color-bg-subtle-hover: var(--palette-sand-200);
+  --color-bg-inverse: var(--palette-lake-900);
+  --color-bg-backdrop: rgb(18 53 74 / 0.55);
+  --color-bg-lake: var(--palette-lake-50);          /* soft lake wash behind hero and map */
+  --color-bg-lake-strong: var(--palette-lake-100);
+
+  --color-fg-default: var(--palette-sand-900);
+  --color-fg-muted: var(--palette-sand-600);
+  --color-fg-subtle: var(--palette-sand-500);
+  --color-fg-disabled: var(--palette-sand-400);
+  --color-fg-inverse: var(--palette-white);
+  --color-fg-link: var(--palette-lake-700);
+  --color-fg-link-hover: var(--palette-lake-800);
+  --color-fg-lake: var(--palette-lake-700);         /* wayfinding text: drive times, places */
+
+  --color-border-default: var(--palette-sand-200);
+  --color-border-strong: var(--palette-sand-500);
+  --color-border-inverse: var(--palette-lake-700);
+
+  --color-accent: var(--palette-coral-600);
+  --color-accent-hover: var(--palette-coral-700);
+  --color-accent-active: var(--palette-coral-800);
+  --color-accent-subtle: var(--palette-coral-50);
+  --color-accent-subtle-hover: var(--palette-coral-100);
+  --color-fg-on-accent: var(--palette-white);
+  --color-fg-accent: var(--palette-coral-700);
+
+  --color-focus-ring: var(--palette-lake-600);
+  --color-focus-ring-offset: var(--color-bg-surface);
+
+  --color-info-bg: var(--palette-lake-50);
+  --color-info-fg: var(--palette-lake-800);
+  --color-info-border: var(--palette-lake-300);
+  --color-info-icon: var(--palette-lake-600);
+  --color-info-solid: var(--palette-lake-600);
+
+  --color-success-bg: var(--palette-pine-50);
+  --color-success-fg: var(--palette-pine-700);
+  --color-success-border: var(--palette-pine-300);
+  --color-success-icon: var(--palette-pine-500);
+  --color-success-solid: var(--palette-pine-700);
+
+  --color-warning-bg: var(--palette-amber-50);
+  --color-warning-fg: var(--palette-amber-700);
+  --color-warning-border: var(--palette-amber-300);
+  --color-warning-icon: var(--palette-amber-500);
+  --color-warning-solid: var(--palette-amber-700);
+
+  --color-danger-bg: var(--palette-red-50);
+  --color-danger-fg: var(--palette-red-700);
+  --color-danger-border: var(--palette-red-300);
+  --color-danger-icon: var(--palette-red-500);
+  --color-danger-solid: var(--palette-red-600);
+  --color-danger-solid-hover: var(--palette-red-700);
+  --color-fg-on-danger: var(--palette-white);
+
+  /* Map: the stylised GTA map and the media art */
+  --map-water: var(--palette-lake-200);
+  --map-water-edge: var(--palette-lake-300);
+  --map-water-label: var(--palette-lake-800);
+  --map-land: var(--palette-sand-100);
+  --map-land-far: var(--palette-sand-200);
+  --map-park: var(--palette-pine-100);
+  --map-road: var(--palette-white);
+  --map-road-major: var(--palette-sand-300);
+  --map-label: var(--palette-sand-700);
+  --map-label-halo: var(--palette-sand-50);
+  --map-ring: var(--palette-lake-500);
+  --map-ring-fill: rgb(47 126 166 / 0.08);
+  --map-pin: var(--palette-coral-600);
+  --map-pin-active: var(--palette-coral-800);
+  --map-pin-fg: var(--palette-white);
+  --map-home: var(--palette-lake-700);
+  --map-home-fg: var(--palette-white);
+
+  /* Media art (photo and video stand-ins) */
+  --art-sky: var(--palette-lake-200);
+  --art-sky-deep: var(--palette-lake-400);
+  --art-sun: var(--palette-coral-300);
+  --art-sky-dawn: #fbd9c9;
+  --art-sky-dusk: #e9a98f;
+  --art-sand: var(--palette-sand-200);
+  --art-figure: var(--palette-lake-800);
+  --art-fg: var(--palette-white);
+  --art-scrim: rgb(18 53 74 / 0.62);
+
+  /* ---------- Semantic: typography roles ------------------------------- */
+  --text-display: var(--font-weight-bold) var(--font-size-5xl) / var(--line-height-tight) var(--font-family-display);
+  --text-h1: var(--font-weight-bold) var(--font-size-4xl) / var(--line-height-tight) var(--font-family-display);
+  --text-h2: var(--font-weight-semibold) var(--font-size-3xl) / var(--line-height-tight) var(--font-family-display);
+  --text-h3: var(--font-weight-semibold) var(--font-size-xl) / var(--line-height-snug) var(--font-family-display);
+  --text-h4: var(--font-weight-semibold) var(--font-size-lg) / var(--line-height-snug) var(--font-family-display);
+  --text-body-lg: var(--font-weight-regular) var(--font-size-lg) / var(--line-height-relaxed) var(--font-family-sans);
+  --text-body: var(--font-weight-regular) var(--font-size-md) / var(--line-height-normal) var(--font-family-sans);
+  --text-body-sm: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-family-sans);
+  --text-caption: var(--font-weight-regular) var(--font-size-xs) / var(--line-height-normal) var(--font-family-sans);
+  --text-label: var(--font-weight-semibold) var(--font-size-sm) / var(--line-height-normal) var(--font-family-sans);
+  --text-overline: var(--font-weight-semibold) var(--font-size-xs) / var(--line-height-normal) var(--font-family-sans);
+  --text-code: var(--font-weight-regular) var(--font-size-sm) / var(--line-height-normal) var(--font-family-mono);
+
+  /* ---------- Semantic: spacing (4px base) ----------------------------- */
+  --space-0: 0;
+  --space-0-5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* ---------- Semantic: layout ----------------------------------------- */
+  --layout-breakpoint-sm: 40rem;
+  --layout-breakpoint-md: 48rem;
+  --layout-breakpoint-lg: 64rem;
+  --layout-breakpoint-xl: 80rem;
+  --layout-columns: 4;
+  --layout-gutter: var(--space-4);
+  --layout-margin: var(--space-4);
+  --layout-container-max: 80rem;
+  --layout-measure: 65ch;
+  --layout-sidebar-width: 16rem;
+  --layout-topbar-height: 4rem;
+  --layout-map-height: 20rem;      /* map panel height on phones */
+  --layout-rail-width: 22rem;      /* booking card / map rail on desktop */
+
+  /* ---------- Semantic: shape (rounded and friendly) ------------------- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.5rem;
+  --radius-full: 9999px;
+
+  --border-width-hairline: 1px;
+  --border-width-thick: 2px;
+  --border-width-heavy: 3px;
+
+  /* ---------- Semantic: elevation (soft, warm shadows) ----------------- */
+  --shadow-color: 76 58 36;
+  --shadow-1: 0 1px 2px rgb(var(--shadow-color) / 0.06), 0 2px 8px rgb(var(--shadow-color) / 0.05);
+  --shadow-2: 0 4px 14px rgb(var(--shadow-color) / 0.10), 0 1px 3px rgb(var(--shadow-color) / 0.06);
+  --shadow-3: 0 12px 32px rgb(var(--shadow-color) / 0.14), 0 2px 6px rgb(var(--shadow-color) / 0.08);
+  --shadow-4: 0 24px 56px rgb(var(--shadow-color) / 0.22), 0 4px 12px rgb(var(--shadow-color) / 0.10);
+  --shadow-focus: 0 0 0 2px var(--color-focus-ring-offset), 0 0 0 4px var(--color-focus-ring);
+
+  /* ---------- Semantic: motion ----------------------------------------- */
+  --duration-instant: 0ms;
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-slow: 340ms;
+  --duration-deliberate: 500ms;
+  --duration-shimmer: 1400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---------- Semantic: z-order ---------------------------------------- */
+  --z-base: 0;
+  --z-raised: 1;
+  --z-sticky: 100;
+  --z-dropdown: 1000;
+  --z-overlay: 1200;
+  --z-modal: 1300;
+  --z-popover: 1400;
+  --z-toast: 1500;
+  --z-tooltip: 1600;
+
+  /* ---------- Semantic: interaction ------------------------------------ */
+  --target-min: 1.5rem;
+  --target-comfortable: 2.75rem;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --control-height-sm: 2.25rem;
+  --control-height-md: 2.75rem;
+  --control-height-lg: 3.25rem;
+
+  color-scheme: light;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --layout-columns: 8;
+    --layout-gutter: var(--space-6);
+    --layout-margin: var(--space-8);
+    --layout-map-height: 26rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --layout-columns: 12;
+    --layout-gutter: var(--space-8);
+    --layout-margin: var(--space-10);
+    --layout-map-height: 34rem;
+  }
+}
+
+/* ---------- Dark theme: the lake at night --------------------------------- */
+[data-theme="dark"] {
+  --color-bg-canvas: var(--palette-night-950);
+  --color-bg-surface: var(--palette-night-900);
+  --color-bg-surface-raised: var(--palette-night-800);
+  --color-bg-surface-sunken: #12202a;
+  --color-bg-subtle: var(--palette-night-850);
+  --color-bg-subtle-hover: var(--palette-night-700);
+  --color-bg-inverse: var(--palette-sand-100);
+  --color-bg-backdrop: rgb(4 10 14 / 0.7);
+  --color-bg-lake: #112836;
+  --color-bg-lake-strong: #163447;
+  --color-fg-default: #f3ece0;
+  --color-fg-muted: #c9bca8;
+  --color-fg-subtle: #a8998a;
+  --color-fg-disabled: var(--palette-night-600);
+  --color-fg-inverse: var(--palette-sand-900);
+  --color-fg-link: var(--palette-lake-300);
+  --color-fg-link-hover: var(--palette-lake-200);
+  --color-fg-lake: var(--palette-lake-300);
+  --color-border-default: var(--palette-night-700);
+  --color-border-strong: var(--palette-night-400);
+  --color-border-inverse: var(--palette-sand-300);
+  --color-accent: var(--palette-coral-300);
+  --color-accent-hover: var(--palette-coral-200);
+  --color-accent-active: var(--palette-coral-100);
+  --color-accent-subtle: #3a2119;
+  --color-accent-subtle-hover: #4a2a1f;
+  --color-fg-on-accent: var(--palette-coral-950);
+  --color-fg-accent: var(--palette-coral-300);
+  --color-focus-ring: var(--palette-lake-300);
+  --color-info-bg: #102a3a;
+  --color-info-fg: var(--palette-lake-200);
+  --color-info-border: var(--palette-lake-800);
+  --color-info-icon: var(--palette-lake-300);
+  --color-info-solid: var(--palette-lake-300);
+  --color-success-bg: var(--palette-pine-950);
+  --color-success-fg: var(--palette-pine-300);
+  --color-success-border: var(--palette-pine-700);
+  --color-success-icon: var(--palette-pine-300);
+  --color-success-solid: var(--palette-pine-300);
+  --color-warning-bg: var(--palette-amber-950);
+  --color-warning-fg: var(--palette-amber-300);
+  --color-warning-border: var(--palette-amber-700);
+  --color-warning-icon: var(--palette-amber-300);
+  --color-warning-solid: var(--palette-amber-300);
+  --color-danger-bg: var(--palette-red-950);
+  --color-danger-fg: var(--palette-red-300);
+  --color-danger-border: var(--palette-red-700);
+  --color-danger-icon: var(--palette-red-300);
+  --color-danger-solid: var(--palette-red-300);
+  --color-danger-solid-hover: var(--palette-red-100);
+  --color-fg-on-danger: var(--palette-red-950);
+  --map-water: #173a50;
+  --map-water-edge: #24526e;
+  --map-water-label: var(--palette-lake-200);
+  --map-land: var(--palette-night-850);
+  --map-land-far: var(--palette-night-900);
+  --map-park: #1b3a2d;
+  --map-road: var(--palette-night-700);
+  --map-road-major: var(--palette-night-600);
+  --map-label: #d9cdb9;
+  --map-label-halo: var(--palette-night-850);
+  --map-ring: var(--palette-lake-300);
+  --map-ring-fill: rgb(127 184 212 / 0.08);
+  --map-pin: var(--palette-coral-300);
+  --map-pin-active: var(--palette-coral-100);
+  --map-pin-fg: var(--palette-coral-950);
+  --map-home: var(--palette-lake-200);
+  --map-home-fg: var(--palette-lake-950);
+  --art-sky: #1d4560;
+  --art-sky-deep: #12354a;
+  --art-sun: var(--palette-coral-400);
+  --art-sky-dawn: #3d3040;
+  --art-sky-dusk: #4f3236;
+  --art-sand: #3b3328;
+  --art-figure: #0b1820;
+  --art-fg: var(--palette-white);
+  --art-scrim: rgb(4 10 14 / 0.62);
+  --shadow-color: 0 0 0;
+  --shadow-1: 0 1px 2px rgb(var(--shadow-color) / 0.4);
+  --shadow-2: 0 4px 14px rgb(var(--shadow-color) / 0.45), 0 1px 3px rgb(var(--shadow-color) / 0.3);
+  --shadow-3: 0 12px 32px rgb(var(--shadow-color) / 0.5), 0 2px 6px rgb(var(--shadow-color) / 0.35);
+  --shadow-4: 0 24px 56px rgb(var(--shadow-color) / 0.6), 0 4px 12px rgb(var(--shadow-color) / 0.4);
+  color-scheme: dark;
+}
+
+/* Follow the OS preference unless the page has explicitly chosen light. Same values as above. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg-canvas: var(--palette-night-950);
+    --color-bg-surface: var(--palette-night-900);
+    --color-bg-surface-raised: var(--palette-night-800);
+    --color-bg-surface-sunken: #12202a;
+    --color-bg-subtle: var(--palette-night-850);
+    --color-bg-subtle-hover: var(--palette-night-700);
+    --color-bg-inverse: var(--palette-sand-100);
+    --color-bg-backdrop: rgb(4 10 14 / 0.7);
+    --color-bg-lake: #112836;
+    --color-bg-lake-strong: #163447;
+    --color-fg-default: #f3ece0;
+    --color-fg-muted: #c9bca8;
+    --color-fg-subtle: #a8998a;
+    --color-fg-disabled: var(--palette-night-600);
+    --color-fg-inverse: var(--palette-sand-900);
+    --color-fg-link: var(--palette-lake-300);
+    --color-fg-link-hover: var(--palette-lake-200);
+    --color-fg-lake: var(--palette-lake-300);
+    --color-border-default: var(--palette-night-700);
+    --color-border-strong: var(--palette-night-400);
+    --color-border-inverse: var(--palette-sand-300);
+    --color-accent: var(--palette-coral-300);
+    --color-accent-hover: var(--palette-coral-200);
+    --color-accent-active: var(--palette-coral-100);
+    --color-accent-subtle: #3a2119;
+    --color-accent-subtle-hover: #4a2a1f;
+    --color-fg-on-accent: var(--palette-coral-950);
+    --color-fg-accent: var(--palette-coral-300);
+    --color-focus-ring: var(--palette-lake-300);
+    --color-info-bg: #102a3a;
+    --color-info-fg: var(--palette-lake-200);
+    --color-info-border: var(--palette-lake-800);
+    --color-info-icon: var(--palette-lake-300);
+    --color-info-solid: var(--palette-lake-300);
+    --color-success-bg: var(--palette-pine-950);
+    --color-success-fg: var(--palette-pine-300);
+    --color-success-border: var(--palette-pine-700);
+    --color-success-icon: var(--palette-pine-300);
+    --color-success-solid: var(--palette-pine-300);
+    --color-warning-bg: var(--palette-amber-950);
+    --color-warning-fg: var(--palette-amber-300);
+    --color-warning-border: var(--palette-amber-700);
+    --color-warning-icon: var(--palette-amber-300);
+    --color-warning-solid: var(--palette-amber-300);
+    --color-danger-bg: var(--palette-red-950);
+    --color-danger-fg: var(--palette-red-300);
+    --color-danger-border: var(--palette-red-700);
+    --color-danger-icon: var(--palette-red-300);
+    --color-danger-solid: var(--palette-red-300);
+    --color-danger-solid-hover: var(--palette-red-100);
+    --color-fg-on-danger: var(--palette-red-950);
+    --map-water: #173a50;
+    --map-water-edge: #24526e;
+    --map-water-label: var(--palette-lake-200);
+    --map-land: var(--palette-night-850);
+    --map-land-far: var(--palette-night-900);
+    --map-park: #1b3a2d;
+    --map-road: var(--palette-night-700);
+    --map-road-major: var(--palette-night-600);
+    --map-label: #d9cdb9;
+    --map-label-halo: var(--palette-night-850);
+    --map-ring: var(--palette-lake-300);
+    --map-ring-fill: rgb(127 184 212 / 0.08);
+    --map-pin: var(--palette-coral-300);
+    --map-pin-active: var(--palette-coral-100);
+    --map-pin-fg: var(--palette-coral-950);
+    --map-home: var(--palette-lake-200);
+    --map-home-fg: var(--palette-lake-950);
+    --art-sky: #1d4560;
+    --art-sky-deep: #12354a;
+    --art-sun: var(--palette-coral-400);
+  --art-sky-dawn: #3d3040;
+  --art-sky-dusk: #4f3236;
+    --art-sand: #3b3328;
+    --art-figure: #0b1820;
+    --art-fg: var(--palette-white);
+    --art-scrim: rgb(4 10 14 / 0.62);
+    --shadow-color: 0 0 0;
+    --shadow-1: 0 1px 2px rgb(var(--shadow-color) / 0.4);
+    --shadow-2: 0 4px 14px rgb(var(--shadow-color) / 0.45), 0 1px 3px rgb(var(--shadow-color) / 0.3);
+    --shadow-3: 0 12px 32px rgb(var(--shadow-color) / 0.5), 0 2px 6px rgb(var(--shadow-color) / 0.35);
+    --shadow-4: 0 24px 56px rgb(var(--shadow-color) / 0.6), 0 4px 12px rgb(var(--shadow-color) / 0.4);
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-slow: 0.01ms;
+    --duration-deliberate: 0.01ms;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --color-border-default: var(--color-border-strong);
+    --color-fg-muted: var(--color-fg-default);
+    --color-fg-subtle: var(--color-fg-muted);
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --color-focus-ring: Highlight;
+    --color-border-default: CanvasText;
+    --color-border-strong: CanvasText;
+  }
+}

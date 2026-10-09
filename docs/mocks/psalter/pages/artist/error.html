@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artist profile · error — Zamaro Psalter mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="artist">
+<meta name="mock:state" content="error">
+<meta name="description" content="Artist profile that failed to load: the masthead stays, an inline alert explains and offers Try again or a way back to Discover, and the saved list is still in reach.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead__strip container">
+    <span class="masthead__motto">Worship artists for churches in Toronto &amp; within a comfortable drive</span>
+    <a href="#join">For artists: join the register</a>
+  </div>
+  <div class="masthead__bar container">
+    <a class="wordmark" href="../discover/default.html"><span class="wordmark__name">Zamaro</span><span class="wordmark__sub">a register of praise &amp; worship artists</span></a>
+    <nav class="masthead__nav" id="primary-nav" aria-label="Primary">
+      <ul>
+        <li><a class="nav-link" href="../discover/default.html">Discover</a></li>
+        <li><a class="nav-link" href="../discover/default.html#how">How booking works</a></li>
+        <li class="keep"><a class="nav-link" href="../discover/default.html#saved">Saved <span class="count" aria-label="2 artists">2</span></a></li>
+        <li class="keep">
+          <details class="account">
+            <summary aria-label="Account: Naomi Fraser"><span class="monogram" aria-hidden="true">NF</span><span class="account__name">Naomi Fraser</span></summary>
+            <ul class="account__menu">
+              <li><a href="../discover/default.html#saved">Saved artists</a></li>
+              <li><a href="#account">Your booking requests</a></li>
+              <li><a href="#account">Riverside Community Church</a></li>
+              <li><a href="#account">Account settings</a></li>
+              <li><a href="#account">Sign out</a></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+    <button class="btn btn--quiet btn--sm masthead__menu" type="button" aria-expanded="false" aria-controls="primary-nav"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
+  </div>
+  <hr class="masthead__rule">
+</header>
+
+<main id="main" class="container">
+
+  <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="../discover/default.html">Free on 14 November</a></li><li aria-current="page">Abigail Mensah</li></ol></nav>
+  <div class="folio-layout">
+    <div>
+      <div class="notice notice--danger" role="alert" style="margin-top: var(--space-8);">
+        <svg class="icon notice__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 20h20zM12 10v4M12 17.5v.01"/></svg>
+        <div>
+          <h1 style="font: var(--text-h2);">We could not open Abigail Mensah’s profile</h1>
+          <p>The page did not load, and the fault is on our side. Your saved artists and any booking requests you have sent are safe.</p>
+        </div>
+        <div class="notice__actions">
+          <button class="btn btn--primary" type="button"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.6M4 4v5h5"/></svg>Try again</button>
+          <a class="btn btn--quiet" href="../discover/default.html">Back to who is free on 14 November</a>
+        </div>
+      </div>
+      <p class="text-caption" style="margin-top: var(--space-4);">If this keeps happening, write to <a href="mailto:help@zamaro.ca">help@zamaro.ca</a> and mention reference <code>ZM-7C09</code>.</p>
+      <span class="fleuron" aria-hidden="true">❦</span>
+    </div>
+
+      <aside class="margin margin" aria-label="Booking guide and saved artists">
+        <div class="stack stack--lg">
+          <section id="how" aria-labelledby="how-h">
+            <h2 class="margin-title" id="how-h">How booking works</h2>
+            <ol class="ordinal">
+              <li><div><strong>Choose your date</strong><p>See only the artists who are free that day, within driving distance of your church.</p></div></li>
+              <li><div><strong>Send a request</strong><p>Tell them about the service: the time, the congregation, the songs you love. Nothing is charged yet.</p></div></li>
+              <li><div><strong>Hear back within two days</strong><p>The artist accepts, asks a question, or suggests another time.</p></div></li>
+              <li><div><strong>Confirm with a deposit</strong><p>A 25% deposit holds the date. We keep it safe until after the service.</p></div></li>
+              <li><div><strong>Worship, then reflect</strong><p>The balance is paid after the service, and your review helps the next church.</p></div></li>
+            </ol>
+          </section>
+          <section id="saved" aria-labelledby="saved-h">
+            <h2 class="margin-title" id="saved-h">Saved artists</h2>
+            <ul class="index-list">
+              <li><a href="../artist/default.html">Abigail Mensah</a><span class="text-caption">from $650</span></li>
+              <li><a href="../artist/default.html">Elijah Park</a><span class="text-caption">from $350</span></li>
+            </ul>
+            <p class="text-caption" style="margin-top: var(--space-3);">Saved artists are shared with everyone on Riverside Community Church’s account.</p>
+          </section>
+        </div>
+      </aside>
+
+  </div>
+
+</main>
+
+<footer class="colophon">
+  <div class="container">
+    <div class="colophon__grid">
+      <section class="join" id="join" aria-labelledby="join-h">
+        <p class="smallcaps smallcaps--accent">For artists</p>
+        <h2 id="join-h">Lead worship for churches across the region</h2>
+        <p>Tell churches your story, share a few live videos, set how far you will drive, and receive booking requests for the dates you are free. Every artist is interviewed and reference-checked before their page goes live.</p>
+        <a class="btn" href="#join">Apply to join the register</a>
+      </section>
+      <section id="account" aria-labelledby="account-h">
+        <h2 id="account-h">Your account</h2>
+        <ul>
+          <li><a href="../discover/default.html#saved">Saved artists</a></li>
+          <li><a href="#account">Booking requests</a></li>
+          <li><a href="#account">Church details</a></li>
+          <li><a href="#account">Account settings</a></li>
+        </ul>
+      </section>
+      <section aria-labelledby="about-h">
+        <h2 id="about-h">Zamaro</h2>
+        <ul>
+          <li><a href="../discover/default.html#how">How booking works</a></li>
+          <li><a href="mailto:help@zamaro.ca">help@zamaro.ca</a></li>
+          <li><a href="#join">For artists</a></li>
+        </ul>
+      </section>
+    </div>
+    <p class="imprint">Zamaro · Toronto, Ontario · MMXXVI</p>
+  </div>
+</footer>
+
+
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Artist profile</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html">default</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="empty.html">empty</a></li>
+    <li><a href="error.html" aria-current="page">error</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>
