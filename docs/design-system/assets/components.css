@@ -1303,3 +1303,15 @@ button.banner__action { min-height: var(--target-min); padding: 0; border: 0; ba
 .calendar__cell[aria-selected="true"] .calendar__day[data-status="requested"] { box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-fg-on-accent), var(--shadow-focus); }
 /* Rows in a two-column definition list keep dt and dd together at the top. */
 .definition__row { align-content: start; }
+
+/* ---------- MVP kit: integration additions ------------------------------
+   Statuses follow L2-029: Requested, Accepted, Confirmed, Completed,
+   Declined, Withdrawn, Expired, Cancelled. */
+.stamp--requested { color: var(--color-fg-default); }
+.stamp--completed { color: var(--color-fg-muted); }
+.stamp--withdrawn { color: var(--color-fg-muted); }
+/* A dialog's form wraps header, body and footer; the dialog still lays them out. */
+.dialog__form { display: contents; }
+.toast__text { font: var(--text-body-sm); }
+/* List wrapper for .menu__item rows inside .dialog--menu and .dialog--drawer */
+.menu-list { list-style: none; margin: 0; padding: 0; display: grid; }

@@ -28,9 +28,9 @@
     <a class="nav-link" href="../../pages/discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
-  <button class="nav-link topbar__saved btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;">
+  <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
-  </button>
+  </a>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -118,7 +118,7 @@
     <div>
       <h2>Artists</h2>
       <ul>
-        <li><a href="../../pages/discover/default.html#join">Join the lineup</a></li>
+        <li><a href="../../pages/apply/default.html">Join the lineup</a></li>
         <li><a href="../../pages/discover/default.html#how">What artists earn</a></li>
       </ul>
     </div>
@@ -126,7 +126,7 @@
       <h2>Naomi Fraser</h2>
       <ul>
         <li>Riverside Community Church</li>
-        <li><a href="../../pages/discover/default.html#saved">Saved artists (3)</a></li>
+        <li><a href="../../pages/saved/default.html">Saved artists (3)</a></li>
       </ul>
     </div>
   </div>
@@ -134,8 +134,8 @@
 
 </div>
 
-<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title" aria-describedby="dlg-desc" data-dismiss-on-escape>
-  <form class="dialog__panel" action="../../pages/booking-detail/completed.html" novalidate>
+<dialog class="dialog" open data-mock-modal aria-labelledby="dlg-title" aria-describedby="dlg-desc">
+  <form class="dialog__form" action="../../pages/booking-detail/completed.html" novalidate>
     <div class="dialog__header">
       <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></div>
       <div style="flex: 1;">
@@ -163,7 +163,7 @@
       <button class="btn btn--primary" type="submit" autofocus><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
     </div>
   </form>
-</div>
+</dialog>
 
 <div class="toast-region" role="status" aria-live="polite"></div>
 

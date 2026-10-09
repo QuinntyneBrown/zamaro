@@ -52,6 +52,13 @@
     }
   });
 
+  // Dialog mocks ship as <dialog open data-mock-modal> so they read without JS; reopen them as real
+  // modals so the backdrop, focus trap, inert page and Escape-to-close behave like the product.
+  document.querySelectorAll('dialog[data-mock-modal]').forEach(function (dialog) {
+    if (typeof dialog.showModal !== 'function') return;
+    try { dialog.close(); dialog.showModal(); } catch (e) { /* leave it open in place */ }
+  });
+
   // Carry the current theme across sibling-state links so a review stays consistent.
   document.querySelectorAll('.mock-bar a[href]').forEach(function (link) {
     link.addEventListener('click', function () {

@@ -26,8 +26,8 @@
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../../pages/requests/default.html">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../../pages/availability/default.html" aria-current="page">Availability</a>
-    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
-    <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
+   <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
+    <a class="nav-link" href="../../pages/edit-profile/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
@@ -169,8 +169,8 @@
 </footer>
 </div>
 
-<div class="dialog" role="dialog" aria-modal="true" aria-labelledby="weekly-title" aria-describedby="weekly-desc" data-dismiss-on-escape>
-  <form class="dialog__panel" action="../../pages/availability/default.html">
+<dialog class="dialog" open data-mock-modal aria-labelledby="weekly-title" aria-describedby="weekly-desc">
+  <form class="dialog__form" action="../../pages/availability/default.html">
     <div class="dialog__header">
       <div class="dialog__icon dialog__icon--info" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9h13l-3-3M20 15H7l3 3"/></svg></div>
       <div style="flex: 1;">
@@ -198,7 +198,7 @@
       <button class="btn btn--primary" type="submit">Save weekly default</button>
     </div>
   </form>
-</div>
+</dialog>
 
 <p class="mock-note" style="top: 6rem; right: 1rem;">Under 640 px the dialog fills the screen with Close in view. Focus is trapped inside, Escape closes it and focus returns to the button that opened it.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>

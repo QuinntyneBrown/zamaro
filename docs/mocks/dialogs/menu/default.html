@@ -26,9 +26,9 @@
     <a class="nav-link" href="../../pages/discover/default.html#join">For artists</a>
   </nav>
   <span class="topbar__spacer"></span>
-  <button class="nav-link topbar__saved btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;">
+  <a class="nav-link topbar__saved" href="../../pages/saved/default.html">
     <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
-  </button>
+  </a>
   <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
 </header>
 
@@ -181,7 +181,7 @@
           <h2 id="join-title">Lead worship? Get on the bill.</h2>
           <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
         </div>
-        <button class="btn btn--lg" type="button">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+        <a class="btn btn--lg" href="../../pages/apply/default.html">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
   </section>
@@ -197,6 +197,7 @@
       <h2>Churches</h2>
       <ul>
         <li><a href="../../pages/discover/default.html">Find who’s free</a></li>
+        <li><a href="../../pages/bookings/default.html">Your bookings</a></li>
         <li><a href="../../pages/discover/default.html#how">How booking works</a></li>
         <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
       </ul>
@@ -204,7 +205,7 @@
     <div>
       <h2>Artists</h2>
       <ul>
-        <li><a href="../../pages/discover/default.html#join">Join the lineup</a></li>
+        <li><a href="../../pages/apply/default.html">Join the lineup</a></li>
         <li><a href="../../pages/discover/default.html#how">What artists earn</a></li>
       </ul>
     </div>
@@ -212,15 +213,14 @@
       <h2>Naomi Fraser</h2>
       <ul>
         <li>Riverside Community Church</li>
-        <li><a href="../../pages/discover/default.html#saved">Saved artists (3)</a></li>
+        <li><a href="../../pages/saved/default.html">Saved artists (3)</a></li>
       </ul>
     </div>
   </div>
 </footer>
 </div>
 
-<div class="dialog dialog--drawer" role="dialog" aria-modal="true" aria-labelledby="dlg-title" aria-describedby="dlg-desc" data-dismiss-on-escape>
-  <div class="dialog__panel">
+<dialog class="dialog dialog--drawer" open data-mock-modal aria-labelledby="dlg-title" aria-describedby="dlg-desc">
     <div class="dialog__header">
       <div style="flex: 1;">
         <h2 class="dialog__title" id="dlg-title">Menu</h2>
@@ -230,13 +230,13 @@
     </div>
     <nav class="dialog__body" aria-label="Main menu">
       <ul class="menu-list" role="list">
-        <li><a class="menu-list__item" href="../../pages/discover/default.html" aria-current="page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-2 5-4 1 2-5z"/></svg>Discover</a></li>
-        <li><a class="menu-list__item" href="../../pages/discover/default.html#how"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17v.5"/></svg>How booking works</a></li>
-        <li><a class="menu-list__item" href="../../pages/discover/default.html#join"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg>For artists</a></li>
+        <li><a class="menu__item" href="../../pages/discover/default.html" aria-current="page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15 9-2 5-4 1 2-5z"/></svg>Discover</a></li>
+        <li><a class="menu__item" href="../../pages/discover/default.html#how"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17v.5"/></svg>How booking works</a></li>
+        <li><a class="menu__item" href="../../pages/discover/default.html#join"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg>For artists</a></li>
       </ul>
     </nav>
-  </div>
-</div>
+  
+</dialog>
 
 <p class="mock-note" style="top: 12rem; right: 1rem;">Only under 64rem, where the top bar collapses. Focus is trapped, Escape closes it and focus returns to the menu button.</p>
 <div class="toast-region" role="status" aria-live="polite"></div>

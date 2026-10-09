@@ -26,8 +26,8 @@
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../../pages/requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../../pages/availability/default.html">Availability</a>
-    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
-    <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
+   <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
+    <a class="nav-link" href="../../pages/edit-profile/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
@@ -139,8 +139,8 @@
 </footer>
 </div>
 
-<div class="dialog dialog--danger" role="dialog" aria-modal="true" aria-labelledby="decline-title" aria-describedby="decline-desc" data-dismiss-on-escape>
-  <form class="dialog__panel" action="../../pages/request-detail/declined.html">
+<dialog class="dialog dialog--danger" open data-mock-modal aria-labelledby="decline-title" aria-describedby="decline-desc">
+  <form class="dialog__form" action="../../pages/request-detail/declined.html">
     <div class="dialog__header">
       <div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></svg></div>
       <div style="flex: 1;">
@@ -170,7 +170,7 @@
       <button class="btn btn--danger" type="submit" aria-busy="true" disabled>Declining</button>
     </div>
   </form>
-</div>
+</dialog>
 
 <p class="mock-note" style="top: 6rem; right: 1rem;">Choices are locked and both buttons disabled while the reply is sent (L2-108).</p>
 <div class="toast-region" role="status" aria-live="polite"></div>

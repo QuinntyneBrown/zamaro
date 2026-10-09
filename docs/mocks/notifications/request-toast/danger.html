@@ -24,8 +24,8 @@
     <a class="nav-link" href="../../pages/dashboard/default.html">Dashboard</a>
     <a class="nav-link" href="../../pages/requests/default.html" aria-current="page">Requests <span class="badge badge--count" aria-label="3 requests awaiting reply">3</span></a>
     <a class="nav-link" href="../../pages/availability/default.html">Availability</a>
-    <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
-    <a class="nav-link" href="../../pages/artist/default.html">Profile</a>
+   <a class="nav-link" href="../../pages/earnings/default.html">Earnings</a>
+    <a class="nav-link" href="../../pages/edit-profile/default.html">Profile</a>
   </nav>
   <span class="topbar__spacer"></span>
   <a class="nav-link topbar__link" href="../../pages/artist/default.html">View public profile</a>
@@ -45,8 +45,8 @@
       </form>
     </header>
     <div class="page-body">
-      <div class="tabs" role="tablist" aria-label="Request status">
-        <button class="tab" type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New <span class="badge badge--count" aria-label="3 new">3</span></button><button class="tab" type="button" role="tab" id="tab-accepted" aria-selected="false" aria-controls="panel-accepted" tabindex="-1">Accepted</button><button class="tab" type="button" role="tab" id="tab-confirmed" aria-selected="false" aria-controls="panel-confirmed" tabindex="-1">Confirmed</button><button class="tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past</button>
+      <div class="tabs__list" role="tablist" aria-label="Request status">
+        <button class="tabs__tab" type="button" role="tab" id="tab-new" aria-selected="true" aria-controls="panel-new">New <span class="badge badge--count" aria-label="3 new">3</span></button><button class="tabs__tab" type="button" role="tab" id="tab-accepted" aria-selected="false" aria-controls="panel-accepted" tabindex="-1">Accepted</button><button class="tabs__tab" type="button" role="tab" id="tab-confirmed" aria-selected="false" aria-controls="panel-confirmed" tabindex="-1">Confirmed</button><button class="tabs__tab" type="button" role="tab" id="tab-past" aria-selected="false" aria-controls="panel-past" tabindex="-1">Past</button>
       </div>
       <div role="tabpanel" id="panel-new" aria-labelledby="tab-new">
         <h2 class="visually-hidden">New requests, soonest deadline first</h2>
@@ -177,7 +177,7 @@
       <p class="toast__kind">Failed</p>
       <p class="toast__title">Couldn’t send your reply</p>
       <p class="toast__text">Nothing reached Riverside, and the request stays open until Mon 12 Oct, 10:15 a.m.</p>
-      <div class="toast__actions"><button class="toast__action" type="button">Try again</button></div>
+      <div class="toast__actions"><button class="btn btn--sm" type="button">Try again</button></div>
     </div>
     <button class="close" type="button" aria-label="Dismiss notification"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
   </div>
