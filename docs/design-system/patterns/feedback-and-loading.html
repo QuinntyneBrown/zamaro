@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback &amp; loading — Zamaro design system</title>
+<meta name="description" content="Which feedback for which event (inline message, toast, alert or dialog), when to use a skeleton, spinner or progress bar, and how the save toggle confirms optimistically with Undo.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Feedback &amp; loading</h1>
+      <p class="ds-lead">Every action gets an answer where the person is already looking. Small results show inline, quick confirmations get a toast, failures get an alert in place of the missing content, and only real decisions get a dialog.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="status"</code> / <code>aria-busy</code></span><span class="ds-pill">Composes 10 components</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>A worship coordinator often books on a phone between rehearsals. They need to know, without hunting, whether the lineup is still loading, whether a save worked and whether a request went out. Three rules cover it:</p>
+      <ul>
+        <li><b>Answer in place.</b> The feedback appears next to the thing that changed: under the field, on the toggle, in the lineup’s slot. A toast is the exception, for confirmations that need no attention.</li>
+        <li><b>Hold the shape.</b> While content loads, a skeleton in the final layout holds its place, so nothing jumps when “ABIGAIL MENSAH” lands.</li>
+        <li><b>Trust, then confirm.</b> Saving an artist is instant and reversible, so the toggle flips at once and the server catches up. If it fails, the toggle flips back and says so.</li>
+      </ul>
+      <p>Composes: <a href="../components/inline-message.html">inline message</a>, <a href="../components/toast.html">toast</a>, <a href="../components/alert.html">alert</a>, <a href="../components/dialog.html">dialog</a>, <a href="../components/skeleton.html">skeleton</a>, <a href="../components/spinner.html">spinner</a>, <a href="../components/progress-bar.html">progress bar</a>, <a href="../components/save-toggle.html">save toggle</a>, <a href="../components/button.html">button</a> and the <a href="../components/ticket.html">ticket card</a>. Longer-lived messages are in <a href="notifications.html">notifications</a>; empty and failed regions in <a href="empty-and-error-states.html">empty and error states</a>.</p>
+    </section>
+
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+      <h3>Which feedback for which event</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Event</th><th scope="col">Feedback</th><th scope="col">Example</th><th scope="col">Lifetime</th></tr></thead>
+        <tbody>
+          <tr><td>A fact about one field changes</td><td><a href="../components/inline-message.html">Inline message</a> under the field</td><td>“Abigail is free Sat 14 Nov”</td><td>While the value stands</td></tr>
+          <tr><td>A quick, reversible action the person just took</td><td>The control changes state, plus a <a href="../components/toast.html">toast</a> with Undo</td><td>Save toggle fills yellow; “Saved Luz Viva”</td><td>8 s or more, pauses on hover and focus</td></tr>
+          <tr><td>A region of the page failed to load</td><td><a href="../components/alert.html">Alert</a> in the region’s place, with Try again</td><td>“We lost the signal” in place of the lineup</td><td>Until it loads</td></tr>
+          <tr><td>The whole page failed</td><td>Poster with a plain headline plus an alert</td><td>“This profile didn’t load”</td><td>Until it loads</td></tr>
+          <tr><td>A submit found problems</td><td>Error summary plus field errors (see <a href="forms.html">forms</a>)</td><td>“2 things to fix”</td><td>Until fixed</td></tr>
+          <tr><td>The person must decide before going on: money or loss</td><td><a href="../components/dialog.html">Dialog</a></td><td>“Cancel your booking with Abigail?”</td><td>Until answered</td></tr>
+          <tr><td>Something changed while they were away</td><td>Banner and e-mail (see <a href="notifications.html">notifications</a>)</td><td>“Abigail accepted your request”</td><td>Until acted on</td></tr>
+        </tbody>
+      </table></div>
+      <p>Never use a toast for an error the person must act on, and never use a dialog to say something worked.</p>
+      <h3>Which loading indicator</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Situation</th><th scope="col">Indicator</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+          <tr><td>The layout is known and content takes more than 300 ms</td><td><a href="../components/skeleton.html">Skeleton</a> in the final shape, region <code>aria-busy="true"</code>, one status line</td><td>Ticket skeletons while the lineup loads; poster-sized name skeleton on a profile</td></tr>
+          <tr><td>The person pressed a button and waits for its result</td><td>Busy button (<code>aria-busy</code>, spinner after the label)</td><td>“Checking calendars…”, “Sending request…”</td></tr>
+          <tr><td>A small part of a region refreshes and its shape is unknown</td><td>Inline <a href="../components/spinner.html">spinner</a> with words</td><td>“Checking nearby dates…” inside the Christmas Eve empty state</td></tr>
+          <tr><td>A long task with measurable progress</td><td>Determinate <a href="../components/progress-bar.html">progress bar</a> with a percentage</td><td>An artist uploading a live video</td></tr>
+          <tr><td>A long task with no measure</td><td>Indeterminate progress bar and a status line that updates</td><td>Payment being confirmed by the bank</td></tr>
+          <tr><td>Under 300 ms</td><td>Nothing; a flash of skeleton is worse than a short wait</td><td>Switching the sort order</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Timing</h3>
+      <ul>
+        <li><b>0–300 ms:</b> show nothing new; keep the old content.</li>
+        <li><b>300 ms–8 s:</b> skeleton or busy control, plus a status line: “Finding who’s free on Saturday 14 November…”.</li>
+        <li><b>After 8 s:</b> the status line changes to “Still checking — thanks for waiting.”</li>
+        <li><b>On timeout or failure:</b> replace the skeleton with the alert. Keep the search, filters and anything typed.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+      <h3>The lineup while it loads</h3>
+      <p>The section keeps its head, the filters stay visible but disabled, one status line says what is happening, and ticket skeletons hold the layout. The skeletons are hidden from assistive technology; the status line is the only thing announced.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <div class="stack stack--lg" aria-busy="true">
+            <div class="section__head" style="margin-bottom: 0;">
+              <div><p class="overline section__kicker">Sat 14 Nov · checking calendars</p><p style="font: var(--text-h2); text-transform: uppercase;">The lineup</p></div>
+              <div class="field field--inline"><label class="field__label" for="l-sort">Sort</label><select class="select" id="l-sort"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></div>
+            </div>
+            <p class="lead"><span role="status">Finding who’s free on Saturday 14 November…</span></p>
+            <fieldset class="filters">
+              <legend>Filter by style</legend>
+              <button class="chip" type="button" aria-pressed="false" disabled>Band</button><button class="chip" type="button" aria-pressed="false" disabled>Solo vocalist</button><button class="chip" type="button" aria-pressed="false" disabled>Gospel choir</button><button class="chip" type="button" aria-pressed="false" disabled>Hymns</button>
+            </fieldset>
+            <ul class="lineup" role="list" aria-hidden="true">
+              <li class="ticket ticket--loading">
+                <span class="skeleton ticket__art"></span>
+                <div class="ticket__body"><span class="skeleton skeleton--text skeleton--medium"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+                <div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div>
+              </li>
+              <li class="ticket ticket--loading">
+                <span class="skeleton ticket__art"></span>
+                <div class="ticket__body"><span class="skeleton skeleton--text skeleton--medium"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+                <div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Region <code>aria-busy="true"</code>; skeleton list <code>aria-hidden="true"</code>; chips <code>disabled</code>; one <code>role="status"</code> line.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section id="lineup" class="section" aria-labelledby="lineup-title" aria-busy="true"&gt;
+  …
+  &lt;p class="lead"&gt;&lt;span role="status"&gt;Finding who’s free on Saturday 14 November…&lt;/span&gt;&lt;/p&gt;
+  &lt;ul class="lineup" role="list" aria-hidden="true"&gt;
+    &lt;li class="ticket ticket--loading"&gt;
+      &lt;span class="skeleton ticket__art"&gt;&lt;/span&gt;
+      &lt;div class="ticket__body"&gt;&lt;span class="skeleton skeleton--text skeleton--medium"&gt;&lt;/span&gt;&lt;span class="skeleton skeleton--title"&gt;&lt;/span&gt;…&lt;/div&gt;
+      &lt;div class="ticket__stub"&gt;&lt;span class="skeleton skeleton--title skeleton--short"&gt;&lt;/span&gt;&lt;span class="skeleton skeleton--target"&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+      <h3>Optimistic save with Undo</h3>
+      <p>Saving an artist is the most frequent action and is always reversible, so it does not wait for the server.</p>
+      <ol>
+        <li>The person presses the heart on Luz Viva’s ticket. The toggle fills yellow at once (<code>aria-pressed="true"</code>) and its name changes to “Remove Luz Viva from your saved artists”.</li>
+        <li>The Saved count in the top bar goes from 2 to 3.</li>
+        <li>A toast confirms “Saved Luz Viva” with Undo. Undo puts both back exactly as they were.</li>
+        <li>If the server has not answered after 1 s, the heart pulses (<code>aria-busy="true"</code>).</li>
+        <li>If the server fails, the toggle and count flip back and a danger toast says “Couldn’t save Luz Viva” with Try again. It stays until dismissed.</li>
+      </ol>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stage on-stage">
+          <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span></button>
+        </div>
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--stack">
+          <ul class="lineup" role="list" aria-label="Example ticket" style="grid-template-columns: minmax(0, 1fr);">
+            <li class="ticket">
+              <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 05 · ★ 5.0</span>
+                <p class="ticket__name"><a href="#structure">Luz Viva</a></p>
+                <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$900</p>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+          </ul>
+          <div class="toast-region toast-region--static" role="status" aria-live="polite">
+            <div class="toast toast--success">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+              <div><p class="toast__title">Saved Luz Viva</p><p class="toast__body">Find them under Saved in the top bar.</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div>
+              <button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Dismiss: Saved Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Toggle, count and toast change together. In the product the toast region is fixed to the bottom right; here it is static (<code>.toast-region--static</code>).</span></div>
+      </div>
+      <h3>Inline, alert and progress side by side</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="field" style="max-width: 22rem;"><label class="field__label" for="s-date">Event date</label><input class="input" id="s-date" type="date" value="2026-11-15" aria-describedby="s-date-msg"><span class="inline-msg inline-msg--warning" id="s-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Fri 20 Nov is free.</span></div>
+          <span class="spinner-inline" role="status"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking nearby dates…</span>
+          <div class="progress" style="max-width: 28rem;">
+            <div class="progress__head"><span id="pg-1">Uploading “Way Maker, live”</span><span class="progress__value">64%</span></div>
+            <div class="progress__track" role="progressbar" aria-labelledby="pg-1" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 64%;"></div></div>
+          </div>
+          <div class="alert alert--danger" role="alert">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button><a class="btn" href="mailto:hello@zamaro.ca">Email the Zamaro team</a></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>A field-level warning, an inline spinner with words, a determinate upload, and a region alert that replaces the lineup.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <h3>A region from request to result</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Phase</th><th scope="col">What is visible</th><th scope="col">Announced</th></tr></thead>
+        <tbody>
+          <tr><td>Idle</td><td>The last good content.</td><td>Nothing</td></tr>
+          <tr><td>Pending (under 300 ms)</td><td>The last good content; the submit is busy.</td><td>Nothing</td></tr>
+          <tr><td>Loading</td><td>Skeletons, disabled filters, the status line.</td><td>“Finding who’s free on Saturday 14 November…”</td></tr>
+          <tr><td>Slow (after 8 s)</td><td>Same, with new status copy.</td><td>“Still checking — thanks for waiting.”</td></tr>
+          <tr><td>Done</td><td>Content; filters enabled; <code>aria-busy</code> removed.</td><td>The count: “7 artists free”</td></tr>
+          <tr><td>Empty</td><td>The empty state in the content’s place.</td><td>Its title, via <code>role="status"</code></td></tr>
+          <tr><td>Failed</td><td>The alert in the content’s place; search kept.</td><td>The alert, via <code>role="alert"</code></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Save toggle</h3>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Context</th><th scope="col">Not saved</th><th scope="col">Saved at once</th><th scope="col">Slow server</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Failed, flipped back</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Ticket</th>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
+            <td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
+          <tr><th scope="row">Profile poster</th>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true" aria-busy="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="false" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="true" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack">
+          <div class="cluster"><span class="skeleton skeleton--target"></span><span class="skeleton skeleton--title" style="flex: 1;"></span></div>
+          <div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="toast__title">Saved Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div><button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Dismiss: Saved Luz Viva, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Try again</button></div></div><button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Dismiss: Couldn’t save Luz Viva, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <span class="inline-msg inline-msg--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span>
+        </div></div>
+        <div data-theme="dark"><div class="stack">
+          <div class="cluster"><span class="skeleton skeleton--target"></span><span class="skeleton skeleton--title" style="flex: 1;"></span></div>
+          <div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="toast__title">Saved Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div><button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Dismiss: Saved Luz Viva, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Try again</button></div></div><button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Dismiss: Couldn’t save Luz Viva, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <span class="inline-msg inline-msg--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Skeletons use the same layout classes as the content (<code>.lineup</code>, <code>.ticket</code>, <code>.artist-poster</code>, <code>.profile-layout</code>), so they reflow exactly like it: one ticket column on phones, two from 1024px, the stub beside the body from 640px.</li>
+        <li>Toasts sit bottom right, 24rem wide, from 640px; on phones they span the width at the bottom, above the safe area. They never cover the booking stub’s submit while it is focused.</li>
+        <li>Alert actions sit under the text on phones and beside it from 640px. “Try again” comes first.</li>
+        <li>The status line sits right under the section head, so on a phone it is visible without scrolling past skeletons.</li>
+        <li>Busy buttons keep their width at every size; the spinner sits inside the existing padding.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Loading regions carry <code>aria-busy="true"</code>; their skeletons are <code>aria-hidden="true"</code>. One <code>role="status"</code> line per region announces progress politely. Failures use <code>role="alert"</code>. Toasts live in a polite <code>role="status"</code> region that exists in the page before any toast is added, so screen readers pick up the change. Determinate progress uses <code>role="progressbar"</code> with <code>aria-valuenow</code>. The save toggle follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button pattern</a> with <code>aria-pressed</code>; alerts follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">APG Alert pattern</a>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Space</kbd> / <kbd>Enter</kbd></td><td>On a save toggle: saves or removes. Pressing it again is the same as Undo.</td></tr>
+        <tr><td><kbd>Tab</kbd></td><td>Reaches “Try again” in an alert straight after the section head and filters.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Dismisses a toast while focus is inside it, and returns focus to the control that caused it.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Feedback never steals focus. Toasts and inline messages are announced, not focused. After “Show the lineup”, focus stays on the submit; the result count is announced. An alert that replaces a region is announced through <code>role="alert"</code>, and its “Try again” is the next stop in the tab order. Undo in a toast is a shortcut, not the only way back: the toggle itself undoes.</p>
+      <h3>Labelling</h3>
+      <p>Status copy says what is loading, with the date: “Finding who’s free on Saturday 14 November…”. Save toggles name the artist and the result of pressing: “Save Elijah Park to your saved artists”. The count badge says “3 saved artists”, not “3”. A toast’s dismiss button names the toast: “Dismiss: Saved Luz Viva”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Toast text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Alert body on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Alert icon</span><span class="ds-pair__ratio" data-contrast="--color-danger-icon|--color-danger-bg" data-min="3"></span></div>
+        <div class="ds-pair"><span>Warning message on card</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Pressed save toggle</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: toast text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: alert body</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+      </div>
+      <p>Skeletons are decorative: they carry no information and are hidden from assistive technology, so their fills are exempt from 1.4.11.</p>
+      <h3>Motion</h3>
+      <p>The skeleton shimmer sweeps slowly (<code>--duration-deliberate</code>) and stops under <code>prefers-reduced-motion</code>. Toasts slide in over <code>--duration-slow</code>; with reduced motion they appear at once. Spinners and the busy heart keep moving because they are status indicators. The indeterminate progress bar stops and shows a half-tone full bar instead.</p>
+      <h3>Touch</h3>
+      <p>The save toggle is 44px round, inside a stub with 16px of padding. Toast actions are 36px buttons in a 16px-padded toast. Nothing depends on hover.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Loading:</b> present tense, says what and for when: “Checking calendars…”, “Finding who’s free on Saturday 14 November…”. Use an ellipsis character (…).</li>
+        <li><b>Slow:</b> one reassuring line, no blame: “Still checking — thanks for waiting.”</li>
+        <li><b>Confirmation:</b> past-tense verb and the name: “Saved Luz Viva”, “Removed Elijah Park”, “Request sent to Abigail”. No exclamation marks.</li>
+        <li><b>Undo</b> is always the single word “Undo”.</li>
+        <li><b>Errors:</b> what happened, what is safe, what to do: “We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.” + “Try again”.</li>
+        <li><b>Counts:</b> numerals and the noun: “7 artists free”, “3 saved artists”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="ticket ticket--loading" aria-hidden="true"><span class="skeleton ticket__art"></span><div class="ticket__body"><span class="skeleton skeleton--text skeleton--medium"></span><span class="skeleton skeleton--title"></span></div><div class="ticket__stub"><span class="skeleton skeleton--title skeleton--short"></span><span class="skeleton skeleton--target"></span></div></div></div><figcaption>A ticket-shaped skeleton holds the lineup’s layout, so nothing jumps when results land.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas" style="justify-content: center;"><span class="spinner spinner--lg" role="status" aria-label="Loading"></span></div><figcaption>A large spinner in place of the whole lineup says nothing about what is coming and makes the page jump.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="toast__title">Saved Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div></div></div><figcaption>A quiet toast with Undo for a reversible action.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="dialog dialog--static dialog--sm" role="dialog" aria-label="Artist saved, wrong example"><div class="dialog__body"><p>Artist saved successfully!</p></div><div class="dialog__footer"><button class="btn btn--primary" type="button">OK</button></div></div></div><figcaption>A dialog that blocks the page to say something worked.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>Your date, location and filters are kept.</p></div><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div></div><figcaption>An alert in the lineup’s place that stays until the person acts.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--danger" data-state="leaving"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Something went wrong</p></div></div></div><figcaption>An error toast that fades after a few seconds, with no cause and no way to retry.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><span class="skeleton skeleton--text skeleton--medium"></span><span class="skeleton skeleton--target"></span></div><figcaption>Size skeletons with modifier classes: <code>.skeleton--medium</code>, <code>.skeleton--target</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><span class="skeleton skeleton--text" style="width: 45%;"></span><span class="skeleton" style="width: 2.75rem; height: 2.75rem;"></span></div><figcaption>The loading mocks set skeleton widths and heights inline, so each page drifted to its own sizes.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: busy submit, region <code>aria-busy</code>, status line, disabled chips, ticket and headliner skeletons, and the note about “Still checking — thanks for waiting.” after 8 s</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: poster-sized name skeleton on the stage, stub skeleton, visually hidden “Loading artist profile” status</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: save toggles on tickets, the Saved count, the empty toast region and the note promising a “Saved Luz Viva” toast</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the region alert with Try again; the note about adding a status link after a third failure</li>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: page-level failure with Try again and Back to the lineup</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Skeleton widths and heights were inline styles in the loading mocks. They are now <code>.skeleton--short/medium/long/portrait/wide/control/control-lg/target/figure</code>.</li>
+        <li>Stage skeletons read <code>--palette-ink-800/700</code>. They now use <code>--color-bg-stage-raised</code> and <code>--color-bg-stage-raised-hover</code>.</li>
+        <li>Skeleton heights 0.9rem and 1.8rem are now 1rem and 1.75rem, on the spacing grid.</li>
+        <li>The toast region sat at <code>bottom: --space-16</code> to clear the mock bar, and no toast existed although the note promises one. There is now a <code>.toast</code> component and the region sits at <code>--space-6</code> (phones <code>--space-4</code> plus the safe area).</li>
+        <li><code>.alert</code> was danger-only by default. It now has tones <code>.alert--danger|success|warning</code> (info by default); the mocks use <code>alert alert--danger</code>.</li>
+        <li>Disabled chips in the loading mock had no disabled style. <code>.chip:disabled</code> now greys them out.</li>
+        <li>The pressed “Saved” button on the profile had no pressed style. It now fills yellow with a filled heart.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

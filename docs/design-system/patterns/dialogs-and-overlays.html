@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dialogs &amp; overlays — Zamaro design system</title>
+<meta name="description" content="When Zamaro interrupts with a dialog, a bottom sheet, a menu or a tooltip, and when it uses a page instead; how overlays stack; and which booking steps need a confirmation dialog.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Dialogs &amp; overlays</h1>
+      <p class="ds-lead">Overlays interrupt, so Zamaro uses them only when a church must decide something before going on: money moving or a booking ending. Everything else stays on the page.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;dialog&gt;</code> + <code>showModal()</code></span><span class="ds-pill">Composes 9 components</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>The mocks deliberately keep booking on the page: the request form is the ticket stub beside the profile, not a pop-up, so the church can scroll the videos and setlist while writing. Overlays are kept for four jobs:</p>
+      <ul>
+        <li><b>Dialog</b>: a decision that moves money or ends something. “Lock in Sat 14 Nov”, “Cancel your booking with Abigail?”.</li>
+        <li><b>Bottom sheet</b>: the same dialog on a phone. Below 640px every dialog becomes a sheet from the bottom edge.</li>
+        <li><b>Menu</b>: a short list of actions or places tied to one control. The account menu behind Naomi’s avatar.</li>
+        <li><b>Tooltip</b>: the name of an icon-only control, on hover and focus. Never essential information.</li>
+      </ul>
+      <p>Composes: <a href="../components/dialog.html">dialog</a>, <a href="../components/menu.html">menu</a>, <a href="../components/tooltip.html">tooltip</a>, <a href="../components/button.html">button</a>, <a href="../components/description-list.html">description list</a>, <a href="../components/alert.html">alert</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/toast.html">toast</a> and the <a href="../components/booking-form.html">booking ticket</a>.</p>
+    </section>
+
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Need</th><th scope="col">Use</th><th scope="col">Example</th><th scope="col">Not</th></tr></thead>
+        <tbody>
+          <tr><td>Confirm a decision that moves money or loses something</td><td><a href="../components/dialog.html">Dialog</a>; danger variant when something is lost</td><td>Pay the $162.50 deposit; cancel a booking</td><td>A toast with Undo: money can’t be un-sent</td></tr>
+          <tr><td>The same decision on a phone</td><td>Bottom sheet (the dialog below 640px)</td><td>Pay the deposit from the e-mail link on a phone</td><td>A full new page that loses context</td></tr>
+          <tr><td>A few actions or places for one control</td><td><a href="../components/menu.html">Menu</a></td><td>Account: Your requests, Saved artists, Church details, Sign out</td><td>A dialog listing links</td></tr>
+          <tr><td>Name an icon-only control</td><td><a href="../components/tooltip.html">Tooltip</a></td><td>“Share Abigail’s profile” on the share icon</td><td>Prices, deadlines or rules; they go in the page</td></tr>
+          <tr><td>A long task, something people link to, or something they compare against</td><td>A page</td><td>The artist profile; the booking request; Your requests</td><td>A dialog the person scrolls inside</td></tr>
+          <tr><td>Confirm that something worked</td><td>Inline success or a toast (see <a href="feedback-and-loading.html">feedback</a>)</td><td>“Request sent to Abigail”, “Saved Luz Viva”</td><td>A dialog with “OK”</td></tr>
+        </tbody>
+      </table></div>
+      <h3>When a booking step needs a dialog</h3>
+      <p>Today is Fri 9 Oct; Naomi has asked Abigail for Sat 14 Nov. Free cancellation ends 14 days before, on Sat 31 Oct.</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Step</th><th scope="col">Dialog?</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+          <tr><td>Request to book</td><td>No</td><td>Nothing is charged and the request can be withdrawn. The stub shows “Request sent to Abigail” in place.</td></tr>
+          <tr><td>Abigail accepts</td><td>No</td><td>It happens while Naomi is away: e-mail plus a banner (see <a href="notifications.html">notifications</a>).</td></tr>
+          <tr><td>Pay the 25% deposit ($162.50)</td><td>Yes</td><td>Money moves. The dialog shows the fee, the deposit, the balance and the cancellation deadline before the card is charged.</td></tr>
+          <tr><td>Cancel before Sat 31 Oct</td><td>Yes, danger</td><td>The booking ends. The dialog says the deposit comes back in full.</td></tr>
+          <tr><td>Cancel from Sat 31 Oct</td><td>Yes, danger</td><td>The booking ends and the deposit is kept. The dialog says so in dollars.</td></tr>
+          <tr><td>Change the date</td><td>No</td><td>It is a new request on the profile page, with the new date in the stub.</td></tr>
+          <tr><td>Remove a saved artist</td><td>No</td><td>Reversible: the toggle and a toast with Undo.</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Stacking</h3>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Layer</th><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Rule</th></tr></thead>
+        <tbody>
+          <tr><td>Sticky top bar</td><td><code>--z-sticky</code></td><td><span data-token="--z-sticky"></span></td><td>Above the page; below every overlay.</td></tr>
+          <tr><td>Menu</td><td><code>--z-dropdown</code></td><td><span data-token="--z-dropdown"></span></td><td>Closes when anything else opens.</td></tr>
+          <tr><td>Backdrop</td><td><code>--z-overlay</code></td><td><span data-token="--z-overlay"></span></td><td>One backdrop, owned by the open dialog.</td></tr>
+          <tr><td>Dialog</td><td><code>--z-modal</code></td><td><span data-token="--z-modal"></span></td><td>One at a time. A second decision replaces the dialog’s content as a step; never a dialog on a dialog.</td></tr>
+          <tr><td>Popover</td><td><code>--z-popover</code></td><td><span data-token="--z-popover"></span></td><td>Only inside a dialog (a native select’s list, a date picker).</td></tr>
+          <tr><td>Toast</td><td><code>--z-toast</code></td><td><span data-token="--z-toast"></span></td><td>New toasts wait while a dialog is open; a problem with the dialog’s own action is an alert inside it.</td></tr>
+          <tr><td>Tooltip</td><td><code>--z-tooltip</code></td><td><span data-token="--z-tooltip"></span></td><td>Always on top, never interactive.</td></tr>
+        </tbody>
+      </table></div>
+      <p>A native <code>&lt;dialog&gt;</code> opened with <code>showModal()</code> sits in the browser’s top layer and makes the rest of the page inert; the tokens order everything that is not in the top layer.</p>
+    </section>
+
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+      <h3>Pay the deposit</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage">
+            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="dg1-title" aria-describedby="dg1-desc">
+              <div class="dialog__header">
+                <div><span class="overline dialog__kicker">No. ZAM-0114 · Abigail accepted</span><p class="dialog__title" id="dg1-title">Lock in Sat 14 Nov</p></div>
+                <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              </div>
+              <div class="dialog__body">
+                <p id="dg1-desc">Pay the deposit and the date is yours. The rest is due after the service.</p>
+                <dl class="dl dl--horizontal">
+                  <div><dt>Artist fee</dt><dd>$650 · Sunday service</dd></div>
+                  <div><dt>Deposit today</dt><dd><b>$162.50</b> (25%)</dd></div>
+                  <div><dt>After the event</dt><dd>$487.50</dd></div>
+                  <div><dt>Free cancellation</dt><dd>Until Sat 31 Oct</dd></div>
+                </dl>
+              </div>
+              <div class="dialog__footer">
+                <button class="btn btn--primary" type="button">Pay $162.50 deposit</button>
+                <button class="btn" type="button">Not now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Kicker with the booking number, a title that names the date, the money as a description list, the primary action first.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dialog class="dialog" aria-labelledby="pay-title" aria-describedby="pay-desc"&gt;
+  &lt;div class="dialog__header"&gt;
+    &lt;div&gt;&lt;span class="overline dialog__kicker"&gt;No. ZAM-0114 · Abigail accepted&lt;/span&gt;&lt;h2 class="dialog__title" id="pay-title"&gt;Lock in Sat 14 Nov&lt;/h2&gt;&lt;/div&gt;
+    &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Close"&gt;…&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="dialog__body"&gt;&lt;p id="pay-desc"&gt;…&lt;/p&gt;&lt;dl class="dl dl--horizontal"&gt;…&lt;/dl&gt;&lt;/div&gt;
+  &lt;div class="dialog__footer"&gt;
+    &lt;button class="btn btn--primary" type="button"&gt;Pay $162.50 deposit&lt;/button&gt;
+    &lt;button class="btn" type="button"&gt;Not now&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;
+&lt;!-- open with dialog.showModal(); the rest of the page becomes inert --&gt;</code></pre></details>
+      </div>
+      <h3>Cancel a booking</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage">
+            <div class="dialog dialog--static dialog--danger dialog--sm" role="alertdialog" aria-modal="true" aria-labelledby="dg2-title" aria-describedby="dg2-desc">
+              <div class="dialog__header"><p class="dialog__title" id="dg2-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel your booking with Abigail?</p></div>
+              <div class="dialog__body"><p id="dg2-desc">Sat 14 Nov is 36 days away, so cancelling is free. Your $162.50 deposit goes back to your card.</p></div>
+              <div class="dialog__footer">
+                <button class="btn btn--danger" type="button">Cancel booking</button>
+                <button class="btn" type="button" data-state="focus">Keep booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Danger rule on top, warning icon, consequences in dollars and days. Focus starts on “Keep booking”, the safe choice.</span></div>
+      </div>
+      <h3>Account menu and tooltip</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stage on-stage" style="align-items: flex-start; justify-content: space-between;">
+          <span class="tooltip-anchor" style="margin: var(--space-10) 0 0 var(--space-20);"><button class="btn btn--icon" type="button" aria-labelledby="tt-share"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button><span class="tooltip" role="tooltip" id="tt-share" data-state="open">Share Abigail’s profile</span></span>
+          <div class="stack stack--sm" style="align-items: flex-end;">
+            <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="menu" aria-expanded="true" aria-controls="acct-menu">NF</button>
+            <ul class="menu" role="menu" id="acct-menu" aria-label="Account">
+              <li role="none"><a class="menu__item" role="menuitem" href="#structure">Your requests</a></li>
+              <li role="none"><a class="menu__item" role="menuitem" href="#structure" data-state="focus">Saved artists (3)</a></li>
+              <li role="none"><a class="menu__item" role="menuitem" href="#structure">Church details</a></li>
+              <li role="separator" class="menu__sep"></li>
+              <li role="none"><button class="menu__item" role="menuitem" type="button">Sign out</button></li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The tooltip names an icon-only button and is its label (<code>aria-labelledby</code>). The account menu opens under the avatar; focus is on the second item.</span></div>
+      </div>
+      <h3>Phone: the bottom sheet</h3>
+      <p>Below 640px <code>.dialog</code> becomes a sheet: full width, anchored to the bottom, at most 92% of the screen tall, with the footer pinned above the safe area and the buttons stretched to equal widths. The frame below forces that layout at any width.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="justify-content: center;">
+          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: 100%; max-width: 22rem; min-height: 28rem; background: var(--color-bg-backdrop); border: var(--border-width-thick) solid var(--color-border-strong);">
+            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="dg3-title" style="width: 100%; margin: 0; border-inline: 0; border-bottom: 0; box-shadow: none;">
+              <div class="dialog__header"><p class="dialog__title" id="dg3-title">Lock in Sat 14 Nov</p><button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+              <div class="dialog__body"><p>Deposit today <b>$162.50</b>. Free cancellation until Sat 31 Oct.</p></div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button" style="flex: 1 1 auto;">Pay $162.50</button><button class="btn" type="button" style="flex: 1 1 auto;">Not now</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Forced phone layout. In the product this comes from the dialog’s own media query, not inline styles.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">State</th><th scope="col">What changes</th><th scope="col">Markup</th></tr></thead>
+        <tbody>
+          <tr><td>Open</td><td>Backdrop, page inert, dialog slides up 16px and fades in.</td><td><code>dialog.showModal()</code></td></tr>
+          <tr><td>Busy</td><td>Body dims; the primary says “Paying…” and spins; Close and Not now still work until the charge starts.</td><td><code>aria-busy="true"</code> on the dialog and the primary</td></tr>
+          <tr><td>Failed</td><td>An alert at the top of the body; the primary becomes “Try again”. Nothing behind the dialog changes.</td><td><code>.alert--danger.alert--compact</code>, <code>role="alert"</code></td></tr>
+          <tr><td>Done</td><td>The dialog closes; focus returns to the button that opened it; the page shows the result.</td><td><code>dialog.close()</code></td></tr>
+          <tr><td>Menu open</td><td>The trigger shows <code>aria-expanded="true"</code>; the first item has focus.</td><td><code>.menu</code> without <code>hidden</code></td></tr>
+          <tr><td>Tooltip shown</td><td>After 300 ms of hover, or at once on keyboard focus; hides on <kbd>Esc</kbd>.</td><td><code>:hover</code>, <code>:focus-within</code>, <code>data-state="open"</code></td></tr>
+        </tbody>
+      </table></div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="dialog-stage" style="gap: var(--space-6);">
+            <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="dg4-title" aria-busy="true">
+              <div class="dialog__header"><p class="dialog__title" id="dg4-title">Lock in Sat 14 Nov</p></div>
+              <div class="dialog__body"><p>Deposit today <b>$162.50</b>.</p></div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button" aria-busy="true">Paying…</button><button class="btn" type="button" disabled>Not now</button></div>
+            </div>
+            <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="dg5-title">
+              <div class="dialog__header"><p class="dialog__title" id="dg5-title">Lock in Sat 14 Nov</p></div>
+              <div class="dialog__body">
+                <div class="alert alert--danger alert--compact" role="alert"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">Your card was declined</p><p>Nothing was charged. Try again or use another card.</p></div></div>
+                <p>Deposit today <b>$162.50</b>.</p>
+              </div>
+              <div class="dialog__footer"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button><button class="btn" type="button">Not now</button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Busy and failed. “Not now” is disabled only once the charge has started, because cancelling it then would be misleading.</span></div>
+      </div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="dialog dialog--static dialog--danger" role="alertdialog" aria-modal="true" aria-labelledby="th1-title" style="width: 100%;"><div class="dialog__header"><p class="dialog__title" id="th1-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel booking?</p></div><div class="dialog__body"><p>Your $162.50 deposit comes back.</p></div><div class="dialog__footer"><button class="btn btn--danger btn--sm" type="button">Cancel booking</button><button class="btn btn--sm" type="button">Keep booking</button></div></div></div>
+        <div data-theme="dark"><div class="dialog dialog--static dialog--danger" role="alertdialog" aria-modal="true" aria-labelledby="th2-title" style="width: 100%;"><div class="dialog__header"><p class="dialog__title" id="th2-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel booking?</p></div><div class="dialog__body"><p>Your $162.50 deposit comes back.</p></div><div class="dialog__footer"><button class="btn btn--danger btn--sm" type="button">Cancel booking</button><button class="btn btn--sm" type="button">Keep booking</button></div></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Dialogs</b> are centred from 640px, 32rem wide (24rem small, 44rem large), and never taller than the screen minus 32px; the body scrolls, the header and footer stay.</li>
+        <li><b>Below 640px</b> they become bottom sheets: full width, no side borders, up to 92% of the screen, footer sticky above <code>env(safe-area-inset-bottom)</code>, buttons equal width.</li>
+        <li><b>Menus</b> stay anchored to their trigger at every size and flip to open upwards near the bottom of the screen. The phone’s main navigation is a disclosure panel, not a menu (see <a href="navigation-and-page-structure.html">navigation</a>).</li>
+        <li><b>Tooltips</b> do not appear on touch. Icon-only controls on phones need a name that does not depend on the tooltip (<code>aria-labelledby</code> still points at its text).</li>
+        <li><b>Zoom to 400%</b> turns every dialog into the sheet layout, so it reflows without sideways scrolling.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Dialogs are native <code>&lt;dialog&gt;</code> opened with <code>showModal()</code>, labelled by their title and described by their first paragraph (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/">APG Dialog (Modal)</a>). Destructive confirmations use <code>role="alertdialog"</code> (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/alertdialog/">APG Alert Dialog</a>). The account menu follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/">APG Menu Button</a> pattern. Tooltips follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/">APG Tooltip</a> pattern.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Cycles through the dialog’s controls only; the page behind is inert.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the dialog (same as “Not now” or “Keep booking”), the menu or the tooltip. Ignored while a payment is being charged.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd> / <kbd>↓</kbd></td><td>On the avatar: opens the menu and focuses the first item.</td></tr>
+        <tr><td><kbd>↑</kbd> <kbd>↓</kbd> / <kbd>Home</kbd> <kbd>End</kbd></td><td>Moves between menu items; letters jump to the item that starts with them.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>On open, focus goes to the first field, or to the safest action when there is none: “Not now” for payment, “Keep booking” for cancelling. On close, focus returns to the control that opened the dialog. Menus focus their first item on open and return focus to the trigger on <kbd>Esc</kbd>. Tooltips never take focus.</p>
+      <h3>Labelling</h3>
+      <p>Every dialog has a visible title that names the decision, and an icon-only Close with <code>aria-label="Close"</code>. The menu trigger has <code>aria-haspopup="menu"</code>, <code>aria-expanded</code> and a name that says whose menu it is. A tooltip that names an icon button is that button’s label (<code>aria-labelledby</code>); one that adds a hint is its description (<code>aria-describedby</code>).</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Dialog text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Dialog labels (dt)</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Tooltip text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Dialog and menu edge</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: dialog text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: danger button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Dialogs rise 16px and fade in over <code>--duration-slow</code> (260ms); tooltips fade over <code>--duration-fast</code> after a 300ms delay. Under reduced motion both appear at once. The backdrop never animates.</p>
+      <h3>Touch</h3>
+      <p>Footer buttons are 44px tall and, on phones, half the sheet wide each. Close is a 44px square. Menu items are 44px tall. Nothing is reachable only by hover: the tooltip text is also the button’s name.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Titles</b> name the decision. Confirmations are a question with the object: “Cancel your booking with Abigail?”. Payments name the outcome: “Lock in Sat 14 Nov”.</li>
+        <li><b>Body</b> gives the consequences in dollars and dates: “Your $162.50 deposit goes back to your card.” One or two sentences.</li>
+        <li><b>Buttons</b> repeat the verb: “Cancel booking” and “Keep booking”, “Pay $162.50 deposit” and “Not now”. Never “Yes”, “No”, “OK” or “Confirm”.</li>
+        <li><b>Menus</b> use nouns for places (“Your requests”) and verbs for actions (“Sign out”), with counts in brackets: “Saved artists (3)”.</li>
+        <li><b>Tooltips</b> are a short label in sentence case without a full stop: “Share Abigail’s profile”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub"><div class="stub__head"><p class="stub__title">Book Abigail</p></div><button class="btn btn--primary btn--block" type="button">Request to book · Sat 14 Nov</button></div></div><figcaption>Keep the booking request in the stub beside the profile. Nothing is charged, so nothing needs a dialog.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="dialog-stage" style="min-height: 0; padding: var(--space-4);"><div class="dialog dialog--static dialog--sm" role="dialog" aria-label="Booking form in a dialog, wrong example"><div class="dialog__body"><p>Event date, kind of gathering, church, message…</p></div><div class="dialog__footer"><button class="btn btn--primary btn--sm" type="button">Send</button></div></div></div></div><figcaption>A booking form in a modal hides the videos and setlist the church is deciding on.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--danger" type="button">Cancel booking</button><button class="btn" type="button">Keep booking</button></div><figcaption>Buttons that say what each choice does.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--danger" type="button">Yes</button><button class="btn" type="button">No</button></div><figcaption>“Yes” and “No” force the reader back to the question to work out which cancels.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="stub__fine">Deposit today $162.50 (25%). Free cancellation until Sat 31 Oct.</p></div><figcaption>Money and deadlines in the page or the dialog body, where everyone can read them.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas" style="padding-top: var(--space-12);"><span class="tooltip-anchor"><button class="btn btn--sm" type="button" aria-describedby="tt-bad">Deposit</button><span class="tooltip" role="tooltip" id="tt-bad" data-state="open">25%, not refunded after Sat 31 Oct</span></span></div><figcaption>The cancellation rule hidden in a tooltip, which touch users never see.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking request lives in the stub, not a dialog; the icon Share button; fine print with the 14-day cancellation rule</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the avatar “Account menu for Naomi Fraser” and the menu button, both with <code>aria-expanded="false"</code>, promise a menu and a phone panel; “Cancel free up to 14 days before your event”</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Ask Miriam for a recording” jumps to the stub’s message instead of opening an overlay</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>No dialog, menu or tooltip is drawn in the mocks yet. They are part of the core set: the product needs the deposit and cancellation dialogs, the account menu and names for icon-only buttons.</li>
+        <li>The deposit (25%) and the 14-day free cancellation are assumptions from the mocks’ README; the dialogs above follow them.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>
