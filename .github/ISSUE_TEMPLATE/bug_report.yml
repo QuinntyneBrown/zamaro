@@ -1,0 +1,74 @@
+name: Bug report
+description: Report behaviour that does not match the requirements, designs or mocks.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Search [existing issues](https://github.com/QuinntyneBrown/zamaro/issues) first to avoid duplicates.
+
+        **Do not report security vulnerabilities here.** Follow [SECURITY.md](https://github.com/QuinntyneBrown/zamaro/blob/main/SECURITY.md) instead.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Requirements (docs/specs)
+        - Detailed designs (docs/detailed-designs)
+        - Mocks (docs/mocks)
+        - Design system (docs/design-system)
+        - API (Laravel)
+        - Web app (Angular)
+        - End-to-end tests (Playwright)
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to ...
+        2. Select ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What you expected to happen.
+    validations:
+      required: true
+  - type: input
+    id: requirement
+    attributes:
+      label: Related requirement
+      description: The L1 or L2 requirement this breaks, if you know it.
+      placeholder: L2-028
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Commit or branch, browser and version, operating system, light or dark theme, viewport width.
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots and logs
+      description: Add screenshots, recordings or log output. Remove any personal information first.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of conduct
+      options:
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/QuinntyneBrown/zamaro/blob/main/CODE_OF_CONDUCT.md).
+          required: true
