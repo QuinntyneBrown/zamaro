@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Run the booking lifecycle
+
+Person(party, "Booker or artist", "Party to a booking")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(errors, "Error tracking service", "Failed job alerts")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Booking pages, status badge and history timeline")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Applies transitions that people request")
+  Container(worker, "Zamaro Worker", "Laravel scheduler and Horizon", "Expires requests and completes bookings on schedule")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings and booking_transitions")
+  ContainerQueue(queue, "Cache and queue", "Redis", "Queued jobs and unique-job locks")
+}
+Rel(party, web, "Uses", "HTTPS")
+Rel(web, api, "Calls booking endpoints", "JSON/HTTPS")
+Rel(api, db, "Applies transitions and records history", "SQL")
+Rel(api, queue, "Queues event listeners", "RESP")
+Rel(worker, queue, "Takes expiry and completion jobs from", "RESP")
+Rel(worker, db, "Applies scheduled transitions", "SQL")
+Rel(worker, email, "Sends status emails through", "HTTPS")
+Rel(worker, errors, "Reports exhausted jobs to", "HTTPS")
+@enduml

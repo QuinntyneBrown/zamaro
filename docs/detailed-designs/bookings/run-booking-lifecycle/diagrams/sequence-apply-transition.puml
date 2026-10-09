@@ -1,0 +1,71 @@
+@startuml
+title UML sequence behaviour — Apply a requested transition
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Slice controller" as controller
+  participant "Exception handler" as handler
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "Slice action\n(e.g. AcceptBooking)" as action
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Activate an action offered by allowedActions
+page -> client : POST /api/v1/.../{number}/{action}
+client -> controller : HTTPS request with session cookie and XSRF token
+controller -> controller : Authorise with BookingPolicy (404 if not a party)
+controller -> action : handle(booking, input, actor)
+action -> db : BEGIN; load booking FOR UPDATE
+db --> action : Booking (status = from)
+action -> sm : transition(booking, to, actor, reason)
+sm -> sm : Check (from, to) against the L2-029 table
+alt pair not in the table
+  sm --> action : throw InvalidBookingTransition
+  action -> db : ROLLBACK
+  action --> handler : InvalidBookingTransition
+  handler --> client : 409 problem details, currentStatus (L2-029)
+  client --> page : BookingConflictError
+  page -> client : GET /api/v1/bookings/{number}
+  client --> page : Current booking
+  page --> actor : Error toast, status unchanged
+else pair allowed
+  sm -> db : UPDATE bookings SET status = to WHERE id = :id AND status = from
+  alt zero rows updated (another transition won)
+    sm --> action : throw InvalidBookingTransition
+    action -> db : ROLLBACK
+    action --> handler : InvalidBookingTransition
+    handler --> client : 409 problem details (L2-029)
+  else one row updated
+    sm -> db : INSERT booking_transitions (from, to, actor, occurred_at) (L2-029)
+    sm --> action : BookingTransition
+    action -> db : COMMIT
+    sm -> queue : Dispatch domain event after commit
+    action --> controller : Updated booking
+    controller --> client : 200 BookingResource with history
+    client --> page : Booking
+    page --> actor : New status badge and timeline entry
+  end
+end
+@enduml

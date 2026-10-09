@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Withdraw a booking request
+
+Person(booker, "Booker", "Signed-in church representative")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Booking page /bookings/:number")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "POST /api/v1/bookings/{number}/withdraw")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends the artist email")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions")
+  ContainerQueue(queue, "Cache and queue", "Redis", "Queued listeners")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "POST withdraw", "JSON/HTTPS")
+Rel(api, db, "Applies Withdrawn and records history", "SQL")
+Rel(api, queue, "Queues RequestWithdrawn", "RESP")
+Rel(worker, queue, "Takes jobs from", "RESP")
+Rel(worker, email, "Sends through", "HTTPS")
+@enduml

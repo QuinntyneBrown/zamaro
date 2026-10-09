@@ -1,0 +1,83 @@
+@startuml
+title UML sequence behaviour — Send a booking request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingStubComponent" as stub
+  participant "BookingRequestStore" as store
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendBookingRequest" as action
+  participant "AvailabilityService" as avail
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Email delivery service" as email
+end box
+
+actor -> stub : Activate "Request to book · Sat 14 Nov"
+stub -> store : submit(payload)
+store -> store : Create idempotency key, status submitting,\nbutton busy and disabled (L2-108)
+store -> client : create(payload, key)
+client -> controller : POST /api/v1/bookings, Idempotency-Key
+controller -> controller : Booker role, verified email, booking-requests limiter (L2-077)
+controller -> controller : Validate CreateBookingRequest (422 per field)
+controller -> action : handle(booker, data, key)
+action -> db : BEGIN; find booking by (booker, key)
+db --> action : None
+action -> db : Open request for same booker, artist, date
+alt open request exists
+  action --> controller : 409 already-requested
+  controller --> client : "You've already asked {first name} about this date." (L2-028)
+  client --> store : Problem
+  store --> stub : Values kept, inline duplicate notice with link (L2-108)
+else no open request
+  action -> avail : isFree(artist, date)
+  avail -> db : Overrides, weekly rules, Confirmed bookings
+  db --> avail : Blocking state
+  alt artist no longer free
+    avail --> action : false
+    action -> avail : nextFreeDates(artist, date, 3)
+    avail --> action : Three dates
+    action --> controller : 409 artist-not-free with nextFreeDates
+    controller --> client : "{first name} was just booked for {date}." (L2-028)
+    client --> store : Problem
+    store --> stub : NextFreeDatesComponent with three date chips
+  else artist free
+    avail --> action : true
+    action -> action : Lock quoted price from "From" price, HST (L2-028, L2-036)
+    action -> action : Snapshot church, respond_by 72 h or 24 h (L2-030)
+    action -> db : INSERT booking status Requested, no payment row (L2-028)
+    action -> sm : start(booking, booker)
+    sm -> db : INSERT booking_transitions (null -> Requested)
+    action -> db : INSERT first message if present (L2-046)
+    action -> db : COMMIT
+    sm -> queue : BookingRequested after commit
+    queue -> email : New-request email to artist within 2 minutes (L2-063)
+    action --> controller : SendResult(booking, replayed = false)
+    controller --> client : 201 BookingResource
+    client --> store : BookingCreated
+    store --> stub : status sent
+    stub --> actor : "Request sent to {first name}" with booking number (L2-028)
+  end
+end
+@enduml

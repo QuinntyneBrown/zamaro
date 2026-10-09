@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Respond to a booking request
+
+Container(web, "Zamaro Web", "Angular", "ArtistRequestsPage, ArtistRequestsStore, ArtistRequestsApi")
+Container(worker, "Zamaro Worker", "Laravel queue", "RequestAccepted and RequestDeclined listeners")
+System_Ext(routing, "Routing provider", "Driving distance")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ArtistRequestsController", "Laravel controller", "index, accept, decline under /api/v1/artist/requests")
+  Component(policy, "BookingPolicy", "Policy", "respond: artist of the booking, else 404")
+  Component(list, "ListArtistRequests", "Query action", "Requested bookings by respond_by")
+  Component(accept, "AcceptBooking", "Action", "Artist lock, Confirmed-date check, Requested -> Accepted")
+  Component(decline, "DeclineBooking", "Action", "Requested -> Declined with optional reason")
+  Component(dist, "DistanceService", "Domain service", "Distance to church with cache")
+  Component(price, "PriceBreakdown", "Value object", "Payout after the 8 % fee")
+  Component(sm, "BookingStateMachine", "Domain service", "Applies transition and history")
+  Component(similar, "SimilarArtistFinder", "Domain service", "Up to 3 similar artists free on the date")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions, messages")
+}
+Rel(web, ctrl, "GET and POST", "JSON/HTTPS")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, list, "index")
+Rel(ctrl, accept, "accept")
+Rel(ctrl, decline, "decline")
+Rel(list, db, "Reads Requested bookings and recipient message view", "SQL")
+Rel(list, dist, "Measures distance")
+Rel(dist, routing, "Uncached pairs", "HTTPS/JSON")
+Rel(list, price, "Computes payout")
+Rel(accept, db, "Locks artist row, checks Confirmed date", "SQL")
+Rel(accept, sm, "transition(Accepted, artist)")
+Rel(decline, sm, "transition(Declined, artist, reason)")
+Rel(sm, db, "Writes status and history", "SQL")
+Rel(sm, worker, "Domain events after commit", "Redis queue")
+Rel(worker, similar, "Uses for decline email")
+@enduml

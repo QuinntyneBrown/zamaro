@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — View the booker's bookings
+
+Container(web, "Zamaro Web", "Angular", "BookingsPage, BookingDetailPage, BookingsStore, BookingsApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "BookingsController", "Laravel controller", "index and show")
+  Component(req, "ListBookingsRequest", "FormRequest", "group = upcoming or past, cursor")
+  Component(scope, "Booking::visibleTo", "Eloquent scope", "Booker or artist of the booking, else 404")
+  Component(list, "ListBookerBookings", "Query action", "Upcoming ascending, Past descending, amount paid")
+  Component(next, "BookingNextAction", "Domain service", "Pay deposit, Message, Cancel, Leave a review")
+  Component(sm, "BookingStateMachine", "Domain service", "allowedFrom for allowedActions")
+  Component(sumres, "BookingSummaryResource", "API resource", "List item")
+  Component(detres, "BookingResource", "API resource", "Detail with history, contacts, freeCancellationUntil")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, artists")
+}
+Rel(web, ctrl, "GET", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, list, "index")
+Rel(ctrl, scope, "show: resolves {number} through")
+Rel(list, db, "Scoped, ordered query with withSum", "SQL")
+Rel(scope, db, "WHERE number = ? AND (booker_id = ? OR artist user = ?)", "SQL")
+Rel(sumres, next, "Asks for next action")
+Rel(detres, sm, "Asks for allowed transitions")
+Rel(ctrl, sumres, "Returns list of")
+Rel(ctrl, detres, "Returns")
+@enduml

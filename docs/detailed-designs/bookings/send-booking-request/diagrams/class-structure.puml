@@ -1,0 +1,131 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Send a booking request
+
+package "Zamaro Web (Angular)" {
+  class BookingStubComponent {
+    +form: FormGroup<BookingStubForm>
+    +store: BookingRequestStore
+    +onSubmit(): void
+    +onRetry(): void
+  }
+  class BookingRequestStore {
+    +status: Signal<'idle'|'submitting'|'sent'|'failed'>
+    +problem: Signal<BookingProblem | null>
+    +booking: Signal<BookingCreated | null>
+    -idempotencyKey: string | null
+    +submit(payload: CreateBookingPayload): void
+    +retry(): void
+    +onFormChanged(): void
+  }
+  class BookingsApi {
+    +create(payload: CreateBookingPayload, idempotencyKey: string): Observable<BookingCreated>
+  }
+  class RequestSentComponent {
+    +artistFirstName: InputSignal<string>
+    +bookingNumber: InputSignal<string>
+  }
+  class NextFreeDatesComponent {
+    +dates: InputSignal<string[]>
+    +picked: OutputEmitterRef<string>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class BookingsController {
+    +store(request: CreateBookingRequest): JsonResponse
+  }
+  class CreateBookingRequest <<FormRequest>> {
+    +rules(): array
+    +toData(): BookingRequestData
+    +idempotencyKey(): string
+  }
+  class BookingRequestData <<value object>> {
+    +Artist artist
+    +CarbonImmutable eventDate
+    +GatheringKind gatheringKind
+    +string startTime
+    +?string message
+    +fingerprint(): string
+  }
+  class SendBookingRequest <<action>> {
+    +handle(booker: User, data: BookingRequestData, key: string): SendResult
+  }
+  class SendResult <<value object>> {
+    +Booking booking
+    +bool replayed
+  }
+  class AvailabilityService {
+    +isFree(artist: Artist, date: CarbonImmutable): bool
+    +nextFreeDates(artist: Artist, after: CarbonImmutable, count: int): CarbonImmutable[]
+  }
+  class PriceBreakdown <<value object>> {
+    +{static} forQuote(quotedCents: int, hasHst: bool): PriceBreakdown
+    +int hstCents
+  }
+  class BookingStateMachine {
+    +start(booking: Booking, actor: TransitionActor): BookingTransition
+  }
+  class BookingNumberGenerator {
+    +next(): string
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +int artistId
+    +int bookerId
+    +int churchId
+    +string churchName
+    +string churchAddress
+    +CarbonImmutable eventDate
+    +string startTime
+    +GatheringKind gatheringKind
+    +int quotedPriceCents
+    +int hstCents
+    +BookingStatus status
+    +CarbonImmutable respondBy
+    +string idempotencyKey
+    +string requestFingerprint
+  }
+  class Church <<Eloquent>> {
+    +string name
+    +string address
+    +float latitude
+    +float longitude
+  }
+  class BookingProblem <<problem details>> {
+    +string type
+    +int status
+    +string detail
+    +?array nextFreeDates
+    +?string existingBookingNumber
+  }
+}
+
+BookingStubComponent --> BookingRequestStore
+BookingStubComponent ..> RequestSentComponent : shows on success
+BookingStubComponent ..> NextFreeDatesComponent : shows on artist-not-free
+BookingRequestStore --> BookingsApi
+BookingsApi ..> BookingsController : POST /api/v1/bookings
+BookingsController ..> CreateBookingRequest : validates
+CreateBookingRequest ..> BookingRequestData : creates
+BookingsController --> SendBookingRequest
+SendBookingRequest --> AvailabilityService
+SendBookingRequest ..> PriceBreakdown : locks price
+SendBookingRequest --> BookingStateMachine
+SendBookingRequest --> BookingNumberGenerator
+SendBookingRequest ..> SendResult : returns
+SendBookingRequest ..> BookingProblem : 409 / 422
+SendResult --> Booking
+Booking --> Church : snapshot of
+@enduml

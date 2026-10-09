@@ -1,0 +1,124 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — View the booker's bookings
+
+package "Zamaro Web (Angular)" {
+  class BookingsPage {
+    +store: BookingsStore
+    +onShowMore(group: BookingGroupName): void
+  }
+  class BookingListItemComponent {
+    +booking: InputSignal<BookingSummary>
+    +action: OutputEmitterRef<NextAction>
+  }
+  class BookingsStore {
+    +upcoming: Signal<BookingGroup>
+    +past: Signal<BookingGroup>
+    +load(): void
+    +loadMore(group: BookingGroupName): void
+  }
+  class BookingDetailPage {
+    +store: BookingDetailStore
+  }
+  class BookingDetailStore {
+    +booking: Signal<BookingDetail | null>
+    +status: Signal<'loading'|'loaded'|'not-found'|'error'>
+    +load(number: string): void
+  }
+  class BookingsApi {
+    +list(group: BookingGroupName, cursor?: string): Observable<Page<BookingSummary>>
+    +get(number: string): Observable<BookingDetail>
+  }
+  class BookingGroup {
+    +items: BookingSummary[]
+    +nextCursor: string | null
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class BookingsController {
+    +index(request: ListBookingsRequest): ResourceCollection
+    +show(booking: Booking): BookingResource
+  }
+  class ListBookingsRequest <<FormRequest>> {
+    +rules(): array
+  }
+  class ListBookerBookings <<action>> {
+    +handle(booker: User, group: string, cursor: ?string): CursorPaginator
+  }
+  class BookingNextAction {
+    +for(booking: Booking, party: User): ?NextAction
+  }
+  enum NextAction {
+    PayDeposit
+    Message
+    Cancel
+    LeaveReview
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +int bookerId
+    +int artistId
+    +CarbonImmutable eventDate
+    +GatheringKind gatheringKind
+    +BookingStatus status
+    +int amountPaidCents
+    +scopeVisibleTo(query: Builder, user: User): Builder
+  }
+  class BookingSummaryResource <<API resource>> {
+    +string number
+    +ArtistSummary artist
+    +string eventDate
+    +GatheringKind gatheringKind
+    +BookingStatus status
+    +int amountPaidCents
+    +?NextAction nextAction
+  }
+  class BookingResource <<API resource>> {
+    +string startTime
+    +ChurchSnapshot church
+    +int quotedPriceCents
+    +int hstCents
+    +string[] allowedActions
+    +BookingHistoryEntry[] history
+    +?string freeCancellationUntil
+    +?BookingContacts contacts
+  }
+  class Payment <<Eloquent>> {
+    +int amountCents
+    +PaymentStatus status
+  }
+  class Refund <<Eloquent>> {
+    +int amountCents
+    +string status
+  }
+}
+
+BookingsPage --> BookingsStore
+BookingsPage *-- BookingListItemComponent
+BookingsStore --> BookingsApi
+BookingsStore *-- BookingGroup
+BookingDetailPage --> BookingDetailStore
+BookingDetailStore --> BookingsApi
+BookingsApi ..> BookingsController : GET /api/v1/bookings
+BookingsController ..> ListBookingsRequest : validates
+BookingsController --> ListBookerBookings
+ListBookerBookings ..> Booking : queries
+BookingSummaryResource --> Booking
+BookingSummaryResource ..> BookingNextAction : uses
+BookingNextAction ..> NextAction : returns
+BookingSummaryResource <|-- BookingResource
+Booking "1" *-- "*" Payment
+Payment "1" *-- "*" Refund
+@enduml

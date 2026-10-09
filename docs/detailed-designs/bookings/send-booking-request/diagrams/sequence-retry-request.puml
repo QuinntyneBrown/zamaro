@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Retry a booking request after a network failure
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingStubComponent" as stub
+  participant "BookingRequestStore" as store
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendBookingRequest" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> stub : Activate submit
+stub -> store : submit(payload)
+store -> store : key = crypto.randomUUID(), status submitting
+actor -> stub : Activate submit again
+stub -> stub : Ignored while busy and disabled (L2-108)
+store -> client : create(payload, key)
+client -> controller : POST /api/v1/bookings, Idempotency-Key: key
+controller -> action : handle(booker, data, key)
+action -> db : INSERT booking, COMMIT
+controller -x client : Response lost (network failure)
+client --> store : Network error
+store --> stub : status failed, every value kept (L2-108)
+stub --> actor : Error with Try again
+actor -> stub : Activate Try again
+stub -> store : retry()
+store -> client : create(payload, same key) (L2-108)
+client -> controller : POST /api/v1/bookings, Idempotency-Key: key
+controller -> action : handle(booker, data, key)
+action -> db : Find booking by (booker, key)
+db --> action : Booking from the first attempt
+alt fingerprint matches
+  action --> controller : SendResult(booking, replayed = true)
+  controller --> client : 200 BookingResource, Idempotency-Replayed: true
+  client --> store : BookingCreated
+  store --> stub : status sent, key discarded
+  stub --> actor : "Request sent to {first name}" with booking number, one booking only
+else fingerprint differs (payload changed with the same key)
+  action --> controller : 422 idempotency-key-reused
+  controller --> client : Problem details
+  client --> store : Problem
+  store --> stub : New key on next submit
+end
+@enduml

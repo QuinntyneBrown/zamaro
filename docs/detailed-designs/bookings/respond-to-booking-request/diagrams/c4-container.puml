@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Respond to a booking request
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(routing, "Routing provider", "Driving distance")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Artist workspace: /artist/requests")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/artist/requests endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Similar artists and booker emails")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions, artists")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Distance cache and queued listeners")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "Lists, accepts and declines requests", "JSON/HTTPS")
+Rel(api, db, "Reads requests and applies transitions", "SQL")
+Rel(api, cache, "Reads cached distances, queues events", "RESP")
+Rel(api, routing, "Requests uncached distances", "HTTPS/JSON")
+Rel(worker, cache, "Takes RequestAccepted and RequestDeclined", "RESP")
+Rel(worker, db, "Finds similar free artists", "SQL")
+Rel(worker, email, "Sends booker email through", "HTTPS")
+@enduml

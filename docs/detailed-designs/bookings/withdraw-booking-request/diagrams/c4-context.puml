@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Withdraw a booking request
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Withdraws a Requested or Accepted booking using", "HTTPS")
+Rel(zamaro, email, "Sends the withdrawal email through", "HTTPS")
+Rel(email, artist, "Delivers the withdrawal email to")
+@enduml

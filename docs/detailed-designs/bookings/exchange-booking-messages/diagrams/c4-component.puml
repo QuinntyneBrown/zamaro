@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Exchange booking messages
+
+Container(web, "Zamaro Web", "Angular", "MessageThreadComponent, MessageComposerComponent, MessagesStore, MessagesApi")
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "BookingMessagesController", "Laravel controller", "index, store, markRead")
+  Component(actrl, "Admin\\BookingMessagesController", "Laravel controller", "Read-only index under /api/v1/admin")
+  Component(policy, "BookingPolicy", "Policy", "message: party only, else 404")
+  Component(send, "SendBookingMessage", "Action", "Stores body and recipient view")
+  Component(redactor, "ContactRedactor", "Domain service", "Replaces emails and phone numbers")
+  Component(audit, "RecordAuditEntry", "Action", "Audits administrator views")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "messages, message_digests, audit_entries")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(sched, "ScheduleUnreadDigest", "Queued listener", "Now, or delayed to the end of the 15-minute window")
+  Component(digest, "SendUnreadMessagesDigest", "Queued job", "Emails unread recipient views")
+}
+Rel(web, ctrl, "GET, POST", "JSON/HTTPS")
+Rel(web, actrl, "GET (admin page)", "JSON/HTTPS")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, send, "store")
+Rel(send, redactor, "Booking not Confirmed: redact")
+Rel(send, db, "INSERT message", "SQL")
+Rel(ctrl, db, "Reads thread, sets read_at", "SQL")
+Rel(actrl, audit, "Records booking.messages.viewed")
+Rel(audit, db, "INSERT audit entry", "SQL")
+Rel(send, sched, "BookingMessageSent after commit", "Redis queue")
+Rel(sched, digest, "Dispatches now or delayed")
+Rel(digest, db, "Unread messages, digest state", "SQL")
+Rel(digest, email, "NewBookingMessagesNotification", "HTTPS")
+@enduml

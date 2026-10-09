@@ -1,0 +1,128 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Cancel a booking
+
+package "Zamaro Web (Angular)" {
+  class CancelBookingDialogComponent {
+    +quote: Signal<CancellationQuote | null>
+    +step: Signal<'review'|'confirm'>
+    +busy: Signal<bool>
+    +confirm(): void
+  }
+  class ArtistCancelBookingDialogComponent {
+    +reason: FormControl<string>
+    +confirm(): void
+  }
+  class CancellationPolicyNoticeComponent {
+    +policyUrl: string
+  }
+  class BookingsApi {
+    +cancellationQuote(number: string): Observable<CancellationQuote>
+    +cancel(number: string, expectedRefundCents: number): Observable<BookingDetail>
+  }
+  class ArtistBookingsApi {
+    +cancel(number: string, reason: string): Observable<BookingDetail>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class BookingCancellationController {
+    +quote(booking: Booking): CancellationQuoteResource
+    +store(request: CancelBookingRequest, booking: Booking): BookingResource
+  }
+  class ArtistBookingCancellationController {
+    +__invoke(request: ArtistCancelBookingRequest, booking: Booking): BookingResource
+  }
+  class CancellationPolicy {
+    +freeCancellationUntil(booking: Booking): CarbonImmutable
+    +forBooker(booking: Booking, now: CarbonImmutable): CancellationQuote
+    +forArtist(booking: Booking): CancellationQuote
+  }
+  class CancellationQuote <<value object>> {
+    +bool early
+    +int paidCents
+    +int refundCents
+    +int compensationCents
+    +int feeCents
+    +CarbonImmutable freeUntil
+  }
+  class CancelBookingAsBooker <<action>> {
+    +handle(booking: Booking, booker: User, expectedRefundCents: int): Booking
+  }
+  class CancelBookingAsArtist <<action>> {
+    +handle(booking: Booking, artistUser: User, reason: string): Booking
+    -cancellationsInLast12Months(artist: Artist): int
+  }
+  class IssueCancellationRefund <<job>> {
+    +int refundId
+    +int tries = 5
+    +backoff(): int[]
+    +handle(gateway: PaymentGateway): void
+  }
+  interface PaymentGateway {
+    +refund(processorPaymentId: string, amountCents: int, key: IdempotencyKey): ProcessorRefund
+  }
+  class Booking <<Eloquent>> {
+    +BookingStatus status
+    +CarbonImmutable eventDate
+    +?ActorKind cancelledBy
+    +?string cancellationReason
+    +?int cancellationRefundCents
+    +?int cancellationCompensationCents
+  }
+  class Payment <<Eloquent>> {
+    +PaymentKind kind
+    +int amountCents
+    +string processorPaymentId
+    +PaymentStatus status
+  }
+  class Refund <<Eloquent>> {
+    +int paymentId
+    +int amountCents
+    +?string processorRefundId
+    +string status
+    +string reason
+  }
+  class Payout <<Eloquent>> {
+    +int bookingId
+    +int amountCents
+    +int feeCents
+    +string status
+  }
+  class BookingStateMachine {
+    +transition(booking: Booking, to: BookingStatus, actor: TransitionActor, reason: ?string): BookingTransition
+  }
+}
+
+CancelBookingDialogComponent --> BookingsApi
+ArtistCancelBookingDialogComponent --> ArtistBookingsApi
+BookingsApi ..> BookingCancellationController : /api/v1/bookings/{number}/cancel
+ArtistBookingsApi ..> ArtistBookingCancellationController : /api/v1/artist/bookings/{number}/cancel
+BookingCancellationController --> CancellationPolicy
+BookingCancellationController --> CancelBookingAsBooker
+ArtistBookingCancellationController --> CancelBookingAsArtist
+CancellationPolicy ..> CancellationQuote : creates
+CancelBookingAsBooker --> CancellationPolicy
+CancelBookingAsArtist --> CancellationPolicy
+CancelBookingAsBooker --> BookingStateMachine
+CancelBookingAsArtist --> BookingStateMachine
+CancelBookingAsBooker ..> Refund : early: creates
+CancelBookingAsBooker ..> Payout : late: creates
+CancelBookingAsArtist ..> Refund : creates per payment
+IssueCancellationRefund --> Refund
+IssueCancellationRefund --> PaymentGateway
+Booking "1" *-- "*" Payment
+Payment "1" *-- "*" Refund
+Booking "1" *-- "0..*" Payout
+@enduml

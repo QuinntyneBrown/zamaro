@@ -1,0 +1,123 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Respond to a booking request
+
+package "Zamaro Web (Angular)" {
+  class ArtistRequestsPage {
+    +store: ArtistRequestsStore
+    +onAccept(number: string): void
+    +onDecline(number: string): void
+  }
+  class RequestCardComponent {
+    +request: InputSignal<ArtistRequest>
+    +timeLeft: Signal<string>
+    +accept: OutputEmitterRef<void>
+    +decline: OutputEmitterRef<void>
+  }
+  class DeclineRequestDialogComponent {
+    +reason: FormControl<string>
+    +confirm(): void
+  }
+  class ArtistRequestsStore {
+    +requests: Signal<ArtistRequest[]>
+    +busyNumber: Signal<string | null>
+    +load(): void
+    +accept(number: string): void
+    +decline(number: string, reason?: string): void
+  }
+  class ArtistRequestsApi {
+    +list(cursor?: string): Observable<Page<ArtistRequest>>
+    +accept(number: string): Observable<void>
+    +decline(number: string, reason?: string): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistRequestsController {
+    +index(): ResourceCollection
+    +accept(request: AcceptBookingRequest, booking: Booking): JsonResponse
+    +decline(request: DeclineBookingRequest, booking: Booking): JsonResponse
+  }
+  class DeclineBookingRequest <<FormRequest>> {
+    +rules(): array
+  }
+  class ListArtistRequests <<action>> {
+    +handle(artist: Artist, cursor: ?string): CursorPaginator
+  }
+  class ArtistRequestResource <<API resource>> {
+    +string number
+    +string churchName
+    +string city
+    +Distance distance
+    +string eventDate
+    +GatheringKind gatheringKind
+    +string startTime
+    +?string message
+    +int quotedPriceCents
+    +int payoutCents
+    +string respondBy
+  }
+  class AcceptBooking <<action>> {
+    +handle(booking: Booking, artistUser: User): Booking
+  }
+  class DeclineBooking <<action>> {
+    +handle(booking: Booking, artistUser: User, reason: ?string): Booking
+  }
+  class BookingStateMachine {
+    +transition(booking: Booking, to: BookingStatus, actor: TransitionActor, reason: ?string): BookingTransition
+  }
+  class SimilarArtistFinder {
+    +freeOn(artist: Artist, date: CarbonImmutable, church: Church, limit: int): Artist[]
+  }
+  class DistanceService {
+    +between(from: Coordinates, to: Coordinates): Distance
+  }
+  class PriceBreakdown <<value object>> {
+    +{static} forBooking(booking: Booking): PriceBreakdown
+    +int totalCents
+    +int feeCents
+    +int artistPayoutCents
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+    +CarbonImmutable respondBy
+    +?CarbonImmutable acceptedAt
+    +?CarbonImmutable depositDueBy
+    +?string declineReason
+  }
+  class RequestDeclined <<event>> {
+    +int bookingId
+    +?string reason
+  }
+}
+
+ArtistRequestsPage --> ArtistRequestsStore
+ArtistRequestsPage *-- RequestCardComponent
+ArtistRequestsPage ..> DeclineRequestDialogComponent : opens
+ArtistRequestsStore --> ArtistRequestsApi
+ArtistRequestsApi ..> ArtistRequestsController : /api/v1/artist/requests
+ArtistRequestsController --> ListArtistRequests
+ArtistRequestsController --> AcceptBooking
+ArtistRequestsController --> DeclineBooking
+ArtistRequestsController ..> DeclineBookingRequest : validates
+ListArtistRequests ..> ArtistRequestResource : builds
+ListArtistRequests --> DistanceService
+ListArtistRequests --> PriceBreakdown
+AcceptBooking --> BookingStateMachine
+DeclineBooking --> BookingStateMachine
+BookingStateMachine ..> Booking : updates
+BookingStateMachine ..> RequestDeclined : dispatches
+RequestDeclined ..> SimilarArtistFinder : listener uses
+@enduml

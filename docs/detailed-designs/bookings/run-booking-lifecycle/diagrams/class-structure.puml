@@ -1,0 +1,139 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Run the booking lifecycle
+
+package "Zamaro Web (Angular)" {
+  class BookingTimelineComponent {
+    +history: InputSignal<BookingHistoryEntry[]>
+  }
+  class BookingStatusBadgeComponent {
+    +status: InputSignal<BookingStatus>
+  }
+  class BookingConflictError {
+    +currentStatus: BookingStatus
+    +detail: string
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  enum BookingStatus {
+    Requested
+    Accepted
+    Confirmed
+    Completed
+    Declined
+    Withdrawn
+    Expired
+    Cancelled
+    +isOpen(): bool
+    +isTerminal(): bool
+  }
+  enum ActorKind {
+    Booker
+    Artist
+    Administrator
+    System
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventDate
+    +string startTime
+    +CarbonImmutable eventStartsAt
+    +CarbonImmutable respondBy
+    +?CarbonImmutable depositDueBy
+  }
+  class BookingTransition <<Eloquent>> {
+    +int id
+    +int bookingId
+    +?BookingStatus fromStatus
+    +BookingStatus toStatus
+    +ActorKind actorKind
+    +?int actorId
+    +?string reason
+    +CarbonImmutable occurredAt
+  }
+  class TransitionActor <<value object>> {
+    +ActorKind kind
+    +?int userId
+    +{static} booker(user: User): TransitionActor
+    +{static} artist(user: User): TransitionActor
+    +{static} administrator(user: User): TransitionActor
+    +{static} system(): TransitionActor
+  }
+  class BookingStateMachine {
+    -array TABLE
+    +start(booking: Booking, actor: TransitionActor): BookingTransition
+    +transition(booking: Booking, to: BookingStatus, actor: TransitionActor, reason: ?string): BookingTransition
+    +canTransition(from: BookingStatus, to: BookingStatus): bool
+    +allowedFrom(from: BookingStatus): BookingStatus[]
+  }
+  class InvalidBookingTransition <<exception>> {
+    +string bookingNumber
+    +BookingStatus current
+    +BookingStatus attempted
+  }
+  class BookingDeadlines {
+    +respondBy(createdAt: CarbonImmutable, eventStartsAt: CarbonImmutable): CarbonImmutable
+    +eventStartsAt(date: CarbonImmutable, startTime: string): CarbonImmutable
+  }
+  abstract class BookingStatusEvent <<event>> {
+    +int bookingId
+    +BookingTransition transition
+  }
+  class RequestExpired <<event>>
+  class BookingCompleted <<event>>
+  class ExpireOverdueRequests <<command>> {
+    +handle(): void
+  }
+  class ExpireBookingRequest <<job>> {
+    +int bookingId
+    +int tries = 5
+    +backoff(): int[]
+    +uniqueId(): string
+    +handle(machine: BookingStateMachine): void
+    +failed(e: Throwable): void
+  }
+  class CompleteFinishedBookings <<command>> {
+    +handle(): void
+  }
+  class CompleteBooking <<job>> {
+    +int bookingId
+    +int tries = 5
+    +backoff(): int[]
+    +uniqueId(): string
+    +handle(machine: BookingStateMachine): void
+    +failed(e: Throwable): void
+  }
+}
+
+Booking --> BookingStatus
+Booking "1" *-- "1..*" BookingTransition : history
+BookingTransition --> ActorKind
+TransitionActor --> ActorKind
+BookingStateMachine ..> Booking : updates status
+BookingStateMachine ..> BookingTransition : records
+BookingStateMachine ..> TransitionActor : takes
+BookingStateMachine ..> InvalidBookingTransition : throws
+BookingStateMachine ..> BookingStatusEvent : dispatches after commit
+BookingStatusEvent <|-- RequestExpired
+BookingStatusEvent <|-- BookingCompleted
+ExpireOverdueRequests ..> ExpireBookingRequest : dispatches
+CompleteFinishedBookings ..> CompleteBooking : dispatches
+ExpireBookingRequest --> BookingStateMachine
+CompleteBooking --> BookingStateMachine
+BookingTimelineComponent ..> BookingTransition : renders history of
+BookingConflictError ..> InvalidBookingTransition : mirrors 409
+@enduml

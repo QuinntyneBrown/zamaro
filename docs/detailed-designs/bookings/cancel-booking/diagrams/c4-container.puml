@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Cancel a booking
+
+Person(party, "Booker or artist", "Party to a Confirmed booking")
+System_Ext(pay, "Payment processor", "Refunds")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Booking pages, cancel dialogs, policy notice")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Cancellation quote and cancel endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Refund jobs, emails, admin alert")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, payouts, booking_transitions")
+  ContainerQueue(queue, "Cache and queue", "Redis", "Queued jobs")
+}
+Rel(party, web, "Uses", "HTTPS")
+Rel(web, api, "Gets quote and cancels", "JSON/HTTPS")
+Rel(api, db, "Cancels and writes pending refunds or payout", "SQL")
+Rel(api, queue, "Queues refund jobs and events", "RESP")
+Rel(worker, queue, "Takes jobs from", "RESP")
+Rel(worker, pay, "Sends refunds", "HTTPS/JSON")
+Rel(worker, db, "Records processor refund IDs", "SQL")
+Rel(worker, email, "Sends emails through", "HTTPS")
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Withdraw a booking request
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, WithdrawRequestDialogComponent, BookingsApi")
+Container(worker, "Zamaro Worker", "Laravel queue", "RequestWithdrawn listener sends the artist email")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "BookingWithdrawalController", "Invokable controller", "POST /api/v1/bookings/{number}/withdraw")
+  Component(policy, "BookingPolicy", "Policy", "withdraw: booker of the booking, else 404")
+  Component(action, "WithdrawBooking", "Action", "Requested or Accepted -> Withdrawn")
+  Component(sm, "BookingStateMachine", "Domain service", "Checks table, conditional update, history")
+  Component(res, "BookingResource", "API resource", "Status, history, allowedActions")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions")
+}
+Rel(web, ctrl, "POST", "JSON/HTTPS")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, action, "Calls")
+Rel(action, sm, "transition(Withdrawn, booker)")
+Rel(sm, db, "Writes status and history", "SQL")
+Rel(sm, worker, "RequestWithdrawn after commit", "Redis queue")
+Rel(ctrl, res, "Returns")
+@enduml

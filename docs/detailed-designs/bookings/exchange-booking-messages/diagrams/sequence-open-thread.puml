@@ -1,0 +1,73 @@
+@startuml
+title UML sequence behaviour — Open a booking thread
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage or AdminBookingPage" as page
+  participant "MessageThreadComponent" as thread
+  participant "MessagesApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingMessagesController" as controller
+  participant "Admin\\BookingMessagesController" as actrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+alt booker or artist of the booking
+  actor -> page : Open /bookings/{number} or /artist/bookings/{number}
+  opt booking is Confirmed
+    page --> actor : Contact card: church phone, artist phone and email (L2-046)
+  end
+  page -> thread : Render with readOnly = false
+  thread -> client : list(number)
+  client -> controller : GET /api/v1/bookings/{number}/messages
+  controller -> db : Booking visible to user, messages ordered by id
+  db --> controller : Messages
+  controller --> client : 200, body for own messages, recipient_body for the other party's
+  client --> thread : Messages
+  thread -> client : markRead(number)
+  client -> controller : POST /api/v1/bookings/{number}/messages/read
+  controller -> db : read_at = now where recipient = user
+  thread --> actor : Thread with composer (L2-045)
+else administrator
+  actor -> page : Open admin booking page
+  page -> thread : Render with readOnly = true
+  thread -> client : adminList(number)
+  client -> actrl : GET /api/v1/admin/bookings/{number}/messages
+  actrl -> actrl : Administrator role, else 404 (L2-066)
+  actrl -> audit : booking.messages.viewed, actor, target, IP, outcome (L2-045, L2-069)
+  audit -> db : INSERT audit entry
+  actrl -> db : Messages, read_at untouched
+  actrl --> client : 200 with readOnly = true
+  client --> thread : Messages
+  thread --> actor : Thread without composer (L2-045)
+else any other user
+  actor -> page : Open /bookings/{number}
+  page -> thread : Render
+  thread -> client : list(number)
+  client -> controller : GET /api/v1/bookings/{number}/messages
+  controller -> db : Booking visible to user
+  db --> controller : No row
+  controller --> client : 404 problem details, no data (L2-045, L2-074)
+  client --> page : Not found
+  page --> actor : Not-found state
+end
+@enduml

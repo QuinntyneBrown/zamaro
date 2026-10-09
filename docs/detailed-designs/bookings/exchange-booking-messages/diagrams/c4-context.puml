@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Exchange booking messages
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Messages the artist about a booking using", "HTTPS")
+Rel(artist, zamaro, "Messages the booker about a booking using", "HTTPS")
+Rel(admin, zamaro, "Reads threads, read-only, using", "HTTPS")
+Rel(zamaro, email, "Sends unread-message digests through", "HTTPS")
+@enduml

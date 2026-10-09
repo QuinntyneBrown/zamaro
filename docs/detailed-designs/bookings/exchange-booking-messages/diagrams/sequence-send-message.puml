@@ -1,0 +1,80 @@
+@startuml
+title UML sequence behaviour — Send a booking message
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "MessageComposerComponent" as composer
+  participant "MessagesStore" as store
+  participant "MessagesApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingMessagesController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ScheduleUnreadDigest" as sched
+  participant "SendUnreadMessagesDigest" as digest
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendBookingMessage" as action
+  participant "ContactRedactor" as redactor
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Email delivery service" as email
+end box
+
+actor -> composer : Type message, activate Send
+composer -> store : send(body)
+store -> store : Busy, second send blocked (L2-108)
+store -> client : send(number, body)
+client -> controller : POST /api/v1/bookings/{number}/messages
+controller -> controller : Party of the booking, else 404 (L2-045)
+controller -> controller : Validate 1-2,000 characters, plain text (L2-045)
+controller -> action : handle(booking, sender, body)
+alt booking is not Confirmed
+  action -> redactor : redact(body) (L2-046)
+  redactor --> action : "[contact details shared after booking]" in place of emails and phones
+else Confirmed
+  action -> action : recipient view = body
+end
+action -> db : INSERT message (body, recipient_body, redacted)
+action -> queue : BookingMessageSent after commit
+action --> controller : Message
+controller --> client : 201 MessageResource with redacted flag
+client --> store : Sent message
+store --> composer : Clear draft
+opt redacted
+  composer --> actor : Note explaining contact details are shared after booking (L2-046)
+end
+queue -> sched : BookingMessageSent
+sched -> db : message_digests row for booking and recipient
+alt no digest sent in the last 15 minutes
+  sched -> queue : Dispatch SendUnreadMessagesDigest now
+else digest sent recently and none scheduled
+  sched -> queue : Dispatch delayed to last_sent_at + 15 min, set scheduled_for (L2-045)
+else already scheduled
+  sched -> sched : Nothing to do
+end
+queue -> digest : Deliver
+digest -> db : Lock digest row; unread messages for recipient
+alt unread messages remain
+  digest -> email : One email summarising unread recipient views (L2-045, L2-063)
+  digest -> db : last_sent_at = now, scheduled_for = null
+else all read
+  digest -> db : scheduled_for = null
+end
+@enduml

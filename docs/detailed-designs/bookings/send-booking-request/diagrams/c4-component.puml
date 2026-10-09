@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Send a booking request
+
+Container(web, "Zamaro Web", "Angular", "BookingStubComponent, BookingRequestStore, BookingsApi")
+ContainerQueue(queue, "Cache and queue", "Redis", "Rate limiter and queued listeners")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "BookingsController@store", "Laravel controller", "POST /api/v1/bookings")
+  Component(req, "CreateBookingRequest", "FormRequest", "Validates artist, date window, kind, start time, message, key")
+  Component(action, "SendBookingRequest", "Action", "Replay, duplicate and availability checks, then insert")
+  Component(avail, "AvailabilityService", "Domain service", "isFree and nextFreeDates")
+  Component(price, "PriceBreakdown", "Value object", "Locks quoted price and HST")
+  Component(deadlines, "BookingDeadlines", "Domain service", "respondBy and eventStartsAt")
+  Component(sm, "BookingStateMachine", "Domain service", "Records the creation entry, dispatches BookingRequested")
+  Component(msg, "SendBookingMessage", "Action", "Stores the optional message as the first thread entry")
+  Component(res, "BookingResource", "API resource", "Number, artist first name, status")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions, messages")
+}
+Rel(web, ctrl, "POST with Idempotency-Key", "JSON/HTTPS")
+Rel(ctrl, queue, "Applies booking-requests limiter", "RESP")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Looks up key and open requests, inserts booking", "SQL")
+Rel(action, avail, "Checks the date is free")
+Rel(avail, db, "Reads overrides, rules, Confirmed bookings", "SQL")
+Rel(action, price, "Locks quoted price")
+Rel(action, deadlines, "Sets respond_by")
+Rel(action, sm, "start(booking, booker)")
+Rel(action, msg, "Stores message")
+Rel(sm, queue, "BookingRequested after commit", "RESP")
+Rel(ctrl, res, "Returns")
+@enduml

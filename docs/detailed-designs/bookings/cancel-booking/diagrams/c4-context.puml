@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Cancel a booking
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(pay, "Payment processor", "PCI DSS Level 1; refunds and payouts")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Cancels a Confirmed booking using", "HTTPS")
+Rel(artist, zamaro, "Cancels a Confirmed booking with a reason using", "HTTPS")
+Rel(zamaro, pay, "Sends refunds to", "HTTPS/JSON, idempotency keys")
+Rel(zamaro, email, "Sends cancellation emails and alerts through", "HTTPS")
+Rel(email, admin, "Delivers repeated-cancellation alert to")
+@enduml

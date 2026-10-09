@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Exchange booking messages
+
+Person(party, "Booker, artist or administrator", "Reads or writes a booking thread")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Thread on booking pages, contact card")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Booking messages endpoints and admin read")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Throttled unread digests")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "messages, message_digests, audit_entries")
+  ContainerQueue(queue, "Cache and queue", "Redis", "Immediate and delayed digest jobs")
+}
+Rel(party, web, "Uses", "HTTPS")
+Rel(web, api, "Lists, sends and marks messages read", "JSON/HTTPS")
+Rel(api, db, "Stores messages, recipient views and audit entries", "SQL")
+Rel(api, queue, "Queues BookingMessageSent", "RESP")
+Rel(worker, queue, "Takes digest jobs from", "RESP")
+Rel(worker, db, "Reads unread messages, updates digest state", "SQL")
+Rel(worker, email, "Sends digest through", "HTTPS")
+@enduml
