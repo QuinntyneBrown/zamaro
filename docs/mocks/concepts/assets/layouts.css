@@ -1,0 +1,121 @@
+/* Composition changes, kept separate from the shared component kit. */
+.artist-grid[aria-busy] .card-image img,.artist-grid[aria-busy] .save,.skeleton-meta>*{visibility:hidden}
+.skeleton-meta{background:var(--tint);border-radius:var(--s2)}
+.loading-profile .profile-visual,.loading-profile .profile-copy>*:not(.booking),.loading-profile .booking,.loading-profile.profile-detail>div{background:var(--tint);border-radius:var(--s3);color:transparent;pointer-events:none}
+.loading-profile .profile-visual>*,.loading-profile .profile-copy>*:not(.booking)>*,.loading-profile .booking>*,.loading-profile.profile-detail>div>*{visibility:hidden}
+.loading-profile .profile-copy h1 em{color:transparent}
+.loading-profile .profile-copy .eyebrow,.loading-profile .profile-copy .rating{color:transparent!important}
+@media(max-width:640px){[data-concept=joy-club] .profile-visual{transform:none!important}[data-concept=joy-club] .profile-visual .orbit-label{right:var(--s3);left:auto;transform:none}}
+.hero-controls{position:absolute;left:0;bottom:0}.hero-copy{padding-bottom:var(--s8)}.hero-location{font-size:var(--label)!important}.satellite{position:absolute;border:var(--s2) solid var(--bg);overflow:hidden;width:38%;height:38%;border-radius:50%;z-index:3}.satellite-one{top:0;right:calc(-1 * var(--s5))}.satellite-two{bottom:0;left:calc(-1 * var(--s5))}.profile-copy em{color:var(--accent);font-weight:inherit}.profile-detail h2:not(:first-child){margin-top:var(--s7)}
+[data-concept=spotlight] .hero-photo{border-radius:45% 45% var(--s2) var(--s2)}
+[data-concept=spotlight] .hero-art:before{content:'';position:absolute;inset:calc(-1 * var(--s4));border:var(--rule) solid var(--accent);border-radius:48% 48% var(--s4) var(--s4);opacity:.35}
+[data-concept=spotlight] .hero-copy h1{max-width:9ch}
+[data-concept=spotlight] .profile-visual img{border-radius:45% 45% var(--s2) var(--s2)}
+[data-concept=spotlight] .card-image{border-radius:45% 45% var(--s2) var(--s2)}
+[data-concept=cloud-nine] .hero-art{height:var(--hero-height);padding:var(--s5)}
+[data-concept=cloud-nine] .hero-photo{border-radius:48% 48% 44% 44%;transform:rotate(5deg)}
+[data-concept=cloud-nine] .hero-art:before{content:'';position:absolute;inset:0;border-radius:50%;background:var(--tint);transform:rotate(-10deg)}
+[data-concept=cloud-nine] .photo-caption{left:var(--s7);bottom:var(--s7);right:var(--s7)}
+[data-concept=cloud-nine] .photo-caption a{display:none}
+[data-concept=cloud-nine] .hero-number{display:none}
+[data-concept=cloud-nine] .card-image{border-radius:50% 50% var(--s6) var(--s6)}
+[data-concept=cloud-nine] .profile-hero{grid-template-columns:1fr 1.2fr}
+[data-concept=cloud-nine] .profile-visual img{border-radius:50%}
+[data-concept=encore] .hero{grid-template-columns:1.2fr .8fr;gap:var(--s5)}
+[data-concept=encore] .hero-copy{padding-bottom:var(--s8)}
+[data-concept=encore] .hero-photo{transform:rotate(3deg)}
+[data-concept=encore] .orbit-label{top:var(--s5);bottom:auto;left:calc(-1 * var(--s6));transform:rotate(-6deg)}
+[data-concept=encore] .artist-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:var(--s5);padding-bottom:var(--s5)}
+[data-concept=encore] .artist-card{flex:0 0 36%;scroll-snap-align:start}
+[data-concept=encore] .profile-visual{order:2;transform:rotate(2deg)}
+[data-concept=encore] .profile-copy{order:1}
+[data-concept=encore] .search{border-inline:0;border-radius:0;padding-inline:0;background:transparent}
+[data-concept=halo] .hero{gap:var(--s9);margin-block:var(--s9)}
+[data-concept=halo] .hero-photo{border-radius:50%;outline:var(--rule) solid var(--line);outline-offset:var(--s5);box-shadow:0 0 var(--s8) var(--tint)}
+[data-concept=halo] .hero-photo img{object-position:50% 35%}
+[data-concept=halo] .photo-caption{bottom:var(--s8);left:var(--s7);right:var(--s7);justify-content:center;text-align:center}
+[data-concept=halo] .photo-caption a,[data-concept=halo] .hero-number{display:none}
+[data-concept=halo] .orbit-label{left:auto;right:calc(-1 * var(--s4));top:var(--s7)}
+[data-concept=halo] .search,[data-concept=halo] .empty-panel,[data-concept=halo] .media{border-radius:var(--s5)}
+[data-concept=halo] .card-image{border-radius:50%;height:auto;aspect-ratio:1}
+[data-concept=halo] .artist-grid{gap:var(--s8)}
+[data-concept=halo] .profile-visual img{border-radius:50%}
+[data-concept=halo] .motion-toggle{bottom:var(--s6);right:var(--s6)}
+[data-concept=gather] .hero{grid-template-columns:.85fr 1.15fr}
+[data-concept=gather] .hero-photo{height:80%;width:72%;position:absolute;left:14%;top:10%;transform:rotate(-5deg)}
+[data-concept=gather] .satellite{border-radius:var(--s1);transform:rotate(9deg)}
+[data-concept=gather] .satellite-one{right:calc(-1 * var(--s3));top:0}
+[data-concept=gather] .satellite-two{left:0;bottom:0;transform:rotate(5deg)}
+[data-concept=gather] .hero-art .orbit-label{top:0;left:0;z-index:5}
+[data-concept=gather] .character{left:auto;right:0;bottom:0}
+[data-concept=gather] .hero-number{display:none}
+[data-concept=gather] .photo-caption{bottom:var(--s9);left:var(--s5)}
+[data-concept=gather] .photo-caption a{display:none}
+[data-concept=gather] .artist-card:nth-child(3n+2){padding-top:var(--s7)}
+[data-concept=gather] .profile-visual{transform:rotate(-3deg);border:var(--s3) solid var(--surface);box-shadow:var(--shadow)}
+[data-concept=gather] .search{background:transparent;border-inline:0;border-radius:0;padding-inline:0}
+[data-concept=constellation] .hero-art:before{content:'';position:absolute;inset:0;border:var(--rule) dashed var(--accent);border-radius:50%;opacity:.4}
+[data-concept=constellation] .hero-photo{width:78%;height:78%;top:11%;left:11%;border-radius:50%}
+[data-concept=constellation] .photo-caption{left:var(--s6);bottom:var(--s7);text-align:center;justify-content:center}
+[data-concept=constellation] .photo-caption a,[data-concept=constellation] .hero-number{display:none}
+[data-concept=constellation] .hero-art .orbit-label{top:auto;bottom:0;left:var(--s6);max-width:calc(100% - var(--s7));font-size:var(--small)}
+[data-concept=constellation] .satellite{width:28%;height:28%}
+[data-concept=constellation] .artist-grid{gap:var(--s8)}
+[data-concept=constellation] .artist-card:nth-child(3n+2){padding-top:var(--s8)}
+[data-concept=constellation] .card-image{border-radius:50%;height:auto;aspect-ratio:1}
+[data-concept=constellation] .profile-visual img{border-radius:50% 50% var(--s4) var(--s4)}
+[data-concept=constellation] .motion-toggle{bottom:var(--s5);right:var(--s7)}
+[data-concept=sunday-paper] .topbar{border-bottom:double calc(var(--rule) * 3) var(--ink)}
+[data-concept=sunday-paper] .hero{grid-template-columns:1fr 1.1fr;gap:var(--s8);margin-top:var(--s7)}
+[data-concept=sunday-paper] .hero-copy{border-right:var(--rule) solid var(--line);padding-right:var(--s5)}
+[data-concept=sunday-paper] img{filter:grayscale(1)}
+[data-concept=sunday-paper] .orbit-label{border-radius:0;left:var(--s5);top:var(--s5);box-shadow:none;text-transform:uppercase;letter-spacing:var(--caps);font-size:var(--small)}
+[data-concept=sunday-paper] .hero-number{display:none}
+[data-concept=sunday-paper] .search{padding-inline:0;border-inline:0;background:transparent}
+[data-concept=sunday-paper] .artist-card:not(:last-child){border-right:var(--rule) solid var(--line);padding-right:var(--s5)}
+[data-concept=sunday-paper] .card-meta{display:block}
+[data-concept=sunday-paper] .price{margin-top:var(--s3)}
+[data-concept=sunday-paper] .profile-copy h1{font-style:italic}
+[data-concept=sunday-paper] .profile-hero{border-bottom:var(--rule) solid var(--line);padding-bottom:var(--s8)}
+[data-concept=joy-club] .hero{grid-template-columns:1.1fr 1fr}
+[data-concept=joy-club] .hero-art{background:var(--tint);border-radius:var(--s8);padding:var(--s5);transform:rotate(3deg)}
+[data-concept=joy-club] .hero-photo{border-radius:var(--s7);transform:rotate(-6deg)}
+[data-concept=joy-club] .orbit-label{top:auto;bottom:var(--s6);left:auto;right:calc(-1 * var(--s4));transform:rotate(-8deg)}
+[data-concept=joy-club] .hero-number{display:none}
+[data-concept=joy-club] .photo-caption{bottom:var(--s8)}
+[data-concept=joy-club] .photo-caption a{display:none}
+[data-concept=joy-club] .artist-card{padding:var(--s3);background:var(--surface);border:var(--rule) solid var(--line);border-radius:var(--s7)}
+[data-concept=joy-club] .card-image{border-radius:var(--s6)}
+[data-concept=joy-club] .card-meta{padding:var(--s3)}
+[data-concept=joy-club] .profile-visual{padding:var(--s4);background:var(--tint);border-radius:var(--s8);transform:rotate(-3deg)}
+[data-concept=reverie] .hero{display:block;margin-block:var(--s7) var(--s8)}
+[data-concept=reverie] .hero-copy{display:grid;grid-template-columns:1.5fr 1fr;align-items:end;padding-bottom:var(--s7);gap:var(--s4) var(--s8)}
+[data-concept=reverie] .hero-copy .eyebrow{grid-column:1/-1}
+[data-concept=reverie] .hero-copy h1{grid-row:2/4}
+[data-concept=reverie] .hero-copy>p{align-self:end}
+[data-concept=reverie] .hero-art{height:var(--hero-height)}
+[data-concept=reverie] .hero-photo img{object-position:50% 35%}
+[data-concept=reverie] .hero-controls{position:static;justify-content:end}
+[data-concept=reverie] .orbit-label{top:var(--s5);left:var(--s5)}
+[data-concept=reverie] .artist-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s8)}
+[data-concept=reverie] .profile-hero{display:flex;flex-direction:column;align-items:stretch;gap:var(--s8)}
+[data-concept=reverie] .profile-visual{height:var(--hero-height)}
+[data-concept=reverie] .profile-visual img{object-position:50% 30%}
+[data-concept=reverie] .profile-copy{display:grid;grid-template-columns:1fr 1fr;column-gap:var(--s9)}
+[data-concept=reverie] .profile-copy .eyebrow{grid-column:1/-1}
+[data-concept=reverie] .profile-copy h1{grid-column:1;grid-row:2/5}
+[data-concept=reverie] .booking{grid-column:2}
+[data-concept=headliner] .hero{grid-template-columns:.95fr 1.05fr;gap:0;margin-top:var(--s6)}
+[data-concept=headliner] .hero-copy{z-index:4;margin-right:calc(-1 * var(--s8));pointer-events:none}
+[data-concept=headliner] .hero-copy h1{text-transform:uppercase;max-width:10ch;text-shadow:var(--s1) var(--s1) var(--bg)}
+[data-concept=headliner] .hero-copy em{font-style:normal}
+[data-concept=headliner] .hero-art{padding-left:var(--s5)}
+[data-concept=headliner] .orbit-label{top:auto;bottom:var(--s8);left:auto;right:calc(-1 * var(--s3));border-radius:0;transform:rotate(-5deg)}
+[data-concept=headliner] .hero-number{font-family:var(--font);font-size:var(--small);letter-spacing:var(--caps)}
+[data-concept=headliner] .hero-number:before{content:'ON THE STAGE / '}
+[data-concept=headliner] .search{border-inline:0;border-radius:0;background:transparent;padding-inline:0}
+[data-concept=headliner] .profile-visual{order:2}
+[data-concept=headliner] .profile-copy h1{text-transform:uppercase;font-size:var(--title)}
+[data-concept=headliner] .profile-copy em{font-style:normal}
+@media(max-width:1000px){[data-concept=halo] .hero{gap:var(--s7)}[data-concept=halo] .hero-photo{outline-offset:var(--s2)}.photo-caption strong{font-size:var(--lead)}[data-concept=reverie] .profile-copy{column-gap:var(--s6)}}
+@media(max-width:640px){.hero-controls{position:static;margin:0}.hero-copy{padding-bottom:0}.hero-location{font-size:var(--small)!important}.hero-art{max-width:100%}.hero{padding-bottom:0}[data-concept] .hero{grid-template-columns:1fr}[data-concept] .hero-copy{padding-right:0;border:0;margin-right:0}[data-concept] .hero-art{height:var(--image-height)}[data-concept] .profile-hero{grid-template-columns:1fr}[data-concept] .profile-visual{order:0}[data-concept=encore] .artist-card{flex-basis:85%}[data-concept=halo] .hero{margin-block:var(--s7)}[data-concept=halo] .artist-grid,[data-concept=constellation] .artist-grid{gap:var(--s7)}[data-concept=gather] .artist-card:nth-child(3n+2),[data-concept=constellation] .artist-card:nth-child(3n+2){padding-top:0}[data-concept=sunday-paper] .artist-card:not(:last-child){border-right:0;padding-right:0}[data-concept=reverie] .hero-copy{display:grid;grid-template-columns:1fr;padding-bottom:var(--s7)}[data-concept=reverie] .hero-copy h1{grid-row:auto}[data-concept=reverie] .artist-grid{grid-template-columns:1fr}[data-concept=reverie] .profile-copy{display:grid;grid-template-columns:1fr}[data-concept=reverie] .profile-copy h1,[data-concept=reverie] .profile-copy .eyebrow,[data-concept=reverie] .booking{grid-column:auto;grid-row:auto}[data-concept=headliner] .hero{gap:var(--s7)}[data-concept=headliner] .hero-art{padding-left:0}[data-concept=constellation] .orbit-label{font-size:var(--small)}[data-concept=halo] .photo-caption{bottom:var(--s7)}[data-concept=halo] .motion-toggle{bottom:var(--s3);right:var(--s5)}}

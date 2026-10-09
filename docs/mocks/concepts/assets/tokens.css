@@ -1,0 +1,16 @@
+:root {
+  color-scheme: light;
+  --bg:#fcfbf7; --surface:#ffffff; --ink:#26251f; --muted:#646158; --line:#dcd8ce;
+  --accent:#76551c; --tint:#f1e8d2; --on-accent:#fff; --photo-ink:#fff; --photo-shade:#121515;
+  --font:Arial, Helvetica, sans-serif; --display:Georgia, 'Times New Roman', serif;
+  --s0:0; --s1:.25rem; --s2:.5rem; --s3:.75rem; --s4:1rem; --s5:1.5rem; --s6:2rem; --s7:3rem; --s8:4rem; --s9:6rem; --s10:8rem;
+  --small:.75rem; --label:.875rem; --body:1rem; --lead:1.15rem; --subhead:1.8rem; --title:clamp(3.4rem,6.7vw,6.6rem); --profile-title:clamp(3rem,5.7vw,5.4rem);
+  --weight:400; --tracking:-.065em; --caps:.15em; --leading:.99; --copy-leading:1.6;
+  --radius:1.3rem; --pill:100rem; --rule:1px; --focus:3px; --target:2.75rem;
+  --page:1440px; --gutter:clamp(1.25rem,5vw,5rem); --hero-height:31rem; --image-height:20rem; --card-min:15rem;
+  --duration-fast:120ms; --duration-reveal:200ms; --duration-slide:320ms; --duration-ambient:8s;
+  --shadow:0 1rem 4rem #29231412; --overlay:linear-gradient(0deg,#121515d9,transparent 65%);
+  --ease:cubic-bezier(.2,.8,.2,1); --gpu-r:.8; --gpu-g:.58; --gpu-b:.3;
+}
+[data-theme=dark]{color-scheme:dark;--bg:#191a1b;--surface:#232527;--ink:#f5f2eb;--muted:#bdbbb3;--line:#424448;--accent:#e4c486;--tint:#353026;--on-accent:#181815;--shadow:0 1rem 4rem #0004}
+@media(prefers-reduced-motion:reduce){:root{--duration-fast:0ms;--duration-reveal:0ms;--duration-slide:0ms;--duration-ambient:0ms}}
