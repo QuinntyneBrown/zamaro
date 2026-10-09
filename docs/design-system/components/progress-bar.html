@@ -285,14 +285,14 @@
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Label and value</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
         <div class="ds-pair"><span>Track rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
-        <div class="ds-pair"><span>Leading edge on the empty track</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="light"><span>Light: leading edge on the empty track</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
         <div class="ds-pair"><span>Success fill</span><span class="ds-pair__ratio" data-contrast="--color-success-solid|--color-bg-surface" data-min="3"></span></div>
         <div class="ds-pair"><span>Danger fill</span><span class="ds-pair__ratio" data-contrast="--color-danger-solid|--color-bg-surface" data-min="3"></span></div>
         <div class="ds-pair" data-theme="dark"><span>Dark: yellow fill on the track</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
         <div class="ds-pair" data-theme="dark"><span>Dark: track rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
         <div class="ds-pair" data-theme="dark"><span>Dark: success fill</span><span class="ds-pair__ratio" data-contrast="--color-success-solid|--color-bg-surface" data-min="3"></span></div>
       </div>
-      <p>On light paper the yellow fill alone is too pale to count as a graphic (WCAG 1.4.11); the ink leading edge and the printed value carry the meaning.</p>
+      <p>On light paper the yellow fill alone is too pale to count as a graphic (WCAG 1.4.11), so the ink leading edge and the printed value carry the meaning. In the dark theme it is the other way round: the yellow fill stands out from the charcoal track and the ink edge is decorative.</p>
       <h3>Motion</h3>
       <p>The fill eases to each new width over <code>--duration-slow</code>. The indeterminate block slides across the track every 1.4 seconds. Under <code>prefers-reduced-motion</code> the width changes instantly, and the indeterminate bar stops sliding and shows a full, half-opacity fill instead.</p>
       <h3>Touch</h3>

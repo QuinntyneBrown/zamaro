@@ -979,3 +979,6 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 :is(.on-stage, .topbar) .btn.btn--ghost[aria-expanded="true"] { --btn-bg: var(--color-bg-stage-raised); --btn-fg: var(--color-fg-on-stage); }
 .stub[aria-busy="true"] .field { opacity: 0.6; pointer-events: none; }
 .menu__item[aria-current="page"] { font-weight: var(--font-weight-bold); box-shadow: inset var(--border-width-poster) 0 0 var(--color-border-on-accent); }
+.toast--danger .btn--ghost { --btn-border: transparent; }
+.toast-region--static { z-index: auto; }
+@media (max-width: 39.99rem) { .empty { padding: var(--space-8) var(--space-5); } }

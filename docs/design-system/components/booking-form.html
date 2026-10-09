@@ -378,7 +378,7 @@
         <li><b>Bar</b>: one column of fields on phones. From <code>--layout-breakpoint-sm</code> (640px) it becomes two columns; the title and the submit span both. In the poster it stacks under the copy until 1024px, then takes the right column.</li>
         <li><b>Stub</b>: under 1024px it follows the reviews at the end of the profile, full width, and “Book for Sat 14 Nov” in the poster jumps to it. From 1024px it sits in the <code>--layout-sidebar-width</code> (22rem) column and stays pinned (<code>position: sticky</code>) at <code>--layout-topbar-height</code> plus 24px while the profile scrolls.</li>
         <li>The stub must fit a laptop screen without scrolling inside itself. Keep it to four fields; the message is optional and short.</li>
-        <li>The submit is always full width in the stub, so its label must fit at 360px. “Request to book · Sat 14 Nov” is the longest allowed.</li>
+        <li>The submit is always full width in the stub. A label that does not fit wraps onto two balanced lines instead of overflowing; in the 22rem sidebar “Request to book · Sat 14 Nov” already takes two, so it is the longest allowed.</li>
       </ul>
     </section>
 

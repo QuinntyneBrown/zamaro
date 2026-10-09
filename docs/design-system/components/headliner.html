@@ -11,7 +11,10 @@
 <style>
 /* Docs only: ds.css restyles every h3 in a section, and the display size is clamp()ed to the
    viewport while specimens sit in the narrower docs column. Restore the type, scaled to fit. */
-.ds-section .headliner__name { font: var(--text-display); font-size: clamp(2.75rem, 5vw, 4.5rem); margin: 0; }
+.ds-section .headliner__name { font: var(--text-display); font-size: clamp(2.5rem, 4vw, 3.75rem); margin: 0; }
+/* Docs only: the headliner needs the width of the product's lineup column, so this page stacks
+   the anatomy, theme and do/don't grids instead of putting specimens side by side. */
+.ds-section .ds-anatomy, .ds-section .ds-themes { grid-template-columns: minmax(0, 1fr); }
 /* Docs only: forced hover for the name link (no data-state hook in components.css yet). */
 .headliner__name a.is-hover { background: var(--color-accent); color: var(--color-fg-on-accent); }
 </style>
@@ -150,13 +153,13 @@
               </div>
             </div>
           </article>
-          <span class="ds-callout" style="left: 7%; top: 9%;" aria-hidden="true">1</span>
-          <span class="ds-callout" style="left: 7%; top: 39%;" aria-hidden="true">2</span>
-          <span class="ds-callout" style="left: 46%; top: 50%;" aria-hidden="true">3</span>
-          <span class="ds-callout" style="left: 46%; top: 59%;" aria-hidden="true">4</span>
-          <span class="ds-callout" style="left: 46%; top: 70%;" aria-hidden="true">5</span>
-          <span class="ds-callout" style="left: 46%; top: 80%;" aria-hidden="true">6</span>
-          <span class="ds-callout" style="left: 46%; top: 91%;" aria-hidden="true">7</span>
+          <span class="ds-callout" style="left: 10%; top: 26%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 23%; top: 81%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 50%; top: 13%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 50%; top: 28%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 50%; top: 40%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 50%; top: 56%;" aria-hidden="true">6</span>
+          <span class="ds-callout" style="left: 50%; top: 74%;" aria-hidden="true">7</span>
           <span class="ds-callout" style="left: 92%; top: 4%;" aria-hidden="true">8</span>
         </figure>
         <ol class="ds-anatomy__list">
@@ -212,16 +215,16 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
           <article class="headliner" aria-labelledby="v2-name">
-            <div class="art art--yellow"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='12' cy='20' r='5' fill-opacity='.55'/%3E%3Ccircle cx='28' cy='18' r='5' fill-opacity='.55'/%3E%3Cpath d='M0 50c0-12 5-22 12-22s10 6 10 12c0-8 3-14 6-14 7 0 12 10 12 24z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"><span class="art__tag">Headliner</span></div>
+            <div class="art art--yellow"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='12' cy='20' r='5' fill-opacity='.55'/%3E%3Ccircle cx='28' cy='18' r='5' fill-opacity='.55'/%3E%3Cpath d='M0 50c0-12 5-22 12-22s10 6 10 12c0-8 3-14 6-14 7 0 12 10 12 24z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"><span class="art__tag">Headliner</span></div>
             <div class="stack">
-              <p class="overline">No. 01 · Closest band with five stars</p>
-              <h3 id="v2-name" class="headliner__name"><a href="#v2-name">Hosanna Collective</a></h3>
-              <div class="headliner__meta"><span>Five-piece band</span><span>Mississauga · 32 km</span><span>★ 4.8 (51 churches)</span><span>From $1,800</span></div>
-              <p>“They set up in twenty minutes and the youth would not stop singing.” <span class="text-muted">— Pastor Femi Adebayo, Brampton</span></p>
+              <p class="overline">No. 01 · Five stars from every church</p>
+              <h3 id="v2-name" class="headliner__name"><a href="#v2-name">Luz Viva</a></h3>
+              <div class="headliner__meta"><span>Spanish &amp; English band</span><span>North York · 63 km</span><span>★ 5.0 (24 churches)</span><span>From $900</span></div>
+              <p>“They led half the set in Spanish and the whole room sang along.” <span class="text-muted">— Tomi Oduya, Milton</span></p>
               <div class="cluster">
                 <span class="badge badge--free">Free Sat 14 Nov</span>
-                <a class="btn btn--ink" href="#v2-name">See Hosanna Collective’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
-                <button class="save" type="button" aria-pressed="false" aria-label="Save Hosanna Collective to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+                <a class="btn btn--ink" href="#v2-name">See Luz Viva’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+                <button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
               </div>
             </div>
           </article>
@@ -342,7 +345,7 @@
         <li><b>Number line</b>: “No. 01 · ” and why this artist leads: “Most booked this autumn”, “Closest band with five stars”. Never “Featured” or “Sponsored”.</li>
         <li><b>Meta</b>: style, town · distance, rating (churches), “From” price. Four facts, no more.</li>
         <li><b>Quote</b>: one sentence from a real review, in curly quotes, naming something specific that happened. Attribute with name and town.</li>
-        <li><b>Button</b>: “See {first name}’s profile”. For groups use the full name: “See Hosanna Collective’s profile”.</li>
+        <li><b>Button</b>: “See {first name}’s profile”. For groups use the full name: “See Luz Viva’s profile”.</li>
         <li><b>Badge</b>: “Free Sat 14 Nov”, the date the booker searched.</li>
       </ul>
     </section>

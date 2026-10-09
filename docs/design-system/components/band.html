@@ -11,6 +11,10 @@
 <style>
 /* Docs only: on phones, let specimen bands use the full column, as they do in the product. */
 @media (max-width: 39.99rem) { .band-demo { padding-inline: 0; } }
+/* Docs only: the band needs the width of the product container, and its clamp()ed headline is sized
+   for the viewport, so this page stacks side-by-side grids and scales the headline to the docs column. */
+.ds-section .ds-anatomy, .ds-section .ds-themes, .ds-section .ds-dodont { grid-template-columns: minmax(0, 1fr); }
+.ds-section .band h2 { font-size: clamp(2.25rem, 4vw, 3.5rem); }
 </style>
 </head>
 <body id="top">
@@ -256,7 +260,7 @@
         <li>Under 1024px the copy and the button stack, button below, left-aligned. Padding is 40px top and bottom, 32px at the sides.</li>
         <li>From <code>--layout-breakpoint-lg</code> (1024px), the copy takes the remaining width and the button sits right, vertically centred, 40px away. Padding becomes 48px.</li>
         <li>The headline is <code>--text-h1</code> (48–88px) and wraps in balanced lines. Keep it under eight words.</li>
-        <li>The button label never wraps; on a 360px phone “Apply as an artist” with its arrow fits.</li>
+        <li>On a 360px phone the band leaves about 256px for the button. “Apply as an artist” with its arrow just fits on one line; a longer label wraps onto balanced lines, so keep it to three or four words.</li>
       </ul>
     </section>
 

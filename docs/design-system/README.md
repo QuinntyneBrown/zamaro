@@ -148,7 +148,11 @@ The mocks now read the system: `docs/mocks/assets/tokens.css` and `ui.css` forwa
 | assets/tokens.css | Light colours were declared on `:root` only, so a light island inside a dark page (and the docs’ side-by-side themes) inherited dark values; shadows embedded the root colour. | Light colours on `:root, [data-theme="light"]`; shadows re-declared per theme. |
 | assets/ui.css | Spinners used `--duration-deliberate`, which reduced motion zeroes, making them spin at effectively infinite speed. | `--duration-loop` (kept under reduced motion); skeleton sweep stops instead. |
 | assets/ui.css | Ticket notches always painted `--color-bg-canvas`, wrong on any other surface. | `--ticket-notch-bg` component token. |
-| pages/discover/empty | “Search within 120 km · 2 choirs free” is too long for a phone button and overflowed at 360px once labels stopped wrapping. | Buttons wrap to a balanced second line as a safety net; recorded on the button page as copy to shorten. |
+| all pages | `aria-label` sat on plain `<span>`s (the Saved count badge, review stars), which many screen readers ignore. | Give the element `role="img"` (stars) or put the count in the button’s visible or hidden text. |
+| pages/discover/empty | “Search within 120 km · 2 choirs free” is too long for a phone button and overflowed at 360px once labels stopped wrapping. | Label shortened to “Search within 120 km”; the count moved into the sentence above. Buttons also wrap to a balanced second line as a safety net. |
+| pages/artist/loading | `role="status"` on the page `<h1>` replaced its heading role. | A plain visually hidden `<h1>` plus a separate `role="status"` line. |
+| pages/discover/empty, artist/empty | Decorative stamps (“Sold out”, “Fresh on the bill”, “Opening night”) were read aloud before the real title. | Stamps are `aria-hidden="true"`. |
+| pages/discover/empty | Date-swap buttons read “Sun 20 Dec2 choirs free”: no space between date and count. | A space after the date. |
 | all pages | The top bar overflowed 360px by 15px when no condensed display font is installed. | Tighter gaps and a 22px wordmark below 640px; brand mark never shrinks. |
 
 Decisions kept from the mocks rather than normalised: a 20px phone margin (so ticket notches clear the screen edge), a 3px focus ring with 3px offset, 44px default control height, all-zero radii, and round radios and switches as the only rounded controls besides avatars and the save toggle.
