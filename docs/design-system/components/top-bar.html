@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Top bar — Zamaro design system</title>
+<meta name="description" content="The top bar is Zamaro’s masthead on the charcoal stage: brand, primary navigation, the Saved artists button with its count, and the account menu. Full and compact layouts, every state, both themes.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: the product top bar uses the page margin; inside narrow example frames it uses the phone margin. */
+  .ds-example .topbar, .ds-themes .topbar, .ds-anatomy__figure .topbar { padding-inline: var(--space-2); }
+  /* Docs only: force the phone layout (below 1024px) inside a desktop-width page. */
+  .ds-compact .topbar__nav { display: none; }
+  .ds-compact .topbar__menu { display: inline-flex; }
+  /* Docs only: frames are narrower than the viewport on phones, so tighten the bar there and let theme panels scroll. */
+  @media (max-width: 30rem) { :is(.ds-example, .ds-themes, .ds-anatomy__figure) .topbar { padding-inline: var(--space-2); gap: var(--space-2); } }
+  .ds-themes .ds-compact { overflow-x: auto; }
+  .ds-matrix { position: relative; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Navigation</p>
+      <h1>Top bar</h1>
+      <p class="ds-lead">The masthead on every page: the Zamaro brand, where you can go, how many artists you have saved and who is signed in. It sits on the charcoal stage with a yellow rule under it.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;header&gt;</code> + <code>&lt;nav&gt;</code></span><span class="ds-pill">Class <code>.topbar</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Every Zamaro page starts with the same top bar, in the same order, so a booker always knows where Discover, Saved and their account are. It is the page’s <code>&lt;header&gt;</code> landmark and sticks to the top of the viewport while the page scrolls.</p>
+      <ul>
+        <li><b>Brand</b> links home (Discover). The yellow <code>.brand-mark</code> holds the microphone icon.</li>
+        <li><b>Primary navigation</b> (<code>.topbar__nav</code>) holds three to five <code>.nav-link</code>s. The current one has <code>aria-current="page"</code> and a yellow underline.</li>
+        <li><b>Saved</b> is a <code>.nav-link</code> button with a yellow <a href="badge.html">count badge</a>. It opens the saved-artists panel.</li>
+        <li><b>Account</b> is an initials <a href="avatar.html">avatar</a> button that opens the account <a href="menu.html">menu</a>.</li>
+      </ul>
+      <p>Use it once per page, as the first thing after the <a href="skip-link.html">skip link</a>. Do not put page actions (“Request to book”, filters) in it: those belong in the page. For sections inside an account area, use <a href="sidebar-navigation.html">sidebar navigation</a> or <a href="tabs.html">tabs</a> under the top bar.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy" style="grid-template-columns: minmax(0, 1fr);">
+        <figure class="ds-anatomy__figure" style="padding: var(--space-10) 0; place-items: stretch;">
+          <header class="topbar topbar--static">
+            <a class="topbar__brand" href="#anatomy"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <nav class="topbar__nav" aria-label="Primary (anatomy example)">
+              <a class="nav-link" href="#anatomy" aria-current="page">Discover</a>
+              <a class="nav-link" href="#anatomy">How it works</a>
+              <a class="nav-link" href="#anatomy">For artists</a>
+            </nav>
+            <span class="topbar__spacer"></span>
+            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+            <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+          </header>
+          <span class="ds-callout" style="left: 4%; top: 4%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 34%; top: 4%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 30%; top: 74%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 80%; top: 4%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 94%; top: 4%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 60%; top: 74%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Brand</b><small><code>.topbar__brand</code>: a 32px yellow <code>.brand-mark</code> with the microphone icon (<code>aria-hidden</code>) and the word “Zamaro” in the display face. The word is the link’s name.</small></div></li>
+          <li><div><b>Primary navigation</b><small><code>.topbar__nav</code> inside <code>&lt;nav aria-label="Primary"&gt;</code>. Bold 14px uppercase labels, 44px tall, 12px side padding.</small></div></li>
+          <li><div><b>Current marker</b><small>A 3px yellow underline drawn with an inset shadow on the link with <code>aria-current="page"</code>.</small></div></li>
+          <li><div><b>Saved button</b><small><code>.nav-link.topbar__saved</code>: heart icon, “Saved” label and a yellow <code>.badge--count</code>. Opens the saved-artists panel.</small></div></li>
+          <li><div><b>Account button</b><small><code>button.avatar</code> with the booker’s initials, 40px, yellow fill with an ink ring. Opens the account menu.</small></div></li>
+          <li><div><b>Stage and rule</b><small>Charcoal <code>--color-bg-stage</code> in both themes, 68px tall, with a 4px <code>--color-accent</code> rule along the bottom.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>There is one top bar. What changes is who is signed in and how wide the screen is. The examples use <code>.topbar--static</code> so they do not stick to the top of this page.</p>
+      <h3>Signed in (booker)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <header class="topbar topbar--static">
+            <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <nav class="topbar__nav" aria-label="Primary (signed-in example)">
+              <a class="nav-link" href="#variants" aria-current="page">Discover</a>
+              <a class="nav-link" href="#variants">How it works</a>
+              <a class="nav-link" href="#variants">For artists</a>
+            </nav>
+            <span class="topbar__spacer"></span>
+            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+            <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>Naomi Fraser on Discover, with three saved artists. This is the bar in every mock.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;header class="topbar"&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer"&gt;…&lt;/button&gt;
+  &lt;a class="topbar__brand" href="/"&gt;&lt;span class="brand-mark" aria-hidden="true"&gt;&lt;svg …/&gt;&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class="topbar__nav" aria-label="Primary"&gt;
+    &lt;a class="nav-link" href="/" aria-current="page"&gt;Discover&lt;/a&gt;
+    &lt;a class="nav-link" href="/#how"&gt;How it works&lt;/a&gt;
+    &lt;a class="nav-link" href="/#join"&gt;For artists&lt;/a&gt;
+  &lt;/nav&gt;
+  &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
+  &lt;button class="nav-link topbar__saved" type="button" aria-expanded="false"&gt;
+    &lt;svg class="icon" aria-hidden="true" …/&gt;&lt;span class="nav-link__text"&gt;Saved&lt;/span&gt;
+    &lt;span class="badge badge--count"&gt;3&lt;span class="visually-hidden"&gt; artists&lt;/span&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false"&gt;NF&lt;/button&gt;
+&lt;/header&gt;</code></pre></details>
+      </div>
+
+      <h3>Signed out</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <header class="topbar topbar--static">
+            <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <nav class="topbar__nav" aria-label="Primary (signed-out example)">
+              <a class="nav-link" href="#variants">Discover</a>
+              <a class="nav-link" href="#variants">How it works</a>
+              <a class="nav-link" href="#variants" aria-current="page">For artists</a>
+            </nav>
+            <span class="topbar__spacer"></span>
+            <a class="nav-link" href="#variants">Sign in</a>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>No Saved button and no avatar: a single “Sign in” link takes their place. Not in the mocks yet; needed for the artist sign-up pages.</span></div>
+      </div>
+
+      <h3>Compact (phones and tablets)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-compact">
+          <header class="topbar topbar--static">
+            <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+            <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <span class="topbar__spacer"></span>
+            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="visually-hidden">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+            <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>Below 1024px the links move into a drawer behind the menu button and “Saved” keeps only its heart and count. The word stays in the accessible name.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;!-- Same markup as the full bar: CSS hides .topbar__nav and shows .topbar__menu below 64rem --&gt;
+&lt;button class="btn btn--ghost btn--icon topbar__menu" type="button"
+        aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer"&gt;…&lt;/button&gt;</code></pre></details>
+      </div>
+
+      <h3>Saved panel and account menu open</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush" style="padding-bottom: 11rem;">
+          <header class="topbar topbar--static">
+            <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <span class="topbar__spacer"></span>
+            <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+            <div class="menu-anchor">
+              <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="menu" aria-expanded="true" aria-controls="account-menu">NF</button>
+              <ul class="menu" id="account-menu" role="menu" aria-label="Naomi Fraser">
+                <li role="none"><a class="menu__item" role="menuitem" href="#variants">My bookings</a></li>
+                <li role="none"><a class="menu__item" role="menuitem" href="#variants">Riverside Community Church</a></li>
+                <li role="separator" class="menu__sep"></li>
+                <li role="none"><button class="menu__item" role="menuitem" type="button">Sign out</button></li>
+              </ul>
+            </div>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>The avatar opens a <a href="menu.html">menu</a> anchored to its right edge. Only one panel is open at a time.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The top bar has one height (68px including the rule) at every width. Only its contents change with the breakpoint."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The top bar has one height (68px including the rule) at every width. Only its contents change with the breakpoint.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Each control in the bar is shown on the stage. Hover and focus are forced with <code>data-state</code>; current and open come from <code>aria-current</code> and <code>aria-expanded</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Current / open</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Nav link</th>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="nav-link" href="#states">Discover</a></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="nav-link" href="#states" data-state="hover">Discover</a></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="nav-link" href="#states" data-state="focus">Discover</a></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="nav-link" href="#states" aria-current="page">Discover</a></div></td></tr>
+          <tr><th scope="row">Saved</th>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="nav-link" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="nav-link" type="button" aria-expanded="false" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="nav-link" type="button" aria-expanded="false" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="nav-link" type="button" aria-expanded="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved <span class="badge badge--count">4<span class="visually-hidden"> artists</span></span></button></div></td></tr>
+          <tr><th scope="row">Account</th>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false" data-state="hover">NF</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false" data-state="focus">NF</button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="true">NF</button></div></td></tr>
+          <tr><th scope="row">Menu (phones)</th>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><button class="btn btn--ghost btn--icon" type="button" aria-label="Close menu" aria-expanded="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></td></tr>
+          <tr><th scope="row">Brand</th>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="topbar__brand" href="#states"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="topbar__brand" href="#states" style="color: var(--color-accent-on-stage);"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div></td>
+            <td><div class="on-stage" style="padding: var(--space-2);"><a class="topbar__brand" href="#states" data-state="focus"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div></td>
+            <td><span class="text-caption">Not marked; the brand always links home.</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes" style="grid-template-columns: minmax(0, 1fr);">
+        <div data-theme="light"><div class="ds-compact"><header class="topbar topbar--static">
+          <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+          <a class="topbar__brand" href="#states"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+          <span class="topbar__spacer"></span>
+          <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="visually-hidden">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+          <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+        </header></div></div>
+        <div data-theme="dark"><div class="ds-compact"><header class="topbar topbar--static">
+          <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+          <a class="topbar__brand" href="#states"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+          <span class="topbar__spacer"></span>
+          <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="visually-hidden">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+          <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+        </header></div></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> turns a link or the Saved button yellow (<code>--color-accent-on-stage</code>). Nothing lifts: the stage is already the loudest surface on the page.</li>
+        <li><b>Current</b> adds a 3px yellow underline. The link stays a link, so a booker can reload Discover from Discover.</li>
+        <li><b>Open</b> (<code>aria-expanded="true"</code>) keeps the Saved label yellow while its panel is showing. When a save changes the count, the badge updates in place (3 → 4) and a <a href="toast.html">toast</a> confirms it.</li>
+        <li><b>Focus</b> is a yellow ring on the stage in both themes.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>1024px and wider</b> (<code>--layout-breakpoint-lg</code>): brand, primary links, a flexible spacer, Saved with its label, then the avatar. Side padding is <code>--layout-margin</code>, so the bar lines up with the page container.</li>
+        <li><b>Below 1024px</b>: <code>.topbar__nav</code> is hidden and the ghost menu button (<code>.topbar__menu</code>) appears before the brand. It opens a drawer with the same links in the same order. Saved shows only the heart and count.</li>
+        <li><b>At 360px</b>: menu (44px), brand, spacer, Saved (about 76px) and avatar (40px) fit with 12px gaps. Nothing wraps; the bar keeps one row and the same 68px height.</li>
+        <li>The bar is <code>position: sticky</code>. <code>html</code> sets <code>scroll-padding-top</code> to <code>--layout-topbar-height</code> plus 16px, so in-page links (“Book for Sat 14 Nov”) and focused fields are never hidden under it.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The top bar is a stage surface in both themes, so the newsprint theme and the stage theme look almost the same here: on light the stage is <code>--palette-ink-850</code>, on dark it drops to <code>--palette-ink-950</code> so it still sits darker than the dark canvas. It reads semantic tokens only: <code>--color-bg-stage</code>, <code>--color-fg-on-stage</code>, <code>--color-accent-on-stage</code> (hover, current underline, focus ring) and <code>--color-accent</code> (the bottom rule, brand mark and count badge).</p>
+      <p>It has no component tokens of its own. The controls inside it are re-skinned by context: <code>.topbar .btn--ghost</code> resets <code>--btn-fg</code> to <code>currentColor</code> and <code>--btn-fg-hover</code> to <code>--color-accent-on-stage</code>, and the count badge keeps its <code>--badge-bg: var(--color-accent)</code> with an ink outline from <code>--color-border-on-accent</code>.</p>
+      <pre><code>/* Links inside the stage inherit paper and turn yellow on hover */
+:is(.on-stage, .topbar) a:not(.btn) { color: inherit; }
+:is(.on-stage, .topbar) a:not(.btn):hover { background: none; color: var(--color-accent-on-stage); }</code></pre>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>The bar is a <code>&lt;header&gt;</code> that is a direct child of <code>&lt;body&gt;</code>, so it is the page’s banner landmark. The links sit in <code>&lt;nav aria-label="Primary"&gt;</code>. The menu button and the Saved button follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">APG Disclosure pattern</a> (<code>aria-expanded</code>, <code>aria-controls</code>). The account avatar follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/">APG Menu Button pattern</a> (<code>aria-haspopup="menu"</code>).</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through menu button (phones), brand, links, Saved and avatar, in that order.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows a link; opens the drawer, Saved panel or account menu.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Opens the drawer, Saved panel or account menu.</td></tr>
+        <tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>In the open account menu: moves between items (see <a href="menu.html">Menu</a>).</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the open drawer, panel or menu and returns focus to the button that opened it.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The skip link is the first stop, so keyboard users can jump past the bar. The ring on the stage is yellow (<code>--color-accent-on-stage</code>) with a 3px offset in both themes. Opening the drawer moves focus to its first link; closing it returns focus to the menu button. Because the bar is sticky, <code>scroll-padding-top</code> keeps focused elements below it (WCAG 2.4.11).</p>
+      <h3>Labelling</h3>
+      <p>The brand link’s name is “Zamaro”; the mark is <code>aria-hidden</code>. The nav is labelled “Primary” and must be the only nav with that name on the page. The Saved button’s name is “Saved 3 artists”: the count badge carries visually hidden text, and on phones the word “Saved” is visually hidden rather than removed. The avatar has <code>aria-label="Account menu for Naomi Fraser"</code>. When a save changes the count, a polite <code>role="status"</code> toast says so; the badge itself is not a live region.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Link text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Hover text and current underline</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Count badge and brand mark</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: link text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: hover text, underline and focus ring</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: count badge</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Link colour changes take <code>--duration-fast</code>; the avatar grows 6% on hover with <code>--ease-spring</code>. The drawer slides in over <code>--duration-slow</code>. Under <code>prefers-reduced-motion</code> these durations drop to near zero and the drawer simply appears. Smooth scrolling to anchors is turned off too.</p>
+      <h3>Touch</h3>
+      <p>Links, Saved and the menu button are 44px tall (<code>--target-comfortable</code>); the avatar is 40px with at least 12px around it. Nothing depends on hover: the current page is marked by an underline, not by colour alone.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Nav labels are one to three short words, in sentence case in the source: “Discover”, “How it works”, “For artists”. CSS adds the uppercase.</li>
+        <li>Budget the width: at 1024px the bar has about 900px for content, and the brand, Saved and avatar take about 370px of it. Three links of up to 12 characters fit with room for a fourth.</li>
+        <li>Keep three to five links. Anything more belongs in the drawer, the footer or an account page.</li>
+        <li>The Saved count is the number of saved artists, not a notification count. It never says “9+”; show the real number.</li>
+        <li>Avatars show two initials from the booker’s name (“NF”). The menu inside names the person and church.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button></div><figcaption>One class: <code>.nav-link</code> resets the button’s background, border and cursor itself.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="nav-link btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button></div><figcaption>The mocks mixed <code>.nav-link</code> with <code>.btn--ghost</code> and an inline style reset on every page.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><a class="nav-link" href="#do-dont" aria-current="page">Discover</a><a class="nav-link" href="#do-dont">For artists</a></div><figcaption>Mark the current page with <code>aria-current="page"</code>, which draws the underline and tells screen readers.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><a class="nav-link" href="#do-dont" style="color: var(--color-accent-on-stage);">Discover</a><a class="nav-link" href="#do-dont">For artists</a></div><figcaption>Colouring the current link yellow with a class or style. It looks like hover, and screen readers hear nothing.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><a class="topbar__brand" href="#do-dont"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div><figcaption>Brand mark at 32px (<code>2rem</code>), on the 8px grid.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><a class="topbar__brand" href="#do-dont"><span class="brand-mark" aria-hidden="true" style="width: 1.9rem; height: 1.9rem;"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a></div><figcaption>The mocks’ 1.9rem (30.4px) mark, off the grid, and painted with the <code>--palette-ink</code> primitive.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Bar background</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+          <tr><td>Link text</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+          <tr><td>Hover, current underline, focus ring</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Bottom rule, brand mark, count badge</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Icon on the mark, badge text and outline</td><td><code>--color-fg-on-accent</code> / <code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+          <tr><td>Height</td><td><code>--layout-topbar-height</code></td><td colspan="2"><span data-token="--layout-topbar-height"></span></td></tr>
+          <tr><td>Side padding</td><td><code>--layout-margin</code></td><td colspan="2"><span data-token="--layout-margin"></span> (grows with the breakpoint)</td></tr>
+          <tr><td>Bottom rule width</td><td><code>--border-width-poster</code></td><td colspan="2"><span data-token="--border-width-poster"></span></td></tr>
+          <tr><td>Link height / padding</td><td><code>--target-comfortable</code>, <code>--space-3</code></td><td colspan="2"><span data-token="--target-comfortable"></span> / <span data-token="--space-3"></span></td></tr>
+          <tr><td>Link and brand type</td><td><code>--text-label</code>, <code>--text-figure</code>, <code>--letter-spacing-wide</code></td><td colspan="2"><span data-token="--text-label"></span></td></tr>
+          <tr><td>Stacking</td><td><code>--z-sticky</code></td><td colspan="2"><span data-token="--z-sticky"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;a class="skip-link" href="#main"&gt;Skip to content&lt;/a&gt;
+&lt;header class="topbar"&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__menu" type="button"
+          aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer"&gt;…&lt;/button&gt;
+  &lt;a class="topbar__brand" href="/"&gt;&lt;span class="brand-mark" aria-hidden="true"&gt;…&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class="topbar__nav" aria-label="Primary"&gt;
+    &lt;a class="nav-link" href="/" aria-current="page"&gt;Discover&lt;/a&gt; …
+  &lt;/nav&gt;
+  &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
+  &lt;button class="nav-link topbar__saved" type="button" aria-expanded="false" aria-controls="saved-panel"&gt;
+    &lt;svg class="icon" aria-hidden="true" …/&gt;&lt;span class="nav-link__text"&gt;Saved&lt;/span&gt;
+    &lt;span class="badge badge--count"&gt;3&lt;span class="visually-hidden"&gt; artists&lt;/span&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;button class="avatar" type="button" aria-label="Account menu for Naomi Fraser"
+          aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"&gt;NF&lt;/button&gt;
+&lt;/header&gt;
+&lt;main id="main"&gt;…&lt;/main&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.topbar</code></td><td>The stage bar: sticky, 68px, yellow bottom rule.</td></tr>
+        <tr><td><code>.topbar--static</code></td><td>Not sticky. For documentation and previews only.</td></tr>
+        <tr><td><code>.topbar__brand</code>, <code>.brand-mark</code></td><td>Home link and its 32px yellow mark.</td></tr>
+        <tr><td><code>.topbar__nav</code></td><td>Primary links; shown from 1024px.</td></tr>
+        <tr><td><code>.topbar__menu</code></td><td>Menu button; shown below 1024px.</td></tr>
+        <tr><td><code>.topbar__spacer</code></td><td>Pushes Saved and the avatar to the right.</td></tr>
+        <tr><td><code>.topbar__saved</code>, <code>.nav-link__text</code></td><td>Saved button; its label is hidden below 1024px.</td></tr>
+        <tr><td><code>.nav-link</code></td><td>Link or button on the stage; resets button styles.</td></tr>
+        <tr><td><code>aria-current="page"</code></td><td>Current link: yellow underline.</td></tr>
+        <tr><td><code>aria-expanded="true"</code></td><td>Open panel: yellow label; on the menu button, swap the icon to close.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only: forces a state.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the full bar with “Discover” current, Saved with a count of 3, the NF avatar</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same bar, unchanged while the page below loads or fails</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the bar with no current link (a profile is below Discover), and the menu button below 1024px</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>, <a href="../../mocks/pages/artist/empty.html">empty</a> and <a href="../../mocks/pages/artist/error.html">error</a>: the same bar on every profile state</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The Saved button combined <code>.nav-link</code>, <code>.btn--ghost</code> and an inline <code>style="background: none; border: 0; cursor: pointer;"</code>. <code>.nav-link</code> now resets buttons itself.</li>
+        <li><code>.brand-mark</code> was 1.9rem (30.4px, off the grid) and read <code>--palette-ink</code>. It is now 2rem and uses <code>--color-fg-on-accent</code>.</li>
+        <li>The count badge’s minimum width was 1.4em; it is now 1.5em so “3” and “12” sit in the same box. Its outline now reads <code>--color-border-on-accent</code>, not the ink primitive.</li>
+        <li>The mocks’ “How booking works” link wrapped onto three lines in narrow frames. It is now “How it works”; the section it links to keeps its full heading.</li>
+        <li>The count was named with <code>aria-label</code> on a plain <code>&lt;span&gt;</code>, which screen readers do not reliably read. It now carries visually hidden text.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

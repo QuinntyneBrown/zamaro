@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marquee — Zamaro design system</title>
+<meta name="description" content="The marquee is a static, decorative yellow strip of cities or song titles under the poster. It is hidden from assistive technology and repeats content the page already shows.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Marquee</h1>
+      <p class="ds-lead">A yellow strip of cities or song titles, set like the bill under a gig poster. It is decoration: it never moves, never holds a link and is hidden from screen readers.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Decorative, <code>aria-hidden="true"</code></span><span class="ds-pill">Class <code>.marquee</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>The marquee sits directly under the <a href="poster.html">poster hero</a> and closes the stage with a printed rule. On Discover it lists the cities Zamaro artists drive to; on a full artist profile it lists the songs the artist leads.</p>
+      <ul>
+        <li>Use it at most once per page, between the poster and the first section.</li>
+        <li>It only repeats content the page already shows in an accessible form: the cities in the search’s location and radius fields, the songs in the <a href="setlist.html">setlist</a>. If that content is not on the page, do not add a marquee.</li>
+        <li>It is not a ticker, a news strip or navigation. For announcements use a <a href="alert.html">banner</a>; for links use the <a href="top-bar.html">top bar</a> or a <a href="list.html">list</a>.</li>
+        <li>It is static by design. The text runs off the right edge and is clipped, which already reads as “the bill goes on”. Nothing scrolls on its own.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding-inline: 0;">
+          <div class="marquee" aria-hidden="true" style="width: 100%;"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton ✦</span><span>Markham</span></div>
+          <span class="ds-callout" style="left: 4%; top: 22%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 30%; top: 22%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 47%; top: 22%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 92%; top: 64%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Strip</b><small>Full width, yellow fill, 2px ink rules top and bottom, 12px vertical padding. Text never wraps.</small></div></li>
+          <li><div><b>Item</b><small>A <code>&lt;span&gt;</code> per city or song with 20px side padding, set in <code>--text-h4</code> (22px display, uppercase, 0.08em tracking).</small></div></li>
+          <li><div><b>Separator</b><small>A typed “ ✦” at the end of every item except the last. It is part of the item, so it never starts a line.</small></div></li>
+          <li><div><b>Clipped edge</b><small><code>overflow: hidden</code> cuts the strip at the viewport edge. There is no fade and no scroll.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>The default yellow strip follows the poster. Use the stage variant when the strip sits on or between charcoal surfaces, for example above the footer, so it does not add a second yellow band to the page.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton ✦</span><span>Markham ✦</span><span>Ajax ✦</span><span>Oshawa ✦</span><span>Barrie ✦</span><span>Kitchener ✦</span><span>Niagara</span></div>
+        </div>
+        <div class="ds-example__caption"><span>Default, cities (Discover). Each city is within the 200 km the radius field allows.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="marquee" aria-hidden="true"&gt;&lt;span&gt;Toronto ✦&lt;/span&gt;&lt;span&gt;Burlington ✦&lt;/span&gt;&lt;span&gt;Mississauga ✦&lt;/span&gt;…&lt;span&gt;Niagara&lt;/span&gt;&lt;/div&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance ✦</span><span>Build My Life</span></div>
+        </div>
+        <div class="ds-example__caption"><span>Default, song titles (artist profile). The same six songs open Abigail’s setlist further down the page.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="marquee" aria-hidden="true"&gt;&lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;…&lt;span&gt;Build My Life&lt;/span&gt;&lt;/div&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="marquee marquee--stage" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance ✦</span><span>Build My Life</span></div>
+        </div>
+        <div class="ds-example__caption"><span><code>.marquee--stage</code>: charcoal strip, yellow type and yellow rules.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="marquee marquee--stage" aria-hidden="true"&gt;…&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The marquee has one size: 22px display type with 12px vertical padding, about 50px tall."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The marquee has one size: 22px display type with 12px vertical padding, about 50px tall.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The marquee is not interactive, so it has no hover, focus, active or disabled state. What varies is whether it appears and how much of it fits.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Short list</th><th scope="col">Loading</th><th scope="col">Empty or new profile</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Default</th>
+            <td><div class="marquee" aria-hidden="true" style="width: 16rem;"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div></td>
+            <td><div class="marquee" aria-hidden="true" style="width: 16rem;"><span>Jireh ✦</span><span>Way Maker</span></div></td>
+            <td><div class="marquee" aria-hidden="true" style="width: 16rem;"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div></td>
+            <td><span class="text-caption">Not rendered</span></td></tr>
+          <tr><th scope="row">Stage</th>
+            <td><div class="marquee marquee--stage" aria-hidden="true" style="width: 16rem;"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div></td>
+            <td><div class="marquee marquee--stage" aria-hidden="true" style="width: 16rem;"><span>Jireh ✦</span><span>Way Maker</span></div></td>
+            <td><div class="marquee marquee--stage" aria-hidden="true" style="width: 16rem;"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div></td>
+            <td><span class="text-caption">Not rendered</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Default</b>: a long list clipped at the right edge.</li>
+        <li><b>Short list</b>: two or three items leave the rest of the strip empty yellow. That is fine; do not repeat items to fill it.</li>
+        <li><b>Loading</b>: the city strip on Discover is static content and stays while results load. The song strip on a profile waits for the profile: the artist loading mock has no marquee.</li>
+        <li><b>Empty or new profile</b>: when there is nothing to repeat (an artist with no setlist yet, or Miriam’s new profile in the mocks), leave the marquee out instead of showing an empty strip.</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Hamilton</span></div><div class="marquee marquee--stage" aria-hidden="true"><span>Jireh ✦</span><span>Way Maker ✦</span><span>Build My Life</span></div></div></div>
+        <div data-theme="dark"><div class="stack"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Hamilton</span></div><div class="marquee marquee--stage" aria-hidden="true"><span>Jireh ✦</span><span>Way Maker ✦</span><span>Build My Life</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The strip always spans the viewport, edge to edge, outside <code>.container</code>.</li>
+        <li>Text never wraps (<code>white-space: nowrap</code>). On a 360px phone about two cities show; on a 1280px screen about nine. Order the list so the first two items make sense alone.</li>
+        <li>The strip clips with <code>overflow: hidden</code>, so a long list can never cause horizontal page scroll.</li>
+        <li>Type and padding do not change across breakpoints.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The default strip reads <code>--color-accent</code> for the fill and <code>--color-fg-on-accent</code> and <code>--color-border-on-accent</code> for the type and rules, so it is the same butter yellow with ink type in both themes. <code>.marquee--stage</code> reads <code>--color-bg-stage</code> and <code>--color-accent-on-stage</code> for the type and rules.</p>
+      <p>There are no component tokens. To re-skin, override those semantic tokens on the strip or an ancestor. Never set a raw colour on <code>.marquee</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A plain <code>&lt;div&gt;</code> with <code>aria-hidden="true"</code>. No APG pattern applies because it is decoration. It must be hidden for three reasons:</p>
+      <ul>
+        <li>It repeats content: a screen reader user would hear eleven city names, or six songs twice, before reaching the lineup.</li>
+        <li>Each “✦” would be announced as “four-pointed star”.</li>
+        <li>Part of the list is clipped off-screen, so what is read would not match what is seen.</li>
+      </ul>
+      <p>Because it is hidden, the same information must exist elsewhere in an accessible form: the location and radius fields for cities, the <a href="setlist.html">setlist</a> for songs.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Skips the marquee. It never contains links, buttons or anything else focusable. A focusable element inside <code>aria-hidden</code> would be reachable but unnamed.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Nothing inside takes focus, so the strip has no focus style.</p>
+      <h3>Labelling</h3>
+      <p>None. Do not add <code>aria-label</code>, <code>role</code> or a heading: the strip should not appear in the accessibility tree at all.</p>
+      <h3>Contrast</h3>
+      <p>Hidden text still has to be readable for sighted users, so the strip meets text contrast.</p>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Type on yellow strip</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="light"><span>Light: ink rule against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair"><span>Stage variant type</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: type on yellow strip</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: yellow strip against the page</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: stage variant type</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None, by design. A scrolling ticker that runs for more than five seconds alongside other content would need a pause control (WCAG 2.2.2), would distract people with attention or vestibular disorders, and would make the clipped list even harder to read. The printed look does not need motion: the clipped edge already says the bill goes on. Do not add a CSS animation or the <code>&lt;marquee&gt;</code> element.</p>
+      <h3>Touch</h3>
+      <p>Nothing to tap. The strip does not intercept pointer or scroll gestures.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Cities: the region’s anchor first (Toronto), then the booker’s city and the nearest suburbs, outward. Use the city name only, no province.</li>
+        <li>Songs: the artist’s setlist in setlist order, title only, no credits or keys. Keep the song’s own capitalisation in the source (“Great Is Thy Faithfulness”); CSS uppercases it.</li>
+        <li>Six to eleven items. End every item but the last with “ ✦”. No commas, no counts, no prices.</li>
+        <li>Never put information in the marquee that is not elsewhere on the page.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Jireh ✦</span><span>Build My Life</span></div></div><figcaption>Hide the strip with <code>aria-hidden="true"</code> and list the same songs in the setlist.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee"><span><a href="#do-dont" style="color: inherit;">Way Maker</a> ✦</span><span><a href="#do-dont" style="color: inherit;">Jireh</a></span></div></div><figcaption>Links in the strip. They would be hidden from screen readers but still focusable, and they are only 22px tall.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton</span></div></div><figcaption>Static and clipped at the edge, like the end of a printed bill.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton</span></div></div><figcaption>Do not make it scroll on its own (a CSS animation or <code>&lt;marquee&gt;</code>). Moving text needs a pause control and distracts from the lineup.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Goodness of God ✦</span><span>Abide With Me</span></div></div><figcaption>Text and rules read the on-accent tokens, so the strip keeps ink type in both themes.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--flush"><div class="marquee" aria-hidden="true"><span>Goodness of God, Abide With Me, Firm Foundation, It Is Well</span></div></div><figcaption>One long comma-separated span. It cannot space items and gives no visual rhythm.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Strip fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Type</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+          <tr><td>Rules</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Stage fill</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+          <tr><td>Stage type and rules</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Type</td><td><code>--text-h4</code>, <code>--letter-spacing-wide</code></td><td colspan="2"><span data-token="--text-h4"></span></td></tr>
+          <tr><td>Padding (vertical / item)</td><td><code>--space-3</code> / <code>--space-5</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-5"></span></td></tr>
+          <tr><td>Rules</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;!-- Directly after the poster, outside .container --&gt;
+&lt;div class="marquee" aria-hidden="true"&gt;
+  &lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;&lt;span&gt;Great Is Thy Faithfulness ✦&lt;/span&gt;
+  &lt;span&gt;Jireh ✦&lt;/span&gt;&lt;span&gt;Blessed Assurance ✦&lt;/span&gt;&lt;span&gt;Build My Life&lt;/span&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.marquee</code></td><td>Yellow strip with ink rules; no wrap; clipped.</td></tr>
+        <tr><td><code>.marquee span</code></td><td>One item, 20px side padding.</td></tr>
+        <tr><td><code>.marquee--stage</code></td><td>Charcoal strip with yellow type and rules.</td></tr>
+        <tr><td><code>aria-hidden="true"</code></td><td>Required. Removes the strip from the accessibility tree.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: city strip under the search poster</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same strip, unchanged in every state</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: song strip repeating the first six setlist songs</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a> and <a href="../../mocks/pages/artist/empty.html">artist/empty</a>: no strip</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The strip read the primitive <code>--palette-ink</code> for its type and rules. It now reads <code>--color-fg-on-accent</code> and <code>--color-border-on-accent</code>.</li>
+        <li>It set its type with an inline display-font shorthand. It now uses the role token <code>--text-h4</code>.</li>
+        <li><code>.marquee--stage</code> is new: the mocks only use the yellow strip.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

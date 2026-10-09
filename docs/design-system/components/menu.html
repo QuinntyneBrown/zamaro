@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu — Zamaro design system</title>
+<meta name="description" content="A menu button opens a short list of actions or choices: the account menu behind the NF avatar, a sort menu with checkable items, and per-artist actions.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Actions</p>
+      <h1>Menu</h1>
+      <p class="ds-lead">A menu button opens a short list of actions or links, like the account menu behind Naomi’s “NF” avatar. Arrow keys move through it and Escape closes it.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">APG Menu Button</span><span class="ds-pill">Class <code>.menu</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a menu when a single button needs to offer three to eight related actions or destinations, and showing them all would crowd the view. Zamaro has three:</p>
+      <ul>
+        <li><b>Account menu</b> behind the “NF” avatar in the top bar: Naomi’s saved artists, booking requests, church profile, help and sign out.</li>
+        <li><b>Sort menu</b> with checkable items, for compact toolbars such as the saved-artists list on a phone. The Discover lineup keeps its native <a href="select.html">select</a>, because there sort is a form value next to other fields.</li>
+        <li><b>Artist actions</b> behind a “more” button on a saved artist: share, message, remove from saved.</li>
+      </ul>
+      <p>Do not use a menu for site navigation (use the <a href="top-bar.html">top bar</a>), for choosing a form value (use a <a href="select.html">select</a> or <a href="radio-group.html">radio group</a>), or for content with inputs or paragraphs (that is a popover or <a href="dialog.html">dialog</a>).</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="place-items: start end; min-height: 26rem;">
+          <div class="menu-anchor">
+            <button class="avatar" type="button" id="ana-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="ana-menu" aria-label="Account menu for Naomi Fraser">NF</button>
+            <div class="menu" style="width: max-content;" id="ana-menu" role="menu" aria-labelledby="ana-btn">
+              <div role="group" aria-labelledby="ana-sec">
+                <div class="menu__section" id="ana-sec" aria-hidden="true">Riverside Community Church</div>
+                <a class="menu__item" role="menuitem" tabindex="-1" href="#anatomy" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved artists<span class="menu__shortcut">3</span></a>
+                <a class="menu__item" role="menuitem" tabindex="-1" href="#anatomy"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/></svg>Booking requests<span class="menu__shortcut">1</span></a>
+              </div>
+              <div class="menu__sep" role="separator"></div>
+              <button class="menu__item" role="menuitem" tabindex="-1" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 4h5v16h-5M10 8l-4 4 4 4M6 12h11"/></svg>Sign out</button>
+            </div>
+          </div>
+          <span class="ds-callout" style="right: 5rem; top: 3rem;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="right: 17rem; top: 4.5rem;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="right: 17rem; top: 6.5rem;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="right: 17rem; top: 9.25rem;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="right: 17rem; top: 14rem;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Trigger</b><small>Any button with <code>aria-haspopup="menu"</code> and <code>aria-expanded</code>. Here the 40px avatar; elsewhere a <code>.btn</code> with a chevron or a ghost icon button.</small></div></li>
+          <li><div><b>Panel</b><small>Raised surface, 2px charcoal rule, hard 6px <code>--shadow-2</code>, 4px inner padding, at least 14rem wide. Opens 4px below the trigger, aligned to its right edge.</small></div></li>
+          <li><div><b>Section label</b><small>Mono overline in muted ink. It names the group for screen readers through <code>aria-labelledby</code>.</small></div></li>
+          <li><div><b>Item</b><small>44px tall: optional 20px icon, label in body small, optional trailing hint (a count or shortcut). Hover and focus fill it with the subtle yellow.</small></div></li>
+          <li><div><b>Separator</b><small>1px hairline with 4px above and below. Separates groups, never single items.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>All menus share the panel and the item. They differ in what the items do.</p>
+      <h3>With icons, sections and trailing hints: the account menu</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas" style="justify-content: flex-end; align-items: flex-start; min-height: 26rem;">
+    <div class="menu-anchor">
+      <button class="avatar" type="button" id="acct-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="acct-menu" aria-label="Account menu for Naomi Fraser">NF</button>
+      <div class="menu" style="width: max-content;" id="acct-menu" role="menu" aria-labelledby="acct-btn">
+        <div role="group" aria-labelledby="acct-sec">
+          <div class="menu__section" id="acct-sec" aria-hidden="true">Riverside Community Church</div>
+          <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved artists<span class="menu__shortcut">3</span></a>
+          <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/></svg>Booking requests<span class="menu__shortcut">1</span></a>
+          <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12zM12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>Church profile</a>
+        </div>
+        <div class="menu__sep" role="separator"></div>
+        <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>Help and contact</a>
+        <button class="menu__item" role="menuitem" tabindex="-1" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 4h5v16h-5M10 8l-4 4 4 4M6 12h11"/></svg>Sign out</button>
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>Destinations are links with <code>role="menuitem"</code>; “Sign out” is a button. Sign out is not a danger item: it loses nothing, and Naomi can sign back in.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="menu-anchor"&gt;
+  &lt;button class="avatar" type="button" id="acct-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="acct-menu" aria-label="Account menu for Naomi Fraser"&gt;NF&lt;/button&gt;
+  &lt;div class="menu" style="width: max-content;" id="acct-menu" role="menu" aria-labelledby="acct-btn"&gt;
+    &lt;div role="group" aria-labelledby="acct-sec"&gt;
+      &lt;div class="menu__section" id="acct-sec" aria-hidden="true"&gt;Riverside Community Church&lt;/div&gt;
+      &lt;a class="menu__item" role="menuitem" tabindex="-1" href="#variants"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;Saved artists&lt;span class="menu__shortcut"&gt;3&lt;/span&gt;&lt;/a&gt;
+      &lt;a class="menu__item" role="menuitem" tabindex="-1" href="#variants"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/&gt;&lt;/svg&gt;Booking requests&lt;span class="menu__shortcut"&gt;1&lt;/span&gt;&lt;/a&gt;
+      &lt;a class="menu__item" role="menuitem" tabindex="-1" href="#variants"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12zM12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/&gt;&lt;/svg&gt;Church profile&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class="menu__sep" role="separator"&gt;&lt;/div&gt;
+    &lt;a class="menu__item" role="menuitem" tabindex="-1" href="#variants"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/&gt;&lt;/svg&gt;Help and contact&lt;/a&gt;
+    &lt;button class="menu__item" role="menuitem" tabindex="-1" type="button"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M15 4h5v16h-5M10 8l-4 4 4 4M6 12h11"/&gt;&lt;/svg&gt;Sign out&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Checkable items: the sort menu</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas" style="justify-content: flex-end; align-items: flex-start; min-height: 25rem;">
+    <div class="menu-anchor">
+      <button class="btn" type="button" id="sort-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="sort-menu">Sort: closest first <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="menu" style="width: max-content;" id="sort-menu" role="menu" aria-labelledby="sort-btn">
+        <div role="group" aria-labelledby="sort-sec">
+          <div class="menu__section" id="sort-sec" aria-hidden="true">Sort saved artists</div>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Closest first</button>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Price, low to high</button>
+        </div>
+        <div class="menu__sep" role="separator"></div>
+        <div role="group" aria-labelledby="show-sec">
+          <div class="menu__section" id="show-sec" aria-hidden="true">Show</div>
+          <button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="true" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Free Sat 14 Nov only</button>
+          <button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="false" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Within 120 km only</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>Radio items (<code>menuitemradio</code>) pick one sort; checkbox items (<code>menuitemcheckbox</code>) toggle independently. The tick (<code>.menu__check</code>) keeps its space when hidden, so labels stay aligned. The trigger label names the current sort.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="menu-anchor"&gt;
+  &lt;button class="btn" type="button" id="sort-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="sort-menu"&gt;Sort: closest first &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 9l6 6 6-6"/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;div class="menu" style="width: max-content;" id="sort-menu" role="menu" aria-labelledby="sort-btn"&gt;
+    &lt;div role="group" aria-labelledby="sort-sec"&gt;
+      &lt;div class="menu__section" id="sort-sec" aria-hidden="true"&gt;Sort saved artists&lt;/div&gt;
+      &lt;button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"&gt;&lt;svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Closest first&lt;/button&gt;
+      &lt;button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1"&gt;&lt;svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Highest rated&lt;/button&gt;
+      &lt;button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1"&gt;&lt;svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Price, low to high&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="menu__sep" role="separator"&gt;&lt;/div&gt;
+    &lt;div role="group" aria-labelledby="show-sec"&gt;
+      &lt;div class="menu__section" id="show-sec" aria-hidden="true"&gt;Show&lt;/div&gt;
+      &lt;button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="true" tabindex="-1"&gt;&lt;svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Free Sat 14 Nov only&lt;/button&gt;
+      &lt;button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="false" tabindex="-1"&gt;&lt;svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Within 120 km only&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Danger and disabled items: artist actions</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas" style="justify-content: flex-end; align-items: flex-start; min-height: 19rem;">
+    <div class="menu-anchor">
+      <button class="btn btn--ghost btn--icon" type="button" id="more-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="more-menu" aria-label="More actions for Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4.5 12h2M11 12h2M17.5 12h2"/></svg></button>
+      <div class="menu" style="width: max-content;" id="more-menu" role="menu" aria-labelledby="more-btn">
+        <button class="menu__item" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share profile</button>
+        <button class="menu__item" type="button" role="menuitem" tabindex="-1" aria-disabled="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg>Message Luz Viva<span class="menu__shortcut">After booking</span></button>
+        <div class="menu__sep" role="separator"></div>
+        <button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button>
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>The danger item comes last, after a separator. A disabled item stays focusable (<code>aria-disabled</code>, not <code>disabled</code>) so screen-reader users hear that it exists and why it is off.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="menu-anchor"&gt;
+  &lt;button class="btn btn--ghost btn--icon" type="button" id="more-btn" aria-haspopup="menu" aria-expanded="true" aria-controls="more-menu" aria-label="More actions for Luz Viva"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4.5 12h2M11 12h2M17.5 12h2"/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;div class="menu" style="width: max-content;" id="more-menu" role="menu" aria-labelledby="more-btn"&gt;
+    &lt;button class="menu__item" type="button" role="menuitem" tabindex="-1"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/&gt;&lt;/svg&gt;Share profile&lt;/button&gt;
+    &lt;button class="menu__item" type="button" role="menuitem" tabindex="-1" aria-disabled="true"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/&gt;&lt;/svg&gt;Message Luz Viva&lt;span class="menu__shortcut"&gt;After booking&lt;/span&gt;&lt;/button&gt;
+    &lt;div class="menu__sep" role="separator"&gt;&lt;/div&gt;
+    &lt;button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 6l12 12M18 6 6 18"/&gt;&lt;/svg&gt;Remove from saved&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Try it</h3>
+      <p>This one works: click it, or Tab to it and press <kbd>Enter</kbd>, <kbd>↓</kbd> or <kbd>↑</kbd>. Inside, use the arrows, <kbd>Home</kbd>, <kbd>End</kbd>, a letter to jump, and <kbd>Esc</kbd> to close.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="justify-content: space-between; align-items: flex-start; min-height: 22rem;">
+          <p id="menu-demo-status" role="status" class="text-muted">Nothing chosen yet.</p>
+          <div class="menu-anchor" data-menu-demo>
+            <button class="avatar" type="button" id="live-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="live-menu" aria-label="Account menu for Naomi Fraser">NF</button>
+            <div class="menu" style="width: max-content;" id="live-menu" role="menu" aria-labelledby="live-btn" hidden>
+              <div role="group" aria-labelledby="live-sec">
+                <div class="menu__section" id="live-sec" aria-hidden="true">Riverside Community Church</div>
+                <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved artists<span class="menu__shortcut">3</span></a>
+                <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v4M16 3v4"/></svg>Booking requests<span class="menu__shortcut">1</span></a>
+                <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12zM12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>Church profile</a>
+              </div>
+              <div class="menu__sep" role="separator"></div>
+              <a class="menu__item" role="menuitem" tabindex="-1" href="#variants"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>Help and contact</a>
+              <button class="menu__item" role="menuitem" tabindex="-1" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 4h5v16h-5M10 8l-4 4 4 4M6 12h11"/></svg>Sign out</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The open panel uses the <code>hidden</code> attribute. The script on this page is a reference for the keyboard model, not production code.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Menus have one size. Every item is 44px tall, so the list is easy to hit on a phone."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Menus have one size. Every item is 44px tall, so the list is easy to hit on a phone.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Item states are forced with <code>data-state</code>. In the product, hover comes from the pointer and focus from the arrow keys, and both look the same apart from the inset focus rule.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Checked</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Action</th>
+            <td><div class="menu" role="menu" aria-label="Action, default"><button class="menu__item" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share profile</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Action, hover"><button class="menu__item" type="button" role="menuitem" tabindex="-1" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share profile</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Action, focus"><button class="menu__item" type="button" role="menuitem" tabindex="-1" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share profile</button></div></td>
+            <td><span class="text-caption">Not checkable</span></td>
+            <td><div class="menu" role="menu" aria-label="Action, disabled"><button class="menu__item" type="button" role="menuitem" tabindex="-1" aria-disabled="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share profile</button></div></td></tr>
+          <tr><th scope="row">Checkable</th>
+            <td><div class="menu" role="menu" aria-label="Checkable, default"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Checkable, hover"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1" data-state="hover"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Checkable, focus"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1" data-state="focus"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Checkable, checked"><button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Checkable, disabled"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false" aria-disabled="true" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button></div></td></tr>
+          <tr><th scope="row">Danger</th>
+            <td><div class="menu" role="menu" aria-label="Danger, default"><button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Danger, hover"><button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button></div></td>
+            <td><div class="menu" role="menu" aria-label="Danger, focus"><button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button></div></td>
+            <td><span class="text-caption">Not checkable</span></td>
+            <td><div class="menu" role="menu" aria-label="Danger, disabled"><button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1" aria-disabled="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Trigger</h3>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Trigger</th><th scope="col">Closed</th><th scope="col">Open</th><th scope="col">Focus</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Avatar</th><td><button class="avatar" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu for Naomi Fraser, closed example">NF</button></td><td><button class="avatar" type="button" aria-haspopup="menu" aria-expanded="true" aria-label="Account menu for Naomi Fraser, open example">NF</button></td><td><button class="avatar" type="button" aria-haspopup="menu" aria-expanded="false" data-state="focus" aria-label="Account menu for Naomi Fraser, focus example">NF</button></td></tr>
+          <tr><th scope="row">Button</th><td><button class="btn" type="button" aria-haspopup="menu" aria-expanded="false">Sort: closest <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></td><td><button class="btn" type="button" aria-haspopup="menu" aria-expanded="true">Sort: closest <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></td><td><button class="btn" type="button" aria-haspopup="menu" aria-expanded="false" data-state="focus">Sort: closest <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></td></tr>
+        </tbody>
+      </table></div>
+      <p>An open <code>.btn</code> trigger gets the subtle fill and drops its lift. The avatar has no open style of its own; the panel below it is the cue.</p>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="menu" role="menu" aria-label="Sort, light theme example">
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Closest first</button>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1" data-state="hover"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1" data-state="focus"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Price, low to high</button>
+          <div class="menu__sep" role="separator"></div>
+          <button class="menu__item" type="button" role="menuitem" tabindex="-1" aria-disabled="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg>Message Luz Viva</button>
+          <button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button>
+        </div></div>
+        <div data-theme="dark"><div class="menu" role="menu" aria-label="Sort, dark theme example">
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Closest first</button>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1" data-state="hover"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Highest rated</button>
+          <button class="menu__item" type="button" role="menuitemradio" aria-checked="false" tabindex="-1" data-state="focus"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Price, low to high</button>
+          <div class="menu__sep" role="separator"></div>
+          <button class="menu__item" type="button" role="menuitem" tabindex="-1" aria-disabled="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg>Message Luz Viva</button>
+          <button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button>
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Hover and focus</b> fill the item with <code>--color-accent-subtle</code>. Focus adds a 2px inset rule in the focus colour, so keyboard users can tell focus from the mouse position.</li>
+        <li><b>Checked</b> shows the tick. Nothing else changes: the tick is enough, and the trigger label repeats the choice.</li>
+        <li><b>Disabled</b> greys the item and ignores clicks, but it stays in the arrow-key order.</li>
+        <li><b>Danger</b> uses danger text and a pale red hover. It is for items that remove something from Naomi’s lists.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The panel is at least 14rem (224px) wide and grows to its longest item; the examples here set <code>width: max-content</code> inline until the stylesheet does. It opens under the trigger’s right edge, because triggers sit at the right of the top bar and of ticket stubs. At 360px it fits with the 16px page margin.</li>
+        <li>Item labels wrap rather than truncate. Keep them short so they don’t.</li>
+        <li>If a trigger sits on the left of a narrow screen, flip the panel to <code>left: 0</code> so it does not open off-screen.</li>
+        <li>On phones, the top-bar hamburger opens the main navigation; the avatar menu stays a menu. Neither turns into a bottom sheet.</li>
+        <li>A menu with more than eight items is too long for a phone screen. Split it, or use a page.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The menu reads semantic tokens directly: <code>--color-bg-surface-raised</code>, <code>--color-border-strong</code>, <code>--shadow-2</code>, <code>--color-accent-subtle</code> for hover and focus, <code>--color-focus-ring</code> for the inset focus rule, <code>--color-fg-muted</code> for section labels and hints, <code>--color-border-default</code> for separators and <code>--color-danger-fg</code> / <code>--color-danger-bg</code> for danger items. It has no <code>--menu-*</code> component tokens yet.</p>
+      <p>In the dark theme the panel is a raised charcoal surface with a light rule, and its hard shadow turns yellow like every other lifted surface on the stage. The account menu opens from the stage top bar but is itself a paper (or charcoal) panel, not part of the stage.</p>
+      <p>Because the top bar re-colours its links (<code>:is(.on-stage, .topbar) a:not(.btn):hover</code>), a link item inside a menu that lives in the top bar would turn yellow with no fill on hover. Menus need to opt out of that rule: <code>:is(.on-stage, .topbar) .menu a.menu__item:hover { background: var(--color-accent-subtle); color: var(--color-fg-default); }</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>The <a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/">APG Menu Button pattern</a>. The trigger is a <code>&lt;button&gt;</code> with <code>aria-haspopup="menu"</code>, <code>aria-expanded</code> and <code>aria-controls</code>. The panel has <code>role="menu"</code> and <code>aria-labelledby</code> pointing at the trigger. Items are <code>role="menuitem"</code>, <code>menuitemradio</code> or <code>menuitemcheckbox</code> with <code>tabindex="-1"</code>. Groups are <code>role="group"</code> labelled by their section label; separators are <code>role="separator"</code>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd> / <kbd>↓</kbd> on the trigger</td><td>Opens the menu and focuses the first item.</td></tr>
+        <tr><td><kbd>↑</kbd> on the trigger</td><td>Opens the menu and focuses the last item.</td></tr>
+        <tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>Moves to the next or previous item, wrapping at the ends. Disabled items are included.</td></tr>
+        <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>Moves to the first or last item.</td></tr>
+        <tr><td>A letter</td><td>Moves to the next item that starts with that letter (type-ahead).</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Activates the item and closes the menu. On a checkable item it sets the item and closes.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Activates an action item. On a checkable item it toggles the item and may leave the menu open.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the menu and returns focus to the trigger.</td></tr>
+        <tr><td><kbd>Tab</kbd></td><td>Closes the menu and moves focus to the next element after the trigger.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Opening moves focus into the menu; closing returns it to the trigger, except when Tab closes it. Items are focused with <code>element.focus()</code> (a roving focus), so the browser scrolls them into view. The focused item gets the subtle fill plus a 2px inset rule in <code>--color-focus-ring</code>, drawn inside the item so the panel’s edge never clips it.</p>
+      <h3>Labelling</h3>
+      <p>The trigger’s name says whose menu it is: “Account menu for Naomi Fraser”, “More actions for Luz Viva”. Avoid a bare “More”. The menu takes its name from the trigger. Item names come from their text, so a trailing count is read too (“Saved artists 3”). Section labels are <code>aria-hidden</code> and used only as group names, so they are not read twice. Disabled items keep their reason in the text (“After booking”).</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Item label on panel</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Section label and hint</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Item label on hover fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger label</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger label on hover</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Panel rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: item label on panel</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: section label and hint</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: danger label on hover</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+      </div>
+      <p>Disabled items use <code>--color-fg-disabled</code>, which WCAG exempts from contrast because the item is inactive. The reason text next to it should still be readable, so keep it short and rely on the screen-reader name as well.</p>
+      <h3>Motion</h3>
+      <p>The menu appears and disappears without animation. Item fills change instantly. Nothing here depends on motion.</p>
+      <h3>Touch</h3>
+      <p>Items are 44px tall and full width, so they meet the comfortable target. The avatar trigger is 40px; the 44px top bar row around it keeps the target comfortable. Tapping outside the menu closes it without acting.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Items start with a verb for actions (“Share profile”, “Remove from saved”, “Sign out”) and a noun for destinations (“Saved artists”, “Booking requests”).</li>
+        <li>Sentence case, two or three words. No trailing ellipsis unless the item opens a dialog that asks for more.</li>
+        <li>Sort items describe the order, not the field: “Closest first”, “Price, low to high”.</li>
+        <li>The trigger says what is selected (“Sort: closest first”) or whose menu it is (aria-label on icon and avatar triggers).</li>
+        <li>Keyboard shortcuts, if ever added, need a modifier and go in <code>aria-keyshortcuts</code>; single letters are taken by type-ahead. Today <code>.menu__shortcut</code> holds counts and short hints.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="menu" role="menu" aria-label="Do example: account menu end"><button class="menu__item" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>Help and contact</button><button class="menu__item" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 4h5v16h-5M10 8l-4 4 4 4M6 12h11"/></svg>Sign out</button></div></div><figcaption>“Sign out” is an ordinary item. Nothing is lost, so it does not need danger red.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="menu" role="menu" aria-label="Don't example: red sign out"><button class="menu__item" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>Help and contact</button><button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 4h5v16h-5M10 8l-4 4 4 4M6 12h11"/></svg>Sign out</button></div></div><figcaption>Red on “Sign out” cries wolf, and the real danger items stop standing out.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="menu" role="menu" aria-label="Do example: danger last"><button class="menu__item" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share profile</button><div class="menu__sep" role="separator"></div><button class="menu__item menu__item--danger" type="button" role="menuitem" tabindex="-1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Remove from saved</button></div></div><figcaption>The danger item comes last, behind a separator. Removal is undone from a toast, so it does not need a dialog.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser, missing haspopup example" aria-expanded="false">NF</button></div><figcaption>The mocks’ avatar had <code>aria-expanded</code> but no <code>aria-haspopup</code> or <code>aria-controls</code>, so screen readers did not announce a menu.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Panel fill</td><td><code>--color-bg-surface-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td></tr>
+          <tr><td>Panel rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Panel shadow</td><td><code>--shadow-2</code> (<code>--color-shadow</code>)</td><td><span data-theme="light" data-token="--shadow-2"></span></td><td><span data-theme="dark" data-token="--shadow-2"></span></td></tr>
+          <tr><td>Item hover / focus fill</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Item focus rule</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+          <tr><td>Section label, hint</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Separator</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Danger label / hover</td><td><code>--color-danger-fg</code> / <code>--color-danger-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Disabled label</td><td><code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+          <tr><td>Item height / padding</td><td><code>--target-comfortable</code>, <code>--space-3</code></td><td colspan="2"><span data-token="--target-comfortable"></span> / <span data-token="--space-3"></span></td></tr>
+          <tr><td>Panel padding / gap to trigger</td><td><code>--space-1</code></td><td colspan="2"><span data-token="--space-1"></span></td></tr>
+          <tr><td>Item / section type</td><td><code>--text-body-sm</code>, <code>--text-overline</code></td><td colspan="2"><span data-token="--text-body-sm"></span></td></tr>
+          <tr><td>Stacking</td><td><code>--z-dropdown</code></td><td colspan="2"><span data-token="--z-dropdown"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="menu-anchor"&gt;
+  &lt;button class="avatar" type="button" id="account-button" aria-label="Account menu for Naomi Fraser"
+          aria-haspopup="menu" aria-expanded="false" aria-controls="account-menu"&gt;NF&lt;/button&gt;
+  &lt;div class="menu" id="account-menu" role="menu" aria-labelledby="account-button" hidden&gt;
+    &lt;div role="group" aria-labelledby="account-church"&gt;
+      &lt;div class="menu__section" id="account-church" aria-hidden="true"&gt;Riverside Community Church&lt;/div&gt;
+      &lt;a class="menu__item" role="menuitem" tabindex="-1" href="/saved"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/&gt;&lt;/svg&gt;Saved artists&lt;span class="menu__shortcut"&gt;3&lt;/span&gt;&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div class="menu__sep" role="separator"&gt;&lt;/div&gt;
+    &lt;button class="menu__item" role="menuitem" tabindex="-1" type="button"&gt;Sign out&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"&gt;
+  &lt;svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Closest first
+&lt;/button&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.menu-anchor</code></td><td>Positioning context around the trigger and panel.</td></tr>
+        <tr><td><code>.menu</code> + <code>role="menu"</code></td><td>The panel. Inside <code>.menu-anchor</code> it is absolutely positioned under the trigger’s right edge; elsewhere it sits in the flow.</td></tr>
+        <tr><td><code>hidden</code></td><td>Closed. Remove it and set <code>aria-expanded="true"</code> on the trigger to open.</td></tr>
+        <tr><td><code>.menu__item</code></td><td>An item: a <code>&lt;button&gt;</code> for actions, an <code>&lt;a&gt;</code> for destinations, with <code>tabindex="-1"</code>.</td></tr>
+        <tr><td><code>.menu__item--danger</code></td><td>Danger text and hover for removals.</td></tr>
+        <tr><td><code>aria-disabled="true"</code></td><td>Greyed, focusable, ignores clicks.</td></tr>
+        <tr><td><code>.menu__check</code> + <code>aria-checked</code></td><td>Tick shown when <code>aria-checked="true"</code>; space reserved when false.</td></tr>
+        <tr><td><code>.menu__section</code>, <code>.menu__sep</code></td><td>Group label (also the group’s name) and hairline separator.</td></tr>
+        <tr><td><code>.menu__shortcut</code></td><td>Trailing hint, pushed to the right: a count, a short reason, or a modifier shortcut.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only: forces an item state.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the “NF” avatar trigger for Naomi’s account menu (closed), the sort field the sort menu stands in for on compact screens</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the same avatar trigger in the profile top bar</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The avatar trigger had <code>aria-expanded="false"</code> but no <code>aria-haspopup</code>, <code>aria-controls</code> or panel. It now follows the menu-button pattern.</li>
+        <li>The open menu itself is not in the mocks yet; it is part of the core set. The product needs it for the account menu, the saved-artists sort on phones and the per-artist actions on the saved list.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>/* Live demo of the APG Menu Button pattern for this page only. */
+document.querySelectorAll('[data-menu-demo]').forEach(function (anchor) {
+  var button = anchor.querySelector('[aria-haspopup="menu"]');
+  var menu = anchor.querySelector('[role="menu"]');
+  var items = function () { return Array.prototype.slice.call(menu.querySelectorAll('[role^="menuitem"]')); };
+  function open(focusLast) {
+    menu.hidden = false; button.setAttribute('aria-expanded', 'true');
+    var list = items(); (focusLast ? list[list.length - 1] : list[0]).focus();
+  }
+  function close(returnFocus) {
+    menu.hidden = true; button.setAttribute('aria-expanded', 'false');
+    if (returnFocus) button.focus();
+  }
+  button.addEventListener('click', function () { menu.hidden ? open(false) : close(true); });
+  button.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(e.key === 'ArrowUp'); }
+  });
+  menu.addEventListener('keydown', function (e) {
+    var list = items(), i = list.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); list[(i + 1) % list.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
+    else if (e.key === 'Home') { e.preventDefault(); list[0].focus(); }
+    else if (e.key === 'End') { e.preventDefault(); list[list.length - 1].focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); close(true); }
+    else if (e.key === 'Tab') { close(false); }
+    else if (e.key.length === 1 && /\S/.test(e.key)) {
+      var start = i + 1, key = e.key.toLowerCase();
+      for (var n = 0; n < list.length; n++) {
+        var item = list[(start + n) % list.length];
+        if (item.textContent.trim().toLowerCase().indexOf(key) === 0) { item.focus(); break; }
+      }
+    }
+  });
+  menu.addEventListener('click', function (e) {
+    var item = e.target.closest('[role^="menuitem"]');
+    if (!item || item.getAttribute('aria-disabled') === 'true') { e.preventDefault(); return; }
+    if (item.tagName === 'A') e.preventDefault();
+    var status = document.getElementById('menu-demo-status');
+    if (status) status.textContent = 'Chose “' + item.textContent.trim().replace(/\s+/g, ' ') + '”. In the product this would navigate or act.';
+    close(true);
+  });
+  document.addEventListener('click', function (e) { if (!anchor.contains(e.target) && !menu.hidden) close(false); });
+});</script>
+</body>
+</html>

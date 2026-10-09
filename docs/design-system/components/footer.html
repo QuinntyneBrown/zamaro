@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Footer — Zamaro design system</title>
+<meta name="description" content="The footer closes every Zamaro page on the charcoal stage: the giant Zamaro word, links for churches and artists, and the signed-in booker’s shortcuts. Full and simple variants.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: keep ds.css prose list spacing out of product specimens. */
+  :is(.ds-example, .ds-themes, .ds-anatomy__figure, .ds-do, .ds-dont, .ds-matrix) li + li { margin-top: 0; }
+  /* Docs only: the specimens sit in a frame narrower than the viewport, so trim the page-level bottom padding. */
+  .ds-example .footer:not(.footer--simple), .ds-anatomy__figure .footer { padding-block: var(--space-10); }
+  .ds-example .footer .container, .ds-anatomy__figure .footer .container, .ds-themes .footer .container { padding-inline: var(--space-6); }
+  /* Docs only: the frames are about 800px wide, not a full page, so the word is set one step smaller. */
+  :is(.ds-example, .ds-anatomy__figure) .footer__word { font-size: var(--font-size-4xl); }
+  .ds-matrix { position: relative; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Navigation</p>
+      <h1>Footer</h1>
+      <p class="ds-lead">The footer closes every page on the charcoal stage, like the bottom of a gig poster: the Zamaro word set huge in yellow, then short columns of links for churches, artists and the signed-in booker.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;footer&gt;</code> landmark</span><span class="ds-pill">Class <code>.footer</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Every page ends with the footer. It repeats the routes people look for at the bottom of a page (how booking works, how to join as an artist, how to reach Zamaro) and gives a signed-in booker a shortcut to their saved artists. It is the page’s <code>&lt;footer&gt;</code> landmark.</p>
+      <ul>
+        <li><b>Full</b> (<code>.footer.on-stage</code>): the yellow word, a one-line description and three link columns. Use it on public pages.</li>
+        <li><b>Simple</b> (<code>.footer--simple</code>): one short row. Use it where the person is in the middle of a task, such as the booking flow or the artist dashboard, so the footer does not compete.</li>
+      </ul>
+      <p>Do not put primary actions in the footer. “Request to book” and “Apply as an artist” belong in the page (the <a href="booking-form.html">booking ticket</a> and the <a href="band.html">band</a>).</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy" style="grid-template-columns: minmax(0, 1fr);">
+        <figure class="ds-anatomy__figure" style="padding: var(--space-10) 0; place-items: stretch; grid-template-columns: minmax(0, 1fr);">
+          <footer class="footer on-stage">
+            <div class="container footer__grid">
+              <div class="stack">
+                <p class="footer__word" aria-hidden="true">Zamaro</p>
+                <p>Worship artists for churches around Toronto.</p>
+              </div>
+              <div>
+                <h2>Churches</h2>
+                <ul>
+                  <li><a href="#anatomy">Find who’s free</a></li>
+                  <li><a href="#anatomy">How booking works</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Artists</h2>
+                <ul>
+                  <li><a href="#anatomy">Join the lineup</a></li>
+                  <li><a href="#anatomy">What artists earn</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Naomi Fraser</h2>
+                <ul>
+                  <li>Riverside Community Church</li>
+                  <li><a href="#anatomy">Saved artists (3)</a></li>
+                </ul>
+              </div>
+            </div>
+          </footer>
+          <span class="ds-callout" style="left: 3%; top: 4%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 1%; top: 28%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 1%; top: 50%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 66%; top: 4%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 66%; top: 86%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 90%; top: 4%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Stage and rule</b><small><code>--color-bg-stage</code> with a 4px yellow rule along the top, mirroring the top bar.</small></div></li>
+          <li><div><b>The word</b><small><code>.footer__word</code>: “Zamaro” in the display face at <code>--text-display</code>, yellow. Decorative (<code>aria-hidden</code>).</small></div></li>
+          <li><div><b>Description</b><small>One sentence on what Zamaro is, in body text.</small></div></li>
+          <li><div><b>Column heading</b><small>An <code>&lt;h2&gt;</code> in the mono overline style. It names the audience: churches, artists, the booker.</small></div></li>
+          <li><div><b>Links</b><small>Underlined, inheriting paper text; yellow on hover. 12px between items.</small></div></li>
+          <li><div><b>Account column</b><small>Only when signed in: the booker’s name, church and “Saved artists (3)”.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Full, signed out</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <footer class="footer on-stage">
+            <div class="container footer__grid">
+              <div class="stack">
+                <p class="footer__word" aria-hidden="true">Zamaro</p>
+                <p>Worship artists for churches around Toronto.</p>
+              </div>
+              <div>
+                <h2>Churches</h2>
+                <ul>
+                  <li><a href="#variants">Find who’s free</a></li>
+                  <li><a href="#variants">How booking works</a></li>
+                  <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Artists</h2>
+                <ul>
+                  <li><a href="#variants">Join the lineup</a></li>
+                  <li><a href="#variants">What artists earn</a></li>
+                </ul>
+              </div>
+              <div>
+                <h2>Your account</h2>
+                <ul>
+                  <li><a href="#variants">Sign in</a></li>
+                </ul>
+              </div>
+            </div>
+          </footer>
+        </div>
+        <div class="ds-example__caption"><span>The last column becomes “Your account · Sign in” when nobody is signed in. Signed in, it shows the booker’s name and saved artists, as in the anatomy above.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;footer class="footer on-stage"&gt;
+  &lt;div class="container footer__grid"&gt;
+    &lt;div class="stack"&gt;
+      &lt;p class="footer__word" aria-hidden="true"&gt;Zamaro&lt;/p&gt;
+      &lt;p&gt;Worship artists for churches around Toronto.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+      &lt;h2&gt;Churches&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href="/"&gt;Find who’s free&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/#how"&gt;How booking works&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="mailto:hello@zamaro.ca"&gt;hello@zamaro.ca&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+    …
+  &lt;/div&gt;
+&lt;/footer&gt;</code></pre></details>
+      </div>
+
+      <h3>Simple</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <footer class="footer footer--simple on-stage">
+            <div class="container cluster cluster--between">
+              <p>Zamaro · Worship artists around Toronto</p>
+              <ul class="cluster cluster--lg" style="display: flex;">
+                <li><a href="#variants">How booking works</a></li>
+                <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+              </ul>
+            </div>
+          </footer>
+        </div>
+        <div class="ds-example__caption"><span><code>.footer--simple</code>: 32px padding, one row that wraps on phones. For the booking flow and the artist dashboard.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;footer class="footer footer--simple on-stage"&gt;
+  &lt;div class="container cluster cluster--between"&gt;
+    &lt;p&gt;Zamaro · Worship artists around Toronto&lt;/p&gt;
+    &lt;ul class="cluster cluster--lg"&gt;…&lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The footer has two variants (full and simple) rather than sizes; its spacing follows the page margin tokens."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The footer has two variants (full and simple) rather than sizes; its spacing follows the page margin tokens.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Only the links have states. Hover and focus are forced with <code>data-state</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Plain text (not a link)</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Footer link</th>
+            <td><div class="footer on-stage" style="padding: var(--space-3); border-top: 0;"><a href="#states">Find who’s free</a></div></td>
+            <td><div class="footer on-stage" style="padding: var(--space-3); border-top: 0;"><a href="#states" style="color: var(--color-accent-on-stage);">Find who’s free</a></div></td>
+            <td><div class="footer on-stage" style="padding: var(--space-3); border-top: 0;"><a href="#states" data-state="focus">Find who’s free</a></div></td>
+            <td><div class="footer on-stage" style="padding: var(--space-3); border-top: 0;"><span>Riverside Community Church</span></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><footer class="footer footer--simple on-stage"><div class="container stack stack--sm"><p class="footer__word" aria-hidden="true" style="font-size: var(--font-size-3xl);">Zamaro</p><ul><li><a href="#states">Find who’s free</a></li><li><a href="#states" data-state="focus">Join the lineup</a></li></ul></div></footer></div>
+        <div data-theme="dark"><footer class="footer footer--simple on-stage"><div class="container stack stack--sm"><p class="footer__word" aria-hidden="true" style="font-size: var(--font-size-3xl);">Zamaro</p><ul><li><a href="#states">Find who’s free</a></li><li><a href="#states" data-state="focus">Join the lineup</a></li></ul></div></footer></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> turns a link yellow (<code>--color-accent-on-stage</code>) and removes the highlighter background links get on paper.</li>
+        <li><b>Focus</b> shows the yellow stage ring.</li>
+        <li>Plain facts (the booker’s church) are text, not links, and have no states.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Below 768px</b>: one column. The word and description, then each link group stacked, 32px apart.</li>
+        <li><b>768–1023px</b>: the word spans the full width; the three link groups sit in three columns under it.</li>
+        <li><b>1024px and wider</b>: four columns, 2fr for the word and 1fr for each group.</li>
+        <li>The word scales with the viewport (<code>--font-size-5xl</code> is <code>clamp(4rem, 15vw, 10rem)</code>). With the condensed display face it fits its column; if the fallback face is wider, it can run past its column, so keep the word to one short line.</li>
+        <li>Bottom padding is <code>--space-24</code> so the last link clears the toast region and the phone’s home indicator.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The footer is a stage surface in both themes: <code>.footer</code> shares the <code>.on-stage</code> rule, reading <code>--color-bg-stage</code> and <code>--color-fg-on-stage</code>. The word and link hover use <code>--color-accent-on-stage</code>; the top rule uses <code>--color-accent</code>. On the dark theme the stage drops to the darkest charcoal so the footer still reads as a separate band below the dark canvas.</p>
+      <p>There are no component tokens. The footer’s links are re-skinned by the shared stage rule <code>:is(.on-stage, .topbar) a:not(.btn)</code>, the same one the top bar uses.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A <code>&lt;footer&gt;</code> that is a direct child of <code>&lt;body&gt;</code>, so it is the page’s contentinfo landmark. Link groups are lists under <code>&lt;h2&gt;</code> headings, so screen-reader users can jump between them by heading. No APG widget pattern applies; it is plain links.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through the links in reading order: column by column, top to bottom.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows the link (or opens the mail app for hello@zamaro.ca).</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The ring is yellow on the stage, 3px with a 3px offset. Nothing in the footer traps or moves focus.</p>
+      <h3>Labelling</h3>
+      <p>The giant word is <code>aria-hidden="true"</code>: it repeats the brand that the top bar already names, and reading “Zamaro” once more adds nothing. Column headings name their audience. The mail link shows the address itself, so its purpose is clear out of context (WCAG 2.4.4).</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Links and text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>The word, hovered links</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Muted text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: links and text on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: the word, hovered links, focus ring</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None. Link colour changes instantly.</p>
+      <h3>Touch</h3>
+      <p>Footer links are inline text in a list with 12px between items, so each line is a target at least 24px tall (WCAG 2.5.8). On phones the column layout gives every link its own full-width row.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Column headings name people, not site sections: “Churches”, “Artists”, then the booker’s own name.</li>
+        <li>Links start with a verb or say exactly where they go: “Find who’s free”, “Join the lineup”, “What artists earn”.</li>
+        <li>Two or three links per column. The footer is a short list of routes, not a site map.</li>
+        <li>The description is one sentence: “Worship artists for churches around Toronto.”</li>
+        <li>Counts match the top bar: “Saved artists (3)”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><p class="footer__word" aria-hidden="true" style="font-size: var(--font-size-3xl);">Zamaro</p></div><figcaption>The word is decoration, hidden from screen readers. The brand is named once, in the top bar.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><h2 class="footer__word" style="font-size: var(--font-size-3xl);">Zamaro</h2></div><figcaption>Making the word a heading. It adds an empty “Zamaro” section to the heading outline of every page.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><ul class="stack stack--sm" style="list-style: none; padding: 0;"><li><a href="#do-dont">Join the lineup</a></li><li><a href="#do-dont">What artists earn</a></li></ul></div><figcaption>Footer links are plain stage links that turn yellow on hover.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><button class="btn btn--primary" type="button">Apply as an artist</button></div><figcaption>A yellow primary button in the footer competes with the page’s one main action.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Background</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+          <tr><td>Text and links</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+          <tr><td>Word, link hover</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Top rule</td><td><code>--color-accent</code>, <code>--border-width-poster</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Word size</td><td><code>--text-display</code> (<code>--font-size-5xl</code>)</td><td colspan="2"><span data-token="--font-size-5xl"></span></td></tr>
+          <tr><td>Column heading</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--text-overline"></span></td></tr>
+          <tr><td>Padding full / simple</td><td><code>--space-16</code> + <code>--space-24</code> / <code>--space-8</code></td><td colspan="2"><span data-token="--space-16"></span> top, <span data-token="--space-24"></span> bottom / <span data-token="--space-8"></span></td></tr>
+          <tr><td>Column gap / link gap</td><td><code>--space-8</code> / <code>--space-3</code></td><td colspan="2"><span data-token="--space-8"></span> / <span data-token="--space-3"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;footer class="footer on-stage"&gt;
+  &lt;div class="container footer__grid"&gt;
+    &lt;div class="stack"&gt;
+      &lt;p class="footer__word" aria-hidden="true"&gt;Zamaro&lt;/p&gt;
+      &lt;p&gt;Worship artists for churches around Toronto.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div&gt;&lt;h2&gt;Churches&lt;/h2&gt;&lt;ul&gt;…&lt;/ul&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;h2&gt;Artists&lt;/h2&gt;&lt;ul&gt;…&lt;/ul&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;h2&gt;Naomi Fraser&lt;/h2&gt;&lt;ul&gt;
+      &lt;li&gt;Riverside Community Church&lt;/li&gt;
+      &lt;li&gt;&lt;a href="/account/saved"&gt;Saved artists (3)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/footer&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.footer</code></td><td>Stage background, yellow top rule, page-level padding.</td></tr>
+        <tr><td><code>.on-stage</code></td><td>Applies the stage colours and link rules (always pair with <code>.footer</code>).</td></tr>
+        <tr><td><code>.footer__grid</code></td><td>1, 3 or 4 columns by breakpoint; the first child spans the row at 768–1023px.</td></tr>
+        <tr><td><code>.footer__word</code></td><td>The giant yellow word; add <code>aria-hidden="true"</code>.</td></tr>
+        <tr><td><code>.footer--simple</code></td><td>One short row with 32px padding.</td></tr>
+        <tr><td><code>data-state="focus"</code></td><td>Documentation only: forces the focus ring.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks, where the same footer closes every page:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the full footer with “Churches”, “Artists” and “Naomi Fraser” columns</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: unchanged while the lineup loads, is empty or fails</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>, <a href="../../mocks/pages/artist/loading.html">loading</a>, <a href="../../mocks/pages/artist/empty.html">empty</a> and <a href="../../mocks/pages/artist/error.html">error</a>: the same footer under the profile</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The mocks had only the full footer. <code>.footer--simple</code> was added for task pages (booking flow, dashboard), and the signed-out “Your account · Sign in” column was defined.</li>
+        <li>The large bottom padding (<code>--space-24</code>) was kept so the last link clears the toast region; the toast region itself moved down to <code>--space-6</code> (phones <code>--space-4</code> plus the safe area) instead of sitting at <code>--space-16</code>.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

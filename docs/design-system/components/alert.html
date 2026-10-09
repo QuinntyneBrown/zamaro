@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alert &amp; banner — Zamaro design system</title>
+<meta name="description" content="Alerts explain something that happened in one part of the page and offer a way forward. Banners carry page-wide news across the top. Four tones, dismissible and compact, in both themes.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Alert &amp; banner</h1>
+      <p class="ds-lead">An alert sits where something happened and says what to do next: “We lost the signal. Try again.” A banner runs across the top of the page for news that affects every part of it.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="alert"</code> / <code>role="status"</code></span><span class="ds-pill">Class <code>.alert</code> <code>.banner</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use an <b>alert</b> when one region of the page needs to explain itself: the lineup failed to load, a request was sent, a deposit is due. It stays in the layout until the problem is fixed or the booker dismisses it. Use a <b>banner</b> for news that affects the whole page or the whole site, such as planned maintenance or being offline.</p>
+      <ul>
+        <li><b>Info</b> (the default) adds context the booker would otherwise miss: travel is included within 120 km.</li>
+        <li><b>Success</b> confirms something that lasts: “Request sent to Abigail Mensah.” For quick confirmations such as saving an artist, use a <a href="toast.html">toast</a>.</li>
+        <li><b>Warning</b> flags something that needs attention soon but isn’t broken: a deposit due date, one date left.</li>
+        <li><b>Danger</b> reports a failure and how to recover: “We lost the signal.” This is the tone the error mocks use.</li>
+      </ul>
+      <p>Don’t use an alert for a problem with one field; use an <a href="inline-message.html">inline message</a> under the field. Don’t use it for a whole page that failed; use the <a href="error-page.html">error page</a> composition, which wraps an alert in a stage poster.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="alert alert--danger alert--dismissible" style="width: 100%;">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm">
+              <p class="alert__title">We lost the signal</p>
+              <p>We couldn’t load who’s free on Sat 14 Nov. Your date, location and filters are kept.</p>
+            </div>
+            <div class="alert__actions">
+              <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+            </div>
+            <button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: We lost the signal"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+          <span class="ds-callout" style="left: 6%; top: 22%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 50%; top: 9%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 84%; top: 48%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 36%; top: 74%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 86%; top: 12%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 4%; top: 86%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Icon</b><small>28px (<code>.icon--lg</code>) in <code>--alert-icon</code>, <code>aria-hidden</code>. Info circle, check, or warning triangle for warning and danger.</small></div></li>
+          <li><div><b>Title</b><small><code>.alert__title</code>: display face, 28px, uppercase. Says what happened in a few words.</small></div></li>
+          <li><div><b>Body</b><small>One or two sentences of body text: what is safe and what to do.</small></div></li>
+          <li><div><b>Actions (optional)</b><small><code>.alert__actions</code>: at most one primary and one secondary button. Sits under the text, aligned with it from 640px.</small></div></li>
+          <li><div><b>Close (optional)</b><small><code>.alert__close</code> on a ghost icon button, only on <code>.alert--dismissible</code>.</small></div></li>
+          <li><div><b>Container</b><small>2px rule in <code>--alert-border</code>, tinted fill <code>--alert-bg</code>, 24px padding, square corners.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>The tone is a modifier on <code>.alert</code>. Plain <code>.alert</code> is info. Pick the tone from what happened, not from how loud you want it to be.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="alert">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">Travel is included within 120 km</p><p>Artists who drive farther may add a travel fee. You’ll see it before you send a request.</p></div>
+          </div>
+          <div class="alert alert--success">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">Request sent to Abigail Mensah</p><p>She usually replies within 2 days. Nothing is charged until she accepts.</p></div>
+            <div class="alert__actions"><a class="btn" href="#variants">View your request</a></div>
+          </div>
+          <div class="alert alert--warning">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">Deposit due Fri 30 Oct</p><p>Pay the 25% deposit ($162.50) to lock in Abigail for Sat 14 Nov. Unpaid requests are released after that date.</p></div>
+            <div class="alert__actions"><a class="btn btn--primary" href="#variants">Pay deposit</a></div>
+          </div>
+          <div class="alert alert--danger">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="alert__actions">
+              <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+              <a class="btn" href="mailto:hello@zamaro.ca">Email us</a>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Info (default), success, warning, danger. Each pairs colour with an icon and a title, so the tone never depends on colour alone.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="alert alert--danger" role="alert"&gt;
+  &lt;svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;
+  &lt;div class="stack stack--sm"&gt;
+    &lt;p class="alert__title"&gt;We lost the signal&lt;/p&gt;
+    &lt;p&gt;We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="alert__actions"&gt;
+    &lt;button class="btn btn--primary" type="button"&gt;…Try again&lt;/button&gt;
+    &lt;a class="btn" href="mailto:hello@zamaro.ca"&gt;Email us&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Dismissible</h3>
+      <p>Add <code>.alert--dismissible</code> and a <code>.alert__close</code> button when the message is only for information and the booker has read it. Never make a danger alert dismissible while the problem is still there.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="alert alert--success alert--dismissible">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">Request sent to Abigail Mensah</p><p>She usually replies within 2 days. We’ll email you at Riverside Community Church.</p></div>
+            <button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: Request sent to Abigail Mensah"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The close button is a 44px ghost icon button pinned to the top-right corner; the alert reserves room for it on the right.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="alert alert--success alert--dismissible" role="status"&gt;
+  …icon, title, body…
+  &lt;button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: Request sent to Abigail Mensah"&gt;
+    &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 6l12 12M18 6 6 18"/&gt;&lt;/svg&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+
+      <h3>Page banner</h3>
+      <p>A <code>.banner</code> spans the full width directly under the top bar. It is a single line of small text with an optional small button. It defaults to warning; <code>.banner--info</code> and <code>.banner--danger</code> change the tone.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <div class="banner">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <p class="banner__text">Zamaro is down for maintenance Sun 11 Oct, 1–3 am. Requests you send before then are safe.</p>
+          </div>
+          <div class="banner banner--info">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>
+            <p class="banner__text">Showing artists who drive to Burlington, ON.</p>
+            <a class="btn btn--sm" href="#variants">Change location</a>
+          </div>
+          <div class="banner banner--danger">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <p class="banner__text">You’re offline. Your search is kept, and the lineup will refresh when you reconnect.</p>
+            <button class="btn btn--sm" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Warning (default), info and danger banners. The text wraps; the button drops below it when space runs out.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="banner banner--danger" role="status"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…warning…&lt;/svg&gt;
+  &lt;p class="banner__text"&gt;You’re offline. Your search is kept, and the lineup will refresh when you reconnect.&lt;/p&gt;
+  &lt;button class="btn btn--sm" type="button"&gt;Try again&lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>The default alert has 24px padding and a 28px title, for messages that explain a whole section. <code>.alert--compact</code> has 16px padding and a 22px title, for alerts inside a card, the booking stub or a dialog. Banners have one size.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="alert alert--warning">
+            <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">Deposit due Fri 30 Oct</p><p>Pay $162.50 to lock in Abigail for Sat 14 Nov.</p></div>
+          </div>
+          <div class="alert alert--warning alert--compact">
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+            <div class="stack stack--sm"><p class="alert__title">Deposit due Fri 30 Oct</p><p>Pay $162.50 to lock in Abigail for Sat 14 Nov.</p></div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Default (24px padding, <code>--text-h3</code> title, 28px icon) and compact (16px padding, <code>--text-h4</code> title, 20px icon).</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The alert itself is static; its states live in its actions. Focus and hover are forced with <code>data-state</code>. A retry in progress sets <code>aria-busy="true"</code> on the button and keeps the alert in place until the result arrives.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Tone</th><th scope="col">Default</th><th scope="col">Action focused</th><th scope="col">Retrying</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Info</th>
+            <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button">See rates</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button" data-state="focus">See rates</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p><div class="alert__actions"><button class="btn btn--sm" type="button" aria-busy="true">Loading rates…</button></div></div></div></td></tr>
+          <tr><th scope="row">Success</th>
+            <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button">View request</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button" data-state="focus">View request</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p><div class="alert__actions"><button class="btn btn--sm" type="button" aria-busy="true">Opening…</button></div></div></div></td></tr>
+          <tr><th scope="row">Warning</th>
+            <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Pay deposit</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" data-state="focus">Pay deposit</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true">Paying…</button></div></div></div></td></tr>
+          <tr><th scope="row">Danger</th>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" data-state="focus">Try again</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true">Trying again…</button></div></div></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Dismiss button</h3>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>.alert__close</code></th>
+            <td><div class="alert alert--success alert--compact alert--dismissible" style="width: 10rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Sent</p><button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: Sent"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></td>
+            <td><div class="alert alert--success alert--compact alert--dismissible" style="width: 10rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Sent</p><button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: Sent" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></td>
+            <td><div class="alert alert--success alert--compact alert--dismissible" style="width: 10rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Sent</p><button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: Sent" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></td>
+            <td><div class="alert alert--success alert--compact alert--dismissible" style="width: 10rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Sent</p><button class="btn btn--ghost btn--icon alert__close" type="button" aria-label="Dismiss: Sent" data-state="active"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack stack--sm">
+          <div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p></div>
+          <div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p></div>
+          <div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p></div>
+          <div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p></div>
+          <div class="banner banner--danger" style="padding-inline: var(--space-4);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="banner__text">You’re offline.</p></div>
+        </div></div>
+        <div data-theme="dark"><div class="stack stack--sm">
+          <div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="alert__title">Travel included</p></div>
+          <div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="alert__title">Request sent</p></div>
+          <div class="alert alert--warning alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Deposit due 30 Oct</p></div>
+          <div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">We lost the signal</p></div>
+          <div class="banner banner--danger" style="padding-inline: var(--space-4);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="banner__text">You’re offline.</p></div>
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Appearing</b>: an alert that reports the result of an action (a failed retry, a sent request) is inserted into an element that already exists, so the live region announces it.</li>
+        <li><b>Retrying</b>: the button goes busy; the alert text does not change until the result is known. On success the alert is removed and focus moves to the content that loaded.</li>
+        <li><b>Dismissed</b>: the alert is removed from the DOM and focus moves to the next logical element, usually the section heading.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Below 640px the actions span the full width under the icon and text (<code>grid-column: 1 / -1</code>). From 640px they line up with the text column.</li>
+        <li>Action buttons wrap onto a new line instead of shrinking. A label that is too long wraps to a balanced second line rather than overflowing, but that is a safety net: keep labels short enough for one line. The mock’s “Email the Zamaro team” just fits a full-width alert at 360px; inside anything narrower (a card, the stub, these examples) use “Email us”.</li>
+        <li>The alert fills its container. In the lineup it spans the container; in the booking stub it uses <code>.alert--compact</code>.</li>
+        <li>Banners pad with <code>--layout-margin</code>, so their text lines up with the page content at every breakpoint. The text takes the remaining width (<code>flex: 1 1 16rem</code>) and the button wraps below it on phones.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Alerts and banners read four component tokens that each tone sets from the status tokens: <code>--alert-bg</code> (tinted fill), <code>--alert-fg</code> (status text colour, reserved for status-coloured copy), <code>--alert-border</code> (the 2px rule) and <code>--alert-icon</code>. Title and body stay <code>--color-fg-default</code>, so body text always has full contrast. Warning uses <code>--color-warning-icon</code> for its rule because the warning border token is too pale to read as an edge.</p>
+      <pre><code>/* A new tone needs only the four component tokens */
+.alert--warning { --alert-bg: var(--color-warning-bg); --alert-fg: var(--color-warning-fg);
+                  --alert-border: var(--color-warning-icon); --alert-icon: var(--color-warning-icon); }</code></pre>
+      <p>In the dark theme the tinted fills become deep, low-chroma versions of each hue and the rule and icon lighten, so the status still reads on the charcoal stage. Buttons inside an alert keep their own tokens: primary stays yellow with an ink label.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">APG Alert pattern</a>. Use <code>role="alert"</code> only for a new, important message the booker must hear now, such as a failed load after they searched (as in the error mocks). Use <code>role="status"</code> for confirmations (“Request sent”) and for banners that appear while the page is open. An alert or banner that is part of the page when it loads needs no role. Never move focus into an alert just to announce it.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through the actions, then the close button, in DOM order. The alert itself is not focusable.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Activates the focused action or the close button.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Does nothing. Alerts are not overlays; only the close button dismisses them.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>Actions use the standard ring: ink on newsprint, yellow in dark mode. After dismissing, move focus to the section heading or the next control so it isn’t lost on <code>&lt;body&gt;</code>. After a successful retry, focus stays on the page and the alert is removed.</p>
+      <h3>Labelling</h3>
+      <p>The title and body are read in order inside the live region. The icon is decorative (<code>aria-hidden</code>), because the title already states the tone. The close button names what it dismisses: “Dismiss: Request sent to Abigail Mensah”. A link-styled action names its destination (“Email the Zamaro team”, not “Contact”).</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Body text on info fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-info-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Body text on success fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-success-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Body text on warning fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-warning-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Body text on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger icon on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-danger-icon|--color-danger-bg" data-min="3"></span></div>
+        <div class="ds-pair"><span>Warning icon on warning fill</span><span class="ds-pair__ratio" data-contrast="--color-warning-icon|--color-warning-bg" data-min="3"></span></div>
+        <div class="ds-pair"><span>Danger rule on the page</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: body text on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: body text on warning fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-warning-bg" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: danger icon on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-danger-icon|--color-danger-bg" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Alerts appear and disappear without animation, so the layout shift is a single step rather than a slide. Buttons inside keep their own <code>--duration-fast</code> lift, which reduced motion removes.</p>
+      <h3>Touch</h3>
+      <p>Action buttons are 44px (36px for <code>.btn--sm</code> in compact alerts and banners, which still clears the 24px minimum). The close button is a 44px square. Actions in a cluster are 12px apart.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Title: what happened, in a few words, in sentence case in the source: “We lost the signal”, “Request sent to Abigail Mensah”, “Deposit due Fri 30 Oct”.</li>
+        <li>Body: what is safe and what to do, in one or two short sentences. “Your date, location and filters are kept.” is the reassurance the error mocks use.</li>
+        <li>For errors, say whose side it is on when you know: “It’s on our side, not yours.” Never blame the booker or show a raw error string.</li>
+        <li>Actions start with a verb and say what happens: “Try again”, “Pay deposit”, “Back to the lineup”. One primary action at most.</li>
+        <li>Banners are one sentence. Name the date and time for planned events: “Sun 11 Oct, 1–3 am”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>Your date and filters are kept.</p></div></div></div><figcaption>Give a failure the danger tone explicitly: <code>alert alert--danger</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>Your date and filters are kept.</p></div></div></div><figcaption>The mocks used bare <code>.alert</code> for errors because it was danger-only. Plain <code>.alert</code> is now info, so an error without the modifier reads as a tip.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div class="stack stack--sm"><p class="alert__title">Request sent</p><div class="cluster"><a class="btn btn--sm" href="#do-dont">View request</a></div></div></div></div><figcaption>One clear next step, styled as a secondary button.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--success alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div class="stack stack--sm"><p class="alert__title">Request sent</p><div class="cluster"><button class="btn btn--primary btn--sm" type="button">View</button><button class="btn btn--primary btn--sm" type="button">Share</button><button class="btn btn--sm" type="button">Edit</button></div></div></div></div><figcaption>Three actions, two of them yellow. An alert offers one way forward, two at most.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="container page-error" style="padding: 0;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Profile didn’t load</p></div></div></div><figcaption>Wrap a page-level alert in <code>.page-error</code> for its vertical spacing.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--danger alert--compact" style="margin-block: 2.5rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Profile didn’t load</p></div></div><figcaption>The artist error mock spaced its alert with an inline <code>padding-block</code>. Hand-set spacing drifts from page to page.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Info fill / rule</td><td><code>--color-info-bg</code> / <code>--color-info-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-info-bg" data-swatch></i><span data-token="--color-info-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-info-bg" data-swatch></i><span data-token="--color-info-bg"></span></span></td></tr>
+          <tr><td>Info icon</td><td><code>--color-info-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-info-icon" data-swatch></i><span data-token="--color-info-icon"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-info-icon" data-swatch></i><span data-token="--color-info-icon"></span></span></td></tr>
+          <tr><td>Success fill</td><td><code>--color-success-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-bg" data-swatch></i><span data-token="--color-success-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-bg" data-swatch></i><span data-token="--color-success-bg"></span></span></td></tr>
+          <tr><td>Success rule / icon</td><td><code>--color-success-border</code> / <code>--color-success-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-border" data-swatch></i><span data-token="--color-success-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-border" data-swatch></i><span data-token="--color-success-border"></span></span></td></tr>
+          <tr><td>Warning fill</td><td><code>--color-warning-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-warning-bg" data-swatch></i><span data-token="--color-warning-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-warning-bg" data-swatch></i><span data-token="--color-warning-bg"></span></span></td></tr>
+          <tr><td>Warning rule and icon</td><td><code>--color-warning-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-warning-icon" data-swatch></i><span data-token="--color-warning-icon"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-warning-icon" data-swatch></i><span data-token="--color-warning-icon"></span></span></td></tr>
+          <tr><td>Danger fill</td><td><code>--color-danger-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td></tr>
+          <tr><td>Danger rule / icon</td><td><code>--color-danger-border</code> / <code>--color-danger-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Title and body</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Padding default / compact</td><td><code>--space-6</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-4"></span></td></tr>
+          <tr><td>Banner padding</td><td><code>--space-3</code>, <code>--layout-margin</code></td><td colspan="2"><span data-token="--space-3"></span> · <span data-token="--layout-margin"></span></td></tr>
+          <tr><td>Title</td><td><code>--text-h3</code> / <code>--text-h4</code> (compact)</td><td colspan="2"><span data-token="--text-h3"></span></td></tr>
+          <tr><td>Rule</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Close button room</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;!-- Inserted after a failed load: announce it now --&gt;
+&lt;div class="alert alert--danger" role="alert"&gt;
+  &lt;svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;
+  &lt;div class="stack stack--sm"&gt;
+    &lt;p class="alert__title"&gt;We couldn’t reach the artist’s page&lt;/p&gt;
+    &lt;p&gt;It’s on our side, not yours. Your search is saved and any request you’ve sent is safe.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="alert__actions"&gt;
+    &lt;button class="btn btn--primary" type="button"&gt;…Try again&lt;/button&gt;
+    &lt;a class="btn" href="/discover"&gt;Back to the lineup&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Page-wide news under the top bar --&gt;
+&lt;div class="banner" role="status"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+  &lt;p class="banner__text"&gt;Zamaro is down for maintenance Sun 11 Oct, 1–3 am.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.alert</code></td><td>Base alert, info tone: icon column and text column, 24px padding.</td></tr>
+        <tr><td><code>.alert--success</code> <code>.alert--warning</code> <code>.alert--danger</code></td><td>Tone; sets the four <code>--alert-*</code> tokens.</td></tr>
+        <tr><td><code>.alert__title</code></td><td>Display-face title.</td></tr>
+        <tr><td><code>.alert__actions</code></td><td>Button row; full width on phones, under the text from 640px.</td></tr>
+        <tr><td><code>.alert--dismissible</code> + <code>.alert__close</code></td><td>Reserves room on the right and pins the close button to the top-right corner.</td></tr>
+        <tr><td><code>.alert--compact</code></td><td>16px padding, <code>--text-h4</code> title. For cards, stubs and dialogs.</td></tr>
+        <tr><td><code>.banner</code></td><td>Full-width page banner, warning tone, one line of small text.</td></tr>
+        <tr><td><code>.banner--info</code> <code>.banner--danger</code></td><td>Banner tone.</td></tr>
+        <tr><td><code>.banner__text</code></td><td>Flexible text column; the button wraps below it.</td></tr>
+        <tr><td><code>role="alert"</code> / <code>role="status"</code></td><td>Assertive for new failures; polite for confirmations and banners. Omit on content present at load.</td></tr>
+        <tr><td><code>.page-error</code></td><td>Vertical spacing for an alert that stands in for a whole page section.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “We lost the signal” alert in place of the lineup, with “Try again” (primary) and “Email the Zamaro team”; the search and filters stay on screen</li>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: “We couldn’t reach the artist’s page” under the “Show postponed” poster, with “Try again” and “Back to the lineup”</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li><code>.alert</code> was danger-only by default. It now has an info default and <code>.alert--danger</code>, <code>.alert--success</code> and <code>.alert--warning</code> tones; the mocks now use <code>alert alert--danger</code>.</li>
+        <li>The artist error mock spaced its alert with an inline <code>padding-block</code>. That is now <code>.page-error</code>.</li>
+        <li>Dismissible, compact and banner variants are not in the mocks yet. They are part of the core set: the product will need banners for maintenance and offline notices, and compact alerts for the deposit reminder in the booking stub.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

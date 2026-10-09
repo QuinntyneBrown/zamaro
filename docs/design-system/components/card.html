@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card — Zamaro design system</title>
+<meta name="description" content="The generic card: a framed paper panel with optional media, header, body and a perforated footer. Interactive (whole card is a link), selected and flat variants. Tickets, the headliner and reviews are specialised cards.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+  /* Docs only: ds.css styles every h3 inside a section; keep the product card title. */
+  .ds-section .card__title { margin: 0; font: var(--text-h3); }
+  .ds-matrix { position: relative; }
+  .ds-matrix .card { width: 13rem; }
+  :is(.ds-example, .ds-themes, .ds-do, .ds-dont) li + li { margin-top: 0; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers &amp; overlays</p>
+      <h1>Card</h1>
+      <p class="ds-lead">A framed paper panel that holds one thing: a booking request, a package, a saved artist. It has a 2px charcoal frame, square corners and a perforated footer, and it lifts with a hard shadow when the whole card is a link.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;article&gt;</code> or <code>&lt;li&gt;</code></span><span class="ds-pill">Class <code>.card</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a card when several items of the same kind sit side by side in a <a href="container.html">card grid</a> and each needs its own small layout: a title, a few facts, an action. Use a plain <a href="list.html">list</a> when items are one line each.</p>
+      <p>Zamaro already has specialised cards for its signature moments. Use them, not <code>.card</code>, for these jobs:</p>
+      <ul>
+        <li>An artist in search results is a <a href="ticket.html">ticket</a>, with a perforated price stub and notches.</li>
+        <li>The top result is the <a href="headliner.html">headliner</a>, framed with a 4px rule.</li>
+        <li>A church’s quote is a <a href="review.html">review</a>, with the yellow quote mark.</li>
+        <li>The booking form is the <a href="booking-form.html">booking ticket</a>.</li>
+      </ul>
+      <p>The generic card covers everything else: request and booking summaries in a booker’s account, packages an artist offers, saved artists, dashboard panels.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="grid-template-columns: minmax(0, 1fr); justify-items: center;">
+          <article class="card" style="width: 100%; max-width: 20rem;" aria-labelledby="an-card-title">
+            <div class="card__media"><div class="art art--wide art--group" role="img" aria-label="Luz Viva, a band of six singing on a church platform"></div></div>
+            <div class="card__header"><h3 class="card__title" id="an-card-title">Luz Viva</h3><span class="badge badge--warning">Awaiting reply</span></div>
+            <div class="card__body"><p class="text-muted">Sat 14 Nov · Sunday service · Riverside Community Church</p></div>
+            <div class="card__footer"><span class="ticket__price">$900</span><button class="btn btn--sm" type="button">Withdraw</button></div>
+          </article>
+          <span class="ds-callout" style="left: 50%; top: 14%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 18%; top: 47%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 74%; top: 47%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 18%; top: 66%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 50%; top: 80%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 86%; top: 6%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Media (optional)</b><small><code>.card__media</code>: a halftone <a href="artwork.html">artwork</a> or photo, full bleed, with a 2px rule under it.</small></div></li>
+          <li><div><b>Title</b><small><code>.card__title</code>: a heading in the display face, 28px, uppercase. Holds the card’s one link when the card is interactive.</small></div></li>
+          <li><div><b>Header aside (optional)</b><small>A badge or a save toggle, aligned to the top right of <code>.card__header</code>.</small></div></li>
+          <li><div><b>Body</b><small><code>.card__body</code>: facts and short copy, 12px between items, 24px side padding.</small></div></li>
+          <li><div><b>Footer (optional)</b><small><code>.card__footer</code>: a dashed tear line, then price and actions, pushed to the bottom so footers line up in a row.</small></div></li>
+          <li><div><b>Frame</b><small>2px <code>--card-border</code> on <code>--card-bg</code>, square corners. No shadow at rest.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Default</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: stretch;">
+          <article class="card" style="flex: 1 1 16rem;" aria-labelledby="v-card-1">
+            <div class="card__header"><h3 class="card__title" id="v-card-1">Abigail Mensah</h3><span class="badge badge--success">Confirmed</span></div>
+            <div class="card__body"><p>Sun 1 Nov · Sunday service</p><p class="text-muted">No. ZAM-0114 · deposit $162.50 paid</p></div>
+            <div class="card__footer"><span class="stub__code">Balance $487.50 after</span><a class="btn btn--sm" href="#variants">View booking</a></div>
+          </article>
+          <article class="card" style="flex: 1 1 16rem;" aria-labelledby="v-card-2">
+            <div class="card__header"><h3 class="card__title" id="v-card-2">Luz Viva</h3><span class="badge badge--warning">Awaiting reply</span></div>
+            <div class="card__body"><p>Sat 14 Nov · Sunday service</p><p class="text-muted">Sent Thu 8 Oct · Spanish &amp; English band</p></div>
+            <div class="card__footer"><span class="stub__code">From $900</span><button class="btn btn--sm" type="button">Withdraw</button></div>
+          </article>
+        </div>
+        <div class="ds-example__caption"><span>Naomi’s bookings: each card has its own actions, so the card itself is not a link.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;article class="card" aria-labelledby="booking-0114"&gt;
+  &lt;div class="card__header"&gt;
+    &lt;h3 class="card__title" id="booking-0114"&gt;Abigail Mensah&lt;/h3&gt;
+    &lt;span class="badge badge--success"&gt;Confirmed&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="card__body"&gt;&lt;p&gt;Sun 1 Nov · Sunday service&lt;/p&gt;…&lt;/div&gt;
+  &lt;div class="card__footer"&gt;&lt;span class="stub__code"&gt;Balance $487.50 after&lt;/span&gt;&lt;a class="btn btn--sm" href="/bookings/ZAM-0114"&gt;View booking&lt;/a&gt;&lt;/div&gt;
+&lt;/article&gt;</code></pre></details>
+      </div>
+
+      <h3>Interactive (the whole card is a link)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: stretch;">
+          <article class="card card--interactive" style="flex: 0 1 18rem;" aria-labelledby="v-card-3">
+            <div class="card__media"><div class="art art--wide" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div></div>
+            <div class="card__header"><h3 class="card__title" id="v-card-3"><a href="#variants">Elijah Park</a></h3><button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+            <div class="card__body"><p class="text-muted">Solo vocalist · Acoustic guitar · Markham · 74 km</p></div>
+            <div class="card__footer"><span class="ticket__price">$350</span><span class="badge badge--free">Free Sat 14 Nov</span></div>
+          </article>
+        </div>
+        <div class="ds-example__caption"><span>A saved artist. The title link stretches over the card (<code>::after</code>); the save toggle sits above it and still works on its own.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;article class="card card--interactive" aria-labelledby="saved-elijah"&gt;
+  &lt;div class="card__media"&gt;&lt;div class="art art--wide" role="img" aria-label="…"&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;div class="card__header"&gt;
+    &lt;h3 class="card__title" id="saved-elijah"&gt;&lt;a href="/artists/elijah-park"&gt;Elijah Park&lt;/a&gt;&lt;/h3&gt;
+    &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"&gt;…&lt;/button&gt;
+  &lt;/div&gt;
+  …
+&lt;/article&gt;</code></pre></details>
+      </div>
+
+      <h3>Selected</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: stretch;">
+          <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-4); width: 100%;">
+            <legend class="field__label" style="margin-bottom: var(--space-3);">Choose a set from Abigail</legend>
+            <label class="card card--selected" style="flex: 1 1 14rem; cursor: pointer;">
+              <span class="card__header"><span class="card__title">Sunday service</span><input type="radio" name="ds-set" checked></span>
+              <span class="card__body"><span>Three or four songs with the congregation, plus a solo at the offering.</span></span>
+              <span class="card__footer"><span class="ticket__price">$650</span><span class="stub__code">About 25 min</span></span>
+            </label>
+            <label class="card" style="flex: 1 1 14rem; cursor: pointer;">
+              <span class="card__header"><span class="card__title">Worship night</span><input type="radio" name="ds-set"></span>
+              <span class="card__body"><span>A full evening set with her tracks or your band.</span></span>
+              <span class="card__footer"><span class="ticket__price">$1,100</span><span class="stub__code">About 75 min</span></span>
+            </label>
+          </fieldset>
+        </div>
+        <div class="ds-example__caption"><span><code>.card--selected</code> on the chosen option: ink-edged, yellow highlighter, a small print shadow. The radio carries the state.</span></div>
+      </div>
+
+      <h3>Flat</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: stretch;">
+          <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-5"><div class="card__header"><h3 class="card__title" id="v-card-5">2 requests</h3></div><div class="card__body"><p class="text-muted">Waiting for a reply</p></div></section>
+          <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-6"><div class="card__header"><h3 class="card__title" id="v-card-6">1 booking</h3></div><div class="card__body"><p class="text-muted">Next: Sun 1 Nov</p></div></section>
+          <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-7"><div class="card__header"><h3 class="card__title" id="v-card-7">3 saved</h3></div><div class="card__body"><p class="text-muted">Artists you’re considering</p></div></section>
+        </div>
+        <div class="ds-example__caption"><span><code>.card--flat</code>: hairline frame for low-emphasis panels, such as summaries at the top of an account page.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Cards have one padding scale (24px sides). Their width comes from the grid they sit in, not from a size modifier."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Cards have one padding scale (24px sides). Their width comes from the grid they sit in, not from a size modifier.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover is forced with <code>data-state="hover"</code> on the card; focus is shown on the title link, which the card reacts to through <code>:focus-within</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus (link)</th><th scope="col">Selected</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Interactive</th>
+            <td><article class="card card--interactive" aria-label="Elijah Park, default"><div class="card__body"><p class="card__title"><a href="#states">Elijah Park</a></p><p class="text-muted">Markham · $350</p></div></article></td>
+            <td><article class="card card--interactive" data-state="hover" aria-label="Elijah Park, hover"><div class="card__body"><p class="card__title"><a href="#states">Elijah Park</a></p><p class="text-muted">Markham · $350</p></div></article></td>
+            <td><article class="card card--interactive" aria-label="Elijah Park, focus"><div class="card__body"><p class="card__title"><a href="#states" data-state="focus">Elijah Park</a></p><p class="text-muted">Markham · $350</p></div></article></td>
+            <td><article class="card card--interactive card--selected" aria-label="Elijah Park, selected"><div class="card__body"><p class="card__title"><a href="#states">Elijah Park</a></p><p class="text-muted">Markham · $350</p></div></article></td></tr>
+          <tr><th scope="row">Default</th>
+            <td><article class="card" aria-label="Luz Viva, default"><div class="card__body"><p class="card__title">Luz Viva</p><p class="text-muted">Sat 14 Nov</p></div></article></td>
+            <td><span class="text-caption">No hover: only the buttons inside react.</span></td>
+            <td><span class="text-caption">Focus goes to the buttons inside.</span></td>
+            <td><article class="card card--selected" aria-label="Luz Viva, selected"><div class="card__body"><p class="card__title">Luz Viva</p><p class="text-muted">Sat 14 Nov</p></div></article></td></tr>
+          <tr><th scope="row">Flat</th>
+            <td><article class="card card--flat" aria-label="Summary, default"><div class="card__body"><p class="card__title">2 requests</p><p class="text-muted">Waiting</p></div></article></td>
+            <td><span class="text-caption">No hover.</span></td>
+            <td><span class="text-caption">Not focusable.</span></td>
+            <td><span class="text-caption">Not selectable.</span></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster cluster--lg" style="align-items: stretch;">
+          <article class="card card--interactive" data-state="hover" style="width: 12rem;" aria-label="Light theme, hover"><div class="card__body"><p class="card__title"><a href="#states">Elijah Park</a></p><p class="text-muted">$350</p></div></article>
+          <article class="card card--selected" style="width: 12rem;" aria-label="Light theme, selected"><div class="card__body"><p class="card__title">Sunday service</p><p class="text-muted">$650</p></div></article>
+        </div></div>
+        <div data-theme="dark"><div class="cluster cluster--lg" style="align-items: stretch;">
+          <article class="card card--interactive" data-state="hover" style="width: 12rem;" aria-label="Dark theme, hover"><div class="card__body"><p class="card__title"><a href="#states">Elijah Park</a></p><p class="text-muted">$350</p></div></article>
+          <article class="card card--selected" style="width: 12rem;" aria-label="Dark theme, selected"><div class="card__body"><p class="card__title">Sunday service</p><p class="text-muted">$650</p></div></article>
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> and <b>focus-within</b> (interactive only) lift the card 4px up and left over a hard 6px shadow: ink on newsprint, yellow on the stage theme.</li>
+        <li><b>Selected</b> doubles the frame in <code>--color-border-on-accent</code>, lays the yellow highlighter behind the card and adds a 4px print shadow. Pair it with a checked radio, checkbox or <code>aria-current</code>; the style alone says nothing to a screen reader.</li>
+        <li><b>Loading</b>: render the card frame with <a href="skeleton.html">skeleton</a> lines inside and <code>aria-busy="true"</code> on the list, not a spinner per card.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Cards fill the column they are given. In <code>.grid--cards</code> they are at least 288px wide, so one per row on phones, two or three on larger screens.</li>
+        <li>The footer stays at the bottom (<code>margin-top: auto</code>), so cards of different heights in one row line up their prices and actions.</li>
+        <li>Footer content wraps: on a narrow card the action moves under the price rather than shrinking.</li>
+        <li>Media keeps its aspect ratio (16:9 with <code>.art--wide</code>); never crop faces with a fixed height.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The card has two component tokens: <code>--card-bg</code> (defaults to <code>--color-bg-surface</code>) and <code>--card-border</code> (defaults to <code>--color-border-strong</code>). <code>.card--flat</code> sets <code>--card-border</code> to <code>--color-border-default</code>; <code>.card--selected</code> sets it to <code>--color-border-on-accent</code> and paints <code>--color-accent-subtle</code> behind. The media rule and the footer’s tear line also read <code>--card-border</code>, so a re-skin is two variables.</p>
+      <p>In the dark theme the card is a dim charcoal panel with a light frame, and the hover shadow turns yellow (<code>--color-shadow</code>). On the yellow <a href="band.html">band</a> or the stage, wrap the card in <code>data-theme="light"</code> so it stays a paper panel, as the booking ticket does.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>No ARIA role. Use <code>&lt;article&gt;</code> for a self-contained item (a booking), <code>&lt;li&gt;</code> inside a list of cards, or <code>&lt;label&gt;</code> around a radio for a choosable card. An interactive card is not a link itself: it contains <b>one</b> real link (in the title) whose hit area is stretched over the card, which keeps the link’s name short and lets other buttons inside work. This follows the inclusive “block link” approach; there is no APG pattern for it.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves to the title link, then to each button inside the card, in DOM order.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>On the title link: opens the item. On a button: its own action.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>On a button or the radio of a choosable card: activates it.</td></tr>
+        <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>In a group of choosable cards: moves the radio selection (native radio behaviour).</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The ring is drawn on the title link; the whole card lifts too (<code>:focus-within</code>), which makes the focused card easy to spot in a grid. Buttons inside sit above the stretched link (<code>z-index: var(--z-raised)</code>) so they can receive their own clicks and focus.</p>
+      <h3>Labelling</h3>
+      <p>Label the card by its title (<code>aria-labelledby</code>). The title link’s name is the item’s name alone (“Elijah Park”), not the whole card’s text. Icon buttons inside name their object: “Remove Elijah Park from your saved artists”. Media needs <code>alt</code> or <code>aria-label</code> that describes the picture, not “photo”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Text on a card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Muted facts on a card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Frame against the canvas</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair"><span>Text on a selected card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected frame against the canvas</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: muted facts on a card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: frame against the canvas</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: text on a selected card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+      </div>
+      <p>The flat card’s hairline frame is under 3:1 and is decoration; flat cards are never interactive, so the frame does not need to identify a control.</p>
+      <h3>Motion</h3>
+      <p>The lift and shadow take <code>--duration-base</code> (160ms) with <code>--ease-standard</code>. Under <code>prefers-reduced-motion</code> they change instantly; the shadow still appears, so the hover cue remains.</p>
+      <h3>Touch</h3>
+      <p>The stretched link makes the whole card a large target. Keep buttons inside at least 36px tall with 8px around them, so a tap meant for the card does not hit the save toggle, and the other way round.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>The title is the thing’s name: an artist, a booking code, a package. Keep it to one or two lines.</li>
+        <li>Body facts follow the order a booker scans: date, kind of gathering, place. Separate them with a middle dot.</li>
+        <li>Money in the footer, with the right word: “From $900” for a starting price, “$650” for an agreed one, “Balance $487.50 after” for what is left.</li>
+        <li>One status badge per card at most (“Confirmed”, “Awaiting reply”).</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--canvas"><article class="card card--interactive" style="width: 14rem;" aria-label="Do example"><div class="card__header"><p class="card__title"><a href="#do-dont">Marcus Bell Trio</a></p><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><div class="card__body"><p class="text-muted">Piano trio · Hamilton · $950</p></div></article></div><figcaption>One link in the title, stretched over the card; the save toggle stays a separate control.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--canvas"><a class="card" href="#do-dont" style="width: 14rem; text-decoration: none;"><span class="card__header"><span class="card__title">Marcus Bell Trio</span></span><span class="card__body"><span class="text-muted">Piano trio · Hamilton · $950 · Save · Share</span></span></a></div><figcaption>Wrapping the whole card in <code>&lt;a&gt;</code>: the link’s name is every word on the card, and no button can live inside it.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--canvas"><span class="text-caption">Search results → <a href="ticket.html">ticket</a> · Top pick → <a href="headliner.html">headliner</a> · Quotes → <a href="review.html">review</a></span></div><figcaption>Use the specialised card for the job it was made for.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--canvas"><article class="card" style="width: 14rem;" aria-label="Don't example"><div class="card__body"><p class="card__title">Hosanna Collective</p><p class="text-muted">From $1,800</p></div></article></div><figcaption>A generic card for an artist in the lineup. It loses the ticket stub, the notches and the price stamp that make results scannable.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Fill (<code>--card-bg</code>)</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Frame (<code>--card-border</code>)</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Flat frame</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Selected frame / fill</td><td><code>--color-border-on-accent</code> / <code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Hover shadow</td><td><code>--shadow-2</code> (<code>--color-shadow</code>)</td><td><span data-theme="light" data-token="--shadow-2"></span></td><td><span data-theme="dark" data-token="--shadow-2"></span></td></tr>
+          <tr><td>Selected shadow</td><td><code>--shadow-1</code></td><td><span data-theme="light" data-token="--shadow-1"></span></td><td><span data-theme="dark" data-token="--shadow-1"></span></td></tr>
+          <tr><td>Hover lift</td><td><code>--transform-lift</code></td><td colspan="2"><span data-token="--transform-lift"></span></td></tr>
+          <tr><td>Padding</td><td><code>--space-6</code> sides, <code>--space-5</code> / <code>--space-4</code> top</td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-5"></span> / <span data-token="--space-4"></span></td></tr>
+          <tr><td>Frame width</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Title</td><td><code>--text-h3</code></td><td colspan="2"><span data-token="--text-h3"></span></td></tr>
+          <tr><td>Transition</td><td><code>--duration-base</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-base"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;ul class="grid grid--cards" role="list"&gt;
+  &lt;li class="card card--interactive"&gt;
+    &lt;div class="card__media"&gt;&lt;div class="art art--wide" role="img" aria-label="Elijah Park seated with an acoustic guitar"&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;div class="card__header"&gt;
+      &lt;h3 class="card__title"&gt;&lt;a href="/artists/elijah-park"&gt;Elijah Park&lt;/a&gt;&lt;/h3&gt;
+      &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="card__body"&gt;&lt;p class="text-muted"&gt;Solo vocalist · Markham · 74 km&lt;/p&gt;&lt;/div&gt;
+    &lt;div class="card__footer"&gt;&lt;span class="ticket__price"&gt;$350&lt;/span&gt;&lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;&lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.card</code></td><td>Framed paper panel, column layout.</td></tr>
+        <tr><td><code>.card__media</code> <code>.card__header</code> <code>.card__title</code> <code>.card__body</code> <code>.card__footer</code></td><td>Parts; all optional except a title or body.</td></tr>
+        <tr><td><code>.card--interactive</code></td><td>Stretches the title link over the card; lifts on hover and focus-within.</td></tr>
+        <tr><td><code>.card--selected</code></td><td>Ink double frame, yellow highlighter, small shadow.</td></tr>
+        <tr><td><code>.card--flat</code></td><td>Hairline frame; for summaries.</td></tr>
+        <tr><td><code>--card-bg</code>, <code>--card-border</code></td><td>Component tokens for re-skinning.</td></tr>
+        <tr><td><code>data-state="hover"</code></td><td>Documentation only: forces the lift.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>The generic card is not in the mocks yet; it is part of the core set. The mocks use its specialised relatives, which share its frame, rules and lift:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: tickets in the lineup (stretched name link, save toggle above it, perforated stub) and the headliner</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: ticket frames with skeletons inside while the lineup loads</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: review cards under “What churches say”</li>
+      </ul>
+      <p>The product will need the generic card for the booker’s bookings and saved artists, the artist dashboard’s requests and packages, and summary panels. Drift fixed during extraction: none in the card itself; it was written to the corrected tokens from the start (hover shadow offset 6px via <code>--shadow-2</code>, <code>--color-shadow</code> instead of <code>--shadow-color</code>, <code>--transform-lift</code> instead of <code>--lift</code>).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

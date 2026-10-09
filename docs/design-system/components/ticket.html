@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket card — Zamaro design system</title>
+<meta name="description" content="The ticket card shows one artist in the lineup as an admission ticket: halftone art, number and rating, name, meta, and a perforated price stub with a save toggle. Default, booked and loading, in a two-up lineup grid.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: ds.css styles every h3 and li inside a section; give the specimens their product styles back. */
+.ds-section .ticket__name { font: var(--text-h3); margin: 0; }
+.ds-section :is(.lineup) > li + li { margin-top: 0; }
+.ds-matrix .ticket { min-width: 32rem; }
+/* Docs only: the docs column is narrower than the product container, where two tickets sit side by
+   side from 1024px. Specimens here use one column so each ticket gets the width it has in the product. */
+.ds-section .lineup { grid-template-columns: minmax(0, 1fr); }
+.ds-section .ds-themes, .ds-section .ds-dodont { grid-template-columns: minmax(0, 1fr); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Ticket card</h1>
+      <p class="ds-lead">Each artist in the lineup is an admission ticket: halftone art on the left, the name and where they come from in the middle, and a perforated stub with the price and a save toggle.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">One link per card, stretched</span><span class="ds-pill">Classes <code>.ticket</code> <code>.lineup</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a ticket for an artist in a list of results: the Discover lineup, saved artists, “three similar artists free on the same date”. The whole ticket opens the artist’s profile; the round <a href="save-toggle.html">save toggle</a> on the stub saves them without leaving the list.</p>
+      <ul>
+        <li>The first result on Discover is the <a href="headliner.html">headliner</a>, not a ticket. Tickets follow it in a <code>.lineup</code> grid, numbered from No. 02.</li>
+        <li>For anything that is not an artist (a booking request, a church), use a <a href="card.html">card</a>.</li>
+        <li>For a single date on a profile, use <a href="tour-dates.html">tour dates</a>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure ds-example__canvas--canvas">
+          <ol class="lineup" role="list" aria-label="Anatomy example" style="width: 100%;">
+            <li class="ticket">
+              <div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 02 · ★ 4.8</span>
+                <h3 class="ticket__name"><a href="#anatomy">Hosanna Collective</a></h3>
+                <p class="ticket__meta">Five-piece band · Contemporary<br>Mississauga · 32 km from you</p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$1,800</p>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+          </ol>
+          <span class="ds-callout" style="left: 8%; top: 20%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 28%; top: 20%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 28%; top: 38%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 28%; top: 62%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 66%; top: 18%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 74%; top: 30%;" aria-hidden="true">6</span>
+          <span class="ds-callout" style="left: 74%; top: 62%;" aria-hidden="true">7</span>
+          <span class="ds-callout" style="left: 90%; top: 46%;" aria-hidden="true">8</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Art</b><small><code>.art.ticket__art</code>: halftone placeholder or photo, 6.5rem wide (9rem from 640px), full height, ruled off on the right.</small></div></li>
+          <li><div><b>Number and rating</b><small><code>.ticket__no</code>: mono overline, muted. “No. 02 · ★ 4.8”.</small></div></li>
+          <li><div><b>Name</b><small><code>.ticket__name</code>: an <code>&lt;h3&gt;</code> in <code>--text-h3</code>. Its link stretches over the whole ticket.</small></div></li>
+          <li><div><b>Meta</b><small><code>.ticket__meta</code>: two short lines: what they are, then where and how far.</small></div></li>
+          <li><div><b>Perforation</b><small>A 2px dashed rule between body and stub, with two half-circle notches cut at its ends.</small></div></li>
+          <li><div><b>Price</b><small><code>.ticket__price</code>: “From” as a mono overline over the amount in <code>--text-figure</code>.</small></div></li>
+          <li><div><b>Save toggle</b><small><code>.save</code>, raised above the stretched link so it stays clickable.</small></div></li>
+          <li><div><b>Frame</b><small>Paper surface, 2px <code>--ticket-border</code>. Hover lifts 4px and tilts −0.4° over a 6px print shadow.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Lineup of tickets</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ol class="lineup" role="list" aria-label="More artists free Saturday 14 November">
+            <li class="ticket">
+              <div class="art ticket__art" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 03 · ★ 4.7</span>
+                <h3 class="ticket__name"><a href="#variants">Elijah Park</a></h3>
+                <p class="ticket__meta">Solo vocalist · Acoustic guitar<br>Markham · 74 km from you</p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$350</p>
+                <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+            <li class="ticket">
+              <div class="art ticket__art art--group art--tilt" role="img" aria-label="Grace Tabernacle Mass Choir in gold robes, three rows deep"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 04 · ★ 4.8</span>
+                <h3 class="ticket__name"><a href="#variants">Grace Tabernacle Mass Choir</a></h3>
+                <p class="ticket__meta">30-voice gospel choir<br>Scarborough · 81 km from you</p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$2,400</p>
+                <button class="save" type="button" aria-pressed="false" aria-label="Save Grace Tabernacle Mass Choir to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+            <li class="ticket">
+              <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 05 · ★ 5.0</span>
+                <h3 class="ticket__name"><a href="#variants">Luz Viva</a></h3>
+                <p class="ticket__meta">Band · Spanish &amp; English worship<br>North York · 63 km from you</p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$900</p>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+            <li class="ticket">
+              <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 06 · ★ 4.9</span>
+                <h3 class="ticket__name"><a href="#variants">Daniel &amp; Ruth Okonkwo</a></h3>
+                <p class="ticket__meta">Duo · Hymns &amp; acoustic<br>Ajax · 97 km from you</p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$700</p>
+                <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="ds-example__caption"><span><code>.lineup</code> is one column, two from 1024px (shown as one column here to fit the docs column). Art variants (<code>--group</code>, <code>--tilt</code>) tell artists apart before photos load.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="lineup" role="list" aria-label="More artists free Saturday 14 November"&gt;
+  &lt;li class="ticket"&gt;
+    &lt;div class="art ticket__art" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"&gt;&lt;/div&gt;
+    &lt;div class="ticket__body"&gt;
+      &lt;span class="ticket__no"&gt;No. 03 · ★ 4.7&lt;/span&gt;
+      &lt;h3 class="ticket__name"&gt;&lt;a href="/artists/elijah-park"&gt;Elijah Park&lt;/a&gt;&lt;/h3&gt;
+      &lt;p class="ticket__meta"&gt;Solo vocalist · Acoustic guitar&lt;br&gt;Markham · 74 km from you&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="ticket__stub"&gt;
+      &lt;p class="ticket__price"&gt;&lt;small&gt;From&lt;/small&gt;$350&lt;/p&gt;
+      &lt;button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"&gt;…heart…&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  …
+&lt;/ol&gt;</code></pre></details>
+      </div>
+
+      <h3>With tags, booked and on a surface</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <ol class="lineup" role="list" aria-label="Saved artists">
+            <li class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);">
+              <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">No. 07 · ★ 4.6</span>
+                <h3 class="ticket__name"><a href="#variants">Marcus Bell Trio</a></h3>
+                <p class="ticket__meta">Piano trio · Gospel &amp; hymns<br>Hamilton · 14 km from you</p>
+                <div class="ticket__tags"><span class="chip chip--static">Hymns</span><span class="chip chip--static">Under $1,000</span></div>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$950</p>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Marcus Bell Trio from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+            <li class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface);">
+              <div class="art ticket__art" role="img" aria-label="Miriam Haile seated at an upright piano, smiling toward the camera"></div>
+              <div class="ticket__body">
+                <span class="ticket__no">New · Etobicoke</span>
+                <h3 class="ticket__name"><a href="#variants">Miriam Haile</a></h3>
+                <p class="ticket__meta">Solo vocalist &amp; pianist<br><span class="badge badge--booked">Booked Sun 15 Nov</span></p>
+              </div>
+              <div class="ticket__stub">
+                <p class="ticket__price"><small>From</small>$300</p>
+                <button class="save" type="button" aria-pressed="true" aria-label="Remove Miriam Haile from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="ds-example__caption"><span><code>.ticket__tags</code> holds static chips that explain why an artist matched. <code>.ticket--booked</code> mutes the frame, name and price when the artist is not free on the chosen date. On a paper surface, set <code>--ticket-notch-bg</code> to that surface.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;li class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface)"&gt;
+  …
+  &lt;p class="ticket__meta"&gt;Solo vocalist &amp;amp; pianist&lt;br&gt;&lt;span class="badge badge--booked"&gt;Booked Sun 15 Nov&lt;/span&gt;&lt;/p&gt;
+  …
+&lt;/li&gt;</code></pre></details>
+      </div>
+
+      <h3>Loading</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ul class="lineup" role="list" aria-hidden="true">
+            <li class="ticket ticket--loading">
+              <span class="skeleton ticket__art"></span>
+              <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+              <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+            </li>
+            <li class="ticket ticket--loading">
+              <span class="skeleton ticket__art"></span>
+              <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+              <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+            </li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span><code>.ticket--loading</code> keeps the shape and switches off the hover lift. The list is <code>aria-hidden</code>; the section carries <code>aria-busy="true"</code> and a status line announces the search.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;p class="lead"&gt;&lt;span role="status"&gt;Finding who’s free on Saturday 14 November…&lt;/span&gt;&lt;/p&gt;
+&lt;ul class="lineup" role="list" aria-hidden="true"&gt;
+  &lt;li class="ticket ticket--loading"&gt;
+    &lt;span class="skeleton ticket__art"&gt;&lt;/span&gt;
+    &lt;div class="ticket__body"&gt;&lt;span class="skeleton skeleton--text skeleton--short"&gt;&lt;/span&gt;&lt;span class="skeleton skeleton--title"&gt;&lt;/span&gt;&lt;span class="skeleton skeleton--text"&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="ticket__stub"&gt;&lt;span class="skeleton skeleton--figure"&gt;&lt;/span&gt;&lt;span class="skeleton skeleton--target"&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Tickets have one size. Width comes from the lineup grid; the art and stub columns change at 640px (see Responsive)."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Tickets have one size. Width comes from the lineup grid; the art and stub columns change at 640px (see Responsive).</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The ticket is a card with one link and one toggle, so its states come from both. Hover and focus are forced with <code>data-state</code>; real pages get them from <code>:hover</code> and <code>:focus-within</code>. These specimens sit on a paper cell, so each sets <code>--ticket-notch-bg</code> to the surface.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">State</th><th scope="col">Ticket</th><th scope="col">Trigger</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Default</th><td><div class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta">Markham · 74 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div></td><td>—</td></tr>
+          <tr><th scope="row">Hover</th><td><div class="ticket" data-state="hover" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta">Markham · 74 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div></td><td><code>:hover</code> anywhere on the ticket: lift, −0.4° tilt, <code>--shadow-2</code></td></tr>
+          <tr><th scope="row">Focus</th><td><div class="ticket" data-state="hover" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states" data-state="focus">Elijah Park</a></p><p class="ticket__meta">Markham · 74 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div></td><td><code>:focus-within</code>: the name shows the ring and the ticket lifts as on hover</td></tr>
+          <tr><th scope="row">Saved</th><td><div class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta">Markham · 74 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div></td><td><code>aria-pressed="true"</code> on <code>.save</code>: yellow fill, filled heart</td></tr>
+          <tr><th scope="row">Saving</th><td><div class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta">Markham · 74 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div></td><td><code>aria-busy="true"</code> on <code>.save</code>: the heart pulses until the server confirms</td></tr>
+          <tr><th scope="row">Booked</th><td><div class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta"><span class="badge badge--booked">Booked Sat 14 Nov</span></p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></div></td><td><code>.ticket--booked</code> plus a booked badge saying when</td></tr>
+          <tr><th scope="row">Loading</th><td><div class="ticket ticket--loading" aria-hidden="true" style="--ticket-notch-bg: var(--color-bg-surface);"><span class="skeleton ticket__art"></span><div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span></div><div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div></div></td><td><code>.ticket--loading</code>, skeletons, <code>aria-hidden</code>; no lift</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><ol class="lineup" role="list" aria-label="Light theme example">
+          <li class="ticket" data-state="hover"><div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas"></div><div class="ticket__body"><span class="ticket__no">No. 05 · ★ 5.0</span><p class="ticket__name"><a href="#states">Luz Viva</a></p><p class="ticket__meta">North York · 63 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$900</p><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></li>
+          <li class="ticket ticket--booked"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta"><span class="badge badge--booked">Booked</span></p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></li>
+        </ol></div>
+        <div data-theme="dark"><ol class="lineup" role="list" aria-label="Dark theme example">
+          <li class="ticket" data-state="hover"><div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas"></div><div class="ticket__body"><span class="ticket__no">No. 05 · ★ 5.0</span><p class="ticket__name"><a href="#states">Luz Viva</a></p><p class="ticket__meta">North York · 63 km</p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$900</p><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></li>
+          <li class="ticket ticket--booked"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><span class="ticket__no">No. 03 · ★ 4.7</span><p class="ticket__name"><a href="#states">Elijah Park</a></p><p class="ticket__meta"><span class="badge badge--booked">Booked</span></p></div><div class="ticket__stub"><p class="ticket__price"><small>From</small>$350</p><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div></li>
+        </ol></div>
+      </div>
+      <p>State specimens use <code>&lt;p class="ticket__name"&gt;</code> to keep this page’s outline short; in the product the name is always an <code>&lt;h3&gt;</code>.</p>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Under 640px</b>: two columns, art (6.5rem) and body. The stub runs across the bottom with a horizontal perforation; the notches sit on the left and right edges.</li>
+        <li><b>From <code>--layout-breakpoint-sm</code> (640px)</b>: three columns, art (9rem), body and stub (10.5rem). The perforation turns vertical and the notches move to the top and bottom edges.</li>
+        <li><b>Lineup</b>: one column, then two from <code>--layout-breakpoint-lg</code> (1024px), 32px apart.</li>
+        <li>Names wrap; they never truncate. “Grace Tabernacle Mass Choir” takes two lines at 360px.</li>
+        <li>The stub’s price and save toggle stay on one row on phones (price left, toggle right).</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The ticket reads <code>--color-bg-surface</code>, <code>--color-fg-default</code> and <code>--color-fg-muted</code>, plus three component tokens declared on <code>.ticket</code>:</p>
+      <ul>
+        <li><code>--ticket-border</code> (<code>--color-border-strong</code>): frame, art rule, perforation and notch outline. <code>.ticket--booked</code> sets it to <code>--color-border-default</code>.</li>
+        <li><code>--ticket-notch-bg</code> (<code>--color-bg-canvas</code>): the fill of the two notches, which must match whatever is behind the ticket. Override it on the ticket itself (inline or with a more specific selector) when tickets sit on a surface, in a dialog or on the stage.</li>
+        <li><code>--notch</code> (1rem): the notch radius.</li>
+      </ul>
+      <p>In the dark theme the ticket is a charcoal surface with a light frame, and the hover shadow turns yellow (<code>--color-shadow</code>). The notches follow the dark canvas automatically.</p>
+      <pre><code>/* Tickets inside a paper panel */
+.panel .ticket { --ticket-notch-bg: var(--color-bg-surface); }</code></pre>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Each ticket is an <code>&lt;li&gt;</code> in an <code>&lt;ol class="lineup" role="list"&gt;</code> labelled with the date (“More artists free Saturday 14 November”). <code>role="list"</code> restores list semantics that Safari drops when list styling is removed. The ticket has exactly one link, the name, whose <code>::after</code> covers the whole ticket; the save toggle is a separate <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG toggle button</a> raised above it with <code>--z-raised</code>. Never wrap the ticket in an <code>&lt;a&gt;</code>: a button inside a link is invalid and unreachable.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Two stops per ticket: the name link, then the save toggle.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>On the name: opens the profile. On the toggle: saves or removes.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>On the toggle: saves or removes.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The ring is drawn around the name link (3px, offset 3px); <code>:focus-within</code> also lifts the whole ticket, so keyboard users see the same response as mouse users. The save toggle has its own ring.</p>
+      <h3>Labelling</h3>
+      <p>The link text is the artist’s name, so the list reads as a list of names. The art is <code>role="img"</code> with a description of the photo. The save toggle is named after the artist (“Save Elijah Park to your saved artists”) and exposes <code>aria-pressed</code>; see <a href="save-toggle.html">save toggle</a>. The booked state is text in a badge, not just the muted colour. The price reads “From $350”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Name and price on ticket</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Number, meta, booked name</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Frame and perforation</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Frame against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: name and price</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: number and meta</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <p>The booked frame (<code>--color-border-default</code>) is deliberately quiet; the badge text carries the meaning.</p>
+      <h3>Motion</h3>
+      <p>The lift and tilt take <code>--duration-base</code> (160ms). Under <code>prefers-reduced-motion</code> the duration drops to near zero, so the ticket changes position without animating. The saving pulse respects the same setting through the save toggle.</p>
+      <h3>Touch</h3>
+      <p>The whole ticket is the link’s target, and the save toggle is 44px with at least 16px around it, so a tap near the heart never opens the profile by accident. Nothing depends on hover.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Number</b>: position in the lineup and rating: “No. 04 · ★ 4.8”. New artists: “New · Etobicoke”.</li>
+        <li><b>Name</b>: the artist’s own spelling, “&amp;” for duos.</li>
+        <li><b>Meta</b>: line one is what they are (“30-voice gospel choir”, “Duo · Hymns &amp; acoustic”); line two is where and how far (“Scarborough · 81 km from you”).</li>
+        <li><b>Price</b>: “From” plus the lowest rate, no cents: “$2,400”.</li>
+        <li><b>Booked</b>: say when: “Booked Sat 14 Nov”, not just “Unavailable”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><p class="ticket__name"><a href="#do-dont">Elijah Park</a></p></div><div class="ticket__stub"><p class="ticket__price">$350</p></div></div></div><figcaption>On a paper surface, set <code>--ticket-notch-bg</code> to that surface so the notches look cut out.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="ticket"><div class="art ticket__art" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="ticket__body"><p class="ticket__name"><a href="#do-dont">Elijah Park</a></p></div><div class="ticket__stub"><p class="ticket__price">$350</p></div></div></div><figcaption>The mocks always painted the notches with the canvas colour, so on a surface they show as grey blobs.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><code>&lt;h3 class="ticket__name"&gt;&lt;a href="…"&gt;Luz Viva&lt;/a&gt;&lt;/h3&gt; … &lt;button class="save"&gt;</code></div><figcaption>One stretched link on the name; the save toggle is a sibling raised above it.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><code>&lt;a class="ticket" href="…"&gt; … &lt;button class="save"&gt; … &lt;/a&gt;</code></div><figcaption>Wrapping the ticket in a link nests a button inside it and reads the whole ticket as one long link name.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface);"><div class="ticket__body" style="grid-column: 1 / -1;"><p class="ticket__name"><a href="#do-dont">Elijah Park</a></p><p class="ticket__meta"><span class="badge badge--booked">Booked Sat 14 Nov</span></p></div></div></div><figcaption>Booked tickets say so in text.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="ticket" style="--ticket-notch-bg: var(--color-bg-surface); opacity: 0.5;"><div class="ticket__body" style="grid-column: 1 / -1;"><p class="ticket__name"><a href="#do-dont">Elijah Park</a></p></div></div></div><figcaption>Fading the ticket hides the reason and drops the name below 4.5:1.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Ticket surface</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Frame (<code>--ticket-border</code>)</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Booked frame</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Notches (<code>--ticket-notch-bg</code>)</td><td><code>--color-bg-canvas</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-canvas" data-swatch></i><span data-token="--color-bg-canvas"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-canvas" data-swatch></i><span data-token="--color-bg-canvas"></span></span></td></tr>
+          <tr><td>Number, meta, booked text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Hover shadow</td><td><code>--shadow-2</code> (<code>--color-shadow</code>)</td><td><span data-theme="light" data-token="--shadow-2"></span></td><td><span data-theme="dark" data-token="--shadow-2"></span></td></tr>
+          <tr><td>Hover lift and tilt</td><td><code>--transform-lift</code> + <code>rotate(-0.4deg)</code>, <code>--duration-base</code></td><td colspan="2"><span data-token="--transform-lift"></span> · <span data-token="--duration-base"></span></td></tr>
+          <tr><td>Name / price / number</td><td><code>--text-h3</code> / <code>--text-figure</code> / <code>--text-overline</code></td><td colspan="2"><span data-token="--font-size-2xl"></span> / <span data-token="--font-size-2xl"></span> / <span data-token="--font-size-xs"></span></td></tr>
+          <tr><td>Body padding / stub padding</td><td><code>--space-5</code> / <code>--space-4</code> <code>--space-5</code></td><td colspan="2"><span data-token="--space-5"></span> / <span data-token="--space-4"></span> <span data-token="--space-5"></span></td></tr>
+          <tr><td>Lineup gap</td><td><code>--space-8</code></td><td colspan="2"><span data-token="--space-8"></span></td></tr>
+          <tr><td>Save toggle layer</td><td><code>--z-raised</code></td><td colspan="2"><span data-token="--z-raised"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;ol class="lineup" role="list" aria-label="More artists free Saturday 14 November"&gt;
+  &lt;li class="ticket"&gt;
+    &lt;div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"&gt;&lt;/div&gt;
+    &lt;div class="ticket__body"&gt;
+      &lt;span class="ticket__no"&gt;No. 02 · ★ 4.8&lt;/span&gt;
+      &lt;h3 class="ticket__name"&gt;&lt;a href="/artists/hosanna-collective"&gt;Hosanna Collective&lt;/a&gt;&lt;/h3&gt;
+      &lt;p class="ticket__meta"&gt;Five-piece band · Contemporary&lt;br&gt;Mississauga · 32 km from you&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="ticket__stub"&gt;
+      &lt;p class="ticket__price"&gt;&lt;small&gt;From&lt;/small&gt;$1,800&lt;/p&gt;
+      &lt;button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"&gt;…&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.lineup</code></td><td>Ticket grid: one column, two from 1024px.</td></tr>
+        <tr><td><code>.ticket</code></td><td>Ticket frame and grid; hover and <code>:focus-within</code> lift and tilt.</td></tr>
+        <tr><td><code>.ticket__art</code> (with <code>.art</code>)</td><td>Left column art, full height.</td></tr>
+        <tr><td><code>.ticket__body</code> <code>.ticket__no</code> <code>.ticket__name</code> <code>.ticket__meta</code> <code>.ticket__tags</code></td><td>Middle column and its parts. <code>.ticket__name a::after</code> stretches the link.</td></tr>
+        <tr><td><code>.ticket__stub</code> <code>.ticket__price</code></td><td>Perforated stub with notches; price with a small “From”.</td></tr>
+        <tr><td><code>.ticket .save</code></td><td>Save toggle raised above the stretched link.</td></tr>
+        <tr><td><code>.ticket--booked</code></td><td>Quiet frame, muted name and price.</td></tr>
+        <tr><td><code>.ticket--loading</code></td><td>No lift; holds skeletons.</td></tr>
+        <tr><td><code>--ticket-notch-bg</code> <code>--ticket-border</code> <code>--notch</code></td><td>Component tokens; set on the ticket.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: six tickets (No. 02 to No. 07) in the lineup, saved and unsaved toggles</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: four <code>.ticket--loading</code> skeletons with a status line</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: where the lineup is replaced by an empty state or an alert</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Ticket notches always painted <code>--color-bg-canvas</code>. They now read the <code>--ticket-notch-bg</code> component token.</li>
+        <li>The notch radius was 0.9rem (off the 4px grid). It is now 1rem.</li>
+        <li>The frame, art rule and perforation read <code>--color-border-strong</code> directly. They now read <code>--ticket-border</code>, which <code>.ticket--booked</code> overrides.</li>
+        <li>The hover read <code>--lift</code>; it is now <code>--transform-lift</code>. The price used an inline display-font shorthand; it now reads <code>--text-figure</code>.</li>
+        <li>Skeleton sizes were inline styles. They now use <code>.skeleton--short</code>, <code>--figure</code> and <code>--target</code>.</li>
+        <li><code>.ticket--booked</code> is new: the mocks have no booked ticket, but saved artists and similar-artist lists need one.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

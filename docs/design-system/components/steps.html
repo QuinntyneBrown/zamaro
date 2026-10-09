@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Steps — Zamaro design system</title>
+<meta name="description" content="Steps explain how booking works in three numbered panels, and track a booking request’s progress with aria-current and a complete status. Horizontal and vertical.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: ds.css restyles every h3 and li inside a section; give the specimens their product styles back. */
+.ds-section .steps h3 { margin: 0 0 var(--space-2); }
+.ds-section .steps > li + li { margin-top: 0; }
+.ds-matrix .steps { min-width: 15rem; }
+.ds-matrix .steps > li { padding: var(--space-5); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Steps</h1>
+      <p class="ds-lead">Three numbered panels, like the running order on a set list. On Discover they explain how booking works; in a booking request they show how far it has got.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;ol&gt;</code></span><span class="ds-pill">Class <code>.steps</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use steps for a short, fixed sequence of three (at most five) stages a booker goes through.</p>
+      <ul>
+        <li><b>Explainer</b>: “How booking works” on Discover. Every step is upcoming; nothing is current.</li>
+        <li><b>Progress</b>: where a booking request stands (picked, requested, locked in). One step is current (<code>aria-current="step"</code>); earlier steps are complete (<code>data-status="complete"</code>).</li>
+      </ul>
+      <p>Steps are not navigation. If a step must be clickable, use <a href="tabs.html">tabs</a> or links in a <a href="list.html">list</a>. For a long or branching flow, use the <a href="form-layout.html">form layout</a> with sections. For time-based progress use a <a href="progress-bar.html">progress bar</a>.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <ol class="steps steps--vertical" style="width: 100%;">
+            <li><div><h3>Pick your date</h3><p>You only see artists who are free that day and will drive to you.</p></div></li>
+            <li><div><h3>Send a request</h3><p>Tell them about your church and the songs you love. Nothing is charged yet.</p></div></li>
+          </ol>
+          <span class="ds-callout" style="left: 6%; top: 18%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 30%; top: 18%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 30%; top: 34%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 92%; top: 50%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 6%; top: 80%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Number</b><small>CSS counter, two digits (“01”), <code>--text-figure-lg</code> on a yellow block with a 2px ink rule.</small></div></li>
+          <li><div><b>Title</b><small>An <code>&lt;h3&gt;</code> in <code>--text-h4</code>: a short imperative.</small></div></li>
+          <li><div><b>Description</b><small>One or two short sentences in body text.</small></div></li>
+          <li><div><b>Divider</b><small>2px charcoal rule between steps: horizontal when stacked, vertical when side by side.</small></div></li>
+          <li><div><b>Panel</b><small>Paper surface inside one 2px frame, 32px padding, number and text 20px apart.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Explainer (default)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ol class="steps">
+            <li><div><h3>Pick your date</h3><p>You only see artists who are free that day and will drive to you.</p></div></li>
+            <li><div><h3>Send a request</h3><p>Tell them about your church and the songs you love. Nothing is charged yet.</p></div></li>
+            <li><div><h3>Lock it in</h3><p>When they accept, pay a 25% deposit. The rest is due after the event.</p></div></li>
+          </ol>
+        </div>
+        <div class="ds-example__caption"><span>Stacked under 1024px, three columns from 1024px. This is “How booking works” on Discover.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="steps"&gt;
+  &lt;li&gt;&lt;div&gt;&lt;h3&gt;Pick your date&lt;/h3&gt;&lt;p&gt;You only see artists who are free that day and will drive to you.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;h3&gt;Send a request&lt;/h3&gt;&lt;p&gt;Tell them about your church and the songs you love. Nothing is charged yet.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;h3&gt;Lock it in&lt;/h3&gt;&lt;p&gt;When they accept, pay a 25% deposit. The rest is due after the event.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3>Vertical</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+          <ol class="steps steps--vertical" style="max-width: var(--layout-sidebar-width);">
+            <li><div><h3>Pick your date</h3><p>Only artists free that day.</p></div></li>
+            <li><div><h3>Send a request</h3><p>Nothing is charged yet.</p></div></li>
+            <li><div><h3>Lock it in</h3><p>Pay a 25% deposit when they accept.</p></div></li>
+          </ol>
+        </div>
+        <div class="ds-example__caption"><span><code>.steps--vertical</code> stays stacked at every width. Use it in narrow columns such as the profile sidebar or a dialog.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="steps steps--vertical"&gt;…&lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3>Progress</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+          <ol class="steps" aria-label="Your request to Abigail Mensah">
+            <li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3><p>Sat 14 Nov, Sunday service at Riverside Community Church.</p></div></li>
+            <li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3><p>Abigail has your request. She usually replies within 2 days.</p></div></li>
+            <li><div><p class="overline text-muted">Next</p><h3>Lock it in</h3><p>When she accepts, pay the 25% deposit: $162.50.</p></div></li>
+          </ol>
+        </div>
+        <div class="ds-example__caption"><span>Complete steps turn the number ink. The current step gets a 4px yellow bar along its bottom and <code>aria-current="step"</code>. Each step also says “Done”, “Now” or “Next” in words.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="steps" aria-label="Your request to Abigail Mensah"&gt;
+  &lt;li data-status="complete"&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Done&lt;/p&gt;&lt;h3&gt;Pick your date&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li aria-current="step"&gt;&lt;div&gt;&lt;p class="overline"&gt;Now&lt;/p&gt;&lt;h3&gt;Send a request&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Next&lt;/p&gt;&lt;h3&gt;Lock it in&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Steps have one size: 32px panel padding and a 40px number. Use the vertical variant, not a smaller size, in narrow places."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Steps have one size: 32px panel padding and a 40px number. Use the vertical variant, not a smaller size, in narrow places.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Steps are not interactive, so there is no hover, focus or disabled state. A step is upcoming, current or complete.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Upcoming (default)</th><th scope="col">Current</th><th scope="col">Complete</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Horizontal</th>
+            <td><ol class="steps"><li><div><p class="overline text-muted">Next</p><h3>Lock it in</h3><p>Pay the deposit.</p></div></li></ol></td>
+            <td><ol class="steps"><li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3><p>Abigail has it.</p></div></li></ol></td>
+            <td><ol class="steps"><li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3><p>Sat 14 Nov.</p></div></li></ol></td></tr>
+          <tr><th scope="row">Vertical</th>
+            <td><ol class="steps steps--vertical"><li><div><p class="overline text-muted">Next</p><h3>Lock it in</h3><p>Pay the deposit.</p></div></li></ol></td>
+            <td><ol class="steps steps--vertical"><li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3><p>Abigail has it.</p></div></li></ol></td>
+            <td><ol class="steps steps--vertical"><li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3><p>Sat 14 Nov.</p></div></li></ol></td></tr>
+        </tbody>
+      </table></div>
+      <p>Each cell is a one-step list, so every number reads “01” here.</p>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><ol class="steps steps--vertical" aria-label="Light theme example"><li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3></div></li><li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3></div></li><li><div><p class="overline text-muted">Next</p><h3>Lock it in</h3></div></li></ol></div>
+        <div data-theme="dark"><ol class="steps steps--vertical" aria-label="Dark theme example"><li data-status="complete"><div><p class="overline text-muted">Done</p><h3>Pick your date</h3></div></li><li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3></div></li><li><div><p class="overline text-muted">Next</p><h3>Lock it in</h3></div></li></ol></div>
+      </div>
+      <ul>
+        <li><b>Upcoming</b>: yellow number block. In the explainer every step looks like this.</li>
+        <li><b>Current</b>: <code>aria-current="step"</code> adds a 4px yellow bar along the bottom of the panel. Only one step is current.</li>
+        <li><b>Complete</b>: <code>data-status="complete"</code> turns the number block ink (the inverse pair).</li>
+        <li><b>Loading</b> and <b>error</b> do not apply to the explainer, which is static copy. A progress list renders only once the request has loaded; until then its card shows a skeleton.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Stacked, full width, under <code>--layout-breakpoint-lg</code> (1024px), with horizontal rules between steps.</li>
+        <li>From 1024px, three equal columns with vertical rules. Four or five steps also share the row, so keep the copy short.</li>
+        <li><code>.steps--vertical</code> ignores the breakpoint and always stacks.</li>
+        <li>The number sits to the left of the text at every width; it never moves above it.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The panel reads <code>--color-bg-surface</code> and <code>--color-border-strong</code>. The number reads <code>--color-accent</code>, <code>--color-fg-on-accent</code> and <code>--color-border-on-accent</code>, so it stays yellow with ink type in both themes. A complete number reads <code>--color-bg-inverse</code> and <code>--color-fg-inverse</code>: ink on paper in light, paper on charcoal in dark. The current bar reads <code>--color-accent</code>.</p>
+      <p>No component tokens. Override the semantic tokens on an ancestor to re-skin.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;ol&gt;</code>, so screen readers announce “list, 3 items” and each position. Each step’s title is an <code>&lt;h3&gt;</code> under the section’s <code>&lt;h2&gt;</code>. A progress list carries an <code>aria-label</code> naming what it tracks and <code>aria-current="step"</code> on the current item. There is no APG widget pattern: steps are static content.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skips the steps; nothing in them is focusable. Links inside a description (rare) take focus in reading order.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>No focus style of its own.</p>
+      <h3>Labelling</h3>
+      <p>The CSS number repeats the list position, so it adds nothing for screen readers. <code>data-status="complete"</code> is not exposed to assistive technology, so complete and upcoming steps also say “Done” and “Next” in visible text. <code>aria-current="step"</code> is announced as “current step”; the visible “Now” matches it.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Number on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Complete number</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Title and description</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>“Done” and “Next”</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Frame and dividers</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: complete number</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: current bar against the panel</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: frame and dividers</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <p>On newsprint the yellow current bar is only about 1.4:1 against paper, so it cannot be the only sign of the current step. The “Now” label and <code>aria-current</code> carry the meaning; the bar is emphasis.</p>
+      <h3>Motion</h3>
+      <p>None. When a request moves to the next step, the page re-renders the list; do not animate the bar sliding across.</p>
+      <h3>Touch</h3>
+      <p>Nothing to tap.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Titles: two or three words, imperative, in the booker’s voice: “Pick your date”, “Send a request”, “Lock it in”.</li>
+        <li>Descriptions: one or two short sentences with the reassuring detail: “Nothing is charged yet.”, “pay a 25% deposit”.</li>
+        <li>In progress, replace the generic description with this booking’s facts: the date, the church, the deposit amount.</li>
+        <li>Status words: “Done”, “Now”, “Next”. No ticks or colours alone.</li>
+        <li>Do not number in the copy (“Step 1:”); the list numbers itself.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ol class="steps steps--vertical"><li aria-current="step"><div><p class="overline">Now</p><h3>Send a request</h3></div></li></ol></div><figcaption>Mark the current step with <code>aria-current="step"</code> and a visible word.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><ol class="steps steps--vertical"><li aria-current="step"><div><h3>Send a request</h3></div></li></ol></div><figcaption>Relying on the yellow bar alone. On paper it is 1.4:1 and easy to miss.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ol class="steps steps--vertical"><li><div><h3>Lock it in</h3><p>When they accept, pay a 25% deposit.</p></div></li></ol></div><figcaption>Numbers come from the CSS counter and the number reads the on-accent tokens with an ink rule.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><ol class="steps steps--vertical"><li><div><h3>Step 3: Lock it in</h3><p>When they accept, pay a 25% deposit.</p></div></li></ol></div><figcaption>Typing the number into the title repeats what the counter and the list already say.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Panel</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Frame and dividers</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Number block, current bar</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Number and its rule</td><td><code>--color-fg-on-accent</code> / <code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Complete number</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Number / title</td><td><code>--text-figure-lg</code> / <code>--text-h4</code></td><td colspan="2"><span data-token="--font-size-3xl"></span> / <span data-token="--font-size-xl"></span></td></tr>
+          <tr><td>Panel padding / gap</td><td><code>--space-8</code> / <code>--space-5</code></td><td colspan="2"><span data-token="--space-8"></span> / <span data-token="--space-5"></span></td></tr>
+          <tr><td>Current bar</td><td><code>--border-width-poster</code></td><td colspan="2"><span data-token="--border-width-poster"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;ol class="steps" aria-label="Your request to Abigail Mensah"&gt;
+  &lt;li data-status="complete"&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Done&lt;/p&gt;&lt;h3&gt;Pick your date&lt;/h3&gt;&lt;p&gt;Sat 14 Nov, Sunday service.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li aria-current="step"&gt;&lt;div&gt;&lt;p class="overline"&gt;Now&lt;/p&gt;&lt;h3&gt;Send a request&lt;/h3&gt;&lt;p&gt;Abigail usually replies within 2 days.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;div&gt;&lt;p class="overline text-muted"&gt;Next&lt;/p&gt;&lt;h3&gt;Lock it in&lt;/h3&gt;&lt;p&gt;Pay the 25% deposit: $162.50.&lt;/p&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.steps</code></td><td>Framed numbered list; three columns from 1024px.</td></tr>
+        <tr><td><code>.steps--vertical</code></td><td>Always stacked.</td></tr>
+        <tr><td><code>aria-current="step"</code></td><td>Current step: yellow bottom bar; announced as current.</td></tr>
+        <tr><td><code>data-status="complete"</code></td><td>Complete step: ink number block. Not announced, so add “Done”.</td></tr>
+        <tr><td><code>aria-label</code> on the <code>&lt;ol&gt;</code></td><td>Names a progress list.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “How booking works”, three steps</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same steps, unchanged</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The number’s rule read the primitive <code>--palette-ink</code>. It now reads <code>--color-border-on-accent</code>.</li>
+        <li>The number used an inline display-font shorthand. It now reads <code>--text-figure-lg</code>.</li>
+        <li>Not in the mocks yet: <code>.steps--vertical</code>, <code>aria-current="step"</code> and <code>data-status="complete"</code> are part of the core set. The product needs them for a booking request’s status page and the request confirmation.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

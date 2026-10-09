@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error page — Zamaro design system</title>
+<meta name="description" content="Error pages tell the booker a page couldn’t be shown, that their work is safe, and how to recover: 404, 403, 500, offline and maintenance, composed from a stage poster with a struck-out headline and a danger alert.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Error page</h1>
+      <p class="ds-lead">When a whole page can’t be shown, Zamaro prints a tour poster with the show crossed out: “Show postponed.” Under it, an alert says the booker’s work is safe and offers one way back.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Composition</span><span class="ds-pill">Class <code>.error-poster</code> <code>.error-code</code> <code>.page-error</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>An error page replaces the main content when the page itself can’t be shown: the link is wrong, the booker isn’t allowed to see it, the server failed, the device is offline, or Zamaro is down for maintenance. It keeps the top bar and footer, so the booker is never stranded.</p>
+      <p>It is a composition, not a new widget: a <a href="poster.html">poster</a> on the stage (<code>.poster.on-stage</code>) with an <code>.error-poster</code> headline, an optional <code>.strike</code> word and an <code>.error-code</code> reference, followed by an <a href="alert.html">alert</a> in a <code>.page-error</code> container that carries the recovery actions.</p>
+      <ul>
+        <li>If only one section failed (the lineup), keep the page and put an alert where the section was, as in the discover error mock.</li>
+        <li>If the page loaded but a list is empty, use an <a href="empty-state.html">empty state</a>.</li>
+        <li>If a background action failed (saving an artist), use a danger <a href="toast.html">toast</a>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding: var(--space-4);">
+          <div style="width: 100%;">
+            <div class="poster on-stage" style="padding-block: var(--space-8);">
+              <div class="container stack">
+                <p class="overline poster__kicker">Error 500 · Show postponed</p>
+                <p class="error-poster"><span class="strike" aria-hidden="true">Live</span> On hold</p>
+                <p class="error-code">Ref ZAM-E500-7Q4K</p>
+              </div>
+            </div>
+            <div class="container" style="padding-block: var(--space-4);">
+              <div class="alert alert--danger alert--compact">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+                <p class="alert__title">It’s on our side</p>
+                <div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div>
+              </div>
+            </div>
+          </div>
+          <span class="ds-callout" style="left: 6%; top: 8%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 60%; top: 8%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 46%; top: 30%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 70%; top: 50%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 50%; top: 58%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 80%; top: 76%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Stage</b><small><code>.poster.on-stage</code>: charcoal in both themes, with the halftone corner. Holds the breadcrumb when there is one.</small></div></li>
+          <li><div><b>Kicker</b><small><code>.overline.poster__kicker</code> in stage yellow: the error in plain words and its code, “Error 500 · Show postponed”.</small></div></li>
+          <li><div><b>Struck word</b><small><code>.strike</code> inside the headline: a crossed-out word with a thick line in <code>--color-accent-on-stage</code> (red <code>--color-danger-solid</code> off the stage). Decorative, <code>aria-hidden</code>.</small></div></li>
+          <li><div><b>Headline</b><small><code>.error-poster</code>: <code>--text-display</code>, 64–160px, uppercase. The page’s <code>&lt;h1&gt;</code>.</small></div></li>
+          <li><div><b>Reference</b><small><code>.error-code</code>: mono overline in <code>--color-fg-on-stage-muted</code>. A short id support can look up. 500s only.</small></div></li>
+          <li><div><b>Recovery alert</b><small>An <code>.alert</code> in <code>.container.page-error</code>: what is safe, and one primary action.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Five page-level errors share the composition. The tone of the alert follows the cause: danger when something failed, warning when access is refused, info when nothing is wrong with the booker’s request.</p>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Error</th><th scope="col">Kicker</th><th scope="col">Alert tone</th><th scope="col">Primary action</th><th scope="col">Reference id</th></tr></thead><tbody>
+        <tr><td>500 server error</td><td>Error 500 · Show postponed</td><td><code>.alert--danger</code></td><td>Try again</td><td>Yes</td></tr>
+        <tr><td>Offline</td><td>No signal</td><td><code>.alert--danger</code></td><td>Try again</td><td>No</td></tr>
+        <tr><td>404 not found</td><td>Error 404 · Wrong venue</td><td><code>.alert</code> (info)</td><td>Back to the lineup</td><td>No</td></tr>
+        <tr><td>403 forbidden</td><td>Error 403 · Crew only</td><td><code>.alert--warning</code></td><td>Your bookings</td><td>No</td></tr>
+        <tr><td>Maintenance</td><td>Sound check · back at 3 am</td><td><code>.alert</code> (info)</td><td>None, or a status link</td><td>No</td></tr>
+      </tbody></table></div>
+
+      <h3>500 · something broke on our side</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="poster on-stage">
+            <div class="container stack stack--lg">
+              <p class="overline poster__kicker">Error 500 · Show postponed</p>
+              <p class="error-poster"><span class="strike" aria-hidden="true">Live</span> On hold</p>
+              <p class="poster__sub">Zamaro hit a problem showing this page.</p>
+              <p class="error-code">Reference ZAM-E500-7Q4K · Fri 9 Oct, 2:32 pm</p>
+            </div>
+          </div>
+          <div><div class="container page-error">
+            <div class="alert alert--danger">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+              <div class="stack stack--sm"><p class="alert__title">It’s on our side, not yours</p><p>Your search is saved and any request you’ve sent is safe. Try again in a minute.</p></div>
+              <div class="alert__actions">
+                <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+                <a class="btn" href="mailto:hello@zamaro.ca?subject=ZAM-E500-7Q4K">Email us</a>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div class="ds-example__caption"><span>The reference id goes into the email subject, so the booker never has to copy it.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;main id="main"&gt;
+  &lt;section class="poster on-stage" aria-labelledby="error-title"&gt;
+    &lt;div class="container stack stack--lg"&gt;
+      &lt;p class="overline poster__kicker"&gt;Error 500 · Show postponed&lt;/p&gt;
+      &lt;h1 id="error-title" class="error-poster"&gt;&lt;span class="strike" aria-hidden="true"&gt;Live&lt;/span&gt; On hold&lt;/h1&gt;
+      &lt;p class="poster__sub"&gt;Zamaro hit a problem showing this page.&lt;/p&gt;
+      &lt;p class="error-code"&gt;Reference ZAM-E500-7Q4K · Fri 9 Oct, 2:32 pm&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  &lt;div class="container page-error"&gt;
+    &lt;div class="alert alert--danger"&gt;
+      …icon…
+      &lt;div class="stack stack--sm"&gt;
+        &lt;p class="alert__title"&gt;It’s on our side, not yours&lt;/p&gt;
+        &lt;p&gt;Your search is saved and any request you’ve sent is safe. Try again in a minute.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class="alert__actions"&gt;
+        &lt;button class="btn btn--primary" type="button"&gt;…Try again&lt;/button&gt;
+        &lt;a class="btn" href="mailto:hello@zamaro.ca?subject=ZAM-E500-7Q4K"&gt;Email us&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;</code></pre></details>
+      </div>
+
+      <h3>Offline · no signal</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="poster on-stage">
+            <div class="container stack stack--lg">
+              <p class="overline poster__kicker">You’re offline</p>
+              <p class="error-poster"><span class="strike" aria-hidden="true">Live</span> No signal</p>
+              <p class="poster__sub">This page needs a connection to check who’s free.</p>
+            </div>
+          </div>
+          <div><div class="container page-error">
+            <div class="alert alert--danger">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+              <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>Your date, location and filters are kept. We’ll reload the lineup as soon as you’re back online.</p></div>
+              <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="ds-example__caption"><span>Uses the discover error mock’s title and reassurance. Retry happens on its own when the connection returns.</span></div>
+      </div>
+
+      <h3>404 · wrong venue</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="poster on-stage">
+            <div class="container stack stack--lg">
+              <p class="overline poster__kicker">Error 404 · Wrong venue</p>
+              <p class="error-poster"><span class="strike" aria-hidden="true">Here</span> Not found</p>
+              <p class="poster__sub">This page isn’t on the bill. The link may be old, or the artist may have changed their page.</p>
+            </div>
+          </div>
+          <div><div class="container page-error">
+            <div class="alert">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>
+              <div class="stack stack--sm"><p class="alert__title">Find the artist again</p><p>Search by name or date. Your saved artists are under Saved in the top bar.</p></div>
+              <div class="alert__actions"><a class="btn btn--primary" href="../../mocks/pages/discover/default.html">Back to the lineup</a></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="ds-example__caption"><span>Nothing failed, so the alert is info. The action goes somewhere useful, not just “Home”.</span></div>
+      </div>
+
+      <h3>403 · crew only</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="poster on-stage">
+            <div class="container stack stack--lg">
+              <p class="overline poster__kicker">Error 403 · Not your booking</p>
+              <p class="error-poster"><span class="strike" aria-hidden="true">Open</span> Crew only</p>
+              <p class="poster__sub">Booking No. ZAM-0098 belongs to another church’s account.</p>
+            </div>
+          </div>
+          <div><div class="container page-error">
+            <div class="alert alert--warning">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+              <div class="stack stack--sm"><p class="alert__title">You’re signed in as Naomi Fraser</p><p>Only the coordinators of the church that sent this request can see it. If it should be shared with Riverside Community Church, ask them to add you.</p></div>
+              <div class="alert__actions"><a class="btn btn--primary" href="#variants">Your bookings</a><a class="btn" href="#variants">Switch account</a></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="ds-example__caption"><span>Say who the booker is signed in as and how to get access; never reveal details of someone else’s booking.</span></div>
+      </div>
+
+      <h3>Maintenance · sound check</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="poster on-stage">
+            <div class="container stack stack--lg">
+              <p class="overline poster__kicker">Sound check · back at 3 am</p>
+              <p class="error-poster"><span class="strike" aria-hidden="true">Doors</span> Back soon</p>
+              <p class="poster__sub">Zamaro is down for planned maintenance, Sun 11 Oct, 1–3 am.</p>
+            </div>
+          </div>
+          <div><div class="container page-error">
+            <div class="alert">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg>
+              <div class="stack stack--sm"><p class="alert__title">Your bookings are safe</p><p>Requests sent before 1 am are kept and artists can still reply by email.</p></div>
+            </div>
+          </div></div>
+        </div>
+        <div class="ds-example__caption"><span>Planned downtime: give the time it ends. Announce it a day ahead with a <a href="alert.html">banner</a>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Three scales, from the whole page down to one section. Use the smallest one that covers what failed.</p>
+      <ul>
+        <li><b>Full page</b>: the compositions above. The <code>.error-poster</code> headline is the page’s h1.</li>
+        <li><b>Page with known context</b>: when the shell knows where the booker was going (an artist profile), keep the breadcrumb and use the normal <code>.artist-poster__name</code> headline instead of the display headline, as the artist error mock does.</li>
+        <li><b>Section</b>: only the lineup failed. No poster; an <code>.alert--danger</code> replaces the section’s content and the search stays usable (the discover error mock). See <a href="alert.html">Alert &amp; banner</a>.</li>
+      </ul>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas">
+          <div class="poster on-stage">
+            <div class="container stack stack--lg">
+              <nav aria-label="Breadcrumb (example)"><ol class="breadcrumb"><li><a href="../../mocks/pages/discover/default.html">Discover · Sat 14 Nov</a></li><li aria-current="page">Artist</li></ol></nav>
+              <p class="overline poster__kicker">Show postponed</p>
+              <p class="artist-poster__name">This profile didn’t load</p>
+            </div>
+          </div>
+          <div><div class="container page-error">
+            <div class="alert alert--danger">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+              <div class="stack stack--sm"><p class="alert__title">We couldn’t reach the artist’s page</p><p>It’s on our side, not yours. Your search is saved and any request you’ve sent is safe.</p></div>
+              <div class="alert__actions">
+                <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+                <a class="btn" href="../../mocks/pages/discover/default.html">Back to the lineup</a>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div class="ds-example__caption"><span>The artist error mock: breadcrumb kept, “Show postponed” kicker, a profile-sized headline and the recovery alert in <code>.page-error</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>An error page moves through a retry cycle. The alert’s primary button goes busy (<code>aria-busy="true"</code>) while retrying; if the retry fails again, the alert text changes and a reference id appears; if it succeeds, the real page replaces the error.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Error</th><th scope="col">First failure</th><th scope="col">Retrying</th><th scope="col">Failed again</th><th scope="col">Action focused</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">500</th>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">On our side</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">On our side</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true">Trying again…</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">Still not working</p><p class="text-sm">Ref ZAM-E500-7Q4K</p></div><div class="alert__actions"><a class="btn btn--primary btn--sm" href="mailto:hello@zamaro.ca?subject=ZAM-E500-7Q4K">Email us</a></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">On our side</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" data-state="focus">Try again</button></div></div></div></td></tr>
+          <tr><th scope="row">Offline</th>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" aria-busy="true">Reconnecting…</button></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">Still offline</p><p class="text-sm">We’ll retry when you reconnect.</p></div></div></div></td>
+            <td><div style="width: 13rem;"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">Lost the signal</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button" data-state="focus">Try again</button></div></div></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <p>The poster is the stage in both themes; only the alert below it changes.</p>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack">
+          <div class="poster on-stage" style="padding: var(--space-6);"><p class="overline poster__kicker">Error 500</p><p class="error-poster" style="font-size: var(--font-size-3xl);"><span class="strike" aria-hidden="true">Live</span> On hold</p><p class="error-code">Ref ZAM-E500-7Q4K</p></div>
+          <div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">It’s on our side</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div>
+          <p class="error-poster" style="font-size: var(--font-size-3xl);"><span class="strike" aria-hidden="true">Live</span> On hold</p>
+        </div></div>
+        <div data-theme="dark"><div class="stack">
+          <div class="poster on-stage" style="padding: var(--space-6);"><p class="overline poster__kicker">Error 500</p><p class="error-poster" style="font-size: var(--font-size-3xl);"><span class="strike" aria-hidden="true">Live</span> On hold</p><p class="error-code">Ref ZAM-E500-7Q4K</p></div>
+          <div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="alert__title">It’s on our side</p><div class="alert__actions"><button class="btn btn--primary btn--sm" type="button">Try again</button></div></div>
+          <p class="error-poster" style="font-size: var(--font-size-3xl);"><span class="strike" aria-hidden="true">Live</span> On hold</p>
+        </div></div>
+      </div>
+      <p>The last line of each panel shows <code>.error-poster</code> off the stage, where the strike turns red (<code>--color-danger-solid</code>). Off-stage use is rare: a section-level error inside a dialog, for example. The headline is reduced to <code>--font-size-3xl</code> here only to fit the panel.</p>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The headline scales with the viewport (<code>--text-display</code>, 64px at 360px to 160px from about 1070px). Keep each word to six letters or fewer so it never overflows a 360px screen: “On hold”, “No signal”, “Not found”, “Crew only”, “Back soon”.</li>
+        <li>The struck word and the headline wrap onto separate lines on phones; that reads as a poster correction, which is the point.</li>
+        <li>The alert’s actions drop below its text under 640px and fill the width, so “Try again” is the first thing under the thumb.</li>
+        <li>The poster keeps its 48–64px vertical padding; the <code>.page-error</code> container adds 40px above and below the alert.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The poster reads stage tokens (<code>--color-bg-stage</code>, <code>--color-fg-on-stage</code>, <code>--color-fg-on-stage-muted</code>, <code>--color-accent-on-stage</code>), which are the same in both themes, so an error page always opens on the dark stage. The strike line is <code>--color-accent-on-stage</code> on the stage and <code>--color-danger-solid</code> elsewhere; its thickness is 0.08em, so it scales with the headline. The alert below uses its own <code>--alert-*</code> tokens and follows the theme.</p>
+      <pre><code>.error-poster .strike { text-decoration: line-through; text-decoration-thickness: 0.08em;
+                        text-decoration-color: var(--color-danger-solid); }
+.on-stage .error-poster .strike { text-decoration-color: var(--color-accent-on-stage); }</code></pre>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A normal page with landmarks: the top bar, <code>&lt;main&gt;</code> holding the poster <code>&lt;section&gt;</code> and the alert, the footer. The <code>.error-poster</code> is the <code>&lt;h1&gt;</code>, and the document title names the error: “Page not found · Zamaro”, “Something went wrong · Zamaro”. Serve the real HTTP status (404, 403, 500, 503). The alert needs no live role on a page that loads as an error; give it <code>role="alert"</code> only when it replaces content in a page that was already open (a failed retry, as in the mocks). No APG widget pattern applies; the alert follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">APG Alert pattern</a>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Skip link, top bar, breadcrumb (if any), then the alert’s actions, then the footer.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Activates Try again, Back to the lineup, or the email link.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>On a full page load, focus starts at the top as usual; the skip link goes to <code>&lt;main&gt;</code>, whose first heading is the error. When an error replaces content in an open page, move focus to the <code>&lt;h1&gt;</code> (with <code>tabindex="-1"</code>) so the booker hears what happened. While retrying, focus stays on the busy Try again button.</p>
+      <h3>Labelling</h3>
+      <p>The struck word is a visual joke, so hide it with <code>aria-hidden="true"</code>; the heading then reads “On hold”, “Not found”. The kicker spells out the error in plain words. The reference id is plain text that can be selected, and it is also put into the email link so no one has to copy it.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Headline on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Kicker and strike line on the stage</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Reference id on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Strike line off the stage</span><span class="ds-pair__ratio" data-contrast="--color-danger-solid|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Alert text on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: headline on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: reference id on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: alert text on danger fill</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-danger-bg" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Nothing animates on an error page except the busy spinner in Try again, which keeps turning under reduced motion because it reports status.</p>
+      <h3>Touch</h3>
+      <p>Recovery buttons are 44px tall and full width on phones. The email link is a button-styled link of the same size. No action depends on hover.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Kicker</b>: the error in plain words, with the code for people who search it: “Error 404 · Wrong venue”, “Error 500 · Show postponed”.</li>
+        <li><b>Headline</b>: two short poster words, with one struck word in front: “<s>Live</s> On hold”. Keep the joke gentle; churches book these for services and funerals.</li>
+        <li><b>Sub line</b>: what happened in one sentence, without jargon: “Zamaro hit a problem showing this page.”</li>
+        <li><b>Alert</b>: what is safe (“Your search is saved and any request you’ve sent is safe.”), whose side it is on (“It’s on our side, not yours.”), and what to do.</li>
+        <li><b>Actions</b>: “Try again” for failures; a specific destination for 404 (“Back to the lineup”), never just “Home”.</li>
+        <li><b>Reference</b>: “Reference ZAM-E500-7Q4K · Fri 9 Oct, 2:32 pm”. Short, uppercase, no stack traces.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--danger alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">We couldn’t reach the artist’s page</p><p>Your search is saved.</p></div></div></div><figcaption>Recovery alerts use <code>alert alert--danger</code> explicitly.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--compact"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">We couldn’t reach the artist’s page</p><p>Your search is saved.</p></div></div></div><figcaption>The mocks relied on <code>.alert</code> being danger by default. It is now info, so an unmarked error reads as a tip.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="container page-error" style="padding-inline: 0;"><p class="text-caption">&lt;div class="container page-error"&gt;</p></div></div><figcaption>Space the recovery alert with <code>.page-error</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="text-caption">&lt;div class="container" style="padding-block: var(--space-10);"&gt;</p></div><figcaption>The artist error mock set the alert’s spacing inline. Inline spacing drifts between error pages.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--flush"><div class="poster on-stage" style="padding: var(--space-6);"><p class="error-poster" style="font-size: var(--font-size-3xl);"><span class="strike" aria-hidden="true">Here</span> Not found</p></div></div><figcaption>Short words, struck word hidden from screen readers: the heading reads “Not found”.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--flush"><div class="poster on-stage" style="padding: var(--space-6);"><p class="error-poster" style="font-size: var(--font-size-3xl);">Error 404</p><p class="error-code">ERR_NOT_FOUND /artists/abigail-mensah-2</p></div></div><figcaption>A bare code and a raw path tell a church coordinator nothing and offer no way back.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Stage</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+          <tr><td>Headline</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+          <tr><td>Kicker, strike on stage</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Reference id</td><td><code>--color-fg-on-stage-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage-muted" data-swatch></i><span data-token="--color-fg-on-stage-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage-muted" data-swatch></i><span data-token="--color-fg-on-stage-muted"></span></span></td></tr>
+          <tr><td>Strike off stage</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+          <tr><td>Headline type</td><td><code>--text-display</code></td><td colspan="2"><span data-token="--text-display"></span></td></tr>
+          <tr><td>Reference type</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--letter-spacing-stamp"></span></td></tr>
+          <tr><td>Space around the alert</td><td><code>--space-10</code> (<code>.page-error</code>)</td><td colspan="2"><span data-token="--space-10"></span></td></tr>
+        </tbody>
+      </table></div>
+      <p>The recovery alert’s tokens are listed on <a href="alert.html">Alert &amp; banner</a>; the poster’s on <a href="poster.html">Poster hero</a>.</p>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;title&gt;Page not found · Zamaro&lt;/title&gt;
+…
+&lt;main id="main"&gt;
+  &lt;section class="poster on-stage" aria-labelledby="error-title"&gt;
+    &lt;div class="container stack stack--lg"&gt;
+      &lt;p class="overline poster__kicker"&gt;Error 404 · Wrong venue&lt;/p&gt;
+      &lt;h1 id="error-title" class="error-poster" tabindex="-1"&gt;
+        &lt;span class="strike" aria-hidden="true"&gt;Here&lt;/span&gt; Not found
+      &lt;/h1&gt;
+      &lt;p class="poster__sub"&gt;This page isn’t on the bill.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  &lt;div class="container page-error"&gt;
+    &lt;div class="alert"&gt;…&lt;a class="btn btn--primary" href="/discover"&gt;Back to the lineup&lt;/a&gt;…&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.poster.on-stage</code></td><td>The charcoal stage the error is printed on (see <a href="poster.html">Poster hero</a>).</td></tr>
+        <tr><td><code>.error-poster</code></td><td>Display-size uppercase headline; put it on the <code>&lt;h1&gt;</code>.</td></tr>
+        <tr><td><code>.strike</code> (inside <code>.error-poster</code>)</td><td>Thick strike line: yellow on the stage, red elsewhere. Add <code>aria-hidden="true"</code>.</td></tr>
+        <tr><td><code>.error-code</code></td><td>Mono reference id in muted stage text.</td></tr>
+        <tr><td><code>.page-error</code></td><td>40px block padding around the recovery alert.</td></tr>
+        <tr><td><code>.alert--danger</code> / <code>.alert--warning</code> / <code>.alert</code></td><td>Recovery alert tone: failure / refused / nothing wrong.</td></tr>
+        <tr><td><code>role="alert"</code></td><td>Only when the error replaces content in a page that was already open.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the “Show postponed” poster with the breadcrumb, “This profile didn’t load”, and the recovery alert “We couldn’t reach the artist’s page” with Try again and Back to the lineup</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the section-level version, “We lost the signal”, with the search and filters kept on screen</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li><code>.alert</code> was danger-only by default. Tones are now explicit and the error mocks use <code>alert alert--danger</code>.</li>
+        <li>The artist error mock spaced its alert with an inline <code>padding-block</code>. That is now <code>.page-error</code>.</li>
+        <li>The 404, 403, 500, offline and maintenance pages are not in the mocks yet; they are part of the core set. <code>.error-poster</code>, <code>.strike</code> and <code>.error-code</code> were added for them, built on the poster.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

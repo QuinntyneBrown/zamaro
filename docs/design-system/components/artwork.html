@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artwork — Zamaro design system</title>
+<meta name="description" content="Artwork is Zamaro’s halftone image frame: a screen-printed placeholder with a singer or group silhouette, in portrait, wide and square, plain or yellow, with a tag, and the print treatment for real photos. Plus the photo and media grids.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: ds.css adds space between every li in a section; the grids use gap instead. */
+.ds-section :is(.photo-grid, .media-grid) > li + li { margin-top: 0; }
+.art-demo { width: 9rem; }
+.art-demo--wide { width: 15rem; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Artwork</h1>
+      <p class="ds-lead">Every artist image is printed like a gig poster: a halftone dot screen with a silhouette cut out of it until the photo arrives, and the photo itself in greyscale, multiplied onto the paper.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>role="img"</code> or <code>&lt;img alt&gt;</code></span><span class="ds-pill">Classes <code>.art</code> <code>.photo-grid</code> <code>.media-grid</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p><code>.art</code> is the frame for every picture of an artist: the profile portrait in the <a href="poster.html">poster</a>, the <a href="headliner.html">headliner</a>, the left column of a <a href="ticket.html">ticket</a>, <a href="video-card.html">video</a> thumbnails and the photo gallery. It always has the same 2px frame and print treatment, so real photos and placeholders sit together without looking broken.</p>
+      <ul>
+        <li><b>Placeholder</b>: until an artist uploads a photo, or while it loads, the halftone shows a silhouette: one singer at a mic, or a group.</li>
+        <li><b>Photo</b>: an <code>&lt;img alt&gt;</code> inside <code>.art</code> is turned greyscale and multiplied onto the halftone paper.</li>
+      </ul>
+      <p>Do not use <code>.art</code> for icons, logos or illustrations of the product. Avatars of people who are not artists (the booker’s initials) use the <a href="avatar.html">avatar</a>.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone" style="width: 14rem;"><span class="art__tag">Headliner</span></div>
+          <span class="ds-callout" style="left: 30%; top: 14%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 50%; top: 52%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 30%; top: 84%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 70%; top: 14%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Dot screen</b><small>A radial-gradient halftone, 0.6rem cells, <code>--color-halftone-ink</code> on <code>--color-halftone-paper</code> (ink on yellow for <code>--yellow</code>).</small></div></li>
+          <li><div><b>Silhouette</b><small><code>::before</code>, a paper-coloured cut-out: one singer at a mic, or a row of heads with <code>--group</code>.</small></div></li>
+          <li><div><b>Tag (optional)</b><small><code>.art__tag</code>: an ink label pinned bottom-left, mono overline. Only “Headliner” today.</small></div></li>
+          <li><div><b>Frame</b><small>2px <code>--color-border-strong</code>, square corners, 12px inner padding for the tag. Paper-coloured on the stage.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Modifiers combine: a wide group shot, a square yellow portrait, a tilted dot screen. Choose the silhouette by what the photo will show, and use <code>--tilt</code> (a coarser screen) to tell neighbouring placeholders apart.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-end;">
+          <div class="art art-demo" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+          <div class="art art--group art-demo" role="img" aria-label="Hosanna Collective, five musicians on a lit stage"></div>
+          <div class="art art--tilt art-demo" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
+          <div class="art art--group art--tilt art-demo" role="img" aria-label="Grace Tabernacle Mass Choir in gold robes, three rows deep"></div>
+          <div class="art art--yellow art-demo" role="img" aria-label="Abigail Mensah singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+        </div>
+        <div class="ds-example__caption"><span>Default (singer), <code>--group</code>, <code>--tilt</code>, <code>--group --tilt</code>, <code>--yellow</code> with <code>.art__tag</code>.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="art" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"&gt;&lt;/div&gt;
+&lt;div class="art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage"&gt;&lt;/div&gt;
+&lt;div class="art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"&gt;&lt;/div&gt;
+&lt;div class="art art--yellow" role="img" aria-label="Abigail Mensah singing into a vintage microphone"&gt;&lt;span class="art__tag"&gt;Headliner&lt;/span&gt;&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Real photo</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-end;">
+          <div class="art art-demo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='20' cy='17' r='8' fill-opacity='.55'/%3E%3Cpath d='M3 50c0-13 8-21 17-21s17 8 17 21z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Elijah Park seated on a stool with an acoustic guitar"></div>
+          <div class="art art--yellow art-demo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='20' cy='17' r='8' fill-opacity='.55'/%3E%3Cpath d='M3 50c0-13 8-21 17-21s17 8 17 21z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Abigail Mensah singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+        </div>
+        <div class="ds-example__caption"><span>An <code>&lt;img alt&gt;</code> fills the frame (<code>object-fit: cover</code>), turns greyscale and multiplies onto the paper or yellow, so it prints in the same two inks. The wrapper drops <code>role</code> and <code>aria-label</code>. (A simple shape stands in for a photo here.)</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="art"&gt;&lt;img src="/media/elijah-park.jpg" alt="Elijah Park seated on a stool with an acoustic guitar"&gt;&lt;/div&gt;
+&lt;div class="art art--yellow"&gt;&lt;img src="/media/abigail-mensah.jpg" alt="Abigail Mensah singing into a vintage microphone"&gt;&lt;span class="art__tag"&gt;Headliner&lt;/span&gt;&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Photo grid</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <ul class="photo-grid" role="list">
+            <li><div class="art art--square" role="img" aria-label="Abigail at the microphone during a Sunday service"></div></li>
+            <li><div class="art art--square art--group" role="img" aria-label="Abigail rehearsing with a church volunteer band"></div></li>
+            <li><div class="art art--square art--yellow" role="img" aria-label="Portrait of Abigail smiling in a kente scarf"></div></li>
+            <li><div class="art art--square art--tilt" role="img" aria-label="Abigail leading a youth night from the floor, not the stage"></div></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span><code>.photo-grid</code>: square art, two columns, four from 768px.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="photo-grid" role="list"&gt;
+  &lt;li&gt;&lt;div class="art art--square" role="img" aria-label="Abigail at the microphone during a Sunday service"&gt;&lt;/div&gt;&lt;/li&gt;
+  …
+&lt;/ul&gt;</code></pre></details>
+      </div>
+      <h3>Media grid</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <ul class="media-grid" role="list">
+            <li><div class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary, hands raised in the front rows"></div></li>
+            <li><div class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist in a small chapel"></div></li>
+            <li><div class="art art--wide art--tilt" role="img" aria-label="A congregation dancing during a Ghanaian praise medley"></div></li>
+            <li><div class="art art--wide art--yellow" role="img" aria-label="Abigail singing at a lakeside women’s retreat"></div></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span><code>.media-grid</code>: wide art, one column; from 768px the first item spans the row and the rest sit three across. It usually holds <a href="video-card.html">video cards</a>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Art has no fixed size: it fills its column and takes its height from an aspect ratio. Pick the ratio by where it goes.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-end;">
+          <div class="art art-demo" role="img" aria-label="Elijah Park with an acoustic guitar, portrait"></div>
+          <div class="art art--square art-demo" role="img" aria-label="Elijah Park with an acoustic guitar, square"></div>
+          <div class="art art--wide art-demo--wide" role="img" aria-label="Elijah Park with an acoustic guitar, wide"></div>
+        </div>
+        <div class="ds-example__caption"><span>Portrait 4:5 (default: poster, headliner), square 1:1 (<code>--square</code>: gallery), wide 16:9 (<code>--wide</code>: video). On a ticket the art fills the ticket’s height instead.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Art is not interactive on its own. When it is the face of a <a href="video-card.html">video button</a> or sits in a ticket, the parent handles hover and focus. Its own states follow the image.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Placeholder</th><th scope="col">Loading</th><th scope="col">Photo loaded</th><th scope="col">Photo failed</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Default</th>
+            <td><div class="art art-demo" role="img" aria-label="Elijah Park with an acoustic guitar"></div></td>
+            <td><span class="skeleton skeleton--portrait art-demo" aria-hidden="true"></span></td>
+            <td><div class="art art-demo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='20' cy='17' r='8' fill-opacity='.55'/%3E%3Cpath d='M3 50c0-13 8-21 17-21s17 8 17 21z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Elijah Park with an acoustic guitar"></div></td>
+            <td><div class="art art-demo" role="img" aria-label="Elijah Park with an acoustic guitar"></div></td></tr>
+          <tr><th scope="row">Yellow</th>
+            <td><div class="art art--yellow art-demo" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></td>
+            <td><span class="skeleton skeleton--portrait art-demo" aria-hidden="true"></span></td>
+            <td><div class="art art--yellow art-demo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='20' cy='17' r='8' fill-opacity='.55'/%3E%3Cpath d='M3 50c0-13 8-21 17-21s17 8 17 21z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></td>
+            <td><div class="art art--yellow art-demo" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></td></tr>
+          <tr><th scope="row">On the stage</th>
+            <td><div class="on-stage" style="padding: var(--space-3);"><div class="artist-poster"><div class="art art-demo" role="img" aria-label="Miriam Haile at an upright piano"></div></div></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><span class="skeleton skeleton--portrait art-demo" aria-hidden="true"></span></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><div class="artist-poster"><div class="art art-demo"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='20' cy='17' r='8' fill-opacity='.55'/%3E%3Cpath d='M3 50c0-13 8-21 17-21s17 8 17 21z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Miriam Haile at an upright piano"></div></div></div></td>
+            <td><div class="on-stage" style="padding: var(--space-3);"><div class="artist-poster"><div class="art art-demo" role="img" aria-label="Miriam Haile at an upright piano"></div></div></div></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Loading</b>: a <a href="skeleton.html">skeleton</a> with the same ratio (<code>.skeleton--portrait</code>, <code>--wide</code>, or square) so nothing shifts. Or keep the placeholder and fade the photo in when it decodes.</li>
+        <li><b>Photo failed</b>: drop the <code>&lt;img&gt;</code> and fall back to the placeholder, moving the description to <code>role="img"</code> and <code>aria-label</code>. Never show a broken-image icon.</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster cluster--lg"><div class="art art-demo" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="art art--group art-demo" role="img" aria-label="Hosanna Collective on stage"></div><div class="art art--yellow art-demo" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></div></div>
+        <div data-theme="dark"><div class="cluster cluster--lg"><div class="art art-demo" role="img" aria-label="Elijah Park with an acoustic guitar"></div><div class="art art--group art-demo" role="img" aria-label="Hosanna Collective on stage"></div><div class="art art--yellow art-demo" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Art is fluid: it fills its grid cell and keeps its ratio. The dot cells stay 0.6rem, so a bigger frame shows more dots, not bigger ones.</li>
+        <li><code>.photo-grid</code>: two columns, four from <code>--layout-breakpoint-md</code> (768px), 16px apart.</li>
+        <li><code>.media-grid</code>: one column; from 768px the first item spans all three columns and the rest sit three across, 24px apart.</li>
+        <li>Photos use <code>object-fit: cover</code>; crop to keep faces in the upper third, since the frame can be portrait on a phone and wide in a video.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The dot screen reads <code>--color-halftone-ink</code> and <code>--color-halftone-paper</code>: mid-grey dots on bright paper in light; light grey dots on raised charcoal in dark. <code>--yellow</code> reads <code>--color-accent</code> and <code>--color-border-on-accent</code>, the same in both themes. The tag reads the inverse pair. The frame reads <code>--color-border-strong</code>, and on the stage <code>--color-fg-on-stage</code>.</p>
+      <p>In the dark theme a multiplied photo darkens onto charcoal paper, which keeps photos from glowing on the stage. To re-skin, override the two halftone tokens; never set a background on <code>.art</code> directly.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A placeholder that stands for a photo is <code>&lt;div class="art" role="img" aria-label="…"&gt;</code>. A real photo is <code>&lt;img alt="…"&gt;</code> inside a plain <code>.art</code>. Art that only decorates (a repeated thumbnail next to the same name in a list) takes <code>aria-hidden="true"</code> and no label. Inside a <code>&lt;button&gt;</code>, such as a video card, children are presentational: the art’s label is not read, so the button’s own <code>aria-label</code> must carry what matters.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skips art; it is never focusable on its own.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>None of its own. A parent link or button draws the ring around the whole frame.</p>
+      <h3>Labelling</h3>
+      <p>Describe the photo, not the placeholder: who, doing what, where (“Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone”). Keep the same description when the photo arrives or fails, so the page reads the same either way. The tag text inside a <code>role="img"</code> element is part of the image and is not read; if it matters, put it in the label or nearby text.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Tag text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Frame against a card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Halftone dots on paper (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-halftone-ink|--color-halftone-paper" data-min="3"></span></div>
+        <div class="ds-pair"><span>Yellow art dots (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: tag text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: halftone dots (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-halftone-ink|--color-halftone-paper" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: frame against a card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <p>The silhouette is decoration, so 1.4.11 does not require a ratio; the dots still clear 3:1 so the shape reads.</p>
+      <h3>Motion</h3>
+      <p>None. If photos fade in when loaded, use <code>--duration-base</code>, which drops to zero under reduced motion.</p>
+      <h3>Touch</h3>
+      <p>Not a target on its own.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Labels: who, doing what, where, in one sentence without “Image of” or “Photo of”. Name the artist the first time; later photos in the same gallery can say “Abigail” only.</li>
+        <li>Groups: count and instruments (“five musicians on a lit stage with guitars and a drum kit”).</li>
+        <li>Pick the silhouette by the photo: <code>--group</code> for bands, choirs and duos with more than one face; default for solo artists.</li>
+        <li>Yellow is for the headliner and one gallery portrait at most. It is the top-of-the-bill colour.</li>
+        <li>Tags are one word, uppercase from CSS: “Headliner”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="art art--group art-demo" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div></div><figcaption>Describe the photo the placeholder stands for: “Hosanna Collective, five musicians on a lit stage with guitars and a drum kit”.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="art art--group art-demo" role="img" aria-label="Placeholder image"></div></div><figcaption>“Placeholder image” or “Artist photo” tells a screen reader user nothing about the artist.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="art art--yellow art-demo" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></div><figcaption>Dots and tag read <code>--color-border-on-accent</code> and the inverse pair.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="art art-demo" role="img" aria-label="Elijah Park with an acoustic guitar" style="background: var(--color-accent);"></div></div><figcaption>Overriding the background on <code>.art</code> loses the dot screen and the silhouette. Use the modifiers.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Dots</td><td><code>--color-halftone-ink</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-halftone-ink" data-swatch></i><span data-token="--color-halftone-ink"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-halftone-ink" data-swatch></i><span data-token="--color-halftone-ink"></span></span></td></tr>
+          <tr><td>Paper, silhouette</td><td><code>--color-halftone-paper</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-halftone-paper" data-swatch></i><span data-token="--color-halftone-paper"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-halftone-paper" data-swatch></i><span data-token="--color-halftone-paper"></span></span></td></tr>
+          <tr><td>Yellow paper</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Yellow dots</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Tag</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Frame</td><td><code>--color-border-strong</code>, <code>--border-width-thick</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Tag type / padding</td><td><code>--text-overline</code> / <code>--space-1</code> <code>--space-2</code></td><td colspan="2"><span data-token="--font-size-xs"></span> / <span data-token="--space-1"></span> <span data-token="--space-2"></span></td></tr>
+          <tr><td>Inner padding</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr>
+          <tr><td>Grid gaps (photo / media)</td><td><code>--space-4</code> / <code>--space-6</code></td><td colspan="2"><span data-token="--space-4"></span> / <span data-token="--space-6"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;!-- Placeholder standing in for a photo --&gt;
+&lt;div class="art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"&gt;&lt;/div&gt;
+
+&lt;!-- Real photo --&gt;
+&lt;div class="art"&gt;&lt;img src="/media/hosanna-collective.jpg" alt="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"&gt;&lt;/div&gt;
+
+&lt;!-- Decorative repeat --&gt;
+&lt;div class="art art--square" aria-hidden="true"&gt;&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.art</code></td><td>Framed halftone, 4:5, singer silhouette.</td></tr>
+        <tr><td><code>.art--group</code></td><td>Group silhouette.</td></tr>
+        <tr><td><code>.art--wide</code> <code>.art--square</code></td><td>16:9 or 1:1.</td></tr>
+        <tr><td><code>.art--tilt</code></td><td>Coarser dot screen (0.85rem), to tell neighbours apart.</td></tr>
+        <tr><td><code>.art--yellow</code></td><td>Ink dots on yellow: the headliner.</td></tr>
+        <tr><td><code>.art__tag</code></td><td>Ink label pinned bottom-left.</td></tr>
+        <tr><td><code>.art &gt; img</code></td><td>Photo: cover, greyscale, multiplied.</td></tr>
+        <tr><td><code>role="img"</code> + <code>aria-label</code></td><td>Placeholder that stands for a photo.</td></tr>
+        <tr><td><code>.photo-grid</code> <code>.media-grid</code></td><td>Gallery grids (2→4 square; 1→featured + 3 wide).</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: yellow headliner art with tag; ticket art in every modifier</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: ticket art as skeletons</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: portrait on the stage, four square photos, four wide video thumbnails</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: plain portrait for a new artist, a two-photo gallery</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: portrait and video skeletons</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li><code>.art--yellow</code> dots and <code>.art__tag</code> read <code>--palette-ink</code> and <code>--palette-paper</code>. They now read <code>--color-border-on-accent</code> and the inverse pair, so the tag stays legible in the dark theme.</li>
+        <li>Art skeletons used inline <code>aspect-ratio</code>. They now use <code>.skeleton--portrait</code> and <code>.skeleton--wide</code>.</li>
+        <li>The grids used <code>1fr</code> tracks, which let long content push columns wider. They now use <code>minmax(0, 1fr)</code>.</li>
+        <li>New: <code>.art &gt; img</code> defines the print treatment for real photos; the mocks only have placeholders.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkbox — Zamaro design system</title>
+<meta name="description" content="Native checkboxes in a square ink box: single confirmations, groups in a fieldset, descriptions, and the indeterminate “some selected” state set from script.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Checkbox</h1>
+      <p class="ds-lead">A checkbox says yes to something on its own line: what Naomi needs from an artist, that she has read the cancellation terms. Several can be ticked at once, and a ticked box fills butter yellow.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;input type="checkbox"&gt;</code></span><span class="ds-pill">Class <code>.check</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a checkbox for an independent yes/no that takes effect when the form is sent, or for picking any number of options from a short list. In the booking request: “What would you like from the artist?” and “I’ve read the cancellation terms”.</p>
+      <ul>
+        <li>One choice from several: <a href="radio-group.html">radio group</a>.</li>
+        <li>A setting that applies at once, with no submit: <a href="switch.html">switch</a>.</li>
+        <li>Filters that apply instantly to the lineup: filter <a href="chip.html">chips</a>.</li>
+      </ul>
+      <p>The box is a real <code>&lt;input type="checkbox"&gt;</code>, visually hidden but focusable, followed by a drawn <code>.check__box</code> that holds two icons: a tick for checked and a dash for indeterminate.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <label class="check">
+            <input type="checkbox" name="ana-tracks" checked>
+            <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+            <span class="check__text">Bring backing tracks<span class="check__desc">For churches without a band.</span></span>
+          </label>
+          <span class="ds-callout" style="left: calc(50% - 8.5rem); top: calc(50% - 2.25rem);" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: calc(50% - 8.5rem); top: calc(50% + 0.5rem);" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: calc(50% + 6.5rem); top: calc(50% - 2.5rem);" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: calc(50% + 6.5rem); top: calc(50% + 0.75rem);" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Box</b><small>24px square (<code>--target-min</code>), 2px charcoal rule, surface fill. Square corners like everything else.</small></div></li>
+          <li><div><b>Mark</b><small>Two icons in the box: <code>.check__tick</code> (checked) and <code>.check__dash</code> (indeterminate), 16px, 3px stroke, ink on yellow. They share one grid cell; the examples here set <code>grid-area: 1 / 1</code> inline until <code>components.css</code> does.</small></div></li>
+          <li><div><b>Label</b><small>Body text, the accessible name. The whole row is clickable because it is a <code>&lt;label&gt;</code>.</small></div></li>
+          <li><div><b>Description (optional)</b><small>Body small, muted, under the label. Part of the name, so keep it to one sentence.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Single</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <label class="check">
+      <input type="checkbox" name="terms" required>
+      <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+      <span class="check__text">I’ve read the cancellation terms</span>
+    </label>
+  </div>
+  <div class="ds-example__caption"><span>A single confirmation before “Request to book”. Never pre-ticked.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;label class="check"&gt;
+  &lt;input type="checkbox" name="terms" required&gt;
+  &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;span class="check__text"&gt;I’ve read the cancellation terms&lt;/span&gt;
+&lt;/label&gt;</code></pre></details>
+</div>
+      <h3>Group in a fieldset, with descriptions</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <fieldset class="choice-group">
+      <legend>What would you like from Abigail?</legend>
+      <label class="check">
+        <input type="checkbox" name="needs" value="lead" checked>
+        <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+        <span class="check__text">Lead the congregation<span class="check__desc">Three or four songs in the service.</span></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" name="needs" value="tracks">
+        <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+        <span class="check__text">Bring backing tracks<span class="check__desc">For churches without a band.</span></span>
+      </label>
+      <label class="check">
+        <input type="checkbox" name="needs" value="rehearse" checked>
+        <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+        <span class="check__text">Rehearse with our volunteers<span class="check__desc">Usually the Saturday before.</span></span>
+      </label>
+    </fieldset>
+  </div>
+  <div class="ds-example__caption"><span><code>.choice-group</code> is a reset <code>&lt;fieldset&gt;</code>; its <code>&lt;legend&gt;</code> is the group’s name and is read before each option.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;What would you like from Abigail?&lt;/legend&gt;
+  &lt;label class="check"&gt;
+    &lt;input type="checkbox" name="needs" value="lead" checked&gt;
+    &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class="check__text"&gt;Lead the congregation&lt;span class="check__desc"&gt;Three or four songs in the service.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class="check"&gt;
+    &lt;input type="checkbox" name="needs" value="tracks"&gt;
+    &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class="check__text"&gt;Bring backing tracks&lt;span class="check__desc"&gt;For churches without a band.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;label class="check"&gt;
+    &lt;input type="checkbox" name="needs" value="rehearse" checked&gt;
+    &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class="check__text"&gt;Rehearse with our volunteers&lt;span class="check__desc"&gt;Usually the Saturday before.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/fieldset&gt;</code></pre></details>
+</div>
+      <h3>Indeterminate: select all</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <fieldset class="choice-group" data-check-group>
+      <legend>Styles</legend>
+      <label class="check">
+        <input type="checkbox" name="styles-all" data-check-all aria-controls="st-band st-choir st-hymns">
+        <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+        <span class="check__text">All styles</span>
+      </label>
+      <div class="choice-group" style="padding-left: var(--space-8);">
+        <label class="check"><input type="checkbox" id="st-band" name="styles" value="band" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Band</span></label>
+        <label class="check"><input type="checkbox" id="st-choir" name="styles" value="choir" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Gospel choir</span></label>
+        <label class="check"><input type="checkbox" id="st-hymns" name="styles" value="hymns"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Hymns</span></label>
+      </div>
+    </fieldset>
+  </div>
+  <div class="ds-example__caption"><span>“All styles” is indeterminate while some styles are ticked. HTML has no attribute for it: set <code>input.indeterminate = true</code> from script. Try it.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group" data-check-group&gt;
+  &lt;legend&gt;Styles&lt;/legend&gt;
+  &lt;label class="check"&gt;
+    &lt;input type="checkbox" name="styles-all" data-check-all aria-controls="st-band st-choir st-hymns"&gt;
+    &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class="check__text"&gt;All styles&lt;/span&gt;
+  &lt;/label&gt;
+  &lt;div class="choice-group" style="padding-left: var(--space-8);"&gt;
+    &lt;label class="check"&gt;&lt;input type="checkbox" id="st-band" name="styles" value="band" checked&gt;&lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class="check__text"&gt;Band&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="check"&gt;&lt;input type="checkbox" id="st-choir" name="styles" value="choir" checked&gt;&lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class="check__text"&gt;Gospel choir&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="check"&gt;&lt;input type="checkbox" id="st-hymns" name="styles" value="hymns"&gt;&lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class="check__text"&gt;Hymns&lt;/span&gt;&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre></details>
+</div>
+<pre><code>// Indeterminate is a property, not an attribute
+const all = document.querySelector('[data-check-all]');
+const items = [...document.querySelectorAll('input[name="styles"]')];
+const on = items.filter(i =&gt; i.checked).length;
+all.checked = on === items.length;
+all.indeterminate = on &gt; 0 &amp;&amp; on &lt; items.length;</code></pre>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Checkboxes have one size: a 24px box in a row at least 24px tall, with the label as part of the target."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Checkboxes have one size: a 24px box in a row at least 24px tall, with the label as part of the target.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover and focus are forced with <code>data-state</code> on the <code>.check</code> label. Indeterminate boxes on this page are set by script.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Value</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Unchecked</th>
+            <td><label class="check"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Hymns</span></label></td>
+            <td><label class="check" data-state="hover"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Hymns</span></label></td>
+            <td><label class="check" data-state="focus" style="outline: none;"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Hymns</span></label></td>
+            <td><label class="check"><input type="checkbox" aria-invalid="true"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Hymns</span></label></td>
+            <td><label class="check"><input type="checkbox" disabled><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Hymns</span></label></td></tr>
+          <tr><th scope="row">Checked</th>
+            <td><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Band</span></label></td>
+            <td><label class="check" data-state="hover"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Band</span></label></td>
+            <td><label class="check" data-state="focus" style="outline: none;"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Band</span></label></td>
+            <td><label class="check"><input type="checkbox" checked aria-invalid="true"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Band</span></label></td>
+            <td><label class="check"><input type="checkbox" checked disabled><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Band</span></label></td></tr>
+          <tr><th scope="row">Indeterminate</th>
+            <td><label class="check"><input type="checkbox" data-indeterminate><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label></td>
+            <td><label class="check" data-state="hover"><input type="checkbox" data-indeterminate><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label></td>
+            <td><label class="check" data-state="focus" style="outline: none;"><input type="checkbox" data-indeterminate><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label></td>
+            <td><label class="check"><input type="checkbox" data-indeterminate aria-invalid="true"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label></td>
+            <td><label class="check"><input type="checkbox" data-indeterminate disabled><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label></td></tr>
+        </tbody>
+      </table></div>
+      <p>The checked and indeterminate boxes keep their yellow fill on hover; hover only tints an empty box. A checked invalid box keeps the yellow and an ink rule, so invalid shows mainly on empty required boxes, which is the only place it occurs.</p>
+      <h3>Required, left empty</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <div class="stack stack--sm">
+      <label class="check">
+        <input type="checkbox" name="terms-err" aria-invalid="true" aria-describedby="terms-err-msg">
+        <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
+        <span class="check__text">I’ve read the cancellation terms</span>
+      </label>
+      <p class="field__error" id="terms-err-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Confirm you’ve read the terms to send the request. Cancelling is free up to 14 days before.</p>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>The red rule on the empty box plus an error with an icon, linked by <code>aria-describedby</code>.</span></div>
+</div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack stack--sm">
+          <label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Lead the congregation</span></label>
+          <label class="check"><input type="checkbox" data-indeterminate><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label>
+          <label class="check" data-state="hover"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Bring backing tracks (hover)</span></label>
+          <label class="check" data-state="focus" style="outline: none;"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Rehearse (focus)</span></label>
+          <label class="check"><input type="checkbox" disabled><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Stay for lunch (disabled)</span></label>
+        </div></div>
+        <div data-theme="dark"><div class="stack stack--sm">
+          <label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Lead the congregation</span></label>
+          <label class="check"><input type="checkbox" data-indeterminate><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">All styles</span></label>
+          <label class="check" data-state="hover"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Bring backing tracks (hover)</span></label>
+          <label class="check" data-state="focus" style="outline: none;"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Rehearse (focus)</span></label>
+          <label class="check"><input type="checkbox" disabled><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Stay for lunch (disabled)</span></label>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Groups stack vertically at every width; 12px (<code>--space-3</code>) between options. Labels wrap under themselves, never under the box.</li>
+        <li><code>.choice-group--inline</code> lays short options in a row that wraps. Use it only for two to four one-word options.</li>
+        <li>Long lists (more than eight) belong behind a “Show all styles” button, not a scrolling box.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The box has three component tokens shared with the radio dot: <code>--control-bg</code> (<code>--color-bg-surface</code>), <code>--control-border</code> (<code>--color-border-strong</code>) and <code>--control-fg</code> (<code>--color-fg-on-accent</code>, the mark). Checked and indeterminate set <code>--control-bg</code> to <code>--color-accent</code> and the border to <code>--color-border-on-accent</code>; hover sets the fill to <code>--color-accent-subtle</code>; disabled uses <code>--color-bg-subtle</code> and <code>--color-fg-disabled</code>; invalid sets the border to <code>--color-danger-border</code>.</p>
+      <p>In dark mode the empty box is charcoal with a light rule, and the checked box keeps its yellow and ink tick, the same as on paper.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;input type="checkbox"&gt;</code> inside a <code>&lt;label&gt;</code>, which gives the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/">APG Checkbox pattern</a> for free, including the mixed state through the <code>indeterminate</code> property. Groups are a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves to each checkbox in turn; every box is a tab stop.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Toggles it. An indeterminate “All” becomes checked and ticks every child.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Submits the form; it does not toggle.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The input is hidden, so the ring is drawn on the box (<code>input:focus-visible + .check__box</code>): 3px with a 3px offset, ink on paper, yellow in dark mode. The forced focus examples on this page set <code>outline: none</code> on the label, because the generic <code>[data-state="focus"]</code> rule would also ring the whole row.</p>
+      <h3>Labelling</h3>
+      <p>The wrapping label names the box; the description inside it is part of the name, so keep it short. The legend names the group. A parent “All styles” box lists the boxes it controls in <code>aria-controls</code>. Screen readers announce indeterminate as “mixed” or “half checked”. An error is linked from the input with <code>aria-describedby</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Box rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Checked fill edge on card</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Tick on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair"><span>Invalid rule</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Description</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: box rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: tick on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: description</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <p>Checked is not colour alone: the tick (or dash) appears.</p>
+      <h3>Motion</h3>
+      <p>The fill changes over <code>--duration-fast</code>; nothing moves. Instant under reduced motion.</p>
+      <h3>Touch</h3>
+      <p>The box is 24px, the WCAG minimum; the label makes the real target the whole row, usually 300px or more wide. Rows are 12px apart.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Write the label as the thing that will be true when ticked: “Bring backing tracks”, “I’ve read the cancellation terms”. No “Check to…”.</li>
+        <li>Sentence case, no full stop. Descriptions are one sentence with a full stop.</li>
+        <li>The legend is a question or a noun phrase: “What would you like from Abigail?”, “Styles”.</li>
+        <li>Never pre-tick consent or anything that costs money.</li>
+        <li>The parent of an indeterminate group is “All {things}”: “All styles”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><fieldset class="choice-group"><legend>What would you like?</legend><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Lead the congregation</span></label><label class="check"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Bring backing tracks</span></label></fieldset></div><figcaption>A fieldset and legend, so each box is read with its question.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="stack stack--sm"><p><b>What would you like?</b></p><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Lead the congregation</span></label><label class="check"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Bring backing tracks</span></label></div></div><figcaption>A bold paragraph as the “legend”. Screen readers never connect it to the boxes.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Email me when an artist accepts</span></label></div><figcaption>A setting that saves on its own is a switch.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Email me when an artist accepts</span></label></div><figcaption>A checkbox that saves the moment it is ticked, with no submit. People expect checkboxes to wait for the form.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Box fill</td><td><code>--control-bg</code> → <code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Box rule</td><td><code>--control-border</code> → <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Hover fill</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Checked fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Checked rule</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Mark</td><td><code>--control-fg</code> → <code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+          <tr><td>Invalid rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Disabled</td><td><code>--color-bg-subtle</code> / <code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+          <tr><td>Description</td><td><code>--color-fg-muted</code>, <code>--text-body-sm</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Box size</td><td><code>--target-min</code>, <code>--radius-xs</code></td><td colspan="2"><span data-token="--target-min"></span></td></tr>
+          <tr><td>Box to label / between rows</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;What would you like from Abigail?&lt;/legend&gt;
+  &lt;label class="check"&gt;
+    &lt;input type="checkbox" name="needs" value="tracks"&gt;
+    &lt;span class="check__box"&gt;
+      &lt;svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;
+      &lt;svg class="icon check__dash" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;
+    &lt;/span&gt;
+    &lt;span class="check__text"&gt;Bring backing tracks&lt;span class="check__desc"&gt;For churches without a band.&lt;/span&gt;&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.check</code> (a <code>&lt;label&gt;</code>)</td><td>Row: hidden input, box, text.</td></tr>
+        <tr><td><code>.check__box</code></td><td>The drawn box; must follow the input directly.</td></tr>
+        <tr><td><code>.check__tick</code>, <code>.check__dash</code></td><td>Both icons always present; CSS shows one by state.</td></tr>
+        <tr><td><code>.check__text</code>, <code>.check__desc</code></td><td>Label and optional description.</td></tr>
+        <tr><td><code>.choice-group</code>, <code>.choice-group--inline</code></td><td>Reset fieldset with a stamped legend; stacked or wrapped row.</td></tr>
+        <tr><td><code>checked</code>, <code>disabled</code>, <code>aria-invalid</code></td><td>Native state and the invalid rule.</td></tr>
+        <tr><td><code>input.indeterminate = true</code></td><td>Script only: the dash and yellow fill.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code> on <code>.check</code></td><td>Documentation and mocks only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Not in the mocks yet; part of the core set. The product will need checkboxes in the booking request (what the church needs from the artist, the terms confirmation) and in the phone filter panel, where the lineup’s style chips become a checkbox list with “All styles”.</p>
+      <ul>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub and Abigail’s bio (“bring my own tracks”, “happy to rehearse with your volunteers”) that the example options come from</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the style filters that a checkbox group mirrors on phones</li>
+      </ul>
+      <p>Drift fixed during extraction: none; there was no checkbox in the mocks. The two-icon box (<code>.check__tick</code> and <code>.check__dash</code>) was designed so indeterminate needs no extra markup.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>/* Indeterminate is a DOM property, not an attribute: set it from script. Also wires the "All styles" demo. */
+document.querySelectorAll('input[data-indeterminate]').forEach(function (input) { input.indeterminate = true; });
+document.querySelectorAll('[data-check-group]').forEach(function (group) {
+  var all = group.querySelector('[data-check-all]');
+  var items = Array.prototype.slice.call(group.querySelectorAll('input[type="checkbox"]:not([data-check-all])'));
+  function sync() {
+    var on = items.filter(function (i) { return i.checked; }).length;
+    all.checked = on === items.length;
+    all.indeterminate = on > 0 && on < items.length;
+  }
+  all.addEventListener('change', function () { items.forEach(function (i) { i.checked = all.checked; }); sync(); });
+  items.forEach(function (i) { i.addEventListener('change', sync); });
+  sync();
+});</script>
+</body>
+</html>

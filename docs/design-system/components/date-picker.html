@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Date picker — Zamaro design system</title>
+<meta name="description" content="The event date, chosen with the browser’s native date input, limited to future dates, with quick-pick chips and an availability message. Why native, and how to show free dates around it.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Date picker</h1>
+      <p class="ds-lead">The event date is the first thing a coordinator decides and the first field in every booking form. Zamaro uses the browser’s own date input, limited to today onward, with a few quick-pick dates beside it.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;input type="date"&gt;</code></span><span class="ds-pill">Class <code>.input</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use the date picker for the event date in the booking bar and the booking stub, and anywhere else a single calendar day is needed. It is a <a href="text-field.html">text field</a> with <code>type="date"</code>, inside a <a href="form-field.html">form field</a>.</p>
+      <h3>Why native</h3>
+      <ul>
+        <li><b>Phones get the system wheel or calendar</b>, which coordinators already know, and the right keyboard on Android.</li>
+        <li><b>Keyboard and screen-reader support is built in</b>: day, month and year segments, arrow keys, and announced values. A custom calendar grid has to follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/">APG Date Picker Dialog example</a> to match it, and most do not.</li>
+        <li><b><code>min</code> stops past dates</b> at the source: <code>min="2026-10-09"</code> greys out everything before today.</li>
+        <li><b>The value is always ISO</b> (<code>2026-11-14</code>), whatever the display format, so there is no parsing of “14/11” versus “11/14”.</li>
+        <li><b>No script, no weight</b>: nothing to load before the booking bar works.</li>
+      </ul>
+      <p>The trade-offs are real. The display format follows the browser’s locale (“2026-11-14” or “11/14/2026”), so we repeat the friendly date in the message under the field (“Abigail is free Sat 14 Nov”). And the native calendar cannot mark which days an artist is free, so availability lives next to it: in quick-pick chips, in the <a href="tour-dates.html">tour dates</a> list on the profile, and in the message after a date is chosen.</p>
+      <p>For a multi-day retreat use two date fields, “First day” and “Last day”, side by side in a <a href="form-layout.html">form row</a>. Do not build a range picker.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="field" style="width: min(100%, 20rem);">
+            <label class="field__label" for="ana-date">Event date</label>
+            <input class="input" type="date" id="ana-date" value="2026-11-14" min="2026-10-09" aria-describedby="ana-date-msg">
+            <p class="inline-msg inline-msg--success" id="ana-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p>
+          </div>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.5rem)); top: 2.25rem;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.5rem)); top: 4.5rem;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: min(calc(50% + 8.25rem), calc(100% - 2rem)); top: 6.9rem;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.5rem)); top: 7.4rem;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small>“Event date”. Always visible.</small></div></li>
+          <li><div><b>Date segments</b><small>Day, month and year in the browser’s order, with tabular figures so the width does not jump.</small></div></li>
+          <li><div><b>Calendar button</b><small>Drawn by the browser. Opens the system calendar; on phones the whole field opens it.</small></div></li>
+          <li><div><b>Availability message</b><small>An <a href="inline-message.html">inline message</a> that repeats the date in words and says whether the artist is free.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Event date</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="dp-date">Event date</label>
+      <input class="input" type="date" id="dp-date" name="date" value="2026-11-14" min="2026-10-09">
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>The booking bar’s field. <code>min</code> is today, Fri 9 Oct 2026; the value is ISO.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="dp-date"&gt;Event date&lt;/label&gt;
+  &lt;input class="input" type="date" id="dp-date" name="date" value="2026-11-14" min="2026-10-09"&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>With an availability message</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="dp-free">Event date</label>
+      <input class="input" type="date" id="dp-free" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="dp-free-msg">
+      <p class="inline-msg inline-msg--success" id="dp-free-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p>
+    </div>
+    <div class="field">
+      <label class="field__label" for="dp-booked">Event date</label>
+      <input class="input" type="date" id="dp-booked" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="dp-booked-error">
+      <p class="field__error" id="dp-booked-error"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>In the booking stub, where the artist is known. The message repeats the date in Zamaro’s format and is linked by <code>aria-describedby</code>.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="dp-free"&gt;Event date&lt;/label&gt;
+  &lt;input class="input" type="date" id="dp-free" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="dp-free-msg"&gt;
+  &lt;p class="inline-msg inline-msg--success" id="dp-free-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Abigail is free Sat 14 Nov&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="field"&gt;
+  &lt;label class="field__label" for="dp-booked"&gt;Event date&lt;/label&gt;
+  &lt;input class="input" type="date" id="dp-booked" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="dp-booked-error"&gt;
+  &lt;p class="field__error" id="dp-booked-error"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>With quick-pick dates</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="dp-preset">Event date</label>
+      <input class="input" type="date" id="dp-preset" name="date" value="2026-11-14" min="2026-10-09">
+    </div>
+    <div class="cluster" role="group" aria-label="Quick dates for Event date" data-presets-for="dp-preset">
+      <button class="chip chip--sm" type="button" aria-pressed="false" data-date="2026-10-11">This Sunday · 11 Oct</button>
+      <button class="chip chip--sm" type="button" aria-pressed="true" data-date="2026-11-14">Sat 14 Nov</button>
+      <button class="chip chip--sm" type="button" aria-pressed="false" data-date="2026-12-24">Christmas Eve</button>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>Small <a href="chip.html">chips</a> under the field fill it in one tap. The chip that matches the current value is pressed. Try them.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="dp-preset"&gt;Event date&lt;/label&gt;
+  &lt;input class="input" type="date" id="dp-preset" name="date" value="2026-11-14" min="2026-10-09"&gt;
+&lt;/div&gt;
+&lt;div class="cluster" role="group" aria-label="Quick dates for Event date" data-presets-for="dp-preset"&gt;
+  &lt;button class="chip chip--sm" type="button" aria-pressed="false" data-date="2026-10-11"&gt;This Sunday · 11 Oct&lt;/button&gt;
+  &lt;button class="chip chip--sm" type="button" aria-pressed="true" data-date="2026-11-14"&gt;Sat 14 Nov&lt;/button&gt;
+  &lt;button class="chip chip--sm" type="button" aria-pressed="false" data-date="2026-12-24"&gt;Christmas Eve&lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Two dates for a retreat</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="form__row">
+      <div class="field">
+        <label class="field__label" for="dp-first">First day</label>
+        <input class="input" type="date" id="dp-first" name="first" value="2027-03-05" min="2026-10-09">
+      </div>
+      <div class="field">
+        <label class="field__label" for="dp-last">Last day</label>
+        <input class="input" type="date" id="dp-last" name="last" value="2027-03-07" min="2027-03-05">
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>Set the second field’s <code>min</code> to the first field’s value when it changes. Side by side from 768px, stacked below.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="form__row"&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="dp-first"&gt;First day&lt;/label&gt;
+    &lt;input class="input" type="date" id="dp-first" name="first" value="2027-03-05" min="2026-10-09"&gt;
+  &lt;/div&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="dp-last"&gt;Last day&lt;/label&gt;
+    &lt;input class="input" type="date" id="dp-last" name="last" value="2027-03-07" min="2027-03-05"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>The date picker takes the text field sizes. Medium everywhere in the booking flow; large only if the date is alone on a screen.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <input class="input input--sm" type="date" value="2026-11-14" aria-label="Small example">
+    <input class="input" type="date" value="2026-11-14" aria-label="Medium example">
+    <input class="input input--lg" type="date" value="2026-11-14" aria-label="Large example">
+  </div>
+  <div class="ds-example__caption"><span>36, 44 and 56px. Small is 14px text and makes iPhones zoom, so it is for wide screens only.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;input class="input input--sm" type="date" value="2026-11-14" aria-label="Small example"&gt;
+&lt;input class="input" type="date" value="2026-11-14" aria-label="Medium example"&gt;
+&lt;input class="input input--lg" type="date" value="2026-11-14" aria-label="Large example"&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Read-only</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">With value</th>
+            <td><input class="input" style="width: 12rem;" type="date" value="2026-11-14" aria-label="Date, default"></td>
+            <td><input class="input" style="width: 12rem;" type="date" value="2026-11-14" data-state="hover" aria-label="Date, hover"></td>
+            <td><input class="input" style="width: 12rem;" type="date" value="2026-11-14" data-state="focus" aria-label="Date, focus"></td>
+            <td><input class="input" style="width: 12rem;" type="date" value="2026-11-15" aria-invalid="true" aria-label="Date, invalid"></td>
+            <td><input class="input" style="width: 12rem;" type="date" value="2026-11-14" readonly aria-label="Date, read-only"></td>
+            <td><input class="input" style="width: 12rem;" type="date" value="2026-11-14" disabled aria-label="Date, disabled"></td></tr>
+          <tr><th scope="row">Empty</th>
+            <td><input class="input" style="width: 12rem;" type="date" aria-label="Empty date, default"></td>
+            <td><input class="input" style="width: 12rem;" type="date" data-state="hover" aria-label="Empty date, hover"></td>
+            <td><input class="input" style="width: 12rem;" type="date" data-state="focus" aria-label="Empty date, focus"></td>
+            <td><input class="input" style="width: 12rem;" type="date" aria-invalid="true" aria-label="Empty date, invalid"></td>
+            <td><input class="input" style="width: 12rem;" type="date" readonly aria-label="Empty date, read-only"></td>
+            <td><input class="input" style="width: 12rem;" type="date" disabled aria-label="Empty date, disabled"></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack stack--sm">
+          <input class="input" type="date" value="2026-11-14" aria-label="Light theme, default">
+          <input class="input" type="date" value="2026-11-14" data-state="focus" aria-label="Light theme, focus">
+          <input class="input" type="date" value="2026-11-15" aria-invalid="true" aria-label="Light theme, invalid">
+          <div class="cluster"><button class="chip chip--sm" type="button" aria-pressed="true">Sat 14 Nov</button><button class="chip chip--sm" type="button" aria-pressed="false">Christmas Eve</button></div>
+        </div></div>
+        <div data-theme="dark"><div class="stack stack--sm">
+          <input class="input" type="date" value="2026-11-14" aria-label="Dark theme, default">
+          <input class="input" type="date" value="2026-11-14" data-state="focus" aria-label="Dark theme, focus">
+          <input class="input" type="date" value="2026-11-15" aria-invalid="true" aria-label="Dark theme, invalid">
+          <div class="cluster"><button class="chip chip--sm" type="button" aria-pressed="true">Sat 14 Nov</button><button class="chip chip--sm" type="button" aria-pressed="false">Christmas Eve</button></div>
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Invalid</b> covers a past date typed by hand, an empty required date, or a date the artist is booked. The error always offers the nearest free dates.</li>
+        <li><b>Read-only</b> shows the date on a sent request.</li>
+        <li><b>Open</b> is the system calendar, which follows <code>color-scheme</code>: light on newsprint, dark on the stage theme.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Full width of its field. In the booking bar it sits beside “Kind of gathering” from 640px and stacks above it on phones.</li>
+        <li>On phones, tapping anywhere in the field opens the system picker; the calendar button is a desktop affordance.</li>
+        <li>Quick-pick chips wrap onto a second line rather than scrolling sideways.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The date input is a <code>.input</code> and reads the same component tokens: <code>--field-bg</code>, <code>--field-fg</code>, <code>--field-border</code>, <code>--field-height</code>. It adds tabular figures. The calendar icon and popup are the browser’s and follow <code>color-scheme</code>, which the token sheet sets per theme. Preset chips use the <a href="chip.html#theming">chip tokens</a> (<code>--chip-bg</code>, <code>--chip-fg</code>, <code>--chip-border</code>).</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;input type="date"&gt;</code>; the browser exposes each segment as a spin button. If a custom calendar is ever needed (to mark free days inside it), follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/">APG Date Picker Dialog example</a> and keep the typed input. Quick-pick chips are toggle buttons in a labelled <code>role="group"</code>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves into the field (first segment) and out of it; in some browsers between segments too.</td></tr>
+        <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Moves between day, month and year.</td></tr>
+        <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Changes the focused segment.</td></tr>
+        <tr><td>Digits</td><td>Type the segment directly.</td></tr>
+        <tr><td><kbd>Alt</kbd>+<kbd>↓</kbd> or <kbd>Space</kbd></td><td>Opens the calendar (Chrome, Edge).</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd> on a chip</td><td>Fills the date. Focus stays on the chip.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The double ring around the whole field; the browser highlights the active segment inside it. Pressing a chip does not move focus into the field, so keyboard users can try several dates quickly.</p>
+      <h3>Labelling</h3>
+      <p>A visible label. The availability message is linked with <code>aria-describedby</code> and updated after a change; put it in a polite live region too, so “Abigail is booked Sun 15 Nov” is heard without hunting for it. The chip group is labelled “Quick dates for Event date”, and each chip’s text is a full date (“Sat 14 Nov”), not “Next”.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Date on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Field rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Success message</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Error message</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Pressed chip</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: date on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: success message</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: pressed chip</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None of ours. The system calendar animates as the platform does.</p>
+      <h3>Touch</h3>
+      <p>The field is 44px tall; small chips are 36px with 8px gaps. The system picker on phones is designed for thumbs.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Label: “Event date”. For two dates, “First day” and “Last day”.</li>
+        <li>Outside the field, write dates as Zamaro does: “Sat 14 Nov”, adding the year only when it is not this year or next (“Fri 5 Mar 2027”).</li>
+        <li>Chips name the day plainly: “This Sunday · 11 Oct”, “Sat 14 Nov”, “Christmas Eve”. Three or four at most.</li>
+        <li>Errors give the way out: “Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.” For a past date: “Pick a date from today, Fri 9 Oct.”</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-d1">Event date</label><input class="input" type="date" id="dd-d1" value="2026-11-14" min="2026-10-09"></div></div><figcaption>A native date input with <code>min</code> set to today.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-d2">Event date</label><input class="input" type="text" id="dd-d2" value="14/11/26"></div></div><figcaption>A text field for a date. Is it 14 November or 11 December? Year 2026 or 1926?</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-d3">Event date</label><input class="input" type="date" id="dd-d3" value="2026-11-14" aria-describedby="dd-d3-m"><p class="inline-msg inline-msg--success" id="dd-d3-m"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p></div></div><figcaption>Availability said in words under the field, with the date in Zamaro’s format.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-d4">Event date</label><input class="input" type="date" id="dd-d4" value="2026-11-14" style="border-color: var(--color-success-solid);"></div></div><figcaption>A green border to mean “free”. Colour alone, and nothing for screen readers.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Field fill / text / rule</td><td><code>--field-bg</code>, <code>--field-fg</code>, <code>--field-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Invalid rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Free message</td><td><code>--color-success-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td></tr>
+          <tr><td>Booked message</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Pressed preset chip</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Focus</td><td><code>--shadow-focus</code></td><td><span data-theme="light" data-token="--shadow-focus"></span></td><td><span data-theme="dark" data-token="--shadow-focus"></span></td></tr>
+          <tr><td>Height</td><td><code>--control-height-md</code></td><td colspan="2"><span data-token="--control-height-md"></span></td></tr>
+          <tr><td>Chip height / gap</td><td><code>--control-height-sm</code>, <code>--space-2</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--space-2"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="event-date"&gt;Event date&lt;/label&gt;
+  &lt;input class="input" type="date" id="event-date" name="date" value="2026-11-14" min="2026-10-09"
+         aria-describedby="event-date-msg"&gt;
+  &lt;p class="inline-msg inline-msg--success" id="event-date-msg" aria-live="polite"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Abigail is free Sat 14 Nov&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="cluster" role="group" aria-label="Quick dates for Event date"&gt;
+  &lt;button class="chip chip--sm" type="button" aria-pressed="true"&gt;Sat 14 Nov&lt;/button&gt;
+  &lt;button class="chip chip--sm" type="button" aria-pressed="false"&gt;Christmas Eve&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.input[type="date"]</code></td><td>Field look plus tabular figures.</td></tr>
+        <tr><td><code>min</code>, <code>max</code></td><td>Today onward; the second date of a range starts at the first.</td></tr>
+        <tr><td><code>aria-describedby</code> → <code>.inline-msg</code> / <code>.field__error</code></td><td>Availability in words.</td></tr>
+        <tr><td><code>.chip.chip--sm[aria-pressed]</code> in <code>role="group"</code></td><td>Quick-pick dates.</td></tr>
+        <tr><td><code>aria-invalid</code>, <code>readonly</code>, <code>disabled</code></td><td>As for text fields.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Event date” first in the booking bar, <code>value="2026-11-14" min="2026-10-09"</code></li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: Christmas Eve (<code>2026-12-24</code>) with nobody free, and the nearby-date buttons that suggested quick picks</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the stub’s date with “✓ Abigail is free Sat 14 Nov”</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: the same for Miriam Haile</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The availability help was muted text with a typed ✓, inside the label. It is now an <code>.inline-msg--success</code> with an icon, linked by <code>aria-describedby</code>.</li>
+        <li>No booked-date error existed. <code>.field__error</code> with <code>aria-invalid</code> now covers it, and offers the nearest free dates.</li>
+        <li>Quick-pick chips are not in the mocks yet; they are part of the core set, drawn from the empty state’s nearby dates.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>/* Date presets for this page's demo: a chip fills the date input and shows which preset matches. */
+document.querySelectorAll('[data-presets-for]').forEach(function (group) {
+  var input = document.getElementById(group.getAttribute('data-presets-for'));
+  var chips = Array.prototype.slice.call(group.querySelectorAll('[data-date]'));
+  function sync() { chips.forEach(function (c) { c.setAttribute('aria-pressed', c.getAttribute('data-date') === input.value ? 'true' : 'false'); }); }
+  chips.forEach(function (chip) {
+    chip.addEventListener('click', function () { input.value = chip.getAttribute('data-date'); sync(); input.dispatchEvent(new Event('change')); });
+  });
+  input.addEventListener('change', sync);
+  input.addEventListener('input', sync);
+  sync();
+});</script>
+</body>
+</html>

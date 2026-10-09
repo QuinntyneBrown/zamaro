@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Select — Zamaro design system</title>
+<meta name="description" content="The native select for picking one value from a short list: kind of gathering, driving radius, sort order. Three sizes, a placeholder option, invalid and disabled states.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Select</h1>
+      <p class="ds-lead">A select picks one value from a list Naomi doesn’t need to see all at once: the kind of gathering, how far an artist will drive, how to sort the lineup. It is the browser’s own control, dressed in a charcoal rule.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;select&gt;</code></span><span class="ds-pill">Class <code>.select</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a select for one choice from five to fifteen known options when the options do not need explaining. Zamaro always uses the native <code>&lt;select&gt;</code>: it gets the phone’s own picker, type-ahead, screen-reader support and autofill for free.</p>
+      <ul>
+        <li>Two to four options that each need a sentence: use a <a href="radio-group.html">radio group</a> or choice cards, so all options are visible.</li>
+        <li>Several values at once: use <a href="checkbox.html">checkboxes</a> or filter <a href="chip.html">chips</a>.</li>
+        <li>An action list (“Share”, “Remove from saved”): use a <a href="menu.html">menu</a>, never a select.</li>
+        <li>Hundreds of options or free text with suggestions: a combobox (not in the system yet).</li>
+      </ul>
+      <p>Changing a select never submits or navigates by itself (WCAG 3.2.2). The lineup’s sort is the one exception that re-orders results in place, and it announces the new order.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="field" style="width: min(100%, 18rem);">
+            <label class="field__label" for="ana-kind">Kind of gathering</label>
+            <select class="select" id="ana-kind"><option selected>Sunday service</option><option>Worship night</option></select>
+          </div>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 10.5rem)); top: 2.25rem;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 10.5rem)); top: 4.5rem;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: calc(50% - 3rem); top: 6.9rem;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: min(calc(50% + 7.25rem), calc(100% - 2rem)); top: 6.9rem;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small>From the <a href="form-field.html">form field</a>.</small></div></li>
+          <li><div><b>Box</b><small>Same as a text field: 44px, square, 2px charcoal rule, surface fill. 40px right padding leaves room for the chevron.</small></div></li>
+          <li><div><b>Selected value</b><small>Body text, 16px. Never truncated with an ellipsis in a way that hides the meaning; keep options short.</small></div></li>
+          <li><div><b>Chevron</b><small>Drawn in CSS from <code>currentColor</code>, so it greys out with the text when disabled. No icon file.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Kind of gathering and radius</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="se-kind">Kind of gathering</label>
+      <select class="select" id="se-kind" name="kind">
+        <option selected>Sunday service</option><option>Worship night</option><option>Youth event</option>
+        <option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field__label" for="se-radius">How far can they drive?</label>
+      <select class="select" id="se-radius" name="radius">
+        <option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option>
+        <option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option>
+      </select>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>From the booking bar. The radius options pair the distance with a drive time, separated by a middle dot, because coordinators think in minutes.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="se-kind"&gt;Kind of gathering&lt;/label&gt;
+  &lt;select class="select" id="se-kind" name="kind"&gt;
+    &lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;
+    &lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;
+&lt;div class="field"&gt;
+  &lt;label class="field__label" for="se-radius"&gt;How far can they drive?&lt;/label&gt;
+  &lt;select class="select" id="se-radius" name="radius"&gt;
+    &lt;option value="40"&gt;40 km · 30 min&lt;/option&gt;&lt;option value="80"&gt;80 km · 1 hr&lt;/option&gt;
+    &lt;option value="120" selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;option value="200"&gt;200 km · 2.5 hr&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>With a placeholder option</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="se-kind-empty">Kind of gathering</label>
+      <select class="select" id="se-kind-empty" name="kind" required>
+        <option value="" selected disabled>Choose one</option>
+        <option>Sunday service</option><option>Worship night</option><option>Youth event</option>
+      </select>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>Only when there is no sensible default. The placeholder is <code>disabled</code> so it cannot be chosen back, and <code>required</code> catches an empty submit.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="se-kind-empty"&gt;Kind of gathering&lt;/label&gt;
+  &lt;select class="select" id="se-kind-empty" name="kind" required&gt;
+    &lt;option value="" selected disabled&gt;Choose one&lt;/option&gt;
+    &lt;option&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Inline sort</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas">
+    <div class="field field--inline">
+      <label class="field__label" for="se-sort">Sort</label>
+      <select class="select" id="se-sort" name="sort">
+        <option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option>
+      </select>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>In the lineup heading row, with <code>.field--inline</code> for a 12rem minimum. On compact toolbars the same choice can be a <a href="menu.html">sort menu</a>.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field field--inline"&gt;
+  &lt;label class="field__label" for="se-sort"&gt;Sort&lt;/label&gt;
+  &lt;select class="select" id="se-sort" name="sort"&gt;
+    &lt;option selected&gt;Closest first&lt;/option&gt;&lt;option&gt;Highest rated&lt;/option&gt;&lt;option&gt;Price, low to high&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Match the size of the fields and buttons beside it. Medium is the default.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <select class="select select--sm" aria-label="Small example"><option>Small · 36px</option></select>
+    <select class="select" aria-label="Medium example"><option>Medium · 44px</option></select>
+    <select class="select select--lg" aria-label="Large example"><option>Large · 56px</option></select>
+  </div>
+  <div class="ds-example__caption"><span><code>.select--sm</code> and <code>.select--lg</code> use <code>--control-height-sm/lg</code>. Small uses 14px text, so keep it off phone layouts.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;select class="select select--sm" aria-label="Small example"&gt;&lt;option&gt;Small · 36px&lt;/option&gt;&lt;/select&gt;
+&lt;select class="select" aria-label="Medium example"&gt;&lt;option&gt;Medium · 44px&lt;/option&gt;&lt;/select&gt;
+&lt;select class="select select--lg" aria-label="Large example"&gt;&lt;option&gt;Large · 56px&lt;/option&gt;&lt;/select&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover and focus are forced with <code>data-state</code>. “Open” is drawn by the operating system and cannot be styled.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Value</th>
+            <td><select class="select" style="width: 12rem;" aria-label="Kind, default"><option>Sunday service</option></select></td>
+            <td><select class="select" style="width: 12rem;" data-state="hover" aria-label="Kind, hover"><option>Sunday service</option></select></td>
+            <td><select class="select" style="width: 12rem;" data-state="focus" aria-label="Kind, focus"><option>Sunday service</option></select></td>
+            <td><select class="select" style="width: 12rem;" aria-invalid="true" aria-label="Kind, invalid"><option>Wedding</option></select></td>
+            <td><select class="select" style="width: 12rem;" disabled aria-label="Kind, disabled"><option>Sunday service</option></select></td></tr>
+          <tr><th scope="row">Placeholder</th>
+            <td><select class="select" style="width: 12rem;" aria-label="Empty kind, default"><option>Choose one</option></select></td>
+            <td><select class="select" style="width: 12rem;" data-state="hover" aria-label="Empty kind, hover"><option>Choose one</option></select></td>
+            <td><select class="select" style="width: 12rem;" data-state="focus" aria-label="Empty kind, focus"><option>Choose one</option></select></td>
+            <td><select class="select" style="width: 12rem;" aria-invalid="true" aria-label="Empty kind, invalid"><option>Choose one</option></select></td>
+            <td><select class="select" style="width: 12rem;" disabled aria-label="Empty kind, disabled"><option>Choose one</option></select></td></tr>
+        </tbody>
+      </table></div>
+      <p>Selects have no read-only state in HTML. Show a read-only value as text or as a read-only <a href="text-field.html">text field</a>.</p>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack stack--sm">
+          <select class="select" aria-label="Light theme, default"><option>120 km · 1.5 hr</option></select>
+          <select class="select" data-state="focus" aria-label="Light theme, focus"><option>120 km · 1.5 hr</option></select>
+          <select class="select" aria-invalid="true" aria-label="Light theme, invalid"><option>Choose one</option></select>
+          <select class="select" disabled aria-label="Light theme, disabled"><option>120 km · 1.5 hr</option></select>
+        </div></div>
+        <div data-theme="dark"><div class="stack stack--sm">
+          <select class="select" aria-label="Dark theme, default"><option>120 km · 1.5 hr</option></select>
+          <select class="select" data-state="focus" aria-label="Dark theme, focus"><option>120 km · 1.5 hr</option></select>
+          <select class="select" aria-invalid="true" aria-label="Dark theme, invalid"><option>Choose one</option></select>
+          <select class="select" disabled aria-label="Dark theme, disabled"><option>120 km · 1.5 hr</option></select>
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Invalid</b> happens only for a required select left on its placeholder. Pair it with “Choose a kind of gathering.”</li>
+        <li><b>Disabled</b> while a dependent value is missing is a trap: Naomi can’t tell why. Prefer showing all options and explaining a bad combination in the error.</li>
+        <li><b>Open</b> uses the platform list: a sheet on iOS, a dropdown on Android and desktop. Its colours follow the browser’s <code>color-scheme</code>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Full width of its field. The inline sort keeps a 12rem minimum and sits under the heading on phones.</li>
+        <li>On phones the open list is the system picker, which is easier to use with a thumb than any custom dropdown.</li>
+        <li>The longest option decides nothing about the width; the field does. Keep options under about 24 characters so the value does not clip at 360px.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The select shares the field component tokens with <a href="text-field.html#theming">text fields</a>: <code>--field-bg</code>, <code>--field-fg</code>, <code>--field-border</code> and <code>--field-height</code>. It adds <code>appearance: none</code> and draws the chevron with two gradients in <code>currentColor</code>, so the chevron follows the text colour in every theme and state.</p>
+      <p>The open list is styled by the browser. Setting <code>color-scheme</code> per theme (the token sheet does) makes it dark on the dark theme.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;select&gt;</code> (a combobox with a listbox popup in the accessibility tree). Use it before any custom widget; a custom listbox would have to follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/">APG Listbox pattern</a> and still lose the phone picker.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves to and from the select.</td></tr>
+        <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Changes the value (Windows) or opens the list (macOS).</td></tr>
+        <tr><td><kbd>Alt</kbd>+<kbd>↓</kbd> / <kbd>Space</kbd></td><td>Opens the list.</td></tr>
+        <tr><td>A letter</td><td>Jumps to the next option starting with it (“W” → Worship night, Wedding).</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Esc</kbd></td><td>Chooses / closes without changing.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The double ring (<code>--shadow-focus</code>) around the box, the same as text fields.</p>
+      <h3>Labelling</h3>
+      <p>A visible <code>&lt;label&gt;</code>. Option text is what gets announced, so write options that stand alone (“120 km · 1.5 hr”, not “1.5”). The placeholder option is not a label. Errors link through <code>aria-describedby</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Value on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Chevron on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Invalid rule</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: value on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Only the rule colour and ring fade (<code>--duration-fast</code>). The open list animates as the platform does.</p>
+      <h3>Touch</h3>
+      <p>44px tall, full width; the system picker handles the rest.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Options in sentence case, short and parallel: “Sunday service”, “Worship night”, “Youth event”.</li>
+        <li>Order options by how often they are picked, or by size for ranges (40, 80, 120, 200 km).</li>
+        <li>Add the detail a coordinator needs after a middle dot: “120 km · 1.5 hr”.</li>
+        <li>Default to the most likely option (Sunday service, 120 km). Use “Choose one” only when guessing would be wrong.</li>
+        <li>Sort options describe the order: “Closest first”, “Price, low to high”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-s1">How far can they drive?</label><select class="select" id="dd-s1"><option>120 km · 1.5 hr</option></select></div></div><figcaption>Options that stand alone, with distance and time.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-s2">Radius</label><select class="select" id="dd-s2"><option>3</option></select></div></div><figcaption>A bare number: 3 what? Screen readers hear only “3”.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><fieldset class="choice-group choice-group--inline"><legend>Deposit</legend><label class="radio"><input type="radio" name="dd-dep" checked><span class="radio__dot"></span><span class="radio__text">Pay 25% now</span></label><label class="radio"><input type="radio" name="dd-dep"><span class="radio__dot"></span><span class="radio__text">Pay in full</span></label></fieldset></div><figcaption>Two options that matter: radios, so both are visible.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-s4">Deposit</label><select class="select" id="dd-s4"><option>Pay 25% now</option><option>Pay in full</option></select></div></div><figcaption>Hiding a two-way money choice in a select.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Fill</td><td><code>--field-bg</code> → <code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Value and chevron</td><td><code>--field-fg</code> → <code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Rule</td><td><code>--field-border</code> → <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Invalid rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Disabled fill / text</td><td><code>--color-bg-subtle</code> / <code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+          <tr><td>Focus</td><td><code>--shadow-focus</code></td><td><span data-theme="light" data-token="--shadow-focus"></span></td><td><span data-theme="dark" data-token="--shadow-focus"></span></td></tr>
+          <tr><td>Height sm / md / lg</td><td><code>--control-height-sm/md/lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+          <tr><td>Chevron room</td><td><code>--space-10</code> right padding</td><td colspan="2"><span data-token="--space-10"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="radius"&gt;How far can they drive?&lt;/label&gt;
+  &lt;select class="select" id="radius" name="radius"&gt;
+    &lt;option value="40"&gt;40 km · 30 min&lt;/option&gt;
+    &lt;option value="80"&gt;80 km · 1 hr&lt;/option&gt;
+    &lt;option value="120" selected&gt;120 km · 1.5 hr&lt;/option&gt;
+    &lt;option value="200"&gt;200 km · 2.5 hr&lt;/option&gt;
+  &lt;/select&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.select</code></td><td>Native select with the field look and a CSS chevron.</td></tr>
+        <tr><td><code>.select--sm</code> <code>.select--lg</code></td><td>Size; leave off for medium.</td></tr>
+        <tr><td><code>.field--inline</code> on the wrapper</td><td>12rem minimum in a heading row.</td></tr>
+        <tr><td><code>required</code> + disabled first option</td><td>Placeholder pattern.</td></tr>
+        <tr><td><code>aria-invalid="true"</code></td><td>Red rule and inner stripe.</td></tr>
+        <tr><td><code>disabled</code></td><td>Greyed, skipped by Tab.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Kind of gathering” and “How far can they drive?” in the booking bar; “Sort” in the lineup heading</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: the radius set to “40 km · 30 min”, the cause of the empty Christmas Eve lineup</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Kind of gathering” in the booking stub</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the same selects in other states</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Invalid styling only covered <code>.input</code>. Selects now take <code>aria-invalid</code> too.</li>
+        <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks. It is now <code>.field--inline</code>.</li>
+        <li>The lineup’s sort select had no <code>id</code>, <code>name</code> or announced result. It now has both, and re-sorting announces “Sorted by highest rated” in the page’s status region.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

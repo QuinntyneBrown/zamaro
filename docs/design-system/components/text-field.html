@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text field — Zamaro design system</title>
+<meta name="description" content="Single-line inputs for names, places, email, search, numbers, units and passwords. Three sizes, invalid, read-only and disabled states, in both themes.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Text field</h1>
+      <p class="ds-lead">A text field takes one line of typing: the church’s town in the booking bar, an email address, a search, a head count. Square, ruled in charcoal, and always under a visible label.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;input&gt;</code></span><span class="ds-pill">Class <code>.input</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+<section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a text field for short, free-form answers. Always put it in a <a href="form-field.html">form field</a> with a label. For longer answers use a <a href="textarea.html">textarea</a>; for a fixed list, a <a href="select.html">select</a> or <a href="radio-group.html">radio group</a>; for dates, the <a href="date-picker.html">date picker</a>.</p>
+      <ul>
+        <li><b>Text</b>: “Church location” in the booking bar, the church name in the booking stub.</li>
+        <li><b>Email</b>: sign-in and the booker’s contact address. <code>type="email"</code> brings the @ keyboard on phones.</li>
+        <li><b>Search</b> with a leading icon (<code>.input-icon</code>): finding an artist or a song by name.</li>
+        <li><b>Number</b>: small whole counts only, such as expected attendance.</li>
+        <li><b>With an addon</b> (<code>.input-group</code>): a unit or currency that belongs to the value, “km” or “$”.</li>
+        <li><b>Password</b> with a show toggle, on sign-in.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="field" style="width: min(100%, 20rem);">
+            <label class="field__label" for="ana-radius">How far can they drive?</label>
+            <div class="input-group">
+              <input class="input" type="text" inputmode="numeric" id="ana-radius" value="120" aria-describedby="ana-radius-unit">
+              <span class="input-group__addon" id="ana-radius-unit">km</span>
+            </div>
+          </div>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.5rem)); top: 2.25rem;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: max(0.25rem, calc(50% - 11.5rem)); top: 4.5rem;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: calc(50% - 2rem); top: 6.9rem;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: min(calc(50% + 8rem), calc(100% - 2rem)); top: 6.9rem;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small>From the <a href="form-field.html">form field</a>: stamped overline above the control.</small></div></li>
+          <li><div><b>Container</b><small>44px tall (<code>--field-height</code>), square, 2px charcoal rule, surface fill, 12px side padding.</small></div></li>
+          <li><div><b>Value</b><small>Body text, 16px, so phones do not zoom on focus. Placeholder text, when used, is <code>--color-fg-subtle</code>.</small></div></li>
+          <li><div><b>Addon (optional)</b><small>A sunken box sharing the rule, mono stub type, muted. Holds a unit; linked by <code>aria-describedby</code>.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Pick the <code>type</code> that matches the data. It sets the phone keyboard, autofill and built-in checks.</p>
+      <h3>Text and email</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="tf-place">Church location</label>
+      <input class="input" type="text" id="tf-place" name="place" value="Burlington, ON" autocomplete="address-level2">
+    </div>
+    <div class="field">
+      <label class="field__label" for="tf-email">Email</label>
+      <input class="input" type="email" id="tf-email" name="email" value="naomi.fraser@riversidecc.ca" autocomplete="email" spellcheck="false">
+    </div>
+  </div>
+  <div class="ds-example__caption"><span><code>autocomplete</code> lets the browser fill known data (WCAG 1.3.5). Email turns spellcheck off.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-place"&gt;Church location&lt;/label&gt;
+  &lt;input class="input" type="text" id="tf-place" name="place" value="Burlington, ON" autocomplete="address-level2"&gt;
+&lt;/div&gt;
+&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-email"&gt;Email&lt;/label&gt;
+  &lt;input class="input" type="email" id="tf-email" name="email" value="naomi.fraser@riversidecc.ca" autocomplete="email" spellcheck="false"&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Search with an icon</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="tf-search">Search artists or songs</label>
+      <div class="input-icon">
+        <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>
+        <input class="input" type="search" id="tf-search" name="q" placeholder="Hosanna Collective, Way Maker…">
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>The icon is decoration inside <code>.input-icon</code>; the label carries the meaning. The placeholder shows examples, not instructions.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-search"&gt;Search artists or songs&lt;/label&gt;
+  &lt;div class="input-icon"&gt;
+    &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/&gt;&lt;/svg&gt;
+    &lt;input class="input" type="search" id="tf-search" name="q" placeholder="Hosanna Collective, Way Maker…"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Number and addons</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="tf-people">Expected attendance</label>
+      <input class="input" type="number" id="tf-people" name="people" value="180" min="1" max="5000" step="10">
+    </div>
+    <div class="field">
+      <label class="field__label" for="tf-radius">How far can they drive?</label>
+      <div class="input-group">
+        <input class="input" type="text" inputmode="numeric" id="tf-radius" name="radius" value="120" aria-describedby="tf-radius-unit">
+        <span class="input-group__addon" id="tf-radius-unit">km</span>
+      </div>
+    </div>
+    <div class="field">
+      <label class="field__label" for="tf-budget">Budget for the artist</label>
+      <div class="input-group">
+        <span class="input-group__addon" id="tf-budget-unit">$<span class="visually-hidden"> Canadian dollars</span></span>
+        <input class="input" type="text" inputmode="decimal" id="tf-budget" name="budget" value="1,800" aria-describedby="tf-budget-unit">
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>Use <code>type="number"</code> only for small counts. Money and distances are <code>type="text"</code> with <code>inputmode</code>, so “1,800” is accepted and the wheel cannot change the value.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-people"&gt;Expected attendance&lt;/label&gt;
+  &lt;input class="input" type="number" id="tf-people" name="people" value="180" min="1" max="5000" step="10"&gt;
+&lt;/div&gt;
+&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-radius"&gt;How far can they drive?&lt;/label&gt;
+  &lt;div class="input-group"&gt;
+    &lt;input class="input" type="text" inputmode="numeric" id="tf-radius" name="radius" value="120" aria-describedby="tf-radius-unit"&gt;
+    &lt;span class="input-group__addon" id="tf-radius-unit"&gt;km&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-budget"&gt;Budget for the artist&lt;/label&gt;
+  &lt;div class="input-group"&gt;
+    &lt;span class="input-group__addon" id="tf-budget-unit"&gt;$&lt;span class="visually-hidden"&gt; Canadian dollars&lt;/span&gt;&lt;/span&gt;
+    &lt;input class="input" type="text" inputmode="decimal" id="tf-budget" name="budget" value="1,800" aria-describedby="tf-budget-unit"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>Password with a show toggle</h3>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <div class="field">
+      <label class="field__label" for="tf-password">Password</label>
+      <div class="input-group">
+        <input class="input" type="password" id="tf-password" name="password" value="lakeshore-hymns-2026" autocomplete="current-password">
+        <button class="btn" type="button" aria-pressed="false" aria-controls="tf-password" aria-label="Show password" data-password-toggle><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>Show</button>
+      </div>
+    </div>
+  </div>
+  <div class="ds-example__caption"><span>The toggle is a button with <code>aria-pressed</code>; its name starts with its visible label (“Show”). Pasting and password managers always work.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="tf-password"&gt;Password&lt;/label&gt;
+  &lt;div class="input-group"&gt;
+    &lt;input class="input" type="password" id="tf-password" name="password" value="lakeshore-hymns-2026" autocomplete="current-password"&gt;
+    &lt;button class="btn" type="button" aria-pressed="false" aria-controls="tf-password" aria-label="Show password" data-password-toggle&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/&gt;&lt;/svg&gt;Show&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+</div>
+      <h3>In the booking bar</h3>
+      <p>The booking bar sits on the charcoal poster but is a paper ticket: <code>data-theme="light"</code> keeps its fields on newsprint in both themes. See <a href="form-layout.html">Form layout</a> for the whole bar.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stage">
+    <form class="booking-bar" data-theme="light" aria-labelledby="tf-bar-title" action="#variants" style="width: min(100%, 36rem);">
+      <h3 id="tf-bar-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h3>
+      <label class="field"><span class="field__label">Church location</span>
+        <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
+      <label class="field"><span class="field__label">How far can they drive?</span>
+        <select class="select" name="radius"><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option></select></label>
+      <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+    </form>
+  </div>
+  <div class="ds-example__caption"><span>Two fields of the Discover booking bar. On the stage the bar casts a yellow hard shadow.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="booking-bar" data-theme="light" aria-labelledby="tf-bar-title" action="#variants" style="width: min(100%, 36rem);"&gt;
+  &lt;h3 id="tf-bar-title" class="booking-bar__title"&gt;Your event &lt;small aria-hidden="true"&gt;Admit one church&lt;/small&gt;&lt;/h3&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;Church location&lt;/span&gt;
+    &lt;input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"&gt;&lt;/label&gt;
+  &lt;label class="field"&gt;&lt;span class="field__label"&gt;How far can they drive?&lt;/span&gt;
+    &lt;select class="select" name="radius"&gt;&lt;option value="80"&gt;80 km · 1 hr&lt;/option&gt;&lt;option value="120" selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;button class="btn btn--primary btn--lg" type="submit"&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Medium is the default and matches buttons, so a field and its submit line up. Large suits a single, important field, such as search on its own page. Small is for dense toolbars and table filters on wide screens.</p>
+<div class="ds-example">
+  <div class="ds-example__canvas ds-example__canvas--stack">
+    <input class="input input--sm" type="text" aria-label="Small example" value="Small · 36px">
+    <input class="input" type="text" aria-label="Medium example" value="Medium · 44px">
+    <input class="input input--lg" type="text" aria-label="Large example" value="Large · 56px">
+  </div>
+  <div class="ds-example__caption"><span>Heights <code>--control-height-sm/md/lg</code>. Small uses 14px text, which makes iPhones zoom on focus, so do not use it on phone layouts.</span></div>
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;input class="input input--sm" type="text" aria-label="Small example" value="Small · 36px"&gt;
+&lt;input class="input" type="text" aria-label="Medium example" value="Medium · 44px"&gt;
+&lt;input class="input input--lg" type="text" aria-label="Large example" value="Large · 56px"&gt;</code></pre></details>
+</div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Hover and focus are forced with <code>data-state</code>; the rest use real attributes.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Read-only</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Text</th>
+            <td><input class="input" style="width: 11rem;" type="text" value="Burlington, ON" aria-label="Church location, default"></td>
+            <td><input class="input" style="width: 11rem;" type="text" value="Burlington, ON" data-state="hover" aria-label="Church location, hover"></td>
+            <td><input class="input" style="width: 11rem;" type="text" value="Burlington, ON" data-state="focus" aria-label="Church location, focus"></td>
+            <td><input class="input" style="width: 11rem;" type="text" value="Burlingtn" aria-invalid="true" aria-label="Church location, invalid"></td>
+            <td><input class="input" style="width: 11rem;" type="text" value="Burlington, ON" readonly aria-label="Church location, read-only"></td>
+            <td><input class="input" style="width: 11rem;" type="text" value="Burlington, ON" disabled aria-label="Church location, disabled"></td></tr>
+          <tr><th scope="row">Placeholder</th>
+            <td><input class="input" style="width: 11rem;" type="text" placeholder="Way Maker…" aria-label="Song, default"></td>
+            <td><input class="input" style="width: 11rem;" type="text" placeholder="Way Maker…" data-state="hover" aria-label="Song, hover"></td>
+            <td><input class="input" style="width: 11rem;" type="text" placeholder="Way Maker…" data-state="focus" aria-label="Song, focus"></td>
+            <td><input class="input" style="width: 11rem;" type="text" placeholder="Way Maker…" aria-invalid="true" aria-label="Song, invalid"></td>
+            <td><input class="input" style="width: 11rem;" type="text" placeholder="Way Maker…" readonly aria-label="Song, read-only"></td>
+            <td><input class="input" style="width: 11rem;" type="text" placeholder="Way Maker…" disabled aria-label="Song, disabled"></td></tr>
+          <tr><th scope="row">Search icon</th>
+            <td><div class="input-icon" style="width: 11rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" value="Luz Viva" aria-label="Search, default"></div></td>
+            <td><div class="input-icon" style="width: 11rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" value="Luz Viva" data-state="hover" aria-label="Search, hover"></div></td>
+            <td><div class="input-icon" style="width: 11rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" value="Luz Viva" data-state="focus" aria-label="Search, focus"></div></td>
+            <td><div class="input-icon" style="width: 11rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" value="Luz Viva" aria-invalid="true" aria-label="Search, invalid"></div></td>
+            <td><div class="input-icon" style="width: 11rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" value="Luz Viva" readonly aria-label="Search, read-only"></div></td>
+            <td><div class="input-icon" style="width: 11rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input class="input" type="search" value="Luz Viva" disabled aria-label="Search, disabled"></div></td></tr>
+          <tr><th scope="row">Addon</th>
+            <td><div class="input-group" style="width: 11rem;"><input class="input" type="text" value="120" aria-label="Radius in km, default"><span class="input-group__addon">km</span></div></td>
+            <td><div class="input-group" style="width: 11rem;"><input class="input" type="text" value="120" data-state="hover" aria-label="Radius in km, hover"><span class="input-group__addon">km</span></div></td>
+            <td><div class="input-group" style="width: 11rem;"><input class="input" type="text" value="120" data-state="focus" aria-label="Radius in km, focus"><span class="input-group__addon">km</span></div></td>
+            <td><div class="input-group" style="width: 11rem;"><input class="input" type="text" value="12o" aria-invalid="true" aria-label="Radius in km, invalid"><span class="input-group__addon">km</span></div></td>
+            <td><div class="input-group" style="width: 11rem;"><input class="input" type="text" value="120" readonly aria-label="Radius in km, read-only"><span class="input-group__addon">km</span></div></td>
+            <td><div class="input-group" style="width: 11rem;"><input class="input" type="text" value="120" disabled aria-label="Radius in km, disabled"><span class="input-group__addon">km</span></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack stack--sm">
+          <input class="input" type="text" value="Burlington, ON" aria-label="Light theme, default">
+          <input class="input" type="text" value="Burlington, ON" data-state="focus" aria-label="Light theme, focus">
+          <input class="input" type="text" value="Burlingtn" aria-invalid="true" aria-label="Light theme, invalid">
+          <input class="input" type="text" value="Riverside Community Church" readonly aria-label="Light theme, read-only">
+          <input class="input" type="text" placeholder="Way Maker…" disabled aria-label="Light theme, disabled">
+        </div></div>
+        <div data-theme="dark"><div class="stack stack--sm">
+          <input class="input" type="text" value="Burlington, ON" aria-label="Dark theme, default">
+          <input class="input" type="text" value="Burlington, ON" data-state="focus" aria-label="Dark theme, focus">
+          <input class="input" type="text" value="Burlingtn" aria-invalid="true" aria-label="Dark theme, invalid">
+          <input class="input" type="text" value="Riverside Community Church" readonly aria-label="Dark theme, read-only">
+          <input class="input" type="text" placeholder="Way Maker…" disabled aria-label="Dark theme, disabled">
+        </div></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> darkens the rule from charcoal to body ink. Subtle on purpose: fields are not buttons.</li>
+        <li><b>Focus</b> draws the double ring around the box (<code>--shadow-focus</code>): yellow inside, ink outside on paper; the reverse in dark mode.</li>
+        <li><b>Invalid</b> (<code>aria-invalid="true"</code>) turns the rule red and adds a 2px inner stripe on the left, so it reads without colour. Pair it with a <code>.field__error</code>.</li>
+        <li><b>Read-only</b> shows a value Naomi can copy but not change, such as her church on a request: sunken fill, dashed rule. It is still focusable.</li>
+        <li><b>Disabled</b> greys everything and is skipped by Tab. Prefer read-only, or hide the field, when the value still matters.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>A text field is always 100% of its field. Its width says nothing about the expected length; help text does that if needed.</li>
+        <li>Addons and the show toggle keep their width; the input shrinks (<code>min-width: 0</code>), so groups fit at 360px.</li>
+        <li>Medium and large use 16px text, which stops iOS from zooming on focus. Small (14px) is for wide screens only.</li>
+        <li>In the booking bar the fields stack on phones and pair up from 640px (<code>--layout-breakpoint-sm</code>).</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Inputs, selects and textareas share four component tokens: <code>--field-bg</code> (<code>--color-bg-surface</code>), <code>--field-fg</code> (<code>--color-fg-default</code>), <code>--field-border</code> (<code>--color-border-strong</code>) and <code>--field-height</code> (<code>--control-height-md</code>). States override them: hover sets <code>--field-border</code> to body ink, read-only sets <code>--field-bg</code> to <code>--color-bg-surface-sunken</code>, disabled uses <code>--color-bg-subtle</code> and <code>--color-fg-disabled</code>, invalid uses <code>--color-danger-border</code>.</p>
+<pre><code>/* A surface that needs quieter fields overrides the tokens, never the rules */
+.toolbar .input { --field-bg: var(--color-bg-surface-sunken); --field-border: var(--color-border-default); }</code></pre>
+      <p>In dark mode fields are charcoal with a light rule and paper text. The booking bar and stub stay paper in both themes because they carry <code>data-theme="light"</code>, the paper island.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;input&gt;</code> with the right <code>type</code>; no ARIA role is needed. There is no APG widget pattern for a textbox; follow the <a href="https://www.w3.org/WAI/tutorials/forms/labels/">W3C WAI forms tutorial on labels</a>. The show-password toggle follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button pattern</a> with <code>aria-pressed</code>.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves to and from the field; read-only fields are included, disabled ones skipped.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Submits the surrounding form.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Clears a search field.</td></tr>
+        <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Steps a number field by its <code>step</code>.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd> on “Show”</td><td>Shows or hides the password. Focus stays on the toggle.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The double ring (<code>--shadow-focus</code>) replaces the outline and hugs the box, so it is never clipped by a card. Inside an input group the focused input rises above its neighbours (<code>z-index: var(--z-raised)</code>), so the addon does not cover the ring.</p>
+      <h3>Labelling</h3>
+      <p>Every field has a visible <code>&lt;label&gt;</code>; placeholders vanish on typing and fail contrast as labels. Units in an addon are linked by <code>aria-describedby</code> so they are read (“How far can they drive?, 120, km”). The password toggle has <code>aria-controls</code> and keeps the name “Show password” in both states; <code>aria-pressed</code> says whether it is on. Errors: see <a href="form-field.html">Form field</a>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Value on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Placeholder on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Addon text</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Field rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Field rule on page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair"><span>Invalid rule</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Focus ring, outer</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: value on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: placeholder</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: field rule</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Rule colour and the focus ring fade in over <code>--duration-fast</code>. Under <code>prefers-reduced-motion</code> they change instantly.</p>
+      <h3>Touch</h3>
+      <p>Medium fields are 44px tall and full width. The whole label is also a target. The show toggle is a 44px button beside the input, not an icon inside it.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Labels name the value, not the action: “Church location”, not “Enter your location”.</li>
+        <li>Placeholders, if any, show a real example and end with an ellipsis: “Hosanna Collective, Way Maker…”. Never put rules or the label there.</li>
+        <li>Units go in an addon, not in the value: “120” + “km”, “$” + “1,800”.</li>
+        <li>Prefill what Zamaro already knows (Naomi’s church and town) to save typing (WCAG 3.3.7).</li>
+        <li>Error copy names the fix: “Enter an email address like naomi@riversidecc.ca.”</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-t1">Church location</label><input class="input" type="text" id="dd-t1" value="Burlington, ON"></div></div><figcaption>A visible label above the field, prefilled from Naomi’s profile.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><input class="input" type="text" placeholder="Church location" aria-label="Church location, placeholder as label example"></div><figcaption>Placeholder as the label. It disappears as soon as Naomi types and is too faint to be a label.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="input-group"><span class="input-group__addon">$</span><input class="input" type="text" inputmode="decimal" value="1,800" aria-label="Budget, Canadian dollars"></div></div><figcaption>Money as text with a decimal keyboard and a currency addon.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><input class="input" type="number" value="1800" aria-label="Budget, number example"></div><figcaption><code>type="number"</code> for money rejects “1,800”, shows spinners, and changes the value when someone scrolls past it.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Fill</td><td><code>--field-bg</code> → <code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Value</td><td><code>--field-fg</code> → <code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Rule</td><td><code>--field-border</code> → <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Placeholder, search icon</td><td><code>--color-fg-subtle</code> / <code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td></tr>
+          <tr><td>Addon fill</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Read-only fill</td><td><code>--color-bg-surface-sunken</code> + dashed rule</td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Disabled fill / text</td><td><code>--color-bg-subtle</code> / <code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Invalid rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Focus ring</td><td><code>--shadow-focus</code> (<code>--color-focus-ring-offset</code> inside, <code>--color-focus-ring</code> outside)</td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring-offset" data-swatch></i><span data-token="--color-focus-ring-offset"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring-offset" data-swatch></i><span data-token="--color-focus-ring-offset"></span></span></td></tr>
+          <tr><td>Height sm / md / lg</td><td><code>--control-height-sm/md/lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+          <tr><td>Padding</td><td><code>--space-2</code> × <code>--space-3</code> (lg: <code>--space-4</code>)</td><td colspan="2"><span data-token="--space-2"></span> × <span data-token="--space-3"></span></td></tr>
+          <tr><td>Rule width</td><td><code>--border-width-thick</code>, <code>--radius-md</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Value type</td><td><code>--text-body</code> (sm: <code>--text-body-sm</code>, lg: <code>--text-body-lg</code>)</td><td colspan="2"><span data-token="--text-body"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="radius"&gt;How far can they drive?&lt;/label&gt;
+  &lt;div class="input-group"&gt;
+    &lt;input class="input" type="text" inputmode="numeric" id="radius" name="radius" value="120" aria-describedby="radius-unit"&gt;
+    &lt;span class="input-group__addon" id="radius-unit"&gt;km&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class="input-icon"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/&gt;&lt;/svg&gt;
+  &lt;input class="input" type="search" id="q" name="q" aria-label="Search artists or songs"&gt;
+&lt;/div&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.input</code></td><td>The field box, medium size.</td></tr>
+        <tr><td><code>.input--sm</code> <code>.input--lg</code></td><td>Size; leave off for medium.</td></tr>
+        <tr><td><code>.input-icon</code> + <code>.icon</code></td><td>Leading decorative icon; adds left padding.</td></tr>
+        <tr><td><code>.input-group</code>, <code>.input-group__addon</code></td><td>Joins an input with a unit, currency or button so they share one rule.</td></tr>
+        <tr><td><code>aria-invalid="true"</code></td><td>Red rule with inner stripe.</td></tr>
+        <tr><td><code>readonly</code></td><td>Sunken fill, dashed rule, still focusable.</td></tr>
+        <tr><td><code>disabled</code></td><td>Greyed, not focusable.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Church location” in the booking bar, on the stage</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>, <a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the same bar in every state</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Church” prefilled with “Riverside Community Church, Burlington” in the booking stub</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Invalid styling only covered <code>.input</code>. It now covers input, select and textarea through the shared field tokens.</li>
+        <li>The booking bar read primitives (<code>--palette-ink</code>, <code>--palette-paper</code>) to stay paper on the stage. It is now a <code>data-theme="light"</code> paper island.</li>
+        <li>Email, search, number, addon and password fields are not in the mocks yet; they are part of the core set. The product needs them for sign-in, artist and song search, attendance, budget and radius.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+<script>/* Show / hide password toggle for this page's demo. */
+document.querySelectorAll('[data-password-toggle]').forEach(function (button) {
+  var input = document.getElementById(button.getAttribute('aria-controls'));
+  button.addEventListener('click', function () {
+    var show = button.getAttribute('aria-pressed') !== 'true';
+    button.setAttribute('aria-pressed', show ? 'true' : 'false');
+    input.type = show ? 'text' : 'password';
+  });
+});</script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poster hero — Zamaro design system</title>
+<meta name="description" content="The poster hero is the charcoal stage at the top of Discover and every artist profile: kicker, a headline set like a tour date, a halftone corner, and the artist header with name, facts and art.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+<style>
+/* Docs only: the display sizes are clamp()ed to the viewport, but specimens here sit in the
+   narrower docs column, so they are scaled down to fit. The product uses the full tokens. */
+.ds-section .poster__date { font-size: clamp(3.5rem, 7vw, 6.5rem); }
+.ds-section .poster__title { font-size: clamp(2.5rem, 5vw, 4rem); }
+.ds-section .artist-poster__name { font-size: clamp(2.75rem, 5vw, 4.5rem); }
+/* Docs only: compact stage tiles for the state matrix. */
+.poster-tile { display: grid; gap: var(--space-2); min-width: 12rem; max-width: 16rem; padding: var(--space-4); }
+.poster-tile .poster__date { font: var(--text-h2); }
+.poster-tile .artist-poster__name { font: var(--text-h3); }
+.poster-tile .skeleton--poster { height: 2.5rem; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Zamaro signatures</p>
+      <h1>Poster hero</h1>
+      <p class="ds-lead">The poster is the charcoal stage at the top of the page. It sets the question as a tour date (“Who’s free Sat 14 Nov”) or the artist’s name as a headliner, with a screen-printed halftone in the corner.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Labelled <code>&lt;section&gt;</code> holding the page <code>&lt;h1&gt;</code></span><span class="ds-pill">Classes <code>.poster</code> <code>.artist-poster</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Every page opens with one poster. It holds the page’s only <code>&lt;h1&gt;</code> and is always on the stage (<code>.on-stage</code>), so it stays charcoal in both themes. Two layouts share the stage:</p>
+      <ul>
+        <li><b>Search poster</b> (<code>.poster__grid</code>) on Discover: a kicker, the question with the date set huge, one line of context, and the <a href="booking-form.html">booking bar</a> beside it on desktop.</li>
+        <li><b>Artist poster</b> (<code>.artist-poster</code>) on a profile: the artist’s name at poster size, up to four facts, the actions (“Book for Sat 14 Nov”, Save, Share) and the portrait as <a href="artwork.html">artwork</a>.</li>
+      </ul>
+      <p>Use it once per page, at the top, directly under the <a href="top-bar.html">top bar</a>. Do not use it for in-page sections: those use <code>.section</code> with a <code>.section__head</code>. Do not use it to report errors in results. Discover keeps its poster unchanged and shows an <a href="alert.html">alert</a> in the lineup.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <section class="poster on-stage" aria-labelledby="anatomy-title" style="width: 100%; padding-inline: var(--space-6);">
+            <div class="stack">
+              <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+              <h2 id="anatomy-title" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h2>
+              <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+            </div>
+          </section>
+          <span class="ds-callout" style="left: 1%; top: 18%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 1%; top: 33%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 1%; top: 51%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 1%; top: 74%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 88%; top: 82%;" aria-hidden="true">5</span>
+          <span class="ds-callout" style="left: 92%; top: 4%;" aria-hidden="true">6</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Kicker</b><small><code>.overline.poster__kicker</code>: mono 12px, 0.18em tracking, yellow on the stage. Says where or who in under eight words.</small></div></li>
+          <li><div><b>Title</b><small><code>.poster__title</code>: condensed display, <code>--text-h1</code> (48–88px), uppercase from CSS. The page <code>&lt;h1&gt;</code>.</small></div></li>
+          <li><div><b>Date</b><small><code>.poster__date</code>: <code>--text-display</code> (64–160px), yellow. Each word is its own no-wrap span so “14 Nov” never splits.</small></div></li>
+          <li><div><b>Sub line</b><small><code>.poster__sub</code>: 18px body on <code>--color-fg-on-stage-muted</code>. One sentence with a count and a place.</small></div></li>
+          <li><div><b>Halftone corner</b><small><code>.poster::after</code>: yellow dots at 35% opacity fading out from the bottom right. Decorative, never read aloud.</small></div></li>
+          <li><div><b>Stage</b><small><code>.on-stage</code>: <code>--color-bg-stage</code> with paper text in both themes. Padding 48/64px, 64/80px from 1024px.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Choose by page: the search poster asks a question and carries the search form; the artist poster names one artist and carries their actions. Specimens on this page scale the display type down to fit the docs column; in the product the date and name use the full <code>--text-display</code> and <code>--text-poster</code> sizes.</p>
+      <h3>Search poster (Discover)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <section class="poster on-stage" aria-labelledby="v-search-title">
+            <div class="container poster__grid">
+              <div class="stack">
+                <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+                <h2 id="v-search-title" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h2>
+                <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+              </div>
+              <form class="booking-bar" data-theme="light" aria-labelledby="v-find-title" action="#v-search-title">
+                <h2 id="v-find-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+                <label class="field"><span class="field__label">Event date</span>
+                  <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
+                <label class="field"><span class="field__label">Kind of gathering</span>
+                  <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option></select></label>
+                <label class="field"><span class="field__label">Church location</span>
+                  <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
+                <label class="field"><span class="field__label">How far can they drive?</span>
+                  <select class="select" name="radius"><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option></select></label>
+                <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+              </form>
+            </div>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>Copy and booking bar stack on phones and tablets; from 1024px they sit side by side, bottom-aligned. The bar is a paper island (<code>data-theme="light"</code>).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="poster on-stage" aria-labelledby="hero-title"&gt;
+  &lt;div class="container poster__grid"&gt;
+    &lt;div class="stack"&gt;
+      &lt;p class="overline poster__kicker"&gt;Worship artists within driving distance of Toronto&lt;/p&gt;
+      &lt;h1 id="hero-title" class="poster__title"&gt;Who’s free &lt;span class="poster__date"&gt;&lt;span&gt;Sat&lt;/span&gt; &lt;span&gt;14 Nov&lt;/span&gt;&lt;/span&gt;&lt;/h1&gt;
+      &lt;p class="poster__sub"&gt;Seven artists are free that Saturday and will drive to Burlington.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;form class="booking-bar" data-theme="light" aria-labelledby="find-title"&gt;…&lt;/form&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+
+      <h3>Artist poster (profile)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <section class="poster on-stage" aria-labelledby="v-artist-name">
+            <div class="container stack stack--lg">
+              <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#v-search-title">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav>
+              <div class="artist-poster">
+                <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+                <div class="stack">
+                  <p class="overline poster__kicker">Headliner · Gospel &amp; contemporary vocalist</p>
+                  <h2 id="v-artist-name" class="artist-poster__name">Abigail Mensah</h2>
+                  <p class="artist-poster__facts"><strong>★ 4.9</strong><span>38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
+                  <div class="cluster">
+                    <a class="btn btn--primary" href="#v-artist-name">Book for Sat 14 Nov</a>
+                    <button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button>
+                    <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>The name is <code>--text-poster</code> (72–208px) and breaks anywhere rather than overflow. From 768px the portrait moves to the right column.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="poster on-stage" aria-labelledby="artist-name"&gt;
+  &lt;div class="container stack stack--lg"&gt;
+    &lt;nav aria-label="Breadcrumb"&gt;&lt;ol class="breadcrumb"&gt;…&lt;/ol&gt;&lt;/nav&gt;
+    &lt;div class="artist-poster"&gt;
+      &lt;div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"&gt;&lt;/div&gt;
+      &lt;div class="stack"&gt;
+        &lt;p class="overline poster__kicker"&gt;Headliner · Gospel &amp;amp; contemporary vocalist&lt;/p&gt;
+        &lt;h1 id="artist-name" class="artist-poster__name"&gt;Abigail Mensah&lt;/h1&gt;
+        &lt;p class="artist-poster__facts"&gt;&lt;strong&gt;★ 4.9&lt;/strong&gt;&lt;span&gt;38 churches&lt;/span&gt;&lt;span&gt;Brampton, ON&lt;/span&gt;&lt;span&gt;Drives up to 120 km&lt;/span&gt;&lt;/p&gt;
+        &lt;div class="cluster"&gt;
+          &lt;a class="btn btn--primary" href="#book-title"&gt;Book for Sat 14 Nov&lt;/a&gt;
+          &lt;button class="btn" type="button" aria-pressed="true"&gt;…Saved&lt;/button&gt;
+          &lt;button class="btn" type="button"&gt;…Share&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+
+      <h3>New artist</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <section class="poster on-stage" aria-labelledby="v-new-name">
+            <div class="container">
+              <div class="artist-poster">
+                <div class="art" role="img" aria-label="Miriam Haile seated at an upright piano, smiling toward the camera"></div>
+                <div class="stack">
+                  <p class="overline poster__kicker">New to Zamaro · Solo vocalist &amp; pianist</p>
+                  <h2 id="v-new-name" class="artist-poster__name">Miriam Haile</h2>
+                  <p class="artist-poster__facts"><strong>New</strong><span>No reviews yet</span><span>Etobicoke, ON</span><span>Drives up to 60 km</span></p>
+                  <div class="cluster">
+                    <a class="btn btn--primary" href="#v-new-name">Book for Sat 14 Nov</a>
+                    <button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>Without a rating, the yellow fact says “New” and the second says “No reviews yet”. The portrait uses the plain halftone, not yellow, which is kept for headliners.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The poster has one size. It always spans the full width, and its type scales with the viewport through clamp() tokens."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The poster has one size. It always spans the full width, and its type scales with the viewport through clamp() tokens.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The poster has no pointer states of its own: its buttons, links and fields carry those. What changes is the copy and, while the profile loads, the whole artist header. Discover keeps the same poster when results fail, because the failure belongs to the lineup, not the search.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Loading</th><th scope="col">Empty</th><th scope="col">Error</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Search poster</th>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">Discover</p><p class="poster__date"><span>Sat</span> <span>14 Nov</span></p><p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p></div></td>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">Discover</p><p class="poster__date"><span>Sat</span> <span>14 Nov</span></p><p class="poster__sub">Checking the calendars of every artist who drives to Burlington…</p><button class="btn btn--primary btn--sm" type="submit" aria-busy="true">Checking calendars…</button></div></td>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">Discover</p><p class="poster__date"><span>Thu</span> <span>24 Dec</span></p><p class="poster__sub">Christmas Eve is the busiest night of the year for worship artists.</p></div></td>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">Discover</p><p class="poster__date"><span>Sat</span> <span>14 Nov</span></p><p class="poster__sub">Seven praise and worship artists are usually free on a Saturday in November.</p></div></td></tr>
+          <tr><th scope="row">Artist poster</th>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">Headliner</p><p class="artist-poster__name">Abigail Mensah</p><p class="artist-poster__facts"><strong>★ 4.9</strong><span>38 churches</span></p></div></td>
+            <td><div class="on-stage poster-tile" aria-hidden="true"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--text"></span></div></td>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">New to Zamaro</p><p class="artist-poster__name">Miriam Haile</p><p class="artist-poster__facts"><strong>New</strong><span>No reviews yet</span></p></div></td>
+            <td><div class="on-stage poster-tile"><p class="overline poster__kicker">Show postponed</p><p class="artist-poster__name">This profile didn’t load</p></div></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Loading, full size</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <section class="poster on-stage" aria-labelledby="s-loading-title" aria-busy="true">
+            <div class="container stack stack--lg">
+              <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#s-loading-title">Discover · Sat 14 Nov</a></li><li aria-current="page">Loading artist</li></ol></nav>
+              <div class="artist-poster" aria-hidden="true">
+                <span class="skeleton skeleton--portrait"></span>
+                <div class="stack"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--poster skeleton--medium"></span><span class="skeleton skeleton--text"></span></div>
+              </div>
+              <h2 id="s-loading-title" class="visually-hidden">Loading artist profile</h2>
+              <p class="visually-hidden" role="status">Loading Abigail Mensah’s profile…</p>
+            </div>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>The name skeleton is poster-sized so nothing jumps when the name lands. The <code>&lt;h1&gt;</code> stays, visually hidden; a separate <code>role="status"</code> line announces the load.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="poster on-stage" aria-labelledby="artist-name" aria-busy="true"&gt;
+  &lt;div class="container stack stack--lg"&gt;
+    &lt;nav aria-label="Breadcrumb"&gt;…&lt;li aria-current="page"&gt;Loading artist&lt;/li&gt;…&lt;/nav&gt;
+    &lt;div class="artist-poster" aria-hidden="true"&gt;
+      &lt;span class="skeleton skeleton--portrait"&gt;&lt;/span&gt;
+      &lt;div class="stack"&gt;
+        &lt;span class="skeleton skeleton--text skeleton--short"&gt;&lt;/span&gt;
+        &lt;span class="skeleton skeleton--poster"&gt;&lt;/span&gt;
+        &lt;span class="skeleton skeleton--poster skeleton--medium"&gt;&lt;/span&gt;
+        &lt;span class="skeleton skeleton--text"&gt;&lt;/span&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;h1 id="artist-name" class="visually-hidden"&gt;Loading artist profile&lt;/h1&gt;
+    &lt;p class="visually-hidden" role="status"&gt;Loading Abigail Mensah’s profile…&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+
+      <h3>Error, full size</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush">
+          <section class="poster on-stage" aria-labelledby="s-error-title">
+            <div class="container stack stack--lg">
+              <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#s-error-title">Discover · Sat 14 Nov</a></li><li aria-current="page">Artist</li></ol></nav>
+              <p class="overline poster__kicker">Show postponed</p>
+              <h2 id="s-error-title" class="artist-poster__name">This profile didn’t load</h2>
+            </div>
+          </section>
+          <div class="container page-error" style="padding-inline: var(--space-6);">
+            <div class="alert alert--danger" role="alert">
+              <svg class="icon icon--lg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+              <div class="stack stack--sm">
+                <p class="alert__title">We couldn’t reach the artist’s page</p>
+                <p>It’s on our side, not yours. Your search is saved and any request you’ve sent is safe.</p>
+              </div>
+              <div class="alert__actions">
+                <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+                <a class="btn" href="#s-error-title">Back to the lineup</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>The poster keeps the stage and states the failure in show language; the <a href="alert.html">alert</a> below (<code>.page-error</code>) explains it and offers the way out.</span></div>
+      </div>
+
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="on-stage poster-tile"><p class="overline poster__kicker">Discover</p><p class="poster__date"><span>Sat</span> <span>14 Nov</span></p><p class="poster__sub">Seven artists are free that Saturday.</p><div class="cluster"><button class="btn btn--primary btn--sm" type="button">Book</button><button class="btn btn--sm" type="button" data-state="focus">Share</button></div></div></div>
+        <div data-theme="dark"><div class="on-stage poster-tile"><p class="overline poster__kicker">Discover</p><p class="poster__date"><span>Sat</span> <span>14 Nov</span></p><p class="poster__sub">Seven artists are free that Saturday.</p><div class="cluster"><button class="btn btn--primary btn--sm" type="button">Book</button><button class="btn btn--sm" type="button" data-state="focus">Share</button></div></div></div>
+      </div>
+      <ul>
+        <li><b>Loading</b> (search) keeps the poster and changes the sub line to what is happening; the submit goes busy. (Artist) every part of the header becomes a stage skeleton and the section gets <code>aria-busy="true"</code>.</li>
+        <li><b>Empty</b> (search) sets the date that has no one free; the sub line explains why in one sentence. (Artist) a new artist shows “New” instead of a rating.</li>
+        <li><b>Error</b> (search) is unchanged; the lineup shows the alert. (Artist) the kicker reads “Show postponed” and the title says plainly what failed.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>Padding</b>: 48px top and 64px bottom on phones, 64px and 80px from <code>--layout-breakpoint-lg</code> (1024px). Side margins come from <code>.container</code> (<code>--layout-margin</code>: 20, 40, then 64px).</li>
+        <li><b>Search poster</b>: copy and booking bar stack below 1024px. From 1024px <code>.poster__grid</code> becomes two columns (1.15fr and 1fr), bottom-aligned, 64px apart.</li>
+        <li><b>Date</b>: <code>--text-display</code> is <code>clamp(4rem, 15vw, 10rem)</code>. Words wrap as whole units, so “Sat” can drop above “14 Nov” but the day and month never split. At 360px “14 Nov” is about 64px tall and fits.</li>
+        <li><b>Artist poster</b>: portrait first and capped at 18rem on phones; from 768px it moves into a 15rem right column (20rem from 1024px), bottom-aligned with the name. The name breaks anywhere (<code>overflow-wrap: anywhere</code>) instead of scrolling sideways, which matters for “Grace Tabernacle Mass Choir”.</li>
+        <li><b>Halftone corner</b>: fixed at 22rem and clipped by the poster’s <code>overflow: hidden</code>, so it never causes horizontal scroll.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The poster sits on the stage in both themes. <code>.on-stage</code> (shared with the top bar and footer) sets <code>--color-bg-stage</code> and <code>--color-fg-on-stage</code>; the kicker, date and yellow fact read <code>--color-accent-on-stage</code>; the sub line and facts read <code>--color-fg-on-stage-muted</code>. In light the stage is charcoal on newsprint; in dark it drops to the deepest ink so it still reads as a stage above the dark canvas.</p>
+      <p>The poster has no component tokens. Re-skin it by overriding the stage tokens on <code>.on-stage</code>. Children follow automatically: secondary buttons turn into paper outlines, the focus ring and link hover turn yellow, skeletons use <code>--color-bg-stage-raised</code>, and the booking bar opts out with <code>data-theme="light"</code>.</p>
+      <pre><code>/* The screen-print corner: yellow dots, faded out with a mask */
+.poster::after { background: radial-gradient(circle, var(--color-accent-on-stage) 22%, transparent 24%) 0 0 / 0.85rem 0.85rem; opacity: 0.35; }</code></pre>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A <code>&lt;section&gt;</code> labelled by its heading (<code>aria-labelledby</code>), which makes it a named region. It holds the page <code>&lt;h1&gt;</code>; no other heading on the page is level one. There is no APG pattern: it is static content. The portrait is <code>role="img"</code> with an <code>aria-label</code> that describes the photo; the halftone corner is a pseudo-element and is never announced.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through the breadcrumb, the actions and the booking-bar fields in reading order. The poster itself is not focusable.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows “Book for Sat 14 Nov” to the booking stub. The target heading takes <code>tabindex="-1"</code> so focus moves with the scroll.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>On the stage the 3px ring turns yellow (<code>--color-accent-on-stage</code>), well above 3:1 against charcoal. Inside the paper booking bar the ring goes back to ink.</p>
+      <h3>Labelling</h3>
+      <p>The title is read as one phrase: “Who’s free Sat 14 Nov”. CSS adds the uppercase, so screen readers do not spell it out. Facts are separate spans, so they are read as a list of short phrases. While loading, the visually hidden <code>&lt;h1&gt;</code> stays a heading and a separate <code>role="status"</code> line announces the load. Never put <code>role="status"</code> on the <code>&lt;h1&gt;</code> itself, because it removes the heading role.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Title and name on stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Kicker, date and yellow fact on stage</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Sub line and facts on stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Primary button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: title on stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: date on stage</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: sub line on stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Nothing on the poster moves. Loading skeletons shimmer on <code>--duration-deliberate</code> and stop under <code>prefers-reduced-motion</code>.</p>
+      <h3>Touch</h3>
+      <p>Actions are 44px buttons 8px apart. Breadcrumb links are at least 24px tall. The poster has no hover-only content.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li><b>Kicker</b>: where or who, under eight words. “Worship artists within driving distance of Toronto”, “Headliner · Gospel &amp; contemporary vocalist”.</li>
+        <li><b>Title</b>: the question the page answers, then the date in short form: “Who’s free Sat 14 Nov”. Write it in sentence case; CSS uppercases it.</li>
+        <li><b>Sub line</b>: one sentence with a count and a place. “Seven artists are free that Saturday and will drive to Burlington.” While loading, say what is happening and end with an ellipsis.</li>
+        <li><b>Artist name</b>: exactly as the artist writes it, with “&amp;” for duos (“Daniel &amp; Ruth Okonkwo”).</li>
+        <li><b>Facts</b>: at most four, the rating first: “★ 4.9 · 38 churches · Brampton, ON · Drives up to 120 km”. A new artist shows “New · No reviews yet”.</li>
+        <li><b>Errors</b>: show language in the kicker (“Show postponed”), plain words in the title (“This profile didn’t load”). The reason and the fix go in the alert below.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><p class="poster__date" style="font: var(--text-h1);"><span>Sat</span> <span>14 Nov</span></p></div><figcaption>Set the date as separate no-wrap spans in short form, so it wraps between words and never mid-date.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><p class="poster__date" style="font: var(--text-h1);">Saturday, November 14, 2026</p></div><figcaption>A long, unsplit date is too wide for a phone at display size, and the year adds nothing.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><div class="stack stack--sm" style="width: 100%;"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title skeleton--long"></span></div></div><figcaption>Use the size classes (<code>.skeleton--short</code>, <code>--portrait</code>, <code>--medium</code>). On the stage, skeletons read the stage-raised tokens.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><div class="stack stack--sm" style="width: 100%;"><span class="skeleton" style="width: 35%; height: 1rem;"></span><span class="skeleton" style="width: 60%; height: 2.5rem;"></span></div></div><figcaption>The loading mocks sized skeletons with inline <code>style</code> widths and heights. Inline sizes drift between pages.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><code>&lt;h1 class="visually-hidden"&gt;Loading artist profile&lt;/h1&gt; + &lt;p role="status"&gt;</code></div><figcaption>Keep the heading and announce the load from a separate status line.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><code>&lt;h1 class="visually-hidden" role="status"&gt;</code></div><figcaption>The artist loading mock put <code>role="status"</code> on the <code>&lt;h1&gt;</code>. The role replaces the heading, so the page has no <code>&lt;h1&gt;</code> while it loads.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Stage</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+          <tr><td>Title, name</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+          <tr><td>Sub line, facts</td><td><code>--color-fg-on-stage-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage-muted" data-swatch></i><span data-token="--color-fg-on-stage-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage-muted" data-swatch></i><span data-token="--color-fg-on-stage-muted"></span></span></td></tr>
+          <tr><td>Kicker, date, halftone dots</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Stage skeleton</td><td><code>--color-bg-stage-raised</code> / <code>-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td></tr>
+          <tr><td>Title / date / name</td><td><code>--text-h1</code> / <code>--text-display</code> / <code>--text-poster</code></td><td colspan="2"><span data-token="--font-size-4xl"></span> / <span data-token="--font-size-5xl"></span> / <span data-token="--font-size-6xl"></span></td></tr>
+          <tr><td>Sub line / facts</td><td><code>--text-body-lg</code> / <code>--text-stub</code></td><td colspan="2"><span data-token="--text-body-lg"></span></td></tr>
+          <tr><td>Padding (phone / desktop)</td><td><code>--space-12</code> <code>--space-16</code> / <code>--space-16</code> <code>--space-20</code></td><td colspan="2"><span data-token="--space-12"></span> <span data-token="--space-16"></span> / <span data-token="--space-16"></span> <span data-token="--space-20"></span></td></tr>
+          <tr><td>Column gap (grid / artist)</td><td><code>--space-10</code> → <code>--space-16</code> / <code>--space-8</code></td><td colspan="2"><span data-token="--space-10"></span> → <span data-token="--space-16"></span> / <span data-token="--space-8"></span></td></tr>
+          <tr><td>Content above the corner</td><td><code>--z-raised</code></td><td colspan="2"><span data-token="--z-raised"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section class="poster on-stage" aria-labelledby="hero-title"&gt;
+  &lt;div class="container poster__grid"&gt;
+    &lt;div class="stack"&gt;
+      &lt;p class="overline poster__kicker"&gt;Worship artists within driving distance of Toronto&lt;/p&gt;
+      &lt;h1 id="hero-title" class="poster__title"&gt;Who’s free &lt;span class="poster__date"&gt;&lt;span&gt;Sat&lt;/span&gt; &lt;span&gt;14 Nov&lt;/span&gt;&lt;/span&gt;&lt;/h1&gt;
+      &lt;p class="poster__sub"&gt;Seven artists are free that Saturday and will drive to Burlington.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;form class="booking-bar" data-theme="light" aria-labelledby="find-title"&gt;…&lt;/form&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.poster</code> + <code>.on-stage</code></td><td>Stage background, vertical padding, halftone corner, clips overflow. Always use both.</td></tr>
+        <tr><td><code>.poster__grid</code></td><td>Copy and booking bar; two columns from 1024px.</td></tr>
+        <tr><td><code>.poster__kicker</code> <code>.poster__title</code> <code>.poster__date</code> <code>.poster__sub</code></td><td>Yellow overline, h1 type, display-size yellow date, muted lead.</td></tr>
+        <tr><td><code>.artist-poster</code></td><td>Profile header grid: portrait and copy; portrait moves right from 768px.</td></tr>
+        <tr><td><code>.artist-poster__name</code> <code>.artist-poster__facts</code></td><td>Poster-size name; stub-font fact row, <code>&lt;strong&gt;</code> in yellow.</td></tr>
+        <tr><td><code>.artist-poster &gt; .art</code>, <code>&gt; .skeleton</code></td><td>Portrait (or its skeleton) capped at 18rem, paper border on the stage.</td></tr>
+        <tr><td><code>aria-labelledby</code></td><td>Names the region after its heading.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>On the poster while the artist header is skeletons.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: search poster with booking bar, “Who’s free Sat 14 Nov”</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: sub line “Checking the calendars…”, busy submit</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: “Who’s free Thu 24 Dec” with the Christmas Eve sub line</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: poster unchanged while the lineup fails</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: artist poster for Abigail Mensah, breadcrumb, Book / Saved / Share</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: stage skeletons, visually hidden heading</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: new artist Miriam Haile, “New · No reviews yet”</li>
+        <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: “Show postponed · This profile didn’t load” and the alert below</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>The halftone mask read the primitive <code>--palette-ink</code>. It now uses <code>currentColor</code>, since a mask only needs an opaque colour.</li>
+        <li>Loading skeletons were sized with inline <code>style</code> widths, heights and aspect ratios. They now use <code>.skeleton--short</code>, <code>--medium</code>, <code>--portrait</code> and <code>.artist-poster &gt; .skeleton</code> caps the portrait at 18rem.</li>
+        <li>Stage skeletons read <code>--palette-ink-800/700</code>. They now read <code>--color-bg-stage-raised</code> and <code>--color-bg-stage-raised-hover</code>.</li>
+        <li>The artist error page padded its alert with an inline <code>padding-block</code>. It now uses <code>.page-error</code>.</li>
+        <li>The booking bar in the poster read paper and ink primitives to stay light on the stage. It is now a <code>data-theme="light"</code> island (see <a href="booking-form.html">Booking ticket</a>).</li>
+        <li>Not fixed in the mocks: <code>artist/loading</code> puts <code>role="status"</code> on the <code>&lt;h1&gt;</code>. This page documents the corrected markup.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>
