@@ -83,10 +83,24 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 
 ### Pages
 
-| Screen | default | loading | empty | error | Requirements |
-|---|---|---|---|---|---|
-| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
-| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Screen | default | loading | empty | error | invalid | submitting | expired | success | artist | step-2 | step-3 | step-4 | Requirements |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) |  |  |  |  |  |  |  |  | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
+| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) |  |  |  |  |  |  |  |  | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Sign in (`sign-in`) | [✅](pages/sign-in/default.html) | ➖ | ➖ | [✅](pages/sign-in/error.html) | [✅](pages/sign-in/invalid.html) | [✅](pages/sign-in/submitting.html) | [✅](pages/sign-in/expired.html) |  |  |  |  |  | `L2-023`, `L2-072`, `L2-073`, `L2-108` |
+| Sign up (`sign-up`) | [✅](pages/sign-up/default.html) | ➖ | ➖ | [✅](pages/sign-up/error.html) | [✅](pages/sign-up/invalid.html) | [✅](pages/sign-up/submitting.html) |  | [✅](pages/sign-up/success.html) |  |  |  |  | `L2-022`, `L2-072`, `L2-077`, `L2-080`, `L2-108` |
+| Forgot password (`forgot-password`) | [✅](pages/forgot-password/default.html) | ➖ | ➖ | [✅](pages/forgot-password/error.html) | [✅](pages/forgot-password/invalid.html) | [✅](pages/forgot-password/submitting.html) |  | [✅](pages/forgot-password/success.html) |  |  |  |  | `L2-023`, `L2-077`, `L2-108` |
+| Reset password (`reset-password`) | [✅](pages/reset-password/default.html) | [✅](pages/reset-password/loading.html) | ➖ | [✅](pages/reset-password/error.html) | [✅](pages/reset-password/invalid.html) | [✅](pages/reset-password/submitting.html) | [✅](pages/reset-password/expired.html) | [✅](pages/reset-password/success.html) |  |  |  |  | `L2-023`, `L2-072`, `L2-105`, `L2-108` |
+| Not found (`not-found`) | [✅](pages/not-found/default.html) | ➖ | ➖ | ➖ |  |  |  |  | [✅](pages/not-found/artist.html) |  |  |  | `L2-021` |
+| Server error (`server-error`) | [✅](pages/server-error/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  | `L2-093` |
+| Offline (`offline`) | [✅](pages/offline/default.html) | ➖ | ➖ | ➖ |  |  |  |  |  |  |  |  | `L2-026`, `L2-027` |
+| Apply as an artist (`apply`) | [✅](pages/apply/default.html) | ➖ | ➖ | [✅](pages/apply/error.html) | [✅](pages/apply/invalid.html) | [✅](pages/apply/submitting.html) |  | [✅](pages/apply/success.html) |  | [✅](pages/apply/step-2.html) | [✅](pages/apply/step-3.html) | [✅](pages/apply/step-4.html) | `L2-039`, `L2-047`, `L2-052`, `L2-077`, `L2-108` |
+
+### Notifications
+
+| Screen | info | success | warning | danger | persistent | Requirements |
+|---|---|---|---|---|---|---|
+| System banner (`system-banner`) | [✅](notifications/system-banner/info.html) | [✅](notifications/system-banner/success.html) | [✅](notifications/system-banner/warning.html) | [✅](notifications/system-banner/danger.html) | [✅](notifications/system-banner/persistent.html) | `L2-022`, `L2-026`, `L2-090` |
 
 <!-- coverage:end -->
 

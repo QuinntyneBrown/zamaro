@@ -783,3 +783,22 @@ img, svg, video { display: block; max-width: 100%; }
 @keyframes scale-in { from { opacity: 0; scale: 0.96; } }
 @keyframes slide-in-left { from { translate: -100% 0; } }
 @media print { .topbar, .toast-region, .mock-bar, .skip-link, .dialog, .bulk-bar { display: none !important; } }
+
+/* ---------- Slice B: entry ----------------------------------------------- */
+.auth-card__title { font: var(--text-h2); }
+.alert--compact { gap: var(--space-2) var(--space-3); padding: var(--space-4); }
+.alert--compact .alert__title { font: var(--text-h4); }
+button.banner__action { min-height: var(--target-min); padding: 0; border: 0; background: none; text-decoration: underline; text-underline-offset: 0.22em; cursor: pointer; }
+.error-page { display: grid; gap: var(--space-6); justify-items: start; padding-block: var(--space-16) var(--space-20); }
+.topbar__auth { white-space: nowrap; }
+.topbar__auth-long { display: none; }
+@media (min-width: 30rem) { .topbar__auth-short { display: none; } .topbar__auth-long { display: inline; } }
+.form-actions--static { position: static; }
+.banner__text--fill { flex: 1 1 0; min-width: 0; max-width: none; }
+.banner__text--fill .banner__action { margin-left: var(--space-2); }
+.upload-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.upload-list__item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--color-bg-surface-sunken); border: var(--border-width-thick) dashed var(--color-border-strong); }
+.upload-list__item .icon { color: var(--color-success-icon); }
+.upload-list__text { flex: 1; display: grid; min-width: 0; font: var(--text-body-sm); }
+.upload-list__text span { color: var(--color-fg-muted); overflow-wrap: anywhere; }
+.input[type="file"] { padding: var(--space-2); cursor: pointer; }
