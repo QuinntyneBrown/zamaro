@@ -64,6 +64,6 @@ else all fields valid
   controller --> client : 200 ArtistProfileResource
   client --> store : ArtistProfile
   store --> page : status = saved
-  page --> actor : Confirmation toast (copy <TO SUPPLY>)
+  page --> actor : Success banner "Your changes are on your public profile now."
 end
 @enduml

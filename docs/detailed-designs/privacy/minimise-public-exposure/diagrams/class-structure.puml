@@ -15,14 +15,14 @@ title Class structure — Minimise public exposure
 
 package "Zamaro Web (Angular)" {
   class ArtistProfilePage {
-    +profile: Signal<PublicArtist>
-    +reviews: Signal<PublicReview[]>
+    +profile: Signal<ArtistProfile>
+    +reviews: Signal<ReviewView[]>
   }
   class ReviewComponent {
-    +review: InputSignal<PublicReview>
+    +review: InputSignal<ReviewView>
   }
-  class SeoService {
-    +applyProfile(profile: PublicArtist): void
+  class ProfileSeoService {
+    +applyProfile(profile: ArtistProfile): void
   }
 }
 
@@ -30,10 +30,10 @@ package "Zamaro API (Laravel)" {
   abstract class JsonResource {
     +toArray(request: Request): array
   }
-  class PublicArtistResource {
+  class ArtistProfileResource {
     +toArray(request: Request): array
   }
-  class PublicReviewResource {
+  class ReviewResource {
     +toArray(request: Request): array
   }
   class ReviewAttribution <<value object>> {
@@ -80,17 +80,17 @@ package "Zamaro API (Laravel)" {
 }
 
 ArtistProfilePage *-- ReviewComponent
-ArtistProfilePage --> SeoService
-JsonResource <|-- PublicArtistResource
-JsonResource <|-- PublicReviewResource
-PublicArtistResource ..> Artist : narrows
-PublicReviewResource ..> Review : narrows
-PublicReviewResource --> ReviewAttribution
+ArtistProfilePage --> ProfileSeoService
+JsonResource <|-- ArtistProfileResource
+JsonResource <|-- ReviewResource
+ArtistProfileResource ..> Artist : narrows
+ReviewResource ..> Review : narrows
+ReviewResource --> ReviewAttribution
 ReviewAttribution ..> User : reads name
 ReviewAttribution ..> Church : reads name and city
 Review --> User : booker
 User "1" o-- "0..1" Church
 PublicExposureTest ..> ResourceFieldAllowlist
-PublicExposureTest ..> PublicArtistResource : verifies
-PublicExposureTest ..> PublicReviewResource : verifies
+PublicExposureTest ..> ArtistProfileResource : verifies
+PublicExposureTest ..> ReviewResource : verifies
 @enduml

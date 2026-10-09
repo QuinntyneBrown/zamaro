@@ -52,6 +52,8 @@ job -> scanner : Scan file
 alt malware found
   job -> storage : Delete file
   job -> db : Set status Failed, log security event (L2-076)
+else longer than 15 minutes
+  job -> db : Set status Failed with the reason (L2-052)
 else clean
   job -> video : Transcode to 360p, 720p, 1080p with poster (L2-052)
   video --> job : Renditions ready

@@ -59,16 +59,23 @@ delivery service. The recipient later sees the booking in Zamaro Web.
   - The email holds the event date, start time, church address, both parties'
     contact details and the thread link (L2-064), in HTML and plain text, with the
     booking number (L2-063).
-  - The booker's thread link is `/bookings/{number}#messages`. The artist's link
-    points to the booking in the artist workspace (route `<TO SUPPLY>`).
+  - The booker's thread link is `/bookings/{number}#messages`. The artist's link is
+    `/artist/bookings/{number}#messages`, the booking in the artist workspace.
 - **`NotificationPreferenceGate`** — domain service owned by
   `notifications/manage-email-preferences`.
 
 **Frontend (Zamaro Web, `features/bookings`)**
 
-No new component is introduced. `BookingDetailPage` at `/bookings/:number` opens at
-the message thread when the URL fragment is `#messages`, and shows the contact
-details for a Confirmed booking (L2-046).
+No new component is introduced. `BookingDetailPage` at `/bookings/:number` and
+`ArtistBookingPage` at `/artist/bookings/:number` open at the message thread when the
+URL fragment is `#messages`, and show the contact details for a Confirmed booking
+(L2-046).
+
+**Mock screens** — the reminder email is not mocked. Its links land on
+[`pages/booking-detail/confirmed`](../../../mocks/pages/booking-detail/confirmed.html)
+for the booker and
+[`pages/request-detail/confirmed`](../../../mocks/pages/request-detail/confirmed.html)
+for the artist, both of which show the thread and the contact details.
 
 **Data**
 

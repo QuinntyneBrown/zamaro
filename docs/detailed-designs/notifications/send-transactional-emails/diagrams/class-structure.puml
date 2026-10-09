@@ -33,16 +33,17 @@ package "Zamaro API and Worker (Laravel)" {
     +failed(e: Throwable): void
   }
   class BookingRequestedNotification
-  class BookingAcceptedNotification {
+  class RequestAcceptedNotification {
     +CarbonImmutable depositDueBy
   }
-  class BookingDeclinedNotification
-  class BookingExpiredNotification
+  class RequestDeclinedNotification
+  class RequestWithdrawnNotification
+  class RequestExpiredNotification
   class BookingConfirmedNotification
   class BalanceChargedNotification
   class PayoutSentNotification
   class BookingCancelledNotification
-  class UnreadMessagesNotification
+  class NewBookingMessagesNotification
   class ApplicationStatusNotification {
     +ApplicationStatus status
   }
@@ -82,14 +83,15 @@ package "Zamaro API and Worker (Laravel)" {
 
 UndeliverableEmailBannerComponent --> AuthService
 TransactionalNotification <|-- BookingRequestedNotification
-TransactionalNotification <|-- BookingAcceptedNotification
-TransactionalNotification <|-- BookingDeclinedNotification
-TransactionalNotification <|-- BookingExpiredNotification
+TransactionalNotification <|-- RequestAcceptedNotification
+TransactionalNotification <|-- RequestDeclinedNotification
+TransactionalNotification <|-- RequestWithdrawnNotification
+TransactionalNotification <|-- RequestExpiredNotification
 TransactionalNotification <|-- BookingConfirmedNotification
 TransactionalNotification <|-- BalanceChargedNotification
 TransactionalNotification <|-- PayoutSentNotification
 TransactionalNotification <|-- BookingCancelledNotification
-TransactionalNotification <|-- UnreadMessagesNotification
+TransactionalNotification <|-- NewBookingMessagesNotification
 TransactionalNotification <|-- ApplicationStatusNotification
 TransactionalNotification ..> BookingEmailData : renders
 TransactionalNotification ..> EmailMessage : logged as
@@ -97,8 +99,8 @@ EmailMessage --> EmailMessageStatus
 RecordEmailBounce --> User : marks undeliverable
 RecordEmailBounce --> EmailMessage : Bounced
 BookingRequestedNotification -[hidden]down- BookingConfirmedNotification
-BookingAcceptedNotification -[hidden]down- BalanceChargedNotification
-BookingDeclinedNotification -[hidden]down- PayoutSentNotification
-BookingExpiredNotification -[hidden]down- BookingCancelledNotification
-UnreadMessagesNotification -[hidden]down- ApplicationStatusNotification
+RequestAcceptedNotification -[hidden]down- BalanceChargedNotification
+RequestDeclinedNotification -[hidden]down- PayoutSentNotification
+RequestExpiredNotification -[hidden]down- BookingCancelledNotification
+NewBookingMessagesNotification -[hidden]down- ApplicationStatusNotification
 @enduml

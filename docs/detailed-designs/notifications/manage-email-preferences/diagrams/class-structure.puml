@@ -14,10 +14,10 @@ skinparam class {
 title Class structure — Manage email preferences
 
 package "Zamaro Web (Angular)" {
-  class NotificationSettingsPage {
+  class EmailPreferencesSectionComponent {
     +preferences: Signal<NotificationPreferenceDto[]>
-    +saving: Signal<boolean>
-    +toggle(category: string, enabled: boolean): void
+    +changes(): NotificationPreferenceDto[]
+    +reset(): void
   }
   class NotificationPreferencesApi {
     +get(): Observable<NotificationPreferenceDto[]>
@@ -63,7 +63,7 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-NotificationSettingsPage --> NotificationPreferencesApi
+EmailPreferencesSectionComponent --> NotificationPreferencesApi
 NotificationPreferencesApi ..> NotificationPreferencesController : /api/v1/account/notification-preferences
 NotificationPreferencesController ..> UpdateNotificationPreferencesRequest : validates
 NotificationPreferencesController --> UpdateNotificationPreferences

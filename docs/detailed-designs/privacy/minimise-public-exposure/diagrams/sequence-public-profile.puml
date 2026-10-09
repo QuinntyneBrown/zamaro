@@ -19,13 +19,13 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "Angular SSR" as ssr
   participant "ArtistProfilePage" as page
   participant "ReviewComponent" as reviewCmp
-  participant "SeoService" as seo
+  participant "ProfileSeoService" as seo
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "ArtistProfileController" as profileCtrl
   participant "ArtistReviewsController" as reviewCtrl
-  participant "PublicArtistResource" as artistRes
-  participant "PublicReviewResource" as reviewRes
+  participant "ArtistProfileResource" as artistRes
+  participant "ReviewResource" as reviewRes
 end box
 box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db

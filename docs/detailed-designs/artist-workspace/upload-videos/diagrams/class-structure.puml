@@ -14,14 +14,17 @@ skinparam class {
 title Class structure — Upload videos
 
 package "Zamaro Web (Angular)" {
-  class VideosManagerPage {
+  class VideosSectionComponent {
     +store: ArtistVideosStore
-    +onFileChosen(file: File): void
+    +openAddVideo(): void
   }
   class VideoUploadDialogComponent {
+    +file: FormControl<File | null>
     +title: FormControl<string>
     +captions: FormControl<File | null>
+    +atLimit: input<boolean>
     +confirm(): void
+    +resume(): void
   }
   class VideoListComponent {
     +videos: input<ArtistVideoView[]>
@@ -111,9 +114,9 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-VideosManagerPage --> ArtistVideosStore
-VideosManagerPage *-- VideoUploadDialogComponent
-VideosManagerPage *-- VideoListComponent
+VideosSectionComponent --> ArtistVideosStore
+VideosSectionComponent ..> VideoUploadDialogComponent : opens
+VideosSectionComponent *-- VideoListComponent
 ArtistVideosStore --> ArtistVideosApi
 ArtistVideosStore --> ChunkedUploader
 ChunkedUploader --> ArtistVideosApi

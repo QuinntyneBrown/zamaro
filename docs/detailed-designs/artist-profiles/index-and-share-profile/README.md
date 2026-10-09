@@ -12,8 +12,9 @@ minute of an artist's edit.
 This feature covers those three concerns for public pages: server rendering with
 metadata, sharing, and caching. It decorates the profile page from
 `artist-profiles/view-artist-profile` and leaves its content unchanged. It also covers
-Discover (`discovery/search-available-artists`) and How booking works for server
-rendering, and it covers the site-wide `/sitemap.xml` and `/robots.txt`.
+Discover (`discovery/search-available-artists`), including its How booking works
+section, for server rendering, and it covers the site-wide `/sitemap.xml` and
+`/robots.txt`.
 
 Terms used in this design:
 
@@ -34,8 +35,9 @@ public response is therefore identical for every viewer and is safe for a shared
 
 **Frontend (Zamaro Web)**
 
-- **SSR server** — the Angular SSR Node.js server renders `/`, `/artists/:slug` and the
-  How booking works page to complete HTML (L2-112). Data fetched during the render
+- **SSR server** — the Angular SSR Node.js server renders `/` and `/artists/:slug` to
+  complete HTML (L2-112). How booking works is the `#how` section of Discover, so it is
+  rendered with `/`. Data fetched during the render
   reaches the browser through `TransferState`. The SSR server also serves a static
   `robots.txt` that disallows `/admin`, `/artist`, `/bookings`, `/saved` and `/api`, and
   links to the sitemap.
@@ -85,10 +87,21 @@ public response is therefore identical for every viewer and is safe for a shared
   (L2-089). A response test asserts the header on each route tagged as personal in the
   OpenAPI document.
 - **`SitemapController`** — serves `GET /api/v1/sitemap`. The SSR server proxies it at
-  `/sitemap.xml` as XML. It lists `/`, the How booking works page and every published
-  profile's canonical URL, with `lastmod` from the profile's last update. It excludes
-  suspended, unpublished and deleted artists (L2-112). The response is cached in Redis
+  `/sitemap.xml` as XML. It lists `/` and every published profile's canonical URL,
+  with `lastmod` from the profile's last update. It excludes suspended, unpublished and
+  deleted artists (L2-112). The response is cached in Redis
   and cleared by the same `ArtistProfileUpdated` listener.
+
+**Mocks**
+
+- [Artist profile · default](../../../mocks/pages/artist/default.html) — the Share
+  action in the header; the note describes the share sheet and the "Link copied"
+  toast.
+- [Share toast · success](../../../mocks/notifications/share-toast/success.html) — on a
+  device without the Web Share API, Share has copied the canonical URL and the success
+  toast reads "Link copied" (L2-113, L2-109).
+- [Discover · default](../../../mocks/pages/discover/default.html) — the server-rendered
+  page, with How booking works as its `#how` section.
 
 **Data**
 
@@ -101,7 +114,7 @@ level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-112` | `L1-025` | **Search engine visibility.**<br>Acceptance criteria:<br>1. Given a crawler requests an artist profile, Discover or How booking works, when the response arrives, then the full content is in the server-rendered HTML.<br>2. Given an artist profile, when it renders, then it has a unique title ("{name} · Worship artist in {city} · Zamaro"), a meta description from the headline and bio, a canonical URL, and JSON-LD of type `MusicGroup` or `Person` with `aggregateRating` when reviews exist.<br>3. Given `/sitemap.xml`, when it is requested, then it lists every published profile and excludes suspended, unpublished and deleted artists.<br>4. Given `/robots.txt`, when it is requested, then it disallows `/admin`, `/artist`, `/bookings`, `/saved` and `/api`. |
+| `L2-112` | `L1-025` | **Search engine visibility.**<br>Acceptance criteria:<br>1. Given a crawler requests an artist profile or Discover (including its How booking works section), when the response arrives, then the full content is in the server-rendered HTML.<br>2. Given an artist profile, when it renders, then it has a unique title ("{name} · Worship artist in {city} · Zamaro"), a meta description from the headline and bio, a canonical URL, and JSON-LD of type `MusicGroup` or `Person` with `aggregateRating` when reviews exist.<br>3. Given `/sitemap.xml`, when it is requested, then it lists every published profile and excludes suspended, unpublished and deleted artists.<br>4. Given `/robots.txt`, when it is requested, then it disallows `/admin`, `/artist`, `/bookings`, `/saved` and `/api`. |
 | `L2-113` | `L1-025` | **Sharing a profile.**<br>Acceptance criteria:<br>1. Given a profile, when it is shared on social or messaging apps, then the preview shows the artist's name, headline and primary photo using Open Graph and Twitter card tags.<br>2. Given a device that supports the Web Share API, when Share is activated, then the native share sheet opens with the profile URL and title.<br>3. Given a device without the Web Share API, when Share is activated, then the URL is copied to the clipboard and a toast reads "Link copied". |
 | `L2-089` | `L1-018` | **Caching.**<br>Acceptance criteria:<br>1. Given a public profile response, when it is returned, then it carries an `ETag` and a conditional request with a matching `If-None-Match` returns 304.<br>2. Given a profile is edited, when the change is saved, then cached copies are invalidated within 60 seconds.<br>3. Given any response containing personal data, when it is returned, then it carries `Cache-Control: private, no-store`. |
 

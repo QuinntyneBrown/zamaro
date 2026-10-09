@@ -42,7 +42,7 @@ list -> db : WHERE booker_id = me AND status IN (Requested, Accepted, Confirmed)
 db --> list : Bookings with artist and sums of payments and refunds
 loop each booking
   list -> next : for(booking, booker)
-  next --> list : Pay deposit, Message, Cancel or none
+  next --> list : Pay deposit when Accepted, otherwise Message
 end
 list --> controller : Page
 controller --> client : 200 BookingSummaryResource[] and next cursor
@@ -53,10 +53,10 @@ controller -> list : handle(booker, past, cursor)
 list -> db : Other statuses ORDER BY event_date DESC, id DESC (L2-033)
 db --> list : Bookings
 list -> next : for(booking, booker) per row
-next --> list : Leave a review when eligible (L2-059) or none
+next --> list : Message when Declined, Leave a review when eligible (L2-059), or none
 list --> controller : Page
 controller --> client : 200 with next cursor
 client --> store : Past group
-store --> page : Render both sections
+store --> page : Render the Upcoming tab; Past waits behind its tab
 page --> actor : Number, artist, date, kind, status, amount paid, next action (L2-033)
 @enduml

@@ -14,12 +14,10 @@ skinparam class {
 title Class structure — Pay out artists
 
 package "Zamaro Web (Angular)" {
-  class PayoutSetupPage {
-    +status: Signal<PayoutAccountStatusDto>
-    +startOnboarding(): void
-  }
   class EarningsPage {
     +store: EarningsStore
+    +payoutAccount: Signal<PayoutAccountStatusDto>
+    +startOnboarding(): void
   }
   class EarningsStore {
     +lines: Signal<EarningsLineDto[]>
@@ -96,7 +94,7 @@ package "Zamaro API and Worker (Laravel)" {
   }
 }
 
-PayoutSetupPage --> PayoutsApi
+EarningsPage --> PayoutsApi
 EarningsPage --> EarningsStore
 EarningsStore --> PayoutsApi
 PayoutsApi ..> PayoutAccountController

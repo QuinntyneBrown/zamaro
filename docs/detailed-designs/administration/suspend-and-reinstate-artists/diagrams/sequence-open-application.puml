@@ -16,12 +16,12 @@ skinparam package {
 }
 actor "Administrator" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "AdminApplicationPage" as page
+  participant "ApplicationReviewPage" as page
   participant "AdminArtistsApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
-  participant "Admin\\ApplicationsController" as ctrl
-  participant "Admin\\ApplicationDocumentsController" as docs
+  participant "AdminArtistApplicationsController" as ctrl
+  participant "DocumentLinksController" as docs
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
   participant "RecordAuditEntry" as audit
@@ -33,7 +33,7 @@ end box
 
 actor -> page : Open /admin/applications/{id}
 page -> client : application(id)
-client -> ctrl : GET /api/v1/admin/applications/{id} (admin only, L2-066)
+client -> ctrl : GET /api/v1/admin/artist-applications/{id} (admin only, L2-066)
 ctrl -> db : Applicant details, references, VSC record
 db --> ctrl : Application
 ctrl -> ctrl : Decrypt reference contacts for display (L2-079)
@@ -42,17 +42,17 @@ client --> page : Application view
 page --> actor : All details, references with checkboxes, VSC link if uploaded, Approve and Reject (L2-067)
 actor -> page : Tick a reference as verified
 page -> client : verifyReference(appId, refId, true)
-client -> ctrl : PATCH /api/v1/admin/applications/{id}/references/{ref}
+client -> ctrl : PUT /api/v1/admin/artist-applications/{id}/references/{ref}/verification
 ctrl -> db : Set verified_at, verified_by
 ctrl -> audit : application_reference.verified (L2-069)
 ctrl --> client : 204
 opt VSC document uploaded
   actor -> page : Open VSC document
-  page -> client : GET /api/v1/admin/applications/{id}/vsc-document
-  client -> docs : Request document
-  docs -> storage : Sign short-lived URL for a clean-scanned file (L2-076)
+  page -> client : documentLink(checkId)
+  client -> docs : GET /api/v1/vulnerable-sector-checks/{check}/document-link
+  docs -> storage : Sign a 5-minute URL for a clean-scanned file (L2-076)
   docs -> audit : vsc_document.viewed (L2-069)
-  docs --> page : Redirect to signed URL
+  docs --> page : 5-minute signed URL; the document opens in a new tab
 end
 page --> actor : Approve enabled once both references are verified (L2-048)
 @enduml

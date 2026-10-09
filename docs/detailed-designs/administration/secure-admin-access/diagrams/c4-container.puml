@@ -7,13 +7,13 @@ Person(admin, "Administrator", "Member of the Zamaro team")
 Person(other, "Booker, artist or guest", "No Administrator role")
 System_Boundary(zamaro, "Zamaro") {
   Container(web, "Zamaro Web", "Angular with SSR", "adminGuard, MFA pages, admin shell, 404 page")
-  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Sign-in, MFA challenge, /api/v1/admin route group")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Session and two-factor endpoints, /api/v1/admin route group")
   ContainerDb(cache, "Cache and queue", "Redis", "Sessions with MFA and activity flags")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users, roles, MFA secrets, audit_entries")
 }
 Rel(admin, web, "Uses /admin", "HTTPS")
 Rel(other, web, "Requests /admin, receives 404", "HTTPS")
-Rel(web, api, "POST /api/v1/auth/..., GET /api/v1/me, /api/v1/admin/...", "JSON/HTTPS")
+Rel(web, api, "POST /api/v1/session, /session/two-factor, GET /api/v1/me, /api/v1/admin/...", "JSON/HTTPS")
 Rel(api, cache, "Reads and writes session state", "RESP")
 Rel(api, db, "Reads roles and MFA secret, appends audit entries", "Eloquent / SQL")
 @enduml

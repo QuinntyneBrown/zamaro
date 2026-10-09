@@ -57,16 +57,20 @@ through the CDN.
 - **`ArtistProfileApi`** — typed client for `GET /api/v1/artists/{slug}`. On the server
   render, Angular `TransferState` carries the response to the browser so the client
   does not fetch it again.
-- **`ProfileHeaderComponent`** — renders name, headline, the `RatingComponent` with
-  rating and review count or "New · No reviews yet" plus a "New" badge, the base city,
+- **`ProfileHeaderComponent`** — renders the kicker, name, headline, the
+  `RatingComponent` with rating and review count or "New · No reviews yet", the base city,
   "Drives up to {km} km", the setlist strip, and the Book, Save and Share actions
   (L2-012). With a carried date, the back link reads "Discover · {short date}" and
   returns to the last Discover URL that `SearchStore` remembers. The Book button then
-  reads "Book for {short date}". Without one, it reads "Check dates" and moves focus to
-  the stub's date field. The Save toggle comes from `accounts/save-artist`, and
-  the Share action comes from `artist-profiles/index-and-share-profile`.
-- **`AboutSectionComponent`** — renders the heading line and the bio. The bio is split
-  on blank lines into paragraphs and bound through text interpolation, never
+  reads "Book for {short date}". Without one, the back link reads "Discover" and the
+  Book button reads "Check dates" and moves focus to the stub's date field. The Save toggle comes from `accounts/save-artist`, and
+  the Share action comes from `artist-profiles/index-and-share-profile`. The kicker is
+  the act headline, prefixed "Headliner" when the artist headlined the carried search
+  (L2-006) or "New to Zamaro" when the artist has no reviews, as in "Headliner · Gospel
+  & contemporary vocalist".
+- **`AboutSectionComponent`** — renders the artist's optional About heading (L2-050),
+  or "About {first name}" when none is set, and the bio. The bio is split on blank
+  lines into paragraphs. Heading and bio are bound through text interpolation, never
   `innerHTML`, so markup appears as literal text (L2-013, L2-075).
 - **`VideosSectionComponent`** and **`VideoPlayerComponent`** — "Watch {pronoun} lead"
   with the first video large and the rest in a grid. Each tile shows its poster frame,
@@ -98,10 +102,10 @@ through the CDN.
   rating aggregate over visible reviews. It does not read bookings, churches or user
   records.
 - **`ArtistProfileResource`** — API resource that lists public fields explicitly: slug,
-  display name, first name, pronoun, act type, headline, bio, base city, maximum driving
-  distance, "From" price, ticket number, rating, review count, styles, photos, videos
-  and setlist. It omits base coordinates, the account email, phone, HST number and
-  payout data (L2-083). A contract test in CI fails when the serialised profile gains a
+  display name, first name, pronoun, act type, headline, About heading (or null), bio,
+  base city, maximum driving distance, "From" price, ticket number, rating, review
+  count, styles, photos, videos and setlist. It omits base coordinates, the account email, the private contact phone, the HST
+  number and payout data (L2-083). A contract test in CI fails when the serialised profile gains a
   field outside this list.
 - **`Pronoun`** — enum with `SheHer`, `HeHim` and `TheyThem`, offering `objective()`
   ("her") and `possessive()` ("her", "his", "their") for profile copy.
@@ -110,6 +114,25 @@ through the CDN.
 
 The rule that derives the first name for a solo act is the first word of the display
 name. The rule for duos, bands and choirs is `<TO SUPPLY>`.
+
+**Mocks**
+
+- [Artist profile · default](../../../mocks/pages/artist/default.html) — Abigail's
+  full profile opened from Discover for Sat 14 Nov, with the five-song setlist strip.
+- [Artist profile · loading](../../../mocks/pages/artist/loading.html) — skeletons in
+  the final layout with `aria-busy`, including a strip-high skeleton where the setlist
+  strip lands, so the swap does not shift the sections below (L2-105).
+- [Artist profile · empty](../../../mocks/pages/artist/empty.html) — Miriam, new to
+  Zamaro, opened from a shared link without a search date: "Check dates", "New · No
+  reviews yet", her four-song setlist strip, "No videos yet" and "Ask Miriam for a
+  recording".
+- [Artist profile · no photos](../../../mocks/pages/artist/no-photos.html) — the same
+  profile before Miriam adds photos: the solo-vocalist illustration fills the poster
+  portrait and the gallery, with no broken images (L2-020).
+- [Artist profile · error](../../../mocks/pages/artist/error.html) — "We couldn't
+  reach the artist's page" with Try again and "Back to the lineup".
+- [Photo viewer · default](../../../mocks/dialogs/photo-viewer/default.html) — the
+  first of Abigail's four photos full size, with previous and next controls.
 
 **Data**
 
@@ -125,11 +148,11 @@ level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
 | `L2-012` | `L1-003` | **Public profile route and header.** Each approved artist has a public profile at `/artists/{slug}`, viewable by guests.<br>Acceptance criteria:<br>1. Given an approved artist, when a guest opens the profile, then it shows the artist's name, act headline, rating and review count (or "New · No reviews yet"), base city, maximum driving distance ("Drives up to 120 km"), the first 5 setlist songs as a strip, and Book, Save and Share actions.<br>2. Given the profile was opened from search results for Sat 14 Nov, when it renders, then the back link reads "Discover · Sat 14 Nov" and returns to those results, and the Book button reads "Book for Sat 14 Nov".<br>3. Given the profile was opened without a search date, when it renders, then the Book button reads "Check dates" and moves focus to the booking stub's date field. |
-| `L2-013` | `L1-003` | **About section.**<br>Acceptance criteria:<br>1. Given an artist with a bio, when the profile renders, then the About section shows the artist's heading line and bio as plain text with paragraph breaks preserved.<br>2. Given a bio containing HTML or script markup, when it renders, then the markup is shown as literal text and never executed. |
+| `L2-013` | `L1-003` | **About section.**<br>Acceptance criteria:<br>1. Given an artist with a bio, when the profile renders, then the About section shows the artist's About heading (L2-050, for example "Raised in the choir loft") over the bio, both as plain text, with the bio's paragraph breaks preserved.<br>2. Given a bio containing HTML or script markup, when it renders, then the markup is shown as literal text and never executed.<br>3. Given an artist who has not set an About heading, when the profile renders, then the About section heading reads "About {first name}" (for example "About Miriam"). |
 | `L2-014` | `L1-003` | **Videos section.**<br>Acceptance criteria:<br>1. Given an artist with videos, when the profile renders, then the "Watch {pronoun} lead" section (using the pronoun from L2-050, for example "Watch her lead") shows the first video large and the rest in a grid, each with a poster frame, title and duration.<br>2. Given a visitor activates a video, when it plays, then it streams in place with standard controls, captions when the artist supplied them, and no autoplay with sound.<br>3. Given a video is still processing, when the profile renders, then that video is not shown publicly. |
 | `L2-015` | `L1-003` | **Photo gallery.**<br>Acceptance criteria:<br>1. Given an artist with photos, when the profile renders, then photos show in a grid (2 columns below MD, 4 columns from MD) with the artist-supplied alt text.<br>2. Given a visitor activates a photo, when the viewer opens, then it shows the full-size image in a dialog with previous and next controls, Escape closes it and focus returns to the photo that opened it. |
 | `L2-016` | `L1-003` | **Setlist.**<br>Acceptance criteria:<br>1. Given an artist with songs, when the profile renders, then "Songs {first name} leads" lists each song numbered with title, writer or source, and key (for example "Key of B♭").<br>2. Given the setlist, when it renders, then it reads "Ask for any of these, or send your own list." |
-| `L2-020` | `L1-003` | **Profile sections with no content.** Every profile section stays in place even when empty, so new profiles have the same shape as full ones.<br>Acceptance criteria:<br>1. Given an artist with no videos, when the profile renders, then the videos section shows "No videos yet" with "Ask {first name} for a recording", which opens the booking stub with the message pre-filled "Could you send a recording of a recent set?".<br>2. Given an artist with no reviews, when the profile renders, then the reviews section shows "No church reviews yet" and "Be {pronoun} first booking" (for example "Be her first booking"), and the header shows a "New" badge.<br>3. Given an artist with no photos, when the profile renders, then the gallery shows the act-type illustration placeholder and no broken images. |
+| `L2-020` | `L1-003` | **Profile sections with no content.** Every profile section stays in place even when empty, so new profiles have the same shape as full ones.<br>Acceptance criteria:<br>1. Given an artist with no videos, when the profile renders, then the videos section shows "No videos yet" with "Ask {first name} for a recording", which opens the booking stub with the message pre-filled "Could you send a recording of a recent set?".<br>2. Given an artist with no reviews, when the profile renders, then the reviews section shows "No church reviews yet" and "Be {pronoun} first booking" (for example "Be her first booking"), and the header shows "New · No reviews yet" in place of the rating (L2-012).<br>3. Given an artist with no photos, when the profile renders, then the gallery shows the act-type illustration placeholder and no broken images. |
 | `L2-083` | `L1-017` | **Minimal public exposure.**<br>Acceptance criteria:<br>1. Given a public profile, when it renders, then it shows the artist's base city only, never a street address, email or phone.<br>2. Given a review, when it renders, then it shows only reviewer name, church name, city and month and year.<br>3. Given a guest, when they call any API, then no booker personal data is returned. |
 | `L2-098` | `L1-020` | **Artist profile layout.**<br>Acceptance criteria:<br>1. Given XS and SM, when the profile renders, then sections stack in one column, photos show 2 per row, reviews show 1 per row, and the booking stub follows the reviews.<br>2. Given MD, when the profile renders, then the setlist shows 2 columns, photos 4 per row, reviews 2 per row and videos one large plus a 3-column grid.<br>3. Given LG and XL, when the profile renders, then the content and the pinned booking stub sit in two columns (L2-019). |
 | `L2-107` | `L1-023` | **Profile error.**<br>Acceptance criteria:<br>1. Given a profile request fails with a server or network error, when the page renders, then it shows "We couldn't reach the artist's page" with "It's on our side, not yours. Your search is saved and any request you've sent is safe.", a Try again button and a "Back to the lineup" link that restores the previous search. |

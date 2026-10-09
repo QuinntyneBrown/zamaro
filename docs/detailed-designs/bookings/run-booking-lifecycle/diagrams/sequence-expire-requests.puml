@@ -64,5 +64,5 @@ page -> client : getBooking(number)
 client -> controller : GET /api/v1/bookings/{number}
 controller --> client : BookingResource, status Expired, history entry by System
 client --> page : Booking
-page --> actor : Expired badge and timeline entry
+page --> actor : Expired stamp and timeline entry
 @enduml

@@ -16,15 +16,15 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ChurchProfileFormComponent" as form
-  participant "AccountApi" as client
+  participant "ChurchFormComponent" as form
+  participant "ChurchApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "LogRequest" as logreq
   participant "ChurchController" as controller
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
-  participant "UpdateChurch" as action
+  participant "SaveChurch" as action
   participant "EncryptedField" as cast
   participant "FieldEncrypter" as enc
 end box
@@ -38,7 +38,7 @@ actor -> form : Enter contact phone and save
 form -> client : updateChurch(form)
 client -> logreq : PUT /api/v1/account/church
 logreq -> controller : Proceed
-controller -> controller : Validate UpdateChurchRequest (L2-024)
+controller -> controller : Validate SaveChurchRequest (L2-024)
 controller -> action : handle(booker, data)
 action -> cast : Set phone
 cast -> enc : encrypt(phone)

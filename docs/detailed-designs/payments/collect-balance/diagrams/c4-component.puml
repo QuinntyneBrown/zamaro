@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Collect the balance
 
-Container(web, "Zamaro Web", "Angular", "BookingDetailPage, ReportProblemDialogComponent, PayBalancePage")
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, ReportProblemDialogComponent, PayBalanceDialogComponent")
 System_Ext(processor, "Payment processor", "Off-session charges")
 Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
   Component(probctrl, "ProblemReportController", "Laravel controller", "POST /api/v1/bookings/{number}/problem-reports")

@@ -30,7 +30,7 @@ box "Backend — Zamaro Application and Domain" #ECFDF3
 end box
 
 alt link pasted into a new browser
-  actor -> router : Open /?date=2026-11-14&kind=sunday-service&lat=43.325&lng=-79.799&place=Burlington&radius=999&sort=rating
+  actor -> router : Open /?date=2026-11-14&kind=worship-night&lat=43.325&lng=-79.799&place=Burlington&radius=999&sort=rating
   router -> page : Activate with queryParamMap
   page -> codec : fromParams(params)
   codec -> codec : Validate each parameter alone; radius=999 falls back to 120 (L2-009)

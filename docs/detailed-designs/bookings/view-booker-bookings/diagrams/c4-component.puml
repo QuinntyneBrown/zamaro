@@ -6,10 +6,10 @@ title Components — View the booker's bookings
 Container(web, "Zamaro Web", "Angular", "BookingsPage, BookingDetailPage, BookingsStore, BookingsApi")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "BookingsController", "Laravel controller", "index and show")
-  Component(req, "ListBookingsRequest", "FormRequest", "group = upcoming or past, cursor")
+  Component(req, "ListBookingsRequest", "FormRequest", "group = upcoming or past, optional status, cursor")
   Component(scope, "Booking::visibleTo", "Eloquent scope", "Booker or artist of the booking, else 404")
   Component(list, "ListBookerBookings", "Query action", "Upcoming ascending, Past descending, amount paid")
-  Component(next, "BookingNextAction", "Domain service", "Pay deposit, Message, Cancel, Leave a review")
+  Component(next, "BookingNextAction", "Domain service", "Pay deposit, Message, Leave a review")
   Component(sm, "BookingStateMachine", "Domain service", "allowedFrom for allowedActions")
   Component(sumres, "BookingSummaryResource", "API resource", "List item")
   Component(detres, "BookingResource", "API resource", "Detail with history, contacts, freeCancellationUntil")

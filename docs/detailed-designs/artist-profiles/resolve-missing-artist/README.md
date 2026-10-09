@@ -22,7 +22,8 @@ Terms used in this design:
 - **hidden artist** — artist with status `Suspended` or `Deleted`, or whose profile is not published
 - **slug history** — record of every slug an artist used before the current one, never reassigned to another artist
 - **carried date** — search date passed to the profile in the `date` query parameter
-- **similar artist** — viewable artist who shares the missing artist's primary style and is free on the carried date
+- **carried search** — the Discover search the visitor came from: date, church location and radius, as kept in the Discover URL (`discovery/sort-and-filter-results`)
+- **similar artist** — viewable artist who shares the missing artist's primary style, is free on the carried date and is within travel range of the carried search location
 
 A hidden artist and a slug that never existed produce the same 404 status and the
 same page, so a visitor cannot tell them apart (L2-021). A renamed slug redirects only
@@ -55,16 +56,20 @@ into the matching HTTP status for the server-rendered page.
   identical in shape for a mistyped, suspended or deleted slug. It never includes the
   hidden artist's name, slug, photos or any other profile content (L2-021).
 - **`SimilarArtistFinder`** — shared domain service that is also used by the booking
-  decline and cancellation slices. `forMissingArtist(context, date, 3)` selects
+  decline and cancellation slices. `forMissingArtist(context, search, 3)` takes the carried search (date, location and
+  radius as a `SearchCriteria`) and selects
   viewable artists who:
   - share the context's primary style,
   - are free on the carried date according to `AvailabilityService::isFree()`,
-  - are ordered nearest first by straight-line distance from the context's base
-    coordinates.
-  The reference point and style for a slug that never existed are `<TO SUPPLY>`, as is
-  the date used when no date is carried.
+  - pass the travel match (L2-003) from the carried search location within the
+    carried radius, measured by `DistanceService`,
+  - are ordered nearest first by that road distance, as on Discover.
+  The style for a slug that never existed, and the reference point and date used
+  when no search is carried, are `<TO SUPPLY>`.
 - **`SimilarArtistResource`** — serialises each suggestion as a ticket-card summary:
-  slug, display name, act type, base city, rating, review count and "From" price.
+  slug, display name, act type, styles, base city, distance from the search location,
+  rating, review count and "From" price. The page heads the list with the carried search, for
+  example "Sat 14 Nov · within 120 km of Burlington".
 
 **Frontend (Zamaro Web, `features/artist-profile`)**
 
@@ -81,8 +86,17 @@ into the matching HTTP status for the server-rendered page.
 - **`ArtistNotFoundComponent`** — error-page pattern with "This artist isn't on
   Zamaro". It shows up to 3 `TicketCardComponent` suggestions, each linking to
   `/artists/{slug}` with the carried date kept, and a link back to Discover. With no
-  suggestions, the list is omitted. The supporting sentence beneath the headline is
-  `<TO SUPPLY>`.
+  suggestions, the list is omitted. The supporting sentence beneath the headline reads
+  "They may have left or changed their address. Here are similar artists who are free
+  on {short date}, nearest first."
+
+**Mocks**
+
+- [Not found · artist](../../../mocks/pages/not-found/artist.html) — "This artist isn't
+  on Zamaro" with two solo vocalists free on Sat 14 Nov, nearest first, and "See the
+  full lineup".
+- [Not found · default](../../../mocks/pages/not-found/default.html) — the generic 404
+  for any other unknown address.
 
 **Data**
 

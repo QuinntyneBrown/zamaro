@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "PayBalancePage" as page
+  participant "PayBalanceDialogComponent" as page
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
   participant "ChargeDueBalancesCommand" as cmd
@@ -50,8 +50,8 @@ else charge failed, attempt 1 to 3
   processor --> gateway : Declined or error
   action -> db : Insert Payment(Balance, Failed, nextRetryAt = +1, +3 or +7 days) (L2-038)
   action -> action : Queue BalancePaymentFailedNotification with payment link
-  actor -> page : Follow link to /bookings/{number}/pay-balance
-  page --> actor : Hosted card fields for another card
+  actor -> page : Follow link to /bookings/{number}?pay=balance, or Pay balance on the booking page
+  page --> actor : Pay balance dialog with hosted card fields for another card
 else final failure after the 7-day retry
   action -> db : Insert Payment(Balance, Failed), no further retry
   action -> alert : handle(BalanceCollectionFailed, booking) (L2-038)

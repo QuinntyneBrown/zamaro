@@ -32,7 +32,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   queue "Cache and queue" as queue
 end box
 
-actor -> page : Enter new email and current password
+actor -> page : Enter new email and current password, press Save changes
 page -> client : requestEmailChange(newEmail, currentPassword)
 client -> controller : PUT /api/v1/account/email
 controller -> controller : Validate ChangeEmailRequest, check current password (L2-025)
@@ -59,7 +59,7 @@ alt token valid and address still free
   confirm -> db : email = pending_email, set email_verified_at, mark token used (L2-025)
   confirm -> db : Insert audit entry
   controller --> client : 204
-  confirmPage --> actor : Email updated
+  confirmPage --> actor : Back to /account with "Email changed" banner
 else token expired, used or address taken
   controller --> client : 410 problem details
   confirmPage --> actor : Link no longer valid, request again from settings

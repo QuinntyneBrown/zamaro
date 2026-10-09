@@ -23,9 +23,15 @@ package "Zamaro Web (Angular)" {
     +month: Input<CalendarMonth>
     +rangeSelected: Output<DateRange>
   }
-  class ConfirmDeclineDialogComponent {
-    +count: Input<number>
-    +confirmed: Output<void>
+  class BlockDatesDialogComponent {
+    +range: Input<DateRange | null>
+    +affectedRequests: Input<number>
+    +note: FormControl<string>
+    +confirmed: Output<RangeChange>
+  }
+  class WeeklyDefaultDialogComponent {
+    +weekdays: FormControl<number[]>
+    +saved: Output<number[]>
   }
   class AvailabilityStore {
     +months: Signal<CalendarMonth[]>
@@ -71,6 +77,7 @@ package "Zamaro API (Laravel)" {
     +int artistId
     +CarbonImmutable date
     +OverrideState state
+    +?string note
   }
   class Booking <<Eloquent>> {
     +int id
@@ -103,7 +110,8 @@ package "Zamaro API (Laravel)" {
 
 ArtistCalendarPage --> AvailabilityStore
 ArtistCalendarPage --> CalendarMonthComponent
-ArtistCalendarPage --> ConfirmDeclineDialogComponent
+ArtistCalendarPage ..> BlockDatesDialogComponent : opens
+ArtistCalendarPage ..> WeeklyDefaultDialogComponent : opens
 AvailabilityStore --> AvailabilityApi
 BuildArtistCalendar --> AvailabilityService
 BuildArtistCalendar ..> CalendarDay : builds

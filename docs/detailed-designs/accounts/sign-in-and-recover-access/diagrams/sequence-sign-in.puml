@@ -62,7 +62,7 @@ else not blocked
   else correct, MFA enabled
     action -> cache : Store pending two-factor marker in session
     controller --> client : 200 two_factor_required
-    page --> actor : Navigate to TwoFactorChallengePage
+    page --> actor : Navigate to MfaChallengePage
   else correct, no MFA
     action -> throttle : clear(user)
     action -> start : start(user)

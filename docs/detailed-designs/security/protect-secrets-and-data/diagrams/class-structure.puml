@@ -14,11 +14,11 @@ skinparam class {
 title Class structure — Protect secrets and data
 
 package "Zamaro Web (Angular)" {
-  class ChurchProfileFormComponent {
+  class ChurchFormComponent {
     +form: FormGroup<ChurchForm>
     +save(): void
   }
-  class AccountApi {
+  class ChurchApi {
     +updateChurch(church: ChurchForm): Observable<ChurchDto>
   }
   class ErrorTrackingService {
@@ -65,7 +65,7 @@ package "Zamaro API (Laravel)" {
     +?string phone <<encrypted>>
     +?string email <<encrypted>>
   }
-  class UpdateChurch <<action>> {
+  class SaveChurch <<action>> {
     +handle(booker: User, data: array): Church
   }
   class LogRequest <<middleware>> {
@@ -79,11 +79,11 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-ChurchProfileFormComponent --> AccountApi
-AccountApi ..> UpdateChurch : PUT /api/v1/account/church
+ChurchFormComponent --> ChurchApi
+ChurchApi ..> SaveChurch : PUT /api/v1/account/church
 ErrorTrackingService ..> RedactSensitiveData : same key list
 ProductionSafetyServiceProvider ..> UnsafeProductionConfiguration : throws
-UpdateChurch ..> Church : saves
+SaveChurch ..> Church : saves
 Church ..> EncryptedField : casts phone
 ApplicationReference ..> EncryptedField : casts phone, email
 EncryptedField --> FieldEncrypter

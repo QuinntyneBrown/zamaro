@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Send a booking request
 
-Container(web, "Zamaro Web", "Angular", "BookingStubComponent, BookingRequestStore, BookingsApi")
+Container(web, "Zamaro Web", "Angular", "BookRequestPage, BookingRequestStore, BookingsApi")
 ContainerQueue(queue, "Cache and queue", "Redis", "Rate limiter and queued listeners")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "BookingsController@store", "Laravel controller", "POST /api/v1/bookings")

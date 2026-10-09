@@ -57,10 +57,13 @@ design system keep their own surfaces in either theme.
   preference to the opposite of the effective theme, writes the device preference and,
   when a user is signed in, calls `PreferencesApi` (L2-104). During server-side
   rendering the service does nothing, leaving the boot script in charge.
-- **`ThemeToggleComponent`** — icon button in `TopBarComponent`, visible in the full
-  and compact header. It is a `button` with `aria-pressed` set when the effective
-  theme is dark. Its accessible name comes from the catalogue: "Switch to dark theme"
-  or "Switch to light theme". It meets the 44 px target size.
+- **`ThemeToggleComponent`** — the design system's `.topbar__theme` icon button in
+  `TopBarComponent`, shown in the full header (from LG). In the compact header there is
+  no room beside the menu button, Saved and the account initials at 320 px, so the
+  same component renders as the "Dark theme" item of `NavDrawerComponent`. Both are a
+  `button` with `aria-pressed="true"` while the effective theme is dark and a constant
+  accessible name from the catalogue, "Dark theme", so screen readers announce the
+  state rather than a changing label. Both meet the 44 px target size.
 - **`PreferencesApi`** — typed client for `PATCH /api/v1/me/preferences` with body
   `{ "themePreference": "light" | "dark" | null }`.
 - **Sign-in reconciliation** — when `CurrentUserStore` loads `GET /api/v1/me` after
@@ -72,6 +75,20 @@ design system keep their own surfaces in either theme.
 - **Save failure** — when the `PATCH` fails, the device preference still applies and
   the toggle reflects it; the next successful toggle or sign-in reconciles the
   account. Whether to show an error toast is `<TO SUPPLY>`.
+
+**Mocks and design system**
+
+- Every mock's top bar carries the toggle (hidden below LG), for example
+  [`discover/default`](../../../mocks/pages/discover/default.html) and
+  [`dashboard/default`](../../../mocks/pages/dashboard/default.html); the compact header
+  puts it in the navigation drawer, [`dialogs/menu`](../../../mocks/dialogs/menu/default.html)
+  ([`artist`](../../../mocks/dialogs/menu/artist.html), [`admin`](../../../mocks/dialogs/menu/admin.html)). Append `?theme=dark` to any mock
+  to see the stage theme.
+- Design system: [`tokens.css`](../../../design-system/tokens/tokens.css), the
+  [Theming](../../../design-system/foundations/theming.html) and
+  [Color](../../../design-system/foundations/color.html) foundations, and the
+  [Top bar](../../../design-system/components/top-bar.html) and
+  [Menu](../../../design-system/components/menu.html) components.
 
 **Backend (Zamaro API)**
 

@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "PayDepositPage" as page
+  participant "PayDepositDialogComponent" as page
   participant "PaymentStore" as store
   participant "PaymentsApi" as client
   participant "CardFieldsService" as fields
@@ -35,12 +35,15 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "Payment processor" as processor
 end box
 
-actor -> page : Open /bookings/{number}/pay
+actor -> page : Activate Pay deposit on /bookings/{number} (Accepted) to open the dialog
 page -> client : GET /api/v1/bookings/{number}/payment-summary
 client -> controller : HTTPS request
 controller --> client : PriceBreakdownResource (L2-036)
 page --> actor : Quoted price, HST line, deposit due now, balance after the event
-actor -> page : Tick save-card consent, activate Pay deposit (L2-037)
+actor -> page : Tick save-card consent, activate Pay (L2-037)
+opt consent missing or card fields invalid
+  page --> actor : Error summary linking to each field; nothing sent
+end
 page -> store : payDeposit(number)
 store -> client : POST /api/v1/bookings/{number}/deposit (Idempotency-Key)
 client -> controller : HTTPS request
@@ -84,6 +87,6 @@ else payment succeeded
   confirm --> controller : DepositResult confirmed
   controller --> client : 200 DepositResultResource
   store --> page : status = confirmed
-  page --> actor : Booking confirmed
+  page --> actor : Dialog closes; booking page reloads as Confirmed
 end
 @enduml

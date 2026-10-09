@@ -33,20 +33,20 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> page : Open /artists/grace-temple-choir?date=2026-11-14
+actor -> page : Open /artists/ruth-adjei?date=2026-11-14
 page -> client : get(slug)
-client -> controller : GET /api/v1/artists/grace-temple-choir?date=2026-11-14
+client -> controller : GET /api/v1/artists/ruth-adjei?date=2026-11-14
 controller -> resolve : handle(slug)
 resolve -> db : artists.slug, then slug_histories.old_slug
 db --> resolve : No row, or artist Suspended, Deleted or unpublished
 resolve --> controller : Missing(context: primary style and base, or empty)
 controller -> ex : throw ArtistNotFound
-ex -> finder : forMissingArtist(context, 2026-11-14, 3)
+ex -> finder : forMissingArtist(context, Sat 14 Nov near Burlington within 120 km, 3)
 finder -> db : Viewable artists with the same primary style
 db --> finder : Candidates
 finder -> avail : isFree(candidate, date) for each
 avail --> finder : Free candidates
-finder -> finder : Nearest first, take 3 (L2-021)
+finder -> finder : Travel match and road distance from the church (L2-003),\nnearest first, take 3 (L2-021)
 finder --> ex : Similar artists
 ex --> client : 404 problem details, identical for every cause, no profile content (L2-021)
 client --> page : ArtistNotFoundProblem

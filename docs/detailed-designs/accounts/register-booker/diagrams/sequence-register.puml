@@ -20,6 +20,7 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "AuthApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "VerifyBotChallenge" as mw
   participant "RegistrationController" as controller
   participant "RegisterBookerRequest" as request
 end box
@@ -37,10 +38,17 @@ end box
 actor -> page : Enter name, email, password, accept terms, marketing choice
 page -> page : Check required fields and 12-128 password length (L2-072)
 page -> client : register(form)
-client -> controller : POST /api/v1/register (XSRF token)
+client -> mw : POST /api/v1/register (XSRF token, challengeToken)
+mw -> bot : Verify challenge token (L2-077)
+alt challenge missing or failed
+  bot --> mw : Fail
+  mw --> client : 422 on challengeToken
+  client --> page : "We couldn't check that you're a person", values kept
+  page --> actor : Challenge error
+else challenge passed
+bot --> mw : Pass
+mw -> controller : Pass request on
 controller -> request : Validate
-request -> bot : Verify challenge token (L2-077)
-bot --> request : Pass
 request -> breach : Range query on SHA-1 prefix (L2-072)
 breach --> request : Matching suffixes
 alt invalid input or breached password
@@ -64,5 +72,6 @@ else valid input
   controller --> client : 202 "Check your email to finish signing up"
   client --> page : Navigate to CheckEmailPage
   page --> actor : Same message for new and repeat addresses (L2-022)
+end
 end
 @enduml

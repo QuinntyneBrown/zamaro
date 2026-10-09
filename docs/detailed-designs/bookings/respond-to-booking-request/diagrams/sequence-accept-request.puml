@@ -16,8 +16,9 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ArtistRequestsPage" as page
-  participant "ArtistRequestsStore" as store
+  participant "ArtistBookingPage" as page
+  participant "AcceptRequestDialogComponent" as dialog
+  participant "ArtistBookingStore" as store
   participant "ArtistRequestsApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -33,22 +34,31 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "Email delivery service" as email
 end box
 
-actor -> page : Activate Accept
-page -> store : accept(number)
-store -> store : Button busy and disabled (L2-108)
+actor -> page : Activate Accept on /artist/bookings/{number}
+page -> dialog : Open: quoted price, 8 % fee, "You'll be paid ${payout} after the event.", deposit deadline
+actor -> dialog : Activate Accept request
+dialog -> store : accept()
+store -> dialog : "Accepting…" busy, Cancel disabled (L2-108)
 store -> client : accept(number)
 client -> controller : POST /api/v1/artist/requests/{number}/accept
 controller -> controller : BookingPolicy::respond, booking of another artist -> 404
 controller -> action : handle(booking, artist)
 action -> db : BEGIN; SELECT artist FOR UPDATE
-action -> db : Confirmed booking for artist on event date?
-alt date already Confirmed
+action -> db : Contact phone saved? Confirmed booking for artist on event date?
+alt no contact phone (L2-025)
+  db --> action : No phone
+  action -> db : ROLLBACK
+  action --> controller : 409 contact-phone-missing
+  controller --> client : "Add your contact phone before you accept." (L2-030)
+  client --> store : Problem
+  store --> dialog : No-phone state with Not now and "Add contact phone" (/account#contact); booking stays Requested
+else date already Confirmed
   db --> action : Yes
   action -> db : ROLLBACK
   action --> controller : 409 already-booked
   controller --> client : "You're already booked on {date}." (L2-030)
   client --> store : Problem
-  store --> page : Error message on the card
+  store --> dialog : Conflict state "You're already booked on {date}" with Back to requests
 else date open
   db --> action : No
   action -> sm : transition(booking, Accepted, artist) (L2-030)
@@ -56,7 +66,7 @@ else date open
     sm --> action : InvalidBookingTransition
     action --> controller : 409 (L2-029)
     controller --> client : Problem details
-    client --> store : Conflict, reload list
+    client --> store : Conflict, reload booking and close dialog
   else Requested
     sm -> db : Conditional update and history row
     action -> db : Set accepted_at and deposit_due_by (L2-037 rule)
@@ -66,8 +76,9 @@ else date open
     action --> controller : Booking
     controller --> client : 200
     client --> store : Accepted
-    store --> page : Remove card, announce result
-    page --> actor : Request accepted
+    store --> dialog : Close
+    store --> page : Accepted state with deposit deadline, announce result
+    page --> actor : Request accepted toast
   end
 end
 @enduml

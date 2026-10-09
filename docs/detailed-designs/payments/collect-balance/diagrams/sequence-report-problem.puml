@@ -33,7 +33,7 @@ end box
 
 actor -> page : Activate "Report a problem"
 page -> dialog : Open dialog
-actor -> dialog : Describe the problem, submit
+actor -> dialog : Describe the problem (required, up to 2,000 characters), submit
 dialog -> client : reportProblem(number, description)
 client -> controller : POST /api/v1/bookings/{number}/problem-reports
 controller -> controller : BookingPolicy (404 for others), validate ReportProblemRequest

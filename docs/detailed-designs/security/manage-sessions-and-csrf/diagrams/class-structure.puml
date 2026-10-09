@@ -48,11 +48,12 @@ package "Zamaro API (Laravel)" {
     #except: array
     +handle(request: Request, next: Closure): Response
   }
-  class AuthenticateUser <<action>> {
-    +handle(request: SignInRequest): User
+  class AttemptSignIn <<action>> {
+    +handle(request: SignInRequest): SignInResult
   }
-  class SignOutController {
-    +__invoke(request: Request): Response
+  class SessionController {
+    +store(request: SignInRequest): JsonResponse
+    +destroy(request: Request): Response
   }
   class ProblemDetailsRenderer {
     +render(e: Throwable, request: Request): JsonResponse
@@ -72,9 +73,9 @@ package "Zamaro API (Laravel)" {
 AuthService --> CurrentUser
 SessionExpiredInterceptor ..> AuthService : clears
 CsrfRecoveryInterceptor ..> AuthService : ensureCsrfCookie()
-AuthService ..> AuthenticateUser : POST /api/v1/auth/sign-in
-AuthService ..> SignOutController : POST /api/v1/auth/sign-out
-AuthenticateUser --> User : authenticates
+AuthService ..> SessionController : POST and DELETE /api/v1/session
+SessionController --> AttemptSignIn : sign in
+AttemptSignIn --> User : authenticates
 EnforceAbsoluteSessionLifetime --> SessionLifetimePolicy : applies
 SessionLifetimePolicy ..> Role : per role
 ValidateCsrfToken ..> ProblemDetailsRenderer : 419 via TokenMismatchException

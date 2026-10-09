@@ -24,7 +24,7 @@ Terms used in this design:
 - **collection point** — moment 48 hours after the event start time, when the balance becomes due
 - **problem report** — booker's statement, filed within 48 hours of the event start, that something went wrong
 - **hold** — flag on a booking that stops the balance charge and the artist payout until an administrator resolves it
-- **payment link** — link in an email to `/bookings/:number/pay-balance`, where the booker pays with another card
+- **payment link** — link in an email to `/bookings/{number}?pay=balance`, which opens the Pay balance dialog so the booker can pay with another card
 - **administrator alert** — `AdminAlert` record plus an email to each administrator
 
 ## Description
@@ -36,14 +36,21 @@ in the Zamaro API.
 **Frontend (Zamaro Web, `features/bookings`)**
 
 - **`BookingDetailPage`** — routed page for `/bookings/:number`. For a Confirmed or
-  Completed booking within 48 hours of the event start, it offers "Report a
-  problem". It lists each payment with its status.
-- **`ReportProblemDialogComponent`** — design-system dialog with a required
-  description field. It submits through `BookingsApi.reportProblem()` and confirms
-  that the balance and payout are on hold.
-- **`PayBalancePage`** — routed page for `/bookings/:number/pay-balance`, the target
-  of the payment link. It reuses `PaymentSummaryComponent`, `CardFieldsService` and
-  `PaymentStore` from `payments/pay-deposit` to pay the balance with another card.
+  Completed booking, until 48 hours after the event start and while the balance is
+  uncharged, it offers "Report a problem" and states when the balance will be
+  charged. Once a report is filed it shows that the balance and the artist's payout
+  are on hold. After a failed balance charge it states the next retry and offers
+  "Pay balance". It lists each payment with its status.
+- **`ReportProblemDialogComponent`** — CDK dialog with a required description of up
+  to 2,000 characters. It submits through `BookingsApi.reportProblem()`, shows a busy
+  state and blocks a second submission (L2-108), and on success closes so the page
+  shows the hold.
+- **`PayBalanceDialogComponent`** — CDK dialog opened by "Pay balance" on
+  `BookingDetailPage`, and automatically when the page loads with `?pay=balance`, the
+  target of the payment link. It reuses `PaymentSummaryComponent`, `CardFieldsService`
+  and `PaymentStore` from `payments/pay-deposit` to pay the balance with another card,
+  including any 3-D Secure challenge the processor shows (L2-035). There is no
+  separate payment route.
 - **`BookingsApi`**, **`PaymentsApi`** — typed clients for the endpoints below.
 
 **Backend (Zamaro API and Zamaro Worker)**
@@ -51,7 +58,7 @@ in the Zamaro API.
 - **`ProblemReportController`** — controller for
   `POST /api/v1/bookings/{number}/problem-reports`, authorised by `BookingPolicy`
   (404 for any user other than the booker). `ReportProblemRequest` validates the
-  description (length limit `<TO SUPPLY>`).
+  description as required plain text of at most 2,000 characters (L2-075).
 - **`ReportBookingProblem`** — action that accepts a report only within 48 hours of
   the event start time and only while the balance is uncharged. In one transaction
   it inserts a `ProblemReport` and sets `bookings.held_at`. It then calls
@@ -102,6 +109,22 @@ payment clears any pending retry.
 - `payments` — balance attempts with `attempt`, `next_retry_at` and `failure_code`.
 - `admin_alerts` — `kind`, `subject_type`, `subject_id`, `detail`, `created_at`,
   `acknowledged_at`.
+
+**Mock screens** — the booking page states
+[balance-due](../../../mocks/pages/booking-detail/balance-due.html) (Completed, Report a
+problem offered before the balance charge),
+[held](../../../mocks/pages/booking-detail/held.html) (problem reported, balance and payout
+on hold), [balance-failed](../../../mocks/pages/booking-detail/balance-failed.html) (charge
+failed, next retry and Pay balance) and
+[completed](../../../mocks/pages/booking-detail/completed.html) (balance paid); the Report a
+problem dialog in states [default](../../../mocks/dialogs/report-problem/default.html),
+[busy](../../../mocks/dialogs/report-problem/busy.html),
+[invalid](../../../mocks/dialogs/report-problem/invalid.html) and
+[failed](../../../mocks/dialogs/report-problem/failed.html); and the Pay balance dialog in
+states [default](../../../mocks/dialogs/pay-balance/default.html),
+[busy](../../../mocks/dialogs/pay-balance/busy.html),
+[invalid](../../../mocks/dialogs/pay-balance/invalid.html) and
+[failed](../../../mocks/dialogs/pay-balance/failed.html).
 
 ## Requirements
 

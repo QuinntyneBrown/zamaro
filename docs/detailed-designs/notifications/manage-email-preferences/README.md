@@ -13,8 +13,9 @@ the `NotificationPreferenceGate` that every notification consults through
 `TransactionalNotification::shouldSend()` in `notifications/send-transactional-emails`.
 Its first consumer is `EventReminderNotification` in
 `notifications/send-event-reminders`. The review-prompt email, sent by the reviews
-subsystem, is the second. Marketing-email consent under CASL is a separate,
-registration-time consent (L2-080) and is not a preference here.
+subsystem, is the second. Marketing-email consent under CASL (L2-080) is not a
+notification preference: the same settings section shows it, but a change is
+recorded as a consent record by `privacy/record-consent`.
 
 Terms used in this design:
 
@@ -22,25 +23,41 @@ Terms used in this design:
 - **transactional category** — category of emails about the user's own bookings and payments, which cannot be turned off
 - **optional category** — category a user may turn off: event reminders or review prompts
 - **notification preference** — stored on-or-off choice of one user for one optional category
-- **notification settings** — account page at `/account/notifications` where a user changes preferences
+- **notification settings** — Email preferences section `#preferences` of the account settings page at `/account`, where a user changes preferences
 
 ## Description
 
-The slice runs from the notification settings page in Zamaro Web to the preference
-endpoints in the Zamaro API. The Zamaro Worker reads the preferences at send time.
+The slice runs from the Email preferences section of account settings in Zamaro Web
+to the preference endpoints in the Zamaro API. The Zamaro Worker reads the
+preferences at send time.
 
 **Frontend (Zamaro Web, `features/account`)**
 
-- **`NotificationSettingsPage`** — routed page for `/account/notifications`, linked
-  from account settings and from the footer of each optional email. It shows one
-  design-system switch per category: event reminders, review prompts, and booking
-  and payment emails. The booking and payment switch is on and disabled, with a
-  line explaining that these emails cannot be turned off (L2-065). Each change saves
-  immediately. The switch shows a busy state until the request returns (L2-108). A
-  success toast confirms the save (L2-109). An error toast stays until dismissed and
-  the switch returns to its previous position. Toast wording `<TO SUPPLY>`.
+- **`EmailPreferencesSectionComponent`** — section `#preferences` of
+  `AccountSettingsPage` (`accounts/manage-account-settings`), linked as
+  `/account#preferences` from the footer of each optional email. Under "Email me
+  about" it shows one design-system checkbox per category: "Bookings and payments"
+  (ticked and disabled, "Always on: these are about your dates and your money."),
+  "Event reminders" and "Review prompts" (L2-065). Artists see only their
+  transactional category, labelled "Requests, bookings and payouts", and "Event
+  reminders": review prompts go to bookers alone. Bookers also see the marketing choice
+  "New artists near my church", which it saves through
+  `POST /api/v1/account/consents/marketing` (`privacy/record-consent`). Changes are
+  saved by the page's Save changes button with the rest of the form: the button is
+  busy until the requests return (L2-108), a "Saved" banner confirms the save, and a
+  failed save keeps every choice with an error message.
 - **`NotificationPreferencesApi`** — typed client for the two endpoints below,
   returning `NotificationPreferenceDto` (`category`, `enabled`, `locked`).
+
+**Mock screens** — the section is `#preferences` on
+[`pages/account`](../../../mocks/pages/account/default.html); saving it uses the
+page's [`submitting`](../../../mocks/pages/account/submitting.html),
+[`success`](../../../mocks/pages/account/success.html) and
+[`failed`](../../../mocks/pages/account/failed.html) states; the artist's version of the
+section is on the [`artist`](../../../mocks/pages/account/artist.html) state. The undeliverable-address
+banner of L2-065 is
+[`notifications/system-banner/undeliverable`](../../../mocks/notifications/system-banner/undeliverable.html),
+raised by `notifications/send-transactional-emails`.
 
 **Backend (Zamaro API)**
 
@@ -68,7 +85,7 @@ endpoints in the Zamaro API. The Zamaro Worker reads the preferences at send tim
   `Suppressed` in `email_messages` (`notifications/send-transactional-emails`).
 
 Whether optional emails also carry a one-click unsubscribe link that works without
-signing in is `<TO SUPPLY>`. Each optional email links to the settings page.
+signing in is `<TO SUPPLY>`. Each optional email links to `/account#preferences`.
 
 **Data**
 
@@ -118,7 +135,7 @@ Each `NotificationPreference` holds one user's choice for one `NotificationCateg
 
 ### Behaviour — turn off reminder emails
 
-The user turns off reminders and the change saves at once. An attempt to turn off
+The user turns off reminders and saves the page. An attempt to turn off
 booking and payment emails is rejected with 422. When a reminder later falls due,
 the gate refuses it and the send is recorded as suppressed.
 

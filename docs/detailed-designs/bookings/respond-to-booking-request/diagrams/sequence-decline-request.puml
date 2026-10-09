@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ArtistRequestsPage" as page
+  participant "ArtistBookingPage" as page
   participant "DeclineRequestDialogComponent" as dialog
   participant "ArtistRequestsApi" as client
 end box
@@ -37,24 +37,25 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "Email delivery service" as email
 end box
 
-actor -> page : Activate Decline
-page -> dialog : Open
-actor -> dialog : Optional reason, up to 500 characters
-dialog -> client : decline(number, reason)
+actor -> page : Activate Decline on /artist/bookings/{number}
+page -> dialog : Open, focus on the first reason
+actor -> dialog : Optional reason choice and note of up to 500 characters
+dialog -> client : decline(number, reason, note)
 client -> controller : POST /api/v1/artist/requests/{number}/decline
 controller -> controller : BookingPolicy::respond; validate DeclineBookingRequest (422)
-controller -> action : handle(booking, artist, reason)
+controller -> action : handle(booking, artist, reason, note)
 action -> sm : transition(booking, Declined, artist, reason) (L2-030)
+action -> action : Post the note to the thread as a "declined" message
 sm -> db : Conditional update, history row with reason
-action -> db : COMMIT, decline_reason stored
+action -> db : COMMIT, decline_reason and decline_note stored
 sm -> queue : RequestDeclined after commit
 action --> controller : Booking
 controller --> client : 200
-client --> page : Remove card, close dialog
-page --> actor : Request declined
+client --> page : Close dialog, show the Declined state
+page --> actor : "You declined" with the reason
 queue -> listener : RequestDeclined
 listener -> similar : freeOn(artist, date, church, 3) (L2-030)
 similar -> db : Free, travel-matched artists for the date
 similar --> listener : Up to 3 artists
-listener -> email : Booker email with reason and similar artists (L2-030, L2-063)
+listener -> email : Booker email with reason, note and similar artists (L2-030, L2-063)
 @enduml

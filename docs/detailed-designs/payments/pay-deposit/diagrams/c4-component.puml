@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Pay the deposit
 
-Container(web, "Zamaro Web", "Angular", "PayDepositPage, PaymentStore, PaymentsApi")
+Container(web, "Zamaro Web", "Angular", "PayDepositDialogComponent, PaymentStore, PaymentsApi")
 System_Ext(processor, "Payment processor", "Payments, refunds, 3-D Secure")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "DepositController", "Laravel controller", "GET payment-summary, POST deposit, POST deposit/confirm")

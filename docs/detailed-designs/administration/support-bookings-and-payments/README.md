@@ -20,7 +20,7 @@ receipts and webhooks belong to `payments/collect-balance`,
 
 Terms used in this design:
 
-- **booking number** — public identifier printed on every booking page, email and receipt (format `<TO SUPPLY>`)
+- **booking number** — public identifier printed on every booking page, email and receipt (format `ZAM-` followed by a sequence number zero-padded to at least 4 digits, for example `ZAM-0097`, as defined in `bookings/send-booking-request`)
 - **payment history** — chronological list of a booking's charges and refunds with amount, kind, card brand, last 4 digits, status and date
 - **refundable amount** — total of a booking's succeeded charges minus every refund that is pending or succeeded
 - **partial refund** — refund of less than the refundable amount
@@ -46,16 +46,24 @@ Zamaro Worker.
   artist, church, event date, status, amount paid and amount refunded.
 - **`AdminBookingPage`** — routed page for `/admin/bookings/:number`. It shows the
   booking summary, the status history (L2-029), the payment history, the hold
-  banner when held, and the actions Issue refund and Resolve hold.
+  banner when held, the booking's message thread read-only through
+  `MessageThreadComponent` with `readOnly` set (`bookings/exchange-booking-messages`,
+  L2-045), and the actions Issue refund and Resolve hold. Loading the thread calls
+  `GET /api/v1/admin/bookings/{number}/messages`, which records the audit entry
+  `booking.messages.viewed` (L2-069).
 - **`IssueRefundDialogComponent`** — dialog with an amount field in dollars, the
-  hint "Up to {refundable amount}", a required reason and Issue refund. It formats
+  hint "Up to {refundable amount}", a required reason and Continue. It formats
   money through `FormatService` (L2-110) and converts to integer cents before
-  sending. It requires a second confirmation that states the exact amount.
-- **`ResolveHeldBookingDialogComponent`** — dialog with a radio group of Release
-  balance, Partial refund (with an amount field) and Full refund, a reason field,
-  and Resolve.
+  sending. It requires a second confirmation, "Refund {amount} to {booker}?", that
+  states the exact amount and what stays refundable, with Go back (the default
+  focus) and the danger button "Refund {amount}".
+- **`ResolveHeldBookingDialogComponent`** — dialog with a required radio group of
+  Release the balance, Partial refund (which reveals an amount field, up to what the
+  booker has paid) and Full refund, a required reason that both parties read in the
+  outcome email, and Resolve hold.
 - **`AdminBookingsStore`** and **`AdminBookingsApi`** — store and typed client for
-  the endpoints below. The store disables actions while a request runs (L2-108).
+  the endpoints below. While a request runs, the dialog's submit button shows its
+  busy state ("Refunding…", "Resolving…") and blocks a second submission (L2-108).
 
 **Backend (Zamaro API)**
 
@@ -97,7 +105,7 @@ MFA-verified administrator (L2-066).
   `PartialRefund` it calls `IssueRefund` for the entered amount; whether the balance
   is charged first and how the artist payout is reduced is `<TO SUPPLY>`. Each path
   stamps `resolved_at`, `resolved_by` and `resolution`, clears `bookings.held_at`, records
-  `problem_report.resolved`, and dispatches `HeldBookingResolved`.
+  `booking_hold.resolved`, and dispatches `HeldBookingResolved`.
 - **`PaymentGateway`** — interface in `App\Services\Payments\` with one adapter for
   the payment processor (vendor `<TO SUPPLY>`).
 
@@ -107,6 +115,21 @@ MFA-verified administrator (L2-066).
   artist stating the resolution and any refund amount (L2-063).
 - **`RefundReceiptNotification`** — queued receipt email for each succeeded refund
   (L2-040), owned by `payments/issue-receipts`.
+
+**Mock screens** — the search is
+[`pages/admin-bookings`](../../../mocks/pages/admin-bookings/default.html) in states
+default (“Riverside”, 6 bookings), [`held`](../../../mocks/pages/admin-bookings/held.html)
+(Held only), loading, error and
+[`no-results`](../../../mocks/pages/admin-bookings/no-results.html). The booking is
+[`pages/admin-booking`](../../../mocks/pages/admin-booking/default.html) in states
+default (ZAM-0097, Confirmed, $237.50 refundable),
+[`held`](../../../mocks/pages/admin-booking/held.html) (ZAM-0104), loading and error;
+the default and held states show the read-only Messages panel.
+The dialogs are [`dialogs/issue-refund`](../../../mocks/dialogs/issue-refund/default.html)
+in states default, invalid, [`confirm`](../../../mocks/dialogs/issue-refund/confirm.html)
+(the second confirmation), busy and failed, and
+[`dialogs/resolve-hold`](../../../mocks/dialogs/resolve-hold/default.html) in states
+default, busy, invalid and failed.
 
 **Data**
 

@@ -8,9 +8,10 @@ profile on Zamaro carries a setlist: the header shows the first 5 songs as a str
 or source and key (L2-016). A worship leader planning a service reads it to check
 that the artist knows the congregation's songs and can lead them in a usable key.
 
-This feature lets the artist maintain that setlist from the artist workspace, the
-`/artist/*` area of Zamaro Web for signed-in approved artists. The artist adds,
-edits, removes and reorders songs, and the order decides which 5 songs appear in the
+This feature lets the artist maintain that setlist from the Songs section of the
+profile editor at `/artist/profile`, in the artist workspace (the `/artist/*` area of
+Zamaro Web for signed-in approved artists). The artist adds, removes and reorders
+songs and sets each song's key, and the order decides which 5 songs appear in the
 profile header. Other profile content is edited in the sibling slices
 `artist-workspace/edit-profile-details`, `artist-workspace/upload-photos` and
 `artist-workspace/upload-videos`. Rendering the setlist on the public profile belongs
@@ -30,27 +31,34 @@ artist saves it, and the saved order decides the header strip (L2-053).
 
 ## Description
 
-The slice runs from the setlist editor in Zamaro Web to the setlist endpoints in the
-Zamaro API and the Zamaro database.
+The slice runs from the Songs section of the profile editor in Zamaro Web to the
+setlist endpoints in the Zamaro API and the Zamaro database.
 
 **Frontend (Zamaro Web, `features/artist-workspace`)**
 
-- **`SetlistEditorPage`** — routed page component for `/artist/setlist`. It shows
-  the count against the limit ("12 of 50"), the add-song form and the ordered list.
-  It disables the form at 50 songs and shows the reason.
-- **`SetlistSongFormComponent`** — reactive form with title (1–100 characters,
-  required), writer or source (up to 100, optional) and a design-system select of the
-  24 keys plus "Any key". It serves both adding and editing a song. On a rejected
-  save it marks each invalid field and moves focus to the first one.
+- **`SetlistSectionComponent`** — the "Songs {first name} leads" section (`#songs`)
+  of `ArtistProfileEditorPage` (`artist-workspace/edit-profile-details`). Its lead
+  says the first 5 show in the strip under the artist's name. It shows the ordered
+  list, the count against the limit ("8 of 50 songs.") and "Add a song", which opens
+  `SetlistSongDialogComponent`. At 50 songs the dialog opens in its limit state.
+- **`SetlistSongDialogComponent`** — design-system dialog with title (1–100
+  characters, required), writer or source (up to 100, optional) and a select of the
+  24 keys plus "Any key", which is the default. On a rejected save it shows an error
+  summary, marks each invalid field and moves focus to the summary. It keeps every
+  value after a failed request and offers Try again. At the limit it shows only "You
+  can list up to 50 songs." and "Back to my songs". A new song is saved when the
+  artist activates "Add song" and goes to the end of the list.
 - **`SetlistListComponent`** — ordered list built on the design-system setlist
-  component. Each row shows its number, title, credit and key label ("Key of B♭"),
-  with "Edit", "Delete", "Move up" and "Move down". Rows also move by CDK drag and
-  drop. A divider and an "In profile header" marker set off the first 5 rows.
-  `LiveAnnouncer` reads each new position.
+  component (`setlist--edit`). Each row shows the title and credit, a key select
+  labelled "Key for {title}", and "Move up", "Move down" and "Remove" icon buttons.
+  Rows also move by CDK drag and drop. `LiveAnnouncer` reads each new position.
+  Removing a song saves at once and offers Undo in a toast. A song's title or credit
+  is corrected by removing it and adding it again.
 - **`SetlistStore`** — signal-based store holding the songs, a local order, an
-  `orderDirty` flag and `canAddMore`. Moves change only the local order until "Save
-  order" runs. Leaving the page with unsaved order changes prompts the artist to
-  confirm; the prompt copy is `<TO SUPPLY>`.
+  `orderDirty` flag, changed keys and `canAddMore`. Moves and key changes stay local
+  until the editor's "Save changes" runs, which sends the order and each changed key.
+  Leaving the editor with unsaved changes prompts the artist to confirm; the prompt
+  copy is `<TO SUPPLY>`.
 - **`SetlistApi`** — typed client for the setlist endpoints.
 
 **Backend (Zamaro API)**
@@ -63,7 +71,7 @@ Every endpoint sits behind `EnsureArtistRole`. Route-bound songs pass
 |-----------------|------------|---------|
 | `GET /api/v1/artist/setlist/songs` | `SetlistSongController@index` | List songs by position |
 | `POST /api/v1/artist/setlist/songs` | `SetlistSongController@store` | Add a song at the end |
-| `PATCH /api/v1/artist/setlist/songs/{song}` | `SetlistSongController@update` | Change title, credit or key |
+| `PATCH /api/v1/artist/setlist/songs/{song}` | `SetlistSongController@update` | Change the key (title and credit are accepted too) |
 | `DELETE /api/v1/artist/setlist/songs/{song}` | `SetlistSongController@destroy` | Remove a song |
 | `PUT /api/v1/artist/setlist/order` | `SetlistOrderController` | Save a full new order |
 
@@ -71,9 +79,12 @@ Every endpoint sits behind `EnsureArtistRole`. Route-bound songs pass
   characters, writer or source at most 100, and key a `MusicalKey` value (L2-053).
   Text is trimmed and stored as plain text (L2-075).
 - **`MusicalKey`** — backed enum with 24 cases for the 12 tonics in major and minor,
-  plus `AnyKey`. `label()` returns the display text, for example "Key of B♭". The
-  enharmonic spelling of each tonic (for example C♯ or D♭) and the label format for
-  minor keys are `<TO SUPPLY>`.
+  plus `AnyKey`. `label()` returns the display text in the order the select lists
+  them: "Any key"; the majors "Key of C", "Key of D♭", "Key of D", "Key of E♭", "Key
+  of E", "Key of F", "Key of F♯", "Key of G", "Key of A♭", "Key of A", "Key of B♭",
+  "Key of B"; and the minors "Key of C minor", "Key of C♯ minor", "Key of D minor",
+  "Key of E♭ minor", "Key of E minor", "Key of F minor", "Key of F♯ minor", "Key of G
+  minor", "Key of G♯ minor", "Key of A minor", "Key of B♭ minor", "Key of B minor".
 - **`AddSetlistSong`** — action that locks the artist row in one `DB::transaction`,
   counts the songs and rejects a 51st with "You can list up to 50 songs." (L2-053).
   Otherwise it inserts the song at the next position.
@@ -90,6 +101,14 @@ Each change dispatches `ArtistProfileUpdated`, whose queued listener purges the
 cached public profile within 60 seconds (L2-089). The public profile reads songs by
 position; `Artist::headerStripSongs()` returns the first 5 for the header strip
 (L2-012).
+
+**Mock screens** — the Songs section (`#songs`) of
+[`pages/edit-profile`](../../../mocks/pages/edit-profile/default.html) shows Abigail's
+8 songs with key selects and move and remove buttons; the
+[`empty`](../../../mocks/pages/edit-profile/empty.html) state shows Miriam's 4. "Add a
+song" opens [`dialogs/add-song`](../../../mocks/dialogs/add-song/default.html) in
+states default, busy, invalid (no title and a 112-character credit), failed and
+limit ("You can list up to 50 songs.").
 
 **Data**
 
@@ -119,7 +138,7 @@ Zamaro purges the cached profile through the CDN after each change.
 
 ### Containers
 
-The setlist editor in Zamaro Web calls the setlist endpoints in the Zamaro API, which
+The Songs section of the profile editor in Zamaro Web calls the setlist endpoints in the Zamaro API, which
 writes the database and queues the cache purge that the Zamaro Worker runs.
 
 ![C4 container view for managing the setlist](diagrams/c4-container.png)
@@ -148,7 +167,7 @@ row lock and appends the song at the end.
 
 ### Behaviour — reorder the setlist
 
-Moves change the local order and show which songs fall in the header strip. "Save
-order" sends the full list, and the action rewrites positions in one transaction.
+Moves change the local order and are announced. The editor's "Save changes" sends
+the full list, and the action rewrites positions in one transaction.
 
 ![Sequence diagram for reordering the setlist](diagrams/sequence-reorder-setlist.png)

@@ -65,7 +65,7 @@ else pair allowed
     action --> controller : Updated booking
     controller --> client : 200 BookingResource with history
     client --> page : Booking
-    page --> actor : New status badge and timeline entry
+    page --> actor : New status stamp and timeline entry
   end
 end
 @enduml

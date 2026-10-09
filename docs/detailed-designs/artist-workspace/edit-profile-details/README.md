@@ -10,15 +10,18 @@ profile.
 
 This feature is the profile editor at `/artist/profile`. An artist changes the
 written details of their profile and the facts that drive search: name, pronoun,
-headline, bio, base city, styles, languages, maximum driving distance and "From"
-price. The same page offers "Preview", which shows the profile as the public would
-see it before the artist saves.
+headline, About heading, bio, base city, styles, languages, maximum driving distance
+and "From" price. The same page offers "Preview", which shows the profile as the
+public would see it before the artist saves.
 
-Sibling slices in the workspace cover the rest of the profile:
-`artist-workspace/change-profile-address` (the slug in the profile URL),
-`artist-workspace/upload-photos`, `artist-workspace/upload-videos` and
-`artist-workspace/manage-setlist`. The public profile page that renders these details
-belongs to the artist profile subsystem.
+The editor is one page with a section for each part of the profile: Photo & name,
+Bio, Rate & travel, Languages, Songs, Videos, Photos, Profile address and Background
+check. Sibling slices own the sections after Languages:
+`artist-workspace/manage-setlist` (Songs), `artist-workspace/upload-videos`,
+`artist-workspace/upload-photos`, `artist-workspace/change-profile-address` (the slug
+in the profile URL) and `artist-onboarding/verify-vulnerable-sector-check`
+(Background check). The public profile page that renders these details belongs to
+the artist profile subsystem.
 
 Terms used in this design:
 
@@ -45,15 +48,31 @@ in the Zamaro API, the Zamaro database and the geocoding and routing providers.
 **Frontend (Zamaro Web, `features/artist-workspace`)**
 
 - **`ArtistProfileEditorPage`** — routed page component for `/artist/profile`. It
-  loads the profile, hosts the details form and the Save and "Preview" actions, and
-  shows a toast after a successful save. The confirmation copy is `<TO SUPPLY>`.
+  loads the profile and hosts a section nav, the details form, the sibling sections,
+  a completeness meter with "Preview", and a sticky save bar with "Save changes" and
+  a status ("Saved 2 min ago · live"). "Save changes" sends the details and, when they
+  changed, the setlist keys and order, photo alt text and order, and the profile
+  address to their slices' endpoints. After a successful save it shows a success
+  banner, "Your changes are on your public profile now. Churches see them in their
+  next search.", with "View your profile". Adding a song, video or photo and
+  uploading a Vulnerable Sector Check open dialogs and save at once; removing one
+  saves at once and offers Undo in a toast.
+- **`ProfileCompletenessMeterComponent`** — design-system progress meter labelled
+  "Profile {n}% complete" with a caption of what is left. It reads `completeness`
+  from the editor payload: five checks worth 20% each — written details complete, a
+  primary photo, at least one Live video, at least 5 songs (a full header strip) and
+  a current verified Vulnerable Sector Check. The domain service `ProfileCompleteness`
+  scores the checks, and the dashboard (`artist-workspace/view-artist-dashboard`)
+  shows the same figure.
 - **`ProfileDetailsFormComponent`** — reactive form built from design-system text
   field, textarea, select, chip and radio-group components. It mirrors the server
-  rules for immediate feedback: display name 2–80 characters, headline up to 80, bio
-  100–1,500 with a live character count, 1–4 styles, maximum driving distance 20–200
-  km in 10 km steps, and a whole-dollar price from $100 to $20,000. For a group act
-  the pronoun control is fixed to they/them. After a rejected save it marks each
-  invalid field and moves focus to the first one.
+  rules for immediate feedback: display name 2–80 characters, a required headline
+  up to 80 (shown above the name on the profile), an optional About heading up to 80
+  (the title of the About section, L2-013), bio 100–1,500 with a live character
+  count, 1–4 styles, maximum driving distance 20–200 km in 10 km steps, and a
+  whole-dollar price from $100 to $20,000. For a group act the pronoun control is
+  fixed to they/them. After a rejected save it marks each invalid field and moves
+  focus to the first one.
 - **`ArtistProfileEditorStore`** — signal-based store holding the saved
   `ArtistProfile`, the current draft, a status (`idle`, `saving`, `saved`, `invalid`,
   `error`) and per-field errors from the API. It lives at the workspace route level,
@@ -63,10 +82,16 @@ in the Zamaro API, the Zamaro database and the geocoding and routing providers.
 - **`ProfilePreviewPage`** — routed page component for `/artist/profile/preview`. It
   renders `ArtistProfileViewComponent`, the presentational root shared with the public
   `ArtistProfilePage`, so the preview uses the same layout as the public page
-  (L2-054). It adds `PreviewBannerComponent` and a "Back to editing" link. Whether
-  Book, Save and Share are inert or hidden in the preview is `<TO SUPPLY>`.
-- **`PreviewBannerComponent`** — design-system inline message that reads "This is a
-  preview" and stays visible above the profile.
+  (L2-054). It adds `PreviewBannerComponent` with a "Back to editing" link. Book,
+  Save, Share and the booking stub are shown so the layout matches, but disabled, and
+  the page has no search date or church context: Save reads "Save", reviews show
+  their replies without Report, Upcoming dates start 3 days from today (L2-017) and
+  the stub shows no date message. A failed preview reads "This preview didn't load", says the
+  unsaved changes are still in the editor and nothing has been published, and offers
+  Try again and Back to editing.
+- **`PreviewBannerComponent`** — design-system info banner that reads "This is a
+  preview. Churches see your profile like this. Unsaved changes are included." and
+  stays visible above the profile, including while it loads and when it fails.
 
 **Backend (Zamaro API)**
 
@@ -76,11 +101,13 @@ in the Zamaro API, the Zamaro database and the geocoding and routing providers.
   saves the details. Both act on the signed-in artist only; no artist identifier
   appears in the URL.
 - **`UpdateArtistProfileRequest`** — FormRequest holding the L2-050 rules. Display
-  name is 2–80 characters, headline at most 80 and bio 100–1,500, all stored as plain
-  text. Pronoun is an `App\Enums\Pronoun` value (`She`, `He`, `They`) and shall be
-  `They` for a group act. Styles are 1–4 existing `Style` IDs. Languages are codes
-  from an allowed list; the list and any maximum count are `<TO SUPPLY>`. Maximum
-  driving distance is an integer from 20 to 200 divisible by 10. Price is an integer
+  name is 2–80 characters, headline is required and at most 80, About heading is
+  optional and at most 80, and bio 100–1,500, all stored as plain text. Pronoun is
+  an `App\Enums\Pronoun` value (`She`, `He`, `They`) and shall be `They` for a group
+  act. Styles are 1–4 existing `Style` IDs. Languages are optional codes from the allowed list
+  the editor offers (English, French, Spanish, Twi, Amharic and Korean); any maximum
+  count is `<TO SUPPLY>`. Maximum driving distance is an integer from 20 to 200
+  divisible by 10. Price is an integer
   number of dollars from 100 to 20,000. When the base city differs from the saved
   value, the rule geocodes it through `Geocoder` and checks it with `ServiceArea`
   (L2-001). A failure produces 422 with per-field errors (L2-075). The request
@@ -106,15 +133,29 @@ in the Zamaro API, the Zamaro database and the geocoding and routing providers.
 - **`Geocoder`** — interface with one adapter for the geocoding provider (vendor
   `<TO SUPPLY>`).
 - **`ArtistProfileResource`** and **`PublicProfileResource`** — API resources. The
-  first serialises the editor payload. The second is shared with the public profile
+  first serialises the editor payload, including `completeness` (percent and the
+  missing checks). The second is shared with the public profile
   endpoint and carries `preview: true` on preview responses, which are sent with
   `Cache-Control: no-store`.
 
+**Mock screens** — the editor is
+[`pages/edit-profile`](../../../mocks/pages/edit-profile/default.html) in states
+default, loading, [`empty`](../../../mocks/pages/edit-profile/empty.html) (Miriam
+Haile, 40% complete), [`invalid`](../../../mocks/pages/edit-profile/invalid.html) (a
+97-character bio and a $60 price), submitting,
+[`success`](../../../mocks/pages/edit-profile/success.html) (the "Live" banner),
+error, [`address-locked`](../../../mocks/pages/edit-profile/address-locked.html),
+[`check-pending`](../../../mocks/pages/edit-profile/check-pending.html) and
+[`video-processing`](../../../mocks/pages/edit-profile/video-processing.html); the last
+three belong to the sibling slices that own those sections. "Preview" opens
+[`pages/profile-preview`](../../../mocks/pages/profile-preview/default.html) in states
+default, loading, empty and error.
+
 **Data**
 
-The slice writes `artists` (`display_name`, `pronoun`, `headline`, `bio`,
-`base_city`, `base_latitude`, `base_longitude`, `languages` as `jsonb`,
-`max_drive_km`, `from_price_cents`) and `artist_styles`. Database check constraints
+The slice writes `artists` (`display_name`, `pronoun`, `headline`, `about_heading`
+(nullable), `bio`, `base_city`, `base_latitude`, `base_longitude`, `languages` as
+`jsonb`, `max_drive_km`, `from_price_cents`) and `artist_styles`. Database check constraints
 repeat the range rules for `max_drive_km` and `from_price_cents`. Each `bookings` row
 keeps its own `quoted_price_cents`, written when the booking is requested. Handling
 of two concurrent saves from different devices (last write wins or an `If-Match`
@@ -127,7 +168,7 @@ level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-050` | `L1-011` | **Edit profile details.**<br>Acceptance criteria:<br>1. Given an artist on `/artist/profile`, when they save, then they can change display name (2–80 characters), pronoun used in profile copy (she/her, he/him or they/them; groups always use they/them), headline (up to 80), bio (100–1,500), base city (inside the service area), styles (1–4), languages, maximum driving distance (20–200 km in 10 km steps) and "From" price (whole dollars, $100–$20,000).<br>2. Given an artist changes their price, when they save, then existing Requested, Accepted and Confirmed bookings keep their locked quoted price.<br>3. Given an invalid value, when they save, then each invalid field shows an inline error and nothing is saved. |
+| `L2-050` | `L1-011` | **Edit profile details.**<br>Acceptance criteria:<br>1. Given an artist on `/artist/profile`, when they save, then they can change display name (2–80 characters), pronoun used in profile copy (she/her, he/him or they/them; groups always use they/them), headline (up to 80), an optional About heading shown over the bio (up to 80), bio (100–1,500), base city (inside the service area), styles (1–4), languages, maximum driving distance (20–200 km in 10 km steps) and "From" price (whole dollars, $100–$20,000).<br>2. Given an artist changes their price, when they save, then existing Requested, Accepted and Confirmed bookings keep their locked quoted price.<br>3. Given an invalid value, when they save, then each invalid field shows an inline error and nothing is saved. |
 | `L2-054` | `L1-011` | **Profile preview.**<br>Acceptance criteria:<br>1. Given an artist editing their profile, when they activate "Preview", then they see their profile exactly as the public would, with a banner "This is a preview" and unpublished changes included. |
 
 ## Diagrams

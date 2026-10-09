@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "CalendarFeedComponent" as comp
+  participant "CalendarFeedDialogComponent" as comp
   participant "CalendarFeedApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -42,11 +42,11 @@ enable -> db : Insert calendar_feeds (token_hash, token_encrypted)
 enable --> controller : CalendarFeed
 controller --> client : 201 CalendarFeedResource with secret URL (L2-058)
 client --> comp : FeedState
-comp --> actor : URL field with Copy and subscription help
+comp --> actor : Link field with "Copy link" and subscription help
 
-actor -> comp : Activate "Regenerate URL"
-comp --> actor : Confirm dialog: the old URL stops working
-actor -> comp : Confirm
+actor -> comp : Activate "Make a new link"
+comp --> actor : Confirm state "Make a new link?": the current link stops working at once
+actor -> comp : Confirm "Make a new link"
 comp -> client : regenerate()
 client -> controller : POST /api/v1/artist/calendar-feed/regeneration
 controller -> rotate : handle(artist)
@@ -57,5 +57,5 @@ note right of db : The old hash no longer exists, so the old URL returns 404 (L2
 rotate --> controller : CalendarFeed
 controller --> client : 200 CalendarFeedResource with new URL
 client --> comp : FeedState
-comp --> actor : New URL shown; success toast
+comp --> actor : New link shown with "Copy link"
 @enduml

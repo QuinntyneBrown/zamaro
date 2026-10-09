@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — View the artist dashboard
+
+Container(web, "Zamaro Web", "Angular", "ArtistDashboardPage, ArtistDashboardStore, ArtistDashboardApi, ArtistsOnlyComponent")
+Container_Boundary(api, "Zamaro API") {
+  Component(mw, "EnsureArtistRole", "Middleware", "Answers 404 to anyone who is not an approved artist")
+  Component(ctrl, "ArtistDashboardController", "Invokable controller", "GET /api/v1/artist/dashboard")
+  Component(build, "BuildArtistDashboard", "Query action", "Composes the dashboard for the signed-in artist")
+  Component(requests, "ListArtistRequests", "Query action", "Open requests ordered by respond_by")
+  Component(calendar, "BuildArtistCalendar", "Action", "Day statuses for the next calendar month")
+  Component(complete, "ProfileCompleteness", "Domain service", "Five checks worth 20% each")
+  Component(price, "PriceBreakdown", "Domain service", "Payout after the 8% fee")
+  Component(res, "ArtistDashboardResource", "API resource", "Stats, request rows, coming-up dates, reviews summary")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, availability_rules, availability_overrides, artist_ratings, reviews, review_replies")
+}
+Rel(web, mw, "Calls", "JSON/HTTPS")
+Rel(mw, ctrl, "Passes approved artists to")
+Rel(ctrl, build, "Calls")
+Rel(build, requests, "Reads open requests through")
+Rel(build, calendar, "Reads free Saturdays through")
+Rel(build, complete, "Scores the profile with")
+Rel(requests, price, "Computes each payout with")
+Rel(build, db, "Reads Confirmed bookings, rating and unreplied reviews", "SQL")
+Rel(requests, db, "Reads Requested bookings", "SQL")
+Rel(calendar, db, "Reads rules, overrides and bookings", "SQL")
+Rel(complete, db, "Reads profile, photos, videos, setlist and check", "SQL")
+Rel(ctrl, res, "Returns")
+@enduml

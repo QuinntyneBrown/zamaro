@@ -1,0 +1,72 @@
+@startuml
+title UML sequence behaviour — Load the artist dashboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistDashboardPage" as page
+  participant "ArtistDashboardStore" as store
+  participant "ArtistDashboardApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistDashboardController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BuildArtistDashboard" as action
+  participant "ListArtistRequests" as requests
+  participant "BuildArtistCalendar" as calendar
+  participant "ProfileCompleteness" as complete
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /artist
+page --> actor : Greeting from the session; skeletons, aria-busy="true" (L2-105)
+page -> store : load()
+store -> client : get()
+client -> controller : GET /api/v1/artist/dashboard
+controller -> controller : EnsureArtistRole; non-artists receive 404 (L2-074)
+controller -> action : handle(artist, today)
+action -> requests : Requested bookings by respond_by, then id (L2-034)
+requests -> db : Select open requests with church snapshot and quoted price
+db --> requests : Rows
+requests --> action : Rows with distance, payout after the 8% fee and time left (L2-034, L2-039)
+action -> db : Confirmed bookings from today, rating, unreplied reviews
+db --> action : Rows
+action -> calendar : Days of the next calendar month
+calendar -> db : Rules, overrides, bookings
+db --> calendar : Rows
+calendar --> action : CalendarDay statuses; keep Free Saturdays (L2-056)
+action -> complete : score(artist)
+complete -> db : Profile, primary photo, Live videos, songs, check
+db --> complete : Rows
+complete --> action : Percent and missing checks
+action --> controller : ArtistDashboard
+controller --> client : 200 ArtistDashboardResource, Cache-Control: private, no-store
+alt request fails
+  client --> store : Error
+  store --> page : status = error
+  page --> actor : Alert "We couldn't load your dashboard" with Try again and Open requests
+else no open requests and no upcoming Confirmed bookings
+  client --> store : ArtistDashboard
+  store --> page : status = empty
+  page --> actor : Stats and "Your first request will land here" with Set your availability
+else data to show
+  client --> store : ArtistDashboard
+  store --> page : status = ready
+  page --> actor : Stats, Needs your reply, Coming up and Reviews in place of skeletons (L2-105)
+end
+@enduml

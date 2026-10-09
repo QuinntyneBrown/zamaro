@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "SetlistEditorPage" as page
+  participant "SetlistSongDialogComponent" as page
   participant "SetlistStore" as store
   participant "SetlistApi" as client
 end box
@@ -48,15 +48,15 @@ else valid
   alt 50 songs already
     action --> controller : Limit reached
     controller --> client : 422 "You can list up to 50 songs." (L2-053)
-    client --> page : Error shown at the form
+    client --> page : Limit state "You can list up to 50 songs."
   else under the limit
     action -> db : Insert at position count + 1; COMMIT
     action -> cache : Queue ArtistProfileUpdated listener (L2-089)
     action --> controller : SetlistSong
     controller --> client : 201 SetlistSongResource
     client --> store : Song
-    store --> page : Append to list; LiveAnnouncer reads "Added"
-    page --> actor : Song at the end of the setlist
+    store --> page : Close the dialog
+    page --> actor : Song at the end of the setlist; LiveAnnouncer reads "Added"
   end
 end
 @enduml

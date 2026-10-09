@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Manage the availability calendar
 
-Container(web, "Zamaro Web", "Angular", "ArtistCalendarPage, AvailabilityStore, AvailabilityApi")
+Container(web, "Zamaro Web", "Angular", "ArtistCalendarPage, BlockDatesDialogComponent, WeeklyDefaultDialogComponent, AvailabilityStore, AvailabilityApi")
 Container(worker, "Zamaro Worker", "Laravel queue workers", "Declined-request notifications, profile cache invalidation")
 Container_Boundary(api, "Zamaro API") {
   Component(calCtrl, "ArtistCalendarController", "Laravel controller", "GET /api/v1/artist/calendar")
@@ -30,6 +30,6 @@ Rel(weekly, db, "Replaces availability_rules", "SQL")
 Rel(dates, db, "Upserts availability_overrides", "SQL")
 Rel(dates, sm, "Declines open requests on confirmation")
 Rel(sm, db, "Updates bookings, inserts transitions", "SQL")
-Rel(dates, worker, "Dispatches BookingDeclined and ArtistAvailabilityChanged", "Redis queue")
+Rel(dates, worker, "Dispatches RequestDeclined and ArtistAvailabilityChanged", "Redis queue")
 Rel(weekly, worker, "Dispatches ArtistAvailabilityChanged", "Redis queue")
 @enduml

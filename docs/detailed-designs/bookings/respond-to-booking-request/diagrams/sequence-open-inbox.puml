@@ -33,12 +33,12 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Cache and queue" as cache
 end box
 
-actor -> page : Open /artist/requests
+actor -> page : Open /artist/requests (New tab)
 page -> store : load()
-store -> client : list()
-client -> controller : GET /api/v1/artist/requests
+store -> client : list(new)
+client -> controller : GET /api/v1/artist/requests?tab=new
 controller -> controller : Artist role, else 404 (L2-074)
-controller -> list : handle(artist, cursor)
+controller -> list : handle(artist, new, query, cursor)
 list -> db : Requested bookings of artist ORDER BY respond_by, id (L2-034)
 db --> list : Bookings with church snapshot and recipient message view
 loop each request
@@ -52,6 +52,8 @@ end
 list --> controller : Page of ArtistRequestResource
 controller --> client : 200 with next cursor
 client --> store : Requests
-store --> page : Render request cards
-page --> actor : Church, city, distance, date, kind, start time, message,\nquoted price, payout, time left; Accept states "You'll be paid ${payout} after the event." (L2-034)
+store --> page : Render request rows
+page --> actor : Church, city, distance, date, kind, start time, message preview,\nquoted price, payout and time left (L2-034)
+actor -> page : Open a row
+page --> actor : /artist/bookings/{number} with Accept and Decline;\nAccept states "You'll be paid ${payout} after the event." (L2-034)
 @enduml

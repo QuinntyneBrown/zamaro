@@ -6,7 +6,7 @@ title Containers — Pay out artists
 Person(artist, "Artist", "Approved worship artist")
 System_Ext(processor, "Payment processor", "Connected accounts and transfers")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "PayoutSetupPage and EarningsPage in /artist")
+  Container(web, "Zamaro Web", "Angular with SSR", "EarningsPage and payout setup on /artist/earnings")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Onboarding link and earnings endpoints")
   Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Creates and sends payouts")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, payouts, payments")

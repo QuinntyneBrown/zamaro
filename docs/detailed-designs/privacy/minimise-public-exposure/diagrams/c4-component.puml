@@ -3,14 +3,14 @@
 LAYOUT_WITH_LEGEND()
 title Components — Minimise public exposure
 
-Container(web, "Zamaro Web", "Angular SSR", "ArtistProfilePage, ReviewComponent, SeoService")
+Container(web, "Zamaro Web", "Angular SSR", "ArtistProfilePage, ReviewComponent, ProfileSeoService")
 Container_Boundary(api, "Zamaro API") {
   Component(routes, "routes/api_public.php", "Route group", "Every endpoint open to guests")
   Component(authmw, "auth:sanctum", "Middleware", "Guards every other route with 401")
   Component(profileCtrl, "ArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}")
   Component(reviewCtrl, "ArtistReviewsController", "Laravel controller", "GET /api/v1/artists/{slug}/reviews")
-  Component(artistRes, "PublicArtistResource", "API resource", "Base city only; no street, email, phone, coordinates")
-  Component(reviewRes, "PublicReviewResource", "API resource", "Reviewer name, church name, city, month and year")
+  Component(artistRes, "ArtistProfileResource", "API resource", "Base city only; no street, email, phone, coordinates")
+  Component(reviewRes, "ReviewResource", "API resource", "Reviewer name, church name, city, month and year")
   Component(lineupRes, "LineupResource", "API resource", "Search cards without contact data")
   Component(test, "PublicExposureTest", "Acceptance test", "Calls every public route as a guest over sentinel data")
   ComponentDb(db, "Zamaro database", "PostgreSQL 16", "Full records")

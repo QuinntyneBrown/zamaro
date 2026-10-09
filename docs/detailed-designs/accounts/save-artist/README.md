@@ -16,7 +16,7 @@ cards rendered by `discovery/search-available-artists` and on profiles.
 Terms used in this design:
 
 - **saved artist** — artist a booker has added to their shortlist, stored as one row per booker and artist
-- **Save toggle** — design-system button with `aria-pressed` that reads "Save" or "Saved"
+- **Save toggle** — design-system toggle with `aria-pressed`: the heart circle (`.save`) on ticket cards, named "Save {artist name} to your saved artists" or "Remove {artist name} from your saved artists", and the labelled button that reads "Save" or "Saved" on the profile
 - **Saved count** — number of saved artists shown as a badge on the header's Saved link
 - **optimistic update** — interface change applied before the server confirms it, reverted if the server refuses
 - **pending intent** — action a guest started before signing in, held in the browser and replayed after sign-in
@@ -42,12 +42,15 @@ already removed, leaves one consistent state and returns the current count.
   toast (L2-026).
 - **`SavedArtistsApi`** — typed client for `PUT /api/v1/saved-artists/{artistId}`,
   `DELETE /api/v1/saved-artists/{artistId}` and the ID list.
-- **`SavedCountBadgeComponent`** — the header's Saved link and count badge, with
-  `aria-label` "{n} saved artists".
+- **`SavedCountBadgeComponent`** — the header's Saved link and count badge
+  (`.badge--count`). The link reads "Saved {n} artists" to assistive technology: the
+  visible "Saved" and count plus a visually hidden "artists".
 - **`ToastService`** — shows "Saved {artist name}" with an Undo action that calls
-  `toggle` again, dismissing after 5 seconds; shows "You can save up to 200
-  artists." for the limit; and shows the error toast "Couldn't save {artist name}.
-  Try again.", which stays until dismissed (L2-109).
+  `toggle` again, dismissing after 5 seconds; "Removed {artist name}" with Undo after
+  an unsave; "Saved artists are private" once, on the booker's first save; "You can
+  save up to 200 artists." for the limit; and the error toast "Couldn't save {artist
+  name}. Try again." with a Try again action, which stays until dismissed (L2-109).
+  A save never queues while offline: it fails and reverts like any other error.
 - **`PendingIntentService`** — stores `{ kind: 'save-artist', artistId, returnUrl }`
   in `sessionStorage` when a guest activates Save, then routes to
   `/sign-in?returnUrl=…`. After sign-in or registration, `AuthService` asks it to
@@ -74,6 +77,17 @@ already removed, leaves one consistent state and returns the current count.
 - `saved_artists` — `user_id`, `artist_id`, `created_at`, with a unique index on
   `(user_id, artist_id)` and an index on `(user_id, created_at DESC)` for the list
   page.
+
+**Mock screens** — the toasts are
+[`notifications/saved-toast`](../../../mocks/notifications/saved-toast/success.html) in
+states [`success`](../../../mocks/notifications/saved-toast/success.html) (Saved, with
+Undo), [`with-action`](../../../mocks/notifications/saved-toast/with-action.html)
+(Removed, with Undo), [`info`](../../../mocks/notifications/saved-toast/info.html)
+(first save), [`warning`](../../../mocks/notifications/saved-toast/warning.html) (200
+limit) and [`danger`](../../../mocks/notifications/saved-toast/danger.html) (failed).
+The toggle and header count appear on
+[`pages/discover`](../../../mocks/pages/discover/default.html) and
+[`pages/artist`](../../../mocks/pages/artist/default.html).
 
 Saving does not require a verified email; only booking requests do
 (`accounts/register-booker`). `PendingIntentService` holds one intent at a time, and

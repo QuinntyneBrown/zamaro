@@ -19,7 +19,7 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "BookingDetailPage" as page
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
-  participant "BookingRequestController" as controller
+  participant "BookingsController" as controller
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
   participant "SendBookingEmails" as listener
@@ -30,7 +30,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "Email delivery service" as email
 end box
 
-controller -> controller : Booking created (L2-028); dispatch BookingRequested after commit
+controller -> controller : SendBookingRequest creates the booking (L2-028); BookingRequested dispatched after commit
 controller -> listener : BookingRequested (queued)
 listener -> db : Insert EmailMessage(Queued) for the artist
 listener -> notif : notify(artist) on notifications queue

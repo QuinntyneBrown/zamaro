@@ -39,13 +39,14 @@ state and the query string, and sort and filter handling in the search endpoint.
 
 **Frontend (Zamaro Web, `features/discover`)**
 
-- **`SortControlComponent`** — radio group labelled "Sort" with the options Closest
-  first, Highest rated and Price, low to high. It emits a `SearchSort` value and
-  never touches the other inputs.
+- **`SortControlComponent`** — select labelled "Sort" in the lineup heading, with the
+  options Closest first, Highest rated and Price, low to high. It emits a `SearchSort`
+  value and never touches the other inputs.
 - **`StyleFilterComponent`** — row of `ChipComponent` toggles from the design system
   for Band, Solo vocalist, Gospel choir, Acoustic, Hymns, Spanish and Under $800. Each
-  chip exposes its pressed state through `aria-pressed`. At XS the row scrolls
-  horizontally inside its own container (L2-097).
+  chip exposes its pressed state through `aria-pressed`. The row wraps onto as many
+  lines as it needs, so at XS every chip stays visible without page-level horizontal
+  scroll (L2-097).
 - **`SummaryLineComponent`** — renders the summary line from the store, using
   `FormatService` for the short date. After each search it sends the line to the CDK
   `LiveAnnouncer` in polite mode, so the changed count is announced (L2-008, L2-102).
@@ -80,7 +81,9 @@ state and the query string, and sort and filter handling in the search endpoint.
   pre-filter, through an `EXISTS` on `artist_styles` for any selected style and
   `artists.from_price_cents < 80000` for the price chip. Filtering before distance
   measurement keeps routing calls to the artists that can appear.
-- **`LineupSorter`** — orders the measured, travel-matched cards (L2-007).
+- **`LineupSorter`** — orders the measured, travel-matched tickets (L2-007). The
+  headliner (L2-006) is picked first from the filtered results and is not sorted: it
+  stays "No. 01" whatever the sort, and the tickets are numbered from "No. 02".
   `Closest` orders by distance ascending, rating descending, then artist ID ascending.
   `HighestRated` orders by average rating descending, review count descending, then
   distance ascending, with unreviewed artists last. `PriceLowToHigh` orders by "From"
@@ -92,6 +95,16 @@ state and the query string, and sort and filter handling in the search endpoint.
   last card returned, so the next page continues the same order.
 - **`LineupResource`** (extended) — echoes the applied sort order and filter set beside
   the filtered `total`.
+
+**Mocks**
+
+- [Discover · default](../../../mocks/pages/discover/default.html) — the summary line
+  "Sat 14 Nov · 7 free · within 120 km", the Sort select on Closest first, and the six
+  style chips and the Under $800 price chip, none pressed.
+- [Discover · empty](../../../mocks/pages/discover/empty.html) — Gospel choir pressed,
+  with a summary line counting 0 free.
+- [Discover · loading](../../../mocks/pages/discover/loading.html) — chips disabled
+  while the lineup loads.
 
 **Data**
 
@@ -106,7 +119,7 @@ level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-007` | `L1-002` | **Sorting results.** Results are sortable by Closest first (default), Highest rated and Price, low to high.<br>Acceptance criteria:<br>1. Given Closest first, when results are returned, then they are ordered by distance ascending, then rating descending, then artist ID ascending.<br>2. Given Highest rated, when results are returned, then they are ordered by average rating descending, then review count descending, then distance ascending; artists with no reviews come last.<br>3. Given Price, low to high, when results are returned, then they are ordered by "From" price ascending, then distance ascending.<br>4. Given the sort changes, when the new order is shown, then the search does not reset date, location, radius or filters. |
+| `L2-007` | `L1-002` | **Sorting results.** Results are sortable by Closest first (default), Highest rated and Price, low to high. The sort orders the ticket cards below the headliner; the headliner (L2-006) stays first whatever the sort.<br>Acceptance criteria:<br>1. Given Closest first, when results are returned, then the tickets are ordered by distance ascending, then rating descending, then artist ID ascending.<br>2. Given Highest rated, when results are returned, then the tickets are ordered by average rating descending, then review count descending, then distance ascending; artists with no reviews come last.<br>3. Given Price, low to high, when results are returned, then the tickets are ordered by "From" price ascending, then distance ascending.<br>4. Given the sort changes, when the new order is shown, then the search does not reset date, location, radius or filters.<br>5. Given the sort changes from Closest first to Price, low to high, when the new order is shown, then the headliner is unchanged and the tickets are re-ordered and re-numbered from "No. 02". |
 | `L2-008` | `L1-002` | **Filtering results.** Style chips filter results: Band, Solo vocalist, Gospel choir, Acoustic, Hymns, Spanish, and the price chip Under $800.<br>Acceptance criteria:<br>1. Given the Band and Gospel choir chips are selected, when results are returned, then they contain artists tagged Band or Gospel choir (any selected style matches).<br>2. Given Under $800 and Hymns are selected, when results are returned, then they contain only artists tagged Hymns whose "From" price is below $800.<br>3. Given filters are applied, when results are returned, then the summary line reads "{short date} · {n} free · within {radius} km" with n counting only filtered results.<br>4. Given a chip is toggled, when it is activated, then its pressed state is exposed with `aria-pressed` and the result count change is announced to assistive technology. |
 | `L2-009` | `L1-002` | **Search state in the URL.** The search date, gathering kind, location, radius, sort and filters are kept in the URL query string.<br>Acceptance criteria:<br>1. Given a completed search, when the booker copies the URL into a new browser, then the same inputs, sort, filters and results are restored.<br>2. Given a booker opens an artist profile from results, when they use the browser Back button, then Discover restores the same results and scroll position.<br>3. Given a URL with an invalid parameter (for example `radius=999`), when it loads, then that parameter falls back to its default and the remaining parameters still apply.<br>4. Given a guest's URL, when it is shared, then it never contains a street address; a church location is encoded as rounded coordinates (3 decimal places) plus a city label. |
 

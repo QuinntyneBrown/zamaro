@@ -21,6 +21,7 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "ArtistApplicationsApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "VerifyBotChallenge" as mw
   participant "ArtistApplicationsController" as controller
   participant "SubmitArtistApplicationRequest" as req
 end box
@@ -39,20 +40,26 @@ box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
   participant "SendApplicationReceivedEmail" as listener
 end box
 
-actor -> page : Activate "Submit application"
+actor -> page : Activate "Send application"
 page -> page : Client checks: required fields, 1–4 styles, bio 100–1,500, video, 2 references
 page -> store : submit(form)
 store -> store : Disable submit, show busy state (L2-108)
 store -> client : submit(body)
-client -> controller : POST /api/v1/artist-applications
+client -> mw : POST /api/v1/artist-applications with Idempotency-Key
+mw -> bot : Verify challengeToken (L2-077)
+bot --> mw : Pass
+mw -> controller : Pass the request
 controller -> req : Validate fields and references (L2-047, L2-075)
-req -> bot : Verify challenge token (L2-077)
-bot --> req : Pass
 alt a reference email equals the applicant email
   req --> controller : 422 references.*.email
   controller --> client : Problem details "References must be someone other than you." (L2-047)
 else fields valid
-  controller -> action : handle(ApplicationData, user)
+  controller -> action : handle(ApplicationData, user, idempotencyKey)
+  action -> db : Find application with this idempotency key (L2-047)
+  alt key already stored
+    action --> controller : The original ArtistApplication
+    controller --> client : 200 ArtistApplicationResource, no new application
+  else new key
   action -> db : Find Submitted application with same email (L2-047)
   alt pending application exists
     action --> controller : DuplicateApplication
@@ -79,6 +86,7 @@ else fields valid
       end
     end
   end
+  end
 end
 client --> store : Result or problem details
 alt submitted
@@ -86,7 +94,7 @@ alt submitted
   page --> actor : Confirmation state, focus on heading
 else rejected
   store --> page : Field errors, every value kept (L2-108)
-  page --> actor : Inline errors, focus first invalid field
+  page --> actor : Step with the first invalid field, error summary focused, inline errors
 end
 queue -> listener : ArtistApplicationSubmitted
 listener -> listener : Send ApplicationReceivedNotification within 2 minutes (L2-063)

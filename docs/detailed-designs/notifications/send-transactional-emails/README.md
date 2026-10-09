@@ -36,18 +36,23 @@ The slice runs from domain events raised in the Zamaro API and Worker, through t
 | Domain event | Notification | Recipients |
 |--------------|--------------|------------|
 | `BookingRequested` | `BookingRequestedNotification` | Artist |
-| `BookingAccepted` | `BookingAcceptedNotification`, with deposit link and deadline | Booker |
-| `BookingDeclined` | `BookingDeclinedNotification` | Booker |
-| `BookingExpired` | `BookingExpiredNotification` | Booker and artist |
+| `RequestAccepted` | `RequestAcceptedNotification`, with deposit link and deadline | Booker |
+| `RequestDeclined` | `RequestDeclinedNotification` | Booker |
+| `RequestWithdrawn` | `RequestWithdrawnNotification` | Artist |
+| `RequestExpired` | `RequestExpiredNotification` | Booker and artist |
 | `BookingConfirmed` | `BookingConfirmedNotification` | Booker and artist |
 | `BalanceCharged` | `BalanceChargedNotification` | Booker |
 | `PayoutSent` | `PayoutSentNotification` | Artist |
 | `BookingCancelled` | `BookingCancelledNotification` | Booker and artist |
-| `UnreadMessagesDue` | `UnreadMessagesNotification` | Other party (L2-045) |
+| `BookingMessageSent`, through the digest of `bookings/exchange-booking-messages` | `NewBookingMessagesNotification` | Other party (L2-045) |
 | `ApplicationSubmitted`, `ApplicationApproved`, `ApplicationRejected` | `ApplicationStatusNotification` | Applicant |
 
-The 15-minute digest window for messages belongs to the booking messages slice
-(L2-045), which raises `UnreadMessagesDue` at most once per window. The extra
+The domain event names are those of `bookings/run-booking-lifecycle`. `RequestDeclined`
+covers both an artist's decline and the automatic decline of competing requests
+(L2-032), and `RequestExpired` covers both an unanswered request and an unpaid deposit
+(L2-030, L2-037). The 15-minute digest window for messages belongs to the booking
+messages slice (L2-045): its `SendUnreadMessagesDigest` job sends
+`NewBookingMessagesNotification` at most once per window per booking and recipient. The extra
 content required by other requirements is supplied by the raising slice. Examples
 are the decline reason and similar artists (L2-030) and the cancellation policy line
 (L2-044).
@@ -108,10 +113,23 @@ Other slices add notifications on the same base class: `ReceiptNotification`
 - **`UndeliverableEmailBannerComponent`** — design-system alert banner in the
   signed-in app shell. It reads `AuthService.currentUser()` and, when
   `emailUndeliverable` is true, asks the user to update the address with a link to
-  `/account/settings` (L2-065). Banner wording `<TO SUPPLY>`.
+  `/account#email` (L2-065). It is persistent, with no close button, and reads
+  "We can’t reach your email. Messages to {email} are bouncing, so you’ll miss booking
+  and payment updates." with the action "Update your email".
 
 The email delivery service vendor is `<TO SUPPLY>`. Its adapter sits behind Laravel's
 mail transport, so templates and notifications do not depend on the vendor.
+
+**Mock screens** — emails themselves are not mocked. While a party is signed in, the
+same events surface as in-app toasts:
+[`notifications/booking-toast`](../../../mocks/notifications/booking-toast/info.html)
+for the booker (request sent, request accepted with the deposit deadline, deposit
+failed, deposit due) and
+[`notifications/request-toast`](../../../mocks/notifications/request-toast/info.html)
+for the artist (new request, reply-by reminder, request accepted, deposit paid). The
+deposit-due and reply-by reminders are in-app toasts only; neither has an email. The
+undeliverable-address banner is
+[`notifications/system-banner/undeliverable`](../../../mocks/notifications/system-banner/undeliverable.html).
 
 **Data**
 
@@ -128,7 +146,7 @@ level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
 
 | L2 ID | Refines (L1) | Requirement |
 |-------|--------------|-------------|
-| `L2-063` | `L1-014` | **Email notifications.**<br>Acceptance criteria:<br>1. Given each of these events, when it occurs, then the listed party is emailed within 2 minutes: request created (artist), request accepted (booker, with deposit link and deadline), request declined (booker), request expired (both), deposit paid and booking confirmed (both), balance charged (booker), payout sent (artist), booking cancelled (both), new messages (other party, L2-045), application received, approved or rejected (applicant).<br>2. Given each email, when it is sent, then it contains the booking number where relevant, a link to the booking, plain-text and HTML parts, and no payment card details. |
+| `L2-063` | `L1-014` | **Email notifications.**<br>Acceptance criteria:<br>1. Given each of these events, when it occurs, then the listed party is emailed within 2 minutes: request created (artist), request accepted (booker, with deposit link and deadline), request declined (booker), request withdrawn (artist), request expired (both), deposit paid and booking confirmed (both), balance charged (booker), payout sent (artist), booking cancelled (both), new messages (other party, L2-045), application received, approved or rejected (applicant).<br>2. Given each email, when it is sent, then it contains the booking number where relevant, a link to the booking, plain-text and HTML parts, and no payment card details. |
 | `L2-065` | `L1-014` | **Email delivery and preferences.**<br>Acceptance criteria:<br>1. Given the sending domain, when its DNS is checked, then SPF, DKIM and DMARC (policy quarantine or reject) are configured.<br>2. Given a transient send failure, when the email job runs, then it retries with exponential backoff up to 5 times before being marked failed and alerted.<br>3. Given a user opens notification settings, when they turn off reminder or review-prompt emails, then those stop; transactional emails about bookings and payments cannot be turned off.<br>4. Given a hard bounce, when it is reported, then the address is marked undeliverable and the user sees a banner asking them to update it. |
 
 ## Diagrams

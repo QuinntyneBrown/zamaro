@@ -10,7 +10,7 @@ Container_Boundary(api, "Zamaro API") {
   Component(report, "ReportReview", "Action", "One report per user per review")
   Component(mctrl, "Admin\\ReviewModerationController", "Laravel controller", "index, hide, dismiss under /api/v1/admin")
   Component(hide, "HideReview", "Action", "Hides with reason, resolves reports")
-  Component(dismiss, "DismissReviewReport", "Action", "Closes a report, review stays visible")
+  Component(dismiss, "DismissReviewReports", "Action", "Closes the review's open reports, review stays visible")
   Component(audit, "RecordAuditEntry", "Action", "Appends an audit entry")
 }
 Container_Boundary(worker, "Zamaro Worker") {

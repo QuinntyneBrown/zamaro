@@ -50,8 +50,9 @@ controller -> action : handle(SearchCriteria)
 action -> db : Candidates with any selected style AND from_price_cents < 80000 (L2-008)
 db --> action : Filtered candidates
 action -> action : Availability, distance and travel match as in search
-action -> sorter : sort(cards, Closest)
-sorter --> action : Distance asc, rating desc, artist ID asc (L2-007)
+action -> action : Pick headliner among filtered results as in search (L2-006)
+action -> sorter : sort(tickets, Closest)
+sorter --> action : Distance asc, rating desc, artist ID asc;\nheadliner stays No. 01 (L2-007)
 action --> controller : Lineup with filtered total
 controller --> client : 200 LineupResource
 client --> store : Lineup

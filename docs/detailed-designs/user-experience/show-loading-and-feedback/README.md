@@ -7,7 +7,8 @@ Zamaro to say clearly what is happening while content loads and when something f
 and never to lose what a person entered. This feature is the shared feedback layer
 that every page uses for those moments: skeleton placeholders while content loads,
 busy submit buttons that cannot send twice, retries that never create a second
-booking or charge, and short-lived toasts that confirm an action.
+booking or charge, short-lived toasts that confirm an action, and a clear notice when
+the connection is lost.
 
 The slice is cross-cutting and supplies building blocks to page features. The search
 and profile pages use the skeletons (`discovery/search-available-artists` for the
@@ -23,7 +24,7 @@ Terms used in this design:
 - **loading threshold** — 300 ms wait before a skeleton appears, so fast responses show no placeholder at all
 - **busy region** — page region with `aria-busy="true"` while its content loads
 - **Cumulative Layout Shift (CLS)** — Core Web Vitals score that sums unexpected movement of visible content
-- **busy state** — state of a submit button while its request is pending: disabled, `aria-busy="true"` and showing a spinner after a progress label
+- **busy state** — state of a submit button while its request is pending: `aria-busy="true"` and `aria-disabled="true"` (never native `disabled`, so focus stays on the button), ignoring further presses and showing a spinner after a progress label
 - **logical submission** — one intent to submit a form, which may span several HTTP attempts after network failures
 - **idempotency key** — random identifier sent with every attempt of one logical submission so that the server performs the operation at most once
 - **toast** — small, temporary message in a corner of the screen that confirms an action or reports a failed background action
@@ -45,7 +46,7 @@ second charge.
 - **`BusyRegionDirective` (`zBusyRegion`)** — binds `aria-busy="true"` on the host
   while the delayed flag is set and swaps in the region's skeleton template. One
   visually hidden status line names what is loading, for example "Finding who's free on
-  Saturday 14 November…"; after 8 s it changes to "Still checking — thanks for
+  Saturday 14 November 2026…"; after 8 s it changes to "Still checking — thanks for
   waiting.", following the design system's feedback pattern.
 - **Skeleton components** — `TicketCardSkeletonComponent`,
   `HeadlinerSkeletonComponent`, `ProfileHeaderSkeletonComponent` and
@@ -61,7 +62,8 @@ second charge.
 **Frontend — safe submission**
 
 - **`SubmitButtonComponent`** — design-system primary button with `busy` and
-  `busyLabel` inputs. While busy it sets `disabled` and `aria-busy="true"`, replaces
+  `busyLabel` inputs. While busy it sets `aria-busy="true"` and `aria-disabled="true"`
+  (not native `disabled`, which would drop focus), ignores further presses, replaces
   the label with the busy label (for example "Sending request…") and shows a spinner
   after it (L2-108).
 - **`FormSubmitter<T>`** — helper that each form page owns. It pipes submit events
@@ -82,9 +84,8 @@ second charge.
   `pause(id)` and `resume(id)`. A success toast starts a 5-second timer that pauses
   while the toast is hovered or holds focus and resumes with the remaining time. A
   danger toast has no timer and stays until dismissed (L2-109). Each toast's text goes
-  to `AnnouncerService` (L2-102). Timing for info and warning toasts is
-  `<TO SUPPLY>`; the design system suggests at least 8 seconds, while L2-109 sets
-  5 seconds for success.
+  to `AnnouncerService` (L2-102). Info and warning toasts, and toasts with an action
+  such as Undo, use the same 5-second timer as success toasts (L2-109).
 - **`ToastRegionComponent`** — fixed region in `AppShellComponent` at
   `--z-toast`. It shows at most 3 toasts, newest at the top (L2-109). A fourth toast
   moves the oldest visible one to a queue; a queued toast's timer is paused and it
@@ -92,6 +93,53 @@ second charge.
 - **`ToastComponent`** — design-system toast with accent stripe, icon, title, optional
   body, optional action (for example Undo) and a close button named
   "Dismiss: {title}".
+
+**Frontend — banners and connection loss**
+
+- **`SystemBannerComponent`** — design-system banner directly under the top bar, one
+  at a time, in the info, success, warning and danger tones. A dismissible banner
+  hides for the session; a persistent one has no close button. Its owners raise it:
+  the planned-maintenance notice (info, from 48 hours before the window), "Verify your
+  email" (persistent, `accounts/register-booker`), "Email verified" (success, once),
+  and the undeliverable-address notice (persistent,
+  `notifications/send-transactional-emails`).
+- **`ConnectivityService`** — watches the browser's `online` and `offline` events and
+  failed requests with no response. While offline it raises the danger banner
+  "You're offline" with `role="alert"`: saving artists and sending requests need a
+  connection, and nothing is queued, so a save tried meanwhile reverts with its error
+  toast (L2-026, L2-114). The banner clears itself when the connection returns
+  (L2-114).
+- **`OfflinePage`** — route `/offline`, the navigation fallback of the Angular service
+  worker when a page is opened without a connection. It shows the persistent
+  "You're offline" banner, "No signal" and Try again (L2-114). The service worker
+  caches only the app shell and static assets, never an API response, so nothing
+  personal is kept on the device (L2-089, L2-114); Try again reopens the page that
+  was asked for. Draft values stay on the page that was left (L2-108).
+
+**Mocks**
+
+- Loading: [`discover/loading`](../../../mocks/pages/discover/loading.html),
+  [`artist/loading`](../../../mocks/pages/artist/loading.html) and the `loading` state of
+  every list and detail page, for example [`bookings/loading`](../../../mocks/pages/bookings/loading.html)
+  and [`booking-detail/loading`](../../../mocks/pages/booking-detail/loading.html): skeletons
+  shaped like the final layout, `aria-busy="true"` and a status line (L2-105).
+- Busy submit: [`book/submitting`](../../../mocks/pages/book/submitting.html),
+  [`sign-in/submitting`](../../../mocks/pages/sign-in/submitting.html) and the `busy` state of
+  every dialog, for example [`pay-deposit/busy`](../../../mocks/dialogs/pay-deposit/busy.html);
+  failed states such as [`book/error`](../../../mocks/pages/book/error.html) keep every value (L2-108).
+- Toasts: [`saved-toast`](../../../mocks/notifications/saved-toast/success.html),
+  [`booking-toast`](../../../mocks/notifications/booking-toast/success.html) with its
+  [`stacked`](../../../mocks/notifications/booking-toast/stacked.html) state,
+  [`request-toast`](../../../mocks/notifications/request-toast/success.html) and
+  [`availability-toast`](../../../mocks/notifications/availability-toast/success.html) (L2-109).
+- Banners and connection loss: [`system-banner`](../../../mocks/notifications/system-banner/info.html)
+  in states info (maintenance), success, warning, danger (offline), persistent and
+  undeliverable, and [`pages/offline`](../../../mocks/pages/offline/default.html).
+- Design system: [Skeleton](../../../design-system/components/skeleton.html),
+  [Toast](../../../design-system/components/toast.html),
+  [Button](../../../design-system/components/button.html) (busy state) and the
+  [Feedback & loading](../../../design-system/patterns/feedback-and-loading.html) and
+  [Notifications](../../../design-system/patterns/notifications.html) patterns.
 
 **Backend (Zamaro API)**
 
@@ -123,7 +171,8 @@ This feature realises the following level-2 (L2) requirements.
 |-------|--------------|-------------|
 | `L2-105` | `L1-023` | **Loading states.**<br>Acceptance criteria:<br>1. Given a search or profile load takes longer than 300 ms, when it is waiting, then skeleton placeholders matching the final layout are shown and the region has `aria-busy="true"`.<br>2. Given loading finishes, when content replaces the skeletons, then Cumulative Layout Shift from the swap is 0.05 or less. |
 | `L2-108` | `L1-023` | **Form submission safety.**<br>Acceptance criteria:<br>1. Given any form is submitted, when the request is pending, then the submit button shows a busy state, is disabled, and a second submission is not sent.<br>2. Given a booking request or payment submission, when it is retried after a network failure, then the same idempotency key is sent and at most one booking or charge results.<br>3. Given a submission fails, when the error renders, then every value entered is kept, except card details held by the processor's fields. |
-| `L2-109` | `L1-023` | **Toasts.**<br>Acceptance criteria:<br>1. Given a success toast, when it appears, then it dismisses after 5 seconds, pausing while hovered or focused.<br>2. Given an error toast, when it appears, then it stays until dismissed.<br>3. Given several toasts, when they appear together, then at most 3 are visible and they stack newest first. |
+| `L2-109` | `L1-023` | **Toasts.**<br>Acceptance criteria:<br>1. Given a success toast, when it appears, then it dismisses after 5 seconds, pausing while hovered or focused.<br>2. Given an error toast, when it appears, then it stays until dismissed.<br>3. Given several toasts, when they appear together, then at most 3 are visible and they stack newest first.<br>4. Given an info or warning toast, or a toast with an action such as Undo, when it appears, then it dismisses after 5 seconds like a success toast, pausing while hovered or focused. The one exception is the idle-session warning of L2-066, which stays until the person acts or the session ends. |
+| `L2-114` | `L1-023` | **Working offline.** Zamaro tells people when their connection is lost and never stores personal data on the device to cover for it. Actions that need the server are not queued for later.<br>Acceptance criteria:<br>1. Given a person opens or navigates to a page without a connection, when the page cannot be loaded, then the offline page is shown with the persistent "You're offline" banner, the heading "No signal", the text "We can't reach Zamaro right now. Check your connection and try again." and a Try again button.<br>2. Given the offline page, when Try again is activated and the connection is back, then the page that was asked for opens.<br>3. Given a page is open, when the connection drops, then a danger banner under the top bar reads "You're offline" with "You can keep reading what's loaded. Saving artists and sending requests need a connection.", is announced to assistive technology, and clears itself when the connection returns.<br>4. Given the service worker caches files for offline use, when it stores them, then only the app shell and static assets are stored; no API response and no personal data is kept on the device (L2-089).<br>5. Given a person saves an artist or submits a form while offline, when the request fails, then nothing is queued to send later: the save toggle reverts with the error toast of L2-026, and a form keeps every value entered (L2-108). |
 
 ## Diagrams
 

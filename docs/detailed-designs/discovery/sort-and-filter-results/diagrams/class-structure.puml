@@ -99,6 +99,7 @@ package "Zamaro API (Laravel)" {
     -priceLowToHigh(a: LineupCard, b: LineupCard): int
   }
   class Lineup <<value object>> {
+    +?LineupCard headliner
     +LineupCard[] cards
     +int total
     +SearchSort sort

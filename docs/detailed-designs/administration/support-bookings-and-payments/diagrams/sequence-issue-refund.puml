@@ -43,7 +43,7 @@ alt amount greater than refundable
   action -> db : ROLLBACK
   action --> ctrl : RefundExceedsRefundable
   ctrl --> client : 422 errors.amountCents (L2-068)
-  client --> dialog : Inline error "Up to {refundable amount}"
+  client --> dialog : Inline error "That’s more than is refundable. Enter {refundable amount} or less."
 else within refundable
   action -> db : INSERT refund Pending with idempotency key; COMMIT (L2-041)
   action -> gateway : refund(payment, amountCents, key)

@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker or artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "SecurityPage" as page
+  participant "MfaEnrolmentPage" as page
   participant "AuthApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -32,7 +32,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> page : Open /account/security, activate Turn on two-step sign-in
+actor -> page : Activate Turn on two-step sign-in in Account settings, opening /account/security/mfa
 page -> client : beginTwoFactor()
 client -> controller : POST /api/v1/account/two-factor
 controller -> enable : handle(user)

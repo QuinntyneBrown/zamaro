@@ -45,16 +45,24 @@ repository.
 
 **Frontend (Zamaro Web)**
 
-- **`ChurchProfileFormComponent`** — form on `/account/*` for church name, address,
-  contact phone, denomination and typical attendance (L2-024). It submits through
-  `AccountApi`.
-- **`AccountApi`** — typed client for `GET` and `PUT /api/v1/account/church`.
+- **`ChurchFormComponent`** — church form owned by `accounts/manage-church-profile`,
+  in the Church section of account settings (`/account#church`) and the first-request
+  dialog, for church name, address, contact phone, denomination and typical
+  attendance (L2-024). It submits through `ChurchApi`.
+- **`ChurchApi`** — typed client for `GET` and `PUT /api/v1/account/church`.
 - **`ErrorTrackingService`** — reports frontend exceptions to the error tracking
   service (L2-093). Its `beforeSend` hook applies the same redaction key list as the
   backend, and it never attaches form values or request bodies.
 - **Build rule** — the Angular build embeds only public configuration such as the
   error tracking public key and the bot challenge site key. Server secrets are not
   available to the frontend build.
+
+**Mock screens** — the encrypted phone numbers are entered in the Church section of
+[`pages/account`](../../../mocks/pages/account/default.html), in
+[`dialogs/add-church`](../../../mocks/dialogs/add-church/default.html) before a first
+request, and, for an artist's private contact phone, in the Contact section of
+[`pages/account/artist`](../../../mocks/pages/account/artist.html). This slice adds no
+screens of its own.
 
 **Backend (Zamaro API and Zamaro Worker)**
 
@@ -76,13 +84,13 @@ repository.
   is `<TO SUPPLY>`.
 - **`App\Casts\EncryptedField`** — Eloquent cast that calls `FieldEncrypter` on write
   and read. It applies to `churches.phone`, `application_references.phone`,
-  `application_references.email` and the artist contact phone and email shown after
-  confirmation (L2-046). These columns are `text` and are never used in `WHERE`
-  clauses.
+  `application_references.email` and `artists.contact_phone`, the private phone an
+  artist saves in account settings and the booker sees once a booking is Confirmed
+  (L2-025, L2-046). These columns are `text` and are never used in `WHERE` clauses.
 - **`FieldEncrypter::encryptStream`** — encrypts VSC documents before
   `PromoteUpload` writes them to object storage (`security/scan-and-serve-uploads`).
-- **`UpdateChurchRequest`**, **`ChurchController::update`** and
-  **`App\Actions\Account\UpdateChurch`** — validate the phone as a North American
+- **`SaveChurchRequest`**, **`ChurchController::update`** and
+  **`App\Actions\Account\SaveChurch`** — validate the phone as a North American
   number (L2-024) and save the `Church`; the cast encrypts the phone.
 - **`App\Http\Middleware\LogRequest`** — writes one structured JSON line per request
   with request ID, method, route name, status, duration and user ID (L2-093). It never

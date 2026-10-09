@@ -16,7 +16,8 @@ side's contact details directly.
 
 This feature covers the thread on the booker's booking page (`/bookings/:number`,
 from `bookings/view-booker-bookings`) and on the artist's booking page
-(`/artist/bookings/:number`), the email digest that tells the other party about
+(`/artist/bookings/:number`), both reachable at the thread through the `#messages`
+fragment, the email digest that tells the other party about
 unread messages, the contact-detail rule, and an administrator's read-only view.
 The administrator booking page itself belongs to
 `administration/support-bookings-and-payments`; the audit log belongs to
@@ -46,11 +47,14 @@ sent by the Zamaro Worker.
   name, en-CA timestamp (L2-110) and text as plain text with preserved line breaks.
   Text goes through Angular interpolation only, never `innerHTML` (L2-075). A
   `readOnly` input hides the composer; the administrator page sets it.
-- **`MessageComposerComponent`** — textarea with a live count against 2,000
-  characters and a Send button. Send shows a busy state and blocks a second
+- **`MessageComposerComponent`** — textarea limited to 2,000 characters and a
+  Send button. Send shows a busy state and blocks a second
   submission (L2-108). When the API reports that a message was redacted, the
-  composer shows a note to the sender explaining that contact details are shared
-  after the booking is confirmed; the note copy is `<TO SUPPLY>`.
+  sender's own copy of the message is followed by the note "{first name} sees
+  “[contact details shared after booking]” in place of your phone number until the
+  booking is confirmed." (for an email address, "your email address"). The composer's
+  help line reads "Plain text, 1 to 2,000 characters." and, on the booker's page,
+  "{first name} gets an email at most every 15 minutes." (L2-045, L2-046).
 - **`BookingContactsComponent`** — the contact card, rendered when the booking
   resource includes `contacts` (L2-046).
 - **`MessagesStore`** — signal-based store per booking holding the messages, the
@@ -88,9 +92,9 @@ sent by the Zamaro Worker.
   `PhoneNumberMatcher`, region CA) with "[contact details shared after booking]".
   Handling of obfuscated forms such as "name at example dot com" is `<TO SUPPLY>`.
 - **Recipient view** — `MessageResource` returns `body` to the sender and
-  `recipient_body` to the recipient. Redaction is fixed at send time. Whether
-  messages redacted before confirmation are revealed after confirmation is
-  `<TO SUPPLY>`.
+  `recipient_body` to the recipient. Redaction is fixed at send time: a message
+  redacted before confirmation stays redacted for the recipient afterwards, and
+  the contact card shows each side's details instead (L2-046).
 - **`ScheduleUnreadDigest`** — queued listener for `BookingMessageSent`. It reads the
   `message_digests` row for the booking and recipient:
   - no digest in the last 15 minutes → dispatches `SendUnreadMessagesDigest` now;
@@ -108,11 +112,29 @@ sent by the Zamaro Worker.
   `booking.messages.viewed`, the booking number as target, the actor, IP address and
   outcome (L2-045, L2-069). Whether the administrator sees original text, recipient
   views or both is `<TO SUPPLY>`.
-- **Contact card** — `BookingResource` includes `contacts` only while the booking is
-  Confirmed (L2-046): the church phone, decrypted from `churches.phone`, and the
-  artist's contact phone and account email. The source field for the artist's
-  contact phone is `<TO SUPPLY>`; no L2 requirement names one. Whether the card stays
-  visible after Completed is `<TO SUPPLY>`.
+- **Contact card** — `BookingResource` includes `contacts` once the booking is
+  Confirmed and while it is Confirmed or Completed (L2-046): the church phone, decrypted from `churches.phone`, and the
+  artist's contact phone, decrypted from `artists.contact_phone` (the private phone
+  the artist keeps in the Contact section of account settings, required before they
+  can accept a request; L2-025, L2-030), and account email. The card stays visible
+  after Completed, as both completed mocks show; a Cancelled booking drops it.
+
+**Mock screens** — the thread and composer appear on every state of
+[`pages/booking-detail`](../../../mocks/pages/booking-detail/default.html) that shows
+a booking (default, accepted, confirmed, declined, completed, withdrawn, cancelled,
+expired, deposit-expired, artist-cancelled, balance-due, held, balance-failed) and of [`pages/request-detail`](../../../mocks/pages/request-detail/default.html)
+(default, accepted, confirmed, declined, completed, expired, cancelled). The default
+and accepted states show redaction and the sender's note; the confirmed states show
+the contact card (booker: the artist's phone and email; artist: the church phone and
+address), and so do the completed states. A sent message is confirmed by the
+[info toast](../../../mocks/notifications/booking-toast/info.html) "Message sent to
+Abigail" (L2-109).
+The bookings list links its Message action to the thread of the matching booking
+page, for example
+[`pages/booking-detail/confirmed#messages`](../../../mocks/pages/booking-detail/confirmed.html).
+The administrator's read-only view is the Messages panel of
+[`pages/admin-booking`](../../../mocks/pages/admin-booking/default.html) (default and
+[`held`](../../../mocks/pages/admin-booking/held.html)), with no composer.
 
 **Data (Zamaro database)**
 

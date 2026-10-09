@@ -17,7 +17,7 @@ package "Zamaro Web (Angular)" {
   class ProfileAddressSectionComponent {
     +address: Signal<ProfileAddress | null>
     +slugControl: FormControl<string>
-    +onSave(): void
+    +save(): Observable<ProfileAddress>
   }
   class ProfileAddressApi {
     +get(): Observable<ProfileAddress>

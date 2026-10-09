@@ -40,15 +40,21 @@ sends prompt emails through the email delivery service.
 **Frontend (Zamaro Web, `features/bookings`)**
 
 - **`BookingDetailPage`** — routed page for `/bookings/:number`. When the booking
-  resource reports `review.canCreate` or `review.canEdit`, it shows the review panel
-  below the booking stub. The review prompt email links here with `#review`.
-- **`ReviewFormComponent`** — reactive form with a 1–5 star radio group (design
-  system `rating` in input mode) and a textarea with a live character count. It
-  enforces 20–1,000 characters on the client, marks invalid fields and moves focus
-  to the first one (L2-101). In edit mode it shows the date the review locks.
+  resource reports `review.canCreate` or `review.canEdit`, it shows "Leave a review"
+  or "Edit your review" in the payment stub, with the date the window closes. The
+  button opens `WriteReviewDialogComponent`. The review prompt email links here with
+  `#review`, which opens the dialog on load.
+- **`WriteReviewDialogComponent`** — CDK dialog with a reactive form: a 1–5 star
+  radio group (design-system radio group of `.choice--stub` options, each with
+  stars and a word from Unforgettable to Poor, since the `rating` component is
+  display-only) and a textarea with a live character count out of 1,000. It enforces 20–1,000 characters on the client, marks invalid
+  fields and moves focus to the first one (L2-101). In edit mode it is prefilled and
+  shows the date the review locks. It traps focus and returns it to the opening
+  button on close.
 - **`BookingReviewStore`** — signal-based store holding the current `Review`, the
-  eligibility flags and a status (`idle`, `saving`, `saved`, `error`). It disables
-  the submit button while saving (L2-108) and raises a toast on success (L2-109).
+  eligibility flags and a status (`idle`, `saving`, `saved`, `error`). While saving,
+  the submit button shows its busy state ("Posting…", or "Saving…" in edit mode)
+  and blocks a second submission (L2-108); on success it raises a toast (L2-109).
 - **`ReviewsApi`** — typed client for `POST /api/v1/bookings/{number}/review` and
   `PATCH /api/v1/reviews/{review}`.
 
@@ -96,7 +102,7 @@ sends prompt emails through the email delivery service.
 
 - `reviews` — `id`, `booking_id` (unique), `artist_id`, `booker_id`, `stars`
   (smallint, check 1–5), `text`, `created_at`, `edited_at`, `hidden_at`,
-  `hidden_reason`. The hidden columns belong to
+  `hidden_reason`, `hidden_by`. The hidden columns belong to
   `reviews/report-and-moderate-review`.
 - `bookings` — gains `review_prompted_at` and `review_reminded_at`. Completion time
   comes from the Completed row in `booking_transitions` (L2-029), written by
@@ -104,8 +110,16 @@ sends prompt emails through the email delivery service.
 - `notification_preferences` — read for the review-prompt opt-out (L2-065), owned by
   `notifications/manage-email-preferences`.
 
-Whether the 60-day review window counts from the event date or from the completion
-timestamp is read here as the event date; confirmation is `<TO SUPPLY>`.
+**Mock screens** — the dialog is
+[`dialogs/write-review`](../../../mocks/dialogs/write-review/default.html) in states
+default, busy, invalid, failed and [`edit`](../../../mocks/dialogs/write-review/edit.html)
+(Naomi's review of ZAM-0114, editable until Tue 24 Nov), shown over
+[`pages/booking-detail/completed`](../../../mocks/pages/booking-detail/completed.html).
+
+The 60-day review window counts from the event date, as L2-059 states ("within 60
+days of the event"). The booking page shows the closing date, for example "You can
+leave a review until Wed 13 Jan 2027, 60 days after the event" for ZAM-0114 on
+Sat 14 Nov.
 
 ## Requirements
 

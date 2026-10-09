@@ -30,7 +30,7 @@ box "Backend — Zamaro Application and Domain" #ECFDF3
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
   participant "PurgeArtistVisibility" as purge
-  participant "BookingDeclinedNotification" as notif
+  participant "RequestDeclinedNotification" as notif
 end box
 box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
@@ -63,7 +63,7 @@ else Approved
   action -> purge : ArtistSuspended
   purge -> cache : Forget profile, search and rating entries (L2-089)
   purge -> cdn : Purge /artists/{slug}
-  action -> notif : BookingDeclined for each declined request
+  action -> notif : RequestDeclined for each declined request
   notif -> notif : Email each booker (L2-063)
   action --> ctrl : SuspensionOutcome
   ctrl --> client : 201 SuspensionOutcomeResource

@@ -38,7 +38,7 @@ db --> action : Due bookings
 loop each due booking
   action -> sm : transition(Accepted -> Expired) only if still Accepted (L2-092)
   sm -> db : Conditional update, insert BookingTransition
-  action -> action : Dispatch BookingExpired to booker and artist (L2-037, L2-063)
+  action -> action : Dispatch RequestExpired to booker and artist (L2-037, L2-063)
 end
 action --> command : Count expired
 actor -> page : Open /bookings/{number}

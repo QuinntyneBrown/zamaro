@@ -1,0 +1,117 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — View the artist dashboard
+
+package "Zamaro Web (Angular)" {
+  class ArtistDashboardPage {
+    +store: ArtistDashboardStore
+    +greeting: Signal<string>
+    +ngOnInit(): void
+    +onRetry(): void
+  }
+  class DashboardStatsComponent {
+    +stats: input<DashboardStats>
+  }
+  class RequestRowComponent {
+    +request: input<ArtistRequest>
+  }
+  class ComingUpPanelComponent {
+    +dates: input<ConfirmedDate[]>
+    +laterCount: input<number>
+  }
+  class ReviewsSummaryPanelComponent {
+    +reviews: input<ReviewsSummary>
+  }
+  class ArtistsOnlyComponent {
+    +accountName: input<string>
+    +churchName: input<string>
+  }
+  class ArtistDashboardStore {
+    +dashboard: Signal<ArtistDashboard | null>
+    +status: Signal<'loading'|'ready'|'empty'|'error'>
+    +load(): void
+    +refreshOnFocus(): void
+  }
+  class ArtistDashboardApi {
+    +get(): Observable<ArtistDashboard>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistDashboardController {
+    +__invoke(request: Request): ArtistDashboardResource
+  }
+  class BuildArtistDashboard <<action>> {
+    +handle(artist: Artist, today: CarbonImmutable): ArtistDashboard
+  }
+  class ArtistDashboard <<value object>> {
+    +int awaitingReply
+    +?CarbonImmutable firstRespondBy
+    +Booking[] openRequests
+    +int confirmedThisAndNextMonth
+    +?CarbonImmutable nextConfirmedDate
+    +Booking[] comingUp
+    +int laterConfirmedCount
+    +CarbonImmutable[] freeSaturdaysNextMonth
+    +Completeness completeness
+    +?float rating
+    +int ratingChurches
+    +int unrepliedReviews
+  }
+  class Completeness <<value object>> {
+    +int percent
+    +string[] missingChecks
+  }
+  class ListArtistRequests <<action>> {
+    +handle(artist: Artist, tab: string, q: ?string, cursor: ?string): CursorPaginator
+  }
+  class BuildArtistCalendar <<action>> {
+    +handle(artist: Artist, from: CarbonImmutable, to: CarbonImmutable): CalendarDay[]
+  }
+  class ProfileCompleteness {
+    +score(artist: Artist): Completeness
+  }
+  class ArtistDashboardResource {
+    +toArray(request: Request): array
+  }
+  class ArtistRequestResource {
+    +toArray(request: Request): array
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventDate
+    +CarbonImmutable respondBy
+    +int quotedPriceCents
+  }
+}
+
+ArtistDashboardPage --> ArtistDashboardStore
+ArtistDashboardPage *-- DashboardStatsComponent
+ArtistDashboardPage *-- "0..*" RequestRowComponent
+ArtistDashboardPage *-- ComingUpPanelComponent
+ArtistDashboardPage *-- ReviewsSummaryPanelComponent
+ArtistDashboardStore --> ArtistDashboardApi
+ArtistDashboardApi ..> ArtistDashboardController : GET /api/v1/artist/dashboard
+ArtistDashboardController --> BuildArtistDashboard
+ArtistDashboardController ..> ArtistDashboardResource : returns
+BuildArtistDashboard ..> ArtistDashboard : creates
+BuildArtistDashboard --> ListArtistRequests
+BuildArtistDashboard --> BuildArtistCalendar
+BuildArtistDashboard --> ProfileCompleteness
+ProfileCompleteness ..> Completeness : creates
+ArtistDashboard *-- Completeness
+ArtistDashboard o-- "0..*" Booking
+ArtistDashboardResource *-- "0..*" ArtistRequestResource
+@enduml

@@ -3,10 +3,10 @@
 LAYOUT_WITH_LEGEND()
 title Components — Suspend and reinstate artists
 
-Container(web, "Zamaro Web", "Angular", "AdminApplicationPage, AdminArtistPage, SuspendArtistDialogComponent, BookingsToResolveComponent")
+Container(web, "Zamaro Web", "Angular", "ApplicationReviewPage, AdminArtistsPage, AdminArtistPage, SuspendArtistDialogComponent, ReinstateArtistDialogComponent, BookingsToResolveComponent")
 Container_Boundary(api, "Zamaro API") {
-  Component(apps, "Admin\\ApplicationsController", "Laravel controller", "Application detail and reference verification")
-  Component(docs, "Admin\\ApplicationDocumentsController", "Laravel controller", "Signed URL for the VSC document")
+  Component(apps, "AdminArtistApplicationsController", "Laravel controller", "Application detail; references via AdminApplicationReferencesController")
+  Component(docs, "DocumentLinksController", "Laravel controller", "GET /api/v1/vulnerable-sector-checks/{check}/document-link: 5-minute signed URL")
   Component(ctrl, "Admin\\ArtistSuspensionsController", "Laravel controller", "POST and DELETE /api/v1/admin/artists/{artist}/suspension")
   Component(suspend, "SuspendArtist", "Action", "Suspends, declines open requests, lists Confirmed bookings")
   Component(reinstate, "ReinstateArtist", "Action", "Returns the artist to Approved")
@@ -15,7 +15,7 @@ Container_Boundary(api, "Zamaro API") {
 }
 Container_Boundary(worker, "Zamaro Worker") {
   Component(purge, "PurgeArtistVisibility", "Queued listener", "Forgets profile, search and CDN entries")
-  Component(notif, "BookingDeclinedNotification", "Queued notification", "Emails each affected booker")
+  Component(notif, "RequestDeclinedNotification", "Queued notification", "Emails each affected booker")
 }
 ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artists, artist_suspensions, bookings, booking_transitions")
 ContainerDb(storage, "Object storage", "S3-compatible", "VSC documents")
@@ -35,5 +35,5 @@ Rel(suspend, audit, "Records artist.suspended")
 Rel(reinstate, audit, "Records artist.reinstated")
 Rel(suspend, purge, "Raises ArtistSuspended for")
 Rel(reinstate, purge, "Raises ArtistReinstated for")
-Rel(sm, notif, "Raises BookingDeclined for")
+Rel(sm, notif, "Raises RequestDeclined for")
 @enduml

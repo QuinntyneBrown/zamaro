@@ -58,6 +58,7 @@ package "Zamaro API (Laravel)" {
     +Pronoun pronoun
     +string actType
     +string headline
+    +?string aboutHeading
     +string bio
     +string baseCity
     +int maxDriveKm

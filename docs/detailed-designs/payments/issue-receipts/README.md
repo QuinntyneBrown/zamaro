@@ -32,15 +32,18 @@ Zamaro API.
 
 **Frontend (Zamaro Web, `features/bookings`)**
 
-- **`BookingDetailPage`** — routed page for `/bookings/:number`. Its payment history
-  lists each charge and refund. A "Download receipt" button appears once at least
-  one receipt exists (L2-040).
+- **`BookingDetailPage`** — routed page for `/bookings/:number`. Its payment panel
+  lists each charge and refund. A download button appears once at least one receipt
+  exists (L2-040). Its label follows the receipts on the booking: "Download receipt"
+  for one charge (a Confirmed booking with its deposit), "Download receipts" for
+  several (a Completed booking with deposit and balance), and "Download refund
+  receipt" after a cancellation refund.
 - **`ReceiptsApi`** — typed client. `list()` calls
   `GET /api/v1/bookings/{number}/receipts`. `pdf()` calls
-  `GET /api/v1/bookings/{number}/receipts/{receipt}/pdf` and returns a `Blob`, which
+  `GET /api/v1/bookings/{number}/receipts/{id}/pdf` and returns a `Blob`, which
   the page saves as `receipt-{receipt number}.pdf`.
 
-Activating "Download receipt" downloads one PDF per payment and refund on the
+Activating the button downloads one PDF per payment and refund on the
 booking (L2-040). The packaging when a booking has more than one receipt is
 `<TO SUPPLY>`: separate files in turn, or one combined PDF with a page per receipt.
 
@@ -80,6 +83,17 @@ unless whole dollars (L2-110). The receipt number format is `<TO SUPPLY>`.
 - `receipts` — `number` (unique), `booking_id`, `payment_id` (unique, nullable),
   `refund_id` (unique, nullable), `kind` (`Charge` or `Refund`), `amount_cents`,
   `lines` (JSON line snapshot), `card_brand`, `last4`, `business_number`, `issued_at`.
+
+**Mock screens** — the booking page shows the download button in states
+[confirmed](../../../mocks/pages/booking-detail/confirmed.html) ("Download receipt"),
+[completed](../../../mocks/pages/booking-detail/completed.html) ("Download receipts"),
+[cancelled](../../../mocks/pages/booking-detail/cancelled.html) and
+[artist-cancelled](../../../mocks/pages/booking-detail/artist-cancelled.html)
+("Download refund receipt"). The deposit-only states
+[balance-due](../../../mocks/pages/booking-detail/balance-due.html),
+[held](../../../mocks/pages/booking-detail/held.html) and
+[balance-failed](../../../mocks/pages/booking-detail/balance-failed.html) keep
+"Download receipt". Receipt emails and PDFs are not mocked.
 
 ## Requirements
 

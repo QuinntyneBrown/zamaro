@@ -33,17 +33,30 @@ party would leave the other side of a paid event without a contact (L2-082).
 
 **Frontend (Zamaro Web, `features/account`)**
 
-- **`DeleteAccountDialogComponent`** — design-system dialog opened from the privacy
-  section of `AccountSettingsPage`. It explains what is erased and what is kept,
-  asks for the current password, and has a destructive "Delete my account" button.
-  Focus is trapped while open and returns to the trigger when closed (L2-101).
-- **`DeletionBlockedComponent`** — content shown in the dialog when the API reports
-  future Confirmed bookings. It lists each booking number and date with a link to
-  `/bookings/:number`, and asks the person to cancel or complete them first
-  (L2-082).
+- **`DeleteAccountDialogComponent`** — CDK dialog opened from the Delete account
+  section (`#delete`) of `AccountSettingsPage`. It explains what is erased and what
+  is kept, names every open request and accepted booking that will be withdrawn,
+  asks for the current password, and has "Keep my account" and a destructive
+  "Delete my account" button. Focus is trapped while open and returns to the
+  trigger when closed (L2-101).
+- **`DeletionBlockedComponent`** — content shown in the dialog, titled "Finish your
+  booking first", when the API reports future Confirmed bookings. It lists each
+  booking's number, artist, date and status, asks the person to cancel or complete
+  them first, and links to Your bookings (`/bookings`) (L2-082).
 - **`PrivacyApi`** — `deleteAccount(password)` for `DELETE /api/v1/account`.
 - **`AuthService`** — clears `currentUser` after a successful deletion, and the router
-  returns to `/` with a confirmation toast. The toast copy is `<TO SUPPLY>`.
+  returns to `/`, signed out, with a success toast "Your account is deleted" and
+  "Your personal data is erased within 30 days."
+
+**Mock screens** — the dialog is
+[`dialogs/delete-account`](../../../mocks/dialogs/delete-account/default.html) over
+account settings, in states default, busy,
+[`invalid`](../../../mocks/dialogs/delete-account/invalid.html) (wrong password),
+[`blocked`](../../../mocks/dialogs/delete-account/blocked.html) (ZAM-0097 is Confirmed
+for Sun 25 Oct) and [`failed`](../../../mocks/dialogs/delete-account/failed.html). The
+section and its Delete account button are on
+[`pages/account`](../../../mocks/pages/account/default.html), and for artists on
+[`pages/account/artist`](../../../mocks/pages/account/artist.html).
 
 **Backend (Zamaro API)**
 
@@ -82,7 +95,8 @@ party would leave the other side of a paid event without a contact (L2-082).
     `<TO SUPPLY>`, data exports, notification preferences, sessions, MFA secrets and
     recovery codes;
   - for an artist, deletes photos, videos and Vulnerable Sector Check documents from
-    object storage and clears profile text;
+    object storage, clears profile text and clears the private contact phone
+    (`artists.contact_phone`, L2-025);
   - replaces `users.name` and `users.email` with non-identifying placeholders and
     sets `erased_at`, keeping the row so retained records keep a valid foreign key.
 - **`PurgeRetainedFinancialRecords`** — scheduled command that deletes retained

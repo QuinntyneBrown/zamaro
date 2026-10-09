@@ -37,19 +37,36 @@ dated within the last 3 years (L2-049).
 
 ## Description
 
-The slice runs from the artist's VSC page and the admin VSC queue in Zamaro Web to
+The slice runs from the check section of the artist's profile editor and the admin
+VSC queue in Zamaro Web to
 the Zamaro API, a private bucket in object storage, the Zamaro Worker and the
 email delivery service.
 
 **Frontend (Zamaro Web)**
 
-- **`VscPage`** — routed page for `/artist/vulnerable-sector-check` in the artist
-  workspace. It shows the current check's status (scanning, waiting for
-  verification, verified until the expiry date, or rejected by the malware scan) and an upload
-  form with a file input and an issue-date field. The page copy is `<TO SUPPLY>`.
-- **`VscQueuePage`** — routed page for `/admin/vulnerable-sector-checks`. It lists
-  Pending checks with artist name, issue date and upload time, oldest first, and a
-  Verify action per row.
+- **`VscSectionComponent`** — the "Vulnerable Sector Check" section (`#check`) of
+  `ArtistProfileEditorPage` at `/artist/profile` (`artist-workspace/edit-profile-details`).
+  It shows a status badge with one line of copy: "Not uploaded" ("Upload one to appear
+  in Youth event searches."), "Checking the file" while the scan runs, "Waiting for
+  verification" with the upload and issue dates, "Verified" ("Verified until {expiry}
+  · issued {issue date}. You appear in Youth event searches until then."), "Renew by
+  {expiry}" inside the renewal window, "Expired" after it, and "Rejected" when the
+  malware scan fails. A newer check waiting for verification is listed above the
+  current verified one, which still counts. The section says that only the artist and
+  Zamaro administrators can open the document and that a reminder comes 60 days
+  before it runs out. Its "Upload your check" or "Upload a newer check" button opens
+  `VscUploadDialogComponent`.
+- **`VscUploadDialogComponent`** — design-system dialog with a required file input
+  (PDF, JPEG or PNG up to 10 MB) and a required issue date that cannot be after today.
+  It pre-checks size and date, shows upload progress with Cancel upload, shows inline
+  errors with a summary, and keeps the file and date after a failed upload with Try
+  again. On success it closes and the section shows the new check.
+- **`VscQueuePage`** — routed page for `/admin/vulnerable-sector-checks`, reached
+  from the Artists section of the admin shell ("Vulnerable Sector Checks · {n}
+  waiting"). It lists Pending checks with artist name, issue date, upload time and
+  whether the check replaces a verified one, oldest first, with View document and
+  Verify per row. After Verify the row shows "Verified until {expiry}" and who
+  verified it.
 - **`VscDocumentComponent`** — requests a signed link and opens the document in a new
   tab. The application review screen of `artist-onboarding/review-artist-application`
   reuses it.
@@ -67,9 +84,9 @@ email delivery service.
   requires an issue date that is not in the future (L2-049, L2-076).
 - **`UploadVulnerableSectorCheck`** — action that stores the file through
   `DocumentVault`, inserts a `VulnerableSectorCheck` with status `Scanning` and
-  dispatches `ScanVulnerableSectorCheck`. Whether an applicant may upload before
-  approval is `<TO SUPPLY>`; the check belongs to the `User` so the review screen can
-  show it either way.
+  dispatches `ScanVulnerableSectorCheck`. Uploads come from the profile editor after
+  approval; the application form has no check step. The check belongs to the `User`,
+  so the review screen can show one uploaded later for a returning applicant.
 - **`DocumentVault`** — service for private documents. It encrypts each file with a
   fresh data key, wraps that key with a key-encryption key read from the secrets
   manager (L2-078, L2-079), and writes the ciphertext to a private bucket under a
@@ -109,6 +126,19 @@ email delivery service.
   `renewal_reminder_sent_at` with a conditional update before queueing
   `VscRenewalReminderNotification`, so a second run has no effect and a missed run
   is caught by the next one (L2-092).
+
+**Mock screens** — the section is `#check` on
+[`pages/edit-profile`](../../../mocks/pages/edit-profile/default.html) (Verified until
+Fri 3 Mar 2028), on [`empty`](../../../mocks/pages/edit-profile/empty.html) (Not
+uploaded) and on [`check-pending`](../../../mocks/pages/edit-profile/check-pending.html)
+(a newer check waiting for verification). The upload dialog is
+[`dialogs/upload-check`](../../../mocks/dialogs/upload-check/default.html) in states
+default, busy, invalid (a 14 MB file and a missing issue date) and failed. The
+administrator verification queue is
+[`pages/admin-checks`](../../../mocks/pages/admin-checks/default.html) in states default
+(Elijah Park and Abigail Mensah waiting), [`verified`](../../../mocks/pages/admin-checks/verified.html)
+(Elijah verified until Tue 25 Sep 2029), loading,
+[`empty`](../../../mocks/pages/admin-checks/empty.html) and error.
 
 **Data**
 
@@ -184,7 +214,7 @@ after the issue date and is audited.
 ### Behaviour — send renewal reminders
 
 The daily job finds checks entering the 60-day renewal window and marks each reminder
-as sent before emailing it. The artist follows the email to the VSC page to upload a
-new check.
+as sent before emailing it. The artist follows the email to the check section of the
+profile editor (`/artist/profile#check`) to upload a newer check.
 
 ![Sequence diagram for sending renewal reminders](diagrams/sequence-renewal-reminder.png)

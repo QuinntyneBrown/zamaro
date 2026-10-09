@@ -7,7 +7,7 @@ Person(party, "Booker or artist", "Party to a booking")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Ext(errors, "Error tracking service", "Failed job alerts")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Booking pages, status badge and history timeline")
+  Container(web, "Zamaro Web", "Angular with SSR", "Booking pages, status stamp and history timeline")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Applies transitions that people request")
   Container(worker, "Zamaro Worker", "Laravel scheduler and Horizon", "Expires requests and completes bookings on schedule")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings and booking_transitions")

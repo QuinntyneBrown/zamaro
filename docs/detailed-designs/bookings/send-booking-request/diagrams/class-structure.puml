@@ -14,8 +14,8 @@ skinparam class {
 title Class structure — Send a booking request
 
 package "Zamaro Web (Angular)" {
-  class BookingStubComponent {
-    +form: FormGroup<BookingStubForm>
+  class BookRequestPage {
+    +form: FormGroup<BookRequestForm>
     +store: BookingRequestStore
     +onSubmit(): void
     +onRetry(): void
@@ -112,9 +112,9 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-BookingStubComponent --> BookingRequestStore
-BookingStubComponent ..> RequestSentComponent : shows on success
-BookingStubComponent ..> NextFreeDatesComponent : shows on artist-not-free
+BookRequestPage --> BookingRequestStore
+BookRequestPage ..> RequestSentComponent : shows on success
+BookRequestPage ..> NextFreeDatesComponent : shows on artist-not-free
 BookingRequestStore --> BookingsApi
 BookingsApi ..> BookingsController : POST /api/v1/bookings
 BookingsController ..> CreateBookingRequest : validates

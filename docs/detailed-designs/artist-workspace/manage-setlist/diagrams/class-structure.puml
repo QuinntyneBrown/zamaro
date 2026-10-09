@@ -14,20 +14,22 @@ skinparam class {
 title Class structure — Manage setlist
 
 package "Zamaro Web (Angular)" {
-  class SetlistEditorPage {
+  class SetlistSectionComponent {
     +store: SetlistStore
-    +onAdd(song: SetlistSongInput): void
-    +onSaveOrder(): void
+    +openAddSong(): void
+    +onKeyChange(id: string, key: MusicalKeyOption): void
   }
-  class SetlistSongFormComponent {
+  class SetlistSongDialogComponent {
     +form: FormGroup<SetlistSongForm>
     +keys: MusicalKeyOption[]
+    +atLimit: input<boolean>
     +submitted: output<SetlistSongInput>
   }
   class SetlistListComponent {
     +songs: input<SetlistSong[]>
     +headerStripCount = 5
     +moved: output<string[]>
+    +removed: output<string>
   }
   class SetlistStore {
     +songs: Signal<SetlistSong[]>
@@ -93,9 +95,9 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-SetlistEditorPage --> SetlistStore
-SetlistEditorPage *-- SetlistSongFormComponent
-SetlistEditorPage *-- SetlistListComponent
+SetlistSectionComponent --> SetlistStore
+SetlistSectionComponent ..> SetlistSongDialogComponent : opens
+SetlistSectionComponent *-- SetlistListComponent
 SetlistStore --> SetlistApi
 SetlistApi ..> SetlistSongController : /api/v1/artist/setlist/songs
 SetlistApi ..> SetlistOrderController : PUT /api/v1/artist/setlist/order

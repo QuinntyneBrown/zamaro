@@ -99,6 +99,16 @@ L2-068). A dedicated reconciliation report page is `<TO SUPPLY>`.
 - `reconciliation_mismatches` — `run_id`, `booking_number`, `kind`, `processor_id`,
   `zamaro_cents`, `processor_cents`.
 
+**Mock screens** — this slice has no screen of its own. Its outcomes show on the
+booking page states [confirmed](../../../mocks/pages/booking-detail/confirmed.html),
+[cancelled](../../../mocks/pages/booking-detail/cancelled.html) and
+[completed](../../../mocks/pages/booking-detail/completed.html), and as payout statuses on
+the [earnings](../../../mocks/pages/earnings/default.html) page. Administrators follow a
+mismatch alert to [`pages/admin-bookings`](../../../mocks/pages/admin-bookings/default.html)
+and [`pages/admin-booking`](../../../mocks/pages/admin-booking/default.html), which belong to
+`administration/support-bookings-and-payments`; the reconciliation report itself is not
+mocked.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the

@@ -3,14 +3,14 @@
 LAYOUT_WITH_LEGEND()
 title Components — Scan and serve uploads
 
-Container(web, "Zamaro Web", "Angular", "VscUploadComponent, UploadsApi, VscDocumentLinkComponent")
+Container(web, "Zamaro Web", "Angular", "VscUploadComponent, UploadsApi, VscDocumentComponent")
 System_Ext(scanner, "Malware scanner", "Vendor <TO SUPPLY>")
 ContainerDb(storage, "Object storage", "S3-compatible", "quarantine/, documents/, originals/")
 Container_Boundary(api, "Zamaro API") {
   Component(upctrl, "VscDocumentController", "Laravel controller", "POST /api/v1/artist/vsc")
   Component(receive, "ReceiveUpload", "Action", "Allow-list check, quarantine write, dispatch scan")
   Component(detect, "ContentTypeDetector", "Service (finfo)", "Type from bytes; refuses SVG and HTML")
-  Component(urlctrl, "VscDocumentUrlController", "Laravel controller", "Policy check, returns 5-minute signed URL")
+  Component(urlctrl, "DocumentLinksController", "Laravel controller", "GET /api/v1/vulnerable-sector-checks/{check}/document-link; policy check, returns 5-minute signed URL")
   Component(docctrl, "PrivateDocumentController", "Laravel controller, signed middleware", "Decrypts and streams with server-set headers")
 }
 Container_Boundary(worker, "Zamaro Worker") {

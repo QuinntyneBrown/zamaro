@@ -30,7 +30,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-stub --> actor : "Book Abigail", "No. ZAM-0114", "From $650", "per service · travel included" and policy line (L2-019, L2-044)
+stub --> actor : "Book Abigail", "No. ACT-0027", "From $650", "per service · travel included" and policy line (L2-019, L2-044)
 actor -> stub : Choose Sun 15 Nov in the event date field
 stub -> store : selectDate(2026-11-15)
 store -> store : dateCheck = checking

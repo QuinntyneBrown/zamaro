@@ -16,7 +16,8 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "VscPage" as page
+  participant "VscUploadDialogComponent" as page
+  participant "VscSectionComponent" as section
   participant "VulnerableSectorChecksApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -56,7 +57,8 @@ else valid
   controller --> client : 201 VscSummary (Scanning)
 end
 client --> page : Result
-page --> actor : "Checking your file" status or inline errors
+page --> actor : Inline errors, or close the dialog
+page -> section : Show "Checking the file"
 job -> vault : read(key)
 job -> scanner : Scan bytes (L2-076)
 alt malware found
@@ -65,7 +67,7 @@ alt malware found
 else clean
   job -> db : Status Pending, queued for administrator verification (L2-049)
 end
-page -> client : current()
-client --> page : Pending, or Blocked with the upload rejected
-page --> actor : "Waiting for verification" or the rejection reason
+section -> client : current()
+client --> section : Pending, or Blocked with the upload rejected
+section --> actor : "Waiting for verification" or "Rejected"
 @enduml

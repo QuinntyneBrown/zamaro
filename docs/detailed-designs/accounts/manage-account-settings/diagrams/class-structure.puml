@@ -33,6 +33,10 @@ package "Zamaro Web (Angular)" {
     +changePassword(current: string, next: string): Observable<void>
     +listSessions(): Observable<SignedInDevice[]>
     +endSession(id: string): Observable<void>
+    +saveContactPhone(contactPhone: string): Observable<void>
+  }
+  class ContactSectionComponent {
+    +phone: FormControl<string>
   }
 }
 
@@ -68,6 +72,14 @@ package "Zamaro API (Laravel)" {
     +CarbonImmutable expiresAt
     +?CarbonImmutable usedAt
   }
+  class Artist <<Eloquent>> {
+    +int id
+    +int userId
+    +?string contactPhone <<encrypted>>
+  }
+  class ArtistContactController {
+    +update(request: UpdateContactPhoneRequest): Response
+  }
   class UserSession <<Eloquent>> {
     +string id
     +int userId
@@ -87,7 +99,10 @@ package "Zamaro API (Laravel)" {
 AccountSettingsPage *-- ChangeEmailFormComponent
 AccountSettingsPage *-- ChangePasswordFormComponent
 AccountSettingsPage *-- SignedInDevicesComponent
+AccountSettingsPage *-- ContactSectionComponent
 AccountSettingsPage --> AccountApi
+ArtistContactController ..> Artist : updates contactPhone
+User "1" -- "0..1" Artist
 RequestEmailChange ..> EmailChangeToken : issues
 ConfirmEmailChange ..> EmailChangeToken : consumes
 ConfirmEmailChange ..> User : updates email

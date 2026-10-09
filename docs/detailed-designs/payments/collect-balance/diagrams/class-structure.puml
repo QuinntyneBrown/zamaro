@@ -19,10 +19,10 @@ package "Zamaro Web (Angular)" {
     +openReportProblem(): void
   }
   class ReportProblemDialogComponent {
-    +description: FormControl<string>
+    +description: FormControl<string> (required, max 2,000)
     +submit(): void
   }
-  class PayBalancePage {
+  class PayBalanceDialogComponent {
     +store: PaymentStore
     +onPay(): void
   }
@@ -92,7 +92,8 @@ package "Zamaro API and Worker (Laravel)" {
 
 BookingDetailPage --> ReportProblemDialogComponent
 ReportProblemDialogComponent --> BookingsApi
-PayBalancePage --> PaymentsApi
+BookingDetailPage --> PayBalanceDialogComponent : opens on ?pay=balance
+PayBalanceDialogComponent --> PaymentsApi
 BookingsApi ..> ProblemReportController : POST problem-reports
 ProblemReportController --> ReportBookingProblem
 ReportBookingProblem ..> ProblemReport : creates

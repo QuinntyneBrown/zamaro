@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Artist" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "PhotosManagerPage" as page
+  participant "PhotoUploadDialogComponent" as page
   participant "ArtistPhotosStore" as store
   participant "ArtistPhotosApi" as client
 end box
@@ -83,6 +83,6 @@ else under the limit
   end
 end
 client --> store : Result or reason
-store --> page : Update grid and upload row
-page --> actor : Thumbnail with Processing then Ready, or reason inline
+store --> page : Progress, then close; or the reason inline
+page --> actor : Thumbnail with Processing then Ready, or the reason in the dialog
 @enduml

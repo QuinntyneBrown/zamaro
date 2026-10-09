@@ -35,9 +35,9 @@ loop each move
   actor -> list : Drag a song, or use Move up and Move down
   list -> store : move(id, toIndex)
   store --> list : Local order, orderDirty = true
-  list --> actor : First 5 marked "In profile header"; LiveAnnouncer reads new position
+  list --> actor : LiveAnnouncer reads the new position
 end
-actor -> list : Activate "Save order"
+actor -> list : Activate "Save changes" in the editor's save bar
 list -> store : saveOrder()
 store -> client : reorder(ids)
 client -> controller : PUT /api/v1/artist/setlist/order

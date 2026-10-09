@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ChurchProfilePage" as page
+  participant "AccountSettingsPage (#church)" as page
   participant "AccountApi\n+ ApiProblemInterceptor" as client
   participant "FormErrorMapper" as mapper
 end box

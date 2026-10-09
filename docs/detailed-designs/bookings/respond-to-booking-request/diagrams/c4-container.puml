@@ -7,7 +7,7 @@ Person(artist, "Artist", "Approved worship artist")
 System_Ext(routing, "Routing provider", "Driving distance")
 System_Ext(email, "Email delivery service", "Transactional email")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Artist workspace: /artist/requests")
+  Container(web, "Zamaro Web", "Angular with SSR", "Artist workspace: /artist/requests and /artist/bookings/:number")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/artist/requests endpoints")
   Container(worker, "Zamaro Worker", "Laravel queue workers", "Similar artists and booker emails")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions, artists")

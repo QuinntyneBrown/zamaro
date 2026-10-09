@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Manage email preferences
 
-Container(web, "Zamaro Web", "Angular", "NotificationSettingsPage, NotificationPreferencesApi")
+Container(web, "Zamaro Web", "Angular", "EmailPreferencesSectionComponent, NotificationPreferencesApi")
 Container(worker, "Zamaro Worker", "Laravel Horizon", "EventReminderNotification, ReviewPromptNotification")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "NotificationPreferencesController", "Laravel controller", "GET and PUT /api/v1/account/notification-preferences")

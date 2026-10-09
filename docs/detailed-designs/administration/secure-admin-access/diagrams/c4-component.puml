@@ -5,9 +5,8 @@ title Components — Secure administrator access
 
 Container(web, "Zamaro Web", "Angular", "adminGuard, NotFoundPage, MfaChallengePage, MfaEnrolmentPage, AuthService")
 Container_Boundary(api, "Zamaro API") {
-  Component(signin, "SignInController", "Laravel controller", "Password step; reports mfaRequired")
-  Component(mfa, "MfaChallengeController", "Laravel controller", "POST /api/v1/auth/mfa/challenge")
-  Component(verify, "VerifyMfaChallenge", "Action", "Checks TOTP or recovery code, completes sign-in")
+  Component(signin, "SessionController", "Laravel controller", "POST /api/v1/session (password step, reports TwoFactorRequired) and POST /api/v1/session/two-factor")
+  Component(verify, "CompleteTwoFactorChallenge", "Action", "Checks TOTP or recovery code, completes sign-in")
   Component(totp, "TotpVerifier", "Interface + adapter", "TOTP check with one-step drift")
   Component(role, "EnsureAdministrator", "Middleware", "404 without the Administrator role")
   Component(mfaMw, "EnsureMfaVerified", "Middleware", "404 without mfa_verified_at")
@@ -19,9 +18,9 @@ ContainerDb(cache, "Cache and queue", "Redis", "Sessions")
 ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users, audit_entries")
 
 Rel(web, signin, "Submits email and password", "JSON/HTTPS")
-Rel(web, mfa, "Submits TOTP code", "JSON/HTTPS")
+Rel(web, signin, "Submits TOTP code", "JSON/HTTPS")
 Rel(web, role, "Calls admin endpoints through", "JSON/HTTPS")
-Rel(mfa, verify, "Calls")
+Rel(signin, verify, "Calls for the two-factor step")
 Rel(verify, totp, "Verifies code with")
 Rel(verify, db, "Reads encrypted MFA secret", "SQL")
 Rel(verify, cache, "Regenerates session, sets mfa_verified_at", "RESP")

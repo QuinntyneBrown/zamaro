@@ -53,8 +53,12 @@ the CDN, the real-user monitoring service and the CI/CD pipeline.
 - **`@defer` blocks** — the profile's gallery, videos and reviews, and Discover content
   below the first lineup row, render when they near the viewport.
 - **Layout stability** — every image has explicit `width` and `height`. Loading states
-  use skeletons matching the final layout (L2-105). Web fonts use `font-display` and
-  size-adjusted fallbacks from the design system (`<TO SUPPLY>`).
+  use skeletons matching the final layout (L2-105), as the mocks' `loading` states
+  show (for example [`discover/loading`](../../../mocks/pages/discover/loading.html)).
+  The only web font is the self-hosted Bebas Neue display face named in the design
+  system's [Typography](../../../design-system/foundations/typography.html) foundation;
+  body and mono text use system font stacks and download nothing. Bebas Neue loads
+  with `font-display: swap`; the metrics of its size-adjusted fallback are `<TO SUPPLY>`.
 
 **Images (L2-088)**
 

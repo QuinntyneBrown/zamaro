@@ -21,11 +21,10 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "AuthService" as auth
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
-  participant "SignInController" as sctrl
-  participant "MfaChallengeController" as mctrl
+  participant "SessionController" as sctrl
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
-  participant "VerifyMfaChallenge" as verify
+  participant "CompleteTwoFactorChallenge" as verify
   participant "RecordAuditEntry" as audit
 end box
 box "Backend — Zamaro Infrastructure" #FFF4E5
@@ -35,32 +34,32 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 actor -> signin : Email and password, activate Sign in
-signin -> sctrl : POST /api/v1/auth/sign-in
+signin -> sctrl : POST /api/v1/session
 sctrl -> db : Check password hash and lockout (L2-072)
 alt wrong password
   sctrl -> audit : sign_in failed (L2-069)
   sctrl --> signin : 422 "Email or password is incorrect." (L2-023)
 else correct password, Administrator role
   sctrl -> cache : Store pending_mfa_user_id only, no signed-in session
-  sctrl --> signin : 200 { mfaRequired: true } (L2-066)
+  sctrl --> signin : 200 { status: TwoFactorRequired } (L2-066)
   alt MFA not yet enrolled
     signin -> actor : Route to MfaEnrolmentPage, scan QR, confirm one code, keep 10 recovery codes
   end
   signin -> page : Route to /account/sign-in/verify
   actor -> page : Enter 6-digit TOTP code
-  page -> mctrl : POST /api/v1/auth/mfa/challenge
-  mctrl -> verify : handle(pendingUserId, code, ip)
+  page -> sctrl : POST /api/v1/session/two-factor
+  sctrl -> verify : handle(pendingUserId, code, ip)
   verify -> db : Load encrypted MFA secret (L2-079)
   verify -> totp : verify(secret, code, window 1)
   alt code invalid
     totp --> verify : false
     verify -> audit : mfa_challenge failed (L2-069)
-    mctrl --> page : 422 per-field error; counts toward lockout (L2-072)
+    sctrl --> page : 422 per-field error; counts toward lockout (L2-072)
   else code valid
     totp --> verify : true
     verify -> cache : Regenerate session ID, log in, set mfa_verified_at and last_activity_at (L2-073)
     verify -> audit : sign_in succeeded with MFA (L2-069)
-    mctrl --> page : 200 CurrentUser
+    sctrl --> page : 200 CurrentUser
     page -> auth : Set current user
     page --> actor : Navigate to the original /admin destination
   end

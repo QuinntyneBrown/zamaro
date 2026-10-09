@@ -1,0 +1,38 @@
+@startuml
+title UML sequence behaviour — A church account opens /artist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Router and artist role guard" as router
+  participant "CurrentUserStore" as user
+  participant "ArtistsOnlyComponent" as only
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EnsureArtistRole" as mw
+  participant "ArtistDashboardController" as controller
+end box
+
+actor -> router : Open /artist
+router -> user : Roles of the signed-in user
+user --> router : Booker, no Artist role
+router -> only : Render in place of the page, inside the church shell
+only --> actor : "This page is for artists" with Back to Discover and Apply as an artist
+note over router, only : No redirect; the dashboard endpoint is not called
+actor -> mw : GET /api/v1/artist/dashboard, called directly
+mw -> mw : No Artist role
+mw --> actor : 404 with no data (L2-074)
+note right of controller : Never reached by a booker
+@enduml

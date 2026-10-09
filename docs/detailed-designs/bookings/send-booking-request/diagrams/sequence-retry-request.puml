@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "BookingStubComponent" as stub
+  participant "BookRequestPage" as stub
   participant "BookingRequestStore" as store
   participant "BookingsApi" as client
 end box

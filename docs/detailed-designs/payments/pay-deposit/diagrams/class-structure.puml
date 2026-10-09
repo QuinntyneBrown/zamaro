@@ -14,7 +14,7 @@ skinparam class {
 title Class structure — Pay the deposit
 
 package "Zamaro Web (Angular)" {
-  class PayDepositPage {
+  class PayDepositDialogComponent {
     +store: PaymentStore
     +consentGiven: Signal<boolean>
     +onPay(): void
@@ -109,7 +109,7 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-PayDepositPage --> PaymentStore
+PayDepositDialogComponent --> PaymentStore
 PaymentStore --> PaymentsApi
 PaymentStore --> CardFieldsService
 PaymentsApi ..> DepositController : /api/v1/bookings/{number}/...

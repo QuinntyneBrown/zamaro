@@ -8,7 +8,7 @@ Accepted and the booker is asked to pay a deposit. Payment of the deposit is the
 step that turns an Accepted booking into a Confirmed one and reserves the artist's
 date.
 
-This feature is that payment, from the payment summary on Zamaro Web to the charge
+This feature is that payment, from the payment dialog on Zamaro Web to the charge
 at the payment processor and the Confirmed status in the Zamaro database. It also
 covers the two ways a deposit fails to confirm: the deadline passes, or another
 church pays for the same artist and date first. Collection of the remaining 75 % is
@@ -37,17 +37,23 @@ per date, enforced by a row lock and a partial unique index (L2-032).
 
 ## Description
 
-The slice runs from the payment page in Zamaro Web through the deposit endpoints
+The slice runs from the payment dialog in Zamaro Web through the deposit endpoints
 of the Zamaro API to the payment processor and the Zamaro database. A scheduled
 command in the Zamaro Worker expires unpaid deposits.
 
 **Frontend (Zamaro Web, `features/bookings`)**
 
-- **`PayDepositPage`** — routed page component for `/bookings/:number/pay`, reached
-  from the Pay deposit action on `/bookings` and `/bookings/:number`. It shows the
-  payment summary, the hosted card fields, a save-card consent checkbox, the
-  cancellation policy line and a Pay button. The Pay button stays disabled until
-  the consent checkbox is ticked (L2-037).
+- **`PayDepositDialogComponent`** — CDK dialog opened by the "Pay ${deposit} deposit"
+  button on `BookingDetailPage` (`/bookings/:number`) while the booking is Accepted.
+  The "Pay ${deposit} deposit" next action on `/bookings` navigates to that page; there
+  is no separate payment route. The dialog shows the booking number, status and
+  date, the deposit deadline ("Due by {date, time}"), the payment summary, the hosted
+  card fields with name on card and billing postal code, a required save-card consent
+  checkbox ("Save this card for the ${balance} balance", charged 48 hours after the
+  event unless the booker reports a problem), the cancellation policy line and a Pay
+  button. Pay stays enabled. Pressing it without consent or with invalid card fields
+  shows an error summary that links to each field, and nothing is sent (L2-037,
+  L2-108). Under 576 px (XS) the dialog fills the screen (L2-099).
 - **`PaymentSummaryComponent`** — presentational component that renders the quoted
   price, the HST line when the artist has an HST number, the deposit due now and
   the balance due after the event, formatted by `FormatService` (L2-036, L2-110).
@@ -62,8 +68,10 @@ command in the Zamaro Worker expires unpaid deposits.
 - **`PaymentsApi`** — typed client for the three deposit endpoints below.
 
 The Pay button shows a busy state and blocks a second submission while a request
-is pending. A declined card keeps the page open with the reason and an empty card
-field for another card (L2-037, L2-108).
+is pending; Not now and Close are disabled until the processor answers. A declined
+card keeps the dialog open with the reason at the top, the processor's card fields
+cleared for another card, and the name, postal code and consent kept (L2-037,
+L2-108). On success the dialog closes and the booking page reloads as Confirmed.
 
 **Backend (Zamaro API)**
 
@@ -102,11 +110,13 @@ field for another card (L2-037, L2-108).
   by another church moments ago." (L2-032). A payment that succeeds after the
   booking already expired is refunded the same way.
 - **Declined card** — `DeclineReasonTranslator` maps the processor's decline code to
-  plain language (wording `<TO SUPPLY>`). The `Payment` becomes `Failed` and the
+  plain language under the heading "Your bank declined the card", one sentence per
+  code. For insufficient funds the sentence is "The bank said there isn't enough
+  credit on it." Wording for the other decline codes is `<TO SUPPLY>`. The `Payment` becomes `Failed` and the
   booking stays Accepted (L2-037).
 - **`DeclineCompetingRequests`** — action run after the confirming transaction
   commits. It declines each competing request with the reason "Booked by another
-  church" and dispatches `BookingDeclined` to each booker (L2-032). Competing
+  church" and dispatches `RequestDeclined` to each booker (L2-032). Competing
   bookings whose own deposit payment is in flight are left Accepted, so their own
   confirmation resolves them as a lost race. The window that counts as "in flight"
   is `<TO SUPPLY>`.
@@ -118,7 +128,7 @@ field for another card (L2-037, L2-108).
   `bookings:expire-unpaid-deposits` every minute. It moves each Accepted booking past
   its deposit deadline, with no succeeded deposit, to Expired. The update applies
   only while the status is still Accepted, so a repeated run has no effect (L2-092).
-  It dispatches `BookingExpired` to both parties (L2-037, L2-063). The deadline is
+  It dispatches `RequestExpired` to both parties (L2-037, L2-063). The deadline is
   stored as `bookings.deposit_due_by` when the artist accepts, in `America/Toronto`
   wall-clock time (L2-110).
 - **`PaymentGateway`** — interface in `App\Services\Payments` with one adapter for
@@ -143,6 +153,22 @@ The processor customer identifier is stored on `users.processor_customer_id` and
 each payment. Whether the balance charge also needs a stored processor
 payment-method identifier, or uses the customer's default card at the processor,
 is `<TO SUPPLY>` once the vendor is chosen.
+
+**Mock screens** — the Pay deposit dialog in states
+[default](../../../mocks/dialogs/pay-deposit/default.html),
+[busy](../../../mocks/dialogs/pay-deposit/busy.html),
+[invalid](../../../mocks/dialogs/pay-deposit/invalid.html),
+[failed](../../../mocks/dialogs/pay-deposit/failed.html) (declined card) and
+[conflict](../../../mocks/dialogs/pay-deposit/conflict.html) (lost race, "Abigail was
+booked by another church moments ago." with the full refund), opened from the
+[accepted](../../../mocks/pages/booking-detail/accepted.html) booking page. The
+[confirmed](../../../mocks/pages/booking-detail/confirmed.html) booking page shows a
+paid deposit, the
+[deposit-expired](../../../mocks/pages/booking-detail/deposit-expired.html) booking
+page shows a deposit left unpaid past its deadline, and the [booking toast](../../../mocks/notifications/booking-toast/danger.html)
+(danger and warning states) reports a declined card and, once an unpaid deposit
+is due within 24 hours, shows an in-app deposit-due reminder (there is no reminder
+email; L2-063 lists the emails).
 
 ## Requirements
 
@@ -192,8 +218,10 @@ mirrors the three deposit endpoints.
 
 ### Behaviour — pay the deposit
 
-The booker sees the summary, consents to saving the card and pays through the
-hosted fields, with a 3-D Secure challenge when the processor asks for one. A
+The booker opens the Pay deposit dialog from the booking page, sees the summary,
+consents to saving the card and pays through the hosted fields, with a 3-D Secure
+challenge when the processor asks for one. Missing consent or invalid card fields
+stop at an error summary. A
 declined card leaves the booking Accepted, and a successful charge confirms it
 under the artist row lock.
 

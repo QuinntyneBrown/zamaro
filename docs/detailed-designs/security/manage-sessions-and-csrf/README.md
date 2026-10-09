@@ -10,7 +10,7 @@ have sat idle or lived too long.
 
 The slice follows a representative request end to end: a booker signs in, the API
 starts a fresh session, and the booker then makes a state-changing call such as saving
-an artist (`POST /api/v1/saved-artists`, L2-026). The same protection covers every
+an artist (`PUT /api/v1/saved-artists/{artistId}`, L2-026). The same protection covers every
 `POST`, `PUT`, `PATCH` and `DELETE` under `/api/v1`. The sign-in form, the password
 rules and the failed-attempt lockout belong to the identity slices (L2-023, L2-072).
 Transport and header protection sit in `security/enforce-transport-and-headers`, and
@@ -53,11 +53,17 @@ URLs on one origin.
   `ToastService`; its copy is `<TO SUPPLY>`. The retry is safe because the rejected
   request changed nothing.
 - **`SessionExpiredInterceptor`** — on a 401 response while `AuthService` holds a user,
-  calls `AuthService.clear()`, navigates to the sign-in page with a `returnUrl`, and
-  shows a toast. The sign-in route and the toast copy are `<TO SUPPLY>`.
+  calls `AuthService.clear()` and navigates to `/sign-in` with a `returnUrl` and a
+  session-ended flag. The sign-in page then shows "Your session ended" above the form
+  with a line naming what is kept, for example "Sign in again to keep your request to
+  Abigail Mensah for Sat 14 Nov. Nothing you typed is lost." Any form draft is kept
+  and reopens after sign-in.
 - **SSR rule** — server rendering forwards no browser cookies to the API. Public pages
   render in their signed-out form and the header switches to the signed-in state after
   hydration, when `AuthService` loads `/api/v1/me`.
+
+**Mock screens** — the session-ended state is
+[`pages/sign-in/expired`](../../../mocks/pages/sign-in/expired.html).
 
 **Backend (Zamaro API)**
 
@@ -75,8 +81,9 @@ URLs on one origin.
   mismatch it throws `TokenMismatchException` before routing reaches a controller, so
   nothing changes (L2-073). It writes a fresh `XSRF-TOKEN` cookie (`Secure`,
   `SameSite=Lax`, readable by script) on every response.
-- **`SignInController`** and **`AuthenticateUser`** — owned by the identity slice
-  (L2-023). After a successful credential check, `AuthenticateUser` calls
+- **`SessionController`**, **`AttemptSignIn`** and **`StartSession`** — owned by
+  `accounts/sign-in-and-recover-access` (L2-023), behind `POST /api/v1/session`. After
+  a successful credential check, the `StartSession` action calls
   `$request->session()->regenerate()` and `$request->session()->regenerateToken()`,
   then stores `auth.started_at` in the session. Regeneration removes the pre-sign-in
   identifier, which defeats session fixation.
@@ -90,8 +97,9 @@ URLs on one origin.
 - **`ProblemDetailsRenderer`** — exception renderer registered in `bootstrap/app.php`.
   It renders 419 and 401 as RFC 9457 problem details (L2-095). The `type` URIs and
   titles are `<TO SUPPLY>`.
-- **`SignOutController`** — `POST /api/v1/auth/sign-out` logs out the guard,
-  invalidates the session and regenerates the token (L2-023).
+- **`SessionController@destroy`** — `DELETE /api/v1/session` runs the `SignOut`
+  action of the identity slice, which logs out the guard, invalidates the session and
+  regenerates the token (L2-023).
 
 **Data**
 

@@ -25,7 +25,7 @@ box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
   participant "HideReview" as hide
-  participant "DismissReviewReport" as dismiss
+  participant "DismissReviewReports" as dismiss
   participant "RecordAuditEntry" as audit
 end box
 box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
@@ -58,12 +58,12 @@ alt hide the review
   rating -> db : Recalculate without the hidden review within 60 s (L2-060)
   controller --> client : 204 No Content
   client --> page : Remove from queue; review gone from the profile (L2-062)
-else dismiss the report
+else dismiss the reports
   actor -> page : Activate Dismiss
-  page -> client : dismiss(reportId)
-  client -> controller : POST /api/v1/admin/review-reports/{report}/dismiss
-  controller -> dismiss : handle(report, admin)
-  dismiss -> db : Resolve report as Dismissed
+  page -> client : dismiss(reviewId)
+  client -> controller : POST /api/v1/admin/reviews/{review}/reports/dismiss
+  controller -> dismiss : handle(review, admin)
+  dismiss -> db : Resolve every open report on the review as Dismissed
   dismiss -> audit : review_report.dismissed (L2-069)
   audit -> db : INSERT audit_entry
   controller --> client : 204 No Content

@@ -83,6 +83,12 @@ searches never need.
 - **`SearchAlternativesResource`** — serialises `nearbyDates` (date and count),
   `widerRadius` (km and count, or null), `filtersApplied` and `explanation`.
 
+**Mocks**
+
+- [Discover · empty](../../../mocks/pages/discover/empty.html) — "Nobody's free
+  Christmas Eve within 40 km" for gospel choirs near Burlington: Wed 23 Dec, Sun 27 Dec
+  and Sun 20 Dec closest first, "Search within 120 km · 2 free" and "Show all styles".
+
 **Data**
 
 The action reads the same tables as the search: `artists`, `artist_styles`,

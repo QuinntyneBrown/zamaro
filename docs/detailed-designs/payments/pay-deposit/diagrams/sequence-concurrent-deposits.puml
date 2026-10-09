@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker B" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "PayDepositPage" as page
+  participant "PayDepositDialogComponent" as page
   participant "PaymentsApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
@@ -58,5 +58,5 @@ end
 confirm -> compete : handle(booking A)
 compete -> db : Requested or Accepted bookings, same artist and date, no deposit in flight
 compete -> sm : transition(-> Declined, "Booked by another church") (L2-032)
-compete -> compete : Dispatch BookingDeclined for each booker (L2-063)
+compete -> compete : Dispatch RequestDeclined for each booker (L2-063)
 @enduml

@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Reply to a review
 
-Container(web, "Zamaro Web", "Angular", "ArtistReviewsPage, ReviewReplyFormComponent, ArtistReviewsStore, ArtistReviewsApi")
+Container(web, "Zamaro Web", "Angular", "ArtistReviewsPage, ReplyToReviewDialogComponent, ArtistReviewsStore, ArtistReviewsApi")
 Container_Boundary(api, "Zamaro API") {
   Component(list, "ArtistReviewsController", "Laravel controller", "GET /api/v1/artist/reviews")
   Component(ctrl, "ArtistReviewReplyController", "Laravel controller", "POST and PATCH /api/v1/artist/reviews/{review}/reply")

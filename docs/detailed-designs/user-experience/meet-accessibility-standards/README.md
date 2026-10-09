@@ -53,9 +53,9 @@ and server-rendered markup.
   Pages with data in the title, such as an artist profile, update it once the data
   arrives (L2-101).
 - **Focus ring (`styles/focus.scss`)** — one `:focus-visible` rule for buttons, links
-  and chips that draws the ring from `--color-focus-ring`, `--color-focus-ring-offset`,
-  `--focus-ring-width` and `--focus-ring-offset`, and `--shadow-focus` for text
-  fields. Both themes and the stage islands re-map the two colours. `html` sets
+  and chips that draws the design system's two-tone ring: an outline in
+  `--color-focus-ring` at `--focus-ring-offset` with the gap filled by
+  `--color-focus-ring-offset`, and `--shadow-focus` for text fields. Both themes and the stage islands re-map the two colours. `html` sets
   `scroll-padding-top` to the sticky top bar's height plus the ring, so the sticky
   header never covers a focused element (L2-101).
 - **`DialogService`** (shared with `user-experience/adapt-layout-to-screens`) —
@@ -64,8 +64,8 @@ and server-rendered markup.
   dialog; on close, focus returns to the control that opened it (L2-101).
 - **`AnnouncerService`** — thin wrapper over the CDK `LiveAnnouncer` in polite mode.
   `SearchStore` announces the result summary when a search finishes, and
-  `ToastService` announces each toast's text (L2-102). The design system marks danger
-  toasts `role="alert"`; this design keeps every toast polite as L2-102 states.
+  `ToastService` announces each toast's text (L2-102). The design system and the
+  toast mocks put every toast, errors included, in one polite `role="status"` region.
 - **`FieldErrorDirective` (`zFieldError`)** — applied to each form control inside
   `FormFieldComponent`. When the control is invalid and touched, or the form was
   submitted, it sets `aria-invalid="true"` and adds the error element's ID to
@@ -83,6 +83,30 @@ and server-rendered markup.
   `[@.disabled]` to it, and `ScrollService` passes `behavior: 'auto'` instead of
   `'smooth'` when it is true. The token layer already reduces `--duration-*` to
   0.01 ms under the same query (L2-103).
+
+**Mocks and design system**
+
+- Every mock starts with the skip link and uses one `header`, `main` and `footer`
+  and one `h1`, for example [`discover/default`](../../../mocks/pages/discover/default.html).
+- Search announcements and the rating label:
+  [`discover/default`](../../../mocks/pages/discover/default.html) and
+  [`artist/default`](../../../mocks/pages/artist/default.html) ("Rated 4.9 out of 5 by 38 churches").
+- Field errors with `aria-invalid` and `aria-describedby`: every `invalid` state, for
+  example [`book/invalid`](../../../mocks/pages/book/invalid.html) and
+  [`sign-in/invalid`](../../../mocks/pages/sign-in/invalid.html).
+- Dialog focus: every dialog mock, for example
+  [`cancel-booking/default`](../../../mocks/dialogs/cancel-booking/default.html), opens as a
+  real modal through `assets/mock.js`.
+- Polite toasts: [`notifications/saved-toast`](../../../mocks/notifications/saved-toast/success.html)
+  and its [`danger`](../../../mocks/notifications/saved-toast/danger.html) state.
+- Design system: the [Accessibility](../../../design-system/foundations/accessibility.html),
+  [Motion](../../../design-system/foundations/motion.html) and
+  [Color](../../../design-system/foundations/color.html) foundations, and the
+  [Skip link](../../../design-system/components/skip-link.html),
+  [Dialog](../../../design-system/components/dialog.html),
+  [Form field](../../../design-system/components/form-field.html),
+  [Rating](../../../design-system/components/rating.html) and
+  [Toast](../../../design-system/components/toast.html) components.
 
 **Automated and manual checks (`e2e/a11y`, CI)**
 

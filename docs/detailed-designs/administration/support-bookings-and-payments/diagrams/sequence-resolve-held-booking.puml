@@ -57,7 +57,7 @@ else held (L2-038)
     action -> refund : handle(booking, refundable amount, reason, admin)
     action -> db : Cancel pending balance charge and payout; resolve hold as FullRefund
   end
-  action -> audit : problem_report.resolved with resolution (L2-069)
+  action -> audit : booking_hold.resolved with resolution (L2-069)
   action -> notif : HeldBookingResolved
   notif -> email : Email booker and artist with the resolution (L2-068)
   ctrl --> client : 204 No Content
