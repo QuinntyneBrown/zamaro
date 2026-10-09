@@ -52,6 +52,199 @@
         "empty",
         "error"
       ]
+    },
+    {
+      "id": "book",
+      "kind": "page",
+      "title": "Request to book",
+      "route": "/artists/:slug/book",
+      "requirements": [
+        "L2-019",
+        "L2-024",
+        "L2-028",
+        "L2-032",
+        "L2-044",
+        "L2-105",
+        "L2-108",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error",
+        "invalid",
+        "duplicate",
+        "submitting",
+        "success"
+      ],
+      "not_applicable": {
+        "empty": "The booking form always has fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "bookings",
+      "kind": "page",
+      "title": "Your bookings",
+      "route": "/bookings",
+      "requirements": [
+        "L2-029",
+        "L2-033",
+        "L2-105",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "no-results",
+        "past"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "booking-detail",
+      "kind": "page",
+      "title": "Booking",
+      "route": "/bookings/:id",
+      "requirements": [
+        "L2-029",
+        "L2-030",
+        "L2-031",
+        "L2-032",
+        "L2-033",
+        "L2-036",
+        "L2-037",
+        "L2-040",
+        "L2-042",
+        "L2-044",
+        "L2-045",
+        "L2-046",
+        "L2-059",
+        "L2-105",
+        "L2-108",
+        "L2-110"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "error",
+        "accepted",
+        "confirmed",
+        "declined",
+        "completed",
+        "withdrawn",
+        "cancelled",
+        "expired",
+        "forbidden"
+      ],
+      "not_applicable": {
+        "empty": "A booking always has a date, an artist, a status and at least the request message."
+      }
+    },
+    {
+      "id": "withdraw-request",
+      "kind": "dialog",
+      "title": "Withdraw request",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-031",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "failed"
+      ],
+      "not_applicable": {
+        "invalid": "Withdrawing has no inputs."
+      }
+    },
+    {
+      "id": "cancel-booking",
+      "kind": "dialog",
+      "title": "Cancel booking",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-042",
+        "L2-044",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "confirm",
+        "late",
+        "busy",
+        "failed"
+      ],
+      "not_applicable": {
+        "invalid": "Bookers give no reason when cancelling; the only input is the second confirmation, shown as the confirm state."
+      }
+    },
+    {
+      "id": "pay-deposit",
+      "kind": "dialog",
+      "title": "Pay deposit",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-035",
+        "L2-036",
+        "L2-037",
+        "L2-044",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "write-review",
+      "kind": "dialog",
+      "title": "Write a review",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-059",
+        "L2-099",
+        "L2-101",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "busy",
+        "invalid",
+        "failed"
+      ],
+      "not_applicable": {}
+    },
+    {
+      "id": "booking-toast",
+      "kind": "notification",
+      "title": "Booking toast",
+      "opens_from": "booking-detail",
+      "requirements": [
+        "L2-037",
+        "L2-063",
+        "L2-109"
+      ],
+      "states": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "with-action",
+        "stacked"
+      ],
+      "not_applicable": {}
     }
   ]
 }

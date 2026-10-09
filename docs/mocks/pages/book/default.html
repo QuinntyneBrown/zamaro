@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request to book · default — Zamaro mocks</title>
+<meta name="mock:kind" content="page">
+<meta name="mock:screen" content="book">
+<meta name="mock:state" content="default">
+<meta name="mock:requirements" content="L2-019 L2-024 L2-028 L2-032 L2-044 L2-105 L2-108 L2-110">
+<meta name="description" content="Full-screen booking stub: Naomi asks Abigail to lead a worship night on Sat 14 Nov at 7:00 p.m.; her church comes from her profile and the $650 quote is locked.">
+<link rel="stylesheet" href="../../assets/tokens.css">
+<link rel="stylesheet" href="../../assets/ui.css">
+<link rel="stylesheet" href="../../assets/mock.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="topbar__brand" href="../discover/default.html"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+  <nav class="topbar__nav" aria-label="Primary">
+    <a class="nav-link" href="../discover/default.html">Discover</a>
+    <a class="nav-link" href="../discover/default.html#how">How booking works</a>
+    <a class="nav-link" href="../discover/default.html#join">For artists</a>
+  </nav>
+  <span class="topbar__spacer"></span>
+  <button class="nav-link topbar__saved btn--ghost" type="button" aria-expanded="false" style="background: none; border: 0; cursor: pointer;">
+    <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count" aria-label="3 saved artists">3</span>
+  </button>
+  <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
+</header>
+
+<main id="main">
+  <div class="container">
+    <nav aria-label="Breadcrumb" style="padding-top: var(--space-8);"><ol class="breadcrumb"><li><a href="../discover/default.html">Discover · Sat 14 Nov</a></li><li><a href="../artist/default.html">Abigail Mensah</a></li><li aria-current="page">Request to book</li></ol></nav>
+    <div class="page-head" style="padding-top: var(--space-4);">
+      <div><p class="overline">Admit one church · Sat 14 Nov</p><h1 id="book-title" class="page-head__title">Request to book Abigail</h1><p class="page-head__sub">$650 · travel included · replies in 72 hours</p></div>
+    </div>
+    <div class="detail-layout" style="padding-top: 0;">
+      <form class="form-stack" action="success.html" novalidate aria-labelledby="book-title">
+        <section class="form-section" aria-labelledby="event-title">
+          <h2 id="event-title" class="form-section__title">Your event</h2>
+          <div class="form-grid">
+          <div class="field"><label class="field__label" for="date">Event date <span class="optional">(required)</span></label>
+          <input class="input" type="date" id="date" name="date" value="2026-11-14" min="2026-10-09" aria-describedby="date-help">
+          <span class="field__help" id="date-help">✓ Abigail is free Sat 14 Nov</span></div>
+          <div class="field"><label class="field__label" for="kind">Kind of gathering <span class="optional">(required)</span></label>
+          <select class="select" id="kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select>
+          </div>
+          <div class="field"><label class="field__label" for="start">Service start time <span class="optional">(required)</span></label>
+          <input class="input" type="time" id="start" name="start" value="19:00" aria-describedby="start-help">
+          <span class="field__help" id="start-help">7:00 p.m. Abigail arrives an hour early for a sound check.</span></div>
+          <div class="field field--full"><label class="field__label" for="message">Message to Abigail <span class="optional">(optional)</span></label>
+          <textarea class="textarea" id="message" name="message" rows="5" maxlength="2000" aria-describedby="message-help">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs.</textarea>
+          <span class="field__help" id="message-help">Up to 2,000 characters. Phone numbers and e-mails are hidden from her until the booking is confirmed.</span></div>
+          </div>
+        </section>
+        <section class="form-section" aria-labelledby="church-title">
+          <h2 id="church-title" class="form-section__title">Your church</h2>
+          <dl class="definition definition--two">
+            <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church</dd></div>
+            <div class="definition__row"><dt>Address</dt><dd>2150 Lakeshore Rd, Burlington ON</dd></div>
+            <div class="definition__row"><dt>Contact phone</dt><dd>905-555-0123</dd></div>
+            <div class="definition__row"><dt>Booked by</dt><dd>Naomi Fraser, worship coordinator</dd></div>
+          </dl>
+          <p class="text-muted">From your church profile. Abigail sees only the city until the booking is confirmed. <a href="../discover/default.html">Edit your church in your account</a></p>
+        </section>
+        <div class="form-actions" style="position: static;">
+          <p class="form-actions__status"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4"/></svg>Nothing is charged today</p>
+          <div class="form-actions__buttons"><a class="btn" href="../artist/default.html">Back to profile</a><button class="btn btn--primary btn--lg" type="submit">Send request to Abigail</button></div>
+        </div>
+      </form>
+      <aside aria-labelledby="summary-title">
+        <div class="panel panel--raised">
+          <div class="panel__head"><h2 id="summary-title" class="panel__title">Abigail Mensah</h2><span class="stub__code">No. ZAM-0114</span></div>
+          <div class="cluster" style="flex-wrap: nowrap; align-items: flex-start; gap: var(--space-4);">
+            <div class="art art--yellow art--square" role="img" aria-label="Abigail Mensah singing into a vintage microphone" style="width: 5rem; flex: none;"></div>
+            <p class="text-muted">Gospel &amp; contemporary vocalist · Brampton, 44 km from you · <span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></p>
+          </div>
+          <dl class="receipt" aria-label="What you would pay"><div class="receipt__row"><dt>Quoted price, locked when you send</dt><dd>$650</dd></div><div class="receipt__row"><dt>Deposit after she accepts (25%)</dt><dd>$162.50</dd></div><div class="receipt__row"><dt>Balance after the event</dt><dd>$487.50</dd></div><div class="receipt__row receipt__total"><dt>Due today</dt><dd>$0</dd></div></dl>
+          <p class="stub__fine">Nothing is charged until Abigail accepts and you pay the deposit. Cancel free up to 14 days before your event. <a href="../discover/default.html#how">Cancellation policy</a></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer class="footer on-stage">
+  <div class="container footer__grid">
+    <div class="stack">
+      <p class="footer__word" aria-hidden="true">Zamaro</p>
+      <p>Worship artists for churches around Toronto.</p>
+    </div>
+    <div>
+      <h2>Churches</h2>
+      <ul>
+        <li><a href="../discover/default.html">Find who’s free</a></li>
+        <li><a href="../discover/default.html#how">How booking works</a></li>
+        <li><a href="mailto:hello@zamaro.ca">hello@zamaro.ca</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Artists</h2>
+      <ul>
+        <li><a href="../discover/default.html#join">Join the lineup</a></li>
+        <li><a href="../discover/default.html#how">What artists earn</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Naomi Fraser</h2>
+      <ul>
+        <li>Riverside Community Church</li>
+        <li><a href="../discover/default.html#saved">Saved artists (3)</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<p class="mock-note" style="top: 14rem; right: 1rem;">The artist page’s booking stub at full size; date and kind arrive from the stub. Enter in any field sends the request.</p>
+<div class="toast-region" role="status" aria-live="polite"></div>
+
+<nav class="mock-bar" aria-label="Mock navigation">
+  <a class="mock-bar__home" href="../../index.html" aria-label="All mocks">⌂</a>
+  <span class="mock-bar__screen">Request to book</span>
+  <ul class="mock-bar__states">
+    <li><a href="default.html" aria-current="page">default</a></li>
+    <li><a href="loading.html">loading</a></li>
+    <li><a href="error.html">error</a></li>
+    <li><a href="invalid.html">invalid</a></li>
+    <li><a href="duplicate.html">duplicate</a></li>
+    <li><a href="submitting.html">submitting</a></li>
+    <li><a href="success.html">success</a></li>
+  </ul>
+  <button type="button" data-theme-toggle aria-pressed="false">☾ Dark</button>
+  <button type="button" data-chrome-toggle aria-label="Hide mock chrome">×</button>
+</nav>
+<script src="../../assets/mock.js"></script>
+</body>
+</html>
