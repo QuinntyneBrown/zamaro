@@ -1,0 +1,124 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Review an artist application
+
+package "Zamaro Web (Angular)" {
+  class ApplicationQueuePage {
+    +applications: Signal<ApplicationSummary[]>
+    +loadMore(): void
+  }
+  class ApplicationReviewPage {
+    +store: ApplicationReviewStore
+    +onApprove(): void
+    +onReject(): void
+  }
+  class ApplicationReviewStore {
+    +application: Signal<ApplicationDetail | null>
+    +canApprove: Signal<boolean>
+    +setVerified(referenceId: number, verified: boolean): void
+    +approve(): void
+    +reject(reason: RejectionReason, note?: string): void
+  }
+  class AdminApplicationsApi {
+    +list(cursor?: string): Observable<Page<ApplicationSummary>>
+    +get(id: number): Observable<ApplicationDetail>
+    +setVerified(id: number, referenceId: number, verified: boolean): Observable<Reference>
+    +approve(id: number): Observable<ApplicationDetail>
+    +reject(id: number, body: RejectBody): Observable<ApplicationDetail>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class AdminArtistApplicationsController {
+    +index(request: Request): ResourceCollection
+    +show(application: ArtistApplication): AdminArtistApplicationResource
+    +approve(application: ArtistApplication): AdminArtistApplicationResource
+    +reject(request: RejectArtistApplicationRequest, application: ArtistApplication): AdminArtistApplicationResource
+  }
+  class SetReferenceVerification <<action>> {
+    +handle(reference: ApplicationReference, verified: bool, admin: User): ApplicationReference
+  }
+  class ApproveArtistApplication <<action>> {
+    +handle(application: ArtistApplication, admin: User): Artist
+  }
+  class RejectArtistApplication <<action>> {
+    +handle(application: ArtistApplication, reason: ApplicationRejectionReason, note: ?string, admin: User): void
+  }
+  class ArtistApplication <<Eloquent>> {
+    +int id
+    +?int userId
+    +string email
+    +ApplicationStatus status
+    +?CarbonImmutable decidedAt
+    +?int decidedBy
+    +?ApplicationRejectionReason rejectionReason
+    +?string rejectionNote
+    +referencesVerified(): bool
+  }
+  class ApplicationReference <<Eloquent>> {
+    +int id
+    +string name
+    +string church
+    +?CarbonImmutable verifiedAt
+    +?int verifiedBy
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +int userId
+    +string slug
+    +string ticketNumber
+    +ArtistStatus status
+    +bool payoutReady
+    +?CarbonImmutable publishedAt
+    +scopePubliclyVisible(query: Builder): Builder
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string email
+    +Role[] roles
+    +grantRole(role: Role): void
+  }
+  class VulnerableSectorCheck <<Eloquent>> {
+    +int id
+    +CarbonImmutable issuedOn
+    +VscStatus status
+  }
+  enum ApplicationStatus {
+    Submitted
+    Approved
+    Rejected
+  }
+  enum ApplicationRejectionReason {
+    <TO SUPPLY>
+  }
+}
+
+ApplicationQueuePage --> AdminApplicationsApi
+ApplicationReviewPage --> ApplicationReviewStore
+ApplicationReviewStore --> AdminApplicationsApi
+AdminApplicationsApi ..> AdminArtistApplicationsController : /api/v1/admin/artist-applications
+AdminArtistApplicationsController --> ApproveArtistApplication
+AdminArtistApplicationsController --> RejectArtistApplication
+SetReferenceVerification ..> ApplicationReference : updates
+ApproveArtistApplication ..> ArtistApplication : approves
+ApproveArtistApplication ..> User : grants Artist role
+ApproveArtistApplication ..> Artist : creates
+RejectArtistApplication ..> ArtistApplication : rejects
+ArtistApplication "1" *-- "2" ApplicationReference
+ArtistApplication --> ApplicationStatus
+ArtistApplication --> ApplicationRejectionReason
+ArtistApplication "0..1" --> "0..1" User
+User "1" --> "0..*" VulnerableSectorCheck
+User "1" --> "0..1" Artist
+@enduml

@@ -1,0 +1,73 @@
+@startuml
+title UML sequence behaviour — Mark dates unavailable
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistCalendarPage" as page
+  participant "ConfirmDeclineDialogComponent" as dialog
+  participant "AvailabilityStore" as store
+  participant "AvailabilityApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistAvailabilityController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SetDateAvailability" as action
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Select a range and choose "Mark unavailable"
+page -> store : saveRange(change, confirm = false)
+store -> client : putDates(change, false)
+client -> controller : PUT /api/v1/artist/availability/dates
+controller -> controller : Validate range inside the next 18 months and state (L2-075)
+controller -> action : handle(artist, from, to, Unavailable, confirm = false)
+action -> db : BEGIN; lock artist row; Requested and Accepted bookings in range
+alt open requests exist and not confirmed
+  action -> db : ROLLBACK
+  action --> controller : ConfirmationRequired(count n)
+  controller --> client : 409 problem details with affectedRequests = n
+  client --> store : Needs confirmation
+  store --> page : pendingConfirmation
+  page -> dialog : Open with n
+  dialog --> actor : "{n} churches have asked about this date. They'll be told you're not available." (L2-057)
+  actor -> dialog : Confirm
+  dialog -> store : saveRange(change, confirm = true)
+  store -> client : putDates(change, true)
+  client -> controller : PUT /api/v1/artist/availability/dates (confirm)
+  controller -> action : handle(artist, from, to, Unavailable, confirm = true)
+  action -> db : BEGIN; lock artist row; re-read open requests
+end
+action -> action : Skip dates with a Confirmed booking (L2-057)
+action -> db : Upsert overrides for the remaining dates (L2-056)
+loop each open request in range
+  action -> sm : transition(booking, Declined, artist) (L2-029, L2-057)
+  sm -> db : Update status, insert BookingTransition
+end
+action -> db : COMMIT
+action -> queue : Dispatch BookingDeclined per booking and ArtistAvailabilityChanged
+action --> controller : RangeResult
+controller --> client : 200 RangeResult
+client --> store : Result
+store -> store : Reload calendar
+store --> page : Updated months
+page --> actor : Days show Unavailable; success toast
+note over db : Search reads committed overrides, so the next search excludes these dates, within 60 seconds (L2-056)
+@enduml

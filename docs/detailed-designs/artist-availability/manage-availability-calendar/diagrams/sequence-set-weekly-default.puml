@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Set the weekly default
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "WeeklyDefaultFormComponent" as form
+  participant "AvailabilityStore" as store
+  participant "AvailabilityApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistAvailabilityController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SetWeeklyAvailability" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> form : Switch Monday to "Unavailable", activate Save
+form -> store : saveWeekly([1])
+store -> client : putWeekly([1])
+client -> controller : PUT /api/v1/artist/availability/weekly
+controller -> controller : Validate weekdays 1–7, no duplicates (L2-075)
+controller -> action : handle(artist, [1])
+action -> db : BEGIN; replace availability_rules for the artist; COMMIT
+action -> queue : Dispatch ArtistAvailabilityChanged
+action --> controller : Done
+controller --> client : 204
+client --> store : Saved
+store -> store : Reload calendar
+store --> form : Every future Monday shows Unavailable unless overridden (L2-056)
+form --> actor : Success toast
+note over action : Overrides take precedence over the weekly default; Booked days are never changed (L2-056, L2-057)
+@enduml

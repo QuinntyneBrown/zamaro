@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Review an artist application
+
+Container(web, "Zamaro Web", "Angular", "ApplicationReviewPage, ApplicationReviewStore, AdminApplicationsApi")
+Container(worker, "Zamaro Worker", "Laravel queue workers", "ApplicationApprovedNotification, ApplicationRejectedNotification")
+Container_Boundary(api, "Zamaro API") {
+  Component(guard, "EnsureAdministrator", "Middleware", "Returns 404 to non-administrators; requires MFA session")
+  Component(ctrl, "AdminArtistApplicationsController", "Laravel controller", "index, show, approve, reject")
+  Component(refCtrl, "AdminApplicationReferencesController", "Laravel controller", "Sets reference verification")
+  Component(policy, "ArtistApplicationPolicy", "Policy", "Administrator-only access")
+  Component(verify, "SetReferenceVerification", "Action", "Marks a reference verified or unverified")
+  Component(approve, "ApproveArtistApplication", "Action", "Grants Artist role and creates the unpublished Artist")
+  Component(reject, "RejectArtistApplication", "Action", "Records reason and note")
+  Component(audit, "RecordAuditEntry", "Action", "Writes AuditEntry")
+  Component(res, "AdminArtistApplicationResource", "API resource", "All applicant details, references, videos, VSC summary")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artist_applications, application_references, users, artists, audit_entries")
+}
+Rel(web, guard, "Calls /api/v1/admin/artist-applications", "JSON/HTTPS")
+Rel(guard, ctrl, "Passes administrator requests")
+Rel(guard, refCtrl, "Passes administrator requests")
+Rel(ctrl, policy, "Authorises with")
+Rel(refCtrl, verify, "Calls")
+Rel(ctrl, approve, "Calls")
+Rel(ctrl, reject, "Calls")
+Rel(ctrl, res, "Returns")
+Rel(verify, audit, "Records")
+Rel(approve, audit, "Records")
+Rel(reject, audit, "Records")
+Rel(approve, db, "Locks application; writes user role, artist, status", "SQL")
+Rel(reject, db, "Writes status, reason, note", "SQL")
+Rel(verify, db, "Writes verified_at, verified_by", "SQL")
+Rel(audit, db, "Inserts", "SQL")
+Rel(approve, worker, "Dispatches ArtistApplicationApproved", "Redis queue")
+Rel(reject, worker, "Dispatches ArtistApplicationRejected", "Redis queue")
+@enduml

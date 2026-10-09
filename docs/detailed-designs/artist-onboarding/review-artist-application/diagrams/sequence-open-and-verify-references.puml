@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Open an application and verify references
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ApplicationReviewPage" as page
+  participant "ApplicationReviewStore" as store
+  participant "AdminApplicationsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EnsureAdministrator" as guard
+  participant "AdminArtistApplicationsController" as controller
+  participant "AdminApplicationReferencesController" as refctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SetReferenceVerification" as verify
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+actor -> page : Open /admin/applications/{id}
+page -> store : load(id)
+store -> client : get(id)
+client -> guard : GET /api/v1/admin/artist-applications/{id}
+alt not an administrator or no MFA session
+  guard --> client : 404 problem details (L2-066)
+else administrator
+  guard -> controller : show(application)
+  controller -> db : Application, references (decrypted), videos, applicant's latest VSC
+  db --> controller : Rows
+  controller -> storage : Sign video poster and stream URLs
+  controller -> audit : Record "application viewed" (L2-069)
+  controller --> client : 200 AdminArtistApplicationResource
+end
+client --> store : ApplicationDetail
+store --> page : Render details, references with checkboxes, VSC link, Approve and Reject (L2-067)
+page --> actor : Review screen; Approve disabled until both references are verified (L2-048)
+actor -> page : Tick "Verified" for a reference after contacting it
+page -> store : setVerified(referenceId, true)
+store -> client : setVerified(id, referenceId, true)
+client -> guard : PUT /api/v1/admin/artist-applications/{id}/references/{ref}/verification
+guard -> refctrl : update(reference, verified)
+refctrl -> verify : handle(reference, true, admin)
+verify -> db : Set verified_at, verified_by
+verify -> audit : Record "reference verified" with actor, target, IP, outcome (L2-069)
+verify --> refctrl : Reference
+refctrl --> client : 200 reference
+client --> store : Reference
+store --> page : canApprove = both references verified
+page --> actor : Checkbox ticked; Approve enabled when both are verified
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — View the availability calendar
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistCalendarPage" as page
+  participant "AvailabilityStore" as store
+  participant "AvailabilityApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistCalendarController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BuildArtistCalendar" as action
+  participant "AvailabilityService" as avail
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /artist/calendar
+page -> store : load()
+store -> client : calendar()
+client -> controller : GET /api/v1/artist/calendar
+controller -> controller : Require Artist role; scope to own artist (L2-074)
+controller -> action : handle(artist, today in America/Toronto)
+action -> db : Weekly rules, overrides, bookings in the next 18 months
+db --> action : Rows
+loop each day in the next 18 months
+  alt a Confirmed booking on the day
+    action -> action : Booked, not editable (L2-057)
+  else override or weekly rule marks it unavailable
+    action -> avail : isUnavailableByChoice(artist, date)
+    action -> action : Unavailable (L2-056)
+  else Requested or Accepted bookings exist
+    action -> action : Requested with count (L2-056)
+  else nothing set
+    action -> action : Free (L2-056)
+  end
+end
+note right of action : Cancelled bookings are ignored, so the day returns to its prior state (L2-057)
+action --> controller : 18 CalendarMonth values
+controller --> client : 200 CalendarResource
+client --> store : Months
+store --> page : Render months with legend
+page --> actor : Each day marked Free, Unavailable, Requested (n) or Booked
+@enduml

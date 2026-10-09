@@ -1,0 +1,100 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Publish a calendar feed
+
+package "Zamaro Web (Angular)" {
+  class CalendarFeedComponent {
+    +feed: Signal<FeedState | null>
+    +enable(): void
+    +regenerate(): void
+    +copy(): void
+  }
+  class CalendarFeedApi {
+    +get(): Observable<FeedState | null>
+    +enable(): Observable<FeedState>
+    +regenerate(): Observable<FeedState>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistCalendarFeedController {
+    +show(): CalendarFeedResource
+    +store(): CalendarFeedResource
+    +regenerate(): CalendarFeedResource
+  }
+  class EnableCalendarFeed <<action>> {
+    +handle(artist: Artist): CalendarFeed
+  }
+  class RegenerateCalendarFeed <<action>> {
+    +handle(artist: Artist): CalendarFeed
+  }
+  class FeedTokenGenerator {
+    +BYTES: int = 32
+    +generate(): FeedToken
+    +hash(token: string): string
+  }
+  class FeedToken <<value object>> {
+    +string plain
+    +string hash
+  }
+  class CalendarFeedController {
+    +__invoke(token: string): Response
+  }
+  class BuildCalendarFeed <<action>> {
+    +handle(feed: CalendarFeed): string
+  }
+  class ICalendarWriter {
+    +calendar(name: string, events: FeedEvent[]): string
+  }
+  class FeedEvent <<value object>> {
+    +string uid
+    +CarbonImmutable startsAt
+    +string summary
+    +string location
+    +CarbonImmutable updatedAt
+  }
+  class CalendarFeed <<Eloquent>> {
+    +int id
+    +int artistId
+    +string tokenHash
+    +string tokenEncrypted
+    +CarbonImmutable enabledAt
+    +?CarbonImmutable regeneratedAt
+    +url(): string
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +CarbonImmutable eventDate
+    +string startTime
+    +GatheringKind gatheringKind
+    +string churchName
+    +string churchAddress
+    +BookingStatus status
+  }
+}
+
+CalendarFeedComponent --> CalendarFeedApi
+CalendarFeedApi ..> ArtistCalendarFeedController : /api/v1/artist/calendar-feed
+ArtistCalendarFeedController --> EnableCalendarFeed
+ArtistCalendarFeedController --> RegenerateCalendarFeed
+EnableCalendarFeed --> FeedTokenGenerator
+RegenerateCalendarFeed --> FeedTokenGenerator
+FeedTokenGenerator ..> FeedToken : creates
+EnableCalendarFeed ..> CalendarFeed : creates
+RegenerateCalendarFeed ..> CalendarFeed : updates
+CalendarFeedController --> BuildCalendarFeed
+BuildCalendarFeed ..> Booking : reads Confirmed
+BuildCalendarFeed --> ICalendarWriter
+BuildCalendarFeed ..> FeedEvent : maps
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Manage the availability calendar
+
+Person(artist, "Artist", "Approved worship artist")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(artist, zamaro, "Sets weekly defaults and marks dates unavailable using", "HTTPS")
+Rel(booker, zamaro, "Searches dates that reflect the artist's availability using", "HTTPS")
+Rel(zamaro, email, "Sends request-declined emails through", "HTTPS")
+@enduml

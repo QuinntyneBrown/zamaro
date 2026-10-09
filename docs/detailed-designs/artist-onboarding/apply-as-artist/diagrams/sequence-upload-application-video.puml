@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Upload an application video
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist applicant" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VideoUploadComponent" as comp
+  participant "ArtistApplicationsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ApplicationVideoUploadsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ProcessApplicationVideo" as job
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+  participant "Malware scanner" as scanner
+  participant "Video processing service" as video
+end box
+
+actor -> comp : Choose MP4, MOV or WebM file and enter title
+comp -> comp : Check size up to 1 GB and title 5–100 characters (L2-052)
+comp -> client : uploadVideo(file)
+client -> controller : POST /api/v1/artist-applications/videos (start upload)
+controller -> db : Insert ArtistVideo (status Processing, no application yet)
+controller --> client : 201 upload id and chunk size
+loop each chunk
+  client -> controller : PATCH chunk at offset
+  controller -> storage : Append chunk under random name
+  controller --> client : Next offset
+  client --> comp : Percent uploaded
+end
+note over client, controller : Above 50 MB a dropped connection resumes from the last completed chunk (L2-052)
+controller -> job : Dispatch ProcessApplicationVideo
+job -> storage : Read file
+job -> job : Verify type from content; reject SVG and HTML (L2-076)
+job -> scanner : Scan file
+alt malware found
+  job -> storage : Delete file
+  job -> db : Set status Failed, log security event (L2-076)
+else clean
+  job -> video : Transcode to 360p, 720p, 1080p with poster (L2-052)
+  video --> job : Renditions ready
+  job -> db : Set status Live
+end
+comp -> client : Poll video status
+client --> comp : Processing, Live or failure reason
+comp --> actor : Progress, then "Processing", then "Live" or the reason
+@enduml

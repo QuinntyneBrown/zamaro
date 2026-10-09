@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Manage the availability calendar
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "/artist/calendar page")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Calendar and availability endpoints under /api/v1/artist")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Declined-request emails, profile cache invalidation")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "availability_rules, availability_overrides, bookings")
+  ContainerDb(cache, "Cache and queue", "Redis", "Queues")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/artist/calendar; PUT availability", "JSON/HTTPS")
+Rel(api, db, "Reads rules, overrides and bookings; writes availability and declines", "Eloquent / SQL")
+Rel(api, cache, "Queues events", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, email, "Sends request-declined email", "HTTPS")
+@enduml

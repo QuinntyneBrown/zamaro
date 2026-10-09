@@ -1,0 +1,71 @@
+@startuml
+title UML sequence behaviour — Upload a Vulnerable Sector Check
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VscPage" as page
+  participant "VulnerableSectorChecksApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "VulnerableSectorChecksController" as controller
+  participant "UploadVulnerableSectorCheckRequest" as req
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UploadVulnerableSectorCheck" as action
+  participant "DocumentVault" as vault
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ScanVulnerableSectorCheck" as job
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Secrets manager" as secrets
+  database "Object storage" as storage
+  database "Zamaro database" as db
+  participant "Malware scanner" as scanner
+end box
+
+actor -> page : Choose file and enter issue date, activate Upload
+page -> page : Check type, size up to 10 MB, date not in the future
+page -> client : upload(file, issuedOn)
+client -> controller : POST /api/v1/artist/vulnerable-sector-checks (multipart)
+controller -> req : Authorise artist; validate type from content: PDF, JPEG or PNG; reject SVG and HTML (L2-049, L2-076)
+alt invalid file or date
+  req --> client : 422 problem details with field errors
+else valid
+  controller -> action : handle(user, file, issuedOn)
+  action -> vault : put(contents, mime)
+  vault -> secrets : Read key-encryption key (L2-078)
+  vault -> vault : Encrypt with a fresh data key (L2-079)
+  vault -> storage : Write ciphertext under a random name in the private bucket
+  vault --> action : StoredDocument(key)
+  action -> db : Insert check (status Scanning, issued_on)
+  action -> job : Dispatch ScanVulnerableSectorCheck
+  controller --> client : 201 VscSummary (Scanning)
+end
+client --> page : Result
+page --> actor : "Checking your file" status or inline errors
+job -> vault : read(key)
+job -> scanner : Scan bytes (L2-076)
+alt malware found
+  job -> vault : delete(key)
+  job -> db : Status Blocked; log security event (L2-076)
+else clean
+  job -> db : Status Pending, queued for administrator verification (L2-049)
+end
+page -> client : current()
+client --> page : Pending, or Blocked with the upload rejected
+page --> actor : "Waiting for verification" or the rejection reason
+@enduml

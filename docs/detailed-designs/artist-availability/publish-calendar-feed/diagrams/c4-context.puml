@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Publish a calendar feed
+
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(calapp, "Calendar application", "Artist's calendar client that subscribes to iCalendar URLs")
+
+Rel(artist, zamaro, "Enables and regenerates the feed using", "HTTPS")
+Rel(artist, calapp, "Subscribes to the secret URL in")
+Rel(calapp, zamaro, "Polls the feed of Confirmed bookings from", "HTTPS, text/calendar")
+@enduml

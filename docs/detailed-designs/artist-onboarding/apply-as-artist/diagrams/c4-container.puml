@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Apply as an artist
+
+Person(applicant, "Artist applicant", "Person applying to join as an artist")
+System_Ext(bot, "Bot challenge provider", "Privacy-respecting challenge")
+System_Ext(geo, "Geocoding provider", "Address to latitude and longitude")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(video, "Video processing service", "Transcodes uploads")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "/apply page, application form and video uploader")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Application and upload endpoints under /api/v1")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Scans and transcodes videos, sends email")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Applications, references, videos")
+  ContainerDb(cache, "Cache and queue", "Redis", "Queues, rate-limit counters, distance cache")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Uploaded video files")
+}
+Rel(applicant, web, "Uses", "HTTPS")
+Rel(web, api, "POST /api/v1/artist-applications and video uploads", "JSON/HTTPS")
+Rel(web, bot, "Runs the challenge widget", "HTTPS")
+Rel(api, bot, "Verifies challenge token", "HTTPS/JSON")
+Rel(api, geo, "Geocodes base city", "HTTPS/JSON")
+Rel(api, routing, "Distance from Toronto City Hall", "HTTPS/JSON")
+Rel(api, db, "Writes application, references and video rows", "Eloquent / SQL")
+Rel(api, storage, "Writes video chunks", "S3 API")
+Rel(api, cache, "Queues jobs, reads cached distances", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, scanner, "Scans video", "HTTPS")
+Rel(worker, video, "Requests transcoding", "HTTPS/JSON")
+Rel(worker, email, "Sends application-received email", "HTTPS")
+Rel(worker, db, "Updates video status", "SQL")
+@enduml

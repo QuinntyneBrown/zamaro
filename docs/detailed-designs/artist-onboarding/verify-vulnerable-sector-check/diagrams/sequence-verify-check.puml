@@ -1,0 +1,77 @@
+@startuml
+title UML sequence behaviour — View and verify a Vulnerable Sector Check
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VscQueuePage" as page
+  participant "VscDocumentComponent" as doc
+  participant "VulnerableSectorChecksApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "DocumentLinksController" as linkctrl
+  participant "PrivateDocumentController" as docctrl
+  participant "AdminVulnerableSectorChecksController" as adminctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "VulnerableSectorCheckPolicy" as policy
+  participant "VerifyVulnerableSectorCheck" as verify
+  participant "RecordAuditEntry" as audit
+  participant "DocumentVault" as vault
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+actor -> doc : Activate "View document"
+doc -> client : documentLink(id)
+client -> linkctrl : GET /api/v1/vulnerable-sector-checks/{id}/document-link
+linkctrl -> policy : view(user, check)
+alt neither the owning artist nor an administrator
+  policy --> linkctrl : Denied
+  linkctrl --> client : 404 problem details (L2-049, L2-074)
+else allowed
+  linkctrl -> audit : Record document access (L2-069)
+  linkctrl -> vault : temporaryUrl(key, 5 minutes) (L2-076)
+  linkctrl --> client : 200 signed URL on the media domain
+  client --> doc : SignedLink
+  doc -> docctrl : GET signed URL in a new tab
+  alt signature invalid or expired
+    docctrl --> doc : 404
+  else valid
+    docctrl -> vault : read(key)
+    vault -> storage : Read ciphertext
+    vault --> docctrl : Decrypted bytes
+    docctrl --> doc : Document with server-set Content-Type, Content-Disposition, no-store
+  end
+end
+actor -> page : Activate Verify
+page -> client : verify(id)
+client -> adminctrl : POST /api/v1/admin/vulnerable-sector-checks/{id}/verification
+adminctrl -> verify : handle(check, admin)
+verify -> db : Lock check; require status Pending
+alt issue date more than 3 years ago
+  verify --> adminctrl : TooOld
+  adminctrl --> client : 422 problem details
+else within the last 3 years
+  verify -> db : Status Verified, verified_at, verified_by, expires_on = issued_on + 3 years (L2-049)
+  verify -> audit : Record "VSC verified" (L2-069)
+  verify --> adminctrl : Check
+  adminctrl --> client : 200 VscSummary
+end
+client --> page : Result
+page --> actor : Row shows Verified until the expiry date; artist eligible for Youth event searches (L2-005)
+@enduml

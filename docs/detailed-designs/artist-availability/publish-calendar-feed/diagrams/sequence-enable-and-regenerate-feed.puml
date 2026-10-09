@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Enable and regenerate the calendar feed
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "CalendarFeedComponent" as comp
+  participant "CalendarFeedApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistCalendarFeedController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "EnableCalendarFeed" as enable
+  participant "RegenerateCalendarFeed" as rotate
+  participant "FeedTokenGenerator" as tokens
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> comp : Activate "Turn on calendar feed"
+comp -> client : enable()
+client -> controller : POST /api/v1/artist/calendar-feed
+controller -> controller : Require Artist role; own artist only (L2-074)
+controller -> enable : handle(artist)
+enable -> tokens : generate()
+tokens --> enable : FeedToken(plain, SHA-256 hash)
+enable -> db : Insert calendar_feeds (token_hash, token_encrypted)
+enable --> controller : CalendarFeed
+controller --> client : 201 CalendarFeedResource with secret URL (L2-058)
+client --> comp : FeedState
+comp --> actor : URL field with Copy and subscription help
+
+actor -> comp : Activate "Regenerate URL"
+comp --> actor : Confirm dialog: the old URL stops working
+actor -> comp : Confirm
+comp -> client : regenerate()
+client -> controller : POST /api/v1/artist/calendar-feed/regeneration
+controller -> rotate : handle(artist)
+rotate -> tokens : generate()
+tokens --> rotate : New FeedToken
+rotate -> db : Replace token_hash and token_encrypted; set regenerated_at
+note right of db : The old hash no longer exists, so the old URL returns 404 (L2-058)
+rotate --> controller : CalendarFeed
+controller --> client : 200 CalendarFeedResource with new URL
+client --> comp : FeedState
+comp --> actor : New URL shown; success toast
+@enduml
