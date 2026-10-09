@@ -83,10 +83,28 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 
 ### Pages
 
-| Screen | default | loading | empty | error | Requirements |
-|---|---|---|---|---|---|
-| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
-| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Screen | default | loading | empty | error | invalid | duplicate | submitting | success | no-results | past | accepted | confirmed | declined | completed | withdrawn | cancelled | expired | forbidden | Requirements |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
+| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) |  |  |  |  |  |  |  |  |  |  |  |  |  |  | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Request to book (`book`) | [✅](pages/book/default.html) | [✅](pages/book/loading.html) | ➖ | [✅](pages/book/error.html) | [✅](pages/book/invalid.html) | [✅](pages/book/duplicate.html) | [✅](pages/book/submitting.html) | [✅](pages/book/success.html) |  |  |  |  |  |  |  |  |  |  | `L2-019`, `L2-024`, `L2-028`, `L2-032`, `L2-044`, `L2-105`, `L2-108`, `L2-110` |
+| Your bookings (`bookings`) | [✅](pages/bookings/default.html) | [✅](pages/bookings/loading.html) | [✅](pages/bookings/empty.html) | [✅](pages/bookings/error.html) |  |  |  |  | [✅](pages/bookings/no-results.html) | [✅](pages/bookings/past.html) |  |  |  |  |  |  |  |  | `L2-029`, `L2-033`, `L2-105`, `L2-110` |
+| Booking (`booking-detail`) | [✅](pages/booking-detail/default.html) | [✅](pages/booking-detail/loading.html) | ➖ | [✅](pages/booking-detail/error.html) |  |  |  |  |  |  | [✅](pages/booking-detail/accepted.html) | [✅](pages/booking-detail/confirmed.html) | [✅](pages/booking-detail/declined.html) | [✅](pages/booking-detail/completed.html) | [✅](pages/booking-detail/withdrawn.html) | [✅](pages/booking-detail/cancelled.html) | [✅](pages/booking-detail/expired.html) | [✅](pages/booking-detail/forbidden.html) | `L2-029`, `L2-030`, `L2-031`, `L2-032`, `L2-033`, `L2-036`, `L2-037`, `L2-040`, `L2-042`, `L2-044`, `L2-045`, `L2-046`, `L2-059`, `L2-105`, `L2-108`, `L2-110` |
+
+### Dialogs
+
+| Screen | default | busy | invalid | failed | confirm | late | Requirements |
+|---|---|---|---|---|---|---|---|
+| Withdraw request (`withdraw-request`) | [✅](dialogs/withdraw-request/default.html) | [✅](dialogs/withdraw-request/busy.html) | ➖ | [✅](dialogs/withdraw-request/failed.html) |  |  | `L2-031`, `L2-099`, `L2-101`, `L2-108` |
+| Cancel booking (`cancel-booking`) | [✅](dialogs/cancel-booking/default.html) | [✅](dialogs/cancel-booking/busy.html) | ➖ | [✅](dialogs/cancel-booking/failed.html) | [✅](dialogs/cancel-booking/confirm.html) | [✅](dialogs/cancel-booking/late.html) | `L2-042`, `L2-044`, `L2-099`, `L2-101`, `L2-108` |
+| Pay deposit (`pay-deposit`) | [✅](dialogs/pay-deposit/default.html) | [✅](dialogs/pay-deposit/busy.html) | [✅](dialogs/pay-deposit/invalid.html) | [✅](dialogs/pay-deposit/failed.html) |  |  | `L2-035`, `L2-036`, `L2-037`, `L2-044`, `L2-099`, `L2-101`, `L2-108` |
+| Write a review (`write-review`) | [✅](dialogs/write-review/default.html) | [✅](dialogs/write-review/busy.html) | [✅](dialogs/write-review/invalid.html) | [✅](dialogs/write-review/failed.html) |  |  | `L2-059`, `L2-099`, `L2-101`, `L2-108` |
+
+### Notifications
+
+| Screen | info | success | warning | danger | with-action | stacked | Requirements |
+|---|---|---|---|---|---|---|---|
+| Booking toast (`booking-toast`) | [✅](notifications/booking-toast/info.html) | [✅](notifications/booking-toast/success.html) | [✅](notifications/booking-toast/warning.html) | [✅](notifications/booking-toast/danger.html) | [✅](notifications/booking-toast/with-action.html) | [✅](notifications/booking-toast/stacked.html) | `L2-037`, `L2-063`, `L2-109` |
 
 <!-- coverage:end -->
 

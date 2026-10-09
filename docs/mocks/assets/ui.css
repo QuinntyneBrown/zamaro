@@ -783,3 +783,8 @@ img, svg, video { display: block; max-width: 100%; }
 @keyframes scale-in { from { opacity: 0; scale: 0.96; } }
 @keyframes slide-in-left { from { translate: -100% 0; } }
 @media print { .topbar, .toast-region, .mock-bar, .skip-link, .dialog, .bulk-bar { display: none !important; } }
+
+/* ---------- Slice A: booking ---------------------------------------------
+   Booking detail: under 64rem the payment panel (and its one primary action)
+   comes straight after the page head instead of after the messages. */
+@media (max-width: 63.99rem) { .detail-layout--aside-first > aside { order: -1; } }
