@@ -83,10 +83,28 @@ Legend: ✅ mock exists · ➖ not applicable (reason in manifest) · ❌ missin
 
 ### Pages
 
-| Screen | default | loading | empty | error | Requirements |
-|---|---|---|---|---|---|
-| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
-| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Screen | default | loading | empty | error | invalid | submitting | success | Requirements |
+|---|---|---|---|---|---|---|---|---|
+| Discover artists (`discover`) | [✅](pages/discover/default.html) | [✅](pages/discover/loading.html) | [✅](pages/discover/empty.html) | [✅](pages/discover/error.html) |  |  |  | `L2-004`, `L2-005`, `L2-006`, `L2-007`, `L2-008`, `L2-009`, `L2-010`, `L2-011`, `L2-097`, `L2-105`, `L2-106` |
+| Artist profile (`artist`) | [✅](pages/artist/default.html) | [✅](pages/artist/loading.html) | [✅](pages/artist/empty.html) | [✅](pages/artist/error.html) |  |  |  | `L2-012`, `L2-013`, `L2-014`, `L2-015`, `L2-016`, `L2-017`, `L2-018`, `L2-019`, `L2-020`, `L2-021`, `L2-098`, `L2-105`, `L2-107` |
+| Saved artists (`saved`) | [✅](pages/saved/default.html) | [✅](pages/saved/loading.html) | [✅](pages/saved/empty.html) | [✅](pages/saved/error.html) |  |  |  | `L2-026`, `L2-027`, `L2-105` |
+| Account settings (`account`) | [✅](pages/account/default.html) | [✅](pages/account/loading.html) | ➖ | [✅](pages/account/error.html) | [✅](pages/account/invalid.html) | [✅](pages/account/submitting.html) | [✅](pages/account/success.html) | `L2-024`, `L2-025`, `L2-065`, `L2-072`, `L2-080`, `L2-081`, `L2-082`, `L2-105`, `L2-108` |
+| Edit profile (`edit-profile`) | [✅](pages/edit-profile/default.html) | [✅](pages/edit-profile/loading.html) | [✅](pages/edit-profile/empty.html) | [✅](pages/edit-profile/error.html) | [✅](pages/edit-profile/invalid.html) | [✅](pages/edit-profile/submitting.html) | [✅](pages/edit-profile/success.html) | `L2-049`, `L2-050`, `L2-051`, `L2-052`, `L2-053`, `L2-054`, `L2-055`, `L2-105`, `L2-108` |
+
+### Dialogs
+
+| Screen | default | busy | invalid | blocked | failed | artist | limit | Requirements |
+|---|---|---|---|---|---|---|---|---|
+| Delete account (`delete-account`) | [✅](dialogs/delete-account/default.html) | [✅](dialogs/delete-account/busy.html) | [✅](dialogs/delete-account/invalid.html) | [✅](dialogs/delete-account/blocked.html) | [✅](dialogs/delete-account/failed.html) |  |  | `L2-082`, `L2-099`, `L2-101`, `L2-108` |
+| Account menu (`account-menu`) | [✅](dialogs/account-menu/default.html) | ➖ | ➖ |  |  | [✅](dialogs/account-menu/artist.html) |  | `L2-023`, `L2-024`, `L2-099`, `L2-101` |
+| Menu (`menu`) | [✅](dialogs/menu/default.html) | ➖ | ➖ |  |  | [✅](dialogs/menu/artist.html) |  | `L2-099`, `L2-101` |
+| Add video (`add-video`) | [✅](dialogs/add-video/default.html) | [✅](dialogs/add-video/busy.html) | [✅](dialogs/add-video/invalid.html) |  | [✅](dialogs/add-video/failed.html) |  | [✅](dialogs/add-video/limit.html) | `L2-052`, `L2-099`, `L2-101`, `L2-108` |
+
+### Notifications
+
+| Screen | info | success | warning | danger | with-action | stacked | Requirements |
+|---|---|---|---|---|---|---|---|
+| Saved toast (`saved-toast`) | [✅](notifications/saved-toast/info.html) | [✅](notifications/saved-toast/success.html) | [✅](notifications/saved-toast/warning.html) | [✅](notifications/saved-toast/danger.html) | [✅](notifications/saved-toast/with-action.html) | ➖ | `L2-026`, `L2-109` |
 
 <!-- coverage:end -->
 
