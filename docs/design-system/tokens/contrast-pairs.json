@@ -194,6 +194,18 @@
       ]
     },
     {
+      "fg": "--color-border-selected",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "outline of a selected choice card, card or nav item"
+    },
+    {
+      "fg": "--color-border-selected",
+      "bg": "--color-accent-subtle",
+      "min": 3,
+      "note": "selected outline against its own highlight fill"
+    },
+    {
       "fg": "--color-border-strong",
       "bg": "--color-bg-surface",
       "min": 3,

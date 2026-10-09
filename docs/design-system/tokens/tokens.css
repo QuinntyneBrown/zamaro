@@ -243,6 +243,7 @@
   --color-border-strong: var(--palette-ink-700);
   --color-border-inverse: var(--palette-ink-300);
   --color-border-on-accent: var(--palette-ink-750);
+  --color-border-selected: var(--palette-ink-750); /* outline of a selected card, choice or nav item */
 
   --color-accent: var(--palette-signal-500);
   --color-accent-hover: var(--palette-signal-300);
@@ -321,6 +322,7 @@
   --color-border-strong: var(--palette-ink-300);
   --color-border-inverse: var(--palette-ink-600);
   --color-border-on-accent: var(--palette-ink-750);
+  --color-border-selected: var(--palette-signal-500);
   --color-accent: var(--palette-signal-500);
   --color-accent-hover: var(--palette-signal-300);
   --color-accent-active: var(--palette-signal-400);
@@ -392,6 +394,7 @@
     --color-border-strong: var(--palette-ink-300);
     --color-border-inverse: var(--palette-ink-600);
     --color-border-on-accent: var(--palette-ink-750);
+    --color-border-selected: var(--palette-signal-500);
     --color-accent: var(--palette-signal-500);
     --color-accent-hover: var(--palette-signal-300);
     --color-accent-active: var(--palette-signal-400);

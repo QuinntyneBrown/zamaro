@@ -59,7 +59,7 @@ a:hover, .link:hover, .link[data-state="hover"] { color: var(--color-fg-link-hov
 .link--standalone:hover .icon, .link--standalone[data-state="hover"] .icon { translate: var(--space-1) 0; }
 .link__external { display: inline; width: 0.85em; height: 0.85em; margin-left: 0.15em; vertical-align: -0.05em; }
 :is(.on-stage, .topbar) a:not(.btn) { color: inherit; }
-:is(.on-stage, .topbar) a:not(.btn):hover { background: none; color: var(--color-accent-on-stage); }
+:is(.on-stage, .topbar) a:not(.btn):hover, :is(.on-stage, .topbar) a:not(.btn)[data-state="hover"] { background: none; color: var(--color-accent-on-stage); }
 
 /* ---------- Skip link ---------------------------------------------------- */
 .skip-link {
@@ -269,7 +269,7 @@ a:hover, .link:hover, .link[data-state="hover"] { color: var(--color-fg-link-hov
 }
 .choice-card > input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 .choice-card:hover, .choice-card[data-state="hover"] { box-shadow: var(--shadow-1); transform: var(--transform-lift); }
-.choice-card:has(> input:checked) { --choice-border: var(--color-border-on-accent); box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-border-on-accent); background: var(--color-accent-subtle); }
+.choice-card:has(> input:checked) { --choice-border: var(--color-border-selected); box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-border-selected); background: var(--color-accent-subtle); }
 .choice-card:has(> input:focus-visible), .choice-card[data-state="focus"] { outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset); }
 .choice-card__title { font: var(--text-h4); text-transform: uppercase; }
 .choice-card__meta { font: var(--text-body-sm); color: var(--color-fg-muted); }
@@ -317,7 +317,7 @@ a:hover, .link:hover, .link[data-state="hover"] { color: var(--color-fg-link-hov
 .chip:hover, .chip[data-state="hover"] { --chip-bg: var(--color-accent-subtle); }
 .chip:active, .chip[data-state="active"] { --chip-bg: var(--color-accent-subtle-hover); }
 .chip[aria-pressed="true"] { --chip-bg: var(--color-bg-inverse); --chip-fg: var(--color-fg-inverse); --chip-border: var(--color-bg-inverse); }
-.chip[aria-pressed="true"]::before { content: "✓"; }
+.chip[aria-pressed="true"]::before { content: "✓"; content: "✓" / ""; }
 .chip:disabled { --chip-bg: var(--color-bg-subtle); --chip-fg: var(--color-fg-disabled); --chip-border: var(--color-fg-disabled); cursor: not-allowed; }
 .chip--sm { --chip-height: var(--control-height-sm); padding: 0 var(--space-3); font-size: var(--font-size-xs); }
 .chip--static { --chip-height: var(--target-min); cursor: default; padding: 0 var(--space-2); font-size: var(--font-size-xs); }
@@ -420,7 +420,7 @@ button.avatar:hover, button.avatar[data-state="hover"] { transform: scale(1.06);
   color: var(--color-fg-default); text-decoration: none; font: var(--text-label); border-left: var(--border-width-poster) solid transparent;
 }
 .sidenav__link:hover, .sidenav__link[data-state="hover"] { background: var(--color-bg-subtle); color: var(--color-fg-default); }
-.sidenav__link[aria-current="page"] { background: var(--color-accent-subtle); color: var(--color-fg-accent); border-left-color: var(--color-border-on-accent); }
+.sidenav__link[aria-current="page"] { background: var(--color-accent-subtle); color: var(--color-fg-accent); border-left-color: var(--color-border-selected); }
 .sidenav__link .badge { margin-left: auto; }
 .sidenav--collapsed { max-width: calc(var(--target-comfortable) + var(--space-8)); padding-inline: var(--space-2); }
 .sidenav--collapsed .sidenav__label, .sidenav--collapsed .sidenav__group > summary { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -563,7 +563,7 @@ dialog.dialog:not([open]) { display: none; }
 .card--interactive .card__title a:hover { background: none; }
 .card--interactive:hover, .card--interactive[data-state="hover"], .card--interactive:focus-within { transform: var(--transform-lift); box-shadow: var(--shadow-2); }
 .card--interactive :is(button, .btn, a:not(.card__title a)) { position: relative; z-index: var(--z-raised); }
-.card--selected { --card-border: var(--color-border-on-accent); box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-border-on-accent), var(--shadow-1); background: var(--color-accent-subtle); }
+.card--selected { --card-border: var(--color-border-selected); box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-border-selected), var(--shadow-1); background: var(--color-accent-subtle); }
 .card--flat { --card-border: var(--color-border-default); }
 
 /* ---------- Poster hero (the stage) ------------------------------------- */
@@ -978,7 +978,7 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 .tour-dates__day { white-space: nowrap; }
 :is(.on-stage, .topbar) .btn.btn--ghost[aria-expanded="true"] { --btn-bg: var(--color-bg-stage-raised); --btn-fg: var(--color-fg-on-stage); }
 .stub[aria-busy="true"] .field { opacity: 0.6; pointer-events: none; }
-.menu__item[aria-current="page"] { font-weight: var(--font-weight-bold); box-shadow: inset var(--border-width-poster) 0 0 var(--color-border-on-accent); }
+.menu__item[aria-current="page"] { font-weight: var(--font-weight-bold); box-shadow: inset var(--border-width-poster) 0 0 var(--color-border-selected); }
 .toast--danger .btn--ghost { --btn-border: transparent; }
 .toast-region--static { z-index: auto; }
 @media (max-width: 39.99rem) { .empty { padding: var(--space-8) var(--space-5); } }
@@ -987,3 +987,9 @@ th[aria-sort="descending"] .table__sort .icon { rotate: 180deg; }
 .band a:not(.btn)[data-state="hover"] { background: var(--color-bg-surface); color: var(--color-fg-on-accent); }
 .review { color: var(--color-fg-default); }
 .stub__code { white-space: nowrap; }
+.switch > input:disabled + .switch__track { --switch-bg: var(--color-bg-subtle); --switch-border: var(--color-fg-disabled); --switch-thumb: var(--color-fg-disabled); }
+.choice-card:has(> input:disabled) { --choice-border: var(--color-fg-disabled); background: var(--color-bg-subtle); color: var(--color-fg-disabled); cursor: not-allowed; box-shadow: none; transform: none; }
+.choice-card:has(> input[aria-invalid="true"]) { --choice-border: var(--color-danger-border); }
+:is(.check, .radio, .switch)[data-state="focus"] { outline: none; }
+.menu-anchor > .menu { width: max-content; max-width: min(20rem, calc(100vw - var(--space-8))); }
+:is(.on-stage, .topbar) .menu a.menu__item:hover, :is(.on-stage, .topbar) .menu a.menu__item[data-state="hover"] { background: var(--color-accent-subtle); color: var(--color-fg-default); }

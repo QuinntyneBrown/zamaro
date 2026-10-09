@@ -336,7 +336,7 @@
       <p>The profile’s sidebar form. On phones it follows the profile content; from 1024px it is a sticky sidebar. It is the reference single-column form.</p>
 <div class="ds-example">
   <div class="ds-example__canvas ds-example__canvas--canvas">
-    <form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 24rem);">
+    <form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 26rem);">
       <div class="stub__head">
         <h4 id="fl-stub-title" class="stub__title">Book Abigail</h4>
         <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
@@ -360,7 +360,7 @@
     </form>
   </div>
   <div class="ds-example__caption"><span>The stub from the profile mock, with the drift fixed: <code>.stub__title</code> instead of an inline font, a success message instead of a typed ✓, and a field with <code>label for</code> where there is help.</span></div>
-  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 24rem);"&gt;
+  <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 26rem);"&gt;
   &lt;div class="stub__head"&gt;
     &lt;h4 id="fl-stub-title" class="stub__title"&gt;Book Abigail&lt;/h4&gt;
     &lt;span class="stub__code" aria-hidden="true"&gt;No. ZAM-0114&lt;/span&gt;
@@ -546,8 +546,8 @@
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--danger" style="animation: none;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Form invalid</p></div></div></div><figcaption>A toast that says “Form invalid” and disappears. It names nothing and points nowhere.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Request to book</button></div><figcaption>The submit stays enabled; pressing it explains what is missing.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" disabled>Request to book</button></div><figcaption>A disabled submit until everything is valid. Naomi can’t tell what is missing, and keyboard users can’t reach the button.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><h4 class="stub__title">Book Abigail</h4><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption><code>.stub__title</code> for the stub heading.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><h4 style="font: var(--text-h3);">Book Abigail</h4><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption>The mocks set the stub heading with <code>style="font: var(--text-h3)"</code>. A class keeps every stub the same.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption><code>.stub__title</code> for the stub heading.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><p style="font: var(--text-h3);">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption>The mocks set the stub heading with <code>style="font: var(--text-h3)"</code>. A class keeps every stub the same.</figcaption></figure>
       </div>
     </section>
 

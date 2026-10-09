@@ -17,7 +17,7 @@ Use the classes on each page’s **Code** section; state comes from real attribu
 
 | Page | Covers |
 |---|---|
-| [Color](foundations/color.html) | Ramps, semantic roles in both themes, status colours, all 145 contrast checks live, adding a brand theme. |
+| [Color](foundations/color.html) | Ramps, semantic roles in both themes, status colours, all 149 contrast checks live, adding a brand theme. |
 | [Typography](foundations/typography.html) | Display, sans and mono families; 16 role shorthands with specimens; weights, line heights, tracking; measure. |
 | [Spacing](foundations/spacing.html) | The 4px scale, inside vs between rules, control heights and padding. |
 | [Layout](foundations/layout.html) | Breakpoints, columns/gutters/margins, live grid, container and sidebar, page templates. |
@@ -112,7 +112,7 @@ Every component page has the same thirteen sections: overview, anatomy, variants
 ## Tokens
 
 - [`tokens/tokens.css`](tokens/tokens.css) — the single source of truth: primitives, semantic tokens, light (“newsprint”, `:root` and `[data-theme="light"]`) and dark (“stage”, `[data-theme="dark"]` and `prefers-color-scheme`), reduced motion, more contrast and forced colours.
-- [`tokens/tokens.json`](tokens/tokens.json) — W3C DTCG export (270 entries with theme overrides), generated from `tokens.css`.
+- [`tokens/tokens.json`](tokens/tokens.json) — W3C DTCG export (272 entries with theme overrides), generated from `tokens.css`.
 - [`tokens/contrast-pairs.json`](tokens/contrast-pairs.json) — every foreground/background pairing the components rely on; checked in both themes.
 - [`assets/components.css`](assets/components.css) — the product stylesheet; token-only, with component tokens (`--btn-*`, `--field-*`, `--chip-*`, `--ticket-*`…) and `data-state` hooks.
 - [`assets/ds.css`](assets/ds.css), [`assets/ds.js`](assets/ds.js) — documentation chrome: theme toggle, live token values and contrast ratios.
@@ -156,6 +156,7 @@ The mocks now read the system: `docs/mocks/assets/tokens.css` and `ui.css` forwa
 | pages/artist/default, empty | The date help sat inside the wrapping `<label>`, so the field’s name became “Event date ✓ Abigail is free…”; review stars put `aria-label` on a plain `<span>`. | The help sits outside a `<label for>`; the stars get `role="img"`. |
 | pages/discover/* (4 mocks) | “Apply as an artist” was a `<button>` although it leads to another page. | A button-styled link. |
 | assets/ui.css | On the stage, the yellow focus ring also applied inside the paper booking bar (1.4:1 on paper); reviews placed on the stage inherited paper-coloured text. | Paper islands restore the ink ring; `.review` sets its own text colour. |
+| assets/ui.css (extended) | Selected outlines reused `--color-border-on-accent` (ink in both themes), which is 1.2:1 on dark surfaces; switch and choice cards had no disabled style. | New `--color-border-selected` (ink on newsprint, yellow on the stage; at least 9:1 in both themes); disabled and invalid states added. |
 | all pages | The top bar overflowed 360px by 15px when no condensed display font is installed. | Tighter gaps and a 22px wordmark below 640px; brand mark never shrinks. |
 
 Decisions kept from the mocks rather than normalised: a 20px phone margin (so ticket notches clear the screen edge), a 3px focus ring with 3px offset, 44px default control height, all-zero radii, and round radios and switches as the only rounded controls besides avatars and the save toggle.

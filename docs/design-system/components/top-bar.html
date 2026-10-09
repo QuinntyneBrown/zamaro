@@ -327,7 +327,7 @@
       <ul>
         <li><b>1024px and wider</b> (<code>--layout-breakpoint-lg</code>): brand, primary links, a flexible spacer, Saved with its label, then the avatar. Side padding is <code>--layout-margin</code>, so the bar lines up with the page container.</li>
         <li><b>Below 1024px</b>: <code>.topbar__nav</code> is hidden and the ghost menu button (<code>.topbar__menu</code>) appears before the brand. It opens a drawer with the same links in the same order. Saved shows only the heart and count.</li>
-        <li><b>At 360px</b>: menu (44px), brand, spacer, Saved (about 76px) and avatar (40px) fit with 12px gaps. Nothing wraps; the bar keeps one row and the same 68px height.</li>
+        <li><b>At 360px</b>: menu (44px), brand, spacer, Saved (about 70px) and avatar (40px) share one row at the same 68px height. This fits only with the condensed display face; with a wide fallback face the word “Zamaro” runs into Saved, so the brand needs to shrink or drop to the mark alone below 400px (proposed fix).</li>
         <li>The bar is <code>position: sticky</code>. <code>html</code> sets <code>scroll-padding-top</code> to <code>--layout-topbar-height</code> plus 16px, so in-page links (“Book for Sat 14 Nov”) and focused fields are never hidden under it.</li>
       </ul>
     </section>
