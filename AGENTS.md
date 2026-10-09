@@ -46,6 +46,7 @@ zamaro/
 │   ├── detailed-designs/          # {subsystem}/{feature}/README.md + diagrams/
 │   ├── mocks/                     # pages/, dialogs/, notifications/, assets/
 │   └── specs/                     # L1.md, L2.md
+├── docker-compose.yml             # local dev: postgres, redis, api, api-e2e, worker, scheduler (ADR-0002)
 ├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
 │   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
@@ -83,6 +84,7 @@ zamaro/
 │   │   ├── Feature/Security/      # cross-user access suite and route-ownership fixtures
 │   │   └── load/                  # load scenarios for the response-time budgets
 │   ├── composer.json
+│   ├── docker/                    # backend container assets (postgres init script); see ADR-0002
 │   └── Dockerfile                 # zamaro-api image (API and Worker)
 ├── frontend/                      # Angular workspace — Zamaro Web; angular.json declares every project
 │   ├── angular.json  package.json  tsconfig.json  eslint.config.js  .prettierrc

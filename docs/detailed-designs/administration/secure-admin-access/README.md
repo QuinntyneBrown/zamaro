@@ -38,6 +38,11 @@ store in Redis and the audit log.
 
 **Frontend (Zamaro Web)**
 
+> Per [ADR-0001](../../../adr/0001-admin-as-separate-application.md) the admin area is its own Angular
+> application (`frontend/projects/admin`, base href `/admin/`), not a lazy route of the public application.
+> Read "lazy `/admin` route" below as the admin application's root route; the guard and the API checks are
+> unchanged.
+
 - **`adminGuard`** (`core/auth`) — `CanMatchFn` on the lazy `/admin` route. It
   reads `AuthService.currentUser()` and matches only for an MFA-verified
   administrator. Otherwise the route does not match and the wildcard route renders
