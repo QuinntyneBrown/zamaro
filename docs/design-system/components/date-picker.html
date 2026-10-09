@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -179,7 +182,7 @@
     <div class="field">
       <label class="field__label" for="dp-booked">Event date</label>
       <input class="input" type="date" id="dp-booked" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="dp-booked-error">
-      <p class="field__error" id="dp-booked-error"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
+      <p class="field__error" id="dp-booked-error">Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
     </div>
   </div>
   <div class="ds-example__caption"><span>In the booking stub, where the artist is known. The message repeats the date in Zamaro’s format and is linked by <code>aria-describedby</code>.</span></div>
@@ -191,7 +194,7 @@
 &lt;div class="field"&gt;
   &lt;label class="field__label" for="dp-booked"&gt;Event date&lt;/label&gt;
   &lt;input class="input" type="date" id="dp-booked" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="dp-booked-error"&gt;
-  &lt;p class="field__error" id="dp-booked-error"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
+  &lt;p class="field__error" id="dp-booked-error"&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
 &lt;/div&gt;</code></pre></details>
 </div>
       <h3>With quick-pick dates</h3>
@@ -305,7 +308,7 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li>Full width of its field. In the booking bar it sits beside “Kind of gathering” from 640px and stacks above it on phones.</li>
+        <li>Full width of its field. In the booking bar it sits beside “Kind of gathering” from 576px and stacks above it on phones.</li>
         <li>On phones, tapping anywhere in the field opens the system picker; the calendar button is a desktop affordance.</li>
         <li>Quick-pick chips wrap onto a second line rather than scrolling sideways.</li>
       </ul>
@@ -408,7 +411,8 @@
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Event date” first in the booking bar, <code>value="2026-11-14" min="2026-10-09"</code></li>
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: Christmas Eve (<code>2026-12-24</code>) with nobody free, and the nearby-date buttons that suggested quick picks</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the stub’s date with “✓ Abigail is free Sat 14 Nov”</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: the same for Miriam Haile</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: Miriam Haile’s stub date, empty because no search date was carried</li>
+        <li><a href="../../mocks/dialogs/block-dates/default.html">dialogs/block-dates</a>: “Start date” and “End date” of a blocked range, <code>min="2026-10-09" max="2028-04-09"</code> (the calendar window ends on the last date a church can request, today + 18 months, L2-004), with the end-before-start error in <a href="../../mocks/dialogs/block-dates/invalid.html">invalid</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>

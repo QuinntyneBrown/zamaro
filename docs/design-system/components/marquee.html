@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -156,14 +159,14 @@
       </div>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--flush">
-          <div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance ✦</span><span>Build My Life</span></div>
+          <div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance</span></div>
         </div>
-        <div class="ds-example__caption"><span>Default, song titles (artist profile). The same six songs open Abigail’s setlist further down the page.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="marquee" aria-hidden="true"&gt;&lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;…&lt;span&gt;Build My Life&lt;/span&gt;&lt;/div&gt;</code></pre></details>
+        <div class="ds-example__caption"><span>Default, song titles (artist profile). The same five songs open Abigail’s setlist further down the page.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="marquee" aria-hidden="true"&gt;&lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;…&lt;span&gt;Blessed Assurance&lt;/span&gt;&lt;/div&gt;</code></pre></details>
       </div>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--flush">
-          <div class="marquee marquee--stage" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance ✦</span><span>Build My Life</span></div>
+          <div class="marquee marquee--stage" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance</span></div>
         </div>
         <div class="ds-example__caption"><span><code>.marquee--stage</code>: charcoal strip, yellow type and yellow rules.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="marquee marquee--stage" aria-hidden="true"&gt;…&lt;/div&gt;</code></pre></details>
@@ -194,8 +197,8 @@
       <ul>
         <li><b>Default</b>: a long list clipped at the right edge.</li>
         <li><b>Short list</b>: two or three items leave the rest of the strip empty yellow. That is fine; do not repeat items to fill it.</li>
-        <li><b>Loading</b>: the city strip on Discover is static content and stays while results load. The song strip on a profile waits for the profile: the artist loading mock has no marquee.</li>
-        <li><b>Empty or new profile</b>: when there is nothing to repeat (an artist with no setlist yet, or Miriam’s new profile in the mocks), leave the marquee out instead of showing an empty strip.</li>
+        <li><b>Loading</b>: the city strip on Discover is static content and stays while results load. The song strip on a profile waits for the profile, and a full-width <a href="skeleton.html"><code>.skeleton--strip</code></a> holds its place: the skeleton is the strip’s exact height, so the sections below do not move when the songs land (L2-105). Never use an empty yellow strip as the placeholder.</li>
+        <li><b>Empty or new profile</b>: when there is nothing to repeat (an artist with no setlist yet), leave the marquee out instead of showing an empty strip. A new artist with a short setlist keeps the strip: Miriam Haile’s profile shows her four songs.</li>
       </ul>
       <h3>Both themes</h3>
       <div class="ds-themes">
@@ -222,7 +225,7 @@
       <h3>Role and pattern</h3>
       <p>A plain <code>&lt;div&gt;</code> with <code>aria-hidden="true"</code>. No APG pattern applies because it is decoration. It must be hidden for three reasons:</p>
       <ul>
-        <li>It repeats content: a screen reader user would hear eleven city names, or six songs twice, before reaching the lineup.</li>
+        <li>It repeats content: a screen reader user would hear eleven city names, or five songs twice, before reaching the lineup.</li>
         <li>Each “✦” would be announced as “four-pointed star”.</li>
         <li>Part of the list is clipped off-screen, so what is read would not match what is seen.</li>
       </ul>
@@ -254,8 +257,8 @@
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
         <li>Cities: the region’s anchor first (Toronto), then the booker’s city and the nearest suburbs, outward. Use the city name only, no province.</li>
-        <li>Songs: the artist’s setlist in setlist order, title only, no credits or keys. Keep the song’s own capitalisation in the source (“Great Is Thy Faithfulness”); CSS uppercases it.</li>
-        <li>Six to eleven items. End every item but the last with “ ✦”. No commas, no counts, no prices.</li>
+        <li>Songs: the first five songs of the artist’s setlist, in setlist order (L2-012, L2-053), title only, no credits or keys. Keep the song’s own capitalisation in the source (“Great Is Thy Faithfulness”); CSS uppercases it.</li>
+        <li>The eleven quick-pick cities on Discover; up to five songs on a profile (fewer when the setlist is shorter, as on Miriam’s four-song profile). End every item but the last with “ ✦”. No commas, no counts, no prices.</li>
         <li>Never put information in the marquee that is not elsewhere on the page.</li>
       </ul>
     </section>
@@ -291,7 +294,7 @@
       <pre><code>&lt;!-- Directly after the poster, outside .container --&gt;
 &lt;div class="marquee" aria-hidden="true"&gt;
   &lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;&lt;span&gt;Great Is Thy Faithfulness ✦&lt;/span&gt;
-  &lt;span&gt;Jireh ✦&lt;/span&gt;&lt;span&gt;Blessed Assurance ✦&lt;/span&gt;&lt;span&gt;Build My Life&lt;/span&gt;
+  &lt;span&gt;Jireh ✦&lt;/span&gt;&lt;span&gt;Blessed Assurance&lt;/span&gt;
 &lt;/div&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.marquee</code></td><td>Yellow strip with ink rules; no wrap; clipped.</td></tr>
@@ -305,9 +308,10 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: city strip under the search poster</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same strip, unchanged in every state</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: song strip repeating the first six setlist songs</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a> and <a href="../../mocks/pages/artist/empty.html">artist/empty</a>: no strip</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a>, <a href="../../mocks/pages/discover/invalid.html">invalid</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same strip, unchanged in every state</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: song strip repeating the first five setlist songs (L2-012)</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: a <code>.skeleton--strip</code> in the strip’s place while the profile loads</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: a short strip of Miriam Haile’s four songs</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>

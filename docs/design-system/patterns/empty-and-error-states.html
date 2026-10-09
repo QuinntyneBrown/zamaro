@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -132,7 +135,7 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Situation</th><th scope="col">Kind</th><th scope="col">Treatment</th><th scope="col">Stamp</th><th scope="col">Actions</th></tr></thead>
         <tbody>
-          <tr><td>Nobody is free on the date within the radius</td><td>No results</td><td><code>.empty</code> in the lineup’s place, with <code>.date-swap</code></td><td>Sold out</td><td>Nearby dates · “Search within 120 km” · “Show all styles”</td></tr>
+          <tr><td>Nobody is free on the date within the radius</td><td>No results</td><td><code>.empty</code> in the lineup’s place, with <code>.date-swap</code></td><td>Sold out</td><td>Nearby dates · “Search within 120 km · 2 free” · “Show all styles”</td></tr>
           <tr><td>Filters rule everyone out but others are free</td><td>No results</td><td><code>.empty--quiet</code>, no stamp</td><td>None</td><td>“Show all styles” (clears the filter) with the count</td></tr>
           <tr><td>A new artist has no videos</td><td>First run</td><td><code>.empty--quiet</code> inside the section</td><td>Fresh on the bill</td><td>“Ask Miriam for a recording” (secondary)</td></tr>
           <tr><td>A new artist has no reviews</td><td>First run</td><td><code>.empty--quiet</code> inside the section</td><td>Opening night</td><td>“Be her first booking” (primary)</td></tr>
@@ -147,7 +150,7 @@
         <li><b>Widen the radius:</b> one primary button with the radius; the count goes in the sentence above it.</li>
         <li><b>Clear a filter:</b> “Show all styles” releases the pressed chips and keeps the date and place.</li>
         <li><b>Try again:</b> re-runs exactly the same search. After a third failure, add “Check status.zamaro.ca”.</li>
-        <li><b>Way out:</b> every error offers a second action that does not depend on the failing service: an e-mail link or the lineup.</li>
+        <li><b>Way out:</b> every error offers a second action that does not depend on the failing service: an email link or the lineup.</li>
       </ul>
     </section>
 
@@ -173,7 +176,7 @@
               </ul>
             </div>
             <div class="cluster">
-              <button class="btn btn--primary" type="button">Search within 120 km <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+              <button class="btn btn--primary" type="button">Search within 120 km · 2 free <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
               <button class="btn" type="button">Show all styles</button>
             </div>
           </div>
@@ -188,7 +191,7 @@
     …
   &lt;/ul&gt;
   &lt;div class="cluster"&gt;
-    &lt;button class="btn btn--primary" type="button"&gt;Search within 120 km …&lt;/button&gt;
+    &lt;button class="btn btn--primary" type="button"&gt;Search within 120 km · 2 free …&lt;/button&gt;
     &lt;button class="btn" type="button"&gt;Show all styles&lt;/button&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre></details>
@@ -216,7 +219,7 @@
         <div class="ds-example__canvas ds-example__canvas--stack">
           <div class="alert alert--danger" role="alert">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November 2026. Your date, location and filters are kept.</p></div>
             <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button><a class="btn" href="mailto:hello@zamaro.ca">Email the Zamaro team</a></div>
           </div>
         </div>
@@ -251,7 +254,7 @@
           <tr><td>Stamp</td><td>Fresh on the bill / Opening night</td><td>Sold out</td><td>None</td><td>Show postponed (kicker)</td></tr>
           <tr><td>Title</td><td>“No videos yet”</td><td>“Nobody’s free Christmas Eve within 40 km”</td><td>“We lost the signal”</td><td>“This profile didn’t load”</td></tr>
           <tr><td>Body</td><td>What will change, and when</td><td>Why, then what to try</td><td>What failed, what is kept</td><td>Whose fault, what is safe</td></tr>
-          <tr><td>Recovery</td><td>One action that helps now</td><td>Date swap, wider radius, clear filters</td><td>Try again, e-mail</td><td>Try again, back to the lineup</td></tr>
+          <tr><td>Recovery</td><td>One action that helps now</td><td>Date swap, wider radius, clear filters</td><td>Try again, email</td><td>Try again, back to the lineup</td></tr>
           <tr><td>Role</td><td>None (static content)</td><td><code>role="status"</code></td><td><code>role="alert"</code></td><td><code>role="alert"</code> on the alert</td></tr>
         </tbody>
       </table></div>
@@ -283,8 +286,8 @@
       <ul>
         <li>Empty states and alerts take the full width of the slot they replace. The <code>.empty</code> padding drops from 40px to 24px in the quiet variant, which is the one used inside narrow profile sections.</li>
         <li>The date swap is an auto-fill grid with a 9rem minimum: three across on a laptop, two on a 360px phone, the third wrapping below.</li>
-        <li>Action buttons wrap with <code>.cluster</code>. Button labels must fit at 360px, so the count moves out of the button and into the sentence: “Search within 120 km”, not “Search within 120 km · 2 choirs free”.</li>
-        <li>Alert actions sit under the text on phones and beside the icon column from 640px.</li>
+        <li>Action buttons wrap with <code>.cluster</code>. Button labels stay short enough for 360px: the count in the button is the bare number, “Search within 120 km · 2 free” (L2-011), and the sentence above says what is free, not “Search within 120 km · 2 choirs free”.</li>
+        <li>Alert actions sit under the text on phones and beside the icon column from 576px.</li>
         <li>Page errors keep the top bar, the breadcrumb and the footer, so a phone user can always get back to the lineup without the browser’s Back.</li>
       </ul>
     </section>
@@ -323,7 +326,7 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Kind</th><th scope="col">Title</th><th scope="col">Body</th><th scope="col">Action</th></tr></thead>
         <tbody>
-          <tr><td>No results</td><td>Nobody’s free {date} within {radius}</td><td>Why, in one sentence. Then “Try a nearby date, or widen the radius”, with a count.</td><td>Verb + the change: “Search within 120 km”</td></tr>
+          <tr><td>No results</td><td>Nobody’s free {date} within {radius}</td><td>Why, in one sentence. Then “Try a nearby date, or widen the radius”, with a count.</td><td>Verb + the change: “Search within 120 km · 2 free”</td></tr>
           <tr><td>First run</td><td>No {things} yet</td><td>What will change and when, then what to do meanwhile.</td><td>The one useful thing now: “Ask Miriam for a recording”</td></tr>
           <tr><td>Error, region</td><td>We {failed to do it}, said plainly</td><td>What failed, with the date. What is kept.</td><td>“Try again” + a way out</td></tr>
           <tr><td>Error, page</td><td>This {page} didn’t load</td><td>Whose fault (“It’s on our side, not yours.”), what is safe.</td><td>“Try again” + “Back to the lineup”</td></tr>
@@ -363,7 +366,7 @@
       <ul>
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: “Sold out” for Christmas Eve, the pressed gospel choir chip, nearby dates and the wider-radius action; the note that counts respect filters</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Fresh on the bill” and “Opening night” quiet empties on Miriam Haile’s profile; the note that empty sections stay</li>
-        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “We lost the signal” in the lineup’s place, Try again and the e-mail link; the third-failure status link</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “We lost the signal” in the lineup’s place, Try again and the email link; the third-failure status link</li>
         <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: “Show postponed” kicker, “This profile didn’t load”, the alert, the kept breadcrumb; the note about the 404 with similar artists</li>
       </ul>
       <p>Drift fixed during extraction:</p>
@@ -371,7 +374,7 @@
         <li><code>.alert</code> was danger-only by default. It now has tones <code>.alert--danger|success|warning</code> with info as the default; the mocks now use <code>alert alert--danger</code>.</li>
         <li>The artist error used an inline <code>padding-block</code> on its container. It is now <code>.page-error</code>.</li>
         <li>The empty profile’s About copy used <code>style="margin-top: var(--space-4)"</code>. It is now <code>.section__body</code>.</li>
-        <li>The mock’s primary empty-state action “Search within 120 km · 2 choirs free” is too long to fit at 360px. The count moves into the sentence.</li>
+        <li>The mock’s primary empty-state action “Search within 120 km · 2 choirs free” was too long to fit at 360px. It is now “Search within 120 km · 2 free” (L2-011).</li>
       </ul>
     </section>
 

@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -124,7 +127,7 @@
 <div data-theme="light"><div class="cluster cluster--lg"><button class="btn" type="button" data-state="focus">Share</button><button class="btn btn--primary" type="button" data-state="focus">Book</button><input class="input" type="text" aria-label="Church location" value="Burlington, ON" data-state="focus" style="max-width: 12rem;"></div></div>
 <div data-theme="dark"><div class="cluster cluster--lg"><button class="btn" type="button" data-state="focus">Share</button><button class="btn btn--primary" type="button" data-state="focus">Book</button><input class="input" type="text" aria-label="Church location (dark)" value="Burlington, ON" data-state="focus" style="max-width: 12rem;"></div></div>
 </div>
-<ul><li>Buttons, links and chips: a <code>--focus-ring-width</code> outline in <code>--color-focus-ring</code> at <code>--focus-ring-offset</code>, on <code>:focus-visible</code> only.</li><li>Text fields: <code>--shadow-focus</code>, a double ring (yellow inside, ink outside on newsprint; charcoal inside, yellow outside on the stage), so the ring shows against both the field and the page.</li><li>Targets: <code>--target-min</code> (24px) is the floor; <code>--target-comfortable</code> (44px) for anything tapped often.</li></ul>
+<ul><li>Every focusable element gets a two-tone ring on <code>:focus-visible</code> only (L2-101): a <code>--focus-ring-width</code> outline in <code>--color-focus-ring</code> at <code>--focus-ring-offset</code>, with the gap filled by <code>--color-focus-ring-offset</code> (yellow inside, ink outside on newsprint; charcoal inside, yellow outside in the dark theme and on the stage). <code>scroll-padding-top</code> keeps a focused element clear of the sticky top bar.</li><li>Text fields: <code>--shadow-focus</code>, a double ring (yellow inside, ink outside on newsprint; charcoal inside, yellow outside on the stage), so the ring shows against both the field and the page.</li><li>Targets: <code>--target-min</code> (24px) is the floor; <code>--target-comfortable</code> (44px) for anything tapped often.</li></ul>
 <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
 <div class="ds-pair"><span>Focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
 <div class="ds-pair"><span>Inner ring vs outer ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring-offset|--color-focus-ring" data-min="3"></span></div>

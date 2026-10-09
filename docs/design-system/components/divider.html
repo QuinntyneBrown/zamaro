@@ -51,6 +51,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -77,6 +78,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -194,7 +197,7 @@
       <h3>Vertical</h3>
       <div class="ds-example">
         <div class="ds-example__canvas">
-          <div class="cluster" style="flex-wrap: nowrap;"><span class="rating"><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>Brampton · 44 km</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>From $650</span></div>
+          <div class="cluster" style="flex-wrap: nowrap;"><span class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>Brampton · 44 km</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>From $650</span></div>
         </div>
         <div class="ds-example__caption"><span><code>.divider--vertical</code> stretches to the row’s height. In text, prefer a middle dot (·); use the rule between blocks.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="divider divider--vertical" role="separator" aria-orientation="vertical"&gt;&lt;/span&gt;</code></pre></details>
@@ -239,9 +242,9 @@
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
         <li>Horizontal dividers are always the full width of their container.</li>
-        <li>A vertical divider in a row that wraps on phones ends up at a line start; switch the row to a <a href="container.html">stack</a> below 640px and the vertical divider to a horizontal one, or drop it and rely on the gap.</li>
+        <li>A vertical divider in a row that wraps on phones ends up at a line start; switch the row to a <a href="container.html">stack</a> below 576px and the vertical divider to a horizontal one, or drop it and rely on the gap.</li>
         <li>The labelled divider’s text never wraps past one line at 360px; keep it under 30 characters.</li>
-        <li>On wide tickets the perforation turns vertical (the stub moves beside the body from 640px). That is the ticket’s own rule, not a <code>.divider</code>.</li>
+        <li>On wide tickets the perforation turns vertical (the stub moves beside the body from 576px). That is the ticket’s own rule, not a <code>.divider</code>.</li>
       </ul>
     </section>
 
@@ -326,10 +329,10 @@
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>The mocks use no standalone <code>&lt;hr&gt;</code>; the divider standardises rules that the mocks drew inside components:</p>
+      <p>The plain <code>&lt;hr class="divider"&gt;</code> is in <a href="../../mocks/pages/admin-application/default.html">pages/admin-application/default</a> (with <a href="../../mocks/pages/admin-application/verified.html">verified</a> and <a href="../../mocks/pages/admin-application/approved.html">approved</a>) and <a href="../../mocks/dialogs/reject-application/default.html">dialogs/reject-application</a>, between the application and the reviewer’s checks. The strong, perforated, vertical and labelled variants are not in the mocks yet. The divider also standardises rules that the mocks draw inside components:</p>
       <ul>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the hairline between page sections, the dashed stub on every ticket, the dashed title rule of the booking bar</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the dashed head of the booking ticket (“Book Abigail · No. ZAM-0114”), the hairlines between setlist songs and tour dates</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the dashed head of the booking ticket (“Book Abigail · No. ACT-0027”), the hairlines between setlist songs and tour dates</li>
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: nearby dates offered as an alternative (“Try a nearby date, or widen the radius”), where a labelled divider can introduce the date list</li>
       </ul>
       <p>Drift fixed during extraction:</p>

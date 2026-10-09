@@ -49,6 +49,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -75,6 +76,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -125,7 +128,7 @@
       <p>Both forms are tickets: a paper card with a 2px charcoal frame, a dashed perforation under the title, and a hard offset shadow. They are built from the standard <a href="form-field.html">form field</a>, <a href="text-field.html">text field</a>, <a href="select.html">select</a>, <a href="textarea.html">textarea</a> and <a href="button.html">button</a>.</p>
       <ul>
         <li><b>Booking bar</b> (<code>.booking-bar</code>) lives in the Discover <a href="poster.html">poster</a>. It asks four things (date, kind of gathering, place, how far) and submits “Show the lineup”. It always has <code>data-theme="light"</code>, so it stays paper on the charcoal stage, even in the dark theme.</li>
-        <li><b>Booking stub</b> (<code>.stub</code>) lives in the right column of an artist profile. It shows the price, confirms the date is free, and submits “Request to book · Sat 14 Nov”. It follows the page theme and is sticky from 1024px.</li>
+        <li><b>Booking stub</b> (<code>.stub</code>) lives in the right column of an artist profile. It shows the price, confirms the date is free, and submits “Request to book · Sat 14 Nov”. It follows the page theme and is sticky from 992px.</li>
       </ul>
       <p>Use these only for searching and requesting a booking. Longer flows (paying the deposit, editing a request) use the regular <a href="form-layout.html">form layout</a>.</p>
     </section>
@@ -136,7 +139,7 @@
           <form class="stub" aria-labelledby="a-title" action="#a-title" style="width: 100%; max-width: var(--layout-sidebar-width);">
             <div class="stub__head">
               <h2 id="a-title" class="stub__title">Book Abigail</h2>
-              <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
+              <span class="stub__code" aria-hidden="true">No. ACT-0027</span>
             </div>
             <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
             <div class="field">
@@ -145,7 +148,7 @@
               <span class="inline-msg inline-msg--success" id="a-date-help"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span>
             </div>
             <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
-            <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+            <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#anatomy">Cancel free up to 14 days before</a>.</p>
           </form>
           <span class="ds-callout" style="left: 6%; top: 9%;" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: 88%; top: 9%;" aria-hidden="true">2</span>
@@ -178,7 +181,7 @@
             <label class="field"><span class="field__label">Event date</span>
               <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
             <label class="field"><span class="field__label">Kind of gathering</span>
-              <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+              <select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
             <label class="field"><span class="field__label">Church location</span>
               <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
             <label class="field"><span class="field__label">How far can they drive?</span>
@@ -187,12 +190,12 @@
           </form>
         </div>
         <div class="ds-example__caption"><span>Paper island on the stage: <code>data-theme="light"</code> keeps newsprint tokens inside it, and its shadow is the stage yellow.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="booking-bar" data-theme="light" aria-labelledby="find-title" action="/discover"&gt;
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="booking-bar" data-theme="light" aria-labelledby="find-title" action="/"&gt;
   &lt;h2 id="find-title" class="booking-bar__title"&gt;Your event &lt;small aria-hidden="true"&gt;Admit one church&lt;/small&gt;&lt;/h2&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Event date&lt;/span&gt;
     &lt;input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Kind of gathering&lt;/span&gt;
-    &lt;select class="select" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;…&lt;/select&gt;&lt;/label&gt;
+    &lt;select class="select" name="kind"&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;…&lt;/select&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Church location&lt;/span&gt;
     &lt;input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;How far can they drive?&lt;/span&gt;
@@ -207,7 +210,7 @@
           <form class="stub stub-demo" aria-labelledby="v-stub-title" action="#v-stub-title">
             <div class="stub__head">
               <h2 id="v-stub-title" class="stub__title">Book Abigail</h2>
-              <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
+              <span class="stub__code" aria-hidden="true">No. ACT-0027</span>
             </div>
             <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
             <div class="field">
@@ -217,26 +220,26 @@
             </div>
             <div class="field">
               <label class="field__label" for="v-kind">Kind of gathering</label>
-              <select class="select" id="v-kind" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select>
+              <select class="select" id="v-kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select>
             </div>
             <div class="field">
               <label class="field__label" for="v-church">Church</label>
               <input class="input" id="v-church" type="text" name="church" value="Riverside Community Church, Burlington" autocomplete="organization">
             </div>
             <div class="field">
-              <div class="field__row"><label class="field__label" for="v-message">Message</label><span class="field__optional">Optional</span></div>
+              <div class="field__row"><label class="field__label" for="v-message">Message</label><span class="field__optional">(optional)</span></div>
               <textarea class="textarea" id="v-message" name="message" placeholder="Your church, the room, the songs you love."></textarea>
             </div>
             <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
-            <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+            <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#anatomy">Cancel free up to 14 days before</a>.</p>
           </form>
         </div>
-        <div class="ds-example__caption"><span>The stub follows the page theme. On a profile it sits in <code>.profile-layout &gt; aside</code> and is sticky from 1024px.</span></div>
+        <div class="ds-example__caption"><span>The stub follows the page theme. On a profile it sits in <code>.profile-layout &gt; aside</code> and is sticky from 992px.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;aside aria-labelledby="book-title"&gt;
   &lt;form class="stub" aria-labelledby="book-title" action="/requests"&gt;
     &lt;div class="stub__head"&gt;
       &lt;h2 id="book-title" class="stub__title" tabindex="-1"&gt;Book Abigail&lt;/h2&gt;
-      &lt;span class="stub__code" aria-hidden="true"&gt;No. ZAM-0114&lt;/span&gt;
+      &lt;span class="stub__code" aria-hidden="true"&gt;No. ACT-0027&lt;/span&gt;
     &lt;/div&gt;
     &lt;p&gt;&lt;span class="stub__price"&gt;From $650&lt;/span&gt;&lt;br&gt;&lt;span class="text-muted"&gt;per service · travel included&lt;/span&gt;&lt;/p&gt;
     &lt;div class="field"&gt;
@@ -246,9 +249,60 @@
     &lt;/div&gt;
     …kind of gathering, church, optional message…
     &lt;button class="btn btn--primary btn--lg btn--block" type="submit"&gt;Request to book · Sat 14 Nov&lt;/button&gt;
-    &lt;p class="stub__fine"&gt;Nothing is charged until Abigail accepts. Cancel free up to 14 days before.&lt;/p&gt;
+    &lt;p class="stub__fine"&gt;Nothing is charged until Abigail accepts. &lt;a href="…"&gt;Cancel free up to 14 days before&lt;/a&gt;.&lt;/p&gt;
   &lt;/form&gt;
 &lt;/aside&gt;</code></pre></details>
+      </div>
+      <h3 id="auth-card">Auth card (“Admit one”)</h3>
+      <p>Sign-in, sign-up, password reset, email confirmation and two-step codes are the same paper stub as the booking stub, centred on the stage in an <a href="container.html">auth layout</a>. <code>.auth-card</code> on the <code>.stub</code> caps it at <code>--layout-auth-width</code> (28rem) and swaps the ink shadow for a yellow one so it reads on charcoal. The head stacks the mono kicker (“Admit one · Your account”) over the h1 in <code>.auth-card__title</code>; <code>.auth-card__links</code> spreads the secondary links (“Forgot your password?”, “Create an account”) under the full-width submit.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<div class="poster" style="width: 100%; padding: var(--space-8) var(--space-4);">
+  <div class="auth-layout" style="min-height: 0;">
+    <form class="stub auth-card" action="#auth-card" method="post" novalidate aria-labelledby="bf-card-title">
+      <div class="stub__head">
+        <span class="stub__code" aria-hidden="true">Admit one · Your account</span>
+        <p id="bf-card-title" class="auth-card__title">Sign in</p>
+      </div>
+      <p class="text-muted">Welcome back. Your saved artists and requests are waiting.</p>
+      <div class="field">
+        <label class="field__label" for="bf-email">Email <span class="field__required">(required)</span></label>
+        <input class="input" type="email" id="bf-email" name="bf-email" autocomplete="email" placeholder="name@church.ca" required>
+      </div>
+      <div class="field">
+        <label class="field__label" for="bf-password">Password <span class="field__required">(required)</span></label>
+        <input class="input" type="password" id="bf-password" name="bf-password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn--primary btn--lg btn--block" type="submit">Sign in</button>
+      <div class="auth-card__links"><a href="#auth-card">Forgot your password?</a><a href="#auth-card">Create an account</a></div>
+      <p class="stub__fine">Artists sign in here too.</p>
+    </form>
+  </div>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.stub.auth-card</code> in an <code>.auth-layout</code> on the stage: pages/sign-in/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="poster" style="width: 100%; padding: var(--space-8) var(--space-4);"&gt;
+  &lt;div class="auth-layout" style="min-height: 0;"&gt;
+    &lt;form class="stub auth-card" action="#auth-card" method="post" novalidate aria-labelledby="bf-card-title"&gt;
+      &lt;div class="stub__head"&gt;
+        &lt;span class="stub__code" aria-hidden="true"&gt;Admit one · Your account&lt;/span&gt;
+        &lt;p id="bf-card-title" class="auth-card__title"&gt;Sign in&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;p class="text-muted"&gt;Welcome back. Your saved artists and requests are waiting.&lt;/p&gt;
+      &lt;div class="field"&gt;
+        &lt;label class="field__label" for="bf-email"&gt;Email &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/label&gt;
+        &lt;input class="input" type="email" id="bf-email" name="bf-email" autocomplete="email" placeholder="name@church.ca" required&gt;
+      &lt;/div&gt;
+      &lt;div class="field"&gt;
+        &lt;label class="field__label" for="bf-password"&gt;Password &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/label&gt;
+        &lt;input class="input" type="password" id="bf-password" name="bf-password" autocomplete="current-password" required&gt;
+      &lt;/div&gt;
+      &lt;button class="btn btn--primary btn--lg btn--block" type="submit"&gt;Sign in&lt;/button&gt;
+      &lt;div class="auth-card__links"&gt;&lt;a href="#auth-card"&gt;Forgot your password?&lt;/a&gt;&lt;a href="#auth-card"&gt;Create an account&lt;/a&gt;&lt;/div&gt;
+      &lt;p class="stub__fine"&gt;Artists sign in here too.&lt;/p&gt;
+    &lt;/form&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
       </div>
     </section>
 
@@ -265,7 +319,7 @@
             <td><div class="field"><label class="field__label" for="m-d1">Event date</label><input class="input" id="m-d1" type="date" value="2026-11-14"></div></td>
             <td><div class="field"><label class="field__label" for="m-d2">Event date</label><input class="input" id="m-d2" type="date" value="2026-11-14" data-state="hover"></div></td>
             <td><div class="field"><label class="field__label" for="m-d3">Event date</label><input class="input" id="m-d3" type="date" value="2026-11-14" data-state="focus"></div></td>
-            <td><div class="field"><label class="field__label" for="m-d4">Event date</label><input class="input" id="m-d4" type="date" value="2026-11-15" aria-invalid="true" aria-describedby="m-d4-err"><p class="field__error" id="m-d4-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov.</p></div></td>
+            <td><div class="field"><label class="field__label" for="m-d4">Event date</label><input class="input" id="m-d4" type="date" value="2026-11-15" aria-invalid="true" aria-describedby="m-d4-err"><p class="field__error" id="m-d4-err">Abigail is booked Sun 15 Nov. Try another date.</p></div></td>
             <td><div class="field"><label class="field__label" for="m-d5">Event date</label><input class="input" id="m-d5" type="date" value="2026-11-14" readonly></div></td></tr>
         </tbody>
       </table></div>
@@ -277,63 +331,34 @@
             <td><button class="btn btn--primary btn--lg" type="submit" data-state="hover">Show the lineup</button></td>
             <td><button class="btn btn--primary btn--lg" type="submit" data-state="focus">Show the lineup</button></td>
             <td><button class="btn btn--primary btn--lg" type="submit" data-state="active">Show the lineup</button></td>
-            <td><button class="btn btn--primary btn--lg" type="submit" aria-busy="true">Checking calendars…</button></td></tr>
+            <td><button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Checking calendars…</button></td></tr>
           <tr><th scope="row">Stub submit</th>
             <td><button class="btn btn--primary btn--lg" type="submit">Request to book</button></td>
             <td><button class="btn btn--primary btn--lg" type="submit" data-state="hover">Request to book</button></td>
             <td><button class="btn btn--primary btn--lg" type="submit" data-state="focus">Request to book</button></td>
             <td><button class="btn btn--primary btn--lg" type="submit" data-state="active">Request to book</button></td>
-            <td><button class="btn btn--primary btn--lg" type="submit" aria-busy="true">Sending request…</button></td></tr>
+            <td><span class="text-muted">Never busy: it opens the request page</span></td></tr>
         </tbody>
       </table></div>
 
-      <h3>Busy, invalid date and success</h3>
+      <h3>Booked date</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
-          <form class="stub stub-demo" aria-labelledby="s1-title" aria-busy="true" action="#s1-title">
-            <div class="stub__head"><h2 id="s1-title" class="stub__title">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
-            <div class="field">
-              <label class="field__label" for="s1-date">Event date</label>
-              <input class="input" id="s1-date" type="date" value="2026-11-14" aria-describedby="s1-help">
-              <span class="inline-msg inline-msg--success" id="s1-help"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span>
-            </div>
-            <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true">Sending request…</button>
-            <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
-          </form>
           <form class="stub stub-demo" aria-labelledby="s2-title" action="#s2-title" novalidate>
-            <div class="stub__head"><h2 id="s2-title" class="stub__title">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+            <div class="stub__head"><h2 id="s2-title" class="stub__title">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
             <div class="field">
               <label class="field__label" for="s2-date">Event date</label>
               <input class="input" id="s2-date" type="date" value="2026-11-15" aria-invalid="true" aria-describedby="s2-err">
-              <p class="field__error" id="s2-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick another date, like Fri 20 Nov.</p>
+              <p class="field__error" id="s2-err">Abigail is booked Sun 15 Nov. Try another date.</p>
             </div>
-            <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button>
-            <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
-          </form>
-          <form class="stub stub-demo" aria-labelledby="s3-title" action="#s3-title">
-            <div class="stub__head"><h2 id="s3-title" class="stub__title">Requested</h2><span class="stub__code">No. ZAM-0114</span></div>
-            <div class="field">
-              <label class="field__label" for="s3-date">Event date</label>
-              <input class="input" id="s3-date" type="date" value="2026-11-14" readonly>
-            </div>
-            <p class="inline-msg inline-msg--success" role="status"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Request sent to Abigail for Sat 14 Nov. She usually replies within 2 days.</p>
-            <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+            <button class="btn btn--primary btn--lg btn--block" type="submit" disabled>Request to book · Sun 15 Nov</button>
+            <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#anatomy">Cancel free up to 14 days before</a>.</p>
           </form>
         </div>
-        <div class="ds-example__caption"><span>Busy keeps every field in place and says what is happening. Invalid says what is wrong and offers a free date. Success replaces the submit with a status message; the code becomes the request’s reference and is read aloud.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;!-- Busy --&gt;
-&lt;form class="stub" aria-labelledby="book-title" aria-busy="true"&gt;…
-  &lt;button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true"&gt;Sending request…&lt;/button&gt;
-&lt;/form&gt;
-
-&lt;!-- Invalid date --&gt;
-&lt;input class="input" id="date" type="date" value="2026-11-15" aria-invalid="true" aria-describedby="date-error"&gt;
-&lt;p class="field__error" id="date-error"&gt;&lt;svg class="icon" aria-hidden="true" …&gt;…&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick another date, like Fri 20 Nov.&lt;/p&gt;
-
-&lt;!-- Success --&gt;
-&lt;span class="stub__code"&gt;No. ZAM-0114&lt;/span&gt;
-&lt;input class="input" id="date" type="date" value="2026-11-14" readonly&gt;
-&lt;p class="inline-msg inline-msg--success" role="status"&gt;…Request sent to Abigail for Sat 14 Nov. She usually replies within 2 days.&lt;/p&gt;</code></pre></details>
+        <div class="ds-example__caption"><span>A date the artist is not free on says so and disables the submit (L2-019). The stub never sends a request itself: “Request to book” opens the request page with the date, kind of gathering, church and message carried, and that page owns the busy and sent states.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;input class="input" id="date" type="date" value="2026-11-15" aria-invalid="true" aria-describedby="date-error"&gt;
+&lt;p class="field__error" id="date-error"&gt;Abigail is booked Sun 15 Nov. Try another date.&lt;/p&gt;
+&lt;button class="btn btn--primary btn--lg btn--block" type="submit" disabled&gt;Request to book · Sun 15 Nov&lt;/button&gt;</code></pre></details>
       </div>
 
       <h3>Invalid date in the booking bar</h3>
@@ -343,8 +368,8 @@
             <h2 id="s4-title" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
             <div class="field">
               <label class="field__label" for="s4-date">Event date</label>
-              <input class="input" id="s4-date" type="date" name="date" value="2026-10-03" min="2026-10-09" aria-invalid="true" aria-describedby="s4-err">
-              <p class="field__error" id="s4-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>That date has passed. Pick Fri 9 Oct or later.</p>
+              <input class="input" id="s4-date" type="date" name="date" value="2026-10-10" min="2026-10-12" aria-invalid="true" aria-describedby="s4-err">
+              <p class="field__error" id="s4-err">Pick a date at least 3 days away.</p>
             </div>
             <label class="field"><span class="field__label">Church location</span>
               <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
@@ -357,28 +382,32 @@
       <h3>Both themes</h3>
       <div class="ds-themes">
         <div data-theme="light"><div class="stack">
-          <form class="stub" aria-labelledby="t1-title" action="#t1-title"><div class="stub__head"><h2 id="t1-title" class="stub__title">Book Elijah</h2><span class="stub__code" aria-hidden="true">No. ZAM-0117</span></div><p><span class="stub__price">From $350</span></p><button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button></form>
+          <form class="stub" aria-labelledby="t1-title" action="#t1-title"><div class="stub__head"><h2 id="t1-title" class="stub__title">Book Miriam</h2><span class="stub__code" aria-hidden="true">No. ACT-0154</span></div><p><span class="stub__price">From $300</span></p><button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button></form>
           <div class="on-stage" style="padding: var(--space-4);"><form class="booking-bar" data-theme="light" aria-labelledby="t2-title" action="#t2-title"><h2 id="t2-title" class="booking-bar__title">Your event</h2><button class="btn btn--primary" type="submit">Show the lineup</button></form></div>
         </div></div>
         <div data-theme="dark"><div class="stack">
-          <form class="stub" aria-labelledby="t3-title" action="#t3-title"><div class="stub__head"><h2 id="t3-title" class="stub__title">Book Elijah</h2><span class="stub__code" aria-hidden="true">No. ZAM-0117</span></div><p><span class="stub__price">From $350</span></p><button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button></form>
+          <form class="stub" aria-labelledby="t3-title" action="#t3-title"><div class="stub__head"><h2 id="t3-title" class="stub__title">Book Miriam</h2><span class="stub__code" aria-hidden="true">No. ACT-0154</span></div><p><span class="stub__price">From $300</span></p><button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button></form>
           <div class="on-stage" style="padding: var(--space-4);"><form class="booking-bar" data-theme="light" aria-labelledby="t4-title" action="#t4-title"><h2 id="t4-title" class="booking-bar__title">Your event</h2><button class="btn btn--primary" type="submit">Show the lineup</button></form></div>
         </div></div>
       </div>
       <ul>
-        <li><b>Busy</b>: the submit gets <code>aria-busy="true"</code>, a spinner and a present-tense label (“Checking calendars…”, “Sending request…”). It ignores further clicks so a request is never sent twice. The form gets <code>aria-busy="true"</code> too. Fields stay editable.</li>
+        <li><b>Busy</b> (booking bar only): the submit gets <code>aria-busy="true"</code> and <code>aria-disabled="true"</code> (the <a href="button.html#states">button’s busy pattern</a>, never native <code>disabled</code>), a spinner and a present-tense label (“Checking calendars…”). It ignores further clicks so a request is never sent twice. The form gets <code>aria-busy="true"</code> too. Fields stay editable.</li>
         <li><b>Invalid date</b>: the date input gets <code>aria-invalid="true"</code> and a <code>.field__error</code> linked with <code>aria-describedby</code>. The message replaces the availability help; it does not sit beside it.</li>
-        <li><b>Success</b>: the title changes to “Requested”, the submit is replaced by a <code>role="status"</code> success message, sent fields become <code>readonly</code>, and the code loses <code>aria-hidden</code> because it is now a real reference.</li>
+        <li><b>Booked date</b> (stub): when the artist is not free on the chosen date, the help becomes the error “{first name} is booked {date}. Try another date.” and the submit is disabled (L2-019).</li>
+        <li><b>Hand-over</b> (stub): the stub has no busy or sent state. “Request to book” opens the request page (<code>/artists/{slug}/book</code>) with the date, kind of gathering, church and message carried; the sending and sent states live there and on the booking page, where the booking number (No. ZAM-0114) first appears.</li>
         <li><b>Available</b> (default on the stub): the date help is a success <a href="inline-message.html">inline message</a> with a check icon, not a typed “✓”.</li>
       </ul>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Bar</b>: one column of fields on phones. From <code>--layout-breakpoint-sm</code> (640px) it becomes two columns; the title and the submit span both. In the poster it stacks under the copy until 1024px, then takes the right column.</li>
-        <li><b>Stub</b>: under 1024px it follows the reviews at the end of the profile, full width, and “Book for Sat 14 Nov” in the poster jumps to it. From 1024px it sits in the <code>--layout-sidebar-width</code> (22rem) column and stays pinned (<code>position: sticky</code>) at <code>--layout-topbar-height</code> plus 24px while the profile scrolls.</li>
+        <li><b>Bar</b>: one column of fields on phones. From <code>--layout-breakpoint-sm</code> (576px) it becomes two columns; the title and the submit span both. In the poster it stacks under the copy until 992px, then takes the right column.</li>
+        <li><b>Stub</b>: under 992px it follows the reviews at the end of the profile, full width, and “Book for Sat 14 Nov” in the poster jumps to it. From 992px it sits in the <code>--layout-sidebar-width</code> (22rem) column and stays pinned (<code>position: sticky</code>) at <code>--layout-topbar-height</code> plus 24px while the profile scrolls.</li>
         <li>The stub must fit a laptop screen without scrolling inside itself. Keep it to four fields; the message is optional and short.</li>
         <li>The submit is always full width in the stub. A label that does not fit wraps onto two balanced lines instead of overflowing; in the 22rem sidebar “Request to book · Sat 14 Nov” already takes two, so it is the longest allowed.</li>
+      </ul>
+      <ul>
+        <li><b>Auth card</b>: full width minus the page margins on phones, at most 28rem from there up, always centred; its links wrap onto two lines rather than shrinking.</li>
       </ul>
     </section>
 
@@ -402,10 +431,10 @@
         <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Change the focused part of the date, or the option in a closed select.</td></tr>
       </tbody></table>
       <h3>Focus</h3>
-      <p>Fields show the double ring (<code>--shadow-focus</code>): yellow inside, ink outside on paper. On submit with errors, focus moves to the first invalid field. After success, focus moves to the status message’s heading (“Requested”, <code>tabindex="-1"</code>) so the change is not missed. “Book for Sat 14 Nov” in the poster moves focus to the stub title.</p>
+      <p>Fields show the double ring (<code>--shadow-focus</code>): yellow inside, ink outside on paper. On submit with errors, focus moves to the first invalid field. “Book for Sat 14 Nov” (or “Check dates”) in the poster scrolls to the stub and moves focus to its date field (L2-019, L2-012).</p>
       <p>Inside the bar the button ring must be ink, not the stage yellow: the bar sits inside <code>.on-stage</code>, whose rule turns rings yellow, and yellow on paper is only 1.4:1. The paper island needs its own ring colour (see the note in Sources).</p>
       <h3>Labelling</h3>
-      <p>Every control has a visible label. In the stub, use <code>&lt;label for&gt;</code> and keep help and error text outside the label, linked with <code>aria-describedby</code>, so the name stays “Event date” and the help is read as a description. The optional message says “Optional” next to its label. “Admit one church” and the ticket code are <code>aria-hidden</code> until the code is a real reference. The busy submit keeps its accessible name updated (“Sending request…”).</p>
+      <p>Every control has a visible label. In the stub, use <code>&lt;label for&gt;</code> and keep help and error text outside the label, linked with <code>aria-describedby</code>, so the name stays “Event date” and the help is read as a description. The optional message says “(optional)” after its label, in <code>.field__optional</code>. “Admit one church” and the artist’s ticket code are <code>aria-hidden</code>. The busy booking-bar submit keeps its accessible name updated (“Checking calendars…”).</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Field labels and values on the ticket</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
@@ -427,11 +456,11 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li><b>Titles</b>: “Your event” on the bar; “Book {first name}” on the stub; “Requested” after success.</li>
+        <li><b>Titles</b>: “Your event” on the bar; “Book {first name}” on the stub.</li>
         <li><b>Labels</b>: short nouns or a plain question (“How far can they drive?”). Radius options pair distance and time: “120 km · 1.5 hr”.</li>
         <li><b>Price</b>: “From $650” and, below, what it covers: “per service · travel included”.</li>
-        <li><b>Availability</b>: “Abigail is free Sat 14 Nov”. Errors say what happened and what to do: “Abigail is booked Sun 15 Nov. Pick another date, like Fri 20 Nov.”</li>
-        <li><b>Submit</b>: verb plus date: “Request to book · Sat 14 Nov”, “Show the lineup”. Busy: “Sending request…”, “Checking calendars…”.</li>
+        <li><b>Availability</b>: “Abigail is free Sat 14 Nov”. Errors say what happened and what to do: “Abigail is booked Sun 15 Nov. Try another date.” (L2-019).</li>
+        <li><b>Submit</b>: verb plus date: “Request to book · Sat 14 Nov” (“Request to book” before a date is chosen), “Show the lineup”. Busy (booking bar): “Checking calendars…”.</li>
         <li><b>Fine print</b>: when money moves and the cancellation rule, in one or two sentences: “Nothing is charged until Abigail accepts. Cancel free up to 14 days before.”</li>
       </ul>
     </section>
@@ -442,7 +471,7 @@
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage" data-theme="dark"><form class="booking-bar" aria-labelledby="dd2-title" action="#dd2-title" style="width: 100%;"><h2 id="dd2-title" class="booking-bar__title">Your event</h2><label class="field"><span class="field__label">Church location</span><input class="input" type="text" value="Burlington, ON"></label></form></div><figcaption>Without it, the bar turns charcoal in the dark theme and disappears into the stage. The mocks forced paper with primitives instead.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="dd3-date">Event date</label><input class="input" id="dd3-date" type="date" value="2026-11-14" aria-describedby="dd3-help"><span class="inline-msg inline-msg--success" id="dd3-help"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</span></div></div><figcaption>Availability as a success inline message with an icon, outside the label and linked with <code>aria-describedby</code>.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><label class="field" style="width: 100%;"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"><span class="field__help">✓ Abigail is free Sat 14 Nov</span></label></div><figcaption>The mocks typed a “✓” into muted help text inside the label, so the field’s name became “Event date ✓ Abigail is free…”.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true">Sending request…</button></div><figcaption>While sending, keep the button in place with <code>aria-busy</code>, so a second click does nothing.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Checking calendars…</button></div><figcaption>While searching, keep the button in place with <code>aria-busy</code>, so a second click does nothing.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><h2 style="font: var(--text-h3); text-transform: uppercase;">Book Abigail</h2></div><figcaption>The mocks styled the stub heading with <code>style="font: var(--text-h3)"</code>. Use <code>.stub__title</code>.</figcaption></figure>
       </div>
     </section>
@@ -461,6 +490,8 @@
           <tr><td>Price / code / fine print</td><td><code>--text-figure-lg</code> / <code>--text-stub</code> / <code>--text-caption</code></td><td colspan="2"><span data-token="--font-size-3xl"></span> / <span data-token="--font-size-sm"></span> / <span data-token="--font-size-xs"></span></td></tr>
           <tr><td>Padding / gaps</td><td><code>--space-6</code> / <code>--space-4</code> (bar), <code>--space-5</code> (stub)</td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-4"></span>, <span data-token="--space-5"></span></td></tr>
           <tr><td>Stub column / sticky offset</td><td><code>--layout-sidebar-width</code> / <code>--layout-topbar-height</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span> / <span data-token="--layout-topbar-height"></span></td></tr>
+                  <tr><td>Auth card shadow</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+          <tr><td>Auth card width</td><td><code>--layout-auth-width</code></td><td colspan="2"><span data-token="--layout-auth-width"></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -472,37 +503,38 @@
     &lt;form class="stub" aria-labelledby="book-title" action="/requests"&gt;
       &lt;div class="stub__head"&gt;
         &lt;h2 id="book-title" class="stub__title" tabindex="-1"&gt;Book Abigail&lt;/h2&gt;
-        &lt;span class="stub__code" aria-hidden="true"&gt;No. ZAM-0114&lt;/span&gt;
+        &lt;span class="stub__code" aria-hidden="true"&gt;No. ACT-0027&lt;/span&gt;
       &lt;/div&gt;
       …
       &lt;button class="btn btn--primary btn--lg btn--block" type="submit"&gt;Request to book · Sat 14 Nov&lt;/button&gt;
-      &lt;p class="stub__fine"&gt;Nothing is charged until Abigail accepts. Cancel free up to 14 days before.&lt;/p&gt;
+      &lt;p class="stub__fine"&gt;Nothing is charged until Abigail accepts. &lt;a href="…"&gt;Cancel free up to 14 days before&lt;/a&gt;.&lt;/p&gt;
     &lt;/form&gt;
   &lt;/aside&gt;
 &lt;/div&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
-        <tr><td><code>.booking-bar</code></td><td>Paper ticket with yellow shadow; two-column grid from 640px.</td></tr>
+        <tr><td><code>.booking-bar</code></td><td>Paper ticket with yellow shadow; two-column grid from 576px. The title, the submit button, an <code>.error-summary</code> and a <code>.filters</code> row of quick-pick cities span both columns.</td></tr>
         <tr><td><code>.booking-bar__title</code> (+ <code>&lt;small&gt;</code>)</td><td>Title with a dashed perforation; the small stamp sits right.</td></tr>
         <tr><td><code>data-theme="light"</code></td><td>Required on the bar: keeps it paper in the dark theme.</td></tr>
         <tr><td><code>.stub</code></td><td>Paper ticket with <code>--shadow-3</code>; column of fields, 20px apart.</td></tr>
         <tr><td><code>.stub__head</code> <code>.stub__title</code> <code>.stub__code</code></td><td>Title row with perforation, h3-sized title, mono ticket code.</td></tr>
         <tr><td><code>.stub__price</code> <code>.stub__fine</code></td><td>Display-size price; muted caption.</td></tr>
-        <tr><td><code>.profile-layout &gt; aside</code></td><td>Sidebar column, sticky from 1024px.</td></tr>
-        <tr><td><code>aria-busy="true"</code></td><td>On the submit (spinner, clicks ignored) and the form.</td></tr>
+        <tr><td><code>.profile-layout &gt; aside</code></td><td>Sidebar column, sticky from 992px.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>On the submit, with <code>aria-disabled="true"</code> (spinner, presses ignored, focus kept), and on the form.</td></tr>
         <tr><td><code>aria-invalid</code> + <code>aria-describedby</code> + <code>.field__error</code></td><td>Invalid date with its message.</td></tr>
         <tr><td><code>.inline-msg--success</code></td><td>Availability help, and the sent message with <code>role="status"</code>.</td></tr>
+      
+        <tr><td><code>.stub.auth-card</code></td><td>Sign-in style stub: 28rem max, yellow offset shadow on the stage.</td></tr>
+        <tr><td><code>.auth-card__title</code></td><td>The card’s h1, in the h2 role style.</td></tr>
+        <tr><td><code>.auth-card__links</code></td><td>Secondary links spread under the submit, wrapping.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: booking bar in the poster</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: busy submit “Checking calendars…”</li>
-        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: bar with Thu 24 Dec and 40 km</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: booking stub for Abigail, “No. ZAM-0114”, sticky note</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: stub for Miriam, “From $300”, “No. ZAM-0115”</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: stub-shaped skeleton</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: booking bar in the poster; <a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: busy submit “Checking calendars…”; <a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: bar with Thu 24 Dec and 40 km; <a href="../../mocks/pages/discover/invalid.html">pages/discover/invalid</a>: a guest’s empty submit, with an error summary, field errors and the quick-pick city chips spanning both columns</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: booking stub for Abigail, sticky note; <a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: stub for Miriam, “From $300”; <a href="../../mocks/pages/artist/booked-date.html">pages/artist/booked-date</a>: booked date, “Abigail is booked Sun 15 Nov. Try another date.” with the submit disabled; <a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: stub-shaped skeleton</li>
+        <li>Auth cards: <a href="../../mocks/pages/sign-in/default.html">pages/sign-in/default</a> (<a href="../../mocks/pages/sign-in/invalid.html">invalid</a>, <a href="../../mocks/pages/sign-in/submitting.html">submitting</a>, <a href="../../mocks/pages/sign-in/error.html">error</a>, <a href="../../mocks/pages/sign-in/expired.html">expired</a>), <a href="../../mocks/pages/sign-up/default.html">pages/sign-up/default</a>, <a href="../../mocks/pages/forgot-password/default.html">pages/forgot-password/default</a>, <a href="../../mocks/pages/reset-password/default.html">pages/reset-password/default</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
@@ -511,7 +543,7 @@
         <li>“✓ Abigail is free Sat 14 Nov” was muted help with a typed ✓. It is now <code>.inline-msg--success</code> with a check icon.</li>
         <li>No field error existed. Invalid dates now use <code>.field__error</code> with <code>aria-invalid</code> and <code>aria-describedby</code>, and invalid styling covers inputs, selects and textareas.</li>
         <li>Stub skeletons were sized inline. They now use <code>.skeleton--title</code>, <code>--control</code>, <code>--control-lg</code>.</li>
-        <li>Still open: inside the poster, the <code>.on-stage</code> rule turns the submit’s focus ring yellow on the paper bar. <code>components.css</code> needs a rule that resets the ring on a light island inside the stage.</li>
+        <li>Inside the poster, the <code>.on-stage</code> rule turned the submit’s focus ring yellow on the paper bar; <code>components.css</code> now restores the ink ring on a light island inside the stage.</li>
       </ul>
     </section>
 

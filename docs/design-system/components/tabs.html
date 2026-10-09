@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tabs — Zamaro design system</title>
-<meta name="description" content="Tabs switch between views of the same thing without leaving the page, such as a booker’s Requests, Upcoming and Past bookings. Underline and stamp variants, counts, two sizes, automatic and manual activation.">
+<meta name="description" content="Tabs switch between views of the same thing without leaving the page, such as a booker’s Upcoming and Past bookings or an artist’s New, Accepted, Confirmed and Past requests. Underline and stamp variants, counts, two sizes, automatic and manual activation.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -50,6 +50,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -76,6 +77,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -116,7 +119,7 @@
       <p class="ds-kicker">Component · Navigation</p>
       <h1>Tabs</h1>
       <p class="ds-lead">Tabs show one of several views of the same thing in place: a booker’s requests, upcoming bookings and past bookings. The selected tab gets a yellow underline, or turns solid ink in the stamp style.</p>
-      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill ds-pill--warn">Status: ready, not in the mocks yet</span><span class="ds-pill">APG Tabs, automatic activation</span><span class="ds-pill">Class <code>.tabs</code></span></div>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">APG Tabs, automatic activation</span><span class="ds-pill">Class <code>.tabs</code></span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
       </ul>
@@ -168,27 +171,21 @@
         <div class="ds-example__canvas ds-example__canvas--block">
           <div class="tabs" data-tabs="automatic">
             <div class="tabs__list" role="tablist" aria-label="Your bookings">
-              <button class="tabs__tab" role="tab" type="button" id="bk-tab-req" aria-selected="true" aria-controls="bk-panel-req">Requests <span class="tabs__count">2</span></button>
-              <button class="tabs__tab" role="tab" type="button" id="bk-tab-up" aria-selected="false" aria-controls="bk-panel-up" tabindex="-1">Upcoming <span class="tabs__count">1</span></button>
-              <button class="tabs__tab" role="tab" type="button" id="bk-tab-past" aria-selected="false" aria-controls="bk-panel-past" tabindex="-1">Past <span class="tabs__count">4</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="bk-tab-up" aria-selected="true" aria-controls="bk-panel-up">Upcoming <span class="tabs__count">3</span></button>
+              <button class="tabs__tab" role="tab" type="button" id="bk-tab-past" aria-selected="false" aria-controls="bk-panel-past" tabindex="-1">Past <span class="tabs__count">3</span></button>
             </div>
-            <div class="tabs__panel" role="tabpanel" id="bk-panel-req" aria-labelledby="bk-tab-req" tabindex="0">
+            <div class="tabs__panel" role="tabpanel" id="bk-panel-up" aria-labelledby="bk-tab-up" tabindex="0">
               <ul class="list list--divided">
-                <li class="list__item"><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Sat 14 Nov · Sunday service · sent Thu 8 Oct</span></div><span class="list__trail badge badge--warning">Awaiting reply</span></li>
-                <li class="list__item"><div class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Sun 20 Dec · Christmas service · sent Tue 6 Oct</span></div><span class="list__trail badge badge--warning">Awaiting reply</span></li>
-              </ul>
-            </div>
-            <div class="tabs__panel" role="tabpanel" id="bk-panel-up" aria-labelledby="bk-tab-up" tabindex="0" hidden>
-              <ul class="list list--divided">
-                <li class="list__item"><div class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sun 1 Nov · Sunday service · No. ZAM-0114 · deposit $162.50 paid</span></div><span class="list__trail badge badge--success">Confirmed</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Marcus Bell Trio</span><span class="list__meta">Sun 25 Oct · Sunday service · No. ZAM-0097 · deposit $237.50 paid</span></div><span class="list__trail stamp stamp--confirmed">Confirmed</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sat 14 Nov · Worship night · No. ZAM-0114 · sent Fri 9 Oct</span></div><span class="list__trail stamp stamp--requested">Requested</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Sat 5 Dec · Worship night · No. ZAM-0088 · deposit $225 due Sat 10 Oct</span></div><span class="list__trail stamp stamp--accepted">Accepted</span></li>
               </ul>
             </div>
             <div class="tabs__panel" role="tabpanel" id="bk-panel-past" aria-labelledby="bk-tab-past" tabindex="0" hidden>
               <ul class="list list--divided">
-                <li class="list__item"><div class="list__content"><span class="list__title">Elijah Park</span><span class="list__meta">Sun 13 Sep · Sunday service</span></div><a class="list__trail" href="#variants">Write a review</a></li>
-                <li class="list__item"><div class="list__content"><span class="list__title">Daniel &amp; Ruth Okonkwo</span><span class="list__meta">Sun 16 Aug · Memorial service</span></div><span class="list__trail text-caption">Reviewed</span></li>
-                <li class="list__item"><div class="list__content"><span class="list__title">Marcus Bell Trio</span><span class="list__meta">Fri 3 Jul · Worship night</span></div><span class="list__trail text-caption">Reviewed</span></li>
-                <li class="list__item"><div class="list__content"><span class="list__title">Grace Tabernacle Mass Choir</span><span class="list__meta">Sun 12 Apr · Easter service</span></div><span class="list__trail text-caption">Reviewed</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Elijah Park</span><span class="list__meta">Sat 3 Oct · No. ZAM-0080</span></div><span class="list__trail stamp stamp--withdrawn">Withdrawn</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Grace Tabernacle Mass Choir</span><span class="list__meta">Sun 20 Sep · No. ZAM-0075</span></div><span class="list__trail stamp stamp--declined">Declined</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sun 14 Jun · No. ZAM-0061 · reviewed</span></div><span class="list__trail stamp stamp--completed">Completed</span></li>
               </ul>
             </div>
           </div>
@@ -196,15 +193,12 @@
         <div class="ds-example__caption"><span>Automatic activation: the arrow keys move focus and show the panel at once.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="tabs"&gt;
   &lt;div class="tabs__list" role="tablist" aria-label="Your bookings"&gt;
-    &lt;button class="tabs__tab" role="tab" type="button" id="tab-requests"
-            aria-selected="true" aria-controls="panel-requests"&gt;Requests &lt;span class="tabs__count"&gt;2&lt;/span&gt;&lt;/button&gt;
     &lt;button class="tabs__tab" role="tab" type="button" id="tab-upcoming"
-            aria-selected="false" aria-controls="panel-upcoming" tabindex="-1"&gt;Upcoming &lt;span class="tabs__count"&gt;1&lt;/span&gt;&lt;/button&gt;
+            aria-selected="true" aria-controls="panel-upcoming"&gt;Upcoming &lt;span class="tabs__count"&gt;3&lt;/span&gt;&lt;/button&gt;
     &lt;button class="tabs__tab" role="tab" type="button" id="tab-past"
-            aria-selected="false" aria-controls="panel-past" tabindex="-1"&gt;Past &lt;span class="tabs__count"&gt;4&lt;/span&gt;&lt;/button&gt;
+            aria-selected="false" aria-controls="panel-past" tabindex="-1"&gt;Past &lt;span class="tabs__count"&gt;3&lt;/span&gt;&lt;/button&gt;
   &lt;/div&gt;
-  &lt;div class="tabs__panel" role="tabpanel" id="panel-requests" aria-labelledby="tab-requests" tabindex="0"&gt;…&lt;/div&gt;
-  &lt;div class="tabs__panel" role="tabpanel" id="panel-upcoming" aria-labelledby="tab-upcoming" tabindex="0" hidden&gt;…&lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="panel-upcoming" aria-labelledby="tab-upcoming" tabindex="0"&gt;…&lt;/div&gt;
   &lt;div class="tabs__panel" role="tabpanel" id="panel-past" aria-labelledby="tab-past" tabindex="0" hidden&gt;…&lt;/div&gt;
 &lt;/div&gt;</code></pre></details>
       </div>
@@ -214,30 +208,29 @@
         <div class="ds-example__canvas ds-example__canvas--block">
           <div class="tabs tabs--stamp" data-tabs="manual">
             <div class="tabs__list" role="tablist" aria-label="Payouts by period">
-              <button class="tabs__tab" role="tab" type="button" id="po-tab-oct" aria-selected="true" aria-controls="po-panel-oct">October</button>
-              <button class="tabs__tab" role="tab" type="button" id="po-tab-sep" aria-selected="false" aria-controls="po-panel-sep" tabindex="-1">September</button>
+              <button class="tabs__tab" role="tab" type="button" id="po-tab-sep" aria-selected="true" aria-controls="po-panel-sep">September</button>
+              <button class="tabs__tab" role="tab" type="button" id="po-tab-jun" aria-selected="false" aria-controls="po-panel-jun" tabindex="-1">June</button>
               <button class="tabs__tab" role="tab" type="button" id="po-tab-2026" aria-selected="false" aria-controls="po-panel-2026" tabindex="-1">All of 2026</button>
             </div>
-            <div class="tabs__panel" role="tabpanel" id="po-panel-oct" aria-labelledby="po-tab-oct" tabindex="0">
+            <div class="tabs__panel" role="tabpanel" id="po-panel-sep" aria-labelledby="po-tab-sep" tabindex="0">
               <ul class="list list--divided">
-                <li class="list__item"><div class="list__content"><span class="list__title">Bethel Pentecostal, Hamilton</span><span class="list__meta">Sun 4 Oct · paid Mon 5 Oct</span></div><span class="list__trail ticket__price">$598</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">St. Brendan’s Anglican, Oshawa</span><span class="list__meta">Sun 13 Sep · paid Tue 15 Sep</span></div><span class="list__trail ticket__price">$598</span></li>
               </ul>
             </div>
-            <div class="tabs__panel" role="tabpanel" id="po-panel-sep" aria-labelledby="po-tab-sep" tabindex="0" hidden>
+            <div class="tabs__panel" role="tabpanel" id="po-panel-jun" aria-labelledby="po-tab-jun" tabindex="0" hidden>
               <ul class="list list--divided">
-                <li class="list__item"><div class="list__content"><span class="list__title">St. Brendan’s Anglican, Oshawa</span><span class="list__meta">Sun 27 Sep · paid Mon 28 Sep</span></div><span class="list__trail ticket__price">$598</span></li>
-                <li class="list__item"><div class="list__content"><span class="list__title">Women’s retreat, Muskoka</span><span class="list__meta">Sat 12 Sep · paid Mon 14 Sep</span></div><span class="list__trail ticket__price">$598</span></li>
+                <li class="list__item"><div class="list__content"><span class="list__title">Riverside Community Church, Burlington</span><span class="list__meta">Sun 14 Jun · paid Tue 16 Jun</span></div><span class="list__trail ticket__price">$598</span></li>
               </ul>
             </div>
             <div class="tabs__panel" role="tabpanel" id="po-panel-2026" aria-labelledby="po-tab-2026" tabindex="0" hidden>
-              <p>21 payouts this year · $12,558 after Zamaro’s 8%.</p>
+              <p>2 payouts this year · $1,196 after Zamaro’s 8%.</p>
             </div>
           </div>
         </div>
         <div class="ds-example__caption"><span>Manual activation: each period loads from the server, so arrow keys only move focus and <kbd>Enter</kbd> or <kbd>Space</kbd> shows the panel.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="tabs tabs--stamp"&gt;
   &lt;div class="tabs__list" role="tablist" aria-label="Payouts by period"&gt;
-    &lt;button class="tabs__tab" role="tab" type="button" aria-selected="true" …&gt;October&lt;/button&gt; …
+    &lt;button class="tabs__tab" role="tab" type="button" aria-selected="true" …&gt;September&lt;/button&gt; …
   &lt;/div&gt;
   …
 &lt;/div&gt;</code></pre></details>
@@ -336,7 +329,7 @@
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
         <li>Tabs never wrap onto two rows. When they do not fit, <code>.tabs__list</code> scrolls sideways inside its own box (thin scrollbar), and the page does not.</li>
-        <li>At 360px, “Requests 2 · Upcoming 1 · Past 4” fits in one row. Keep labels to one word so typical sets fit on phones without scrolling.</li>
+        <li>The artist’s four tabs, “New 3 · Accepted · Confirmed · Past”, are the longest set in the mocks; at 360px <code>.tabs__list</code> scrolls sideways inside itself rather than wrap or widen the page. Keep labels to one word so typical sets fit on phones without scrolling.</li>
         <li>When the selected tab is off-screen on load, scroll it into view (<code>scrollIntoView({ inline: "nearest" })</code>).</li>
         <li>The stamp style keeps an 8px gap between frames at every width. Panels always take the full width under the list.</li>
       </ul>
@@ -361,7 +354,7 @@
       <h3>Focus</h3>
       <p>Roving tabindex: only the selected tab has <code>tabindex="0"</code>, the others <code>-1</code>. Each panel has <code>tabindex="0"</code> so a keyboard user can reach a panel that has no focusable content. The ring is drawn inside the tab so the scrolling list never clips it.</p>
       <h3>Labelling</h3>
-      <p>The tab list names the set (“Your bookings”). A tab’s name is its label plus its count (“Requests 2”); add visually hidden words when the number alone is ambiguous. Each panel is labelled by its tab, so screen readers announce “Requests 2, tab panel”.</p>
+      <p>The tab list names the set (“Your bookings”). A tab’s name is its label plus its count (“Upcoming 3”); add visually hidden words when the number alone is ambiguous. Each panel is labelled by its tab, so screen readers announce “Requests 2, tab panel”.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Unselected tab label</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
@@ -382,8 +375,8 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>One or two words per tab, nouns for what the panel holds: “Requests”, “Upcoming”, “Past”. Sentence case in the source; CSS adds the uppercase.</li>
-        <li>Put the most-used view first and select it by default. For bookers that is “Requests”, because those need action.</li>
+        <li>One or two words per tab, nouns for what the panel holds: “Upcoming”, “Past”, “New”. Sentence case in the source; CSS adds the uppercase.</li>
+        <li>Put the most-used view first and select it by default. For bookers that is “Upcoming”; for artists it is “New”, because those requests need a reply.</li>
         <li>Counts are plain numbers (“2”, “14”). Show “0” rather than hiding the count, so the tab set keeps its shape.</li>
         <li>Two to five tabs. More than five is a sign the views should be pages in a sidebar.</li>
       </ul>
@@ -444,13 +437,13 @@ tablist.addEventListener('keydown', (e) =&gt; {
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The eight mock pages show public screens with no tabbed views. The product will need tabs for:</p>
+      <p>Extracted from these mocks:</p>
       <ul>
-        <li>The booker’s bookings page: “Requests · Upcoming · Past”, reached from “Saved artists (3)” and the account menu in <a href="../../mocks/pages/discover/default.html">pages/discover/default</a>.</li>
-        <li>The artist dashboard: payouts by period, and a request’s “Details · Messages”.</li>
-        <li>Possibly the artist profile on phones, if “Watch her lead”, “Photos” and “Songs Abigail leads” in <a href="../../mocks/pages/artist/default.html">pages/artist/default</a> become too long to scroll. Today they are sections, which is better for search and for reading top to bottom.</li>
+        <li><a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/bookings/past.html">past</a>, <a href="../../mocks/pages/bookings/loading.html">loading</a> and <a href="../../mocks/pages/bookings/no-results.html">no-results</a>: Naomi’s “Upcoming · Past” tabs, each with a <code>.tabs__count</code> (L2-033)</li>
+        <li><a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/requests/empty.html">empty</a>, <a href="../../mocks/pages/requests/loading.html">loading</a> and <a href="../../mocks/pages/requests/no-results.html">no-results</a>: Abigail’s “New · Accepted · Confirmed · Past” inbox tabs, the count on New (L2-034); the same tabs behind <a href="../../mocks/notifications/request-toast/info.html">notifications/request-toast</a></li>
       </ul>
-      <p>Drift fixed during extraction: none, since no mock uses it. <code>.tabs__count</code> uses full-strength text from the start, avoiding the <code>opacity: .75</code> contrast risk the mocks had on <code>.chip__count</code>.</p>
+      <p>The mocks place <code>.tabs__list</code> straight in the <code>.page-body</code> and give each <code>role="tabpanel"</code> the body’s own stack spacing, so they need neither the <code>.tabs</code> wrapper nor <code>.tabs__panel</code>; use both when tabs sit anywhere else. The stamp and small variants are not in the mocks yet.</p>
+      <p>Drift fixed during extraction: the tab counts were yellow <code>.badge--count</code> badges named with <code>aria-label</code>; they are now <code>.tabs__count</code>, which turns yellow only on the selected tab, and the tab’s text names the count. <code>.tabs__count</code> uses full-strength text from the start, avoiding the <code>opacity: .75</code> contrast risk the mocks had on <code>.chip__count</code>.</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

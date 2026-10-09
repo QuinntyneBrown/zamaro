@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -131,8 +134,8 @@
       <div class="ds-anatomy">
         <figure class="ds-anatomy__figure">
           <div class="field" style="width: min(100%, 22rem);">
-            <div class="field__row"><label class="field__label" for="ana-msg">Message <span class="field__optional">(optional)</span></label><span class="field__counter" id="ana-msg-count">104 / 500</span></div>
-            <textarea class="textarea" id="ana-msg" aria-describedby="ana-msg-count ana-msg-help">About 180 people on the lakeshore. Our band is two guitars and a keyboard. We’d love Goodness of God.</textarea>
+            <div class="field__row"><label class="field__label" for="ana-msg">Message <span class="field__optional">(optional)</span></label><span class="field__counter" id="ana-msg-count">79 / 2,000</span></div>
+            <textarea class="textarea" id="ana-msg" aria-describedby="ana-msg-count ana-msg-help">We’re hosting a worship night for churches across Burlington, about 250 people.</textarea>
             <p class="field__help" id="ana-msg-help">Your church, the room, the songs you love.</p>
           </div>
           <span class="ds-callout" style="left: max(0.25rem, calc(50% - 13rem)); top: 2.25rem;" aria-hidden="true">1</span>
@@ -172,11 +175,11 @@
     <div class="field">
       <div class="field__row">
         <label class="field__label" for="ta-message">Message <span class="field__optional">(optional)</span></label>
-        <span class="field__counter" id="ta-message-count" data-counter-for="ta-message" data-limit="500" data-live="ta-message-live">0 / 500</span>
+        <span class="field__counter" id="ta-message-count" data-counter-for="ta-message" data-limit="2000" data-live="ta-message-live">0 / 2,000</span>
       </div>
-      <textarea class="textarea textarea--autogrow" id="ta-message" name="message" maxlength="600"
+      <textarea class="textarea textarea--autogrow" id="ta-message" name="message" maxlength="2000"
                 aria-describedby="ta-message-help ta-message-count"
-                placeholder="Your church, the room, the songs you love.">Hi Abigail, we’re Riverside Community Church in Burlington, about 180 on a Sunday. Our band is two guitars, a keyboard and four singers. We’d love Goodness of God and Great Is Thy Faithfulness.</textarea>
+                placeholder="Your church, the room, the songs you love.">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</textarea>
       <p class="field__help" id="ta-message-help">Abigail reads this before she accepts. Nothing is charged yet.</p>
       <p class="visually-hidden" id="ta-message-live" aria-live="polite"></p>
     </div>
@@ -185,16 +188,16 @@
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
   &lt;div class="field__row"&gt;
     &lt;label class="field__label" for="ta-message"&gt;Message &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
-    &lt;span class="field__counter" id="ta-message-count" data-counter-for="ta-message" data-limit="500" data-live="ta-message-live"&gt;0 / 500&lt;/span&gt;
+    &lt;span class="field__counter" id="ta-message-count" data-counter-for="ta-message" data-limit="2000" data-live="ta-message-live"&gt;0 / 2,000&lt;/span&gt;
   &lt;/div&gt;
-  &lt;textarea class="textarea textarea--autogrow" id="ta-message" name="message" maxlength="600"
+  &lt;textarea class="textarea textarea--autogrow" id="ta-message" name="message" maxlength="2000"
             aria-describedby="ta-message-help ta-message-count"
-            placeholder="Your church, the room, the songs you love."&gt;Hi Abigail, we’re Riverside Community Church in Burlington, about 180 on a Sunday. Our band is two guitars, a keyboard and four singers. We’d love Goodness of God and Great Is Thy Faithfulness.&lt;/textarea&gt;
+            placeholder="Your church, the room, the songs you love."&gt;We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.&lt;/textarea&gt;
   &lt;p class="field__help" id="ta-message-help"&gt;Abigail reads this before she accepts. Nothing is charged yet.&lt;/p&gt;
   &lt;p class="visually-hidden" id="ta-message-live" aria-live="polite"&gt;&lt;/p&gt;
 &lt;/div&gt;</code></pre></details>
 </div>
-      <p><code>maxlength</code> is set above the visible limit on purpose: a hard limit at 500 would silently cut a pasted message. Let the count go over, show the error, and keep the text.</p>
+      <p><code>maxlength</code> equals the limit (2,000 for the booking message), as in every mock, so the text can never go over; the counter on the label row shows the limit before it is reached. A lower bound (<code>minlength</code>, or a required message) is checked on submit and shown as an error under the box.</p>
     </section>
 
     <section class="ds-section" id="sizes" data-na="Textareas have one width (their field) and one starting height; auto-grow handles the rest."><h2><a href="#sizes">Sizes</a></h2>
@@ -207,12 +210,12 @@
         <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Read-only</th><th scope="col">Disabled</th></tr></thead>
         <tbody>
           <tr><th scope="row">Default</th>
-            <td><textarea class="textarea" style="width: 12rem;" aria-label="Message, default">About 180 people.</textarea></td>
-            <td><textarea class="textarea" style="width: 12rem;" data-state="hover" aria-label="Message, hover">About 180 people.</textarea></td>
-            <td><textarea class="textarea" style="width: 12rem;" data-state="focus" aria-label="Message, focus">About 180 people.</textarea></td>
-            <td><textarea class="textarea" style="width: 12rem;" aria-invalid="true" aria-label="Message, invalid">Call me on 905-555-0142.</textarea></td>
-            <td><textarea class="textarea" style="width: 12rem;" readonly aria-label="Message, read-only">About 180 people.</textarea></td>
-            <td><textarea class="textarea" style="width: 12rem;" disabled aria-label="Message, disabled">About 180 people.</textarea></td></tr>
+            <td><textarea class="textarea" style="width: 12rem;" aria-label="Message, default">About 250 people.</textarea></td>
+            <td><textarea class="textarea" style="width: 12rem;" data-state="hover" aria-label="Message, hover">About 250 people.</textarea></td>
+            <td><textarea class="textarea" style="width: 12rem;" data-state="focus" aria-label="Message, focus">About 250 people.</textarea></td>
+            <td><textarea class="textarea" style="width: 12rem;" aria-invalid="true" aria-label="Message, invalid">So good!</textarea></td>
+            <td><textarea class="textarea" style="width: 12rem;" readonly aria-label="Message, read-only">About 250 people.</textarea></td>
+            <td><textarea class="textarea" style="width: 12rem;" disabled aria-label="Message, disabled">About 250 people.</textarea></td></tr>
           <tr><th scope="row">Placeholder</th>
             <td><textarea class="textarea" style="width: 12rem;" placeholder="Your church, the room…" aria-label="Empty message, default"></textarea></td>
             <td><textarea class="textarea" style="width: 12rem;" placeholder="Your church, the room…" data-state="hover" aria-label="Empty message, hover"></textarea></td>
@@ -222,34 +225,34 @@
             <td><textarea class="textarea" style="width: 12rem;" placeholder="Your church, the room…" disabled aria-label="Empty message, disabled"></textarea></td></tr>
         </tbody>
       </table></div>
-      <h3>Over the limit</h3>
+      <h3>Too short</h3>
 <div class="ds-example">
   <div class="ds-example__canvas ds-example__canvas--stack">
     <div class="field">
-      <div class="field__row"><label class="field__label" for="ta-over">Message</label><span class="field__counter" id="ta-over-count" data-over="true">512 / 500</span></div>
-      <textarea class="textarea" id="ta-over" aria-invalid="true" aria-describedby="ta-over-error ta-over-count">We’re a church of about 180 on the lakeshore…</textarea>
-      <p class="field__error" id="ta-over-error"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Shorten your message to 500 characters. It is 12 over.</p>
+      <div class="field__row"><label class="field__label" for="ta-over">Your review <span class="field__required">(required)</span></label><span class="field__counter" id="ta-over-count">8 / 1,000</span></div>
+      <textarea class="textarea" id="ta-over" minlength="20" maxlength="1000" aria-invalid="true" aria-describedby="ta-over-error ta-over-count">So good!</textarea>
+      <p class="field__error" id="ta-over-error">Write at least 20 characters; you have 8.</p>
     </div>
   </div>
-  <div class="ds-example__caption"><span>The counter turns red and bold, the box is invalid, and the error says by how much. Nothing is cut.</span></div>
+  <div class="ds-example__caption"><span>After submit, a review under its 20-character minimum (L2-055): the box is invalid and the error says what to add. From dialogs/write-review/invalid.</span></div>
 </div>
       <h3>Both themes</h3>
       <div class="ds-themes">
         <div data-theme="light"><div class="stack stack--sm">
-          <textarea class="textarea" aria-label="Light theme, default">About 180 people on the lakeshore.</textarea>
-          <textarea class="textarea" data-state="focus" aria-label="Light theme, focus">About 180 people on the lakeshore.</textarea>
-          <textarea class="textarea" aria-invalid="true" aria-label="Light theme, invalid">Call me on 905-555-0142.</textarea>
-          <textarea class="textarea" readonly aria-label="Light theme, read-only">Sent Fri 9 Oct · About 180 people.</textarea>
+          <textarea class="textarea" aria-label="Light theme, default">About 250 people, across Burlington.</textarea>
+          <textarea class="textarea" data-state="focus" aria-label="Light theme, focus">About 250 people, across Burlington.</textarea>
+          <textarea class="textarea" aria-invalid="true" aria-label="Light theme, invalid">So good!</textarea>
+          <textarea class="textarea" readonly aria-label="Light theme, read-only">Sent Fri 9 Oct · About 250 people.</textarea>
         </div></div>
         <div data-theme="dark"><div class="stack stack--sm">
-          <textarea class="textarea" aria-label="Dark theme, default">About 180 people on the lakeshore.</textarea>
-          <textarea class="textarea" data-state="focus" aria-label="Dark theme, focus">About 180 people on the lakeshore.</textarea>
-          <textarea class="textarea" aria-invalid="true" aria-label="Dark theme, invalid">Call me on 905-555-0142.</textarea>
-          <textarea class="textarea" readonly aria-label="Dark theme, read-only">Sent Fri 9 Oct · About 180 people.</textarea>
+          <textarea class="textarea" aria-label="Dark theme, default">About 250 people, across Burlington.</textarea>
+          <textarea class="textarea" data-state="focus" aria-label="Dark theme, focus">About 250 people, across Burlington.</textarea>
+          <textarea class="textarea" aria-invalid="true" aria-label="Dark theme, invalid">So good!</textarea>
+          <textarea class="textarea" readonly aria-label="Dark theme, read-only">Sent Fri 9 Oct · About 250 people.</textarea>
         </div></div>
       </div>
       <ul>
-        <li><b>Invalid</b> is used for the length limit and for contact details in a first message (artists and churches share phone numbers after acceptance).</li>
+        <li><b>Invalid</b> is used for a missing required text or one under its minimum length (a review needs 20 characters). Contact details are not an error: L2-046 replaces a phone number or email with “[contact details shared after booking]” for the recipient until the booking is confirmed, and a note under the message tells the sender.</li>
         <li><b>Read-only</b> shows a sent message on a booking request: Naomi can select and copy it, not edit it.</li>
         <li><b>Disabled</b> is for the moment a request is being sent; the whole <a href="form-layout.html">form</a> goes busy.</li>
       </ul>
@@ -302,15 +305,15 @@
       <ul>
         <li>The label names the thing (“Message”), the help says what helps the artist decide: “Your church, the room, the songs you love.”</li>
         <li>Prefill nothing in the message. A canned greeting reads as spam to artists.</li>
-        <li>Limit by characters (500 for the booking message) and say so with the counter, not with an error after the fact.</li>
-        <li>Errors say what to change: “Leave out phone numbers. Abigail can reply here once she accepts.”</li>
+        <li>Limit by characters (2,000 for the booking message and the message thread, 500 for a reply or a reason, 1,000 for a review, as L2 sets them), set <code>maxlength</code> to that limit and say so with the counter, not with an error after the fact.</li>
+        <li>Errors say what to change: “Write at least 20 characters; you have 8.”</li>
       </ul>
     </section>
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="dd-a1">Message</label><span class="field__counter" id="dd-a1-c" data-over="true">512 / 500</span></div><textarea class="textarea" id="dd-a1" aria-invalid="true" aria-describedby="dd-a1-c">We’re a church of about 180…</textarea></div></div><figcaption>Let the text run over, show the count in red and keep every word.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><textarea class="textarea" maxlength="40" aria-label="Message, hard limit example">We’re a church of about 180 on the lakes</textarea></div><figcaption>A hard <code>maxlength</code> at the limit cuts pasted text mid-word, without telling anyone.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="dd-a1">Message</label><span class="field__counter" id="dd-a1-c">79 / 2,000</span></div><textarea class="textarea" id="dd-a1" maxlength="2000" aria-describedby="dd-a1-c">We’re hosting a worship night for churches across Burlington, about 250 people.</textarea></div></div><figcaption>Show the limit with a counter on the label row and stop at it with <code>maxlength</code>.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><textarea class="textarea" maxlength="40" aria-label="Message, hidden limit example">We’re hosting a worship night for church</textarea></div><figcaption>A limit with no counter: typing just stops, and nobody knows why.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-a3">Message <span class="field__optional">(optional)</span></label><textarea class="textarea" id="dd-a3" placeholder="Your church, the room, the songs you love."></textarea></div></div><figcaption>A real label above, a hint in the placeholder.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><textarea class="textarea" style="resize: both;" aria-label="Message, resize both example" placeholder="Message (optional)"></textarea></div><figcaption>Placeholder as label, and sideways resizing that can push the stub off the page.</figcaption></figure>
       </div>
@@ -339,7 +342,7 @@
 <pre><code>&lt;div class="field"&gt;
   &lt;div class="field__row"&gt;
     &lt;label class="field__label" for="message"&gt;Message &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
-    &lt;span class="field__counter" id="message-count"&gt;0 / 500&lt;/span&gt;
+    &lt;span class="field__counter" id="message-count"&gt;0 / 2,000&lt;/span&gt;
   &lt;/div&gt;
   &lt;textarea class="textarea textarea--autogrow" id="message" name="message"
             aria-describedby="message-help message-count"
@@ -350,7 +353,7 @@
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.textarea</code></td><td>6rem minimum, vertical resize, field tokens.</td></tr>
         <tr><td><code>.textarea--autogrow</code></td><td><code>field-sizing: content</code>, capped at 20rem.</td></tr>
-        <tr><td><code>.field__counter</code>, <code>data-over="true"</code></td><td>Counter on the label row; red and bold when over.</td></tr>
+        <tr><td><code>.field__counter</code>, <code>data-over="true"</code></td><td>Counter on the label row; red and bold if a value is over the limit (a restored draft, for example). With <code>maxlength</code> at the limit, typing never gets there; no mock uses it.</td></tr>
         <tr><td><code>aria-invalid="true"</code></td><td>Red rule and inner stripe.</td></tr>
         <tr><td><code>readonly</code>, <code>disabled</code></td><td>Sunken and dashed / greyed and skipped.</td></tr>
         <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
@@ -367,7 +370,7 @@
       <ul>
         <li>Invalid styling only covered <code>.input</code>; the textarea now shares it.</li>
         <li>“(optional)” was typed into the label. It is now <code>.field__optional</code>.</li>
-        <li>The message had no limit, counter or auto-grow in the mocks. They are part of the core set for the booking message; the 500-character limit is an assumption to confirm.</li>
+        <li>The first mocks had no limit or counter on the message. L2 now sets the limits (2,000 characters for the booking message, 500 for replies and reasons, 1,000 for reviews) and the dialog mocks show the counter: <a href="../../mocks/dialogs/write-review/default.html">dialogs/write-review</a>, <a href="../../mocks/dialogs/reply-review/default.html">dialogs/reply-review</a>, <a href="../../mocks/dialogs/report-review/default.html">dialogs/report-review</a>, <a href="../../mocks/dialogs/hide-review/default.html">dialogs/hide-review</a>, <a href="../../mocks/dialogs/reject-application/default.html">dialogs/reject-application</a> and <a href="../../mocks/dialogs/suspend-artist/default.html">dialogs/suspend-artist</a>. Auto-grow is not in the mocks yet.</li>
       </ul>
     </section>
 
@@ -383,7 +386,7 @@ document.querySelectorAll('[data-counter-for]').forEach(function (counter) {
   var warned = false;
   function update() {
     var used = area.value.length, left = limit - used;
-    counter.textContent = used + ' / ' + limit;
+    counter.textContent = used.toLocaleString('en-CA') + ' / ' + limit.toLocaleString('en-CA');
     counter.setAttribute('data-over', used > limit ? 'true' : 'false');
     area.setAttribute('aria-invalid', used > limit ? 'true' : 'false');
     if (live && left <= 20 && !warned) { live.textContent = left >= 0 ? left + ' characters left' : (-left) + ' characters over the limit'; warned = true; }

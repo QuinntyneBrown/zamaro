@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status stamp — Zamaro design system</title>
+<meta name="description" content="Status stamps print a booking’s L2-029 status (Requested, Accepted, Confirmed, Completed, Declined, Withdrawn, Expired, Cancelled) as a tilted rubber stamp in lists, page heads and receipts.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>Status stamp</h1>
+      <p class="ds-lead">A rubber stamp, slightly askew, that says where a booking stands: Requested, Accepted, Confirmed, Completed, or one of the exits Declined, Withdrawn, Expired and Cancelled.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Statuses from L2-029</span><span class="ds-pill">Class <code>.stamp</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Every booking carries exactly one status, and the stamp is how that status is printed wherever the booking appears: in Naomi’s bookings list, in Abigail’s requests inbox, on the booking and request pages, in the itinerary of a dialog and in toasts. The words and the order come from the booking lifecycle (L2-029): <b>Requested → Accepted → Confirmed → Completed</b>, with the exits <b>Declined</b>, <b>Withdrawn</b>, <b>Expired</b> and <b>Cancelled</b>.</p>
+      <ul>
+        <li>Use a stamp for a <b>booking status</b> and for the one-word outcome of another record (an application “Submitted”, a profile “40%” complete). It is read-only.</li>
+        <li>Every booking status is a stamp, never a badge: <code>.stamp--lg</code> in the page head of one booking, request or admin booking, the default stamp in lists and toasts, and <code>.stamp--flat</code> in table and receipt rows. Use a <a href="badge.html">badge</a> for counts, availability and states outside the booking lifecycle (“3” requests, “Free”, “Booked” on a tour date, an application “Submitted”, a payment “Held”). A held payment is a warning badge beside the booking’s stamp. A badge is a label; a stamp is a verdict.</li>
+        <li>Use an <a href="inline-message.html">inline message</a> or <a href="alert.html">alert</a> when the status needs a sentence (“Pay the $162.50 deposit by Mon 12 Oct, 3:15 p.m.”). Put the stamp beside it, not instead of it.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <span class="stamp stamp--lg stamp--confirmed">Confirmed</span>
+          <span class="ds-callout" style="left: 30%; top: 18%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 52%; top: 50%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 76%; top: 18%;" aria-hidden="true">3</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Ink square</b><small><code>::before</code>, half an em, in the stamp’s colour. A shape cue so the status never depends on colour alone.</small></div></li>
+          <li><div><b>Status word</b><small>Mono overline, uppercase, stamp tracking. One word from L2-029.</small></div></li>
+          <li><div><b>Double rule</b><small>A 2px border plus a 1px outline 2px outside it, both <code>currentColor</code>; the whole stamp is rotated −2° (−4° large).</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>One modifier per status. Colour follows the meaning: the happy path in ink and yellow, the money moment in yellow, refusals in red, lapses in amber, and finished or withdrawn records in muted ink.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="gap: var(--space-4);">
+          <span class="stamp stamp--requested">Requested</span>
+          <span class="stamp stamp--accepted">Accepted</span>
+          <span class="stamp stamp--confirmed">Confirmed</span>
+          <span class="stamp stamp--completed">Completed</span>
+          <span class="stamp stamp--declined">Declined</span>
+          <span class="stamp stamp--withdrawn">Withdrawn</span>
+          <span class="stamp stamp--expired">Expired</span>
+          <span class="stamp stamp--cancelled">Cancelled</span>
+        </div>
+        <div class="ds-example__caption"><span>The eight L2-029 statuses, in lifecycle order.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="stamp stamp--requested"&gt;Requested&lt;/span&gt;
+&lt;span class="stamp stamp--accepted"&gt;Accepted&lt;/span&gt;
+&lt;span class="stamp stamp--confirmed"&gt;Confirmed&lt;/span&gt;
+&lt;span class="stamp stamp--completed"&gt;Completed&lt;/span&gt;
+&lt;span class="stamp stamp--declined"&gt;Declined&lt;/span&gt;
+&lt;span class="stamp stamp--withdrawn"&gt;Withdrawn&lt;/span&gt;
+&lt;span class="stamp stamp--expired"&gt;Expired&lt;/span&gt;
+&lt;span class="stamp stamp--cancelled"&gt;Cancelled&lt;/span&gt;</code></pre></details>
+      </div>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Modifier</th><th scope="col">Status (L2-029)</th><th scope="col">Look</th><th scope="col">Shown when</th></tr></thead>
+        <tbody>
+          <tr><td><code>.stamp--requested</code></td><td>Requested</td><td>Ink on paper</td><td>The church has asked; the artist has 72 hours (24 inside 7 days) to answer.</td></tr>
+          <tr><td><code>.stamp--accepted</code></td><td>Accepted</td><td>Success green on paper</td><td>The artist said yes; the deposit is due within 48 hours.</td></tr>
+          <tr><td><code>.stamp--confirmed</code></td><td>Confirmed</td><td>Ink on yellow</td><td>The deposit is paid; the date is booked.</td></tr>
+          <tr><td><code>.stamp--completed</code></td><td>Completed</td><td>Muted ink</td><td>24 hours after the event started.</td></tr>
+          <tr><td><code>.stamp--declined</code></td><td>Declined</td><td>Danger red</td><td>The artist said no (or marked the date unavailable).</td></tr>
+          <tr><td><code>.stamp--withdrawn</code></td><td>Withdrawn</td><td>Muted ink</td><td>The church withdrew before confirming.</td></tr>
+          <tr><td><code>.stamp--expired</code></td><td>Expired</td><td>Warning amber</td><td>No reply, or no deposit, before the deadline.</td></tr>
+          <tr><td><code>.stamp--cancelled</code></td><td>Cancelled</td><td>Muted ink, struck through</td><td>A Confirmed booking was cancelled by either side.</td></tr>
+          <tr><td><code>.stamp</code> alone</td><td>–</td><td>Ink on paper</td><td>Outcomes that are not booking statuses: an application “Submitted”, a profile “40%”.</td></tr>
+        </tbody>
+      </table></div>
+      <p><code>.stamp--paid</code> and <code>.stamp--done</code> remain in the stylesheet as aliases of Confirmed and Completed from before the lifecycle was fixed. They are not statuses; don’t use them in new screens.</p>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="gap: var(--space-6); align-items: center;">
+          <span class="stamp stamp--requested">Requested</span>
+          <span class="stamp stamp--lg stamp--requested">Requested</span>
+          <span class="stamp stamp--flat stamp--confirmed">Confirmed</span>
+        </div>
+        <div class="ds-example__caption"><span>Default (lists, rows, toasts), <code>.stamp--lg</code> (the page head of one booking or request) and <code>.stamp--flat</code> (inside a receipt row or a panel head, where a tilt would fight the alignment).</span></div>
+      </div>
+      <ul>
+        <li><b>Default</b>: 12px mono overline, 2px × 8px padding, rotated −2°. In every list row, itinerary and toast.</li>
+        <li><b>Large</b> (<code>.stamp--lg</code>): the display face at <code>--font-size-2xl</code>, 4px × 12px padding, rotated −4°. Once per page, beside the booking number in the page head.</li>
+        <li><b>Flat</b> (<code>.stamp--flat</code>): any size, no rotation. Use it in tables, receipts and panel heads.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>A stamp is not interactive: it has no hover, focus or disabled state. Its states are the statuses themselves, plus loading.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Size</th><th scope="col">Requested</th><th scope="col">Accepted</th><th scope="col">Confirmed</th><th scope="col">Declined</th><th scope="col">Expired</th><th scope="col">Cancelled</th><th scope="col">Loading</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Default</th>
+            <td><span class="stamp stamp--requested">Requested</span></td>
+            <td><span class="stamp stamp--accepted">Accepted</span></td>
+            <td><span class="stamp stamp--confirmed">Confirmed</span></td>
+            <td><span class="stamp stamp--declined">Declined</span></td>
+            <td><span class="stamp stamp--expired">Expired</span></td>
+            <td><span class="stamp stamp--cancelled">Cancelled</span></td>
+            <td><span class="skeleton skeleton--stamp" role="img" aria-label="Loading"></span></td></tr>
+          <tr><th scope="row">Large</th>
+            <td><span class="stamp stamp--lg stamp--requested">Requested</span></td>
+            <td><span class="stamp stamp--lg stamp--accepted">Accepted</span></td>
+            <td><span class="stamp stamp--lg stamp--confirmed">Confirmed</span></td>
+            <td><span class="stamp stamp--lg stamp--declined">Declined</span></td>
+            <td><span class="stamp stamp--lg stamp--expired">Expired</span></td>
+            <td><span class="stamp stamp--lg stamp--cancelled">Cancelled</span></td>
+            <td><span class="skeleton" style="width: 8rem; height: 2rem;" role="img" aria-label="Loading"></span></td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Loading</b>: a skeleton bar the width of the stamp sits in its place, as on <a href="../../mocks/pages/bookings/loading.html">bookings/loading</a>. Never show a guessed status.</li>
+        <li><b>Changed</b>: when the status changes while the page is open (the artist accepts), the stamp is replaced and the change is announced by the toast (“Abigail accepted. Pay the $162.50 deposit…”), not by the stamp.</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster"><span class="stamp stamp--requested">Requested</span><span class="stamp stamp--accepted">Accepted</span><span class="stamp stamp--confirmed">Confirmed</span><span class="stamp stamp--completed">Completed</span><span class="stamp stamp--declined">Declined</span><span class="stamp stamp--withdrawn">Withdrawn</span><span class="stamp stamp--expired">Expired</span><span class="stamp stamp--cancelled">Cancelled</span></div></div>
+        <div data-theme="dark"><div class="cluster"><span class="stamp stamp--requested">Requested</span><span class="stamp stamp--accepted">Accepted</span><span class="stamp stamp--confirmed">Confirmed</span><span class="stamp stamp--completed">Completed</span><span class="stamp stamp--declined">Declined</span><span class="stamp stamp--withdrawn">Withdrawn</span><span class="stamp stamp--expired">Expired</span><span class="stamp stamp--cancelled">Cancelled</span></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>A stamp never wraps (<code>white-space: nowrap</code>) and keeps its size at every breakpoint; the longest word, “Withdrawn”, is about 7rem.</li>
+        <li>In a <a href="booking-list.html">booking list</a> row the stamp sits in the status line under the meta on phones and moves to the right-hand status column from MD (768px).</li>
+        <li>In a page head the large stamp wraps under the title on narrow screens; the head is a flex row that wraps, so nothing overflows at 320px.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The stamp has no component tokens. Text, square and both rules read <code>currentColor</code>, which each modifier sets from a semantic token: <code>--color-fg-default</code> (Requested), <code>--color-success-fg</code> (Accepted), <code>--color-fg-on-accent</code> on <code>--color-accent</code> (Confirmed), <code>--color-fg-muted</code> (Completed, Withdrawn, Cancelled), <code>--color-danger-fg</code> (Declined) and <code>--color-warning-fg</code> (Expired). The fill is <code>--color-bg-surface</code>, so in the dark theme stamps print light ink on charcoal paper; Confirmed stays yellow in both.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A plain <code>&lt;span&gt;</code> with the status as visible text. No role is needed: the word is the information. When the stamp sits away from the thing it describes (a page head), make sure the heading or row it belongs to comes first in reading order, so it reads “ZAM-0114 … Requested”.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Skips the stamp; it is never focusable. Put any action (Pay deposit, Leave a review) in a real button next to it.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>None. The stamp is static text.</p>
+      <h3>Labelling</h3>
+      <p>The word is the label; don’t add <code>aria-label</code> or replace the word with an icon. The ink square and the strike-through on Cancelled are decorative cues, so status never depends on colour alone (1.4.1). When a status changes on screen, announce it through the page’s polite status region or toast.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Requested on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Accepted on paper</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Confirmed on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Completed, Withdrawn, Cancelled</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Declined on paper</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Expired on paper</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: Accepted on surface</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: Declined on surface</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: Expired on surface</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <p>The default stamp is 12px text, so every status needs the full 4.5:1; the rules are the same colour and so clear the 3:1 non-text minimum.</p>
+      <h3>Motion</h3>
+      <p>None. The tilt is static; nothing animates when a status changes.</p>
+      <h3>Touch</h3>
+      <p>Nothing to tap.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Use the L2-029 word exactly, in sentence case in the markup (“Requested”); CSS uppercases it. Never invent statuses such as “Pending”, “Paid” or “Done”.</li>
+        <li>One word. Deadlines, amounts and next steps go in the text next to the stamp: “1 day left · reply by Sat 10 Oct, 3:15 p.m.”.</li>
+        <li>Use the same word for both sides of a booking: Naomi and Abigail both see “Accepted”.</li>
+        <li>Outside bookings, keep to a single past-tense word or a number: “Submitted”, “40%”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><span class="stamp stamp--accepted">Accepted</span> <span class="text-caption">Pay the $162.50 deposit by Mon 12 Oct</span></div><figcaption>A lifecycle word, with the next step in plain text beside it.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><span class="stamp stamp--accepted">Awaiting deposit</span></div><figcaption>A sentence in a stamp. It invents a status and won’t match the other side’s view.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><span class="stamp stamp--lg stamp--confirmed">Confirmed</span></div><figcaption>One large stamp per page, in the page head.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><span class="stamp stamp--lg stamp--requested">Requested</span> <span class="stamp stamp--lg stamp--requested">Requested</span></div><figcaption>Large stamps in every row shout. Rows use the default size.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Requested</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Accepted</td><td><code>--color-success-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td></tr>
+          <tr><td>Confirmed fill / text</td><td><code>--color-accent</code> / <code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Completed, Withdrawn, Cancelled</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Declined</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Expired</td><td><code>--color-warning-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-warning-fg" data-swatch></i><span data-token="--color-warning-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-warning-fg" data-swatch></i><span data-token="--color-warning-fg"></span></span></td></tr>
+          <tr><td>Text (default / large)</td><td><code>--text-overline</code> / <code>--font-size-2xl</code> + <code>--font-family-display</code></td><td colspan="2"><span data-token="--text-overline"></span> / <span data-token="--font-size-2xl"></span></td></tr>
+          <tr><td>Tracking</td><td><code>--letter-spacing-stamp</code> / <code>--letter-spacing-wide</code> (large)</td><td colspan="2"><span data-token="--letter-spacing-stamp"></span> / <span data-token="--letter-spacing-wide"></span></td></tr>
+          <tr><td>Rules</td><td><code>--border-width-thick</code> + <code>--border-width-hairline</code> outline</td><td colspan="2"><span data-token="--border-width-thick"></span> + <span data-token="--border-width-hairline"></span></td></tr>
+          <tr><td>Padding (default / large)</td><td><code>--space-0-5</code> <code>--space-2</code> / <code>--space-1</code> <code>--space-3</code></td><td colspan="2"><span data-token="--space-0-5"></span> <span data-token="--space-2"></span> / <span data-token="--space-1"></span> <span data-token="--space-3"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;!-- In a list row --&gt;
+&lt;div class="booking-list__status"&gt;
+  &lt;span class="stamp stamp--accepted"&gt;Accepted&lt;/span&gt;
+  &lt;a class="btn btn--sm btn--primary" href="/bookings/ZAM-0088"&gt;Pay $225 deposit&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;!-- In the page head of one booking --&gt;
+&lt;header class="page-head"&gt;
+  &lt;div&gt;&lt;h1 class="page-head__title"&gt;Abigail Mensah&lt;/h1&gt;&lt;p class="page-head__sub"&gt;ZAM-0114 · Sat 14 Nov&lt;/p&gt;&lt;/div&gt;
+  &lt;span class="stamp stamp--lg stamp--requested"&gt;Requested&lt;/span&gt;
+&lt;/header&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.stamp</code></td><td>Tilted double-ruled stamp in ink on paper, with the ink square.</td></tr>
+        <tr><td><code>.stamp--requested</code>, <code>--accepted</code>, <code>--confirmed</code>, <code>--completed</code></td><td>Lifecycle statuses (L2-029).</td></tr>
+        <tr><td><code>.stamp--declined</code>, <code>--withdrawn</code>, <code>--expired</code>, <code>--cancelled</code></td><td>Exit statuses; Cancelled is also struck through.</td></tr>
+        <tr><td><code>.stamp--lg</code></td><td>Display face, larger padding, −4° tilt. Once per page.</td></tr>
+        <tr><td><code>.stamp--flat</code></td><td>No rotation; for receipts, tables and panel heads.</td></tr>
+        <tr><td><code>.stamp--paid</code>, <code>.stamp--done</code></td><td>Legacy aliases of Confirmed and Completed. Don’t use.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Introduced by the MVP mocks for booking management; used on these screens:</p>
+      <ul>
+        <li><a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/bookings/past.html">bookings/past</a>: one stamp per row (Confirmed, Requested, Accepted; Completed, Declined, Withdrawn)</li>
+        <li><a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail</a> (default, <a href="../../mocks/pages/booking-detail/accepted.html">accepted</a>, <a href="../../mocks/pages/booking-detail/confirmed.html">confirmed</a>, <a href="../../mocks/pages/booking-detail/completed.html">completed</a>, <a href="../../mocks/pages/booking-detail/declined.html">declined</a>, <a href="../../mocks/pages/booking-detail/withdrawn.html">withdrawn</a>, <a href="../../mocks/pages/booking-detail/expired.html">expired</a>, <a href="../../mocks/pages/booking-detail/cancelled.html">cancelled</a>): the large stamp in the page head</li>
+        <li><a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/request-detail/default.html">pages/request-detail</a> and <a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>: the artist’s side of the same statuses</li>
+        <li><a href="../../mocks/dialogs/accept-request/default.html">dialogs/accept-request</a>, <a href="../../mocks/dialogs/cancel-booking/default.html">cancel-booking</a>, <a href="../../mocks/dialogs/pay-deposit/default.html">pay-deposit</a>, <a href="../../mocks/dialogs/write-review/default.html">write-review</a>, <a href="../../mocks/dialogs/withdraw-request/default.html">withdraw-request</a>: the stamp on the page under the dialog</li>
+        <li><a href="../../mocks/notifications/booking-toast/info.html">notifications/booking-toast</a> and <a href="../../mocks/notifications/request-toast/info.html">request-toast</a>: rows behind the toast</li>
+        <li><a href="../../mocks/dialogs/delete-account/blocked.html">dialogs/delete-account/blocked</a>: <code>.stamp--flat</code> in a receipt row; <a href="../../mocks/pages/edit-profile/empty.html">pages/edit-profile/empty</a>: a flat “40%”; <a href="../../mocks/pages/apply/success.html">pages/apply/success</a>: “Submitted”, the applicant’s own verdict in the page head</li>
+        <li><a href="../../mocks/pages/admin-bookings/default.html">pages/admin-bookings/default</a> and <a href="../../mocks/pages/admin-bookings/held.html">held</a>: <code>.stamp--flat</code> in the status column; <a href="../../mocks/pages/admin-booking/default.html">pages/admin-booking/default</a>: the booking’s stamp in the page head, with a “Held” warning badge beside it in <a href="../../mocks/pages/admin-booking/held.html">held</a></li>
+      </ul>
+      <p>Drift noted during documentation:</p>
+      <ul>
+        <li><code>.stamp--paid</code> and <code>.stamp--done</code> predate the L2-029 lifecycle and are used by no mock; they are kept only as aliases.</li>
+        <li>Some mocks write the modifiers in the other order (<code>stamp--expired stamp--lg</code> on the four expired-link pages, such as <a href="../../mocks/pages/verify-email/expired.html">pages/verify-email/expired</a>; <code>stamp--confirmed stamp--flat</code> in <a href="../../mocks/dialogs/delete-account/blocked.html">dialogs/delete-account/blocked</a>); the order does not matter.</li>
+      </ul>
+    </section>
+
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

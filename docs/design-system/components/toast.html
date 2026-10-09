@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -122,7 +125,7 @@
       <ul>
         <li><b>Success</b> confirms a change: “Saved Luz Viva”.</li>
         <li><b>Info</b> reports something the system did for the booker: “Search widened to 120 km”.</li>
-        <li><b>Warning</b> means it worked with a catch: “You’re offline. Saved artists will sync when you reconnect.”</li>
+        <li><b>Warning</b> means something needs attention soon: “Luz Viva deposit due. Pay your $225 deposit by Sat 10 Oct, 4:00 p.m. or the booking expires.” Losing the connection is not a toast: it is the danger “You’re offline” banner, and nothing is queued (L2-114)</li>
         <li><b>Danger</b> reports a failed background action and stays until the booker dismisses it or it succeeds on retry.</li>
       </ul>
       <p>Don’t use a toast for anything the booker must read or act on to continue, such as a failed booking request; use an <a href="alert.html">alert</a> in place. Don’t use one for field problems; use an <a href="inline-message.html">inline message</a>. When a toast and a banner could both apply, see <a href="../patterns/notifications.html">Notifications</a>.</p>
@@ -177,8 +180,8 @@
             </div>
             <div class="toast toast--warning">
               <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-              <div><p class="toast__title">You’re offline</p><p class="toast__body">Saved artists will sync when you reconnect.</p></div>
-              <button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: You’re offline"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              <div><p class="toast__title">Luz Viva deposit due</p><p class="toast__body">Pay your $225 deposit by Sat 10 Oct, 4:00 p.m. or the booking expires.</p></div>
+              <button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: Luz Viva deposit due"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
             </div>
             <div class="toast toast--danger">
               <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
@@ -198,8 +201,8 @@
   &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: Saved Luz Viva"&gt;…close…&lt;/button&gt;
 &lt;/div&gt;
 
-&lt;!-- Errors announce assertively and never time out --&gt;
-&lt;div class="toast toast--danger" role="alert"&gt;
+&lt;!-- Errors are announced politely like every toast, and never time out --&gt;
+&lt;div class="toast toast--danger"&gt;
   …warning icon…
   &lt;div&gt;
     &lt;p class="toast__title"&gt;Couldn’t save Luz Viva&lt;/p&gt;
@@ -223,10 +226,51 @@
         </div>
         <div class="ds-example__caption"><span>When the title says it all, leave out the body and the action.</span></div>
       </div>
+
+      <h3>Product toast: kind, title, text, timer bar</h3>
+      <p>The booking, request, availability, saved and session toasts in the mocks use the full structure: a <code>.toast__body</code> column holding a small <code>.toast__kind</code> overline (“Accepted”, “Info”, “Heads up”), the <code>.toast__title</code> and a <code>.toast__text</code> sentence with the real date, time and amount. A timed toast ends with a <code>.toast__progress</code> bar along its bottom edge that empties over the 5-second timer (<code>--value</code> sets the remaining share); danger toasts have no timer and no bar. Dismiss is the shared <code>.close</code> button.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+          <div class="toast-region toast-region--static">
+            <div class="toast toast--success">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+              <div class="toast__body">
+                <p class="toast__kind">Accepted</p>
+                <p class="toast__title">Abigail accepted</p>
+                <p class="toast__text">Pay the $162.50 deposit by Sun 11 Oct, 2:40 p.m. to confirm Sat 14 Nov.</p>
+                <div class="toast__actions"><a class="btn btn--sm" href="#variants">Pay deposit</a></div>
+              </div>
+              <button class="close" type="button" aria-label="Dismiss: Abigail accepted"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+              <span class="toast__progress" aria-hidden="true" style="--value: 60%;"></span>
+            </div>
+            <div class="toast toast--danger">
+              <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
+              <div class="toast__body">
+                <p class="toast__kind">Not sent</p>
+                <p class="toast__title">Couldn’t send your message</p>
+                <p class="toast__text">We kept what you wrote. Try again when you’re back online.</p>
+              </div>
+              <button class="close" type="button" aria-label="Dismiss: Couldn’t send your message"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>A timed success toast with its timer bar 60% full, and a danger toast with no timer. The kind overline repeats the tone in words, so tone never depends on colour.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="toast toast--success"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;…&lt;/svg&gt;
+  &lt;div class="toast__body"&gt;
+    &lt;p class="toast__kind"&gt;Accepted&lt;/p&gt;
+    &lt;p class="toast__title"&gt;Abigail accepted&lt;/p&gt;
+    &lt;p class="toast__text"&gt;Pay the $162.50 deposit by Sun 11 Oct, 2:40 p.m. to confirm Sat 14 Nov.&lt;/p&gt;
+    &lt;div class="toast__actions"&gt;&lt;a class="btn btn--sm" href="…"&gt;Pay deposit&lt;/a&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="close" type="button" aria-label="Dismiss: Abigail accepted"&gt;…&lt;/button&gt;
+  &lt;span class="toast__progress" aria-hidden="true" style="--value: 60%;"&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
     </section>
 
-    <section class="ds-section" id="sizes" data-na="Toasts have one size: 24rem wide from 640px, the full width minus 16px margins on phones."><h2><a href="#sizes">Sizes</a></h2>
-      <p class="ds-na">Toasts have one size: 24rem wide from 640px, the full width minus 16px margins on phones.</p>
+    <section class="ds-section" id="sizes" data-na="Toasts have one size: 24rem wide from 576px, the full width minus 16px margins on phones."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Toasts have one size: 24rem wide from 576px, the full width minus 16px margins on phones.</p>
     </section>
 
     <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
@@ -245,35 +289,36 @@
             <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><div><p class="toast__title">Widened to 120 km</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="focus">Undo</button></div></div></div></div></td>
             <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--info" data-state="leaving" style="opacity: 0.5; translate: var(--space-2) 0;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><div><p class="toast__title">Widened to 120 km</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div></div></div></td></tr>
           <tr><th scope="row">Warning</th>
-            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">You’re offline</p><div class="toast__actions"><button class="btn btn--sm" type="button">Details</button></div></div></div></div></td>
-            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">You’re offline</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="hover">Details</button></div></div></div></div></td>
-            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">You’re offline</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="focus">Details</button></div></div></div></div></td>
-            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning" data-state="leaving" style="opacity: 0.5; translate: var(--space-2) 0;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">You’re offline</p><div class="toast__actions"><button class="btn btn--sm" type="button">Details</button></div></div></div></div></td></tr>
+            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Luz Viva deposit due</p><div class="toast__actions"><button class="btn btn--sm" type="button">Pay deposit</button></div></div></div></div></td>
+            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Luz Viva deposit due</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="hover">Pay deposit</button></div></div></div></div></td>
+            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Luz Viva deposit due</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="focus">Pay deposit</button></div></div></div></div></td>
+            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--warning" data-state="leaving" style="opacity: 0.5; translate: var(--space-2) 0;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Luz Viva deposit due</p><div class="toast__actions"><button class="btn btn--sm" type="button">Pay deposit</button></div></div></div></div></td></tr>
           <tr><th scope="row">Danger</th>
             <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save</p><div class="toast__actions"><button class="btn btn--sm" type="button">Retry</button></div></div></div></div></td>
             <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="hover">Retry</button></div></div></div></div></td>
             <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save</p><div class="toast__actions"><button class="btn btn--sm" type="button" data-state="focus">Retry</button></div></div></div></div></td>
-            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save</p><div class="toast__actions"><button class="btn btn--sm" type="button" aria-busy="true">Retrying…</button></div></div></div></div><span class="text-caption">Never leaves on a timer; shown retrying.</span></td></tr>
+            <td><div class="toast-region toast-region--static" style="width: 15rem;"><div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save</p><div class="toast__actions"><button class="btn btn--sm" type="button" aria-busy="true" aria-disabled="true">Retrying…</button></div></div></div></div><span class="text-caption">Never leaves on a timer; shown retrying.</span></td></tr>
         </tbody>
       </table></div>
       <h3>Timing rules</h3>
       <table class="ds-table"><thead><tr><th scope="col">Rule</th><th scope="col">Value</th></tr></thead><tbody>
-        <tr><td>Time on screen (success, info, warning)</td><td>At least 8 seconds; add 1 second for every 15 words over 10. With an Undo action, 10 seconds.</td></tr>
-        <tr><td>Pause</td><td>The timer stops while the pointer is over the toast, while focus is inside it, and while the window is in the background. It restarts from the full time when the pointer or focus leaves.</td></tr>
-        <tr><td>Errors</td><td>Danger toasts never time out. They leave when the booker dismisses them or a retry succeeds (then a success toast replaces them).</td></tr>
-        <tr><td>Stacking</td><td>At most three at once, newest nearest the screen edge. A fourth pushes out the oldest non-error toast. Identical toasts merge (“Saved 3 artists”).</td></tr>
+        <tr><td>Time on screen (success, info, warning, and toasts with an action such as Undo)</td><td>5 seconds (L2-109), shown by the <code>.toast__progress</code> bar. Keep the text short enough to read in that time; anything longer or anything that must be acted on belongs in an alert or banner.</td></tr>
+        <tr><td>Pause</td><td>The timer pauses while the pointer is over the toast, while focus is inside it, and while the window is in the background, and resumes with the time that was left when they leave (L2-109).</td></tr>
+        <tr><td>Idle-session warning</td><td>The administrator’s “You’ll be signed out in 2 minutes.” warning with Stay signed in has no timer: it stays until the person acts or the session ends (L2-066, L2-109).</td></tr>
+        <tr><td>Errors</td><td>Danger toasts have no timer and stay until dismissed (L2-109). They also leave when a retry succeeds (then a success toast replaces them).</td></tr>
+        <tr><td>Stacking</td><td>At most three visible at once, newest first (on top, first in the region). Older ones wait in a queue and show as space frees; a queued error is never dropped (L2-109). Each toast keeps its own timer. Identical toasts merge (“Saved 3 artists”).</td></tr>
         <tr><td>Enter / leave</td><td>Rises 16px and fades in over <code>--duration-slow</code> (260ms, <code>--ease-enter</code>); leaves by fading and sliding 32px right over <code>--duration-base</code> (160ms, <code>--ease-exit</code>).</td></tr>
       </tbody></table>
       <h3>Both themes</h3>
       <div class="ds-themes">
         <div data-theme="light"><div class="toast-region toast-region--static">
           <div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="toast__title">Saved Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div><button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: Saved Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-          <div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">You’re offline</p><button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: You’re offline"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">Luz Viva deposit due</p><button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: Luz Viva deposit due"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
           <div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Retry</button></div></div><button class="btn btn--ghost btn--icon" type="button" style="--btn-border: transparent;" aria-label="Dismiss: Couldn’t save Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
         </div></div>
         <div data-theme="dark"><div class="toast-region toast-region--static">
           <div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="toast__title">Saved Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div><button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: Saved Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-          <div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">You’re offline</p><button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: You’re offline"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">Luz Viva deposit due</p><button class="btn btn--ghost btn--icon" type="button" aria-label="Dismiss: Luz Viva deposit due"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
           <div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Couldn’t save Luz Viva</p><div class="toast__actions"><button class="btn btn--sm" type="button">Retry</button></div></div><button class="btn btn--ghost btn--icon" type="button" style="--btn-border: transparent;" aria-label="Dismiss: Couldn’t save Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
         </div></div>
       </div>
@@ -281,8 +326,8 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Phones (below 640px)</b>: the region spans the screen with 16px side margins and sits 16px above the bottom edge plus <code>env(safe-area-inset-bottom)</code>, so it clears the home indicator.</li>
-        <li><b>From 640px</b>: the region is 24rem wide, 24px from the right and bottom edges (<code>--space-6</code>).</li>
+        <li><b>Phones (below 576px)</b>: the region spans the screen with 16px side margins and sits 16px above the bottom edge plus <code>env(safe-area-inset-bottom)</code>, so it clears the home indicator.</li>
+        <li><b>From 576px</b>: the region is 24rem wide, 24px from the right and bottom edges (<code>--space-6</code>).</li>
         <li>The region has <code>pointer-events: none</code> and each toast turns them back on, so the empty space around a toast never blocks clicks on the page.</li>
         <li>A toast must never cover the focused element (WCAG 2.4.11). On pages with a sticky bottom bar, raise the region above it rather than overlapping it.</li>
         <li>Long titles wrap; the close button stays top-right in its own column.</li>
@@ -298,7 +343,7 @@
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
       <h3>Role and pattern</h3>
-      <p>The page has one <code>.toast-region</code> with <code>role="status"</code> (polite), present from page load, as in the mocks. Success, info and warning toasts are inserted into it and read when the booker is idle. A danger toast carries <code>role="alert"</code>, which is announced at once. This follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">APG Alert pattern</a> and WCAG 4.1.3 Status Messages. A toast is not a dialog: it never traps or takes focus.</p>
+      <p>The page has one <code>.toast-region</code> with <code>role="status"</code> (polite), present from page load, as in the mocks. Every toast, danger included, is inserted into it and read politely when the booker is idle (L2-102); a danger toast is told apart by its kind, title and icon, and by staying until dismissed, not by an assertive role. This follows WCAG 4.1.3 Status Messages. Failures the booker must act on before continuing are alerts in the page, not toasts. A toast is not a dialog: it never traps or takes focus.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Reaches the toast’s action and close button in DOM order. The region sits at the end of <code>&lt;body&gt;</code>.</td></tr>
@@ -382,13 +427,16 @@
 
 &lt;!-- To remove: set data-state="leaving", wait for transitionend, then remove the node --&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
-        <tr><td><code>.toast-region</code></td><td>Fixed stack in the bottom corner: full width on phones, 24rem from 640px. Ignores pointer events itself.</td></tr>
+        <tr><td><code>.toast-region</code></td><td>Fixed stack in the bottom corner: full width on phones, 24rem from 576px. Ignores pointer events itself.</td></tr>
         <tr><td><code>.toast-region--static</code></td><td>Documentation only: puts the region in the page flow.</td></tr>
         <tr><td><code>.toast</code></td><td>Inverse slip with a 4px accent stripe and a hard shadow; rises in on insert.</td></tr>
         <tr><td><code>.toast--success</code> <code>.toast--info</code> <code>.toast--warning</code> <code>.toast--danger</code></td><td>Tone. Danger switches to a red-tinted paper slip with a full rule.</td></tr>
-        <tr><td><code>.toast__title</code> <code>.toast__body</code> <code>.toast__actions</code></td><td>Title (bold uppercase label), optional sentence, optional button row.</td></tr>
-        <tr><td><code>.btn--ghost.btn--icon</code> (last child)</td><td>Close button; needs <code>aria-label="Dismiss: …"</code>.</td></tr>
-        <tr><td><code>role="status"</code> (region) / <code>role="alert"</code> (danger toast)</td><td>Polite announcement for confirmations; immediate for errors.</td></tr>
+        <tr><td><code>.toast__title</code> <code>.toast__body</code> <code>.toast__actions</code></td><td>Title (bold uppercase label), the text column (a wrapper for kind, title and text, or a lone sentence), optional button row.</td></tr>
+        <tr><td><code>.toast__kind</code></td><td>Overline above the title naming the event or tone (“Accepted”, “Heads up”).</td></tr>
+        <tr><td><code>.toast__text</code></td><td>The sentence under the title, body-small.</td></tr>
+        <tr><td><code>.toast__progress</code></td><td>Timer bar along the bottom edge in <code>--toast-accent</code>; <code>--value</code> is the share of the 5 s left. Omit on danger toasts. <code>aria-hidden="true"</code>.</td></tr>
+        <tr><td><code>.close</code> or <code>.btn--ghost.btn--icon</code> (last button)</td><td>Close button; needs <code>aria-label="Dismiss: …"</code>.</td></tr>
+        <tr><td><code>role="status"</code> + <code>aria-live="polite"</code> (region)</td><td>One polite live region for every toast, errors included (L2-102). Toasts carry no role of their own.</td></tr>
         <tr><td><code>data-state="leaving"</code></td><td>Exit transition: fades out and slides 32px right.</td></tr>
       </tbody></table>
     </section>
@@ -396,13 +444,16 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
+        <li>notifications/booking-toast (<a href="../../mocks/notifications/booking-toast/info.html">info</a>, <a href="../../mocks/notifications/booking-toast/success.html">success</a>, <a href="../../mocks/notifications/booking-toast/warning.html">warning</a>, <a href="../../mocks/notifications/booking-toast/danger.html">danger</a>, <a href="../../mocks/notifications/booking-toast/with-action.html">with-action</a>, <a href="../../mocks/notifications/booking-toast/stacked.html">stacked</a>): every tone, the kind overline, the timer bar, the action and the three-toast stack, newest on top</li>
+        <li>notifications/request-toast (<a href="../../mocks/notifications/request-toast/info.html">info</a>, <a href="../../mocks/notifications/request-toast/stacked.html">stacked</a>), notifications/saved-toast (<a href="../../mocks/notifications/saved-toast/success.html">success</a>, <a href="../../mocks/notifications/saved-toast/with-action.html">with-action</a>), notifications/availability-toast (<a href="../../mocks/notifications/availability-toast/success.html">success</a>, <a href="../../mocks/notifications/availability-toast/danger.html">danger</a>), notifications/session-toast (<a href="../../mocks/notifications/session-toast/warning.html">warning</a>) and notifications/share-toast (<a href="../../mocks/notifications/share-toast/success.html">success</a>: “Link copied” after Share on a profile, L2-113)</li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the empty <code>role="status"</code> toast region, and the mock note promising a “Saved Luz Viva” toast when a ticket is saved</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the same region on the profile, where “Saved” is toggled from the stage</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The toast region sat at <code>bottom: --space-16</code> to clear the mock bar, and no toast existed although the mock note promises “Saved Luz Viva”. There is now a <code>.toast</code> component, and the region sits at <code>--space-6</code> (phones <code>--space-4</code> plus the safe area).</li>
-        <li>Info, warning and danger toasts are not in the mocks yet; they are part of the core set. The product needs them for widened searches, offline sync and failed background saves.</li>
+        <li>The notification mocks added a kind overline, a separate text line and a timer bar. They are now <code>.toast__kind</code>, <code>.toast__text</code> and <code>.toast__progress</code>; dismiss uses the shared <code>.close</code> button.</li>
+        <li>This page said toasts stay at least 8 seconds (plus 1 second per 15 words, 10 with Undo) and stack newest nearest the screen edge. L2-109 and the mocks say 5 seconds for every non-error toast, pause while hovered or focused, and newest on top; the timing rules now follow them.</li>
       </ul>
     </section>
 

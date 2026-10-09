@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Notifications — Zamaro design system</title>
-<meta name="description" content="How Zamaro tells a church what happened: toasts for confirmations, banners for things that need action, e-mail for anything that matters after the tab is closed, with priorities, grouping and auto-dismiss rules.">
+<meta name="description" content="How Zamaro tells a church what happened: toasts for confirmations, banners for things that need action, email for anything that matters after the tab is closed, with priorities, grouping and auto-dismiss rules.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -110,8 +113,8 @@
     <header class="ds-header">
       <p class="ds-kicker">Pattern</p>
       <h1>Notifications</h1>
-      <p class="ds-lead">Notifications tell a church what just happened or what changed while they were away. Toasts confirm and fade, banners stay until the church acts, and e-mail carries anything that matters after the tab is closed.</p>
-      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Toasts ≥ 8 s · errors persist</span><span class="ds-pill">Composes 8 components</span></div>
+      <p class="ds-lead">Notifications tell a church what just happened or what changed while they were away. Toasts confirm and fade, banners stay until the church acts, and email carries anything that matters after the tab is closed.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Toasts 5 s · errors persist</span><span class="ds-pill">Composes 8 components</span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li>
       </ul>
@@ -122,7 +125,7 @@
       <ul>
         <li><b>Toast</b>: “Saved Luz Viva”. A confirmation of something she just did. It fades on its own; errors stay.</li>
         <li><b>Banner</b>: “Abigail accepted Sat 14 Nov. Pay the $162.50 deposit to lock it in.” News that needs an action, shown on every page under the top bar until it is done.</li>
-        <li><b>E-mail</b>: “Abigail Mensah accepted your request for Sat 14 Nov”. Anything that matters if the tab is closed: accepted, declined, receipts, the end of free cancellation.</li>
+        <li><b>Email</b>: “Abigail Mensah accepted your request for Sat 14 Nov”. Anything that matters if the tab is closed: accepted, declined, receipts, the end of free cancellation.</li>
       </ul>
       <p>A <b>notification centre</b> (a bell with a history) is not in the first release. Until then “Your requests” is the history, and the top bar shows a count when something needs action.</p>
       <p>Composes: <a href="../components/toast.html">toast</a>, <a href="../components/alert.html">alert &amp; banner</a>, <a href="../components/badge.html">badge</a>, <a href="../components/top-bar.html">top bar</a>, <a href="../components/button.html">button</a>, <a href="../components/card.html">card</a>, <a href="../components/description-list.html">description list</a> and <a href="../components/save-toggle.html">save toggle</a>.</p>
@@ -133,10 +136,10 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Channel</th><th scope="col">Use for</th><th scope="col">Lifetime</th><th scope="col">Example</th></tr></thead>
         <tbody>
-          <tr><td><a href="../components/toast.html">Toast</a></td><td>Confirming an action the person just took, usually reversible</td><td>8 s or more; pauses on hover and focus. Errors stay until dismissed.</td><td>“Saved Luz Viva” + Undo</td></tr>
+          <tr><td><a href="../components/toast.html">Toast</a></td><td>Confirming an action the person just took, usually reversible</td><td>5 s; pauses on hover and focus. Errors stay until dismissed (L2-109).</td><td>“Saved Luz Viva” + Undo</td></tr>
           <tr><td><a href="../components/alert.html">Banner</a></td><td>A change to a booking or the account that needs action</td><td>Until the action is done; can be hidden for a day, not for good</td><td>“Abigail accepted Sat 14 Nov. Pay the $162.50 deposit to lock it in.”</td></tr>
           <tr><td><a href="../components/inline-message.html">Inline message</a> or <a href="../components/alert.html">alert</a></td><td>Anything about one field or one region on this page</td><td>While it is true</td><td>“Abigail is free Sat 14 Nov”; “We lost the signal”</td></tr>
-          <tr><td>E-mail</td><td>Anything that matters when the tab is closed</td><td>Permanent; the record</td><td>Request accepted, deposit receipt, free cancellation ends Sat 31 Oct</td></tr>
+          <tr><td>Email</td><td>Anything that matters when the tab is closed</td><td>Permanent; the record</td><td>Request accepted, deposit receipt, free cancellation ends Sat 31 Oct</td></tr>
           <tr><td>Count badge</td><td>How many things wait in a place</td><td>Until they are seen or done</td><td>Saved (3); Your requests (1)</td></tr>
           <tr><td>Notification centre (later)</td><td>A history across bookings</td><td>Permanent</td><td>Not in the first release</td></tr>
         </tbody>
@@ -145,20 +148,20 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Priority</th><th scope="col">Meaning</th><th scope="col">Channels</th><th scope="col">Example</th></tr></thead>
         <tbody>
-          <tr><td>1 · Urgent</td><td>A booking is at risk</td><td>Danger banner + e-mail; <code>role="alert"</code></td><td>The artist cancelled; a payment failed</td></tr>
-          <tr><td>2 · Action needed</td><td>The church must do something</td><td>Info banner + e-mail + count badge</td><td>Request accepted: pay the deposit</td></tr>
-          <tr><td>3 · Heads-up</td><td>A deadline is near</td><td>Warning banner + e-mail</td><td>Free cancellation ends Sat 31 Oct</td></tr>
+          <tr><td>1 · Urgent</td><td>A booking is at risk</td><td>Danger banner + email; <code>role="alert"</code></td><td>The artist cancelled; a payment failed</td></tr>
+          <tr><td>2 · Action needed</td><td>The church must do something</td><td>Info banner + email + count badge</td><td>Request accepted: pay the deposit</td></tr>
+          <tr><td>3 · Heads-up</td><td>A deadline is near</td><td>Warning banner + email</td><td>Free cancellation ends Sat 31 Oct</td></tr>
           <tr><td>4 · Confirmation</td><td>What they just did worked</td><td>Toast</td><td>“Saved Luz Viva”, “Request sent to Abigail”</td></tr>
-          <tr><td>5 · News</td><td>Nice to know</td><td>E-mail digest, opt-in; never a toast</td><td>A new artist near Burlington</td></tr>
+          <tr><td>5 · News</td><td>Nice to know</td><td>Email digest, opt-in; never a toast</td><td>A new artist near Burlington</td></tr>
         </tbody>
       </table></div>
       <p>Only one banner shows at a time: the highest priority. The rest wait in “Your requests”.</p>
       <h3>Auto-dismiss and grouping</h3>
       <ul>
-        <li>Success and info toasts stay at least <b>8 seconds</b>, plus 2 seconds when they carry an action such as Undo (WCAG 2.2.1).</li>
+        <li>Success, info and warning toasts, with or without an action such as Undo, dismiss after <b>5 seconds</b> (L2-109). Pausing on hover and focus keeps the action reachable for as long as the person needs (WCAG 2.2.1).</li>
         <li>The timer pauses while the pointer is over the toast, while anything inside it has focus, and while the window is in the background.</li>
         <li><b>Error toasts never auto-dismiss.</b> Neither do banners.</li>
-        <li>At most three toasts at once, newest at the bottom. A fourth pushes the oldest success toast out early; errors are never pushed out.</li>
+        <li>At most three toasts at once, newest on top (L2-109). A fourth sends the oldest visible toast to a queue with its timer paused; it returns when a slot frees, so an error is never lost.</li>
         <li>Repeats collapse: saving three artists in a row shows one toast, “Saved 3 artists”, with Undo for the last.</li>
         <li>While a dialog is open, new toasts wait until it closes.</li>
       </ul>
@@ -174,8 +177,6 @@
               <div><p class="toast__title">Saved Luz Viva</p><p class="toast__body">Find them under Saved in the top bar.</p><div class="toast__actions"><button class="btn btn--sm" type="button">Undo</button></div></div>
               <button class="btn btn--ghost btn--icon btn--sm" type="button" aria-label="Dismiss: Saved Luz Viva"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
             </div>
-          </div>
-          <div class="toast-region toast-region--static" role="alert">
             <div class="toast toast--danger">
               <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
               <div><p class="toast__title">Couldn’t save Elijah Park</p><p class="toast__body">We lost the connection. Your other saved artists are fine.</p><div class="toast__actions"><button class="btn btn--sm" type="button">Try again</button></div></div>
@@ -183,10 +184,9 @@
             </div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>A success toast with Undo in the polite region; an error toast in the assertive region that stays until dismissed. Regions are static here; in the product they are fixed bottom right.</span></div>
+        <div class="ds-example__caption"><span>A success toast with Undo and an error toast that stays until dismissed, newest on top in the one polite region (L2-102). Regions are static here; in the product they are fixed bottom right.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;!-- In the page from the start, empty --&gt;
 &lt;div class="toast-region" role="status" aria-live="polite"&gt;&lt;/div&gt;
-&lt;div class="toast-region" role="alert"&gt;&lt;/div&gt;
 
 &lt;!-- Added when the save succeeds --&gt;
 &lt;div class="toast toast--success"&gt;
@@ -202,7 +202,7 @@
           <div class="topbar topbar--static" style="padding-inline: var(--space-5);">
             <a class="topbar__brand" href="#structure"><span class="brand-mark" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
             <span class="topbar__spacer"></span>
-            <a class="nav-link" href="#structure">Requests <span class="badge badge--count" aria-label="1 needs action">1</span></a>
+            <a class="nav-link" href="#structure">Requests <span class="badge badge--count">1<span class="visually-hidden"> needs action</span></span></a>
             <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
           </div>
           <div class="banner banner--info" role="status">
@@ -226,7 +226,7 @@
         </div>
         <div class="ds-example__caption"><span>Info (action needed), warning (deadline) and danger (at risk). The top bar shows a count on Requests while the action is open.</span></div>
       </div>
-      <h3>The “request accepted” e-mail</h3>
+      <h3>The “request accepted” email</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas">
           <article class="card" aria-labelledby="em-title" style="width: 100%; max-width: 36rem;">
@@ -234,18 +234,18 @@
             <div class="card__body">
               <p class="text-muted">Preview: Pay the 25% deposit to lock in the date.</p>
               <p>Hi Naomi,</p>
-              <p>Abigail Mensah can lead worship at Riverside Community Church on Saturday 14 November. Pay the deposit to lock in the date; nothing else is due until after the service.</p>
+              <p>Abigail Mensah can lead worship at Riverside Community Church on Saturday 14 November 2026. Pay the deposit to lock in the date; nothing else is due until after the service.</p>
               <dl class="dl dl--horizontal">
                 <div><dt>Booking</dt><dd>No. ZAM-0114</dd></div>
                 <div><dt>Deposit now</dt><dd>$162.50 (25% of $650)</dd></div>
                 <div><dt>Free cancellation</dt><dd>Until Sat 31 Oct</dd></div>
               </dl>
               <div><a class="btn btn--primary" href="#structure">Pay the $162.50 deposit</a></div>
-              <p class="stub__fine">Reply to this e-mail to reach Abigail. You’re getting this because you asked to book her on Zamaro.</p>
+              <p class="stub__fine">Reply to this email to reach Abigail. You’re getting this because you asked to book her on Zamaro.</p>
             </div>
           </article>
         </div>
-        <div class="ds-example__caption"><span>Subject names the artist and the date; one sentence of news; the facts as a list; one button; why they got it. The e-mail template is not in the mocks yet.</span></div>
+        <div class="ds-example__caption"><span>Subject names the artist and the date; one sentence of news; the facts as a list; one button; why they got it. The email template is not in the mocks yet.</span></div>
       </div>
     </section>
 
@@ -254,9 +254,9 @@
       <div class="ds-matrix"><table>
         <thead><tr><th scope="col">Tone</th><th scope="col">Visible</th><th scope="col">Leaving</th><th scope="col">Auto-dismiss</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Success</th><td><div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="toast__title">Request sent to Abigail</p></div></td><td><div class="toast toast--success" data-state="leaving"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="toast__title">Request sent to Abigail</p></div></td><td>8 s</td></tr>
-          <tr><th scope="row">Info</th><td><div class="toast toast--info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="toast__title">Sorted by highest rated</p></div></td><td><div class="toast toast--info" data-state="leaving"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="toast__title">Sorted by highest rated</p></div></td><td>8 s</td></tr>
-          <tr><th scope="row">Warning</th><td><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">You’re offline. Saves will sync.</p></div></td><td>Not applicable</td><td>Stays while offline</td></tr>
+          <tr><th scope="row">Success</th><td><div class="toast toast--success"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="toast__title">Request sent to Abigail</p></div></td><td><div class="toast toast--success" data-state="leaving"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><p class="toast__title">Request sent to Abigail</p></div></td><td>5 s, paused while hovered or focused</td></tr>
+          <tr><th scope="row">Info</th><td><div class="toast toast--info"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="toast__title">Sorted by highest rated</p></div></td><td><div class="toast toast--info" data-state="leaving"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 11v6M12 7.5v.5"/></svg><p class="toast__title">Sorted by highest rated</p></div></td><td>5 s, paused while hovered or focused</td></tr>
+          <tr><th scope="row">Warning</th><td><div class="toast toast--warning"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">Luz Viva deposit due</p></div></td><td><div class="toast toast--warning" data-state="leaving"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">Luz Viva deposit due</p></div></td><td>5 s, paused while hovered or focused; the idle-session warning (“You’ll be signed out in 2 minutes.”) stays until the person acts (L2-109 AC4)</td></tr>
           <tr><th scope="row">Danger</th><td><div class="toast toast--danger"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><p class="toast__title">Couldn’t save Elijah Park</p></div></td><td>Not applicable</td><td>Never</td></tr>
         </tbody>
       </table></div>
@@ -267,7 +267,7 @@
           <tr><td>Shown</td><td>On every page under the top bar, highest priority only. Count badge on Requests.</td></tr>
           <tr><td>Hidden for today</td><td>The close button hides it until tomorrow; the badge stays.</td></tr>
           <tr><td>Resolved</td><td>When the deposit is paid, the banner goes and a toast confirms “Deposit paid · Sat 14 Nov is locked in”.</td></tr>
-          <tr><td>Expired</td><td>If the date passes, the banner goes; the e-mail and “Your requests” keep the record.</td></tr>
+          <tr><td>Expired</td><td>If the date passes, the banner goes; the email and “Your requests” keep the record.</td></tr>
         </tbody>
       </table></div>
       <h3>Both themes</h3>
@@ -287,16 +287,16 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Toasts</b> sit bottom right, 24rem wide, 24px from the edges from 640px. On phones they span the width 16px from the edges and sit above the safe area. They stack upwards.</li>
+        <li><b>Toasts</b> sit bottom right, 24rem wide, 24px from the edges from 576px. On phones they span the width 16px from the edges and sit above the safe area. They stack upwards.</li>
         <li><b>Banners</b> run the full width under the sticky top bar and scroll away with the page. The text wraps; the action wraps under it on phones.</li>
         <li>A toast must never hide the focused control (WCAG 2.4.11). On phones, while the booking stub’s submit has focus, toasts wait.</li>
-        <li><b>E-mails</b> are one column, 36rem at most, with a full-width button on phones.</li>
+        <li><b>Emails</b> are one column, 36rem at most, with a full-width button on phones.</li>
       </ul>
     </section>
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
       <h3>Role and pattern</h3>
-      <p>Two toast regions are in the page from the start: a polite <code>role="status"</code> region for confirmations and a <code>role="alert"</code> region for errors. Adding a toast to a region announces it; a region created at the same moment as its toast is often missed. Banners use <code>role="status"</code>, or <code>role="alert"</code> for priority 1. See the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">APG Alert pattern</a>.</p>
+      <p>One polite toast region (<code>role="status"</code>, <code>aria-live="polite"</code>) is in the page from the start, and every toast, errors included, is announced through it (L2-102); an error is told apart by staying until dismissed. Adding a toast to the region announces it; a region created at the same moment as its toast is often missed. Banners use <code>role="status"</code>, or <code>role="alert"</code> for priority 1. See the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/alert/">APG Alert pattern</a>.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd></td><td>Banners are in the page order straight after the top bar. Toasts sit at the end of the page; the action they offer is always available elsewhere too (the toggle undoes a save).</td></tr>
@@ -306,7 +306,7 @@
       <h3>Focus</h3>
       <p>Notifications never take focus when they appear. Focusing inside a toast pauses its timer. Dismissing a banner moves focus to the start of <code>&lt;main&gt;</code>; dismissing a toast returns focus to its trigger.</p>
       <h3>Labelling</h3>
-      <p>Dismiss buttons name what they dismiss: “Dismiss: Saved Luz Viva”, “Hide until tomorrow”. Count badges carry their meaning: “3 saved artists”, “1 needs action”. The toast title is the announcement, so it stands on its own.</p>
+      <p>Dismiss buttons name what they dismiss: “Dismiss: Saved Luz Viva”, “Hide until tomorrow”. Count badges carry their meaning in visually hidden text, so the control reads “Saved 3 artists” or “Requests 3 awaiting reply”. The toast title is the announcement, so it stands on its own.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Toast text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
@@ -329,7 +329,7 @@
         <li><b>Toast title:</b> past-tense verb and the name: “Saved Luz Viva”, “Removed Elijah Park”, “Request sent to Abigail”, “Deposit paid · Sat 14 Nov is locked in”.</li>
         <li><b>Error toast:</b> “Couldn’t {verb} {name}” plus what is fine: “Your other saved artists are fine.” and Try again.</li>
         <li><b>Banner:</b> the news in bold, then the action and the money or the date: “<b>Abigail accepted Sat 14 Nov.</b> Pay the $162.50 deposit to lock it in.”</li>
-        <li><b>E-mail subject:</b> who did what, for which date: “Abigail Mensah accepted your request for Sat 14 Nov”. No “Update on your booking”.</li>
+        <li><b>Email subject:</b> who did what, for which date: “Abigail Mensah accepted your request for Sat 14 Nov”. No “Update on your booking”.</li>
         <li>No exclamation marks, no “Success!”, no “Congratulations”. Warm, not loud.</li>
       </ul>
     </section>
@@ -348,16 +348,21 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the empty <code>role="status"</code> toast region, the note promising a “Saved Luz Viva” toast, the Saved count badge (“3 saved artists”) in the top bar</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the pressed “Saved” toggle on the profile; “Nothing is charged until Abigail accepts”, which sets up the accepted e-mail</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the empty <code>role="status"</code> toast region, the note promising a “Saved Luz Viva” toast, the Saved count badge (read as “Saved 3 artists”) in the top bar</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the pressed “Saved” toggle on the profile; “Nothing is charged until Abigail accepts”, which sets up the accepted email</li>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: the 8 s threshold for “Still checking — thanks for waiting.”</li>
+        <li><a href="../../mocks/notifications/saved-toast/success.html">notifications/saved-toast</a>: “Saved Luz Viva” with Undo, the first-save info toast, the 200-artist limit warning, the “Couldn’t save” error that stays, and removal with Undo</li>
+        <li><a href="../../mocks/notifications/booking-toast/success.html">notifications/booking-toast</a> and <a href="../../mocks/notifications/request-toast/success.html">notifications/request-toast</a>: all four tones, toasts with one and two actions, and the <a href="../../mocks/notifications/booking-toast/stacked.html">stacked</a> state (three toasts, newest on top)</li>
+        <li><a href="../../mocks/notifications/availability-toast/success.html">notifications/availability-toast</a>: calendar changes with Undo and the Confirmed-day info toast</li>
+        <li><a href="../../mocks/notifications/system-banner/info.html">notifications/system-banner</a>: info (maintenance), success, warning (verify your email, with Resend), danger (offline) and the <a href="../../mocks/notifications/system-banner/persistent.html">persistent</a> banner with no close button</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The toast region sat at <code>bottom: --space-16</code> to clear the mock bar, and no toast existed although the note promises one. There is now a <code>.toast</code> component in four tones, and the region sits at <code>--space-6</code> (phones <code>--space-4</code> plus the safe area).</li>
         <li>The count badge’s minimum width was 1.4em; it is now 1.5em so two digits fit.</li>
         <li>The pressed “Saved” button had no pressed style; it now fills yellow with a filled heart, so the toggle and the toast agree.</li>
-        <li>Banners, the e-mail template and the notification centre are not in the mocks yet. Banners and e-mail are part of the core set; the notification centre is planned for later.</li>
+        <li>Toast timing followed an “at least 8 seconds” rule here while the toast mocks and L2-109 use 5 seconds; every non-error toast now dismisses after 5 seconds, pausing on hover and focus, and stacks newest on top.</li>
+        <li>The email templates and the notification centre are not mocks; the notification centre is planned for later.</li>
       </ul>
     </section>
 

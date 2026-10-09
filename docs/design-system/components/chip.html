@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -121,10 +124,10 @@
       <p>Chips come in three kinds that look alike but behave differently:</p>
       <ul>
         <li><b>Filter chips</b> are toggle buttons (<code>&lt;button aria-pressed&gt;</code>) in a <code>.filters</code> fieldset. They change the lineup at once: “Band”, “Gospel choir”, “Under $800”. Pressed chips turn solid ink with a tick.</li>
-        <li><b>Static tags</b> (<code>.chip--static</code>) are plain text in a stamp, for facts about an artist: “Hymns”, “Spanish &amp; English”. Not interactive.</li>
+        <li><b>Static tags</b> (<code>.chip--static</code>) are plain text in a stamp, for facts about an artist: “Hymns”, “Spanish” (the L2-008 style names). Not interactive.</li>
         <li><b>Removable chips</b> (<code>.chip--removable</code>) list the filters in use, each with its own remove button.</li>
       </ul>
-      <p>Use <a href="checkbox.html">checkboxes</a> for multiple choices in a form that is submitted, <a href="radio-group.html">radios</a> for one choice, and a <a href="badge.html">badge</a> for status (“Free Sat 14 Nov”). Small chips also serve as quick-pick dates beside the <a href="date-picker.html">date picker</a>.</p>
+      <p>Use <a href="checkbox.html">checkboxes</a> for multiple choices in a form that is submitted, <a href="radio-group.html">radios</a> for one choice, and a <a href="badge.html">badge</a> for status (“Free Sat 14 Nov”). Small chips also serve as the quick-pick cities under “Church location” on Discover (L2-004).</p>
     </section>
 
     <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
@@ -200,15 +203,15 @@
   <div class="ds-example__canvas">
     <ul class="ticket__tags" role="list" aria-label="Luz Viva’s styles">
       <li class="chip chip--static">Band</li>
-      <li class="chip chip--static">Spanish &amp; English</li>
-      <li class="chip chip--static">Congas</li>
+      <li class="chip chip--static">Acoustic</li>
+      <li class="chip chip--static">Spanish</li>
     </ul>
   </div>
   <div class="ds-example__caption"><span>Facts on a ticket or profile. A list of <code>.chip--static</code> items: smaller (24px), not focusable, no hover.</span></div>
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="ticket__tags" role="list" aria-label="Luz Viva’s styles"&gt;
   &lt;li class="chip chip--static"&gt;Band&lt;/li&gt;
-  &lt;li class="chip chip--static"&gt;Spanish &amp;amp; English&lt;/li&gt;
-  &lt;li class="chip chip--static"&gt;Congas&lt;/li&gt;
+  &lt;li class="chip chip--static"&gt;Acoustic&lt;/li&gt;
+  &lt;li class="chip chip--static"&gt;Spanish&lt;/li&gt;
 &lt;/ul&gt;</code></pre></details>
 </div>
       <h3>Removable: filters in use</h3>
@@ -230,7 +233,7 @@
     </section>
 
     <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
-      <p>Medium (44px) is the default for filters, comfortable on a phone. Small (36px) fits quick-pick dates and dense rows. Static tags are 24px because nobody taps them.</p>
+      <p>Medium (44px) is the default for filters, comfortable on a phone. Small (36px) fits the quick-pick cities and dense rows. Static tags are 24px because nobody taps them.</p>
 <div class="ds-example">
   <div class="ds-example__canvas">
     <button class="chip chip--sm" type="button" aria-pressed="false">Small · 36px</button>
@@ -397,6 +400,7 @@
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: “Gospel choir” pressed, the filter behind the empty Christmas Eve lineup</li>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: all chips disabled while the lineup loads</li>
         <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the filters stay usable when loading fails</li>
+        <li><a href="../../mocks/pages/discover/invalid.html">pages/discover/invalid</a>: small toggle chips (<code>.chip--sm</code>) as quick-pick cities under “Church location” (L2-004)</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>

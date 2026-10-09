@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -118,11 +121,12 @@
     </header>
 
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-      <p>Use the setlist on an artist’s profile (“Songs Abigail leads”) and anywhere a booking lists songs: the request Naomi sends and the confirmation the artist returns. It tells a worship coordinator, at a glance, whether the artist knows the songs the congregation sings and in which key.</p>
+      <p>Use the setlist on an artist’s profile (“Songs Abigail leads”, L2-016) and in the artist’s own setlist editor. A booking request carries song wishes in its free-text message (L2-028), not as a setlist. It tells a worship coordinator, at a glance, whether the artist knows the songs the congregation sings and in which key.</p>
       <ul>
-        <li>It is a numbered <code>&lt;ol&gt;</code>: the numbers are part of the poster look, but the order also matters when it is a running order for a service.</li>
+        <li>It is a numbered <code>&lt;ol&gt;</code>: the numbers are part of the poster look, but the order is the artist’s own, and the first five songs are the ones the header strip repeats.</li>
         <li>Use a plain <a href="list.html">list</a> for anything that is not songs, and a <a href="table.html">table</a> if songs need more than title, writer and key (length, tempo, who sings lead).</li>
       </ul>
+      <p>In the frontend the setlist is a <code>zm-*</code> component in the shared <code>components</code> library. The setlist as it sits on the artist profile (as on <a href="../../mocks/pages/artist/default.html">pages/artist/default</a>) is the “profile setlist” composite, which has its own perf-test scenario (AGENTS.md, Component perf tests).</p>
     </section>
 
     <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
@@ -172,20 +176,60 @@
 &lt;/ol&gt;</code></pre></details>
       </div>
       <h3>Single column</h3>
-      <p><code>.setlist--single</code> keeps one column at every width. Use it in narrow containers (the booking stub, a dialog, a request summary) and for running orders, where reading top to bottom matters.</p>
+      <p><code>.setlist--single</code> keeps one column at every width. Use it in narrow containers, such as a dialog or a sidebar, where reading top to bottom matters.</p>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas">
-          <div class="stub" style="width: min(100%, 24rem);">
-            <div class="stub__head"><p class="stub__title">Songs you asked for</p><span class="stub__code">No. ZAM-0114</span></div>
-            <ol class="setlist setlist--single" role="list" aria-label="Songs you asked for">
+          <div class="stack" style="width: min(100%, 24rem);">
+            <p class="card__title" id="single-title">Songs Miriam leads</p>
+            <ol class="setlist setlist--single" role="list" aria-labelledby="single-title">
               <li><span class="setlist__song">Goodness of God<span class="setlist__credit">Bethel Music</span></span><span class="setlist__key">Key of G</span></li>
               <li><span class="setlist__song">It Is Well With My Soul<span class="setlist__credit">Horatio Spafford</span></span><span class="setlist__key">Key of C</span></li>
               <li><span class="setlist__song">Abide With Me<span class="setlist__credit">Henry Francis Lyte</span></span><span class="setlist__key">Key of E♭</span></li>
+              <li><span class="setlist__song">Firm Foundation<span class="setlist__credit">Maverick City Music</span></span><span class="setlist__key">Key of B♭</span></li>
             </ol>
           </div>
         </div>
-        <div class="ds-example__caption"><span>A running order in the booking stub: one column so it reads top to bottom.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="setlist setlist--single" role="list" aria-label="Songs you asked for"&gt;…&lt;/ol&gt;</code></pre></details>
+        <div class="ds-example__caption"><span>Miriam Haile’s four songs in a narrow column: one column so they read top to bottom. No mock uses this variant yet; the profile setlist is always the default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="setlist setlist--single" role="list" aria-labelledby="single-title"&gt;…&lt;/ol&gt;</code></pre></details>
+      </div>
+      <h3>Editable</h3>
+      <p><code>.setlist--edit</code> is the artist’s own setlist in the profile editor: one column, and each song gets <code>.setlist__controls</code> with a key select and icon buttons to move it up or down and remove it. Every control is named after the song (“Move Way Maker up”); the first song’s Up and the last song’s Down are disabled. On phones the controls drop under the song title.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<ol class="setlist setlist--edit" role="list" style="width: 100%;">
+  <li><span class="setlist__song">Way Maker<span class="setlist__credit">Sinach</span></span>
+    <span class="setlist__controls">
+      <select class="select" name="sl-key-Way " aria-label="Key for Way Maker"><option>Any key</option><option selected>Key of E</option><option>Key of A</option></select>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Move Way Maker up" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Move Way Maker down"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Remove Way Maker"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+    </span></li>
+  <li><span class="setlist__song">Goodness of God<span class="setlist__credit">Bethel Music</span></span>
+    <span class="setlist__controls">
+      <select class="select" name="sl-key-Good" aria-label="Key for Goodness of God"><option>Any key</option><option>Key of E</option><option selected>Key of A</option></select>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Move Goodness of God up"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Move Goodness of God down" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Remove Goodness of God"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+    </span></li>
+</ol>
+        </div>
+        <div class="ds-example__caption"><span><code>.setlist.setlist--edit</code>: pages/edit-profile/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="setlist setlist--edit" role="list" style="width: 100%;"&gt;
+  &lt;li&gt;&lt;span class="setlist__song"&gt;Way Maker&lt;span class="setlist__credit"&gt;Sinach&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="setlist__controls"&gt;
+      &lt;select class="select" name="sl-key-Way " aria-label="Key for Way Maker"&gt;&lt;option&gt;Any key&lt;/option&gt;&lt;option selected&gt;Key of E&lt;/option&gt;&lt;option&gt;Key of A&lt;/option&gt;&lt;/select&gt;
+      &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Move Way Maker up" disabled&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 19V5M6 11l6-6 6 6"/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Move Way Maker down"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 5v14M6 13l6 6 6-6"/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Remove Way Maker"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span class="setlist__song"&gt;Goodness of God&lt;span class="setlist__credit"&gt;Bethel Music&lt;/span&gt;&lt;/span&gt;
+    &lt;span class="setlist__controls"&gt;
+      &lt;select class="select" name="sl-key-Good" aria-label="Key for Goodness of God"&gt;&lt;option&gt;Any key&lt;/option&gt;&lt;option&gt;Key of E&lt;/option&gt;&lt;option selected&gt;Key of A&lt;/option&gt;&lt;/select&gt;
+      &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Move Goodness of God up"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 19V5M6 11l6-6 6 6"/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Move Goodness of God down" disabled&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 5v14M6 13l6 6 6-6"/&gt;&lt;/svg&gt;&lt;/button&gt;
+      &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Remove Goodness of God"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;</code></pre></details>
       </div>
     </section>
 
@@ -217,8 +261,7 @@
       <ul>
         <li><b>Long titles</b> wrap inside the song column; the number and key stay on the first line.</li>
         <li><b>Key unknown</b> or flexible: write “Any key”. Never leave the key column empty, or the row looks broken.</li>
-        <li><b>Loading</b>: four skeleton rows, a title bar and a short credit bar each.</li>
-        <li><b>Empty</b>: an artist with no songs listed shows a quiet <a href="empty-state.html">empty state</a>: “Miriam hasn’t listed songs yet. Ask for yours in your message.”</li>
+        <li><b>Empty</b>: an artist with no songs listed shows a quiet <a href="empty-state.html">empty state</a>: “{first name} hasn’t listed songs yet. Ask for yours in your message.” No mock shows it yet: every artist in the mocks has at least four songs.</li>
       </ul>
       <h3>Both themes</h3>
       <div class="ds-themes">
@@ -233,6 +276,9 @@
         <li>From 768px (<code>--layout-breakpoint-md</code>): two columns with a 32px gap. Songs flow across then down (01 02, 03 04), so the numbers still read in order.</li>
         <li>The key never wraps. At 360px “Key of B♭” still fits beside a two-line title.</li>
         <li>Inside narrow containers the viewport rule would still split the list, so add <code>.setlist--single</code> there.</li>
+      </ul>
+      <ul>
+        <li><code>.setlist--edit</code>: below 768px the controls sit on their own line under the song; from 768px they line up at the end of the row.</li>
       </ul>
     </section>
 
@@ -272,7 +318,7 @@
         <li>Song titles as published, in title case, because they are names (“Great Is Thy Faithfulness”). CSS uppercases them anyway.</li>
         <li>Credit the writer, the band that made it known, or the tradition: “Sinach”, “Bethel Music”, “Traditional Ghanaian”. Add a year only for hymns (“Thomas Chisholm, 1923”).</li>
         <li>Keys as “Key of D”, “Key of B♭”, or “Any key”.</li>
-        <li>Eight songs or fewer on a profile. More belongs on a separate repertoire page.</li>
+        <li>A profile lists every song the artist added, up to 50 (L2-053), in the artist’s order; the first five also run in the header strip (L2-012).</li>
         <li>Medleys say what they are: “Twi praise medley”.</li>
       </ul>
     </section>
@@ -317,15 +363,18 @@
         <tr><td><code>.setlist__song</code></td><td>Display-face title; holds the credit.</td></tr>
         <tr><td><code>.setlist__credit</code></td><td>Muted writer line under the title.</td></tr>
         <tr><td><code>.setlist__key</code></td><td>Mono key, never wraps.</td></tr>
+      
+        <tr><td><code>.setlist--edit</code></td><td>One-column editable setlist.</td></tr>
+        <tr><td><code>.setlist__controls</code></td><td>Key select and move / remove icon buttons for one song.</td></tr>
       </tbody></table>
+      <p>Implementation: a <code>zm-*</code> component in the shared <code>components</code> library; the profile setlist is the “profile setlist” composite with its own perf-test scenario, rendered with the cast and copy from <code>docs/mocks/README.md</code>.</p>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Songs Abigail leads”, eight songs in two columns</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Songs Miriam leads”, four songs, the shortest setlist</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the section as skeleton title and text lines</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Songs Abigail leads”, eight songs in two columns; <a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: four songs, the shortest setlist; <a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: skeleton title and text lines</li>
+        <li><code>.setlist--edit</code>: <a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a> and its <a href="../../mocks/pages/edit-profile/invalid.html">invalid</a>, <a href="../../mocks/pages/edit-profile/submitting.html">submitting</a> and <a href="../../mocks/pages/edit-profile/success.html">success</a> states, with <a href="../../mocks/dialogs/add-song/default.html">dialogs/add-song/default</a> and <a href="../../mocks/dialogs/add-song/limit.html">dialogs/add-song/limit</a> over it</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>

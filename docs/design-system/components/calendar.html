@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calendar — Zamaro design system</title>
+<meta name="description" content="The availability calendar shows an artist’s month as a grid of Free, Unavailable, Requested and Booked days, with multi-select and a bulk bar.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Calendar</h1>
+      <p class="ds-lead">The artist’s tour-dates sheet: a month grid where every day reads Free, Unavailable, Requested (with a count) or Booked, and where Free and Unavailable days can be selected and changed together from a bulk bar.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">APG grid, multi-select</span><span class="ds-pill">Class <code>.calendar</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>The calendar is how an artist sees and sets their availability for the next 18 months, one month at a time (L2-056). Each day carries one status: <b>Free</b> (the default for a new artist), <b>Unavailable</b> (a weekly default or a range the artist blocked), <b>Requested</b> with the number of open requests, or <b>Booked</b> once a booking is Confirmed. Booked days cannot be changed here (L2-057). In the app it is a <code>zm-*</code> component in the shared <code>components</code> library used by the zamaro app, and one rendered month (a <code>.calendar</code> with its grid of day cells, as on <a href="../../mocks/pages/availability/default.html">pages/availability</a>) is the “availability calendar month” composite, which has its own perf-test scenario (AGENTS.md, component perf tests).</p>
+      <ul>
+        <li>Use the calendar where a person manages many dates at once. Select days, then act on them from the <b>bulk bar</b>: “Mark unavailable” (or “Mark free” when the selection holds Unavailable days) or “Clear”.</li>
+        <li>Use the <a href="date-picker.html">date picker</a> to choose one date in a form (the booker’s event date, the start and end of a blocked range).</li>
+        <li>Use <a href="tour-dates.html">tour dates</a> for a read-only list of an artist’s next dates on their profile.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <section class="calendar" aria-label="Anatomy example" style="width: 100%;">
+            <div class="calendar__head">
+              <h3 id="anat-month" class="calendar__month">November 2026</h3>
+              <ul class="calendar__legend" aria-label="Legend">
+                <li><span class="calendar__swatch" aria-hidden="true"></span>Free</li>
+                <li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li>
+                <li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li>
+                <li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Unavailable</li>
+              </ul>
+            </div>
+            <div class="calendar__grid" role="grid" aria-labelledby="anat-month">
+              <div class="calendar__row" role="row">
+                <div class="calendar__weekday" role="columnheader">Sun</div><div class="calendar__weekday" role="columnheader">Mon</div><div class="calendar__weekday" role="columnheader">Tue</div><div class="calendar__weekday" role="columnheader">Wed</div><div class="calendar__weekday" role="columnheader">Thu</div><div class="calendar__weekday" role="columnheader">Fri</div><div class="calendar__weekday" role="columnheader">Sat</div>
+              </div>
+              <div class="calendar__row" role="row">
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-disabled="true" aria-label="Sun 15 Nov, Booked, Lakeshore Alliance Church. Booked dates can’t be changed"><span class="calendar__num" aria-hidden="true">15</span><span class="calendar__event">Lakeshore</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Mon 16 Nov, Unavailable, weekly default"><span class="calendar__num" aria-hidden="true">16</span><span class="calendar__event">Weekly</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="0" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div>
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Wed 18 Nov, Free"><span class="calendar__num" aria-hidden="true">18</span></button></div>
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Thu 19 Nov, Free"><span class="calendar__num" aria-hidden="true">19</span></button></div>
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Fri 20 Nov, Free"><span class="calendar__num" aria-hidden="true">20</span></button></div>
+                <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-disabled="true" aria-label="Sat 21 Nov, Booked, Kingdom Life Centre. Booked dates can’t be changed"><span class="calendar__num" aria-hidden="true">21</span><span class="calendar__event">Kingdom Life</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+              </div>
+            </div>
+          </section>
+          <span class="ds-callout" style="left: 4%; top: 6%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 52%; top: 6%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 4%; top: 42%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 8%; top: 70%;" aria-hidden="true">4</span>
+          <span class="ds-callout" style="left: 92%; top: 82%;" aria-hidden="true">5</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Head</b><small><code>.calendar__head</code>: the month as an h2-sized heading (<code>.calendar__month</code>) with previous/next month buttons.</small></div></li>
+          <li><div><b>Legend</b><small><code>.calendar__legend</code>: one <code>.calendar__swatch</code> per status, each with its word.</small></div></li>
+          <li><div><b>Weekday header</b><small><code>.calendar__weekday</code>: charcoal stage strip, mono overline; the full day name is in visually hidden text.</small></div></li>
+          <li><div><b>Day</b><small><code>.calendar__cell</code> (the gridcell) holds a <code>.calendar__day</code> button with the number (<code>.calendar__num</code>) and, from MD, an event line (<code>.calendar__event</code>); below MD a square <code>.calendar__dot</code> marks a day that has one.</small></div></li>
+          <li><div><b>Status fill</b><small><code>data-status</code> on the day: free (paper), blocked (hatched), requested (yellow), booked (ink), outside or past (sunken, muted).</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Day statuses</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="calendar__grid" role="grid" aria-label="Day statuses">
+            <div class="calendar__row" role="row">
+              <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="free" tabindex="0" aria-label="Tue 3 Nov, Free"><span class="calendar__num" aria-hidden="true">3</span><span class="calendar__event">Free</span></button></div>
+              <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="blocked" tabindex="-1" aria-label="Thu 26 Nov, Unavailable, studio"><span class="calendar__num" aria-hidden="true">26</span><span class="calendar__event">Studio</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+              <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="requested" tabindex="-1" aria-label="Sat 14 Nov, Requested · 1, Riverside Community Church"><span class="calendar__num" aria-hidden="true">14</span><span class="calendar__event">Requested · 1</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+              <div class="calendar__cell" role="gridcell" aria-selected="false"><button class="calendar__day" type="button" data-status="booked" tabindex="-1" aria-disabled="true" aria-label="Sun 1 Nov, Booked, Harvest Point Church. Booked dates can’t be changed"><span class="calendar__num" aria-hidden="true">1</span><span class="calendar__event">Harvest Point</span><span class="calendar__dot" aria-hidden="true"></span></button></div>
+              <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">1</span></span></div>
+              <div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="past" aria-hidden="true"><span class="calendar__num">8</span></span></div>
+              <div class="calendar__cell" role="gridcell" aria-selected="true"><button class="calendar__day" type="button" data-status="free" tabindex="-1" aria-label="Sat 28 Nov, Free"><span class="calendar__num" aria-hidden="true">28</span><span class="calendar__event">Selected</span></button></div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Free, Unavailable (hatched), Requested with count, Booked, a day outside the month, a past day, and a selected Free day.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="calendar__cell" role="gridcell" aria-selected="false"&gt;
+  &lt;button class="calendar__day" type="button" data-status="requested" tabindex="-1"
+          aria-label="Sat 14 Nov, Requested · 1, Riverside Community Church"&gt;
+    &lt;span class="calendar__num" aria-hidden="true"&gt;14&lt;/span&gt;
+    &lt;span class="calendar__event"&gt;Requested · 1&lt;/span&gt;
+    &lt;span class="calendar__dot" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col"><code>data-status</code></th><th scope="col">Word (L2-056)</th><th scope="col">Look</th><th scope="col">Selectable</th></tr></thead>
+        <tbody>
+          <tr><td><code>free</code></td><td>Free</td><td>Paper</td><td>Yes</td></tr>
+          <tr><td><code>blocked</code></td><td>Unavailable</td><td>Hatched sunken paper, muted number</td><td>Yes (to make it Free again)</td></tr>
+          <tr><td><code>requested</code></td><td>Requested · n</td><td>Yellow with an inner ink rule</td><td>Yes; marking it unavailable warns first (L2-057)</td></tr>
+          <tr><td><code>booked</code></td><td>Booked</td><td>Ink fill, paper number</td><td>No: <code>aria-disabled="true"</code></td></tr>
+          <tr><td><code>outside</code>, <code>past</code></td><td>–</td><td>Sunken, disabled number</td><td>No: not a button, <code>aria-hidden="true"</code></td></tr>
+        </tbody>
+      </table></div>
+      <h3>With the bulk bar</h3>
+      <p>Selecting days shows the bulk bar under the grid. It counts the selection, names the range and offers the two actions. Add <code>.bulk-bar--sticky</code> when the bar must stay in view while the month scrolls on a phone.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--block">
+          <div class="bulk-bar bulk-bar--sticky" role="region" aria-label="Selected days">
+            <span class="bulk-bar__count" role="status">2 days selected · Sat 28 – Sun 29 Nov</span>
+            <div class="bulk-bar__actions">
+              <button class="btn btn--primary btn--sm" type="button">Mark unavailable</button>
+              <button class="btn btn--sm" type="button">Clear</button>
+            </div>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>As on <a href="../../mocks/pages/availability/selected.html">availability/selected</a>. On the inverse bar every button is outlined in paper.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="bulk-bar bulk-bar--sticky" role="region" aria-label="Selected days"&gt;
+  &lt;span class="bulk-bar__count" role="status"&gt;2 days selected · Sat 28 – Sun 29 Nov&lt;/span&gt;
+  &lt;div class="bulk-bar__actions"&gt;
+    &lt;button class="btn btn--primary btn--sm" type="button"&gt;Mark unavailable&lt;/button&gt;
+    &lt;button class="btn btn--sm" type="button"&gt;Clear&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="The calendar has one size: it fills its container in seven equal columns. Days are at least 44px tall (--layout-calendar-cell) and 77px from MD."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">The calendar has one size: it fills its container in seven equal columns. Days are at least 44px tall (<code>--layout-calendar-cell</code>) and 77px from MD.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Status</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Selected</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Free</th>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="free" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="free" data-state="hover" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="free" data-state="focus" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell" aria-selected="true"><button class="calendar__day" type="button" data-status="free" aria-label="Tue 17 Nov, Free"><span class="calendar__num" aria-hidden="true">17</span></button></div></div></td></tr>
+          <tr><th scope="row">Unavailable</th>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="blocked" aria-label="Mon 16 Nov, Unavailable"><span class="calendar__num" aria-hidden="true">16</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="blocked" data-state="hover" aria-label="Mon 16 Nov, Unavailable"><span class="calendar__num" aria-hidden="true">16</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="blocked" data-state="focus" aria-label="Mon 16 Nov, Unavailable"><span class="calendar__num" aria-hidden="true">16</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell" aria-selected="true"><button class="calendar__day" type="button" data-status="blocked" aria-label="Mon 16 Nov, Unavailable"><span class="calendar__num" aria-hidden="true">16</span></button></div></div></td></tr>
+          <tr><th scope="row">Requested</th>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="requested" aria-label="Sat 14 Nov, Requested · 1"><span class="calendar__num" aria-hidden="true">14</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="requested" data-state="hover" aria-label="Sat 14 Nov, Requested · 1"><span class="calendar__num" aria-hidden="true">14</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="requested" data-state="focus" aria-label="Sat 14 Nov, Requested · 1"><span class="calendar__num" aria-hidden="true">14</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell" aria-selected="true"><button class="calendar__day" type="button" data-status="requested" aria-label="Sat 14 Nov, Requested · 1"><span class="calendar__num" aria-hidden="true">14</span></button></div></div></td></tr>
+          <tr><th scope="row">Booked</th>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="booked" aria-disabled="true" aria-label="Sun 15 Nov, Booked. Booked dates can’t be changed"><span class="calendar__num" aria-hidden="true">15</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="booked" data-state="hover" aria-disabled="true" aria-label="Sun 15 Nov, Booked. Booked dates can’t be changed"><span class="calendar__num" aria-hidden="true">15</span></button></div></div></td>
+            <td><div class="calendar__grid" style="grid-template-columns: 1fr;"><div class="calendar__cell"><button class="calendar__day" type="button" data-status="booked" data-state="focus" aria-disabled="true" aria-label="Sun 15 Nov, Booked. Booked dates can’t be changed"><span class="calendar__num" aria-hidden="true">15</span></button></div></div></td>
+            <td class="ds-na">Never</td></tr>
+        </tbody>
+      </table></div>
+      <ul>
+        <li><b>Hover</b> tints Free and Unavailable days yellow-subtle and deepens Requested; Booked days don’t react.</li>
+        <li><b>Focus</b> draws the two-tone ring inside the day (negative offset) so it is not clipped by the grid lines.</li>
+        <li><b>Selected</b> is <code>aria-selected="true"</code> on the gridcell, drawn as the focus-ring shadow on the day so it reads in every status.</li>
+        <li><b>Today</b> (<code>aria-current="date"</code> on the day) underlines the number.</li>
+        <li><b>Loading</b>: the frame, legend and weekday strip render at once; each day holds a short <code>.skeleton</code> and the grid is <code>aria-hidden</code> while the page is <code>aria-busy="true"</code> (<a href="../../mocks/pages/availability/loading.html">availability/loading</a>).</li>
+        <li><b>Empty</b> is a calendar of Free days, never a blank grid (L2-056; <a href="../../mocks/pages/availability/empty.html">availability/empty</a>). <b>Error</b> replaces the grid with an <a href="alert.html">alert</a> and Try again (<a href="../../mocks/pages/availability/error.html">availability/error</a>).</li>
+      </ul>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="calendar__grid" role="grid" aria-label="Light theme"><div class="calendar__row" role="row"><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="free" aria-label="Free"><span class="calendar__num" aria-hidden="true">17</span></button></div><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="blocked" aria-label="Unavailable"><span class="calendar__num" aria-hidden="true">16</span></button></div><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="requested" aria-label="Requested"><span class="calendar__num" aria-hidden="true">14</span></button></div><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="booked" aria-disabled="true" aria-label="Booked"><span class="calendar__num" aria-hidden="true">15</span></button></div><div class="calendar__cell" role="gridcell" aria-selected="true"><button class="calendar__day" type="button" data-status="free" aria-label="Selected"><span class="calendar__num" aria-hidden="true">28</span></button></div><div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">1</span></span></div><div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="past" aria-hidden="true"><span class="calendar__num">8</span></span></div></div></div></div>
+        <div data-theme="dark"><div class="calendar__grid" role="grid" aria-label="Dark theme"><div class="calendar__row" role="row"><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="free" aria-label="Free"><span class="calendar__num" aria-hidden="true">17</span></button></div><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="blocked" aria-label="Unavailable"><span class="calendar__num" aria-hidden="true">16</span></button></div><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="requested" aria-label="Requested"><span class="calendar__num" aria-hidden="true">14</span></button></div><div class="calendar__cell" role="gridcell"><button class="calendar__day" type="button" data-status="booked" aria-disabled="true" aria-label="Booked"><span class="calendar__num" aria-hidden="true">15</span></button></div><div class="calendar__cell" role="gridcell" aria-selected="true"><button class="calendar__day" type="button" data-status="free" aria-label="Selected"><span class="calendar__num" aria-hidden="true">28</span></button></div><div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="outside" aria-hidden="true"><span class="calendar__num">1</span></span></div><div class="calendar__cell" role="gridcell"><span class="calendar__day" data-status="past" aria-hidden="true"><span class="calendar__num">8</span></span></div></div></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Seven equal columns at every width (<code>minmax(0, 1fr)</code>), so the grid never scrolls sideways; at 320px each day is about 40px wide and 44px tall.</li>
+        <li><b>Below MD (768px)</b>: days show the number and, when something is on, a small square dot. The event text is hidden; it stays in the button’s accessible name.</li>
+        <li><b>From MD (768px)</b>: days grow to 1.75 × 44px and show the event line (“Requested · 1”, “Harvest Point”, “Studio”) instead of the dot, truncated with an ellipsis.</li>
+        <li>The head wraps: the month and the arrows stay together; the legend drops to its own line on phones.</li>
+        <li>The bulk bar wraps its actions under the count on phones. With <code>.bulk-bar--sticky</code> it stays 16px above the bottom of the viewport while the month scrolls.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The calendar has no component tokens; each status maps to semantic tokens. Free is <code>--color-bg-surface</code>; Unavailable hatches <code>--color-bg-surface-sunken</code> with <code>--color-border-default</code>; Requested is <code>--color-accent</code> with an inner <code>--color-fg-on-accent</code> rule; Booked inverts to <code>--color-fg-default</code> behind <code>--color-bg-canvas</code> text; outside and past days use <code>--color-bg-surface-sunken</code> and <code>--color-fg-disabled</code>. Grid lines are the <code>--color-border-strong</code> showing through 2px gaps, and the weekday strip is the stage. In the dark theme Booked becomes a paper day on the charcoal sheet; Requested stays yellow. The bulk bar uses the inverse pair (<code>--color-bg-inverse</code>, <code>--color-fg-inverse</code>) with a yellow frame when sticky.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>An APG <b>grid</b> with <code>aria-multiselectable="true"</code>, labelled by the month heading. Rows are <code>role="row"</code>; weekday headers are <code>columnheader</code>s; each day is a <code>gridcell</code> that carries <code>aria-selected</code> and holds a <code>&lt;button&gt;</code>. Days outside the month and past days are not buttons and are hidden from assistive technology. Booked days are buttons with <code>aria-disabled="true"</code> so they stay discoverable and say why they can’t change.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Enters the grid on one day (roving <code>tabindex</code>: the selected day, else today, else the first Free day) and leaves it to the bulk bar.</td></tr>
+        <tr><td><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></td><td>Move one day or one week; crossing the month edge turns the page.</td></tr>
+        <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last day of the week.</td></tr>
+        <tr><td><kbd>Page Up</kbd> / <kbd>Page Down</kbd></td><td>Previous / next month, same day.</td></tr>
+        <tr><td><kbd>Space</kbd> or <kbd>Enter</kbd></td><td>Select or deselect the focused day.</td></tr>
+        <tr><td><kbd>Shift</kbd> + arrow</td><td>Extend the selection to a range.</td></tr>
+        <tr><td><kbd>Escape</kbd></td><td>Clear the selection.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>The focused day shows the two-tone ring inset into the cell and is raised above its neighbours. Selection uses the same ring as a shadow, so a focused selected day is unmistakable; the bulk bar’s count changes as the selection changes.</p>
+      <h3>Labelling</h3>
+      <p>Each day button’s name is the full short date, the status word and the detail: “Sat 14 Nov, Requested · 1, Riverside Community Church”, “Mon 16 Nov, Unavailable, weekly default”, “Sun 1 Nov, Booked, Harvest Point Church. Booked dates can’t be changed”. The visible number is <code>aria-hidden</code>. Weekday headers show “Sun” and give “Sunday” in visually hidden text. The legend is a labelled list, so status is never conveyed by colour or pattern alone. The bulk bar is a labelled region whose count is a polite <code>role="status"</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Free day number</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Unavailable day number</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Requested day number</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Booked day number</span><span class="ds-pair__ratio" data-contrast="--color-bg-canvas|--color-fg-default" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Weekday strip</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Bulk bar count</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: unavailable day number</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: booked day number</span><span class="ds-pair__ratio" data-contrast="--color-bg-canvas|--color-fg-default" data-min="4.5"></span></div>
+      </div>
+      <p>Outside and past days use <code>--color-fg-disabled</code>; they are inert and hidden from assistive technology, so 1.4.3 does not apply. The hatch on Unavailable days is decoration on top of a measured background.</p>
+      <h3>Motion</h3>
+      <p>None beyond colour changes on hover. Month changes swap the grid without sliding.</p>
+      <h3>Touch</h3>
+      <p>Every day is at least 44px tall and about 40px wide at 320px, with 2px between days; drag-to-select is not used, so selection is always a tap per day or a range from the dialog.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>The four status words are fixed by L2-056: Free, Unavailable, Requested, Booked. Requested always carries its count: “Requested · 2”.</li>
+        <li>The event line is the shortest useful name: the church’s first words for Booked (“Harvest Point”), the artist’s own note for Unavailable (“Studio”), “Weekly” for the weekly default.</li>
+        <li>Month heading: “November 2026”. Arrow names say where they go: “Previous month, October 2026”.</li>
+        <li>Bulk bar: count, then the range in the L2-110 short pattern: “2 days selected · Sat 28 – Sun 29 Nov”. Actions are verbs: “Mark unavailable”, “Clear”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><ul class="calendar__legend" aria-label="Legend"><li><span class="calendar__swatch" aria-hidden="true"></span>Free</li><li><span class="calendar__swatch" data-status="requested" aria-hidden="true"></span>Requested</li><li><span class="calendar__swatch" data-status="booked" aria-hidden="true"></span>Booked</li><li><span class="calendar__swatch" data-status="blocked" aria-hidden="true"></span>Unavailable</li></ul></div><figcaption>A legend with words beside the grid, every time.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="calendar__grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));"><div class="calendar__cell"><span class="calendar__day" data-status="free"><span class="calendar__num">3</span></span></div><div class="calendar__cell"><span class="calendar__day" data-status="requested"><span class="calendar__num">4</span></span></div><div class="calendar__cell"><span class="calendar__day" data-status="booked"><span class="calendar__num">5</span></span></div></div></div><figcaption>Colour-only days with no names: neither a screen reader nor a colour-blind artist can tell Requested from Free.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Free day</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Unavailable / outside</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Hatch</td><td><code>--color-border-default</code>, <code>--size-offset-2</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Requested</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Booked</td><td><code>--color-fg-default</code> / <code>--color-bg-canvas</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Hover</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Grid lines</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Weekday strip</td><td><code>--color-bg-stage</code> / <code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+          <tr><td>Selected / focus</td><td><code>--shadow-focus</code>, <code>--focus-ring-offset</code></td><td colspan="2"><span data-token="--focus-ring-offset"></span></td></tr>
+          <tr><td>Bulk bar</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Day height</td><td><code>--layout-calendar-cell</code> (× 1.75 from MD)</td><td colspan="2"><span data-token="--layout-calendar-cell"></span></td></tr>
+          <tr><td>Day number / event</td><td><code>--font-size-xl</code> display / <code>--text-caption</code></td><td colspan="2"><span data-token="--font-size-xl"></span> / <span data-token="--text-caption"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section class="calendar" aria-label="Calendar, next 18 months"&gt;
+  &lt;div class="calendar__head"&gt;
+    &lt;h2 id="cal-month" class="calendar__month"&gt;November 2026&lt;/h2&gt;
+    &lt;button class="btn btn--icon" type="button" aria-label="Previous month, October 2026"&gt;…&lt;/button&gt;
+    &lt;button class="btn btn--icon" type="button" aria-label="Next month, December 2026"&gt;…&lt;/button&gt;
+    &lt;ul class="calendar__legend" aria-label="Legend"&gt;
+      &lt;li&gt;&lt;span class="calendar__swatch" aria-hidden="true"&gt;&lt;/span&gt;Free&lt;/li&gt;
+      &lt;li&gt;&lt;span class="calendar__swatch" data-status="requested" aria-hidden="true"&gt;&lt;/span&gt;Requested&lt;/li&gt;
+      …
+    &lt;/ul&gt;
+  &lt;/div&gt;
+  &lt;div class="calendar__grid" role="grid" aria-labelledby="cal-month" aria-multiselectable="true"&gt;
+    &lt;div class="calendar__row" role="row"&gt;
+      &lt;div class="calendar__weekday" role="columnheader"&gt;&lt;span aria-hidden="true"&gt;Sun&lt;/span&gt;&lt;span class="visually-hidden"&gt;Sunday&lt;/span&gt;&lt;/div&gt;
+      …
+    &lt;/div&gt;
+    &lt;div class="calendar__row" role="row"&gt;
+      &lt;div class="calendar__cell" role="gridcell" aria-selected="false"&gt;
+        &lt;button class="calendar__day" type="button" data-status="free" tabindex="0" aria-label="Tue 3 Nov, Free"&gt;
+          &lt;span class="calendar__num" aria-hidden="true"&gt;3&lt;/span&gt;
+        &lt;/button&gt;
+      &lt;/div&gt;
+      …
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.calendar</code></td><td>Wrapper: head, then grid, 16px apart. One rendered month is the “availability calendar month” perf-test composite.</td></tr>
+        <tr><td><code>.calendar__head</code>, <code>.calendar__month</code></td><td>Wrapping row with the month heading (h2 size, uppercase) and controls.</td></tr>
+        <tr><td><code>.calendar__legend</code>, <code>.calendar__swatch</code></td><td>Labelled legend; the swatch takes the same <code>data-status</code> as a day.</td></tr>
+        <tr><td><code>.calendar__grid</code></td><td>Seven columns with 2px ink lines between days.</td></tr>
+        <tr><td><code>.calendar__row</code></td><td><code>display: contents</code>; carries <code>role="row"</code> without affecting the grid.</td></tr>
+        <tr><td><code>.calendar__weekday</code></td><td>Stage-coloured column header.</td></tr>
+        <tr><td><code>.calendar__cell</code></td><td>The gridcell; <code>aria-selected="true"</code> draws the selection on its day.</td></tr>
+        <tr><td><code>.calendar__day</code> + <code>data-status</code></td><td><code>free</code>, <code>blocked</code>, <code>requested</code>, <code>booked</code>, <code>outside</code>, <code>past</code>.</td></tr>
+        <tr><td><code>aria-current="date"</code> on <code>.calendar__day</code></td><td>Today: underlined number.</td></tr>
+        <tr><td><code>.calendar__num</code>, <code>.calendar__event</code>, <code>.calendar__dot</code></td><td>Number; event line from MD; dot below MD.</td></tr>
+        <tr><td><code>.bulk-bar</code>, <code>.bulk-bar--sticky</code></td><td>Inverse action bar for the selection (documented with the <a href="table.html">table</a>); sticky variant pins it above the viewport bottom with a yellow frame.</td></tr>
+        <tr><td><code>.bulk-bar__count</code>, <code>.bulk-bar__actions</code></td><td>Selection count (mono, uppercase, a live status) and the button group.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation only.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Introduced by the MVP mocks for the artist’s availability (L2-056, L2-057); used on these screens:</p>
+      <ul>
+        <li><a href="../../mocks/pages/availability/default.html">pages/availability/default</a>: November 2026 with Free, Unavailable (weekly default and “Studio”), Requested · 1 and Booked days</li>
+        <li><a href="../../mocks/pages/availability/selected.html">availability/selected</a>: two selected days and the bulk bar</li>
+        <li><a href="../../mocks/pages/availability/loading.html">availability/loading</a>, <a href="../../mocks/pages/availability/empty.html">availability/empty</a>, <a href="../../mocks/pages/availability/error.html">availability/error</a></li>
+        <li><a href="../../mocks/dialogs/block-dates/default.html">dialogs/block-dates</a>, <a href="../../mocks/dialogs/weekly-default/default.html">dialogs/weekly-default</a>, <a href="../../mocks/dialogs/calendar-feed/default.html">dialogs/calendar-feed</a>: the calendar under the dialog</li>
+        <li><a href="../../mocks/notifications/availability-toast/success.html">notifications/availability-toast</a>: the calendar behind the toast</li>
+      </ul>
+      <p>Drift noted during documentation:</p>
+      <ul>
+        <li>The stylesheet still selects <code>.calendar__day[aria-selected="true"]</code> from before selection moved to the gridcell; the cell rule is the one to use.</li>
+        <li>Neither <code>data-status="past"</code> nor <code>aria-current="date"</code> appears in the November mocks.</li>
+        <li>The loading mock sized its day-number skeletons with the <code>--space-5</code> token inline. They now use <code>.skeleton--day</code>.</li>
+      </ul>
+    </section>
+
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

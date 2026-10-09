@@ -52,6 +52,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -78,6 +79,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -141,9 +144,9 @@
         <figure class="ds-anatomy__figure" style="grid-template-columns: minmax(0, 1fr); justify-items: center;">
           <article class="card" style="width: 100%; max-width: 20rem;" aria-labelledby="an-card-title">
             <div class="card__media"><div class="art art--wide art--group" role="img" aria-label="Luz Viva, a band of six singing on a church platform"></div></div>
-            <div class="card__header"><h3 class="card__title" id="an-card-title">Luz Viva</h3><span class="badge badge--warning">Awaiting reply</span></div>
-            <div class="card__body"><p class="text-muted">Sat 14 Nov · Sunday service · Riverside Community Church</p></div>
-            <div class="card__footer"><span class="ticket__price">$900</span><button class="btn btn--sm" type="button">Withdraw</button></div>
+            <div class="card__header"><h3 class="card__title" id="an-card-title">Luz Viva</h3><span class="stamp stamp--accepted">Accepted</span></div>
+            <div class="card__body"><p class="text-muted">Sat 5 Dec · Worship night · Riverside Community Church</p></div>
+            <div class="card__footer"><span class="ticket__price">$900</span><button class="btn btn--sm" type="button">Pay $225 deposit</button></div>
           </article>
           <span class="ds-callout" style="left: 50%; top: 14%;" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: 18%; top: 47%;" aria-hidden="true">2</span>
@@ -155,7 +158,7 @@
         <ol class="ds-anatomy__list">
           <li><div><b>Media (optional)</b><small><code>.card__media</code>: a halftone <a href="artwork.html">artwork</a> or photo, full bleed, with a 2px rule under it.</small></div></li>
           <li><div><b>Title</b><small><code>.card__title</code>: a heading in the display face, 28px, uppercase. Holds the card’s one link when the card is interactive.</small></div></li>
-          <li><div><b>Header aside (optional)</b><small>A badge or a save toggle, aligned to the top right of <code>.card__header</code>.</small></div></li>
+          <li><div><b>Header aside (optional)</b><small>A status stamp, a badge or a save toggle, aligned to the top right of <code>.card__header</code>.</small></div></li>
           <li><div><b>Body</b><small><code>.card__body</code>: facts and short copy, 12px between items, 24px side padding.</small></div></li>
           <li><div><b>Footer (optional)</b><small><code>.card__footer</code>: a dashed tear line, then price and actions, pushed to the bottom so footers line up in a row.</small></div></li>
           <li><div><b>Frame</b><small>2px <code>--card-border</code> on <code>--card-bg</code>, square corners. No shadow at rest.</small></div></li>
@@ -168,24 +171,24 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: stretch;">
           <article class="card" style="flex: 1 1 16rem;" aria-labelledby="v-card-1">
-            <div class="card__header"><h3 class="card__title" id="v-card-1">Abigail Mensah</h3><span class="badge badge--success">Confirmed</span></div>
-            <div class="card__body"><p>Sun 1 Nov · Sunday service</p><p class="text-muted">No. ZAM-0114 · deposit $162.50 paid</p></div>
-            <div class="card__footer"><span class="stub__code">Balance $487.50 after</span><a class="btn btn--sm" href="#variants">View booking</a></div>
+            <div class="card__header"><h3 class="card__title" id="v-card-1">Marcus Bell Trio</h3><span class="stamp stamp--confirmed">Confirmed</span></div>
+            <div class="card__body"><p>Sun 25 Oct · Sunday service</p><p class="text-muted">No. ZAM-0097 · deposit $237.50 paid</p></div>
+            <div class="card__footer"><span class="stub__code">Balance $712.50 after</span><a class="btn btn--sm" href="#variants">View booking</a></div>
           </article>
           <article class="card" style="flex: 1 1 16rem;" aria-labelledby="v-card-2">
-            <div class="card__header"><h3 class="card__title" id="v-card-2">Luz Viva</h3><span class="badge badge--warning">Awaiting reply</span></div>
-            <div class="card__body"><p>Sat 14 Nov · Sunday service</p><p class="text-muted">Sent Thu 8 Oct · Spanish &amp; English band</p></div>
-            <div class="card__footer"><span class="stub__code">From $900</span><button class="btn btn--sm" type="button">Withdraw</button></div>
+            <div class="card__header"><h3 class="card__title" id="v-card-2">Abigail Mensah</h3><span class="stamp stamp--requested">Requested</span></div>
+            <div class="card__body"><p>Sat 14 Nov · Worship night</p><p class="text-muted">No. ZAM-0114 · reply by Mon 12 Oct, 10:15 a.m.</p></div>
+            <div class="card__footer"><span class="stub__code">$650 · nothing paid</span><button class="btn btn--sm" type="button">Withdraw</button></div>
           </article>
         </div>
         <div class="ds-example__caption"><span>Naomi’s bookings: each card has its own actions, so the card itself is not a link.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;article class="card" aria-labelledby="booking-0114"&gt;
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;article class="card" aria-labelledby="booking-0097"&gt;
   &lt;div class="card__header"&gt;
-    &lt;h3 class="card__title" id="booking-0114"&gt;Abigail Mensah&lt;/h3&gt;
-    &lt;span class="badge badge--success"&gt;Confirmed&lt;/span&gt;
+    &lt;h3 class="card__title" id="booking-0097"&gt;Marcus Bell Trio&lt;/h3&gt;
+    &lt;span class="stamp stamp--confirmed"&gt;Confirmed&lt;/span&gt;
   &lt;/div&gt;
-  &lt;div class="card__body"&gt;&lt;p&gt;Sun 1 Nov · Sunday service&lt;/p&gt;…&lt;/div&gt;
-  &lt;div class="card__footer"&gt;&lt;span class="stub__code"&gt;Balance $487.50 after&lt;/span&gt;&lt;a class="btn btn--sm" href="/bookings/ZAM-0114"&gt;View booking&lt;/a&gt;&lt;/div&gt;
+  &lt;div class="card__body"&gt;&lt;p&gt;Sun 25 Oct · Sunday service&lt;/p&gt;…&lt;/div&gt;
+  &lt;div class="card__footer"&gt;&lt;span class="stub__code"&gt;Balance $712.50 after&lt;/span&gt;&lt;a class="btn btn--sm" href="/bookings/ZAM-0097"&gt;View booking&lt;/a&gt;&lt;/div&gt;
 &lt;/article&gt;</code></pre></details>
       </div>
 
@@ -233,7 +236,65 @@
       <h3>Flat</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: stretch;">
-          <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-5"><div class="card__header"><h3 class="card__title" id="v-card-5">2 requests</h3></div><div class="card__body"><p class="text-muted">Waiting for a reply</p></div></section>
+          <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-5"><div class="card__header"><h3 class="card__title" id="v-card-5">2 requests</h3></div><div class="card__body"><p class="text-muted">Waiting for a reply</p></div>      <h3>Panel</h3>
+      <p><code>.panel</code> is the card the signed-in pages are built from: a paper frame with a <code>.panel__head</code> (an h2/h3 in <code>.panel__title</code> plus an optional caption, code or action on the right) over a dashed rule. It does not lift or link as a whole; actions inside it are ordinary buttons. <code>.panel--raised</code> adds the 8px hard shadow for the one panel that holds the page’s primary action, such as the payment aside on a booking.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="cluster" style="width: 100%; align-items: start;">
+  <section class="panel" aria-labelledby="cd-req" style="flex: 2 1 18rem;">
+    <div class="panel__head"><h3 id="cd-req" class="panel__title">Messages</h3><span class="text-caption">Only you and Abigail see these</span></div>
+    <div class="message">
+      <p class="message__meta">You · Fri 9 Oct, 10:15 a.m.</p>
+      <blockquote><p>We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</p></blockquote>
+    </div>
+  </section>
+  <aside class="panel panel--raised" aria-labelledby="cd-pay" style="flex: 1 1 14rem;">
+    <div class="panel__head"><h3 id="cd-pay" class="panel__title">Payment</h3><span class="stub__code">No. ZAM-0114</span></div>
+    <p class="text-muted">Receipt and the one primary action.</p>
+  </aside>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.panel</code> with a <code>.message</code> beside a <code>.panel--raised</code> aside: pages/booking-detail/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="cluster" style="width: 100%; align-items: start;"&gt;
+  &lt;section class="panel" aria-labelledby="cd-req" style="flex: 2 1 18rem;"&gt;
+    &lt;div class="panel__head"&gt;&lt;h3 id="cd-req" class="panel__title"&gt;Messages&lt;/h3&gt;&lt;span class="text-caption"&gt;Only you and Abigail see these&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="message"&gt;
+      &lt;p class="message__meta"&gt;You · Fri 9 Oct, 10:15 a.m.&lt;/p&gt;
+      &lt;blockquote&gt;&lt;p&gt;We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.&lt;/p&gt;&lt;/blockquote&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  &lt;aside class="panel panel--raised" aria-labelledby="cd-pay" style="flex: 1 1 14rem;"&gt;
+    &lt;div class="panel__head"&gt;&lt;h3 id="cd-pay" class="panel__title"&gt;Payment&lt;/h3&gt;&lt;span class="stub__code"&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;
+    &lt;p class="text-muted"&gt;Receipt and the one primary action.&lt;/p&gt;
+  &lt;/aside&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Message</h3>
+      <p><code>.message</code> is one note in a booking’s thread: a sunken block with a 4px yellow rule on the left, a mono <code>.message__meta</code> line (“You · Fri 9 Oct, 10:15 a.m.”) and the text, quoted in a <code>&lt;blockquote&gt;</code> when it is the church’s own words. Messages sit in a panel and stack 16px apart, oldest first.</p>
+      <h3>Stat</h3>
+      <p><code>.stat</code> is a small figure card for the artist dashboard: an overline <code>.stat__label</code>, the figure in <code>.stat__value</code> (tabular, h2 size) and a caption <code>.stat__hint</code> that says what is behind the number, often with a link. <code>.stat--accent</code> fills the one stat that needs action (requests awaiting reply) with yellow. <code>.stat-grid</code> lays them out two across, four from 992px. A stat can hold a <a href="progress-bar.html">meter</a>.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<ul class="stat-grid" role="list" style="width: 100%;">
+  <li class="stat stat--accent"><span class="stat__label">Awaiting reply</span><span class="stat__value">3</span><span class="stat__hint">First one due Sat 10 Oct, 3:15 p.m.</span></li>
+  <li class="stat"><span class="stat__label">Confirmed dates</span><span class="stat__value">4</span><span class="stat__hint">Oct and Nov · next Sun 18 Oct</span></li>
+  <li class="stat"><span class="stat__label">Free Saturdays in Nov</span><span class="stat__value">2</span><span class="stat__hint">Sat 7 and Sat 28 Nov</span></li>
+  <li class="stat"><span class="stat__label">Profile complete</span><span class="stat__value">100%</span><div class="meter" role="progressbar" aria-label="Profile complete" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="--value: 100%;"><div class="meter__bar"></div></div><span class="stat__hint">Updated Tue 6 Oct</span></li>
+</ul>
+        </div>
+        <div class="ds-example__caption"><span><code>.stat-grid</code> of four stats, the first <code>.stat--accent</code>: pages/dashboard/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="stat-grid" role="list" style="width: 100%;"&gt;
+  &lt;li class="stat stat--accent"&gt;&lt;span class="stat__label"&gt;Awaiting reply&lt;/span&gt;&lt;span class="stat__value"&gt;3&lt;/span&gt;&lt;span class="stat__hint"&gt;First one due Sat 10 Oct, 3:15 p.m.&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="stat"&gt;&lt;span class="stat__label"&gt;Confirmed dates&lt;/span&gt;&lt;span class="stat__value"&gt;4&lt;/span&gt;&lt;span class="stat__hint"&gt;Oct and Nov · next Sun 18 Oct&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="stat"&gt;&lt;span class="stat__label"&gt;Free Saturdays in Nov&lt;/span&gt;&lt;span class="stat__value"&gt;2&lt;/span&gt;&lt;span class="stat__hint"&gt;Sat 7 and Sat 28 Nov&lt;/span&gt;&lt;/li&gt;
+  &lt;li class="stat"&gt;&lt;span class="stat__label"&gt;Profile complete&lt;/span&gt;&lt;span class="stat__value"&gt;100%&lt;/span&gt;&lt;div class="meter" role="progressbar" aria-label="Profile complete" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="--value: 100%;"&gt;&lt;div class="meter__bar"&gt;&lt;/div&gt;&lt;/div&gt;&lt;span class="stat__hint"&gt;Updated Tue 6 Oct&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre></details>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><ul class="stat-grid" role="list"><li class="stat stat--accent"><span class="stat__label">Awaiting reply</span><span class="stat__value">3</span><span class="stat__hint">First one due Sat 10 Oct</span></li><li class="stat"><span class="stat__label">Confirmed dates</span><span class="stat__value">4</span><span class="stat__hint">Next Sun 18 Oct</span></li></ul></div>
+        <div data-theme="dark"><ul class="stat-grid" role="list"><li class="stat stat--accent"><span class="stat__label">Awaiting reply</span><span class="stat__value">3</span><span class="stat__hint">First one due Sat 10 Oct</span></li><li class="stat"><span class="stat__label">Confirmed dates</span><span class="stat__value">4</span><span class="stat__hint">Next Sun 18 Oct</span></li></ul></div>
+      </div>
+</section>
           <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-6"><div class="card__header"><h3 class="card__title" id="v-card-6">1 booking</h3></div><div class="card__body"><p class="text-muted">Next: Sun 1 Nov</p></div></section>
           <section class="card card--flat" style="flex: 1 1 12rem;" aria-labelledby="v-card-7"><div class="card__header"><h3 class="card__title" id="v-card-7">3 saved</h3></div><div class="card__body"><p class="text-muted">Artists you’re considering</p></div></section>
         </div>
@@ -292,6 +353,10 @@
         <li>Footer content wraps: on a narrow card the action moves under the price rather than shrinking.</li>
         <li>Media keeps its aspect ratio (16:9 with <code>.art--wide</code>); never crop faces with a fixed height.</li>
       </ul>
+      <ul>
+        <li><code>.stat-grid</code>: two columns on phones and tablets, four from 992px (<code>--layout-breakpoint-lg</code>).</li>
+        <li>Panels fill their column; in a <a href="container.html">detail layout</a> the raised aside sits beside the main panels from 992px.</li>
+      </ul>
     </section>
 
     <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
@@ -336,14 +401,14 @@
         <li>The title is the thing’s name: an artist, a booking code, a package. Keep it to one or two lines.</li>
         <li>Body facts follow the order a booker scans: date, kind of gathering, place. Separate them with a middle dot.</li>
         <li>Money in the footer, with the right word: “From $900” for a starting price, “$650” for an agreed one, “Balance $487.50 after” for what is left.</li>
-        <li>One status badge per card at most (“Confirmed”, “Awaiting reply”).</li>
+        <li>One status per card at most: a booking’s stamp (“Confirmed”, “Requested”) or another state’s badge.</li>
       </ul>
     </section>
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--canvas"><article class="card card--interactive" style="width: 14rem;" aria-label="Do example"><div class="card__header"><p class="card__title"><a href="#do-dont">Marcus Bell Trio</a></p><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><div class="card__body"><p class="text-muted">Piano trio · Hamilton · $950</p></div></article></div><figcaption>One link in the title, stretched over the card; the save toggle stays a separate control.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--canvas"><a class="card" href="#do-dont" style="width: 14rem; text-decoration: none;"><span class="card__header"><span class="card__title">Marcus Bell Trio</span></span><span class="card__body"><span class="text-muted">Piano trio · Hamilton · $950 · Save · Share</span></span></a></div><figcaption>Wrapping the whole card in <code>&lt;a&gt;</code>: the link’s name is every word on the card, and no button can live inside it.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--canvas"><article class="card card--interactive" style="width: 14rem;" aria-label="Do example"><div class="card__header"><p class="card__title"><a href="#do-dont">Marcus Bell Trio</a></p><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><div class="card__body"><p class="text-muted">Band · Acoustic, Hymns · Hamilton · from $950</p></div></article></div><figcaption>One link in the title, stretched over the card; the save toggle stays a separate control.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--canvas"><a class="card" href="#do-dont" style="width: 14rem; text-decoration: none;"><span class="card__header"><span class="card__title">Marcus Bell Trio</span></span><span class="card__body"><span class="text-muted">Band · Acoustic, Hymns · Hamilton · from $950 · Save · Share</span></span></a></div><figcaption>Wrapping the whole card in <code>&lt;a&gt;</code>: the link’s name is every word on the card, and no button can live inside it.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--canvas"><span class="text-caption">Search results → <a href="ticket.html">ticket</a> · Top pick → <a href="headliner.html">headliner</a> · Quotes → <a href="review.html">review</a></span></div><figcaption>Use the specialised card for the job it was made for.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--canvas"><article class="card" style="width: 14rem;" aria-label="Don't example"><div class="card__body"><p class="card__title">Hosanna Collective</p><p class="text-muted">From $1,800</p></div></article></div><figcaption>A generic card for an artist in the lineup. It loses the ticket stub, the notches and the price stamp that make results scannable.</figcaption></figure>
       </div>
@@ -364,6 +429,9 @@
           <tr><td>Frame width</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
           <tr><td>Title</td><td><code>--text-h3</code></td><td colspan="2"><span data-token="--text-h3"></span></td></tr>
           <tr><td>Transition</td><td><code>--duration-base</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-base"></span></td></tr>
+                  <tr><td>Raised panel shadow</td><td><code>--shadow-3</code></td><td colspan="2"><span data-token="--shadow-3"></span></td></tr>
+          <tr><td>Message background</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Message rule / accent stat</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -388,17 +456,25 @@
         <tr><td><code>.card--flat</code></td><td>Hairline frame; for summaries.</td></tr>
         <tr><td><code>--card-bg</code>, <code>--card-border</code></td><td>Component tokens for re-skinning.</td></tr>
         <tr><td><code>data-state="hover"</code></td><td>Documentation only: forces the lift.</td></tr>
+      
+        <tr><td><code>.panel</code>, <code>__head</code>, <code>__title</code></td><td>Static paper card with a dashed-rule header.</td></tr>
+        <tr><td><code>.panel--raised</code></td><td>8px hard shadow for the panel holding the primary action.</td></tr>
+        <tr><td><code>.message</code>, <code>.message__meta</code></td><td>One thread note: sunken block, yellow left rule, mono meta line.</td></tr>
+        <tr><td><code>.stat-grid</code>, <code>.stat</code></td><td>Dashboard figure cards; two across, four from 992px.</td></tr>
+        <tr><td><code>.stat__label</code>, <code>__value</code>, <code>__hint</code></td><td>Overline label, tabular figure, caption.</td></tr>
+        <tr><td><code>.stat--accent</code></td><td>Yellow fill for the stat that needs action.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>The generic card is not in the mocks yet; it is part of the core set. The mocks use its specialised relatives, which share its frame, rules and lift:</p>
+      <p>The generic <code>.card</code> is not in the mocks; it stays ready for summaries that link as a whole. The mocks use its relatives, which share its frame and rules:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: tickets in the lineup (stretched name link, save toggle above it, perforated stub) and the headliner</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: ticket frames with skeletons inside while the lineup loads</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: review cards under “What churches say”</li>
+        <li><code>.panel</code> and <code>.panel--raised</code>: <a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail/default</a> and every booking status, <a href="../../mocks/pages/request-detail/default.html">pages/request-detail/default</a>, <a href="../../mocks/pages/apply/default.html">pages/apply/default</a> (“After you apply”), <a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>, <a href="../../mocks/pages/earnings/default.html">pages/earnings/default</a></li>
+        <li><code>.message</code>: <a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail/default</a>, <a href="../../mocks/pages/request-detail/default.html">pages/request-detail/default</a>, and the dialogs that quote the church, such as <a href="../../mocks/dialogs/accept-request/default.html">dialogs/accept-request/default</a> and <a href="../../mocks/dialogs/decline-request/default.html">dialogs/decline-request/default</a></li>
+        <li><code>.stat</code>: <a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>, <a href="../../mocks/pages/dashboard/empty.html">empty</a>, <a href="../../mocks/pages/dashboard/loading.html">loading</a></li>
+        <li>Tickets, the headliner and review cards: <a href="../../mocks/pages/discover/default.html">pages/discover/default</a>, <a href="../../mocks/pages/artist/default.html">pages/artist/default</a></li>
       </ul>
-      <p>The product will need the generic card for the booker’s bookings and saved artists, the artist dashboard’s requests and packages, and summary panels. Drift fixed during extraction: none in the card itself; it was written to the corrected tokens from the start (hover shadow offset 6px via <code>--shadow-2</code>, <code>--color-shadow</code> instead of <code>--shadow-color</code>, <code>--transform-lift</code> instead of <code>--lift</code>).</p>
+      <p>Drift fixed during extraction: the card was written to the corrected tokens from the start (hover shadow offset 6px via <code>--shadow-2</code>, <code>--color-shadow</code> instead of <code>--shadow-color</code>, <code>--transform-lift</code> instead of <code>--lift</code>). <a href="../../mocks/pages/dashboard/loading.html">pages/dashboard/loading</a> sized its stat skeletons with inline <code>style="width: …"</code>; they now use the skeleton modifiers (<code>.skeleton--short/medium/long</code>).</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

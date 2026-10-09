@@ -50,6 +50,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -76,6 +77,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -123,7 +126,7 @@
     </header>
 
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-      <p>Use video cards in the “Watch her lead” section of a profile, inside a <code>.media-grid</code>. Each card is one <code>&lt;button&gt;</code>: pressing it opens the clip in a <a href="dialog.html">dialog</a> player and does not leave the page. Never autoplay.</p>
+      <p>Use video cards in the “Watch her lead” section of a profile, inside a <code>.media-grid</code>. Each card is one <code>&lt;button&gt;</code>: pressing it plays the clip in place, in the card’s 16:9 frame, as a native <code>&lt;video controls&gt;</code> with captions when the artist supplied them (L2-014). It never leaves the page and never autoplays.</p>
       <ul>
         <li>The first card is the featured clip and spans the full row from 768px.</li>
         <li>For still photos use the <a href="artwork.html">photo grid</a>; for a link to an external channel use a <a href="link.html">link</a>.</li>
@@ -190,13 +193,13 @@
             <td><button class="video video-demo" type="button" data-state="hover" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
             <td><button class="video video-demo" type="button" data-state="focus" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
             <td><button class="video video-demo" type="button" data-state="active" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td>
-            <td><button class="video video-demo" type="button" aria-busy="true" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td></tr>
+            <td><button class="video video-demo" type="button" aria-busy="true" aria-disabled="true" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist"></span><span class="video__play">Play · 4:40</span></button></td></tr>
           <tr><th scope="row">Yellow</th>
             <td><button class="video video-demo" type="button" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
             <td><button class="video video-demo" type="button" data-state="hover" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
             <td><button class="video video-demo" type="button" data-state="focus" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
             <td><button class="video video-demo" type="button" data-state="active" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td>
-            <td><button class="video video-demo" type="button" aria-busy="true" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td></tr>
+            <td><button class="video video-demo" type="button" aria-busy="true" aria-disabled="true" aria-label="Play Goodness of God, women’s retreat, 5 minutes 30 seconds"><span class="art art--wide art--yellow" role="img" aria-label="Abigail at a lakeside retreat"></span><span class="video__play">Play · 5:30</span></button></td></tr>
         </tbody>
       </table></div>
       <h3>Loading, failed and none</h3>
@@ -210,14 +213,14 @@
       </div>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><button class="video" type="button" data-state="hover" aria-label="Play Jireh, Sunday service, 7 minutes 2 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail and a choir"></span><span class="video__play">Play · 7:02</span></button><span class="video__caption">Jireh — Sunday service, Milton</span></div>
-        <div data-theme="dark"><button class="video" type="button" data-state="hover" aria-label="Play Jireh, Sunday service, 7 minutes 2 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail and a choir"></span><span class="video__play">Play · 7:02</span></button><span class="video__caption">Jireh — Sunday service, Milton</span></div>
+        <div data-theme="light"><button class="video" type="button" data-state="hover" aria-label="Play Twi praise medley, Harvest Sunday 2025, 8 minutes 5 seconds"><span class="art art--wide art--group" role="img" aria-label="A congregation dancing during a Ghanaian praise medley"></span><span class="video__play">Play · 8:05</span></button><span class="video__caption">Twi praise medley — Harvest Sunday 2025</span></div>
+        <div data-theme="dark"><button class="video" type="button" data-state="hover" aria-label="Play Twi praise medley, Harvest Sunday 2025, 8 minutes 5 seconds"><span class="art art--wide art--group" role="img" aria-label="A congregation dancing during a Ghanaian praise medley"></span><span class="video__play">Play · 8:05</span></button><span class="video__caption">Twi praise medley — Harvest Sunday 2025</span></div>
       </div>
       <ul>
         <li><b>Hover</b> lifts the play stamp 4px up and left over a hard ink shadow; the thumbnail does not move.</li>
         <li><b>Active</b> presses the stamp flat.</li>
         <li><b>Focus</b> draws the ring around the whole thumbnail.</li>
-        <li><b>Busy</b> (<code>aria-busy="true"</code>) adds a spinner to the stamp while the player loads. The button keeps its label.</li>
+        <li><b>Busy</b> (<code>aria-busy="true"</code> with <code>aria-disabled="true"</code>, like every busy button) adds a spinner to the stamp while the player loads. The button keeps its label.</li>
       </ul>
     </section>
 
@@ -226,7 +229,7 @@
         <li>Under <code>--layout-breakpoint-md</code> (768px), cards stack one per row, full width.</li>
         <li>From 768px, the first card spans the row and the rest sit three across.</li>
         <li>The stamp stays the same size at every width; on a third-width card it still fits “Play · 12:45”.</li>
-        <li>The player opens in a full-screen sheet on phones and a centred dialog from 640px.</li>
+        <li>The player takes the card’s place at the card’s size, so playing a clip never moves the grid.</li>
       </ul>
     </section>
 
@@ -237,12 +240,11 @@
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
       <h3>Role and pattern</h3>
-      <p>A native <code>&lt;button type="button"&gt;</code> (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button</a>) that opens a modal player (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/">APG Dialog</a>). Only phrasing elements (<code>&lt;span&gt;</code>) go inside the button. The caption is a sibling, outside the button.</p>
+      <p>A native <code>&lt;button type="button"&gt;</code> (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button</a>) that swaps itself for a native <code>&lt;video controls&gt;</code> player in the same frame. Only phrasing elements (<code>&lt;span&gt;</code>) go inside the button. The caption is a sibling, outside the button.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>One stop per video.</td></tr>
-        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Opens the player and moves focus to its play control.</td></tr>
-        <tr><td><kbd>Esc</kbd></td><td>In the player: closes it and returns focus to the card.</td></tr>
+        <tr><td><kbd>Enter</kbd> / <kbd>Space</kbd></td><td>Starts the clip in place and moves focus to the player, whose native controls take over.</td></tr>
       </tbody></table>
       <h3>Focus</h3>
       <p>The 3px ring wraps the whole 16:9 thumbnail, with a 3px offset so it is visible against both the halftone and the page.</p>
@@ -277,8 +279,8 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" aria-label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary"></span><span class="video__play">Play · 6:12</span></button><span class="video__caption">Way Maker — live at Bethel Pentecostal, Hamilton</span></div></div><figcaption>The button’s label names the song and duration and starts with the visible word “Play”.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" aria-label="Watch video"><span class="art art--wide art--group" role="img" aria-label="Abigail leading a full sanctuary"></span><span class="video__play">Play · 6:12</span></button></div></div><figcaption>“Watch video” four times in a row, and the visible word “Play” is not in the name.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" data-state="hover" aria-label="Play Jireh, 7 minutes 2 seconds"><span class="art art--wide" role="img" aria-label="Abigail singing"></span><span class="video__play">Play · 7:02</span></button></div></div><figcaption>The hover shadow reads <code>--color-border-on-accent</code>, not a primitive.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas"><div class="video-demo"><div class="art art--wide" role="img" aria-label="Abigail singing"><span class="video__play">Play · 7:02</span></div></div></div><figcaption>A play stamp on a plain <code>&lt;div&gt;</code> with a click handler: not focusable, not announced as a button.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="video-demo"><button class="video" type="button" data-state="hover" aria-label="Play Great Is Thy Faithfulness, acoustic, 4 minutes 40 seconds"><span class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist in a small chapel"></span><span class="video__play">Play · 4:40</span></button></div></div><figcaption>The hover shadow reads <code>--color-border-on-accent</code>, not a primitive.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="video-demo"><div class="art art--wide" role="img" aria-label="Abigail with an acoustic guitarist in a small chapel"><span class="video__play">Play · 4:40</span></div></div></div><figcaption>A play stamp on a plain <code>&lt;div&gt;</code> with a click handler: not focusable, not announced as a button.</figcaption></figure>
       </div>
     </section>
 
@@ -311,7 +313,7 @@
         <tr><td><code>.video__play</code></td><td>Yellow stamp; lifts on hover, presses on active.</td></tr>
         <tr><td><code>.video__caption</code></td><td>Muted caption under the card.</td></tr>
         <tr><td><code>aria-label</code></td><td>Required: “Play {song}, {setting}, {duration in words}”.</td></tr>
-        <tr><td><code>aria-busy="true"</code></td><td>Spinner on the stamp while the player loads.</td></tr>
+        <tr><td><code>aria-busy="true"</code> + <code>aria-disabled="true"</code></td><td>Spinner on the stamp while the player loads; presses are ignored.</td></tr>
         <tr><td><code>data-state="hover|active|focus"</code></td><td>Docs and mocks only.</td></tr>
       </tbody></table>
     </section>
@@ -319,7 +321,7 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: four video cards in the media grid, “PLAY · 6:12”</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: four video cards in the media grid, “Play · 6:12”</li>
         <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: a wide skeleton in place of the videos</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “No videos yet” empty state</li>
       </ul>

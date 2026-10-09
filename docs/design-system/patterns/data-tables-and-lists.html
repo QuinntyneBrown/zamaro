@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -121,7 +124,7 @@
       <p>A search for Sat 14 Nov within 120 km of Burlington returns seven artists. That is a short list of very different things (a soloist, a 30-voice choir, a piano trio) and the church decides by looking. So the lineup is a set of admission tickets: artwork, name, style, distance and the price on the stub, the headliner first. Tables appear later, in the church’s own records, where rows are alike and numbers matter.</p>
       <ul>
         <li><b>Filter with chips</b> that toggle on and off, and <b>sort with one native select</b>. Both re-order in place and keep the date.</li>
-        <li><b>Show everything up to 12.</b> Past that, “Show 6 more”. Numbered pages only for records people return to.</li>
+        <li><b>Load a page, then show more.</b> The lineup loads 24 artists and “Show more artists” brings the rest (L2-010); profile reviews show 4, then 10 more at a time (L2-018). Numbered pages only for records people return to.</li>
         <li><b>Tables scroll inside their frame</b> on phones, with the first column pinned, unless they are four columns or fewer and can become a list.</li>
       </ul>
       <p>Composes: <a href="../components/ticket.html">ticket card</a>, <a href="../components/headliner.html">headliner</a>, <a href="../components/chip.html">chip</a>, <a href="../components/select.html">select</a>, <a href="../components/list.html">list</a>, <a href="../components/tour-dates.html">tour dates</a>, <a href="../components/setlist.html">setlist</a>, <a href="../components/table.html">table</a>, <a href="../components/pagination.html">pagination</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/save-toggle.html">save toggle</a> and <a href="../components/skeleton.html">skeleton</a>.</p>
@@ -143,17 +146,17 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Size and use</th><th scope="col">Pattern</th></tr></thead>
         <tbody>
-          <tr><td>Up to 12 items</td><td>Show them all. A search on one date rarely passes this.</td></tr>
-          <tr><td>More than 12, browsed once</td><td>“Show 6 more” below the list, with “Showing 12 of 18”. Focus moves to the first new item.</td></tr>
+          <tr><td>Up to one page (24 artists in the lineup)</td><td>Show them all, with no button (L2-010 AC3). A search on one date rarely passes this.</td></tr>
+          <tr><td>More than one page, browsed once</td><td>A button below the list: “Show more artists” appends the next page of the lineup (L2-010); reviews add 10 at a time, newest first (“Show 10 more”, L2-018); the audit log’s “Show older entries” follows a cursor. Focus moves to the first new item; the button goes when nothing is left.</td></tr>
           <tr><td>Records people come back to (requests, payouts)</td><td>Numbered <a href="../components/pagination.html">pagination</a>, 20 per page, page number in the URL.</td></tr>
           <tr><td>Never</td><td>Infinite scroll: it hides the footer, loses the place on Back and gives keyboard users no end.</td></tr>
         </tbody>
       </table></div>
       <h3>Filtering and sorting</h3>
       <ul>
-        <li><b>Chips</b> are toggle buttons in a <code>&lt;fieldset class="filters"&gt;</code> with a legend. Styles combine with “or” (Band or Gospel choir); price combines with “and”. Each chip shows how many artists it would match.</li>
+        <li><b>Chips</b> are toggle buttons in a <code>&lt;fieldset class="filters"&gt;</code> with a legend. Styles combine with “or” (Band or Gospel choir); price combines with “and”. Each chip shows how many artists it would match; a style that would match no one is disabled. With Under $800 on, that is Abigail Mensah ($650), Elijah Park ($350) and Daniel &amp; Ruth Okonkwo ($700): Solo vocalist 2, Hymns 2, Acoustic 2, and no Band or Gospel choir.</li>
         <li><b>The sort</b> is a native <code>&lt;select&gt;</code> in a <code>.field--inline</code>: “Closest first” (default), “Highest rated”, “Price, low to high”. Changing it re-orders the lineup in place; focus stays on the select.</li>
-        <li><b>The count</b> in the section kicker updates and is announced: “Sat 14 Nov · 3 free under $800 · within 120 km”.</li>
+        <li><b>The count</b> in the section kicker updates and is announced: “Sat 14 Nov · 3 free · within 120 km”.</li>
         <li>Filters and sort are part of the search, so they live in the URL and survive Back (see <a href="navigation-and-page-structure.html">navigation</a>).</li>
         <li>When filters rule everyone out, the <a href="empty-and-error-states.html">empty state</a> offers “Show all styles”.</li>
       </ul>
@@ -165,21 +168,21 @@
         <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
           <div class="stack stack--lg">
             <div class="section__head" style="margin-bottom: 0;">
-              <div><p class="overline section__kicker">Sat 14 Nov · 3 free under $800 · within 120 km</p><p style="font: var(--text-h2); text-transform: uppercase;">The lineup</p></div>
+              <div><p class="overline section__kicker">Sat 14 Nov · 3 free · within 120 km</p><p style="font: var(--text-h2); text-transform: uppercase;">The lineup</p></div>
               <div class="field field--inline"><label class="field__label" for="dt-sort">Sort</label><select class="select" id="dt-sort"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></div>
             </div>
             <fieldset class="filters">
               <legend>Filter by style</legend>
-              <button class="chip" type="button" aria-pressed="false">Band <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false">Solo vocalist <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false">Gospel choir <span class="chip__count">1<span class="visually-hidden"> artist</span></span></button><button class="chip" type="button" aria-pressed="false">Hymns <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="true">Under $800 <span class="chip__count">3<span class="visually-hidden"> artists</span></span></button>
+              <button class="chip" type="button" aria-pressed="false" disabled>Band</button><button class="chip" type="button" aria-pressed="false">Solo vocalist <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false" disabled>Gospel choir</button><button class="chip" type="button" aria-pressed="false">Hymns <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="true">Under $800 <span class="chip__count">3<span class="visually-hidden"> artists</span></span></button>
             </fieldset>
             <p class="visually-hidden" role="status">3 artists free under $800</p>
-            <ol class="lineup" role="list" aria-label="Artists free Saturday 14 November under $800" style="grid-template-columns: minmax(0, 1fr);">
+            <ol class="lineup" role="list" aria-label="Artists free Saturday 14 November 2026 under $800" style="grid-template-columns: minmax(0, 1fr);">
               <li class="ticket">
                 <div class="art ticket__art" role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
                 <div class="ticket__body">
-                  <span class="ticket__no">No. 03 · ★ 4.7</span>
+                  <span class="ticket__no">No. 02 · ★ 4.7 · 9 churches</span>
                   <p class="ticket__name"><a href="#structure">Elijah Park</a></p>
-                  <p class="ticket__meta">Solo vocalist · Acoustic guitar<br>Markham · 74 km from you</p>
+                  <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
                 </div>
                 <div class="ticket__stub">
                   <p class="ticket__price"><small>From</small>$350</p>
@@ -189,9 +192,9 @@
               <li class="ticket">
                 <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together at a piano"></div>
                 <div class="ticket__body">
-                  <span class="ticket__no">No. 06 · ★ 4.9</span>
+                  <span class="ticket__no">No. 03 · ★ 4.9 · 14 churches</span>
                   <p class="ticket__name"><a href="#structure">Daniel &amp; Ruth Okonkwo</a></p>
-                  <p class="ticket__meta">Duo · Hymns &amp; acoustic<br>Ajax · 97 km from you</p>
+                  <p class="ticket__meta">Duo · Acoustic, Hymns<br>Ajax · 97 km from you</p>
                 </div>
                 <div class="ticket__stub">
                   <p class="ticket__price"><small>From</small>$700</p>
@@ -201,33 +204,33 @@
             </ol>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Head with live count and sort, filter chips with counts, then tickets in sort order. Abigail Mensah (44 km, $650) is the headliner above and is not repeated.</span></div>
+        <div class="ds-example__caption"><span>Head with live count and sort, filter chips with counts, then tickets in sort order, numbered from No. 02 within the filtered results. Abigail Mensah (44 km, $650), the most-booked artist under $800, is the headliner above as No. 01 and is not repeated.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="section__head"&gt;
-  &lt;div&gt;&lt;p class="overline section__kicker"&gt;Sat 14 Nov · 3 free under $800 · within 120 km&lt;/p&gt;&lt;h2 id="lineup-title"&gt;The lineup&lt;/h2&gt;&lt;/div&gt;
+  &lt;div&gt;&lt;p class="overline section__kicker"&gt;Sat 14 Nov · 3 free · within 120 km&lt;/p&gt;&lt;h2 id="lineup-title"&gt;The lineup&lt;/h2&gt;&lt;/div&gt;
   &lt;div class="field field--inline"&gt;&lt;label class="field__label" for="sort"&gt;Sort&lt;/label&gt;&lt;select class="select" id="sort"&gt;…&lt;/select&gt;&lt;/div&gt;
 &lt;/div&gt;
 &lt;fieldset class="filters"&gt;
   &lt;legend&gt;Filter by style&lt;/legend&gt;
   &lt;button class="chip" type="button" aria-pressed="true"&gt;Under $800 &lt;span class="chip__count"&gt;3&lt;span class="visually-hidden"&gt; artists&lt;/span&gt;&lt;/span&gt;&lt;/button&gt;
 &lt;/fieldset&gt;
-&lt;ol class="lineup" role="list" aria-label="Artists free Saturday 14 November under $800"&gt;
+&lt;ol class="lineup" role="list" aria-label="Artists free Saturday 14 November 2026 under $800"&gt;
   &lt;li class="ticket"&gt;… &lt;h3 class="ticket__name"&gt;&lt;a href="/artists/elijah-park?date=2026-11-14"&gt;Elijah Park&lt;/a&gt;&lt;/h3&gt; …&lt;/li&gt;
 &lt;/ol&gt;</code></pre></details>
       </div>
       <h3>Show more</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stack">
-          <div class="cluster cluster--between"><p class="pagination__status" role="status">Showing 12 of 18</p><button class="btn" type="button">Show 6 more</button></div>
+          <div class="cluster cluster--between"><p class="pagination__status" role="status">Showing 24 of 30</p><button class="btn" type="button">Show more artists</button></div>
         </div>
-        <div class="ds-example__caption"><span>Under the last ticket when a wide search (200 km) returns more than 12 artists.</span></div>
+        <div class="ds-example__caption"><span>Under the last ticket when a wide search (200 km) returns more than 24 artists (L2-010): the next 6 append, focus moves to the first new ticket and the button is removed.</span></div>
       </div>
       <h3>Lists: saved artists and tour dates</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
           <ul class="list list--divided list--interactive" aria-label="Saved artists" style="flex: 1 1 20rem;">
-            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Gospel &amp; contemporary · Brampton · from $650</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
-            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">HC</span><span class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Five-piece band · Mississauga · from $1,800</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
-            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Spanish &amp; English band · North York · from $900</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
+            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Solo vocalist · Brampton · from $650</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
+            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">HC</span><span class="list__content"><span class="list__title">Hosanna Collective</span><span class="list__meta">Band · Mississauga · from $1,800</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
+            <li class="list__item"><a class="list__link" href="#structure"><span class="avatar" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Band · North York · from $900</span></span><span class="list__trail badge badge--free">Free Sat 14 Nov</span></a></li>
           </ul>
           <ul class="tour-dates" role="list" aria-label="Abigail Mensah’s upcoming dates" style="flex: 1 1 20rem;">
             <li aria-current="date"><span class="tour-dates__day"><small>Sat</small>14 Nov</span><span class="cluster"><span class="tour-dates__note">Your date</span></span><span class="badge badge--free">Free</span></li>
@@ -252,9 +255,9 @@
                 <th scope="col" class="table__actions"><span class="visually-hidden">Actions</span></th>
               </tr></thead>
               <tbody>
-                <tr><th scope="row" class="table__first">Marcus Bell Trio</th><td>ZAM-0087</td><td>Sun 7 Jun</td><td><span class="badge">Played</span></td><td class="table__num">$950</td><td class="table__actions"><button class="btn btn--sm" type="button" aria-label="Write a review for Marcus Bell Trio">Write a review</button></td></tr>
-                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>ZAM-0114</td><td>Sat 14 Nov</td><td><span class="badge badge--success">Accepted</span></td><td class="table__num">$650</td><td class="table__actions"><button class="btn btn--sm btn--primary" type="button" aria-label="Pay deposit for Abigail Mensah, Sat 14 Nov">Pay deposit</button></td></tr>
-                <tr data-state="hover"><th scope="row" class="table__first">Luz Viva</th><td>ZAM-0121</td><td>Sun 6 Dec</td><td><span class="badge badge--info">Waiting</span></td><td class="table__num">$900</td><td class="table__actions"><button class="btn btn--sm" type="button" aria-label="Withdraw request to Luz Viva">Withdraw</button></td></tr>
+                <tr><th scope="row" class="table__first">Marcus Bell Trio</th><td>ZAM-0097</td><td>Sun 25 Oct</td><td><span class="stamp stamp--flat stamp--confirmed">Confirmed</span></td><td class="table__num">$950</td><td class="table__actions"><button class="btn btn--sm" type="button" aria-label="Message Marcus Bell Trio">Message</button></td></tr>
+                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>ZAM-0114</td><td>Sat 14 Nov</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td><td class="table__num">$650</td><td class="table__actions"><button class="btn btn--sm" type="button" aria-label="Withdraw request to Abigail Mensah, Sat 14 Nov">Withdraw</button></td></tr>
+                <tr data-state="hover"><th scope="row" class="table__first">Luz Viva</th><td>ZAM-0088</td><td>Sat 5 Dec</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td><td class="table__num">$900</td><td class="table__actions"><button class="btn btn--sm btn--primary" type="button" aria-label="Pay $225 deposit for Luz Viva, Sat 5 Dec">Pay deposit</button></td></tr>
               </tbody>
             </table>
           </div>
@@ -268,7 +271,7 @@
             </ul>
           </nav>
         </div>
-        <div class="ds-example__caption"><span>Caption, row headers, a sortable date column (<code>aria-sort</code>), status as badges, money right-aligned, one action per row, numbered pages. The third row is hovered. Not in the mocks yet.</span></div>
+        <div class="ds-example__caption"><span>Caption, row headers, a sortable date column (<code>aria-sort</code>), status as flat stamps, money right-aligned, one action per row, numbered pages. The third row is hovered. The admin lists (pages/admin-applications, admin-bookings, admin-audit) use this table without pagination.</span></div>
       </div>
     </section>
 
@@ -277,11 +280,11 @@
         <thead><tr><th scope="col">State</th><th scope="col">Lineup</th><th scope="col">Table</th></tr></thead>
         <tbody>
           <tr><td>Loading</td><td>Ticket skeletons, chips disabled, status line, region <code>aria-busy</code></td><td>Five skeleton rows under the real header; caption and header stay</td></tr>
-          <tr><td>Filtered</td><td>Pressed chips, kicker count, announced count</td><td>Filter chips above the table; caption says “Your booking requests · Waiting”</td></tr>
+          <tr><td>Filtered</td><td>Pressed chips, kicker count, announced count</td><td>Filter chips above the table; caption says “Your booking requests · Requested”</td></tr>
           <tr><td>Sorted</td><td>Select value; order changes in place</td><td><code>aria-sort</code> on one header; icon solid and pointing the way</td></tr>
           <tr><td>Empty</td><td>“Sold out” <a href="empty-and-error-states.html">empty state</a> with nearby dates</td><td>A quiet empty state in the table’s frame: “No requests yet” + “Find who’s free”</td></tr>
           <tr><td>Error</td><td>Alert in the lineup’s place, filters kept</td><td>Alert in the table’s frame, header kept</td></tr>
-          <tr><td>Partial</td><td>“Showing 12 of 18” + “Show 6 more”</td><td>“Page 1 of 2”</td></tr>
+          <tr><td>Partial</td><td>“Showing 24 of 30” + “Show more artists”</td><td>“Page 1 of 2”</td></tr>
           <tr><td>Row hover / selected</td><td>Ticket lifts and tilts</td><td>Subtle fill; selected rows (<code>aria-selected</code>) get the yellow tint and a bulk bar</td></tr>
         </tbody>
       </table></div>
@@ -296,14 +299,14 @@
       </table></div>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, light theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, light theme">2</a></div><span class="badge badge--success">Accepted</span></div></div>
-        <div data-theme="dark"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, dark theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, dark theme">2</a></div><span class="badge badge--success">Accepted</span></div></div>
+        <div data-theme="light"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, light theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, light theme">2</a></div><span class="stamp stamp--flat stamp--accepted">Accepted</span></div></div>
+        <div data-theme="dark"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, dark theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, dark theme">2</a></div><span class="stamp stamp--flat stamp--accepted">Accepted</span></div></div>
       </div>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Lineup:</b> one ticket per row on phones and tablets, two from 1024px. Below 640px the price stub moves under the body, with the perforation across.</li>
+        <li><b>Lineup:</b> one ticket per row on phones and tablets, two from 992px. Below 576px the price stub moves under the body, with the perforation across.</li>
         <li><b>Section head:</b> the sort sits beside the title when there is room and wraps under it on phones. Chips wrap onto as many lines as they need; they never scroll sideways.</li>
         <li><b>Tables with five columns or more</b> scroll inside <code>.table-wrap</code>; the first column (<code>.table__first</code>, the artist) stays pinned so each row keeps its name. The page itself never scrolls sideways.</li>
         <li><b>Tables with four columns or fewer</b> become a list below 768px: each row a <code>.list__item</code> with the first column as the title and the rest as meta.</li>
@@ -318,12 +321,12 @@
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd></td><td>Sort, each chip, then per ticket: the name link, then the save toggle.</td></tr>
-        <tr><td><kbd>Space</kbd> / <kbd>Enter</kbd></td><td>Toggles a chip; sorts by a column (again to reverse); activates “Show 6 more”.</td></tr>
+        <tr><td><kbd>Space</kbd> / <kbd>Enter</kbd></td><td>Toggles a chip; sorts by a column (again to reverse); activates “Show more artists”.</td></tr>
         <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>Changes the sort select; the lineup re-orders without moving focus.</td></tr>
         <tr><td><kbd>Shift</kbd>+<kbd>Scroll</kbd> or arrows in the table frame</td><td>Scrolls a wide table sideways; the frame is focusable (<code>tabindex="0"</code>) when it overflows.</td></tr>
       </tbody></table>
       <h3>Focus</h3>
-      <p>Filtering and sorting keep focus where it is. “Show 6 more” moves focus to the first new ticket’s link. After a column sort, focus stays on the header button. A ticket lifts on <code>:focus-within</code> so a keyboard user sees which card the link belongs to.</p>
+      <p>Filtering and sorting keep focus where it is. “Show more artists” moves focus to the first new ticket’s link. After a column sort, focus stays on the header button. A ticket lifts on <code>:focus-within</code> so a keyboard user sees which card the link belongs to.</p>
       <h3>Labelling</h3>
       <p>Chip names include their count with a hidden noun: “Under $800, 3 artists”. Row actions repeat the row’s name: “Pay deposit for Abigail Mensah, Sat 14 Nov”, with the visible label first (WCAG 2.5.3). The empty actions header is labelled “Actions” for screen readers. Result counts are announced through <code>role="status"</code>.</p>
       <h3>Contrast</h3>
@@ -350,7 +353,7 @@
         <li><b>Status words</b> are a fixed set, with a badge tone each: Waiting (info), Accepted (success), Booked, Played, Declined, Cancelled. Never “Pending approval”.</li>
         <li><b>Sort options</b> say the order: “Closest first”, “Highest rated”, “Price, low to high”.</li>
         <li><b>Chip labels</b> are styles and limits people use: “Gospel choir”, “Hymns”, “Spanish”, “Under $800”.</li>
-        <li><b>Counts</b> use numerals: “Showing 12 of 18”, “Page 1 of 2 · 23 requests”.</li>
+        <li><b>Counts</b> use numerals: “Showing 24 of 30”, “Page 1 of 2 · 23 requests”.</li>
       </ul>
     </section>
 
@@ -360,7 +363,7 @@
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span><select class="select"><option>Closest first</option></select></label></div><figcaption>Four mocks set <code>style="min-width: 12rem"</code> inline on the sort field.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Hymns <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false" disabled>Band</button></div><figcaption>The count is full-colour text; disabled chips look disabled.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Hymns <span class="chip__count" style="opacity: 0.75;">2</span></button></div><figcaption>The count faded with <code>opacity: .75</code> dropped below 4.5:1 on the pressed chip.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster cluster--between"><p class="pagination__status">Showing 12 of 18</p><button class="btn btn--sm" type="button">Show 6 more</button></div></div><figcaption>Say how many are left and let the person ask for them.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster cluster--between"><p class="pagination__status">Showing 4 of 38, newest first</p><button class="btn btn--sm" type="button">Show 10 more</button></div></div><figcaption>Say how many are left and let the person ask for them.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="table-wrap"><table class="table table--dense"><caption>Artists</caption><thead><tr><th scope="col">Name</th><th scope="col" class="table__num">Price</th><th scope="col" class="table__num">km</th></tr></thead><tbody><tr><td>Elijah Park</td><td class="table__num">350</td><td class="table__num">74</td></tr></tbody></table></div></div><figcaption>A table of artists strips out the pictures and styles churches choose by.</figcaption></figure>
       </div>
     </section>
@@ -372,6 +375,10 @@
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: disabled chips and ticket skeletons</li>
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: a pressed chip (“Gospel choir”) that leads to an empty lineup</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: tour dates with Free and Booked badges and “Pick”, the setlist, the reviews list</li>
+        <li><a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/bookings/past.html">past</a>, <a href="../../mocks/pages/bookings/no-results.html">no-results</a> and <a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/requests/no-results.html">no-results</a>: booking and request rows with status stamps, filters and empty results</li>
+        <li><a href="../../mocks/pages/saved/default.html">pages/saved/default</a>: saved tickets with actions</li>
+        <li><a href="../../mocks/pages/admin-applications/default.html">pages/admin-applications/default</a>, <a href="../../mocks/pages/admin-bookings/default.html">pages/admin-bookings/default</a>, <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a>: tables with row actions, search and “Show older entries”</li>
+        <li><a href="../../mocks/pages/account/default.html">pages/account/default</a>: the signed-in devices list</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
@@ -380,7 +387,7 @@
         <li><code>.chip__count</code> used <code>opacity: .75</code>, a contrast risk. It now uses the full text colour.</li>
         <li>Pressed chips borrowed <code>--color-fg-default</code> and <code>--color-bg-canvas</code>. They now use the inverse pair.</li>
         <li>Ticket notches always painted <code>--color-bg-canvas</code>; they now read <code>--ticket-notch-bg</code>, so tickets on a card show the right colour. The notch grew from 0.9rem to 1rem.</li>
-        <li>Tables, pagination and “Show more” are not in the mocks yet; they are part of the core set and the product needs them for booking requests and artist payouts.</li>
+        <li>Tables are in the admin mocks; numbered pagination is still not in any mock. The lists that grow load more in place instead: “Show 10 more” on <a href="../../mocks/pages/artist-reviews/default.html">pages/artist-reviews/default</a> (L2-018) and “Show older entries” on <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a>; “Show more artists” (L2-010) is not drawn because the mocked lineup has seven artists. The guidance here said “Show everything up to 12, then Show 6 more”; it now follows L2-010’s 24-per-page and the button copy in the specs. Booker and artist lists use <code>.booking-list</code> rows rather than tables.</li>
       </ul>
     </section>
 

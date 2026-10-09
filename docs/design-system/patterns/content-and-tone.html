@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -181,7 +184,7 @@
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Verb</th><th scope="col">For</th><th scope="col">Label</th></tr></thead>
         <tbody>
-          <tr><td>Show</td><td>Running a search or revealing more</td><td>“Show the lineup”, “Show 6 more”, “Show all styles”</td></tr>
+          <tr><td>Show</td><td>Running a search or revealing more</td><td>“Show the lineup”, “Show more artists”, “Show 10 more”</td></tr>
           <tr><td>Book / Request</td><td>Starting or sending a booking</td><td>“Book for Sat 14 Nov”, “Request to book · Sat 14 Nov”</td></tr>
           <tr><td>Pick</td><td>Choosing another date</td><td>“Pick” (named “Pick Fri 20 Nov”)</td></tr>
           <tr><td>Save / Remove</td><td>The save toggle</td><td>“Save”, “Saved”; named “Save Elijah Park to your saved artists”</td></tr>
@@ -198,15 +201,15 @@
         <thead><tr><th scope="col">Thing</th><th scope="col">Write</th><th scope="col">Not</th><th scope="col">Notes</th></tr></thead>
         <tbody>
           <tr><td>Date in the interface</td><td>Sat 14 Nov</td><td>11/14/2026, 14.11.26, November 14th</td><td>Weekday first; the weekday matters for worship.</td></tr>
-          <tr><td>Date in a sentence or announcement</td><td>Saturday 14 November</td><td>Sat. Nov. 14</td><td>Full words read better aloud.</td></tr>
-          <tr><td>Year</td><td>Sun 7 Jun 2026</td><td>Always adding the year</td><td>Only when the date is not in the next 12 months.</td></tr>
+          <tr><td>Date in a sentence or announcement</td><td>Saturday 14 November 2026</td><td>Sat. Nov. 14</td><td>Full words read better aloud; long dates always carry the year (L2-110).</td></tr>
+          <tr><td>Year on a short date</td><td>Sat 9 Jan 2027</td><td>Sat 14 Nov 2026</td><td>Only when the date is outside the current year (L2-110).</td></tr>
           <tr><td>Date range</td><td>Fri 20 – Sun 22 Nov</td><td>20-22 Nov</td><td>En dash with spaces.</td></tr>
-          <tr><td>Time</td><td>10:30 am, 7 pm</td><td>19:00, 7:00 PM</td><td>No “:00” on the hour.</td></tr>
+          <tr><td>Time</td><td>10:30 a.m., 7:00 p.m.</td><td>19:00, 7 PM, 7 pm</td><td>12-hour clock with “a.m.” and “p.m.”, minutes always shown (L2-110).</td></tr>
           <tr><td>Money</td><td>$650, $1,800, $162.50</td><td>$650.00, 1800 dollars, CAD 650</td><td>Cents only when there are cents. Prices are Canadian dollars.</td></tr>
           <tr><td>Price from</td><td>From $650</td><td>$650+</td><td>“per service · travel included” under it.</td></tr>
           <tr><td>Percent</td><td>25%, 8%</td><td>25 percent</td><td>No space.</td></tr>
           <tr><td>Distance</td><td>44 km, 120 km · 1.5 hr</td><td>44km, 44 kilometres</td><td>Space before the unit.</td></tr>
-          <tr><td>Rating</td><td>★ 4.9 (38 churches)</td><td>4.9/5</td><td>Named “Rated 4.9 out of 5 by 38 churches”.</td></tr>
+          <tr><td>Rating</td><td>★ 4.9 · 38 churches</td><td>4.9/5</td><td>Named “Rated 4.9 out of 5 by 38 churches”.</td></tr>
           <tr><td>Counts</td><td>7 free, 3 saved artists</td><td>seven free</td><td>Numerals, except at the start of a sentence: “Seven artists are free…”.</td></tr>
           <tr><td>Booking number</td><td>No. ZAM-0114</td><td>#ZAM0114</td><td>Read aloud as “Booking number ZAM-0114”.</td></tr>
           <tr><td>Detail separator</td><td>Brampton · 44 km</td><td>Brampton - 44 km, Brampton | 44 km</td><td>A middle dot with spaces.</td></tr>
@@ -219,10 +222,10 @@
         <div class="ds-example__canvas ds-example__canvas--stack">
           <div class="alert alert--danger" role="alert">
             <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>
-            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November. Your date, location and filters are kept.</p></div>
+            <div class="stack stack--sm"><p class="alert__title">We lost the signal</p><p>We couldn’t load who’s free on Saturday 14 November 2026. Your date, location and filters are kept.</p></div>
             <div class="alert__actions"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button></div>
           </div>
-          <div class="field" style="max-width: 24rem;"><label class="field__label" for="ct-church">Church</label><input class="input" id="ct-church" type="text" aria-invalid="true" aria-describedby="ct-church-err"><span class="field__error" id="ct-church-err"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name so Abigail knows who’s asking.</span></div>
+          <div class="field" style="max-width: 24rem;"><label class="field__label" for="ct-church">Church</label><input class="input" id="ct-church" type="text" aria-invalid="true" aria-describedby="ct-church-err"><span class="field__error" id="ct-church-err">Enter your church’s name so Abigail knows who’s asking.</span></div>
         </div>
         <div class="ds-example__caption"><span>A region error: what happened, what is kept, Try again. A field error: what is missing and why it matters.</span></div>
       </div>
@@ -237,7 +240,7 @@
           <tr><td>Poster detail</td><td>Seven artists are free that Saturday and will drive to Burlington.</td><td>Checking the calendars of every artist who drives to Burlington…</td><td>Christmas Eve is the busiest night of the year for worship artists.</td><td>Seven praise and worship artists are usually free on a Saturday in November.</td></tr>
           <tr><td>Search button</td><td>Show the lineup</td><td>Checking calendars…</td><td>Show the lineup</td><td>Show the lineup</td></tr>
           <tr><td>Booking submit</td><td>Request to book · Sat 14 Nov</td><td>Sending request…</td><td>Not applicable</td><td>Try again</td></tr>
-          <tr><td>Profile headline</td><td>Abigail Mensah</td><td>Loading artist profile (announced only)</td><td>Miriam Haile, with “New to Zamaro” in the kicker</td><td>This profile didn’t load</td></tr>
+          <tr><td>Profile headline</td><td>Abigail Mensah</td><td>Loading the artist’s profile… (announced only)</td><td>Miriam Haile, with “New to Zamaro” in the kicker</td><td>This profile didn’t load</td></tr>
         </tbody>
       </table></div>
       <div class="ds-example">
@@ -306,7 +309,7 @@
           <tr><td>Discover poster kicker</td><td>Worship artists within driving distance of Toronto</td><td>Sets the scope once.</td></tr>
           <tr><td>Discover headline</td><td>Who’s free Sat 14 Nov</td><td>The date is the hero.</td></tr>
           <tr><td>Search submit</td><td>Show the lineup</td><td>Busy: “Checking calendars…”</td></tr>
-          <tr><td>Loading status</td><td>Finding who’s free on Saturday 14 November…</td><td>After 8 s: “Still checking — thanks for waiting.”</td></tr>
+          <tr><td>Loading status</td><td>Finding who’s free on Saturday 14 November 2026…</td><td>After 8 s: “Still checking — thanks for waiting.”</td></tr>
           <tr><td>Results kicker</td><td>Sat 14 Nov · 7 free · within 120 km</td><td>Updates with filters.</td></tr>
           <tr><td>Headliner kicker</td><td>No. 01 · Most booked this autumn</td><td>Earned, never paid.</td></tr>
           <tr><td>Save toggle names</td><td>Save Elijah Park to your saved artists / Remove Luz Viva from your saved artists</td><td>Says what pressing does.</td></tr>
@@ -318,7 +321,7 @@
           <tr><td>Booking submit</td><td>Request to book · Sat 14 Nov</td><td>Busy: “Sending request…”</td></tr>
           <tr><td>Booking fine print</td><td>Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</td><td>Under every booking submit.</td></tr>
           <tr><td>Field error</td><td>Enter your church’s name so Abigail knows who’s asking.</td><td>Why it matters, not “Required”.</td></tr>
-          <tr><td>Request sent</td><td>Request sent to Abigail. We’ll e-mail you when she answers.</td><td>Next step included.</td></tr>
+          <tr><td>Request sent</td><td>Request sent to Abigail. We’ll email you when she answers.</td><td>Next step included.</td></tr>
           <tr><td>Accepted banner</td><td>Abigail accepted Sat 14 Nov. Pay the $162.50 deposit to lock it in.</td><td>Stays until paid.</td></tr>
           <tr><td>Cancel dialog</td><td>Cancel your booking with Abigail? · Cancel booking · Keep booking</td><td>Body gives the money.</td></tr>
           <tr><td>No results</td><td>Nobody’s free Christmas Eve within 40 km</td><td>Stamp “Sold out”; nearby dates follow.</td></tr>
@@ -332,7 +335,7 @@
       <h3>Rules of thumb</h3>
       <ul>
         <li>Canadian spelling: colour, centre, cheque, travelled, with -ize endings (organization).</li>
-        <li>“E-mail” with a hyphen in copy; “Email” as a verb on a button is fine (“Email the Zamaro team”).</li>
+        <li>“Email” with no hyphen, as noun and verb, following the strings in the specs (“Check your email…”, “Email or password is incorrect.”).</li>
         <li>Use first names after the first mention: “Abigail Mensah” on the ticket, “Abigail” in the stub.</li>
         <li>“Church” for the booker, “artist” for the musician, “service” or “event” for the gathering. Not “client”, “talent” or “gig”.</li>
         <li>No exclamation marks, no emoji, no “Oops”.</li>
@@ -360,14 +363,14 @@
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: the no-results formula and the “Sold out” stamp</li>
         <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “We lost the signal” and what is kept</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: bio voice, setlist, tour dates, reviews, stub fine print, save and share names</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the announced “Loading artist profile”</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the announced “Loading the artist’s profile…”</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Fresh on the bill” and “Opening night”</li>
         <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: “Show postponed” and “It’s on our side, not yours.”</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>Field help “✓ Abigail is free Sat 14 Nov” used a typed ✓. It is now an <code>.inline-msg--success</code> with an icon, and the text alone carries the meaning.</li>
-        <li>The empty state’s “Search within 120 km · 2 choirs free” is too long for one line at 360px. The count moved into the sentence.</li>
+        <li>The empty state’s “Search within 120 km · 2 choirs free” was too long for 360px. It is now “Search within 120 km · 2 free” (L2-011), and the sentence above names the choirs.</li>
         <li>Seven inline display-font shorthands in the mocks are now role tokens (<code>--text-figure</code>, <code>--text-figure-lg</code>, <code>--text-h4</code>), so copy set in display type is styled the same everywhere.</li>
       </ul>
     </section>

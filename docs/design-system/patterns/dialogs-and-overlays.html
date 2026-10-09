@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dialogs &amp; overlays — Zamaro design system</title>
-<meta name="description" content="When Zamaro interrupts with a dialog, a bottom sheet, a menu or a tooltip, and when it uses a page instead; how overlays stack; and which booking steps need a confirmation dialog.">
+<meta name="description" content="When Zamaro interrupts with a dialog (full screen on phones), a drawer, a menu or a tooltip, and when it uses a page instead; how overlays stack; and which booking steps need a confirmation dialog.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -121,7 +124,8 @@
       <p>The mocks deliberately keep booking on the page: the request form is the ticket stub beside the profile, not a pop-up, so the church can scroll the videos and setlist while writing. Overlays are kept for four jobs:</p>
       <ul>
         <li><b>Dialog</b>: a decision that moves money or ends something. “Lock in Sat 14 Nov”, “Cancel your booking with Abigail?”.</li>
-        <li><b>Bottom sheet</b>: the same dialog on a phone. Below 640px every dialog becomes a sheet from the bottom edge.</li>
+        <li><b>Full-screen dialog</b>: the same dialog on a phone. Below 576px (XS) every dialog fills the screen, with its title and close button fixed at the top (L2-099).</li>
+        <li><b>Navigation drawer</b>: the compact header’s menu (<code>.dialog--drawer</code>), full height from the left; and the <b>anchored account menu</b> (<code>.dialog--menu</code>) under the avatar.</li>
         <li><b>Menu</b>: a short list of actions or places tied to one control. The account menu behind Naomi’s avatar.</li>
         <li><b>Tooltip</b>: the name of an icon-only control, on hover and focus. Never essential information.</li>
       </ul>
@@ -133,7 +137,7 @@
         <thead><tr><th scope="col">Need</th><th scope="col">Use</th><th scope="col">Example</th><th scope="col">Not</th></tr></thead>
         <tbody>
           <tr><td>Confirm a decision that moves money or loses something</td><td><a href="../components/dialog.html">Dialog</a>; danger variant when something is lost</td><td>Pay the $162.50 deposit; cancel a booking</td><td>A toast with Undo: money can’t be un-sent</td></tr>
-          <tr><td>The same decision on a phone</td><td>Bottom sheet (the dialog below 640px)</td><td>Pay the deposit from the e-mail link on a phone</td><td>A full new page that loses context</td></tr>
+          <tr><td>The same decision on a phone</td><td>Full-screen dialog (the dialog below 576px)</td><td>Pay the deposit from the email link on a phone</td><td>A full new page that loses context</td></tr>
           <tr><td>A few actions or places for one control</td><td><a href="../components/menu.html">Menu</a></td><td>Account: Your requests, Saved artists, Church details, Sign out</td><td>A dialog listing links</td></tr>
           <tr><td>Name an icon-only control</td><td><a href="../components/tooltip.html">Tooltip</a></td><td>“Share Abigail’s profile” on the share icon</td><td>Prices, deadlines or rules; they go in the page</td></tr>
           <tr><td>A long task, something people link to, or something they compare against</td><td>A page</td><td>The artist profile; the booking request; Your requests</td><td>A dialog the person scrolls inside</td></tr>
@@ -146,7 +150,7 @@
         <thead><tr><th scope="col">Step</th><th scope="col">Dialog?</th><th scope="col">Why</th></tr></thead>
         <tbody>
           <tr><td>Request to book</td><td>No</td><td>Nothing is charged and the request can be withdrawn. The stub shows “Request sent to Abigail” in place.</td></tr>
-          <tr><td>Abigail accepts</td><td>No</td><td>It happens while Naomi is away: e-mail plus a banner (see <a href="notifications.html">notifications</a>).</td></tr>
+          <tr><td>Abigail accepts</td><td>No</td><td>It happens while Naomi is away: email plus a banner (see <a href="notifications.html">notifications</a>).</td></tr>
           <tr><td>Pay the 25% deposit ($162.50)</td><td>Yes</td><td>Money moves. The dialog shows the fee, the deposit, the balance and the cancellation deadline before the card is charged.</td></tr>
           <tr><td>Cancel before Sat 31 Oct</td><td>Yes, danger</td><td>The booking ends. The dialog says the deposit comes back in full.</td></tr>
           <tr><td>Cancel from Sat 31 Oct</td><td>Yes, danger</td><td>The booking ends and the deposit is kept. The dialog says so in dollars.</td></tr>
@@ -177,13 +181,13 @@
           <div class="dialog-stage">
             <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="dg1-title" aria-describedby="dg1-desc">
               <div class="dialog__header">
-                <div><span class="overline dialog__kicker">No. ZAM-0114 · Abigail accepted</span><p class="dialog__title" id="dg1-title">Lock in Sat 14 Nov</p></div>
+                <div><span class="dialog__kicker">No. ZAM-0114 · Abigail accepted</span><p class="dialog__title" id="dg1-title">Lock in Sat 14 Nov</p></div>
                 <button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
               </div>
               <div class="dialog__body">
                 <p id="dg1-desc">Pay the deposit and the date is yours. The rest is due after the service.</p>
                 <dl class="dl dl--horizontal">
-                  <div><dt>Artist fee</dt><dd>$650 · Sunday service</dd></div>
+                  <div><dt>Artist fee</dt><dd>$650 · Worship night</dd></div>
                   <div><dt>Deposit today</dt><dd><b>$162.50</b> (25%)</dd></div>
                   <div><dt>After the event</dt><dd>$487.50</dd></div>
                   <div><dt>Free cancellation</dt><dd>Until Sat 31 Oct</dd></div>
@@ -196,10 +200,10 @@
             </div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Kicker with the booking number, a title that names the date, the money as a description list, the primary action first.</span></div>
+        <div class="ds-example__caption"><span>Kicker with the booking number, a title that names the date, the money as a description list, the way back first and the primary action last.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dialog class="dialog" aria-labelledby="pay-title" aria-describedby="pay-desc"&gt;
   &lt;div class="dialog__header"&gt;
-    &lt;div&gt;&lt;span class="overline dialog__kicker"&gt;No. ZAM-0114 · Abigail accepted&lt;/span&gt;&lt;h2 class="dialog__title" id="pay-title"&gt;Lock in Sat 14 Nov&lt;/h2&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;span class="dialog__kicker"&gt;No. ZAM-0114 · Abigail accepted&lt;/span&gt;&lt;h2 class="dialog__title" id="pay-title"&gt;Lock in Sat 14 Nov&lt;/h2&gt;&lt;/div&gt;
     &lt;button class="btn btn--ghost btn--icon" type="button" aria-label="Close"&gt;…&lt;/button&gt;
   &lt;/div&gt;
   &lt;div class="dialog__body"&gt;&lt;p id="pay-desc"&gt;…&lt;/p&gt;&lt;dl class="dl dl--horizontal"&gt;…&lt;/dl&gt;&lt;/div&gt;
@@ -215,16 +219,16 @@
         <div class="ds-example__canvas ds-example__canvas--flush">
           <div class="dialog-stage">
             <div class="dialog dialog--static dialog--danger dialog--sm" role="alertdialog" aria-modal="true" aria-labelledby="dg2-title" aria-describedby="dg2-desc">
-              <div class="dialog__header"><p class="dialog__title" id="dg2-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel your booking with Abigail?</p></div>
-              <div class="dialog__body"><p id="dg2-desc">Sat 14 Nov is 36 days away, so cancelling is free. Your $162.50 deposit goes back to your card.</p></div>
+              <div class="dialog__header"><div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg></div><div style="flex: 1;"><p class="dialog__title" id="dg2-title">Cancel the worship night with Abigail?</p></div></div>
+              <div class="dialog__body"><p id="dg2-desc">It’s 9 days to the event, inside the 14-day window. Your $162.50 deposit won’t be refunded.</p></div>
               <div class="dialog__footer">
-                <button class="btn btn--danger" type="button">Cancel booking</button>
                 <button class="btn" type="button" data-state="focus">Keep booking</button>
+                <button class="btn btn--danger" type="button">Cancel and lose $162.50</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Danger rule on top, warning icon, consequences in dollars and days. Focus starts on “Keep booking”, the safe choice.</span></div>
+        <div class="ds-example__caption"><span>The late cancellation (inside 14 days, the deposit is lost): danger rule on top, the danger header icon, consequences in dollars and days. The safe “Keep booking” comes first and takes focus. A free cancellation more than 14 days out is a plain dialog with the info icon.</span></div>
       </div>
       <h3>Account menu and tooltip</h3>
       <div class="ds-example">
@@ -243,15 +247,15 @@
         </div>
         <div class="ds-example__caption"><span>The tooltip names an icon-only button and is its label (<code>aria-labelledby</code>). The account menu opens under the avatar; focus is on the second item.</span></div>
       </div>
-      <h3>Phone: the bottom sheet</h3>
-      <p>Below 640px <code>.dialog</code> becomes a sheet: full width, anchored to the bottom, at most 92% of the screen tall, with the footer pinned above the safe area and the buttons stretched to equal widths. The frame below forces that layout at any width.</p>
+      <h3>Phone: the full-screen dialog</h3>
+      <p>Below 576px (XS) <code>.dialog</code> fills the screen (L2-099): full width and the full <code>100dvh</code> height, no frame or shadow. The header with the title and close button stays at the top, only the body scrolls, and the footer is pinned above the safe area with the buttons stretched to equal widths, so the close button is always reachable without scrolling. The frame below forces that layout at any width.</p>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="justify-content: center;">
-          <div style="display: flex; flex-direction: column; justify-content: flex-end; width: 100%; max-width: 22rem; min-height: 28rem; background: var(--color-bg-backdrop); border: var(--border-width-thick) solid var(--color-border-strong);">
-            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="dg3-title" style="width: 100%; margin: 0; border-inline: 0; border-bottom: 0; box-shadow: none;">
-              <div class="dialog__header"><p class="dialog__title" id="dg3-title">Lock in Sat 14 Nov</p><button class="btn btn--ghost btn--icon" type="button" aria-label="Close"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-              <div class="dialog__body"><p>Deposit today <b>$162.50</b>. Free cancellation until Sat 31 Oct.</p></div>
-              <div class="dialog__footer"><button class="btn btn--primary" type="button" style="flex: 1 1 auto;">Pay $162.50</button><button class="btn" type="button" style="flex: 1 1 auto;">Not now</button></div>
+          <div style="display: flex; flex-direction: column; width: 100%; max-width: 22rem; height: 28rem; border: var(--border-width-thick) solid var(--color-border-strong);">
+            <div class="dialog dialog--static" role="dialog" aria-modal="true" aria-labelledby="dg3-title" style="width: 100%; height: 100%; max-height: none; margin: 0; border: 0; box-shadow: none;">
+              <div class="dialog__header"><p class="dialog__title" id="dg3-title">Lock in Sat 14 Nov</p><button class="close" type="button" aria-label="Close"><svg class="icon icon--sm" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+              <div class="dialog__body" style="flex: 1 1 auto;"><p>Deposit today <b>$162.50</b>. Free cancellation until Sat 31 Oct.</p></div>
+              <div class="dialog__footer"><button class="btn" type="button" style="flex: 1 1 auto;">Not now</button><button class="btn btn--primary" type="button" style="flex: 1 1 auto;">Pay $162.50</button></div>
             </div>
           </div>
         </div>
@@ -264,7 +268,7 @@
         <thead><tr><th scope="col">State</th><th scope="col">What changes</th><th scope="col">Markup</th></tr></thead>
         <tbody>
           <tr><td>Open</td><td>Backdrop, page inert, dialog slides up 16px and fades in.</td><td><code>dialog.showModal()</code></td></tr>
-          <tr><td>Busy</td><td>Body dims; the primary says “Paying…” and spins; Close and Not now still work until the charge starts.</td><td><code>aria-busy="true"</code> on the dialog and the primary</td></tr>
+          <tr><td>Busy</td><td>Body dims; the primary says “Paying…” and spins; Close and Not now still work until the charge starts.</td><td><code>aria-busy="true"</code> on the dialog; <code>aria-busy="true"</code> and <code>aria-disabled="true"</code> on the primary</td></tr>
           <tr><td>Failed</td><td>An alert at the top of the body; the primary becomes “Try again”. Nothing behind the dialog changes.</td><td><code>.alert--danger.alert--compact</code>, <code>role="alert"</code></td></tr>
           <tr><td>Done</td><td>The dialog closes; focus returns to the button that opened it; the page shows the result.</td><td><code>dialog.close()</code></td></tr>
           <tr><td>Menu open</td><td>The trigger shows <code>aria-expanded="true"</code>; the first item has focus.</td><td><code>.menu</code> without <code>hidden</code></td></tr>
@@ -277,7 +281,7 @@
             <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="dg4-title" aria-busy="true">
               <div class="dialog__header"><p class="dialog__title" id="dg4-title">Lock in Sat 14 Nov</p></div>
               <div class="dialog__body"><p>Deposit today <b>$162.50</b>.</p></div>
-              <div class="dialog__footer"><button class="btn btn--primary" type="button" aria-busy="true">Paying…</button><button class="btn" type="button" disabled>Not now</button></div>
+              <div class="dialog__footer"><button class="btn" type="button" disabled>Not now</button><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Paying…</button></div>
             </div>
             <div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="true" aria-labelledby="dg5-title">
               <div class="dialog__header"><p class="dialog__title" id="dg5-title">Lock in Sat 14 Nov</p></div>
@@ -285,7 +289,7 @@
                 <div class="alert alert--danger alert--compact" role="alert"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div class="stack stack--sm"><p class="alert__title">Your card was declined</p><p>Nothing was charged. Try again or use another card.</p></div></div>
                 <p>Deposit today <b>$162.50</b>.</p>
               </div>
-              <div class="dialog__footer"><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button><button class="btn" type="button">Not now</button></div>
+              <div class="dialog__footer"><button class="btn" type="button">Not now</button><button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button></div>
             </div>
           </div>
         </div>
@@ -293,18 +297,18 @@
       </div>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="dialog dialog--static dialog--danger" role="alertdialog" aria-modal="true" aria-labelledby="th1-title" style="width: 100%;"><div class="dialog__header"><p class="dialog__title" id="th1-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel booking?</p></div><div class="dialog__body"><p>Your $162.50 deposit comes back.</p></div><div class="dialog__footer"><button class="btn btn--danger btn--sm" type="button">Cancel booking</button><button class="btn btn--sm" type="button">Keep booking</button></div></div></div>
-        <div data-theme="dark"><div class="dialog dialog--static dialog--danger" role="alertdialog" aria-modal="true" aria-labelledby="th2-title" style="width: 100%;"><div class="dialog__header"><p class="dialog__title" id="th2-title"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Cancel booking?</p></div><div class="dialog__body"><p>Your $162.50 deposit comes back.</p></div><div class="dialog__footer"><button class="btn btn--danger btn--sm" type="button">Cancel booking</button><button class="btn btn--sm" type="button">Keep booking</button></div></div></div>
+        <div data-theme="light"><div class="dialog dialog--static dialog--danger" role="alertdialog" aria-modal="true" aria-labelledby="th1-title" style="width: 100%;"><div class="dialog__header"><div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg></div><div style="flex: 1;"><p class="dialog__title" id="th1-title">Cancel the worship night with Abigail?</p></div></div><div class="dialog__body"><p>Your $162.50 deposit won’t be refunded.</p></div><div class="dialog__footer"><button class="btn btn--sm" type="button">Keep booking</button><button class="btn btn--danger btn--sm" type="button">Cancel and lose $162.50</button></div></div></div>
+        <div data-theme="dark"><div class="dialog dialog--static dialog--danger" role="alertdialog" aria-modal="true" aria-labelledby="th2-title" style="width: 100%;"><div class="dialog__header"><div class="dialog__icon dialog__icon--danger" aria-hidden="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg></div><div style="flex: 1;"><p class="dialog__title" id="th2-title">Cancel the worship night with Abigail?</p></div></div><div class="dialog__body"><p>Your $162.50 deposit won’t be refunded.</p></div><div class="dialog__footer"><button class="btn btn--sm" type="button">Keep booking</button><button class="btn btn--danger btn--sm" type="button">Cancel and lose $162.50</button></div></div></div>
       </div>
     </section>
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>Dialogs</b> are centred from 640px, 32rem wide (24rem small, 44rem large), and never taller than the screen minus 32px; the body scrolls, the header and footer stay.</li>
-        <li><b>Below 640px</b> they become bottom sheets: full width, no side borders, up to 92% of the screen, footer sticky above <code>env(safe-area-inset-bottom)</code>, buttons equal width.</li>
+        <li><b>Dialogs</b> are centred from 576px, 32rem wide (24rem small, 44rem large), and never taller than the screen minus 32px; the body scrolls, the header and footer stay.</li>
+        <li><b>Below 576px</b> (XS) they fill the screen: full width and height, no frame, header with title and close fixed at the top, body scrolling, footer sticky above <code>env(safe-area-inset-bottom)</code>, buttons equal width (L2-099). The navigation drawer keeps its 20rem width and the account menu stays anchored under the avatar.</li>
         <li><b>Menus</b> stay anchored to their trigger at every size and flip to open upwards near the bottom of the screen. The phone’s main navigation is a disclosure panel, not a menu (see <a href="navigation-and-page-structure.html">navigation</a>).</li>
         <li><b>Tooltips</b> do not appear on touch. Icon-only controls on phones need a name that does not depend on the tooltip (<code>aria-labelledby</code> still points at its text).</li>
-        <li><b>Zoom to 400%</b> turns every dialog into the sheet layout, so it reflows without sideways scrolling.</li>
+        <li><b>Zoom to 400%</b> turns every dialog into the full-screen layout, so it reflows without sideways scrolling.</li>
       </ul>
     </section>
 
@@ -335,7 +339,7 @@
       <h3>Motion</h3>
       <p>Dialogs rise 16px and fade in over <code>--duration-slow</code> (260ms); tooltips fade over <code>--duration-fast</code> after a 300ms delay. Under reduced motion both appear at once. The backdrop never animates.</p>
       <h3>Touch</h3>
-      <p>Footer buttons are 44px tall and, on phones, half the sheet wide each. Close is a 44px square. Menu items are 44px tall. Nothing is reachable only by hover: the tooltip text is also the button’s name.</p>
+      <p>Footer buttons are 44px tall and, on phones, half the screen wide each. Close is 36px, and 44px under a coarse pointer. Menu items are 44px tall. Nothing is reachable only by hover: the tooltip text is also the button’s name.</p>
     </section>
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
@@ -362,13 +366,16 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
+        <li>Confirmation and form dialogs with default, busy, failed and invalid states: <a href="../../mocks/dialogs/pay-deposit/default.html">dialogs/pay-deposit</a>, <a href="../../mocks/dialogs/cancel-booking/default.html">dialogs/cancel-booking</a>, <a href="../../mocks/dialogs/withdraw-request/default.html">dialogs/withdraw-request</a>, <a href="../../mocks/dialogs/accept-request/default.html">dialogs/accept-request</a>, <a href="../../mocks/dialogs/decline-request/default.html">dialogs/decline-request</a>, <a href="../../mocks/dialogs/write-review/default.html">dialogs/write-review</a>, <a href="../../mocks/dialogs/delete-account/default.html">dialogs/delete-account</a>, <a href="../../mocks/dialogs/block-dates/default.html">dialogs/block-dates</a></li>
+        <li>The navigation drawer <a href="../../mocks/dialogs/menu/default.html">dialogs/menu</a> and the anchored account menu <a href="../../mocks/dialogs/account-menu/default.html">dialogs/account-menu</a></li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking request lives in the stub, not a dialog; the icon Share button; fine print with the 14-day cancellation rule</li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the avatar “Account menu for Naomi Fraser” and the menu button, both with <code>aria-expanded="false"</code>, promise a menu and a phone panel; “Cancel free up to 14 days before your event”</li>
         <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Ask Miriam for a recording” jumps to the stub’s message instead of opening an overlay</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
-        <li>No dialog, menu or tooltip is drawn in the mocks yet. They are part of the core set: the product needs the deposit and cancellation dialogs, the account menu and names for icon-only buttons.</li>
+        <li>The mocks now draw every dialog, the drawer and the account menu. Tooltips are still not drawn; icon-only buttons in the mocks are named with <code>aria-label</code>.</li>
+        <li>Phone dialogs were 92%-high bottom sheets; L2-099 requires full screen at XS, so the pattern now says full screen.</li>
         <li>The deposit (25%) and the 14-day free cancellation are assumptions from the mocks’ README; the dialogs above follow them.</li>
       </ul>
     </section>

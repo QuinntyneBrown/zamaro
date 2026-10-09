@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -168,7 +171,7 @@
       </div>
       <div class="field">
         <label class="field__label" for="fl-kind">Kind of gathering</label>
-        <select class="select" id="fl-kind" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option></select>
+        <select class="select" id="fl-kind" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option></select>
       </div>
       <div class="field">
         <label class="field__label" for="fl-msg">Message <span class="field__optional">(optional)</span></label>
@@ -195,7 +198,7 @@
   &lt;/div&gt;
   &lt;div class="field"&gt;
     &lt;label class="field__label" for="fl-kind"&gt;Kind of gathering&lt;/label&gt;
-    &lt;select class="select" id="fl-kind" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;/select&gt;
+    &lt;select class="select" id="fl-kind" name="kind"&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;/select&gt;
   &lt;/div&gt;
   &lt;div class="field"&gt;
     &lt;label class="field__label" for="fl-msg"&gt;Message &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
@@ -273,7 +276,7 @@
       <div class="field">
         <label class="field__label" for="fl-err-date">Event date</label>
         <input class="input" type="date" id="fl-err-date" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="fl-err-date-msg">
-        <p class="field__error" id="fl-err-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
+        <p class="field__error" id="fl-err-date-msg">Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
       </div>
       <div class="stack stack--sm">
         <label class="check">
@@ -281,7 +284,7 @@
           <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
           <span class="check__text">I’ve read the cancellation terms</span>
         </label>
-        <p class="field__error" id="fl-err-terms-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Confirm this to send the request. Cancelling is free up to 14 days before.</p>
+        <p class="field__error" id="fl-err-terms-msg">Confirm this to send the request. Cancelling is free up to 14 days before.</p>
       </div>
       <div class="form__actions"><button class="btn btn--primary" type="submit">Request to book</button></div>
     </form>
@@ -299,7 +302,7 @@
   &lt;div class="field"&gt;
     &lt;label class="field__label" for="fl-err-date"&gt;Event date&lt;/label&gt;
     &lt;input class="input" type="date" id="fl-err-date" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="fl-err-date-msg"&gt;
-    &lt;p class="field__error" id="fl-err-date-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
+    &lt;p class="field__error" id="fl-err-date-msg"&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="stack stack--sm"&gt;
     &lt;label class="check"&gt;
@@ -307,7 +310,7 @@
       &lt;span class="check__box"&gt;&lt;svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;&lt;svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M6 12h12"/&gt;&lt;/svg&gt;&lt;/span&gt;
       &lt;span class="check__text"&gt;I’ve read the cancellation terms&lt;/span&gt;
     &lt;/label&gt;
-    &lt;p class="field__error" id="fl-err-terms-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Confirm this to send the request. Cancelling is free up to 14 days before.&lt;/p&gt;
+    &lt;p class="field__error" id="fl-err-terms-msg"&gt;Confirm this to send the request. Cancelling is free up to 14 days before.&lt;/p&gt;
   &lt;/div&gt;
   &lt;div class="form__actions"&gt;&lt;button class="btn btn--primary" type="submit"&gt;Request to book&lt;/button&gt;&lt;/div&gt;
 &lt;/form&gt;</code></pre></details>
@@ -319,7 +322,7 @@
       <h4 id="fl-busy-title">Book Abigail</h4>
       <div class="field"><label class="field__label" for="fl-busy-date">Event date</label><input class="input" type="date" id="fl-busy-date" value="2026-11-14"></div>
       <div class="field"><label class="field__label" for="fl-busy-church">Church</label><input class="input" type="text" id="fl-busy-church" value="Riverside Community Church, Burlington"></div>
-      <div class="form__actions"><button class="btn btn--primary" type="submit" aria-busy="true">Sending request…</button></div>
+      <div class="form__actions"><button class="btn btn--primary" type="submit" aria-busy="true" aria-disabled="true">Sending request…</button></div>
       <p class="visually-hidden" role="status">Sending your request to Abigail</p>
     </form>
   </div>
@@ -328,18 +331,18 @@
   &lt;h4 id="fl-busy-title"&gt;Book Abigail&lt;/h4&gt;
   &lt;div class="field"&gt;&lt;label class="field__label" for="fl-busy-date"&gt;Event date&lt;/label&gt;&lt;input class="input" type="date" id="fl-busy-date" value="2026-11-14"&gt;&lt;/div&gt;
   &lt;div class="field"&gt;&lt;label class="field__label" for="fl-busy-church"&gt;Church&lt;/label&gt;&lt;input class="input" type="text" id="fl-busy-church" value="Riverside Community Church, Burlington"&gt;&lt;/div&gt;
-  &lt;div class="form__actions"&gt;&lt;button class="btn btn--primary" type="submit" aria-busy="true"&gt;Sending request…&lt;/button&gt;&lt;/div&gt;
+  &lt;div class="form__actions"&gt;&lt;button class="btn btn--primary" type="submit" aria-busy="true" aria-disabled="true"&gt;Sending request…&lt;/button&gt;&lt;/div&gt;
   &lt;p class="visually-hidden" role="status"&gt;Sending your request to Abigail&lt;/p&gt;
 &lt;/form&gt;</code></pre></details>
 </div>
       <h3>Real layouts: the booking stub</h3>
-      <p>The profile’s sidebar form. On phones it follows the profile content; from 1024px it is a sticky sidebar. It is the reference single-column form.</p>
+      <p>The profile’s sidebar form. On phones it follows the profile content; from 992px it is a sticky sidebar. It is the reference single-column form.</p>
 <div class="ds-example">
   <div class="ds-example__canvas ds-example__canvas--canvas">
     <form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 26rem);">
       <div class="stub__head">
         <h4 id="fl-stub-title" class="stub__title">Book Abigail</h4>
-        <span class="stub__code" aria-hidden="true">No. ZAM-0114</span>
+        <span class="stub__code" aria-hidden="true">No. ACT-0027</span>
       </div>
       <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
       <div class="field">
@@ -348,7 +351,7 @@
         <p class="inline-msg inline-msg--success" id="fl-stub-date-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p>
       </div>
       <label class="field"><span class="field__label">Kind of gathering</span>
-        <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+        <select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
       <label class="field"><span class="field__label">Church</span>
         <input class="input" type="text" name="church" value="Riverside Community Church, Burlington" autocomplete="organization"></label>
       <div class="field">
@@ -363,7 +366,7 @@
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class="stub" action="#variants" novalidate aria-labelledby="fl-stub-title" style="width: min(100%, 26rem);"&gt;
   &lt;div class="stub__head"&gt;
     &lt;h4 id="fl-stub-title" class="stub__title"&gt;Book Abigail&lt;/h4&gt;
-    &lt;span class="stub__code" aria-hidden="true"&gt;No. ZAM-0114&lt;/span&gt;
+    &lt;span class="stub__code" aria-hidden="true"&gt;No. ACT-0027&lt;/span&gt;
   &lt;/div&gt;
   &lt;p&gt;&lt;span class="stub__price"&gt;From $650&lt;/span&gt;&lt;br&gt;&lt;span class="text-muted"&gt;per service · travel included&lt;/span&gt;&lt;/p&gt;
   &lt;div class="field"&gt;
@@ -372,7 +375,7 @@
     &lt;p class="inline-msg inline-msg--success" id="fl-stub-date-msg"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M5 12l5 5L20 7"/&gt;&lt;/svg&gt;Abigail is free Sat 14 Nov&lt;/p&gt;
   &lt;/div&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Kind of gathering&lt;/span&gt;
-    &lt;select class="select" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+    &lt;select class="select" name="kind"&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Church&lt;/span&gt;
     &lt;input class="input" type="text" name="church" value="Riverside Community Church, Burlington" autocomplete="organization"&gt;&lt;/label&gt;
   &lt;div class="field"&gt;
@@ -384,7 +387,7 @@
 &lt;/form&gt;</code></pre></details>
 </div>
       <h3>Real layouts: the booking bar</h3>
-      <p>The Discover poster’s search form. It sits on the charcoal stage, so it carries <code>data-theme="light"</code> to stay a paper ticket in both themes. Fields stack on phones and pair up from 640px; the title and the submit span both columns.</p>
+      <p>The Discover poster’s search form. It sits on the charcoal stage, so it carries <code>data-theme="light"</code> to stay a paper ticket in both themes. Fields stack on phones and pair up from 576px; the title and the submit span both columns.</p>
 <div class="ds-example">
   <div class="ds-example__canvas ds-example__canvas--stage">
     <form class="booking-bar" data-theme="light" action="#variants" aria-labelledby="fl-bar-title" style="width: min(100%, 36rem);">
@@ -392,7 +395,7 @@
       <label class="field"><span class="field__label">Event date</span>
         <input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"></label>
       <label class="field"><span class="field__label">Kind of gathering</span>
-        <select class="select" name="kind"><option selected>Sunday service</option><option>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
+        <select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label>
       <label class="field"><span class="field__label">Church location</span>
         <input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"></label>
       <label class="field"><span class="field__label">How far can they drive?</span>
@@ -406,7 +409,7 @@
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Event date&lt;/span&gt;
     &lt;input class="input" type="date" name="date" value="2026-11-14" min="2026-10-09"&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Kind of gathering&lt;/span&gt;
-    &lt;select class="select" name="kind"&gt;&lt;option selected&gt;Sunday service&lt;/option&gt;&lt;option&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+    &lt;select class="select" name="kind"&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;Church location&lt;/span&gt;
     &lt;input class="input" type="text" name="place" value="Burlington, ON" autocomplete="address-level2"&gt;&lt;/label&gt;
   &lt;label class="field"&gt;&lt;span class="field__label"&gt;How far can they drive?&lt;/span&gt;
@@ -414,6 +417,152 @@
   &lt;button class="btn btn--primary btn--lg" type="submit"&gt;Show the lineup&lt;/button&gt;
 &lt;/form&gt;</code></pre></details>
 </div>
+      <h3>Settings and long forms: sections, grid and the sticky actions bar</h3>
+      <p>Account settings, the artist’s profile editor, the artist application and the booking request are long forms. They are a <code>.form-stack</code> of <code>.form-section</code> panels, each with a dashed-rule title, an optional lead and a <code>.form-grid</code> of fields. The grid is one column on phones and two from 576px; <code>.field--full</code> and <code>.fieldset</code> span both columns. One <code>.form-actions</code> bar sticks to the bottom of the viewport with a save status on the left and the buttons on the right. Settings pages put the form beside <code>.settings-nav</code> inside <code>.settings-layout</code> (see <a href="sidebar-navigation.html">Sidebar navigation</a>).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="settings-layout" style="width: 100%;">
+  <nav class="settings-nav" aria-label="Settings sections">
+    <a href="#fl-church" aria-current="true">Church</a>
+    <a href="#fl-delete">Delete account</a>
+  </nav>
+  <form class="form-stack" action="#" novalidate>
+    <section class="form-section" id="fl-church" aria-labelledby="fl-church-title">
+      <h2 class="form-section__title" id="fl-church-title">Church</h2>
+      <p class="form-section__lead">Artists see this on every request. Bookings already sent keep the address they were made with.</p>
+      <div class="form-grid">
+        <label class="field field--full"><span class="field__label">Church name <span class="field__required">(required)</span></span>
+          <input class="input" name="fl-church-name" type="text" value="Riverside Community Church" required></label>
+        <label class="field"><span class="field__label">City <span class="field__required">(required)</span></span>
+          <input class="input" name="fl-city" type="text" value="Burlington" required></label>
+        <label class="field"><span class="field__label">Postal code <span class="field__required">(required)</span></span>
+          <input class="input" name="fl-postal" type="text" value="L7R 1A3" required></label>
+      </div>
+    </section>
+    <div class="form-actions">
+      <span class="form-actions__status" role="status"><span class="dot" aria-hidden="true"></span>Saved 2 min ago</span>
+      <div class="form-actions__buttons">
+        <button class="btn" type="reset">Discard</button>
+        <button class="btn btn--primary" type="submit">Save changes</button>
+      </div>
+    </div>
+  </form>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.settings-layout</code> &gt; <code>.settings-nav</code> + <code>.form-stack</code>; one <code>.form-section</code> with a <code>.form-grid</code>, then the sticky <code>.form-actions</code>. From pages/account/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="settings-layout" style="width: 100%;"&gt;
+  &lt;nav class="settings-nav" aria-label="Settings sections"&gt;
+    &lt;a href="#fl-church" aria-current="true"&gt;Church&lt;/a&gt;
+    &lt;a href="#fl-delete"&gt;Delete account&lt;/a&gt;
+  &lt;/nav&gt;
+  &lt;form class="form-stack" action="#" novalidate&gt;
+    &lt;section class="form-section" id="fl-church" aria-labelledby="fl-church-title"&gt;
+      &lt;h2 class="form-section__title" id="fl-church-title"&gt;Church&lt;/h2&gt;
+      &lt;p class="form-section__lead"&gt;Artists see this on every request. Bookings already sent keep the address they were made with.&lt;/p&gt;
+      &lt;div class="form-grid"&gt;
+        &lt;label class="field field--full"&gt;&lt;span class="field__label"&gt;Church name &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/span&gt;
+          &lt;input class="input" name="fl-church-name" type="text" value="Riverside Community Church" required&gt;&lt;/label&gt;
+        &lt;label class="field"&gt;&lt;span class="field__label"&gt;City &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/span&gt;
+          &lt;input class="input" name="fl-city" type="text" value="Burlington" required&gt;&lt;/label&gt;
+        &lt;label class="field"&gt;&lt;span class="field__label"&gt;Postal code &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/span&gt;
+          &lt;input class="input" name="fl-postal" type="text" value="L7R 1A3" required&gt;&lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
+    &lt;div class="form-actions"&gt;
+      &lt;span class="form-actions__status" role="status"&gt;&lt;span class="dot" aria-hidden="true"&gt;&lt;/span&gt;Saved 2 min ago&lt;/span&gt;
+      &lt;div class="form-actions__buttons"&gt;
+        &lt;button class="btn" type="reset"&gt;Discard&lt;/button&gt;
+        &lt;button class="btn btn--primary" type="submit"&gt;Save changes&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Danger section</h3>
+      <p><code>.form-section--danger</code> frames an irreversible action (Delete account) in the danger border, ruled off from the form above. The button opens a confirmation dialog; nothing is deleted from the section itself.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<section class="form-section form-section--danger" id="fl-delete" aria-labelledby="fl-delete-title" style="width: 100%;">
+  <h2 class="form-section__title" id="fl-delete-title">Delete account</h2>
+  <p class="form-section__lead">Sign-in stops straight away and your personal data is erased within 30 days. Booking and payment records stay for 7 years, without your name.</p>
+  <div class="cluster"><button class="btn btn--danger" type="button">Delete account…</button></div>
+</section>
+        </div>
+        <div class="ds-example__caption"><span><code>.form-section.form-section--danger</code>. From pages/account/default and dialogs/delete-account.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="form-section form-section--danger" id="fl-delete" aria-labelledby="fl-delete-title" style="width: 100%;"&gt;
+  &lt;h2 class="form-section__title" id="fl-delete-title"&gt;Delete account&lt;/h2&gt;
+  &lt;p class="form-section__lead"&gt;Sign-in stops straight away and your personal data is erased within 30 days. Booking and payment records stay for 7 years, without your name.&lt;/p&gt;
+  &lt;div class="cluster"&gt;&lt;button class="btn btn--danger" type="button"&gt;Delete account…&lt;/button&gt;&lt;/div&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+      <h3>Save status in the actions bar</h3>
+      <p><code>.form-actions__status</code> is a <code>role="status"</code> line with a square <code>.dot</code>: muted for “Saved 2 min ago” and “Saving…”, <code>--success</code> after a save, <code>--danger</code> when fields need fixing. The multi-step application uses <code>.form-actions--static</code>, which keeps the bar in the flow instead of sticking, and shows the step count there.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="stack" style="width: 100%;">
+  <div class="form-actions form-actions--static">
+    <span class="form-actions__status" role="status"><span class="dot" aria-hidden="true"></span>Saving…</span>
+    <div class="form-actions__buttons"><button class="btn" type="reset" disabled>Discard</button><button class="btn btn--primary" type="submit" aria-busy="true" aria-disabled="true">Saving…</button></div>
+  </div>
+  <div class="form-actions form-actions--static">
+    <span class="form-actions__status form-actions__status--success" role="status"><span class="dot" aria-hidden="true"></span>Saved just now</span>
+    <div class="form-actions__buttons"><button class="btn" type="reset">Discard</button><button class="btn btn--primary" type="submit">Save changes</button></div>
+  </div>
+  <div class="form-actions form-actions--static">
+    <span class="form-actions__status form-actions__status--danger" role="status"><span class="dot" aria-hidden="true"></span>2 fields to fix · not saved</span>
+    <div class="form-actions__buttons"><button class="btn" type="reset">Discard</button><button class="btn btn--primary" type="submit">Save changes</button></div>
+  </div>
+  <div class="form-actions form-actions--static">
+    <span class="form-actions__status"><span class="dot" aria-hidden="true"></span>Step 2 of 4 · Saved on this device</span>
+    <div class="form-actions__buttons"><a class="btn" href="#fl-church">Back</a><button class="btn btn--primary" type="submit">Continue</button></div>
+  </div>
+</div>
+        </div>
+        <div class="ds-example__caption"><span>Saving (busy), saved (<code>--success</code>), invalid (<code>--danger</code>) and the static step bar from pages/apply.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="stack" style="width: 100%;"&gt;
+  &lt;div class="form-actions form-actions--static"&gt;
+    &lt;span class="form-actions__status" role="status"&gt;&lt;span class="dot" aria-hidden="true"&gt;&lt;/span&gt;Saving…&lt;/span&gt;
+    &lt;div class="form-actions__buttons"&gt;&lt;button class="btn" type="reset" disabled&gt;Discard&lt;/button&gt;&lt;button class="btn btn--primary" type="submit" aria-busy="true" aria-disabled="true"&gt;Saving…&lt;/button&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-actions form-actions--static"&gt;
+    &lt;span class="form-actions__status form-actions__status--success" role="status"&gt;&lt;span class="dot" aria-hidden="true"&gt;&lt;/span&gt;Saved just now&lt;/span&gt;
+    &lt;div class="form-actions__buttons"&gt;&lt;button class="btn" type="reset"&gt;Discard&lt;/button&gt;&lt;button class="btn btn--primary" type="submit"&gt;Save changes&lt;/button&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-actions form-actions--static"&gt;
+    &lt;span class="form-actions__status form-actions__status--danger" role="status"&gt;&lt;span class="dot" aria-hidden="true"&gt;&lt;/span&gt;2 fields to fix · not saved&lt;/span&gt;
+    &lt;div class="form-actions__buttons"&gt;&lt;button class="btn" type="reset"&gt;Discard&lt;/button&gt;&lt;button class="btn btn--primary" type="submit"&gt;Save changes&lt;/button&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="form-actions form-actions--static"&gt;
+    &lt;span class="form-actions__status"&gt;&lt;span class="dot" aria-hidden="true"&gt;&lt;/span&gt;Step 2 of 4 · Saved on this device&lt;/span&gt;
+    &lt;div class="form-actions__buttons"&gt;&lt;a class="btn" href="#fl-church"&gt;Back&lt;/a&gt;&lt;button class="btn btn--primary" type="submit"&gt;Continue&lt;/button&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Fieldset and the required/optional marker</h3>
+      <p>A <code>.fieldset</code> groups choices under a <code>&lt;legend&gt;</code> set as an h4. <code>.field__optional</code> and <code>.field__required</code> are the muted, sentence-case note after a label or legend (see <a href="form-field.html">Form field</a>). Mark whichever is less common on the form, or both when the form mixes them (account settings marks every field).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<fieldset class="fieldset" style="width: 100%;">
+  <legend>Styles <span class="field__required">(required, pick 1 to 4)</span></legend>
+  <div class="cluster">
+    <label class="choice"><input type="checkbox" name="fl-styles"><span class="choice__text">Band</span></label>
+    <label class="choice"><input type="checkbox" name="fl-styles" checked><span class="choice__text">Solo vocalist</span></label>
+    <label class="choice"><input type="checkbox" name="fl-styles" checked><span class="choice__text">Acoustic</span></label>
+    <label class="choice"><input type="checkbox" name="fl-styles" checked><span class="choice__text">Hymns</span></label>
+  </div>
+</fieldset>
+        </div>
+        <div class="ds-example__caption"><span><code>.fieldset</code> of <code>.choice</code> checkboxes with a <code>.field__required</code> note in the legend. From pages/apply/step-2.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="fieldset" style="width: 100%;"&gt;
+  &lt;legend&gt;Styles &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/legend&gt;
+  &lt;div class="cluster"&gt;
+    &lt;label class="choice"&gt;&lt;input type="checkbox" name="styles"&gt;&lt;span class="choice__text"&gt;Band&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="choice"&gt;&lt;input type="checkbox" name="styles" checked&gt;&lt;span class="choice__text"&gt;Solo vocalist&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="choice"&gt;&lt;input type="checkbox" name="styles" checked&gt;&lt;span class="choice__text"&gt;Acoustic&lt;/span&gt;&lt;/label&gt;
+    &lt;label class="choice"&gt;&lt;input type="checkbox" name="styles" checked&gt;&lt;span class="choice__text"&gt;Hymns&lt;/span&gt;&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/fieldset&gt;</code></pre></details>
+      </div>
     </section>
 
     <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
@@ -423,7 +572,7 @@
         <tbody>
           <tr><td><code>.form</code></td><td>Up to 36rem (576px)</td><td>Every standalone form: booking request, account settings, sign-in.</td></tr>
           <tr><td><code>.form.form--wide</code></td><td>Its container</td><td>Forms inside a card, stub or bar that already sets the width.</td></tr>
-          <tr><td><code>.stub</code></td><td>The sidebar (<code>--layout-sidebar-width</code>) from 1024px</td><td>The booking stub.</td></tr>
+          <tr><td><code>.stub</code></td><td>The sidebar (<code>--layout-sidebar-width</code>) from 992px</td><td>The booking stub.</td></tr>
           <tr><td><code>.booking-bar</code></td><td>Its poster column</td><td>The Discover search.</td></tr>
         </tbody>
       </table></div>
@@ -441,13 +590,13 @@
             <td><div class="alert alert--success alert--compact" role="status" style="width: 14rem;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><div><p class="alert__title">Request sent</p><p class="text-sm">No. ZAM-0114</p></div></div></td></tr>
           <tr><th scope="row">Field</th>
             <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f1">Church</label><input class="input" type="text" id="st-f1" value="Riverside"></div></td>
-            <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f2">Church</label><input class="input" type="text" id="st-f2" aria-invalid="true" aria-describedby="st-f2-e"><p class="field__error" id="st-f2-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</p></div></td>
+            <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f2">Church</label><input class="input" type="text" id="st-f2" aria-invalid="true" aria-describedby="st-f2-e"><p class="field__error" id="st-f2-e">Enter your church’s name.</p></div></td>
             <td><div class="form" aria-busy="true" style="width: 12rem;"><div class="field"><label class="field__label" for="st-f3">Church</label><input class="input" type="text" id="st-f3" value="Riverside"></div></div></td>
             <td><div class="field" style="width: 12rem;"><label class="field__label" for="st-f4">Church</label><input class="input" type="text" id="st-f4" value="Riverside" readonly></div></td></tr>
           <tr><th scope="row">Submit</th>
             <td><button class="btn btn--primary" type="button">Request to book</button></td>
             <td><button class="btn btn--primary" type="button">Request to book</button></td>
-            <td><button class="btn btn--primary" type="button" aria-busy="true">Sending request…</button></td>
+            <td><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Sending request…</button></td>
             <td><a class="btn" href="#states">See your requests</a></td></tr>
         </tbody>
       </table></div>
@@ -481,10 +630,15 @@
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
         <li>One column below 768px (<code>--layout-breakpoint-md</code>). <code>.form__row</code> becomes two equal columns from 768px; the DOM order is the reading order at every width.</li>
-        <li>The booking bar pairs its fields from 640px (<code>--layout-breakpoint-sm</code>); its title and submit always span the full width.</li>
-        <li>The booking stub becomes a sticky sidebar from 1024px (<code>--layout-breakpoint-lg</code>), below the top bar. Its submit is always full width (<code>.btn--block</code>).</li>
+        <li>The booking bar pairs its fields from 576px (<code>--layout-breakpoint-sm</code>); its title and submit always span the full width.</li>
+        <li>The booking stub becomes a sticky sidebar from 992px (<code>--layout-breakpoint-lg</code>), below the top bar. Its submit is always full width (<code>.btn--block</code>).</li>
         <li><code>.form__actions</code> wraps; on phones the buttons stack in DOM order, primary first.</li>
         <li><code>.form__inline</code> fields grow from 12rem; the button drops under the field when space runs out.</li>
+      </ul>
+      <ul>
+        <li><code>.form-grid</code> is one column below 576px (<code>--layout-breakpoint-sm</code>) and two equal columns from 576px; <code>.field--full</code> and <code>.fieldset</code> span both.</li>
+        <li><code>.settings-layout</code> stacks below 992px, with <code>.settings-nav</code> as a horizontally scrolling row of section links above the form; from 992px the nav is a sticky 14rem column beside it.</li>
+        <li><code>.form-actions</code> sticks to the bottom of the viewport at every width and wraps the status above the buttons when space runs out.</li>
       </ul>
     </section>
 
@@ -546,8 +700,8 @@
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--danger" style="animation: none;"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg><div><p class="toast__title">Form invalid</p></div></div></div><figcaption>A toast that says “Form invalid” and disappears. It names nothing and points nowhere.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Request to book</button></div><figcaption>The submit stays enabled; pressing it explains what is missing.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" disabled>Request to book</button></div><figcaption>A disabled submit until everything is valid. Naomi can’t tell what is missing, and keyboard users can’t reach the button.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption><code>.stub__title</code> for the stub heading.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><p style="font: var(--text-h3);">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div></div><figcaption>The mocks set the stub heading with <code>style="font: var(--text-h3)"</code>. A class keeps every stub the same.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div></div><figcaption><code>.stub__title</code> for the stub heading.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stub__head"><p style="font: var(--text-h3);">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div></div><figcaption>The mocks set the stub heading with <code>style="font: var(--text-h3)"</code>. A class keeps every stub the same.</figcaption></figure>
       </div>
     </section>
 
@@ -567,6 +721,12 @@
           <tr><td>Summary padding</td><td><code>--space-5</code></td><td colspan="2"><span data-token="--space-5"></span></td></tr>
           <tr><td>Stub and bar padding</td><td><code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span></td></tr>
           <tr><td>Two-column breakpoint</td><td><code>--layout-breakpoint-md</code></td><td colspan="2"><span data-token="--layout-breakpoint-md"></span></td></tr>
+                  <tr><td>Section and stack gaps</td><td><code>--space-8</code></td><td colspan="2"><span data-token="--space-8"></span></td></tr>
+          <tr><td>Section padding</td><td><code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span></td></tr>
+          <tr><td>Danger section border</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+          <tr><td>Saved status</td><td><code>--color-success-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td></tr>
+          <tr><td>Fields-to-fix status</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Actions bar layer</td><td><code>--z-sticky</code></td><td colspan="2"><span data-token="--z-sticky"></span></td></tr>
         </tbody>
       </table></div>
       <p>The 36rem form cap and the 60% busy opacity are fixed values in <code>components.css</code>.</p>
@@ -594,7 +754,7 @@
 &lt;/form&gt;
 
 &lt;!-- while sending --&gt;
-&lt;form class="form" aria-busy="true"&gt;… &lt;button class="btn btn--primary" type="submit" aria-busy="true"&gt;Sending request…&lt;/button&gt;&lt;/form&gt;</code></pre>
+&lt;form class="form" aria-busy="true"&gt;… &lt;button class="btn btn--primary" type="submit" aria-busy="true" aria-disabled="true"&gt;Sending request…&lt;/button&gt;&lt;/form&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.form</code> / <code>.form--wide</code></td><td>Column with 20px gaps, capped at 36rem / uncapped.</td></tr>
         <tr><td><code>.form__row</code></td><td>One column; two equal columns from 768px.</td></tr>
@@ -604,17 +764,33 @@
         <tr><td><code>.form[aria-busy="true"]</code></td><td>Fields fade to 60% and ignore input.</td></tr>
         <tr><td><code>.stub</code>, <code>.stub__head</code>, <code>.stub__title</code>, <code>.stub__price</code>, <code>.stub__fine</code>, <code>.stub__code</code></td><td>The booking stub.</td></tr>
         <tr><td><code>.booking-bar[data-theme="light"]</code>, <code>.booking-bar__title</code></td><td>The paper booking bar on the stage.</td></tr>
+      
+        <tr><td><code>.form-stack</code></td><td>Column of form sections, 32px apart.</td></tr>
+        <tr><td><code>.form-section</code>, <code>__title</code>, <code>__lead</code></td><td>Paper panel with a dashed-rule h3 title and a muted lead.</td></tr>
+        <tr><td><code>.form-section--danger</code></td><td>Danger border and title rule for an irreversible action.</td></tr>
+        <tr><td><code>.form-grid</code></td><td>One column; two from 576px.</td></tr>
+        <tr><td><code>.field--full</code></td><td>A field that spans both <code>.form-grid</code> columns.</td></tr>
+        <tr><td><code>.fieldset</code> + <code>&lt;legend&gt;</code></td><td>Grouped choices; spans both grid columns.</td></tr>
+        <tr><td><code>.field__optional</code>, <code>.field__required</code></td><td>Muted, sentence-case “(optional)” / “(required)” note in a label or legend.</td></tr>
+        <tr><td><code>.form-actions</code></td><td>Sticky actions bar at the bottom of the viewport.</td></tr>
+        <tr><td><code>.form-actions--static</code></td><td>The same bar kept in the flow (multi-step application).</td></tr>
+        <tr><td><code>.form-actions__status</code>, <code>.dot</code></td><td>Save status line (<code>role="status"</code>) with a square marker.</td></tr>
+        <tr><td><code>.form-actions__status--success</code> / <code>--danger</code></td><td>Saved / fields to fix.</td></tr>
+        <tr><td><code>.form-actions__buttons</code></td><td>Button group on the right of the bar.</td></tr>
+        <tr><td><code>.settings-layout</code></td><td>Settings nav plus form; two columns from 992px.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the booking bar with four fields and “Show the lineup”</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: the busy submit “Checking calendars…”</li>
-        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>, <a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the bar keeping its values when results are empty or fail</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the booking bar with four fields and “Show the lineup”; <a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: the busy submit “Checking calendars…”</li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub, “Request to book · Sat 14 Nov” and its fine print</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: the same stub for Miriam Haile</li>
+        <li><a href="../../mocks/pages/book/default.html">pages/book/default</a>, <a href="../../mocks/pages/book/invalid.html">invalid</a>, <a href="../../mocks/pages/book/submitting.html">submitting</a>: the booking request as form sections with a sticky actions bar and an error summary</li>
+        <li><a href="../../mocks/pages/account/default.html">pages/account/default</a>, <a href="../../mocks/pages/account/submitting.html">submitting</a>, <a href="../../mocks/pages/account/success.html">success</a>, <a href="../../mocks/pages/account/invalid.html">invalid</a>: <code>.settings-layout</code>, form sections, <code>.form-section--danger</code> and every save status</li>
+        <li><a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a> with its <a href="../../mocks/pages/edit-profile/invalid.html">invalid</a> and <a href="../../mocks/pages/edit-profile/success.html">success</a> states: the artist profile editor</li>
+        <li><a href="../../mocks/pages/apply/default.html">pages/apply/default</a> to <a href="../../mocks/pages/apply/step-4.html">step-4</a>, <a href="../../mocks/pages/apply/invalid.html">invalid</a>, <a href="../../mocks/pages/apply/error.html">error</a>: <code>.form-actions--static</code> with the step count, fieldsets of style chips</li>
+        <li>Dialog forms: <a href="../../mocks/dialogs/delete-account/default.html">dialogs/delete-account/default</a>, <a href="../../mocks/dialogs/pay-deposit/default.html">dialogs/pay-deposit/default</a>, <a href="../../mocks/dialogs/block-dates/default.html">dialogs/block-dates/default</a>, <a href="../../mocks/dialogs/decline-request/invalid.html">dialogs/decline-request/invalid</a>: grids, fieldsets and error summaries inside <code>.dialog__body</code></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
@@ -623,6 +799,7 @@
         <li>The stub’s “✓ Abigail is free” help was muted text with a typed tick. It is now an <code>.inline-msg--success</code>.</li>
         <li>No error element or error summary existed. <code>.field__error</code> and <code>.error-summary</code> were added; invalid styling now covers input, select and textarea.</li>
         <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks. It is now <code>.field--inline</code>.</li>
+        <li>The long-form kit (<code>.form-stack</code>, <code>.form-section</code>, <code>.form-grid</code>, <code>.form-actions</code>, <code>.settings-layout</code>) arrived with the account, profile and application mocks; its grid breaks at the L2 SM breakpoint (576px) and the settings nav at LG (992px).</li>
       </ul>
     </section>
 

@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -246,6 +249,36 @@ const items = [...document.querySelectorAll('input[name="styles"]')];
 const on = items.filter(i =&gt; i.checked).length;
 all.checked = on === items.length;
 all.indeterminate = on &gt; 0 &amp;&amp; on &lt; items.length;</code></pre>
+      <h3>Choice row (forms and dialogs)</h3>
+      <p>Most forms and dialogs in the mocks use the lighter <code>.choice</code> row instead of <code>.check</code>: a native input drawn with <code>appearance: none</code> (a 20px square; round for radios), followed by <code>.choice__text</code> with an optional <code>&lt;small&gt;</code> detail line. The row is at least 44px tall and the whole label is the target. <code>.choice--stub</code> frames one important consent in a ticket-stub box that turns yellow-tinted when checked, such as “Save this card for the balance” in the deposit dialog. Use <code>.check</code> where you need the indeterminate state (select all, admin tables); use <code>.choice</code> everywhere else. Both are native checkboxes, so they behave the same.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <fieldset class="choice-group">
+            <legend>Unavailable every <span class="field__optional">(choose any)</span></legend>
+            <label class="choice"><input type="checkbox" name="cr-days" value="sun"><span class="choice__text">Sunday</span></label>
+            <label class="choice"><input type="checkbox" name="cr-days" value="mon" checked><span class="choice__text">Monday</span></label>
+            <label class="choice"><input type="checkbox" name="cr-days" value="tue" disabled><span class="choice__text">Tuesday<small>Booked on every Tuesday you could choose</small></span></label>
+          </fieldset>
+          <label class="choice choice--stub"><input type="checkbox" name="cr-consent" checked><span class="choice__text">Save this card for the $487.50 balance <span class="field__required">(required)</span><small>Charged 48 hours after the event unless you report a problem.</small></span></label>
+          <label class="choice choice--stub"><input type="checkbox" name="cr-consent2" aria-invalid="true"><span class="choice__text">I understand my deposit is not refunded inside 14 days<small>Tick this to cancel.</small></span></label>
+        </div>
+        <div class="ds-example__caption"><span>Choice rows (unchecked, checked, disabled) and the stub variant checked and invalid. From dialogs/weekly-default and dialogs/pay-deposit.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend&gt;Unavailable every &lt;span class="field__optional"&gt;(choose any)&lt;/span&gt;&lt;/legend&gt;
+  &lt;label class="choice"&gt;&lt;input type="checkbox" name="days" value="mon" checked&gt;&lt;span class="choice__text"&gt;Monday&lt;/span&gt;&lt;/label&gt;
+&lt;/fieldset&gt;
+
+&lt;label class="choice choice--stub"&gt;
+  &lt;input type="checkbox" name="consent" checked&gt;
+  &lt;span class="choice__text"&gt;Save this card for the $487.50 balance &lt;span class="field__required"&gt;(required)&lt;/span&gt;
+    &lt;small&gt;Charged 48 hours after the event unless you report a problem.&lt;/small&gt;&lt;/span&gt;
+&lt;/label&gt;</code></pre></details>
+      </div>
+      <h3>Choice row in both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><label class="choice"><input type="checkbox" name="crl1" checked><span class="choice__text">Monday</span></label><label class="choice choice--stub"><input type="checkbox" name="crl2" checked><span class="choice__text">Save this card</span></label></div></div>
+        <div data-theme="dark"><div class="stack"><label class="choice"><input type="checkbox" name="crd1" checked><span class="choice__text">Monday</span></label><label class="choice choice--stub"><input type="checkbox" name="crd2" checked><span class="choice__text">Save this card</span></label></div></div>
+      </div>
     </section>
 
     <section class="ds-section" id="sizes" data-na="Checkboxes have one size: a 24px box in a row at least 24px tall, with the label as part of the target."><h2><a href="#sizes">Sizes</a></h2>
@@ -287,7 +320,7 @@ all.indeterminate = on &gt; 0 &amp;&amp; on &lt; items.length;</code></pre>
         <span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span>
         <span class="check__text">I’ve read the cancellation terms</span>
       </label>
-      <p class="field__error" id="terms-err-msg"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Confirm you’ve read the terms to send the request. Cancelling is free up to 14 days before.</p>
+      <p class="field__error" id="terms-err-msg">Confirm you’ve read the terms to send the request. Cancelling is free up to 14 days before.</p>
     </div>
   </div>
   <div class="ds-example__caption"><span>The red rule on the empty box plus an error with an icon, linked by <code>aria-describedby</code>.</span></div>
@@ -412,6 +445,9 @@ all.indeterminate = on &gt; 0 &amp;&amp; on &lt; items.length;</code></pre>
         <tr><td><code>.check__tick</code>, <code>.check__dash</code></td><td>Both icons always present; CSS shows one by state.</td></tr>
         <tr><td><code>.check__text</code>, <code>.check__desc</code></td><td>Label and optional description.</td></tr>
         <tr><td><code>.choice-group</code>, <code>.choice-group--inline</code></td><td>Reset fieldset with a stamped legend; stacked or wrapped row.</td></tr>
+        <tr><td><code>.choice</code> (a <code>&lt;label&gt;</code>)</td><td>Light row: the native checkbox (or radio) drawn as a 20px square (round dot), then the text; 44px minimum row.</td></tr>
+        <tr><td><code>.choice__text</code></td><td>The label text; a <code>&lt;small&gt;</code> inside is the muted detail line.</td></tr>
+        <tr><td><code>.choice--stub</code></td><td>Framed row; yellow tint when checked. Consent checkboxes here; the star-rating radio cards on <a href="radio-group.html">Radio group</a>.</td></tr>
         <tr><td><code>checked</code>, <code>disabled</code>, <code>aria-invalid</code></td><td>Native state and the invalid rule.</td></tr>
         <tr><td><code>input.indeterminate = true</code></td><td>Script only: the dash and yellow fill.</td></tr>
         <tr><td><code>data-state="hover|focus"</code> on <code>.check</code></td><td>Documentation and mocks only.</td></tr>
@@ -419,12 +455,15 @@ all.indeterminate = on &gt; 0 &amp;&amp; on &lt; items.length;</code></pre>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The product will need checkboxes in the booking request (what the church needs from the artist, the terms confirmation) and in the phone filter panel, where the lineup’s style chips become a checkbox list with “All styles”.</p>
+      <p>Extracted from these mocks:</p>
       <ul>
+        <li><code>.choice</code> checkbox rows: <a href="../../mocks/dialogs/weekly-default/default.html">dialogs/weekly-default</a> (weekdays), <a href="../../mocks/pages/account/default.html">pages/account/default</a> (notification and privacy settings), <a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a>, <a href="../../mocks/pages/sign-up/default.html">pages/sign-up/default</a> (terms and consent), <a href="../../mocks/dialogs/delete-account/default.html">dialogs/delete-account</a>, <a href="../../mocks/dialogs/add-video/default.html">dialogs/add-video</a></li>
+        <li><code>.choice--stub</code>: <a href="../../mocks/dialogs/pay-deposit/default.html">dialogs/pay-deposit</a> (“Save this card for the $487.50 balance”, including the <a href="../../mocks/dialogs/pay-deposit/busy.html">busy</a> disabled state)</li>
+        <li><code>.check</code> with the drawn box: <a href="../../mocks/dialogs/reject-application/default.html">dialogs/reject-application</a>, <a href="../../mocks/pages/admin-application/default.html">pages/admin-application/default</a>, <a href="../../mocks/pages/admin-bookings/default.html">pages/admin-bookings/default</a></li>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub and Abigail’s bio (“bring my own tracks”, “happy to rehearse with your volunteers”) that the example options come from</li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the style filters that a checkbox group mirrors on phones</li>
       </ul>
-      <p>Drift fixed during extraction: none; there was no checkbox in the mocks. The two-icon box (<code>.check__tick</code> and <code>.check__dash</code>) was designed so indeterminate needs no extra markup.</p>
+      <p>Drift found: the mocks introduced the lighter <code>.choice</code> row alongside <code>.check</code>; both are documented and kept, with <code>.check</code> reserved for indeterminate groups. The two-icon box (<code>.check__tick</code> and <code>.check__dash</code>) was designed so indeterminate needs no extra markup.</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -194,7 +197,7 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stack">
           <div class="stub" style="box-shadow: none;">
-            <div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ZAM-0114</span></div>
+            <div class="stub__head"><p class="stub__title">Book Abigail</p><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
             <div class="progress">
               <div class="progress__head"><span id="v5">Your church</span><span class="progress__value">2 of 4</span></div>
               <div class="progress__track" role="progressbar" aria-labelledby="v5" aria-valuenow="2" aria-valuemin="0" aria-valuemax="4" aria-valuetext="Step 2 of 4: your church"><div class="progress__bar" style="--progress: 50%;"></div></div>
@@ -203,6 +206,35 @@
           </div>
         </div>
         <div class="ds-example__caption"><span><code>aria-valuemax="4"</code> and <code>aria-valuetext</code> name the step; the fill is still a percentage (2 of 4 = 50%).</span></div>
+      </div>
+      <h3>Meter (completeness gauge)</h3>
+      <p><code>.meter</code> is a slim 12px gauge for a quantity that is not a running task: how complete an artist’s profile is, or how many of the allowed videos are used. Set the fill with the <code>--value</code> custom property and expose the number with <code>role="progressbar"</code> and <code>aria-valuenow/min/max</code>, named by the visible label beside it. The fill is yellow; <code>.meter--ink</code> fills with ink where yellow would compete with a yellow neighbour (an accent stat). It never animates, and the number is always written next to it.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="gap: var(--space-8); flex-wrap: wrap;">
+<div class="stack stack--sm" style="width: min(100%, 18rem);">
+  <p class="field__label" id="pb-complete-label">Profile 80% complete</p>
+  <div class="meter" role="progressbar" aria-labelledby="pb-complete-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" style="--value: 80%;"><div class="meter__bar"></div></div>
+  <p class="text-caption">Add one more video so churches can hear you lead.</p>
+</div>
+<div class="stack stack--sm" style="width: min(100%, 18rem);">
+  <p class="field__label" id="pb-ink-label">Videos 2 of 6</p>
+  <div class="meter meter--ink" role="progressbar" aria-labelledby="pb-ink-label" aria-valuemin="0" aria-valuemax="6" aria-valuenow="2" style="--value: 33%;"><div class="meter__bar"></div></div>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.meter</code> (yellow) and <code>.meter--ink</code>. From pages/dashboard/default and pages/edit-profile/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="stack stack--sm" style="width: min(100%, 18rem);"&gt;
+  &lt;p class="field__label" id="pb-complete-label"&gt;Profile 80% complete&lt;/p&gt;
+  &lt;div class="meter" role="progressbar" aria-labelledby="pb-complete-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80" style="--value: 80%;"&gt;&lt;div class="meter__bar"&gt;&lt;/div&gt;&lt;/div&gt;
+  &lt;p class="text-caption"&gt;Add one more video so churches can hear you lead.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="stack stack--sm" style="width: min(100%, 18rem);"&gt;
+  &lt;p class="field__label" id="pb-ink-label"&gt;Videos 2 of 6&lt;/p&gt;
+  &lt;div class="meter meter--ink" role="progressbar" aria-labelledby="pb-ink-label" aria-valuemin="0" aria-valuemax="6" aria-valuenow="2" style="--value: 33%;"&gt;&lt;div class="meter__bar"&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="meter" role="progressbar" aria-label="Profile complete, light" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="--value: 80%;"><div class="meter__bar"></div></div></div>
+        <div data-theme="dark"><div class="meter" role="progressbar" aria-label="Profile complete, dark" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="--value: 80%;"><div class="meter__bar"></div></div></div>
       </div>
     </section>
 
@@ -259,6 +291,9 @@
         <li>The head is a flex row with the label on the left and the value on the right. A long label wraps; the value stays on the right of the first line.</li>
         <li>On phones, keep labels to about 30 characters so they fit on one line beside the value: “Uploading ‘Goodness of God’” rather than the full file name.</li>
       </ul>
+      <ul>
+        <li><code>.meter</code> fills its container at every width; its label and number sit above it, never inside it.</li>
+      </ul>
     </section>
 
     <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
@@ -312,7 +347,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="progress"><div class="progress__head"><span>Uploading “Goodness of God”</span><span class="progress__value">40%</span></div><div class="progress__track" role="progressbar" aria-label="Do: labelled upload" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="--progress: 40%;"></div></div></div></div><figcaption>Name the task and show the number. The ink edge marks where the fill stops.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="progress__track"><div class="progress__bar" style="--progress: 40%; border-right: 0;"></div></div></div><figcaption>A bare yellow bar with no label, no value and no ink edge: on paper it is barely visible and says nothing to a screen reader.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster"><button class="btn btn--primary" type="button" aria-busy="true">Checking calendars…</button></div></div><figcaption>A short search with no measurable end uses the busy button, as the loading mock does.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster"><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Checking calendars…</button></div></div><figcaption>A short search with no measurable end uses the busy button, as the loading mock does.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="progress progress--indeterminate"><div class="progress__head"><span>Checking calendars</span></div><div class="progress__track" role="progressbar" aria-label="Don't: progress bar for a short search" aria-valuetext="Checking"><div class="progress__bar"></div></div></div></div><figcaption>A progress bar for a two-second search draws more attention than the wait deserves.</figcaption></figure>
       </div>
     </section>
@@ -331,6 +366,8 @@
           <tr><td>Head</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--text-overline"></span></td></tr>
           <tr><td>Fill transition</td><td><code>--duration-slow</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-slow"></span></td></tr>
           <tr><td>Indeterminate cycle</td><td><code>--duration-loop</code> × 1.6</td><td colspan="2"><span data-token="--duration-loop"></span> × 1.6</td></tr>
+                  <tr><td>Meter track</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Meter fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -358,16 +395,25 @@
         <tr><td><code>.progress--indeterminate</code></td><td>Sliding block; omit <code>aria-valuenow</code>.</td></tr>
         <tr><td><code>.progress--success</code> <code>.progress--danger</code></td><td>Recolours the fill when the task ends.</td></tr>
         <tr><td><code>aria-valuenow/min/max</code>, <code>aria-valuetext</code></td><td>Value for assistive tech; text for steps or time left.</td></tr>
+      
+        <tr><td><code>.meter</code>, <code>.meter__bar</code></td><td>Completeness gauge; fill width from <code>--value</code>.</td></tr>
+        <tr><td><code>.meter--ink</code></td><td>Ink fill instead of yellow.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The closest mock is <a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, where a short search uses a busy button and a <code>role="status"</code> line instead (correctly: there is no measurable end). The product will need progress bars for:</p>
+      <p>The determinate progress bar (<code>.progress</code>) shows every upload in the mocks, beside the busy submit button:</p>
       <ul>
-        <li>Artists uploading live videos to their profile (the “Watch her lead” section on <a href="../../mocks/pages/artist/default.html">pages/artist/default</a>, and Miriam’s first upload after <a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>).</li>
-        <li>The multi-step booking request that follows “Request to book · Sat 14 Nov” in the stub.</li>
+        <li><a href="../../mocks/dialogs/add-video/busy.html">dialogs/add-video/busy</a>: “Uploading jireh-living-waters.mp4 · 46%”, with megabytes sent and time left</li>
+        <li><a href="../../mocks/dialogs/add-photo/busy.html">dialogs/add-photo/busy</a>: a photo at 62%</li>
+        <li><a href="../../mocks/dialogs/upload-check/busy.html">dialogs/upload-check/busy</a>: a Vulnerable Sector Check at 80%</li>
       </ul>
-      <p>Drift fixed during extraction: none, because no mock uses it. The yellow fill was given an ink leading edge from the start so it passes non-text contrast on paper.</p>
+      <p>The indeterminate, success and danger variants are not in the mocks yet; the video list shows “Processing” and a failure as text. The meter is in these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a> and <a href="../../mocks/pages/dashboard/empty.html">empty</a>: “Profile complete” in a stat</li>
+        <li><a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a> and its states, with the dialogs opened from it (<a href="../../mocks/dialogs/add-video/default.html">dialogs/add-video/default</a>, <a href="../../mocks/dialogs/upload-check/default.html">dialogs/upload-check/default</a>): “Profile 100% complete”</li>
+      </ul>
+      <p>Drift fixed during extraction: the progress bar’s yellow fill was given an ink leading edge from the start so it passes non-text contrast on paper. <code>.meter--ink</code> is not used by any mock yet.</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

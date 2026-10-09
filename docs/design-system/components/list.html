@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -163,7 +166,7 @@
             </ul>
             <ul class="list list--divided" role="list">
               <li class="list__item"><div class="list__content"><span class="list__title">Riverside Community Church</span><span class="list__meta">Burlington, ON · Naomi Fraser, worship coordinator</span></div></li>
-              <li class="list__item"><div class="list__content"><span class="list__title">Sunday service</span><span class="list__meta">Sat 14 Nov · 10:30 am · about 45 minutes of worship</span></div></li>
+              <li class="list__item"><div class="list__content"><span class="list__title">Worship night</span><span class="list__meta">Sat 14 Nov · 7:00 p.m. · about 45 minutes of worship</span></div></li>
             </ul>
           </div>
         </div>
@@ -204,9 +207,9 @@
         <div class="ds-example__canvas ds-example__canvas--block">
           <nav aria-label="Your requests">
             <ul class="list list--interactive list--divided" role="list">
-              <li class="list__item"><a class="list__link" href="#variants"><span class="avatar" aria-hidden="true">EP</span><span class="list__content"><span class="list__title">Elijah Park</span><span class="list__meta">Wed 4 Nov · Midweek prayer night</span></span><span class="list__trail"><span class="badge badge--warning">Deposit due</span></span></a></li>
-              <li class="list__item"><a class="list__link" href="#variants" aria-current="true"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sat 14 Nov · Sunday service</span></span><span class="list__trail"><span class="badge badge--info">Requested</span></span></a></li>
-              <li class="list__item"><a class="list__link" href="#variants"><span class="avatar avatar--ink" aria-hidden="true">MB</span><span class="list__content"><span class="list__title">Marcus Bell Trio</span><span class="list__meta">Sun 29 Nov · Advent carol night</span></span><span class="list__trail"><span class="badge badge--success">Accepted</span></span></a></li>
+              <li class="list__item"><a class="list__link" href="#variants"><span class="avatar avatar--ink" aria-hidden="true">MB</span><span class="list__content"><span class="list__title">Marcus Bell Trio</span><span class="list__meta">Sun 25 Oct · Sunday service</span></span><span class="list__trail"><span class="stamp stamp--confirmed">Confirmed</span></span></a></li>
+              <li class="list__item"><a class="list__link" href="#variants" aria-current="true"><span class="avatar" aria-hidden="true">AM</span><span class="list__content"><span class="list__title">Abigail Mensah</span><span class="list__meta">Sat 14 Nov · Worship night</span></span><span class="list__trail"><span class="stamp stamp--requested">Requested</span></span></a></li>
+              <li class="list__item"><a class="list__link" href="#variants"><span class="avatar" aria-hidden="true">LV</span><span class="list__content"><span class="list__title">Luz Viva</span><span class="list__meta">Sat 5 Dec · Worship night</span></span><span class="list__trail"><span class="stamp stamp--accepted">Accepted</span></span></a></li>
             </ul>
           </nav>
         </div>
@@ -214,17 +217,34 @@
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;nav aria-label="Your requests"&gt;
   &lt;ul class="list list--interactive list--divided" role="list"&gt;
     &lt;li class="list__item"&gt;
-      &lt;a class="list__link" href="/bookings/zam-0114" aria-current="true"&gt;
+      &lt;a class="list__link" href="/bookings/ZAM-0114" aria-current="true"&gt;
         &lt;span class="avatar" aria-hidden="true"&gt;AM&lt;/span&gt;
         &lt;span class="list__content"&gt;
           &lt;span class="list__title"&gt;Abigail Mensah&lt;/span&gt;
-          &lt;span class="list__meta"&gt;Sat 14 Nov · Sunday service&lt;/span&gt;
+          &lt;span class="list__meta"&gt;Sat 14 Nov · Worship night&lt;/span&gt;
         &lt;/span&gt;
-        &lt;span class="list__trail"&gt;&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;&lt;/span&gt;
+        &lt;span class="list__trail"&gt;&lt;span class="stamp stamp--requested"&gt;Requested&lt;/span&gt;&lt;/span&gt;
       &lt;/a&gt;
     &lt;/li&gt;
   &lt;/ul&gt;
 &lt;/nav&gt;</code></pre></details>
+      </div>
+      <h3>Device list</h3>
+      <p><code>.device-list</code> lists signed-in sessions in account settings: a hairline-divided row per device with the browser and OS as an uppercase label, a muted line of place and last activity, and an action on the right (“End session”, named after the device) or a “This device” badge. Rows wrap the action under the text on narrow screens.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<ul class="device-list" role="list" style="width: min(100%, 34rem);">
+  <li><span><strong>Chrome on Windows</strong><span class="text-muted">Burlington, ON · This device · active now</span></span><span class="badge">This device</span></li>
+  <li><span><strong>Safari on iPhone</strong><span class="text-muted">Burlington, ON · Last active 2 hours ago</span></span><button class="btn btn--sm" type="button" aria-label="End session on Safari on iPhone">End session</button></li>
+  <li><span><strong>Firefox on Mac</strong><span class="text-muted">Hamilton, ON · Last active Tue 6 Oct</span></span><button class="btn btn--sm" type="button" aria-label="End session on Firefox on Mac">End session</button></li>
+</ul>
+        </div>
+        <div class="ds-example__caption"><span><code>.device-list</code>: “Signed-in devices” on pages/account/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="device-list" role="list" style="width: min(100%, 34rem);"&gt;
+  &lt;li&gt;&lt;span&gt;&lt;strong&gt;Chrome on Windows&lt;/strong&gt;&lt;span class="text-muted"&gt;Burlington, ON · This device · active now&lt;/span&gt;&lt;/span&gt;&lt;span class="badge"&gt;This device&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span&gt;&lt;strong&gt;Safari on iPhone&lt;/strong&gt;&lt;span class="text-muted"&gt;Burlington, ON · Last active 2 hours ago&lt;/span&gt;&lt;/span&gt;&lt;button class="btn btn--sm" type="button" aria-label="End session on Safari on iPhone"&gt;End session&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;span&gt;&lt;strong&gt;Firefox on Mac&lt;/strong&gt;&lt;span class="text-muted"&gt;Hamilton, ON · Last active Tue 6 Oct&lt;/span&gt;&lt;/span&gt;&lt;button class="btn btn--sm" type="button" aria-label="End session on Firefox on Mac"&gt;End session&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre></details>
       </div>
     </section>
 
@@ -292,7 +312,7 @@
       <h3>Focus</h3>
       <p>The ring wraps the whole <code>.list__link</code>, 3px with a 3px offset, so it stays visible on the ink current item. Opening an item moves focus to the opened content’s heading; going back returns focus to the same row.</p>
       <h3>Labelling</h3>
-      <p>The row’s accessible name is its text: title, meta and trail, in that order (“Abigail Mensah Sat 14 Nov · Sunday service Requested”). Keep it short for that reason. Avatars next to a name are <code>aria-hidden="true"</code>. Label the list itself when there is more than one on the page (“Naomi’s saved artists”).</p>
+      <p>The row’s accessible name is its text: title, meta and trail, in that order (“Abigail Mensah Sat 14 Nov · Worship night Requested”). Keep it short for that reason. Avatars next to a name are <code>aria-hidden="true"</code>. Label the list itself when there is more than one on the page (“Naomi’s saved artists”).</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Title on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
@@ -359,25 +379,31 @@
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.list</code> + <code>role="list"</code></td><td>Unstyled list; keeps list semantics in Safari.</td></tr>
         <tr><td><code>.list--divided</code></td><td>Hairline between items.</td></tr>
+        <tr><td><code>.list--grid</code></td><td>Two columns of short items, 8px by 20px apart (recovery codes).</td></tr>
         <tr><td><code>.list__item</code></td><td>Flex row: leading, content, trail; 12px block padding.</td></tr>
         <tr><td><code>.list__content</code>, <code>.list__title</code>, <code>.list__meta</code></td><td>Text column that shrinks and wraps; bold title; muted meta.</td></tr>
         <tr><td><code>.list__trail</code></td><td>Pushed to the end, never shrinks.</td></tr>
         <tr><td><code>.list--interactive</code> + <code>.list__link</code></td><td>Row-filling link or button, 44px minimum, highlighter hover.</td></tr>
         <tr><td><code>aria-current="true"</code> / <code>aria-selected="true"</code> on <code>.list__link</code></td><td>Current (or selected) row: inverse fill.</td></tr>
         <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
+      
+        <tr><td><code>.device-list</code></td><td>Session rows: label and muted meta left, action or badge right; hairline dividers.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The product will need it for the Saved panel behind the top-bar “Saved 3” button, the account menu behind Naomi’s avatar, and the requests view on phones. Related mock parts:</p>
+      <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the top-bar “Saved” button with its count and the “NF” account avatar that open these lists</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: Free and Booked badges used as trails</li>
+        <li><code>.list.list--divided</code>: <a href="../../mocks/dialogs/suspend-artist/default.html">dialogs/suspend-artist/default</a> (what suspending changes); <code>.list</code> of recovery codes: <a href="../../mocks/pages/mfa-setup/codes.html">pages/mfa-setup/codes</a></li>
+        <li><code>.device-list</code>: <a href="../../mocks/pages/account/default.html">pages/account/default</a> and its states, <a href="../../mocks/dialogs/delete-account/default.html">dialogs/delete-account/default</a></li>
+        <li>Menus built from list rows (<code>.menu-list</code> of <code>.menu__item</code>): <a href="../../mocks/dialogs/account-menu/default.html">dialogs/account-menu/default</a>, <a href="../../mocks/dialogs/menu/default.html">dialogs/menu/default</a> (see <a href="menu.html">Menu</a>)</li>
+        <li>Booking and request rows use the <code>.booking-list</code> component: <a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/requests/default.html">pages/requests/default</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
-        <li>The top-bar “Saved” button combined <code>.nav-link</code>, <code>.btn--ghost</code> and an inline style reset. <code>.nav-link</code> now resets buttons itself, so the trigger for this list is one class.</li>
+        <li>The top-bar “Saved” button combined <code>.nav-link</code>, <code>.btn--ghost</code> and an inline style reset. <code>.nav-link</code> now resets buttons itself.</li>
         <li>The avatar read <code>--palette-ink</code> directly for its outline. It now uses <code>--color-border-on-accent</code>, so avatars in list rows follow the theme.</li>
+        <li><a href="../../mocks/pages/mfa-setup/codes.html">pages/mfa-setup/codes</a> laid its code list out with an inline <code>style</code> grid. It now uses <code>.list--grid</code>.</li>
       </ul>
     </section>
 

@@ -40,7 +40,7 @@
   --palette-ink-750: #34322e;        /* ink: text and rules on paper, 11:1 */
   --palette-ink-700: #3f3d38;      /* poster rules, control edges on light */
   --palette-ink-600: #5a5853;      /* muted text on light, 6:1 */
-  --palette-ink-500: #67655f;      /* subtle text on light, >= 4.6:1 */
+  --palette-ink-500: #67655f;      /* subtle text on light, >= 4.9:1 */
   --palette-ink-400: #a19e97;      /* subtle text on dark */
   --palette-ink-300: #b5b2aa;      /* muted text on dark, 7:1 */
   --palette-ink-200: #d9d6cd;      /* hairline dividers on light */
@@ -142,10 +142,10 @@
   --space-32: 8rem;       /* 128px reserved for hero breathing room */
 
   /* Layout */
-  --layout-breakpoint-sm: 40rem;   /* 640px  ticket stub moves beside the body */
-  --layout-breakpoint-md: 48rem;   /* 768px  8 columns, two-up grids */
-  --layout-breakpoint-lg: 64rem;   /* 1024px 12 columns, top nav, sticky booking stub */
-  --layout-breakpoint-xl: 80rem;   /* 1280px container stops growing */
+  --layout-breakpoint-sm: 36rem;   /* 576px  SM (L2): ticket stub moves beside the body */
+  --layout-breakpoint-md: 48rem;   /* 768px  MD (L2): 8 columns, two-up grids */
+  --layout-breakpoint-lg: 62rem;   /* 992px  LG (L2): 12 columns, top nav, sticky booking stub */
+  --layout-breakpoint-xl: 75rem;   /* 1200px XL (L2): widest viewport class; the container caps at 1216px */
   --layout-breakpoint-2xl: 96rem;  /* 1536px margins grow, content does not */
   --layout-columns: 4;
   --layout-gutter: var(--space-4);
@@ -155,7 +155,7 @@
   --layout-sidebar-width: 22rem;   /* booking stub column on the artist page */
   --layout-topbar-height: 4.25rem; /* 68px including the 4px yellow rule */
   --layout-dialog-width: 32rem;    /* 512px default dialog */
-  --layout-drawer-width: 20rem;    /* 320px navigation drawer under 64rem */
+  --layout-drawer-width: 20rem;    /* 320px navigation drawer under 62rem */
   --layout-menu-width: 16rem;      /* 256px account menu popover */
   --layout-auth-width: 28rem;      /* 448px sign-in / sign-up stub */
   --layout-calendar-cell: 2.75rem; /* 44px min-height of an availability day */
@@ -184,7 +184,7 @@
   --duration-base: 160ms;       /* ticket lift, menus, tooltips */
   --duration-slow: 260ms;       /* dialogs, toasts */
   --duration-deliberate: 900ms; /* skeleton sweep */
-  --duration-loop: 900ms;       /* one spinner turn; a status indicator, so reduced motion keeps it */
+  --duration-loop: 900ms;       /* one spinner turn; components.css stops the spinner under reduced motion */
   --duration-tooltip-delay: 300ms; /* hover intent before a tooltip shows */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-enter: cubic-bezier(0, 0, 0, 1);
@@ -216,7 +216,7 @@
 @media (min-width: 48rem) {
   :root { --layout-columns: 8; --layout-gutter: var(--space-6); --layout-margin: var(--space-10); }
 }
-@media (min-width: 64rem) {
+@media (min-width: 62rem) {
   :root { --layout-columns: 12; --layout-gutter: var(--space-8); --layout-margin: var(--space-16); }
 }
 

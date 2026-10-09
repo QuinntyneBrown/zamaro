@@ -15,8 +15,6 @@
 /* Docs only: the headliner needs the width of the product's lineup column, so this page stacks
    the anatomy, theme and do/don't grids instead of putting specimens side by side. */
 .ds-section .ds-anatomy, .ds-section .ds-themes { grid-template-columns: minmax(0, 1fr); }
-/* Docs only: forced hover for the name link (no data-state hook in components.css yet). */
-.headliner__name a.is-hover { background: var(--color-accent); color: var(--color-fg-on-accent); }
 </style>
 </head>
 <body id="top">
@@ -55,6 +53,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -81,6 +80,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -120,7 +121,7 @@
     <header class="ds-header">
       <p class="ds-kicker">Component · Zamaro signatures</p>
       <h1>Headliner</h1>
-      <p class="ds-lead">The headliner is the top of the bill: the best match for the booker’s date, shown larger than the rest of the lineup, with a church’s own words about why.</p>
+      <p class="ds-lead">The headliner is the top of the bill: the most-booked artist who is free on the booker’s date and within travel range, shown larger than the rest of the lineup, with a church’s own words about why.</p>
       <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill"><code>&lt;article&gt;</code> labelled by the name</span><span class="ds-pill">Class <code>.headliner</code></span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
@@ -128,10 +129,10 @@
     </header>
 
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-      <p>Use one headliner at the top of a lineup, above the <a href="ticket.html">tickets</a>. It is “No. 01”: the artist Zamaro would book first for that date and place, usually the most-booked artist who is free. It answers two questions before the booker scrolls: is someone good free, and what do churches say about them.</p>
+      <p>Use one headliner at the top of a lineup, above the <a href="ticket.html">tickets</a>. It is “No. 01”: of the artists free that date and willing to drive that far, the one with the most bookings confirmed this season and matching the active filters (ties go to the higher rating, then the shorter distance, then the lower artist ID). It stays first whatever the sort; the tickets below follow the sort, numbered from No. 02 (L2-006, L2-007). It answers two questions before the booker scrolls: is someone good free, and what do churches say about them.</p>
       <ul>
         <li>Only one per page. If no artist is free, there is no headliner; show the <a href="empty-state.html">empty state</a> instead.</li>
-        <li>Not for ads or sponsored artists. The headliner is earned by availability, distance and reviews.</li>
+        <li>Not for ads or sponsored artists. The headliner is earned by bookings, availability and distance.</li>
         <li>Not on the profile page: the profile already has the <a href="poster.html">artist poster</a>.</li>
       </ul>
     </section>
@@ -144,7 +145,7 @@
             <div class="stack">
               <p class="overline">No. 01 · Most booked this autumn</p>
               <h3 id="a-name" class="headliner__name"><a href="#anatomy">Abigail Mensah</a></h3>
-              <div class="headliner__meta"><span>Gospel &amp; contemporary vocalist</span><span>Brampton · 44 km</span><span>★ 4.9 (38 churches)</span><span>From $650</span></div>
+              <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
               <p>“She had the whole congregation singing in three-part harmony by the last verse.” <span class="text-muted">— Rev. Janet Clarke, Oshawa</span></p>
               <div class="cluster">
                 <span class="badge badge--free">Free Sat 14 Nov</span>
@@ -167,7 +168,7 @@
           <li><div><b>Tag</b><small><code>.art__tag</code> “Headliner”: ink label on the art, mono overline.</small></div></li>
           <li><div><b>Number and reason</b><small><code>.overline</code>: “No. 01 · Most booked this autumn”.</small></div></li>
           <li><div><b>Name</b><small><code>.headliner__name</code>: <code>--text-display</code> (64–160px), the link to the profile. Hover fills it yellow.</small></div></li>
-          <li><div><b>Meta</b><small><code>.headliner__meta</code>: four stub-font facts: style, town and distance, rating, price.</small></div></li>
+          <li><div><b>Meta</b><small><code>.headliner__meta</code>: four stub-font facts: act type and styles (“Solo vocalist · Hymns”), town and distance, rating, price.</small></div></li>
           <li><div><b>Quote</b><small>One review sentence in curly quotes, with the reviewer muted after a dash.</small></div></li>
           <li><div><b>Actions</b><small>Free <a href="badge.html">badge</a>, ink <a href="button.html">button</a> to the profile, <a href="save-toggle.html">save toggle</a>.</small></div></li>
           <li><div><b>Frame</b><small>Paper surface, 4px <code>--border-width-poster</code> frame, hard 8px <code>--shadow-3</code>, 32–40px padding.</small></div></li>
@@ -185,7 +186,7 @@
             <div class="stack">
               <p class="overline">No. 01 · Most booked this autumn</p>
               <h3 id="v1-name" class="headliner__name"><a href="#v1-name">Abigail Mensah</a></h3>
-              <div class="headliner__meta"><span>Gospel &amp; contemporary vocalist</span><span>Brampton · 44 km</span><span>★ 4.9 (38 churches)</span><span>From $650</span></div>
+              <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
               <p>“She had the whole congregation singing in three-part harmony by the last verse.” <span class="text-muted">— Rev. Janet Clarke, Oshawa</span></p>
               <div class="cluster">
                 <span class="badge badge--free">Free Sat 14 Nov</span>
@@ -201,7 +202,7 @@
   &lt;div class="stack"&gt;
     &lt;p class="overline"&gt;No. 01 · Most booked this autumn&lt;/p&gt;
     &lt;h3 id="headliner-name" class="headliner__name"&gt;&lt;a href="/artists/abigail-mensah"&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
-    &lt;div class="headliner__meta"&gt;&lt;span&gt;Gospel &amp;amp; contemporary vocalist&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;★ 4.9 (38 churches)&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
+    &lt;div class="headliner__meta"&gt;&lt;span&gt;Solo vocalist · Hymns&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;&lt;span role="img" aria-label="Rated 4.9 out of 5 by 38 churches"&gt;★ 4.9 · 38 churches&lt;/span&gt;&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
     &lt;p&gt;“She had the whole congregation singing in three-part harmony by the last verse.” &lt;span class="text-muted"&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
     &lt;div class="cluster"&gt;
       &lt;span class="badge badge--free"&gt;Free Sat 14 Nov&lt;/span&gt;
@@ -215,16 +216,16 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
           <article class="headliner" aria-labelledby="v2-name">
-            <div class="art art--yellow"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='12' cy='20' r='5' fill-opacity='.55'/%3E%3Ccircle cx='28' cy='18' r='5' fill-opacity='.55'/%3E%3Cpath d='M0 50c0-12 5-22 12-22s10 6 10 12c0-8 3-14 6-14 7 0 12 10 12 24z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"><span class="art__tag">Headliner</span></div>
+            <div class="art art--yellow"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='12' cy='20' r='5' fill-opacity='.55'/%3E%3Ccircle cx='28' cy='18' r='5' fill-opacity='.55'/%3E%3Cpath d='M0 50c0-12 5-22 12-22s10 6 10 12c0-8 3-14 6-14 7 0 12 10 12 24z' fill-opacity='.7'/%3E%3C/svg%3E" alt="Daniel and Ruth Okonkwo singing together at a piano"><span class="art__tag">Headliner</span></div>
             <div class="stack">
-              <p class="overline">No. 01 · Five stars from every church</p>
-              <h3 id="v2-name" class="headliner__name"><a href="#v2-name">Luz Viva</a></h3>
-              <div class="headliner__meta"><span>Spanish &amp; English band</span><span>North York · 63 km</span><span>★ 5.0 (24 churches)</span><span>From $900</span></div>
-              <p>“They led half the set in Spanish and the whole room sang along.” <span class="text-muted">— Tomi Oduya, Milton</span></p>
+              <p class="overline">No. 01 · Most booked this autumn</p>
+              <h3 id="v2-name" class="headliner__name"><a href="#v2-name">Daniel &amp; Ruth Okonkwo</a></h3>
+              <div class="headliner__meta"><span>Duo · Acoustic, Hymns</span><span>Ajax · 97 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 14 churches">★ 4.9 · 14 churches</span></span><span>From $700</span></div>
+              <p>“Ruth took the melody, Daniel took the harmony, and the whole church followed them.” <span class="text-muted">— Pastor Femi Adebayo, Brampton</span></p>
               <div class="cluster">
                 <span class="badge badge--free">Free Sat 14 Nov</span>
-                <a class="btn btn--ink" href="#v2-name">See Luz Viva’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
-                <button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+                <a class="btn btn--ink" href="#v2-name">See Daniel &amp; Ruth Okonkwo’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+                <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
               </div>
             </div>
           </article>
@@ -257,13 +258,13 @@
     </section>
 
     <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
-      <p>The frame itself does not react to the pointer; its three controls do. Hover and focus are forced with <code>data-state</code> (the name’s hover with a docs-only class).</p>
+      <p>The frame itself does not react to the pointer; its three controls do. Hover and focus are forced with <code>data-state</code>.</p>
       <div class="ds-matrix"><table>
         <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active / on</th><th scope="col">Busy</th></tr></thead>
         <tbody>
           <tr><th scope="row">Name link</th>
             <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states">Abigail</a></p></td>
-            <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states" class="is-hover">Abigail</a></p></td>
+            <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states" data-state="hover">Abigail</a></p></td>
             <td><p class="headliner__name" style="font: var(--text-h2);"><a href="#states" data-state="focus">Abigail</a></p></td>
             <td><span class="text-caption">—</span></td>
             <td><span class="text-caption">—</span></td></tr>
@@ -278,7 +279,7 @@
             <td><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="false" data-state="focus" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
             <td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td>
-            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
+            <td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr>
           <tr><th scope="row">Free badge</th>
             <td><span class="badge badge--free">Free Sat 14 Nov</span></td>
             <td colspan="4"><span class="text-caption">Static. If the date fills while the page is open, it becomes <span class="badge badge--booked">Booked Sat 14 Nov</span> and the artist drops out of the headliner slot on the next search.</span></td></tr>
@@ -300,7 +301,7 @@
       <ul>
         <li><b>Under 768px</b>: art on top (full width, 4:5), copy below, 32px padding.</li>
         <li><b>From <code>--layout-breakpoint-md</code> (768px)</b>: two columns, art at 16rem and copy bottom-aligned beside it.</li>
-        <li><b>From <code>--layout-breakpoint-lg</code> (1024px)</b>: art at 20rem, 40px padding and gap.</li>
+        <li><b>From <code>--layout-breakpoint-lg</code> (992px)</b>: art at 20rem, 40px padding and gap.</li>
         <li>The name breaks anywhere (<code>overflow-wrap: anywhere</code>) rather than scroll sideways. Meta facts and actions wrap as units.</li>
       </ul>
     </section>
@@ -342,7 +343,7 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li><b>Number line</b>: “No. 01 · ” and why this artist leads: “Most booked this autumn”, “Closest band with five stars”. Never “Featured” or “Sponsored”.</li>
+        <li><b>Number line</b>: “No. 01 · Most booked this {season}”, as in “Most booked this autumn”: the headliner is the most-booked artist free that day (L2-006). Never “Featured” or “Sponsored”.</li>
         <li><b>Meta</b>: style, town · distance, rating (churches), “From” price. Four facts, no more.</li>
         <li><b>Quote</b>: one sentence from a real review, in curly quotes, naming something specific that happened. Attribute with name and town.</li>
         <li><b>Button</b>: “See {first name}’s profile”. For groups use the full name: “See Luz Viva’s profile”.</li>
@@ -354,8 +355,8 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas"><div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--ink" href="#do-dont">See Abigail’s profile</a></div></div><figcaption>An ink button beside the yellow badge. The only yellow fill on the frame is information.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--primary" href="#do-dont">See Abigail’s profile</a></div></div><figcaption>A primary button here competes with the booking bar’s “Show the lineup”, the page’s one primary action.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><div class="art art--yellow art--square" role="img" aria-label="Abigail Mensah singing" style="width: 8rem;"><span class="art__tag">Headliner</span></div></div><figcaption>The tag reads the inverse tokens, so it stays legible in both themes.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas"><div class="art art--square" role="img" aria-label="Abigail Mensah singing" style="width: 8rem;"><span class="art__tag">Headliner</span></div><div class="art art--yellow art--square" role="img" aria-label="Elijah Park singing" style="width: 8rem;"><span class="art__tag">Headliner</span></div></div><figcaption>Two headliners, or a headliner without the yellow art. There is one top of the bill, and yellow marks it.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="art art--yellow art--square art--thumb-lg" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div></div><figcaption>The tag reads the inverse tokens, so it stays legible in both themes.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="art art--square art--thumb-lg" role="img" aria-label="Abigail Mensah singing"><span class="art__tag">Headliner</span></div><div class="art art--yellow art--square art--thumb-lg" role="img" aria-label="Elijah Park singing"><span class="art__tag">Headliner</span></div></div><figcaption>Two headliners, or a headliner without the yellow art. There is one top of the bill, and yellow marks it.</figcaption></figure>
       </div>
     </section>
 
@@ -413,7 +414,7 @@
         <li><code>.art--yellow</code> dots and <code>.art__tag</code> read <code>--palette-ink</code> and <code>--palette-paper</code>. They now read <code>--color-border-on-accent</code> and the inverse pair.</li>
         <li><code>.btn--ink</code> borrowed <code>--color-fg-default</code> and <code>--color-bg-canvas</code>. It now reads the inverse pair.</li>
         <li>The loading frame’s skeletons were sized inline (<code>aspect-ratio: 4 / 5</code>, <code>width: 40%</code>, <code>width: 85%</code>). They now use <code>.skeleton--portrait</code>, <code>--short</code> and <code>--long</code>.</li>
-        <li>Still open: <code>.headliner__name a</code> has no <code>data-state="hover"</code> hook, so this page forces the hover with a docs-only class.</li>
+        <li><code>.headliner__name a</code> had no <code>data-state="hover"</code> hook. <code>components.css</code> now has one, so this page forces the name’s hover like every other control.</li>
       </ul>
     </section>
 

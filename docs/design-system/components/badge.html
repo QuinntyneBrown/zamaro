@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Badge — Zamaro design system</title>
-<meta name="description" content="Badges stamp a status on a date, artist or booking: Free, Booked, Requested, Accepted, Declined, Deposit due. Outline, tone and solid variants plus a count badge.">
+<meta name="description" content="Badges mark a state on a date, artist, application or payment: Free, Booked, Submitted, Approved, Held, Suspended. Outline, tone and solid variants plus a count badge. Booking statuses use the status stamp.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -110,7 +113,7 @@
     <header class="ds-header">
       <p class="ds-kicker">Component · Data display</p>
       <h1>Badge</h1>
-      <p class="ds-lead">A badge is a small rubber stamp that says where something stands: a date is Free or Booked, a request is Requested, Accepted, Declined or has a Deposit due.</p>
+      <p class="ds-lead">A badge is a small rubber stamp that says where something stands: a date is Free or Booked, an application is Submitted or Approved, a payment is Held or Succeeded, an artist is Suspended. Booking statuses are not badges: they use the <a href="stamp.html">status stamp</a>.</p>
       <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Static <code>&lt;span&gt;</code></span><span class="ds-pill">Class <code>.badge</code></span></div>
       <ul class="ds-toc">
         <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
@@ -120,10 +123,11 @@
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
       <p>Use a badge for a status from a fixed set, shown next to the thing it describes. A badge is not clickable; to filter by status use a <a href="chip.html">chip</a>, and to explain a status use an <a href="inline-message.html">inline message</a>.</p>
       <ul>
-        <li><b>Availability</b>: <code>.badge--free</code> (yellow stamp) and <code>.badge--booked</code> (muted, struck through) on tour dates, tickets and saved artists.</li>
-        <li><b>Booking status</b>: the four tones, one per status. Requested is info, Accepted is success, Deposit due is warning, Declined is danger.</li>
-        <li><b>Solid</b> (<code>.badge--solid</code> with a tone) is for the one status in a view that needs action now, such as Deposit due in a request header.</li>
-        <li><b>Neutral outline</b> (plain <code>.badge</code>) for labels with no tone: “New on Zamaro”.</li>
+        <li><b>Availability</b>: <code>.badge--free</code> (yellow stamp) and <code>.badge--booked</code> (muted, struck through) on tour dates, tickets and saved artists. They mean availability only; a done state such as a verified check uses the success tone.</li>
+        <li><b>Tones</b> for states outside the booking lifecycle, one tone per meaning: info for waiting on someone (Submitted, Scheduled, Waiting for verification), success for done (Approved, Succeeded, Verified for a Vulnerable Sector Check), warning for needs attention (Held, Paused, “2 reports”), danger for stopped or failed (Suspended, Failed). These are the admin, application and payment states in the mocks.</li>
+        <li><b>Booking status</b> (Requested, Accepted, Confirmed, Completed, Declined, Withdrawn, Expired, Cancelled) is never a badge: use the <a href="stamp.html">status stamp</a>, <code>.stamp--lg</code> in a page head and <code>.stamp--flat</code> in a table or receipt row. A held payment stays a warning badge (“Held”) beside the booking’s stamp.</li>
+        <li><b>Solid</b> (<code>.badge--solid</code> with a tone) is for the one state in a view that needs action now, such as a Held payment in an admin header. No mock uses it yet.</li>
+        <li><b>Neutral outline</b> (plain <code>.badge</code>) for labels with no tone: Unavailable (a blocked day or weekday on <a href="../../mocks/pages/availability/default.html">pages/availability</a>), Off (two-step sign-in not set up, <a href="../../mocks/pages/account/default.html">pages/account</a>), This device (the current session), Deposit held and Paid {date} (<a href="../../mocks/pages/earnings/default.html">pages/earnings/default</a>), Not set up (<a href="../../mocks/pages/earnings/setup.html">pages/earnings/setup</a>), Not uploaded (the check on <a href="../../mocks/pages/edit-profile/empty.html">pages/edit-profile/empty</a>), “New on Zamaro”. Two-step sign-in that is on is a success badge (On).</li>
         <li><b>Count</b> (<code>.badge--count</code>) for a number on a control: the 3 on “Saved”.</li>
       </ul>
     </section>
@@ -131,7 +135,7 @@
     <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
       <div class="ds-anatomy">
         <figure class="ds-anatomy__figure">
-          <span class="badge badge--warning" style="font-size: var(--font-size-md);">Deposit due</span>
+          <span class="badge badge--warning" style="font-size: var(--font-size-md);">Held</span>
           <span class="ds-callout" style="left: 30%; top: 26%;" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: 52%; top: 26%;" aria-hidden="true">2</span>
           <span class="ds-callout" style="left: 72%; top: 70%;" aria-hidden="true">3</span>
@@ -158,30 +162,30 @@
 &lt;span class="badge badge--booked"&gt;Booked&lt;/span&gt;
 &lt;span class="badge"&gt;New on Zamaro&lt;/span&gt;</code></pre></details>
       </div>
-      <h3>Booking status: tones</h3>
+      <h3>Tones</h3>
       <div class="ds-example">
         <div class="ds-example__canvas">
-          <span class="badge badge--info">Requested</span>
-          <span class="badge badge--success">Accepted</span>
-          <span class="badge badge--warning">Deposit due</span>
-          <span class="badge badge--danger">Declined</span>
+          <span class="badge badge--info">Submitted</span>
+          <span class="badge badge--success">Approved</span>
+          <span class="badge badge--warning">Held</span>
+          <span class="badge badge--danger">Suspended</span>
         </div>
-        <div class="ds-example__caption"><span>One tone per status, always the same pairing, so Naomi learns it once. The word still carries the meaning without colour.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;
-&lt;span class="badge badge--success"&gt;Accepted&lt;/span&gt;
-&lt;span class="badge badge--warning"&gt;Deposit due&lt;/span&gt;
-&lt;span class="badge badge--danger"&gt;Declined&lt;/span&gt;</code></pre></details>
+        <div class="ds-example__caption"><span>One tone per meaning, always the same pairing, so Priya and Abigail learn it once. The word still carries the meaning without colour. For a booking’s own status, use the <a href="stamp.html">status stamp</a>.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="badge badge--info"&gt;Submitted&lt;/span&gt;
+&lt;span class="badge badge--success"&gt;Approved&lt;/span&gt;
+&lt;span class="badge badge--warning"&gt;Held&lt;/span&gt;
+&lt;span class="badge badge--danger"&gt;Suspended&lt;/span&gt;</code></pre></details>
       </div>
       <h3>Solid</h3>
       <div class="ds-example">
         <div class="ds-example__canvas">
-          <span class="badge badge--solid badge--info">Requested</span>
-          <span class="badge badge--solid badge--success">Accepted</span>
-          <span class="badge badge--solid badge--warning">Deposit due</span>
-          <span class="badge badge--solid badge--danger">Declined</span>
+          <span class="badge badge--solid badge--info">Submitted</span>
+          <span class="badge badge--solid badge--success">Approved</span>
+          <span class="badge badge--solid badge--warning">Held</span>
+          <span class="badge badge--solid badge--danger">Suspended</span>
         </div>
-        <div class="ds-example__caption"><span>Solid fills for the single status that needs attention in a view, for example the request header of a booking with a deposit due. Never a column of solid badges.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="badge badge--solid badge--warning"&gt;Deposit due&lt;/span&gt;</code></pre></details>
+        <div class="ds-example__caption"><span>Solid fills for the single state that needs attention in a view, for example a held payment in the admin booking header. Never a column of solid badges.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="badge badge--solid badge--warning"&gt;Held&lt;/span&gt;</code></pre></details>
       </div>
       <h3>Count</h3>
       <div class="ds-example">
@@ -212,19 +216,19 @@
         <tbody>
           <tr><th scope="row">Free</th><td><span class="badge badge--free">Free</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--free">Free</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--free">Free</span></td><td class="on-stage"><span class="badge badge--free">Free</span></td></tr>
           <tr><th scope="row">Booked</th><td><span class="badge badge--booked">Booked</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--booked">Booked</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--booked">Booked</span></td><td class="on-stage"><span class="badge">Booked</span></td></tr>
-          <tr><th scope="row">Requested</th><td><span class="badge badge--info">Requested</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--info">Requested</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--info">Requested</span></td><td class="on-stage"><span class="badge badge--info">Requested</span></td></tr>
-          <tr><th scope="row">Accepted</th><td><span class="badge badge--success">Accepted</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--success">Accepted</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--success">Accepted</span></td><td class="on-stage"><span class="badge badge--success">Accepted</span></td></tr>
-          <tr><th scope="row">Deposit due</th><td><span class="badge badge--warning">Deposit due</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--warning">Deposit due</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--warning">Deposit due</span></td><td class="on-stage"><span class="badge badge--warning">Deposit due</span></td></tr>
-          <tr><th scope="row">Declined</th><td><span class="badge badge--danger">Declined</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--danger">Declined</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--danger">Declined</span></td><td class="on-stage"><span class="badge badge--danger">Declined</span></td></tr>
-          <tr><th scope="row">Solid</th><td><span class="badge badge--solid badge--warning">Deposit due</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--solid badge--warning">Deposit due</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--solid badge--warning">Deposit due</span></td><td class="on-stage"><span class="badge badge--solid badge--warning">Deposit due</span></td></tr>
+          <tr><th scope="row">Submitted</th><td><span class="badge badge--info">Submitted</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--info">Submitted</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--info">Submitted</span></td><td class="on-stage"><span class="badge badge--info">Submitted</span></td></tr>
+          <tr><th scope="row">Approved</th><td><span class="badge badge--success">Approved</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--success">Approved</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--success">Approved</span></td><td class="on-stage"><span class="badge badge--success">Approved</span></td></tr>
+          <tr><th scope="row">Held</th><td><span class="badge badge--warning">Held</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--warning">Held</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--warning">Held</span></td><td class="on-stage"><span class="badge badge--warning">Held</span></td></tr>
+          <tr><th scope="row">Suspended</th><td><span class="badge badge--danger">Suspended</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--danger">Suspended</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--danger">Suspended</span></td><td class="on-stage"><span class="badge badge--danger">Suspended</span></td></tr>
+          <tr><th scope="row">Solid</th><td><span class="badge badge--solid badge--warning">Held</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--solid badge--warning">Held</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--solid badge--warning">Held</span></td><td class="on-stage"><span class="badge badge--solid badge--warning">Held</span></td></tr>
           <tr><th scope="row">Count</th><td><span class="badge badge--count">3</span></td><td style="background: var(--color-bg-subtle);"><span class="badge badge--count">3</span></td><td style="background: var(--color-accent-subtle);"><span class="badge badge--count">3</span></td><td class="on-stage"><span class="badge badge--count">3</span></td></tr>
         </tbody>
       </table></div>
       <p>On the stage, Booked uses the neutral outline: <code>.badge--booked</code> reads <code>--color-fg-muted</code>, which is meant for paper and is too dim on charcoal in the light theme.</p>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="cluster"><span class="badge badge--free">Free</span><span class="badge badge--booked">Booked</span><span class="badge badge--info">Requested</span><span class="badge badge--success">Accepted</span><span class="badge badge--warning">Deposit due</span><span class="badge badge--danger">Declined</span><span class="badge badge--solid badge--warning">Deposit due</span><span class="badge badge--count">3</span></div></div>
-        <div data-theme="dark"><div class="cluster"><span class="badge badge--free">Free</span><span class="badge badge--booked">Booked</span><span class="badge badge--info">Requested</span><span class="badge badge--success">Accepted</span><span class="badge badge--warning">Deposit due</span><span class="badge badge--danger">Declined</span><span class="badge badge--solid badge--warning">Deposit due</span><span class="badge badge--count">3</span></div></div>
+        <div data-theme="light"><div class="cluster"><span class="badge badge--free">Free</span><span class="badge badge--booked">Booked</span><span class="badge badge--info">Submitted</span><span class="badge badge--success">Approved</span><span class="badge badge--warning">Held</span><span class="badge badge--danger">Suspended</span><span class="badge badge--solid badge--warning">Held</span><span class="badge badge--count">3</span></div></div>
+        <div data-theme="dark"><div class="cluster"><span class="badge badge--free">Free</span><span class="badge badge--booked">Booked</span><span class="badge badge--info">Submitted</span><span class="badge badge--success">Approved</span><span class="badge badge--warning">Held</span><span class="badge badge--danger">Suspended</span><span class="badge badge--solid badge--warning">Held</span><span class="badge badge--count">3</span></div></div>
       </div>
     </section>
 
@@ -243,7 +247,7 @@
 
     <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
       <h3>Role and pattern</h3>
-      <p>A badge is plain text in a <code>&lt;span&gt;</code>; it has no role and no APG pattern. When a badge changes while the page is open (a request is accepted), announce the change through the page’s <code>role="status"</code> region, not by putting a live region on every badge.</p>
+      <p>A badge is plain text in a <code>&lt;span&gt;</code>; it has no role and no APG pattern. When a badge changes while the page is open (an application is approved), announce the change through the page’s <code>role="status"</code> region, not by putting a live region on every badge.</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
         <tr><td><kbd>Tab</kbd></td><td>Skips badges; they are never focusable. A badge inside a button or link is read as part of its name.</td></tr>
@@ -256,14 +260,14 @@
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Free label on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
         <div class="ds-pair"><span>Booked label on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
-        <div class="ds-pair"><span>Requested (info)</span><span class="ds-pair__ratio" data-contrast="--color-info-fg|--color-info-bg" data-min="4.5"></span></div>
-        <div class="ds-pair"><span>Accepted (success)</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-success-bg" data-min="4.5"></span></div>
-        <div class="ds-pair"><span>Deposit due (warning)</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-warning-bg" data-min="4.5"></span></div>
-        <div class="ds-pair"><span>Declined (danger)</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Submitted (info)</span><span class="ds-pair__ratio" data-contrast="--color-info-fg|--color-info-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Approved (success)</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-success-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Held (warning)</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-warning-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Suspended (danger)</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
         <div class="ds-pair"><span>Solid warning label</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-warning-solid" data-min="4.5"></span></div>
         <div class="ds-pair"><span>Solid danger label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
         <div class="ds-pair" data-theme="dark"><span>Dark: Booked label on surface</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
-        <div class="ds-pair" data-theme="dark"><span>Dark: Deposit due (warning)</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-warning-bg" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: Held (warning)</span><span class="ds-pair__ratio" data-contrast="--color-warning-fg|--color-warning-bg" data-min="4.5"></span></div>
         <div class="ds-pair" data-theme="dark"><span>Dark: solid success label</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-success-solid" data-min="4.5"></span></div>
         <div class="ds-pair" data-theme="dark"><span>Dark: Free label on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
       </div>
@@ -276,9 +280,9 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>Use only the fixed set: Free, Booked, Requested, Accepted, Declined, Deposit due, plus “New on Zamaro”. One or two words, sentence case in the source.</li>
-        <li>Add a date only to Free, and only where the date is not obvious: “Free Sat 14 Nov” on a ticket, plain “Free” in a list of dates.</li>
-        <li>Statuses are past participles or states, not actions: “Deposit due”, not “Pay deposit”. The action is a button next to it.</li>
+        <li>Use only the fixed set: Free, Booked; Submitted, Scheduled, Waiting for verification; Approved, Succeeded, Verified, On; Held, Paused, report counts (“2 reports”); Failed, Suspended; and the neutral labels Unavailable, Off, This device, Deposit held, Paid {date}, Not uploaded, Not set up and “New on Zamaro”. One to three words, sentence case in the source. Booking statuses go on a <a href="stamp.html">status stamp</a>.</li>
+        <li>Add a date only to Free and Paid, and only where the date is not obvious: “Free Sat 14 Nov” on a ticket, plain “Free” in a list of dates, “Paid Tue 16 Jun” on a payout row.</li>
+        <li>Statuses are past participles or states, not actions: “Held”, not “Release payment”. The action is a button next to it.</li>
         <li>Counts are digits; above 99 show “99+”.</li>
       </ul>
     </section>
@@ -289,8 +293,8 @@
         <figure class="ds-dont"><div class="ds-example__canvas"><span class="badge badge--success">Sat 14 Nov</span><span class="badge badge--danger">Sun 15 Nov</span></div><figcaption>Green and red dates with no status word fail WCAG 1.4.1 for anyone who can’t tell them apart.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></div><figcaption>The count’s meaning is real text, hidden visually.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><span class="badge badge--count">3</span></div><figcaption>The mocks put <code>aria-label="3 saved artists"</code> on the count’s <code>&lt;span&gt;</code>. A span has no role, so the label is often ignored and “3” is read alone.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><span class="badge badge--info">Requested</span><span class="badge badge--success">Accepted</span><span class="badge badge--solid badge--warning">Deposit due</span></div><figcaption>One solid badge for the status that needs action now.</figcaption></figure>
-        <figure class="ds-dont"><div class="ds-example__canvas"><span class="badge badge--solid badge--info">Requested</span><span class="badge badge--solid badge--success">Accepted</span><span class="badge badge--solid badge--danger">Declined</span></div><figcaption>All solid: everything shouts, so nothing stands out.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><span class="badge badge--info">Submitted</span><span class="badge badge--success">Approved</span><span class="badge badge--solid badge--warning">Held</span></div><figcaption>One solid badge for the state that needs action now.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><span class="badge badge--solid badge--info">Submitted</span><span class="badge badge--solid badge--success">Approved</span><span class="badge badge--solid badge--danger">Suspended</span></div><figcaption>All solid: everything shouts, so nothing stands out.</figcaption></figure>
       </div>
     </section>
 
@@ -316,8 +320,8 @@
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
       <pre><code>&lt;span class="badge badge--free"&gt;Free&lt;/span&gt;
 &lt;span class="badge badge--booked"&gt;Booked&lt;/span&gt;
-&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;
-&lt;span class="badge badge--solid badge--warning"&gt;Deposit due&lt;/span&gt;
+&lt;span class="badge badge--info"&gt;Submitted&lt;/span&gt;
+&lt;span class="badge badge--solid badge--warning"&gt;Held&lt;/span&gt;
 &lt;span class="badge badge--count"&gt;3&lt;span class="visually-hidden"&gt; artists&lt;/span&gt;&lt;/span&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.badge</code></td><td>Neutral outline in the current text colour, with a square dot.</td></tr>
@@ -333,15 +337,20 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: Free and Booked on the tour dates; the Saved count in the top bar</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: Free and Booked on Miriam Haile’s four dates</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: Free on all six of Miriam Haile’s upcoming dates</li>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Free Sat 14 Nov” on the headliner; the Saved count</li>
       </ul>
-      <p>The tone and solid variants and the booking statuses (Requested, Accepted, Declined, Deposit due) are not in the mocks yet; the product needs them for the bookings page and request emails.</p>
+      <ul>
+        <li>Tones in the admin and payment mocks: <a href="../../mocks/pages/admin-application/default.html">pages/admin-application/default</a> (Submitted), <a href="../../mocks/pages/admin-artists/default.html">pages/admin-artists/default</a> (Approved), <a href="../../mocks/pages/admin-artist/suspended.html">pages/admin-artist/suspended</a> (Suspended), <a href="../../mocks/pages/admin-booking/default.html">pages/admin-booking/default</a> (Scheduled, Succeeded), <a href="../../mocks/pages/admin-booking/held.html">pages/admin-booking/held</a> and <a href="../../mocks/dialogs/resolve-hold/default.html">dialogs/resolve-hold</a> (Held beside the booking stamp, Paused), <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a> (Failed), <a href="../../mocks/pages/admin-reviews/default.html">pages/admin-reviews/default</a> (“2 reports”)</li>
+        <li>“Verified” (success) on the Vulnerable Sector Check: <a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a> and its states, <a href="../../mocks/dialogs/upload-check/default.html">dialogs/upload-check</a>, <a href="../../mocks/pages/admin-checks/verified.html">pages/admin-checks/verified</a> and the artist account menus</li>
+        <li>Count badges on the top bar’s Saved button and the workspace links (“Requests 3”, “Applications 3”) on every signed-in mock</li>
+      </ul>
+      <p>The solid variant is not in the mocks yet. Booking statuses in the mocks are <a href="stamp.html">status stamps</a>, not badges.</p>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The count badge read the primitive <code>--palette-ink</code> for its outline and was 1.4em minimum. It now uses <code>--color-border-on-accent</code> and is 1.5em, so one digit is a square.</li>
         <li>Free read <code>--palette-ink</code> for its label. It now uses <code>--color-fg-on-accent</code>.</li>
-        <li>The count’s meaning was an <code>aria-label</code> on a <code>&lt;span&gt;</code> in every mock. Use visually hidden text instead (see Do and don’t).</li>
+        <li>The count’s meaning was an <code>aria-label</code> on a <code>&lt;span&gt;</code> in every mock. Every mock now uses visually hidden text instead (see Do and don’t).</li>
       </ul>
     </section>
 

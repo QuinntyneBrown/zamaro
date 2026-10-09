@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -146,13 +149,13 @@
     <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
       <div class="ds-example">
         <div class="ds-example__canvas">
-          <button class="btn btn--primary btn--lg" type="button" aria-busy="true">Checking calendars…</button>
-          <button class="btn" type="button" aria-busy="true">Sending</button>
+          <button class="btn btn--primary btn--lg" type="button" aria-busy="true" aria-disabled="true">Checking calendars…</button>
+          <button class="btn" type="button" aria-busy="true" aria-disabled="true">Sending</button>
           <p class="spinner-inline" role="status"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking calendars…</p>
           <div role="status"><span class="spinner" aria-hidden="true"></span><span class="visually-hidden">Loading Abigail’s videos</span></div>
         </div>
         <div class="ds-example__caption"><span>Busy buttons, an inline status line, and a lone spinner with hidden text.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true"&gt;Checking calendars…&lt;/button&gt;
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true"&gt;Checking calendars…&lt;/button&gt;
 
 &lt;p class="spinner-inline" role="status"&gt;
   &lt;span class="spinner spinner--sm" aria-hidden="true"&gt;&lt;/span&gt;Checking calendars…
@@ -169,8 +172,8 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stage on-stage">
           <p class="spinner-inline" role="status"><span class="spinner spinner--sm" aria-hidden="true"></span>Loading Abigail’s dates…</p>
-          <button class="btn btn--primary" type="button" aria-busy="true">Booking…</button>
-          <button class="btn" type="button" aria-busy="true" aria-pressed="false">Saving</button>
+          <button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Booking…</button>
+          <button class="btn" type="button" aria-busy="true" aria-disabled="true" aria-pressed="false">Saving</button>
         </div>
         <div class="ds-example__caption"><span>Same markup on the stage; the surrounding surface sets the colour.</span></div>
       </div>
@@ -181,7 +184,7 @@
           <div class="section__head" style="margin-bottom: 0;">
             <div><p class="overline section__kicker">Sat 14 Nov · checking calendars</p><p class="card__title">The lineup</p></div>
           </div>
-          <p class="lead spinner-inline" role="status"><span class="spinner" aria-hidden="true"></span>Finding who’s free on Saturday 14 November…</p>
+          <p class="lead spinner-inline" role="status"><span class="spinner" aria-hidden="true"></span>Finding who’s free on Saturday 14 November 2026…</p>
         </div>
         <div class="ds-example__caption"><span>The loading mock’s status line, with the ring added in front of it. The tickets below it are <a href="skeleton.html">skeletons</a>.</span></div>
       </div>
@@ -213,21 +216,21 @@
       <div class="ds-matrix"><table>
         <thead><tr><th scope="col">Variant</th><th scope="col">Idle</th><th scope="col">Busy</th><th scope="col">Busy, focused</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Show the lineup</button></td><td><button class="btn btn--primary" type="button" aria-busy="true">Checking calendars…</button></td><td><button class="btn btn--primary" type="button" aria-busy="true" data-state="focus">Checking calendars…</button></td></tr>
-          <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Try again</button></td><td><button class="btn" type="button" aria-busy="true">Trying again…</button></td><td><button class="btn" type="button" aria-busy="true" data-state="focus">Trying again…</button></td></tr>
-          <tr><th scope="row">Ink</th><td><button class="btn btn--ink" type="button">Send request</button></td><td><button class="btn btn--ink" type="button" aria-busy="true">Sending…</button></td><td><button class="btn btn--ink" type="button" aria-busy="true" data-state="focus">Sending…</button></td></tr>
+          <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Show the lineup</button></td><td><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Checking calendars…</button></td><td><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true" data-state="focus">Checking calendars…</button></td></tr>
+          <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Try again</button></td><td><button class="btn" type="button" aria-busy="true" aria-disabled="true">Trying again…</button></td><td><button class="btn" type="button" aria-busy="true" aria-disabled="true" data-state="focus">Trying again…</button></td></tr>
+          <tr><th scope="row">Ink</th><td><button class="btn btn--ink" type="button">Send request</button></td><td><button class="btn btn--ink" type="button" aria-busy="true" aria-disabled="true">Sending…</button></td><td><button class="btn btn--ink" type="button" aria-busy="true" aria-disabled="true" data-state="focus">Sending…</button></td></tr>
         </tbody>
       </table></div>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="cluster cluster--lg"><span class="spinner spinner--sm" aria-hidden="true"></span><span class="spinner" aria-hidden="true"></span><span class="spinner spinner--lg" aria-hidden="true"></span><span class="spinner-inline"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking calendars…</span><button class="btn btn--primary" type="button" aria-busy="true">Booking…</button></div></div>
-        <div data-theme="dark"><div class="cluster cluster--lg"><span class="spinner spinner--sm" aria-hidden="true"></span><span class="spinner" aria-hidden="true"></span><span class="spinner spinner--lg" aria-hidden="true"></span><span class="spinner-inline"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking calendars…</span><button class="btn btn--primary" type="button" aria-busy="true">Booking…</button></div></div>
+        <div data-theme="light"><div class="cluster cluster--lg"><span class="spinner spinner--sm" aria-hidden="true"></span><span class="spinner" aria-hidden="true"></span><span class="spinner spinner--lg" aria-hidden="true"></span><span class="spinner-inline"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking calendars…</span><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Booking…</button></div></div>
+        <div data-theme="dark"><div class="cluster cluster--lg"><span class="spinner spinner--sm" aria-hidden="true"></span><span class="spinner" aria-hidden="true"></span><span class="spinner spinner--lg" aria-hidden="true"></span><span class="spinner-inline"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking calendars…</span><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Booking…</button></div></div>
       </div>
       <h3>Timing</h3>
       <ul>
         <li><b>Delay</b>: wait 400ms before showing a spinner. Most saves finish sooner, and a ring that flashes for 100ms reads as a glitch.</li>
         <li><b>Minimum</b>: once shown, keep it for at least 600ms so the change of state can be seen and read.</li>
-        <li><b>Long waits</b>: after 10 seconds, add a sentence (“Still checking. Some artists’ calendars are slow to answer.”) or switch to a progress bar if the task can report one.</li>
+        <li><b>Long waits</b>: after 8 seconds, change the status line to “Still checking — thanks for waiting.” (the <a href="../patterns/feedback-and-loading.html">feedback and loading</a> timing) or switch to a progress bar if the task can report one.</li>
         <li><b>Done</b>: replace the spinner with the result or a short confirmation; don’t leave an empty gap.</li>
       </ul>
     </section>
@@ -255,7 +258,7 @@
         <tr><td><kbd>Tab</kbd></td><td>The spinner is not focusable. A busy button stays focusable so focus isn’t lost; activating it again does nothing until it is done.</td></tr>
       </tbody></table>
       <h3>Focus</h3>
-      <p>Keep focus on the control that started the wait. Don’t set <code>disabled</code> on a busy submit button: a disabled button drops focus to <code>&lt;body&gt;</code>. Use <code>aria-busy</code>, which keeps it focusable and ignores clicks.</p>
+      <p>Keep focus on the control that started the wait. Don’t set <code>disabled</code> on a busy submit button: a disabled button drops focus to <code>&lt;body&gt;</code>. Use <code>aria-busy="true"</code> with <code>aria-disabled="true"</code> (the <a href="button.html#states">button’s busy pattern</a>), which keeps it focusable and ignores clicks.</p>
       <h3>Labelling</h3>
       <p>Say what is happening with a present-tense verb and an ellipsis: “Checking calendars…”, “Loading Abigail’s videos”. A busy button keeps its accessible name; the page’s status region carries the progress message.</p>
       <h3>Contrast</h3>
@@ -268,7 +271,7 @@
         <div class="ds-pair" data-theme="dark"><span>Dark: ring on a card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="3"></span></div>
       </div>
       <h3>Motion</h3>
-      <p>The ring turns once every <code>--duration-loop</code> (900ms). It keeps turning under <code>prefers-reduced-motion</code>, because it is a status indicator and a still ring would look frozen; the token is deliberately left out of the reduced-motion overrides. It is a small, slow, non-flashing rotation (well under three flashes a second).</p>
+      <p>The ring turns once every <code>--duration-loop</code> (900ms). Under <code>prefers-reduced-motion</code> it holds still (L2-103): <code>components.css</code> sets <code>animation: none</code>, and the status text that always accompanies a spinner carries the meaning. The token itself is left out of the reduced-motion overrides, because a near-zero infinite loop would spin at full speed. It is a small, slow, non-flashing rotation (well under three flashes a second).</p>
       <h3>Touch</h3>
       <p>Not a target. A busy button keeps its full target size; repeat taps are ignored (<code>pointer-events: none</code>) so a double tap can’t send a request twice.</p>
     </section>
@@ -276,7 +279,7 @@
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
         <li>Present tense and an ellipsis: “Checking calendars…”, “Sending request…”, “Saving…”.</li>
-        <li>Name what you’re doing for the booker, not the system step: “Finding who’s free on Saturday 14 November…”, not “Fetching results”.</li>
+        <li>Name what you’re doing for the booker, not the system step: “Finding who’s free on Saturday 14 November 2026…”, not “Fetching results”.</li>
         <li>A busy button may change to a present-tense version of its label, as long as it isn’t much longer: “Show the lineup” → “Checking calendars…”.</li>
         <li>Never “Please wait” on its own.</li>
       </ul>
@@ -284,13 +287,13 @@
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="button" aria-busy="true">Checking calendars…</button></div><figcaption>Busy state on the button that started the search, as in the loading mock.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="button" aria-busy="true" aria-disabled="true">Checking calendars…</button></div><figcaption>Busy state on the button that started the search, as in the loading mock.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="button"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking calendars…</button></div><figcaption>A hand-placed spinner inside a button that isn’t busy: it still takes clicks and says nothing to assistive tech.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><pre style="margin: 0; white-space: pre-wrap; overflow-wrap: anywhere;"><code>&lt;h1 class="visually-hidden"&gt;Loading artist profile&lt;/h1&gt;
-&lt;p class="visually-hidden" role="status"&gt;Loading artist profile&lt;/p&gt;</code></pre></div><figcaption>Keep the page heading a heading, and announce the wait in a separate status element.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><pre style="margin: 0; white-space: pre-wrap; overflow-wrap: anywhere;"><code>&lt;h1 class="visually-hidden"&gt;Artist profile&lt;/h1&gt;
+&lt;p class="visually-hidden" role="status"&gt;Loading the artist’s profile…&lt;/p&gt;</code></pre></div><figcaption>Keep the page heading a heading, and announce the wait in a separate status element.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><pre style="margin: 0; white-space: pre-wrap; overflow-wrap: anywhere;"><code>&lt;h1 class="visually-hidden" role="status"&gt;
-  Loading artist profile
-&lt;/h1&gt;</code></pre></div><figcaption>The artist loading mock put <code>role="status"</code> on its <code>&lt;h1&gt;</code>. The role replaces the heading, so the page has no h1 for screen readers.</figcaption></figure>
+  Loading the artist’s profile…
+&lt;/h1&gt;</code></pre></div><figcaption><code>role="status"</code> on the <code>&lt;h1&gt;</code>. The role replaces the heading, so the page has no h1 for screen readers.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><span class="spinner-inline" role="status"><span class="spinner spinner--sm" aria-hidden="true"></span>Checking Abigail’s calendar…</span></div><figcaption>A ring with words that say what is being checked.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><span class="spinner spinner--lg"></span></div><figcaption>A lone, unlabelled ring that isn’t hidden from assistive tech: nothing is announced and the booker doesn’t know what they are waiting for.</figcaption></figure>
       </div>
@@ -313,7 +316,7 @@
 
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
       <pre><code>&lt;!-- Busy submit: the button draws the ring --&gt;
-&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true"&gt;Checking calendars…&lt;/button&gt;
+&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true"&gt;Checking calendars…&lt;/button&gt;
 
 &lt;!-- Status line; the role="status" element is in the page before the wait --&gt;
 &lt;p class="spinner-inline" role="status"&gt;
@@ -338,13 +341,12 @@
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: “Checking calendars…” busy submit in the booking bar, and the <code>role="status"</code> line “Finding who’s free on Saturday 14 November…” above the skeleton lineup</li>
-        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the visually hidden “Loading artist profile” status</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: “Checking calendars…” busy submit in the booking bar, and the <code>role="status"</code> line “Finding who’s free on Saturday 14 November 2026…” above the skeleton lineup</li>
+        <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the visually hidden <code>&lt;h1&gt;</code> “Artist profile” and a separate visually hidden status, “Loading the artist’s profile…”</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
-        <li>No drift in the spinner itself: the busy buttons already used <code>aria-busy</code>. The standalone <code>.spinner</code> and <code>.spinner-inline</code> are not in the mocks yet and are part of the core set; the product will need them for the availability check in the booking stub and for processing videos.</li>
-        <li>Still open in the mocks: <a href="../../mocks/pages/artist/loading.html">artist/loading</a> puts <code>role="status"</code> on the page <code>&lt;h1&gt;</code>, which removes the heading role. Split it into a visually hidden <code>&lt;h1&gt;</code> and a separate status element.</li>
+        <li>No drift in the spinner itself: the busy buttons already used <code>aria-busy</code>. <code>.spinner-inline</code> (a spinner beside a status sentence) is in <a href="../../mocks/pages/verify-email/default.html">pages/verify-email/default</a> and <a href="../../mocks/pages/confirm-email/default.html">pages/confirm-email/default</a> while the link is checked. The standalone <code>.spinner</code> is not in the mocks yet; it is part of the core set for the availability check in the booking stub and for processing videos.</li>
       </ul>
     </section>
 

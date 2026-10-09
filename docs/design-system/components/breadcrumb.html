@@ -50,6 +50,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -76,6 +77,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -159,7 +162,7 @@
         <div class="ds-example__caption"><span>Inside the artist poster, above the name. Links turn yellow on hover.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;nav aria-label="Breadcrumb"&gt;
   &lt;ol class="breadcrumb"&gt;
-    &lt;li&gt;&lt;a href="/discover?date=2026-11-14&amp;amp;place=Burlington"&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/?date=2026-11-14&amp;amp;place=Burlington"&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;
     &lt;li aria-current="page"&gt;Abigail Mensah&lt;/li&gt;
   &lt;/ol&gt;
 &lt;/nav&gt;</code></pre></details>
@@ -168,7 +171,7 @@
       <h3>On paper (account pages)</h3>
       <div class="ds-example">
         <div class="ds-example__canvas">
-          <nav aria-label="Breadcrumb (paper example)"><ol class="breadcrumb"><li><a href="#variants">Your bookings</a></li><li><a href="#variants">Upcoming</a></li><li aria-current="page">No. ZAM-0114</li></ol></nav>
+          <nav aria-label="Breadcrumb (paper example)"><ol class="breadcrumb"><li><a href="#variants">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav>
         </div>
         <div class="ds-example__caption"><span>Naomi’s booking with Abigail Mensah. Links take the body text colour and get the yellow highlighter on hover.</span></div>
       </div>
@@ -179,18 +182,18 @@
           <nav aria-label="Breadcrumb (collapsed example)"><ol class="breadcrumb" id="crumbs-collapsed">
             <li><a href="#variants">Dashboard</a></li>
             <li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-controls="crumbs-collapsed" aria-label="Show 2 more levels">…</button></li>
-            <li hidden><a href="#variants">Bookings</a></li>
-            <li hidden><a href="#variants">No. ZAM-0114</a></li>
+            <li hidden><a href="#variants">Requests</a></li>
+            <li hidden><a href="#variants">ZAM-0114</a></li>
             <li aria-current="page">Messages</li>
           </ol></nav>
         </div>
-        <div class="ds-example__caption"><span>Abigail’s dashboard, four levels deep. The first and last crumbs stay; “…” reveals the middle in place. Try it.</span></div>
+        <div class="ds-example__caption"><span>Abigail’s artist area, four levels deep: Dashboard (<code>/artist</code>), Requests (<code>/artist/requests</code>), the booking (<code>/artist/bookings/ZAM-0114</code>) and a sub-view. No mock is this deep yet. The first and last crumbs stay; “…” reveals the middle in place. Try it.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ol class="breadcrumb" id="crumbs"&gt;
-  &lt;li&gt;&lt;a href="/dashboard"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="/artist"&gt;Dashboard&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;button class="breadcrumb__more" type="button" aria-expanded="false"
               aria-controls="crumbs" aria-label="Show 2 more levels"&gt;…&lt;/button&gt;&lt;/li&gt;
-  &lt;li hidden&gt;&lt;a href="/dashboard/bookings"&gt;Bookings&lt;/a&gt;&lt;/li&gt;
-  &lt;li hidden&gt;&lt;a href="/dashboard/bookings/ZAM-0114"&gt;No. ZAM-0114&lt;/a&gt;&lt;/li&gt;
+  &lt;li hidden&gt;&lt;a href="/artist/requests"&gt;Requests&lt;/a&gt;&lt;/li&gt;
+  &lt;li hidden&gt;&lt;a href="/artist/bookings/ZAM-0114"&gt;ZAM-0114&lt;/a&gt;&lt;/li&gt;
   &lt;li aria-current="page"&gt;Messages&lt;/li&gt;
 &lt;/ol&gt;</code></pre></details>
       </div>
@@ -216,7 +219,7 @@
             <td><ol class="breadcrumb"><li><a href="#states">Your bookings</a></li></ol></td>
             <td><ol class="breadcrumb"><li><a href="#states" data-state="hover">Your bookings</a></li></ol></td>
             <td><ol class="breadcrumb"><li><a href="#states" data-state="focus">Your bookings</a></li></ol></td>
-            <td><ol class="breadcrumb"><li aria-current="page">No. ZAM-0114</li></ol></td>
+            <td><ol class="breadcrumb"><li aria-current="page">ZAM-0114</li></ol></td>
             <td><ol class="breadcrumb"><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-label="Show 2 more levels">…</button></li></ol></td>
             <td><ol class="breadcrumb"><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-label="Show 2 more levels" data-state="focus">…</button></li></ol></td></tr>
         </tbody>
@@ -225,11 +228,11 @@
       <div class="ds-themes">
         <div data-theme="light">
           <div class="on-stage" style="padding: var(--space-4);"><ol class="breadcrumb"><li><a href="#states">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></div>
-          <ol class="breadcrumb" style="margin-top: var(--space-4);"><li><a href="#states">Your bookings</a></li><li><a href="#states" data-state="hover">Upcoming</a></li><li aria-current="page">No. ZAM-0114</li></ol>
+          <ol class="breadcrumb" style="margin-top: var(--space-4);"><li><a href="#states" data-state="hover">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol>
         </div>
         <div data-theme="dark">
           <div class="on-stage" style="padding: var(--space-4);"><ol class="breadcrumb"><li><a href="#states">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></div>
-          <ol class="breadcrumb" style="margin-top: var(--space-4);"><li><a href="#states">Your bookings</a></li><li><a href="#states" data-state="hover">Upcoming</a></li><li aria-current="page">No. ZAM-0114</li></ol>
+          <ol class="breadcrumb" style="margin-top: var(--space-4);"><li><a href="#states" data-state="hover">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol>
         </div>
       </div>
       <ul>
@@ -264,7 +267,7 @@
       <h3>Focus</h3>
       <p>The shared ring: ink on paper, yellow on the stage. After “…” reveals the middle crumbs, focus moves to the first of them, because the button it was on is gone.</p>
       <h3>Labelling</h3>
-      <p>Only one landmark per page is named “Breadcrumb”. The “…” button needs <code>aria-label</code> (“Show 2 more levels”), since an ellipsis has no meaning when read aloud. The “/” separators are drawn with CSS; a proposed CSS fix gives them empty alternative text (<code>content: "/" / ""</code>) so screen readers do not announce “slash” between crumbs.</p>
+      <p>Only one landmark per page is named “Breadcrumb”. The “…” button needs <code>aria-label</code> (“Show 2 more levels”), since an ellipsis has no meaning when read aloud. The “/” separators are drawn with CSS and given empty alternative text (<code>content: "/" / ""</code>), so screen readers do not announce “slash” between crumbs.</p>
       <h3>Contrast</h3>
       <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
         <div class="ds-pair"><span>Crumbs on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
@@ -285,7 +288,7 @@
       <ul>
         <li>Each crumb is the title of the page it leads to, shortened if needed: “Your bookings”, not “View all of your bookings”.</li>
         <li>Carry the search context in the first crumb with a middle dot: “Discover · Sat 14 Nov”. It tells the booker the link goes back to that date’s lineup.</li>
-        <li>The current crumb matches the page’s <code>&lt;h1&gt;</code>: “Abigail Mensah”, “No. ZAM-0114”.</li>
+        <li>The current crumb names the current page: the artist on a profile (“Abigail Mensah”), the booking number on a booking page (“ZAM-0114”).</li>
         <li>Sentence case in the source; the stub style uppercases it.</li>
       </ul>
     </section>
@@ -294,7 +297,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><ol class="breadcrumb"><li><a href="#do-dont">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></div><figcaption>The first crumb returns to the lineup for the booker’s date, as in the profile mocks.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stage on-stage"><ol class="breadcrumb"><li><a href="#do-dont">Home</a></li><li><a href="#do-dont">Artists</a></li><li><a href="#do-dont">Abigail Mensah</a></li></ol></div><figcaption>Generic levels that do not exist as pages, and the current page as a link to itself.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><ol class="breadcrumb"><li><a href="#do-dont">Your bookings</a></li><li aria-current="page">No. ZAM-0114</li></ol><h3 class="card__title" style="margin: 0; width: 100%;">No. ZAM-0114</h3></div><figcaption>The breadcrumb sits above the title and the last crumb matches it.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><ol class="breadcrumb"><li><a href="#do-dont">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol><h3 class="card__title" style="margin: 0; width: 100%;">Worship night with Abigail Mensah</h3></div><figcaption>The breadcrumb sits above the title; the last crumb names the booking by its number, as on the booking page.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><ol class="breadcrumb"><li><a href="#do-dont">Find</a></li><li><a href="#do-dont">Request</a></li><li aria-current="page">Pay deposit</li></ol></div><figcaption>A breadcrumb used as booking progress. Use <a href="steps.html">steps</a> for a sequence.</figcaption></figure>
       </div>
     </section>
@@ -319,7 +322,7 @@
   &lt;div class="container stack stack--lg"&gt;
     &lt;nav aria-label="Breadcrumb"&gt;
       &lt;ol class="breadcrumb"&gt;
-        &lt;li&gt;&lt;a href="/discover?date=2026-11-14"&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="/?date=2026-11-14"&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;
         &lt;li aria-current="page"&gt;Abigail Mensah&lt;/li&gt;
       &lt;/ol&gt;
     &lt;/nav&gt;
@@ -341,13 +344,13 @@
       <ul>
         <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Discover · Sat 14 Nov / Abigail Mensah” inside the poster</li>
         <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>: the same trail with “Loading artist” as the current crumb while the name loads</li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Discover · Sat 14 Nov / Miriam Haile” for a new artist</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: “Discover / Miriam Haile”, opened without a search date, so the first crumb carries no date</li>
         <li><a href="../../mocks/pages/artist/error.html">pages/artist/error</a>: the trail kept above the error so the booker can get back to the lineup</li>
+        <li>The paper breadcrumb in a <code>.page-crumbs</code> nav above the page head: <a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail</a> (“Your bookings / ZAM-0114”) and every booking status, <a href="../../mocks/pages/book/default.html">pages/book</a> (back to the artist), and the admin record pages <a href="../../mocks/pages/admin-application/default.html">pages/admin-application</a>, <a href="../../mocks/pages/admin-artist/default.html">pages/admin-artist</a>, <a href="../../mocks/pages/admin-booking/default.html">pages/admin-booking</a> and <a href="../../mocks/pages/admin-checks/default.html">pages/admin-checks</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
-        <li>The mocks only had a stage breadcrumb. The paper variant and its highlighter hover were added for account pages, and the collapsed form (<code>.breadcrumb__more</code>) for the artist dashboard.</li>
-        <li>The loading mock named the current crumb “Loading artist”. Keep the artist’s name in the crumb when it is known from the link the booker followed, so the trail does not change when the page finishes loading.</li>
+        <li>The mocks only had a stage breadcrumb. The paper variant and its highlighter hover were added for record pages (bookings, the request form, admin records), and the collapsed form (<code>.breadcrumb__more</code>) for the artist dashboard.</li>
       </ul>
     </section>
 

@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -282,6 +285,41 @@
   &lt;button class="btn btn--primary btn--lg" type="submit"&gt;Show the lineup&lt;/button&gt;
 &lt;/form&gt;</code></pre></details>
 </div>
+      <h3>File</h3>
+      <p>A native <code>&lt;input type="file"&gt;</code> with <code>.input</code> gets 8px padding and a pointer cursor; the browser’s own button and file name stay, so it works with every assistive technology and on phones (camera and photo library). State the accepted types, size and length limits in the help text, and set <code>accept</code> to match. Files already attached show above the picker as an <code>.upload-list</code>: a dashed, sunken row per file with a success check, the title, a muted line of facts (file name, size, length) and a small ghost “Remove” button named after the file.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="stack" style="width: min(100%, 30rem);">
+  <ul class="upload-list" role="list" aria-label="Uploaded videos">
+    <li class="upload-list__item">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>
+      <div class="upload-list__text"><strong>Way Maker, live at Cornerstone</strong><span>way-maker-cornerstone.mp4 · 214 MB · 6:12 · Live</span></div>
+      <button class="btn btn--sm btn--ghost" type="button" aria-label="Remove Way Maker, live at Cornerstone">Remove</button>
+    </li>
+  </ul>
+  <div class="field">
+    <label class="field__label" for="tf-video-file">Add a video <span class="field__optional">(optional)</span></label>
+    <input class="input" type="file" id="tf-video-file" name="tf-video-file" aria-describedby="tf-video-file-help" accept="video/mp4,video/quicktime,video/webm">
+    <span class="field__help" id="tf-video-file-help">MP4, MOV or WebM, up to 1 GB and 15 minutes.</span>
+  </div>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.upload-list</code> above an <code>.input[type="file"]</code>. From pages/apply/step-2; the add-photo, add-video and upload-check dialogs use the bare file field.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="stack" style="width: min(100%, 30rem);"&gt;
+  &lt;ul class="upload-list" role="list" aria-label="Uploaded videos"&gt;
+    &lt;li class="upload-list__item"&gt;
+      &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;circle cx="12" cy="12" r="9"/&gt;&lt;path d="m8 12 3 3 5-6"/&gt;&lt;/svg&gt;
+      &lt;div class="upload-list__text"&gt;&lt;strong&gt;Way Maker, live at Cornerstone&lt;/strong&gt;&lt;span&gt;way-maker-cornerstone.mp4 · 214 MB · 6:12 · Live&lt;/span&gt;&lt;/div&gt;
+      &lt;button class="btn btn--sm btn--ghost" type="button" aria-label="Remove Way Maker, live at Cornerstone"&gt;Remove&lt;/button&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class="field"&gt;
+    &lt;label class="field__label" for="tf-video-file"&gt;Add a video &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
+    &lt;input class="input" type="file" id="tf-video-file" name="tf-video-file" aria-describedby="tf-video-file-help" accept="video/mp4,video/quicktime,video/webm"&gt;
+    &lt;span class="field__help" id="tf-video-file-help"&gt;MP4, MOV or WebM, up to 1 GB and 15 minutes.&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
     </section>
 
     <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
@@ -365,7 +403,10 @@
         <li>A text field is always 100% of its field. Its width says nothing about the expected length; help text does that if needed.</li>
         <li>Addons and the show toggle keep their width; the input shrinks (<code>min-width: 0</code>), so groups fit at 360px.</li>
         <li>Medium and large use 16px text, which stops iOS from zooming on focus. Small (14px) is for wide screens only.</li>
-        <li>In the booking bar the fields stack on phones and pair up from 640px (<code>--layout-breakpoint-sm</code>).</li>
+        <li>In the booking bar the fields stack on phones and pair up from 576px (<code>--layout-breakpoint-sm</code>).</li>
+      </ul>
+      <ul>
+        <li><code>.upload-list__text</code> wraps long file names anywhere (<code>overflow-wrap: anywhere</code>), so a 60-character file name never widens a 320px screen; the Remove button stays on the row.</li>
       </ul>
     </section>
 
@@ -446,6 +487,8 @@
           <tr><td>Padding</td><td><code>--space-2</code> × <code>--space-3</code> (lg: <code>--space-4</code>)</td><td colspan="2"><span data-token="--space-2"></span> × <span data-token="--space-3"></span></td></tr>
           <tr><td>Rule width</td><td><code>--border-width-thick</code>, <code>--radius-md</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
           <tr><td>Value type</td><td><code>--text-body</code> (sm: <code>--text-body-sm</code>, lg: <code>--text-body-lg</code>)</td><td colspan="2"><span data-token="--text-body"></span></td></tr>
+                  <tr><td>Attached file row</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Attached file icon</td><td><code>--color-success-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-icon" data-swatch></i><span data-token="--color-success-icon"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-icon" data-swatch></i><span data-token="--color-success-icon"></span></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -472,21 +515,28 @@
         <tr><td><code>readonly</code></td><td>Sunken fill, dashed rule, still focusable.</td></tr>
         <tr><td><code>disabled</code></td><td>Greyed, not focusable.</td></tr>
         <tr><td><code>data-state="hover|focus"</code></td><td>Documentation and mocks only.</td></tr>
+      
+        <tr><td><code>.input[type="file"]</code></td><td>Native file picker: 8px padding, pointer cursor.</td></tr>
+        <tr><td><code>.upload-list</code>, <code>__item</code>, <code>__text</code></td><td>Attached files: dashed sunken rows with a success icon, title and muted facts.</td></tr>
+        <tr><td><code>.upload:focus-within</code></td><td>Focus ring for a label-styled custom upload area; reserved, no mock uses it.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
       <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Church location” in the booking bar, on the stage</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>, <a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the same bar in every state</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Church” prefilled with “Riverside Community Church, Burlington” in the booking stub</li>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: “Church location” in the booking bar, on the stage; <a href="../../mocks/pages/discover/loading.html">loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a> keep the same bar</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: “Church” prefilled in the booking stub</li>
+        <li><a href="../../mocks/pages/sign-in/default.html">pages/sign-in/default</a>, <a href="../../mocks/pages/sign-in/invalid.html">invalid</a>, <a href="../../mocks/pages/sign-up/default.html">pages/sign-up/default</a>, <a href="../../mocks/pages/reset-password/default.html">pages/reset-password/default</a>: email and password fields with <code>autocomplete</code></li>
+        <li><a href="../../mocks/pages/account/default.html">pages/account/default</a> and <a href="../../mocks/pages/account/invalid.html">invalid</a>: text, tel, number, email and password fields in a form grid, with invalid states</li>
+        <li><a href="../../mocks/pages/book/default.html">pages/book/default</a> and <a href="../../mocks/pages/book/invalid.html">invalid</a>: the booking request’s fields</li>
+        <li><a href="../../mocks/pages/apply/step-2.html">pages/apply/step-2</a>: the file field with the <code>.upload-list</code>; <a href="../../mocks/dialogs/add-video/default.html">dialogs/add-video/default</a>, <a href="../../mocks/dialogs/add-photo/default.html">dialogs/add-photo/default</a>, <a href="../../mocks/dialogs/upload-check/default.html">dialogs/upload-check/default</a>: file fields in dialogs</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>Invalid styling only covered <code>.input</code>. It now covers input, select and textarea through the shared field tokens.</li>
         <li>The booking bar read primitives (<code>--palette-ink</code>, <code>--palette-paper</code>) to stay paper on the stage. It is now a <code>data-theme="light"</code> paper island.</li>
-        <li>Email, search, number, addon and password fields are not in the mocks yet; they are part of the core set. The product needs them for sign-in, artist and song search, attendance, budget and radius.</li>
+        <li>Addons and search arrived with later mocks: <a href="../../mocks/dialogs/issue-refund/default.html">dialogs/issue-refund/default</a> (a “$” prefix addon on the refund amount), <a href="../../mocks/dialogs/calendar-feed/default.html">dialogs/calendar-feed/default</a> (a read-only feed URL with a “Copy link” button in an <code>.input-group</code>), <a href="../../mocks/pages/admin-artists/default.html">pages/admin-artists/default</a> and <a href="../../mocks/pages/admin-bookings/default.html">pages/admin-bookings/default</a> (search fields).</li>
       </ul>
     </section>
 

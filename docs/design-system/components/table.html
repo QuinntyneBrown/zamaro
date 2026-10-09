@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -134,8 +137,8 @@
               <caption>Booking requests</caption>
               <thead><tr><th scope="col">Artist</th><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead>
               <tbody>
-                <tr><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td></tr>
-                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td></tr>
+                <tr><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td class="table__num">$650</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td></tr>
+                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td class="table__num">$950</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -164,7 +167,7 @@
         <div class="ds-example__canvas ds-example__canvas--block">
           <div class="table-wrap" style="position: relative;">
             <table class="table">
-              <caption>Naomi’s booking requests</caption>
+              <caption>Naomi’s bookings</caption>
               <thead><tr>
                 <th scope="col"><button class="table__sort" type="button">Artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th>
                 <th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th>
@@ -174,12 +177,12 @@
                 <th scope="col" class="table__actions"><span class="visually-hidden">Actions</span></th>
               </tr></thead>
               <tbody>
-                <tr><th scope="row">Elijah Park</th><td>Wed&nbsp;4&nbsp;Nov</td><td>Midweek prayer night</td><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="Pay deposit for Elijah Park, Wed 4 Nov">Pay deposit</a></td></tr>
-                <tr><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td>Sunday service</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Abigail Mensah, Sat 14 Nov">View</a></td></tr>
-                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td>Advent carol night</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Marcus Bell Trio, Sun 29 Nov">View</a></td></tr>
-                <tr><th scope="row">Grace Tabernacle Mass Choir</th><td>Sun&nbsp;13&nbsp;Dec</td><td>Christmas concert</td><td class="table__num">$2,400</td><td><span class="badge badge--danger">Declined</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Grace Tabernacle Mass Choir, Sun 13 Dec">View</a></td></tr>
-                <tr><th scope="row">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td>Carol service</td><td class="table__num">$700</td><td><span class="badge badge--info">Requested</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Daniel &amp; Ruth Okonkwo, Sun 20 Dec">View</a></td></tr>
-                <tr><th scope="row">Hosanna Collective</th><td>Sat&nbsp;16&nbsp;Jan</td><td>Youth worship night</td><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Hosanna Collective, Sat 16 Jan">View</a></td></tr>
+                <tr><th scope="row">Abigail Mensah</th><td>Sun&nbsp;14&nbsp;Jun</td><td>Sunday service</td><td class="table__num">$650</td><td><span class="stamp stamp--flat stamp--completed">Completed</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View booking: Abigail Mensah, Sun 14 Jun">View</a></td></tr>
+                <tr><th scope="row">Grace Tabernacle Mass Choir</th><td>Sun&nbsp;20&nbsp;Sep</td><td>Sunday service</td><td class="table__num">$2,400</td><td><span class="stamp stamp--flat stamp--declined">Declined</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Grace Tabernacle Mass Choir, Sun 20 Sep">View</a></td></tr>
+                <tr><th scope="row">Elijah Park</th><td>Sat&nbsp;3&nbsp;Oct</td><td>Youth event</td><td class="table__num">$350</td><td><span class="stamp stamp--flat stamp--withdrawn">Withdrawn</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Elijah Park, Sat 3 Oct">View</a></td></tr>
+                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;25&nbsp;Oct</td><td>Sunday service</td><td class="table__num">$950</td><td><span class="stamp stamp--flat stamp--confirmed">Confirmed</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View booking: Marcus Bell Trio, Sun 25 Oct">View</a></td></tr>
+                <tr><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td>Worship night</td><td class="table__num">$650</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="View request: Abigail Mensah, Sat 14 Nov">View</a></td></tr>
+                <tr><th scope="row">Luz Viva</th><td>Sat&nbsp;5&nbsp;Dec</td><td>Worship night</td><td class="table__num">$900</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td><td class="table__actions"><a class="btn btn--sm" href="#variants" aria-label="Pay deposit for Luz Viva, Sat 5 Dec">Pay deposit</a></td></tr>
               </tbody>
             </table>
           </div>
@@ -187,17 +190,17 @@
         <div class="ds-example__caption"><span>Sorted by date, soonest first (<code>aria-sort="ascending"</code> on the Date header). Fees are right-aligned. Each row has one action, named with the artist and date.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="table-wrap"&gt;
   &lt;table class="table"&gt;
-    &lt;caption&gt;Naomi’s booking requests&lt;/caption&gt;
+    &lt;caption&gt;Naomi’s bookings&lt;/caption&gt;
     &lt;thead&gt;&lt;tr&gt;
       &lt;th scope="col" aria-sort="ascending"&gt;&lt;button class="table__sort" type="button"&gt;Date &lt;svg class="icon" aria-hidden="true" …/&gt;&lt;/button&gt;&lt;/th&gt;
       &lt;th scope="col" class="table__num"&gt;…Fee…&lt;/th&gt;
       &lt;th scope="col" class="table__actions"&gt;&lt;span class="visually-hidden"&gt;Actions&lt;/span&gt;&lt;/th&gt;
     &lt;/tr&gt;&lt;/thead&gt;
     &lt;tbody&gt;
-      &lt;tr&gt;&lt;th scope="row"&gt;Abigail Mensah&lt;/th&gt;&lt;td&gt;Sat 14 Nov&lt;/td&gt;…
+      &lt;tr&gt;&lt;th scope="row"&gt;Abigail Mensah&lt;/th&gt;&lt;td&gt;Sun 14 Jun&lt;/td&gt;…
         &lt;td class="table__num"&gt;$650&lt;/td&gt;
-        &lt;td&gt;&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;&lt;/td&gt;
-        &lt;td class="table__actions"&gt;&lt;a class="btn btn--sm" href="/bookings/zam-0114" aria-label="View request: Abigail Mensah, Sat 14 Nov"&gt;View&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;td&gt;&lt;span class="stamp stamp--flat stamp--requested"&gt;Requested&lt;/span&gt;&lt;/td&gt;
+        &lt;td class="table__actions"&gt;&lt;a class="btn btn--sm" href="/bookings/ZAM-0114" aria-label="View request: Abigail Mensah, Sat 14 Nov"&gt;View&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
   &lt;/table&gt;
 &lt;/div&gt;</code></pre></details>
@@ -216,9 +219,9 @@
                 <th scope="col">Artist</th><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th>
               </tr></thead>
               <tbody>
-                <tr aria-selected="true"><td><label class="check"><input type="checkbox" checked aria-label="Select Abigail Mensah, Sat 14 Nov"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td></tr>
-                <tr aria-selected="false"><td><label class="check"><input type="checkbox" aria-label="Select Marcus Bell Trio, Sun 29 Nov"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td></tr>
-                <tr aria-selected="true"><td><label class="check"><input type="checkbox" checked aria-label="Select Daniel &amp; Ruth Okonkwo, Sun 20 Dec"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td class="table__num">$700</td><td><span class="badge badge--info">Requested</span></td></tr>
+                <tr aria-selected="true"><td><label class="check"><input type="checkbox" checked aria-label="Select Abigail Mensah, Sat 14 Nov"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td class="table__num">$650</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td></tr>
+                <tr aria-selected="false"><td><label class="check"><input type="checkbox" aria-label="Select Marcus Bell Trio, Sun 29 Nov"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td class="table__num">$950</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr>
+                <tr aria-selected="true"><td><label class="check"><input type="checkbox" checked aria-label="Select Daniel &amp; Ruth Okonkwo, Sun 20 Dec"><span class="check__box"><svg class="icon check__tick" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span></label></td><th scope="row">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td class="table__num">$700</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -246,15 +249,15 @@
         <div class="ds-example__canvas ds-example__canvas--block">
           <div class="table-wrap" style="max-height: 15rem;">
             <table class="table table--sticky">
-              <caption>All requests · Nov to Jan</caption>
+              <caption>Naomi’s bookings · Jun to Dec</caption>
               <thead><tr><th scope="col" class="table__first">Artist</th><th scope="col" aria-sort="ascending"><button class="table__sort" type="button">Date <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></th><th scope="col">Gathering</th><th scope="col">Home base</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead>
               <tbody>
-                <tr><th scope="row" class="table__first">Elijah Park</th><td>Wed&nbsp;4&nbsp;Nov</td><td>Midweek prayer night</td><td>Markham · 74&nbsp;km</td><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td></tr>
-                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td>Sunday service</td><td>Brampton · 44&nbsp;km</td><td class="table__num">$650</td><td><span class="badge badge--info">Requested</span></td></tr>
-                <tr><th scope="row" class="table__first">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td>Advent carol night</td><td>Hamilton · 14&nbsp;km</td><td class="table__num">$950</td><td><span class="badge badge--success">Accepted</span></td></tr>
-                <tr><th scope="row" class="table__first">Grace Tabernacle Mass Choir</th><td>Sun&nbsp;13&nbsp;Dec</td><td>Christmas concert</td><td>Scarborough · 81&nbsp;km</td><td class="table__num">$2,400</td><td><span class="badge badge--danger">Declined</span></td></tr>
-                <tr><th scope="row" class="table__first">Daniel &amp; Ruth Okonkwo</th><td>Sun&nbsp;20&nbsp;Dec</td><td>Carol service</td><td>Ajax · 97&nbsp;km</td><td class="table__num">$700</td><td><span class="badge badge--info">Requested</span></td></tr>
-                <tr><th scope="row" class="table__first">Hosanna Collective</th><td>Sat&nbsp;16&nbsp;Jan</td><td>Youth worship night</td><td>Mississauga · 32&nbsp;km</td><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td></tr>
+                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>Sun&nbsp;14&nbsp;Jun</td><td>Sunday service</td><td>Brampton · 44&nbsp;km</td><td class="table__num">$650</td><td><span class="stamp stamp--flat stamp--completed">Completed</span></td></tr>
+                <tr><th scope="row" class="table__first">Grace Tabernacle Mass Choir</th><td>Sun&nbsp;20&nbsp;Sep</td><td>Sunday service</td><td>Scarborough · 81&nbsp;km</td><td class="table__num">$2,400</td><td><span class="stamp stamp--flat stamp--declined">Declined</span></td></tr>
+                <tr><th scope="row" class="table__first">Elijah Park</th><td>Sat&nbsp;3&nbsp;Oct</td><td>Youth event</td><td>Markham · 74&nbsp;km</td><td class="table__num">$350</td><td><span class="stamp stamp--flat stamp--withdrawn">Withdrawn</span></td></tr>
+                <tr><th scope="row" class="table__first">Marcus Bell Trio</th><td>Sun&nbsp;25&nbsp;Oct</td><td>Sunday service</td><td>Hamilton · 14&nbsp;km</td><td class="table__num">$950</td><td><span class="stamp stamp--flat stamp--confirmed">Confirmed</span></td></tr>
+                <tr><th scope="row" class="table__first">Abigail Mensah</th><td>Sat&nbsp;14&nbsp;Nov</td><td>Worship night</td><td>Brampton · 44&nbsp;km</td><td class="table__num">$650</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td></tr>
+                <tr><th scope="row" class="table__first">Luz Viva</th><td>Sat&nbsp;5&nbsp;Dec</td><td>Worship night</td><td>North York · 63&nbsp;km</td><td class="table__num">$900</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -263,7 +266,7 @@
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="table-wrap" style="max-height: 15rem;"&gt;
   &lt;table class="table table--sticky"&gt;
     &lt;thead&gt;&lt;tr&gt;&lt;th scope="col" class="table__first"&gt;Artist&lt;/th&gt;…&lt;/tr&gt;&lt;/thead&gt;
-    &lt;tbody&gt;&lt;tr&gt;&lt;th scope="row" class="table__first"&gt;Elijah Park&lt;/th&gt;…&lt;/tr&gt;&lt;/tbody&gt;
+    &lt;tbody&gt;&lt;tr&gt;&lt;th scope="row" class="table__first"&gt;Abigail Mensah&lt;/th&gt;…&lt;/tr&gt;&lt;/tbody&gt;
   &lt;/table&gt;
 &lt;/div&gt;</code></pre></details>
       </div>
@@ -278,9 +281,8 @@
               <caption>Deposits paid</caption>
               <thead><tr><th scope="col">Artist</th><th scope="col">Date</th><th scope="col">Booking</th><th scope="col" class="table__num">Deposit 25%</th></tr></thead>
               <tbody>
-                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;29&nbsp;Nov</td><td>No. ZAM-0108</td><td class="table__num">$237.50</td></tr>
-                <tr><th scope="row">Hosanna Collective</th><td>Sat&nbsp;16&nbsp;Jan</td><td>No. ZAM-0121</td><td class="table__num">$450.00</td></tr>
-                <tr><th scope="row">Luz Viva</th><td>Sun&nbsp;7&nbsp;Jun</td><td>No. ZAM-0062</td><td class="table__num">$225.00</td></tr>
+                <tr><th scope="row">Marcus Bell Trio</th><td>Sun&nbsp;25&nbsp;Oct</td><td>No. ZAM-0097</td><td class="table__num">$237.50</td></tr>
+                <tr><th scope="row">Abigail Mensah</th><td>Sun&nbsp;14&nbsp;Jun</td><td>No. ZAM-0061</td><td class="table__num">$162.50</td></tr>
               </tbody>
             </table>
           </div>
@@ -360,8 +362,8 @@
 
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td></tr><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td><td><span class="badge badge--info">Requested</span></td></tr><tr aria-selected="true"><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td></tr></tbody></table></div></div>
-        <div data-theme="dark"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td><td><span class="badge badge--warning">Deposit due</span></td></tr><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td><td><span class="badge badge--info">Requested</span></td></tr><tr aria-selected="true"><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td><td><span class="badge badge--success">Accepted</span></td></tr></tbody></table></div></div>
+        <div data-theme="light"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td></tr><tr aria-selected="true"><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr></tbody></table></div></div>
+        <div data-theme="dark"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th><th scope="col">Status</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr><tr data-state="hover"><th scope="row">Luz Viva</th><td class="table__num">$900</td><td><span class="stamp stamp--flat stamp--requested">Requested</span></td></tr><tr aria-selected="true"><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td><td><span class="stamp stamp--flat stamp--accepted">Accepted</span></td></tr></tbody></table></div></div>
       </div>
     </section>
 
@@ -428,7 +430,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="table-wrap"><table class="table"><caption>Fees</caption><thead><tr><th scope="col">Artist</th><th scope="col" class="table__num">Fee</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td class="table__num">$350</td></tr><tr><th scope="row">Hosanna Collective</th><td class="table__num">$1,800</td></tr></tbody></table></div></div><figcaption>Right-align money with <code>.table__num</code> so digits line up and amounts compare at a glance.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="table-wrap"><table class="table"><caption>Fees</caption><thead><tr><th scope="col">Artist</th><th scope="col">Fee</th></tr></thead><tbody><tr><th scope="row">Elijah Park</th><td>$350</td></tr><tr><th scope="row">Hosanna Collective</th><td>$1,800</td></tr></tbody></table></div></div><figcaption>Left-aligned fees put $350 and $1,800 at the same visual weight.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas"><span class="badge badge--danger">Declined</span><span class="badge badge--success">Accepted</span></div><figcaption>Status is a badge with a word and a tone, readable in grayscale and by screen readers.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><span class="stamp stamp--flat stamp--declined">Declined</span><span class="stamp stamp--flat stamp--accepted">Accepted</span></div><figcaption>Status is a badge with a word and a tone, readable in grayscale and by screen readers.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><span style="display: inline-block; width: var(--space-3); height: var(--space-3); background: var(--color-danger-solid);" aria-hidden="true"></span><span style="display: inline-block; width: var(--space-3); height: var(--space-3); background: var(--color-success-solid);" aria-hidden="true"></span></div><figcaption>A coloured square alone fails WCAG 1.4.1: red and green read the same to many people.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--block"><div class="empty empty--quiet"><p class="empty__title">No booking requests yet</p><p>Requests you send show here.</p></div></div><figcaption>Replace an empty table with an empty state that says what will appear.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--block"><div class="table-wrap"><table class="table"><caption>Requests</caption><thead><tr><th scope="col">Artist</th><th scope="col">Date</th><th scope="col">Status</th></tr></thead><tbody><tr><td colspan="3">&nbsp;</td></tr></tbody></table></div></div><figcaption>Headers over nothing. Screen readers announce a table with zero data and no explanation.</figcaption></figure>
@@ -457,7 +459,7 @@
     <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
       <pre><code>&lt;div class="table-wrap"&gt;
   &lt;table class="table table--sticky"&gt;
-    &lt;caption&gt;Naomi’s booking requests&lt;/caption&gt;
+    &lt;caption&gt;Naomi’s bookings&lt;/caption&gt;
     &lt;thead&gt;&lt;tr&gt;
       &lt;th scope="col" class="table__first"&gt;Artist&lt;/th&gt;
       &lt;th scope="col" aria-sort="ascending"&gt;
@@ -468,7 +470,7 @@
     &lt;/tr&gt;&lt;/thead&gt;
     &lt;tbody&gt;
       &lt;tr&gt;&lt;th scope="row" class="table__first"&gt;Abigail Mensah&lt;/th&gt;&lt;td&gt;Sat 14 Nov&lt;/td&gt;
-        &lt;td class="table__num"&gt;$650&lt;/td&gt;&lt;td&gt;&lt;span class="badge badge--info"&gt;Requested&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;td class="table__num"&gt;$650&lt;/td&gt;&lt;td&gt;&lt;span class="stamp stamp--flat stamp--requested"&gt;Requested&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;
     &lt;/tbody&gt;
   &lt;/table&gt;
 &lt;/div&gt;</code></pre>
@@ -490,13 +492,15 @@
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet; part of the core set. The product will need it for Naomi’s bookings page (requests and their statuses), an artist’s incoming requests and an artist’s payout history. Its parts come from these mocks:</p>
+      <p>Extracted from these mocks:</p>
       <ul>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: Free and Booked badges in the tour dates, small “Pick” buttons for row actions</li>
-        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: skeletons in the final positions of the content</li>
-        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: an empty state that explains and offers a next step</li>
-        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: the alert that replaces failed content and keeps the person’s inputs</li>
+        <li><a href="../../mocks/pages/admin-applications/default.html">pages/admin-applications/default</a> and <a href="../../mocks/pages/admin-applications/loading.html">loading</a>: applications in a <code>.table-wrap</code> with a “Review” row action (<code>.table__actions</code>)</li>
+        <li><a href="../../mocks/pages/admin-artists/default.html">pages/admin-artists/default</a>, <a href="../../mocks/pages/admin-bookings/default.html">pages/admin-bookings/default</a>, <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a>: admin lists with their loading and no-results states</li>
+        <li><a href="../../mocks/pages/admin-checks/default.html">pages/admin-checks/default</a> (with its loading, empty, error and verified states): Vulnerable Sector Checks waiting for review, with two row actions in a <code>.cluster</code>, “View document” and “Verify”</li>
+        <li><a href="../../mocks/pages/admin-booking/default.html">pages/admin-booking/default</a>: payment lines in a table (the issue-refund and resolve-hold dialogs open over this page; the dialogs themselves have no table)</li>
+        <li><code>.bulk-bar</code>: <a href="../../mocks/pages/availability/selected.html">pages/availability/selected</a> (dates selected on the calendar)</li>
       </ul>
+      <p>Booker and artist lists (Naomi’s bookings, an artist’s requests) are not tables; they use the <code>.booking-list</code> rows in <a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a> and <a href="../../mocks/pages/requests/default.html">pages/requests/default</a>.</p>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>Skeleton widths and heights were inline styles in the loading mocks. Skeleton rows here use <code>.skeleton--short/medium/long</code>, and the base height is 1rem instead of 0.9rem.</li>

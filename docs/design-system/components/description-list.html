@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -208,6 +211,60 @@
   &lt;/dl&gt;
 &lt;/div&gt;</code></pre></details>
       </div>
+      <h3 id="definition-artist">Definition grid (record details)</h3>
+      <p><code>.definition</code> is the description list of the booking and request pages and most dialogs: each pair is a <code>.definition__row</code> with the term as a muted, uppercase overline over the value, 16px between rows. <code>.definition--two</code> puts the rows in two columns from 576px; each row keeps its term and value together at the top of the cell. Use it for the facts of one booking (date, start time, gathering, church, artist, price) where the vertical <code>.dl</code> would run too long.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<dl class="definition definition--two" style="width: 100%;">
+  <div class="definition__row"><dt>Date</dt><dd>Saturday 14 November 2026</dd></div>
+  <div class="definition__row"><dt>Service start time</dt><dd>7:00 p.m.</dd></div>
+  <div class="definition__row"><dt>Kind of gathering</dt><dd>Worship night</dd></div>
+  <div class="definition__row"><dt>Church</dt><dd>Riverside Community Church, Burlington</dd></div>
+  <div class="definition__row"><dt>Artist</dt><dd><a href="#definition-artist">Abigail Mensah</a>, Brampton · 44 km</dd></div>
+  <div class="definition__row"><dt>Quoted price</dt><dd>$650, locked Fri 9 Oct</dd></div>
+</dl>
+        </div>
+        <div class="ds-example__caption"><span><code>.definition.definition--two</code>: “The request” on pages/booking-detail/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dl class="definition definition--two" style="width: 100%;"&gt;
+  &lt;div class="definition__row"&gt;&lt;dt&gt;Date&lt;/dt&gt;&lt;dd&gt;Saturday 14 November 2026&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class="definition__row"&gt;&lt;dt&gt;Service start time&lt;/dt&gt;&lt;dd&gt;7:00 p.m.&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class="definition__row"&gt;&lt;dt&gt;Kind of gathering&lt;/dt&gt;&lt;dd&gt;Worship night&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class="definition__row"&gt;&lt;dt&gt;Church&lt;/dt&gt;&lt;dd&gt;Riverside Community Church, Burlington&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class="definition__row"&gt;&lt;dt&gt;Artist&lt;/dt&gt;&lt;dd&gt;&lt;a href="#definition-artist"&gt;Abigail Mensah&lt;/a&gt;, Brampton · 44 km&lt;/dd&gt;&lt;/div&gt;
+  &lt;div class="definition__row"&gt;&lt;dt&gt;Quoted price&lt;/dt&gt;&lt;dd&gt;$650, locked Fri 9 Oct&lt;/dd&gt;&lt;/div&gt;
+&lt;/dl&gt;</code></pre></details>
+      </div>
+      <h3>Receipt (money)</h3>
+      <p><code>.receipt</code> is the stub-face list for money: every row is a <code>.receipt__row</code> with the label left, the amount right in tabular figures and a dashed hairline under it. The last row, <code>.receipt__total</code>, is set in the display face between two thick rules. Fine print under the list goes in <code>.receipt__fine</code> (sentence case, caption size). Amounts follow L2-110: “$650”, “$162.50”. The server-error page reuses it for the reference and time a person quotes to support.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="panel panel--raised" style="width: min(100%, 24rem);">
+  <div class="panel__head"><h2 class="panel__title">Payment</h2><span class="stub__code">No. ZAM-0114</span></div>
+  <dl class="receipt" aria-label="Payment summary for ZAM-0114">
+    <div class="receipt__row"><dt>Quoted price, locked</dt><dd>$650</dd></div>
+    <div class="receipt__row"><dt>Deposit after she accepts (25%)</dt><dd>$162.50</dd></div>
+    <div class="receipt__row"><dt>Balance after the event</dt><dd>$487.50</dd></div>
+    <div class="receipt__row receipt__total"><dt>Paid so far</dt><dd>$0</dd></div>
+  </dl>
+  <p class="receipt__fine">3 business days. Monday 12 Oct is Thanksgiving.</p>
+</div>
+        </div>
+        <div class="ds-example__caption"><span><code>.receipt</code> in a raised <a href="card.html">panel</a>: the payment aside of pages/booking-detail/default.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="panel panel--raised" style="width: min(100%, 24rem);"&gt;
+  &lt;div class="panel__head"&gt;&lt;h2 class="panel__title"&gt;Payment&lt;/h2&gt;&lt;span class="stub__code"&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;
+  &lt;dl class="receipt" aria-label="Payment summary for ZAM-0114"&gt;
+    &lt;div class="receipt__row"&gt;&lt;dt&gt;Quoted price, locked&lt;/dt&gt;&lt;dd&gt;$650&lt;/dd&gt;&lt;/div&gt;
+    &lt;div class="receipt__row"&gt;&lt;dt&gt;Deposit after she accepts (25%)&lt;/dt&gt;&lt;dd&gt;$162.50&lt;/dd&gt;&lt;/div&gt;
+    &lt;div class="receipt__row"&gt;&lt;dt&gt;Balance after the event&lt;/dt&gt;&lt;dd&gt;$487.50&lt;/dd&gt;&lt;/div&gt;
+    &lt;div class="receipt__row receipt__total"&gt;&lt;dt&gt;Paid so far&lt;/dt&gt;&lt;dd&gt;$0&lt;/dd&gt;&lt;/div&gt;
+  &lt;/dl&gt;
+  &lt;p class="receipt__fine"&gt;3 business days. Monday 12 Oct is Thanksgiving.&lt;/p&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><dl class="receipt"><div class="receipt__row"><dt>Deposit (25%)</dt><dd>$162.50</dd></div><div class="receipt__row receipt__total"><dt>Refundable now</dt><dd>$162.50</dd></div></dl></div>
+        <div data-theme="dark"><dl class="receipt"><div class="receipt__row"><dt>Deposit (25%)</dt><dd>$162.50</dd></div><div class="receipt__row receipt__total"><dt>Refundable now</dt><dd>$162.50</dd></div></dl></div>
+      </div>
     </section>
 
     <section class="ds-section" id="sizes" data-na="Description lists have one size. Use the stub variant for a smaller, mono value."><h2><a href="#sizes">Sizes</a></h2>
@@ -250,6 +307,10 @@
         <li>The horizontal list keeps two columns down to 360px: the term column is at least 8rem (128px) and takes a third of the width; the value takes the rest and wraps. Keep terms to two words so they do not wrap.</li>
         <li>In the booking stub, which is narrow on desktop (the sidebar) and full width on phones, always use the vertical stub variant.</li>
         <li>For a long summary on wide screens, two vertical lists side by side read better than one long horizontal list; place them in a <code>.form__row</code> or <code>.grid</code>.</li>
+      </ul>
+      <ul>
+        <li><code>.definition--two</code> is one column below 576px and two from 576px (<code>--layout-breakpoint-sm</code>); rows align to the top so a long church name doesn’t push its neighbour down.</li>
+        <li><code>.receipt</code> rows keep label and amount on one line; a long label wraps while the amount stays right-aligned.</li>
       </ul>
     </section>
 
@@ -316,6 +377,8 @@
           <tr><td>Value font / stub</td><td><code>--text-body</code> / <code>--text-stub</code></td><td colspan="2"><span data-token="--text-body"></span> / <span data-token="--text-stub"></span></td></tr>
           <tr><td>Pair gap / term-value gap</td><td><code>--space-3</code> / <code>--space-0-5</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-0-5"></span></td></tr>
           <tr><td>Horizontal column gap</td><td><code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr>
+                  <tr><td>Receipt face / total</td><td><code>--text-stub</code></td><td colspan="2"><span data-token="--text-stub"></span></td></tr>
+          <tr><td>Receipt row rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -337,20 +400,30 @@
         <tr><td><code>&lt;div&gt;</code> around each pair</td><td>Required: the layout hangs on it.</td></tr>
         <tr><td><code>aria-busy="true"</code> on <code>.dl</code></td><td>Loading; values are skeletons.</td></tr>
         <tr><td><code>.mark</code> in a value</td><td>Changed value highlighter.</td></tr>
+      
+        <tr><td><code>.definition</code>, <code>.definition__row</code></td><td>Record details: overline term over value, 16px between rows.</td></tr>
+        <tr><td><code>.definition--two</code></td><td>Two columns from 576px.</td></tr>
+        <tr><td><code>.receipt</code>, <code>.receipt__row</code></td><td>Money list in the stub face: label left, tabular amount right, dashed rule.</td></tr>
+        <tr><td><code>.receipt__total</code></td><td>The total row: display face between thick rules.</td></tr>
+        <tr><td><code>.receipt__fine</code></td><td>Fine print under a receipt.</td></tr>
       </tbody></table>
     </section>
 
     <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
-      <p>Not in the mocks yet as a <code>&lt;dl&gt;</code>; part of the core set. The product needs it for the booking review step, the request an artist receives and the deposit receipt. It grows out of:</p>
+      <p>The mocks use two description lists, <code>.definition</code> and <code>.receipt</code>; the plain <code>.dl</code> variants above are not in the mocks yet and stay ready for compact summaries.</p>
       <ul>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the booking stub (“Book Abigail”, No. ZAM-0114, from $650, the fine print) and the poster facts line (★ 4.9 · 38 churches · Brampton, ON · drives up to 120 km)</li>
-        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the headliner’s meta line and the ticket stubs’ “From $1,800” price pairs</li>
+        <li><a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail/default</a> and every booking status (<a href="../../mocks/pages/booking-detail/accepted.html">accepted</a>, <a href="../../mocks/pages/booking-detail/confirmed.html">confirmed</a>, <a href="../../mocks/pages/booking-detail/cancelled.html">cancelled</a>…): “The request” as <code>.definition--two</code>, the payment aside as <code>.receipt</code></li>
+        <li><a href="../../mocks/pages/request-detail/default.html">pages/request-detail/default</a> and its states: the same request facts for the artist, with <code>.receipt__fine</code> (“You’ll be paid $598 after the event.”)</li>
+        <li><a href="../../mocks/pages/book/default.html">pages/book/default</a> and <a href="../../mocks/pages/book/success.html">success</a>: the booking summary before and after sending</li>
+        <li>Dialogs: <a href="../../mocks/dialogs/accept-request/default.html">dialogs/accept-request/default</a>, <a href="../../mocks/dialogs/cancel-booking/default.html">dialogs/cancel-booking/default</a>, <a href="../../mocks/dialogs/pay-deposit/default.html">dialogs/pay-deposit/default</a>, <a href="../../mocks/dialogs/withdraw-request/default.html">dialogs/withdraw-request/default</a> (what is about to change and the money)</li>
+        <li><a href="../../mocks/pages/server-error/default.html">pages/server-error/default</a>: a <code>.receipt</code> with the error reference and time</li>
+        <li><a href="../../mocks/pages/apply/success.html">pages/apply/success</a>: the application summary</li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The stub heading used <code>style="font: var(--text-h3)"</code>. It is now <code>.stub__title</code>, used in the stub example above.</li>
         <li>Several display-font shorthands were inline (<code>var(--font-weight-regular) var(--font-size-2xl) / 1 var(--font-family-display)</code>). Prices and figures now use the role tokens <code>--text-figure</code> and <code>--text-figure-lg</code>.</li>
-        <li>The poster facts are a row of spans with no labels. In a booking summary the same facts become a <code>&lt;dl&gt;</code> so each value has its term.</li>
+        <li>Rows in <code>.definition--two</code> stretched to the tallest neighbour, separating short terms from their values; rows now align to the top. The two-column break follows the L2 SM breakpoint (576px).</li>
       </ul>
     </section>
 

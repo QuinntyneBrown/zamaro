@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -110,22 +113,22 @@
     <header class="ds-header">
       <p class="ds-kicker">Foundation</p>
       <h1>Layout</h1>
-      <p class="ds-lead">Mobile first, from 360px. Breakpoints add columns, gutters and margins; the container stops at 1216px; the booking stub becomes a sticky column at 1024px.</p>
+      <p class="ds-lead">Mobile first, from 360px. Breakpoints add columns, gutters and margins; the container stops at 1216px; the booking stub becomes a sticky column at 992px.</p>
       <div class="ds-meta"><span class="ds-pill ds-pill--ok">Mobile first</span><span class="ds-pill">4 / 8 / 12 columns</span><span class="ds-pill">Container 1216px</span></div>
       <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#breakpoints">Breakpoints, columns, gutters, margins</a></li><li><a href="#grid">Live grid</a></li><li><a href="#containers">Container, measure, sidebar, top bar</a></li><li><a href="#templates">Page templates</a></li><li><a href="#usage">Usage</a></li><li><a href="#tokens">Tokens</a></li></ul>
     </header>
 
     <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
-<p>Layout tokens change at breakpoints so components don’t need their own media queries. Custom properties can’t be used inside <code>@media</code>, so the queries repeat the values in <code>rem</code> (<code>40rem</code>, <code>48rem</code>, <code>64rem</code>) and scale with the reader’s font size.</p>
+<p>The breakpoints are the L2 viewport classes (docs/specs/L2.md conventions): <b>XS</b> below 576px, <b>SM</b> from 576px, <b>MD</b> from 768px, <b>LG</b> from 992px and <b>XL</b> from 1200px. Visual tests capture every screen once per class (L2-096). Layout tokens change at breakpoints so components don’t need their own media queries. Custom properties can’t be used inside <code>@media</code>, so the queries repeat the values in <code>rem</code> (<code>36rem</code>, <code>48rem</code>, <code>62rem</code>) and scale with the reader’s font size.</p>
     </section>
 
     <section class="ds-section" id="breakpoints"><h2><a href="#breakpoints">Breakpoints, columns, gutters, margins</a></h2>
 <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Breakpoint</th><th scope="col">Min width</th><th scope="col">Columns</th><th scope="col">Gutter</th><th scope="col">Margin</th><th scope="col">What changes in the mocks</th></tr></thead><tbody>
-<tr><td>base</td><td>0</td><td>4</td><td>16px</td><td>20px</td><td>One column; ticket stub below the body; menu button in the top bar</td></tr>
-<tr><td><code>--layout-breakpoint-sm</code></td><td>640px</td><td>4</td><td>16px</td><td>20px</td><td>Ticket stub moves beside the body; booking bar goes two-up; dialogs stop being sheets</td></tr>
-<tr><td><code>--layout-breakpoint-md</code></td><td>768px</td><td>8</td><td>24px</td><td>40px</td><td>Headliner art beside text; setlist and reviews two-up; photo grid four-up</td></tr>
-<tr><td><code>--layout-breakpoint-lg</code></td><td>1024px</td><td>12</td><td>32px</td><td>64px</td><td>Top nav appears; lineup two-up; poster hero splits; booking stub becomes a sticky side column</td></tr>
-<tr><td><code>--layout-breakpoint-xl</code></td><td>1280px</td><td>12</td><td>32px</td><td>64px</td><td>The container (1216px) stops growing</td></tr>
+<tr><td>base (XS)</td><td>0</td><td>4</td><td>16px</td><td>20px</td><td>One column; ticket stub below the body; menu button in the top bar; dialogs fill the screen</td></tr>
+<tr><td><code>--layout-breakpoint-sm</code> (SM)</td><td>576px</td><td>4</td><td>16px</td><td>20px</td><td>Ticket stub moves beside the body; booking bar and form grids go two-up; dialogs are centred instead of full screen</td></tr>
+<tr><td><code>--layout-breakpoint-md</code> (MD)</td><td>768px</td><td>8</td><td>24px</td><td>40px</td><td>Headliner art beside text; setlist and reviews two-up; photo grid four-up</td></tr>
+<tr><td><code>--layout-breakpoint-lg</code> (LG)</td><td>992px</td><td>12</td><td>32px</td><td>64px</td><td>Booker top nav and theme toggle appear; lineup two-up; poster hero splits; booking stub and detail aside become sticky side columns</td></tr>
+<tr><td><code>--layout-breakpoint-xl</code> (XL)</td><td>1200px</td><td>12</td><td>32px</td><td>64px</td><td>Artist top nav appears; the container grows to its 1216px cap</td></tr>
 <tr><td><code>--layout-breakpoint-2xl</code></td><td>1536px</td><td>12</td><td>32px</td><td>auto</td><td>Only the margins grow</td></tr>
 </tbody></table></div>
 <p>The mocks use a 20px phone margin rather than 16px, so tickets’ perforation notches clear the screen edge.</p>
@@ -141,7 +144,7 @@
 <ul>
 <li><code>.container</code> centres content at <code>--layout-container-max</code> (76rem, 1216px) with <code>--layout-margin</code> padding.</li>
 <li>Prose stops at <code>--layout-measure</code> (58ch).</li>
-<li>The artist page’s booking stub column is <code>--layout-sidebar-width</code> (22rem). It is sticky below the top bar from 1024px.</li>
+<li>The artist page’s booking stub column is <code>--layout-sidebar-width</code> (22rem). It is sticky below the top bar from 992px.</li>
 <li>The top bar is <code>--layout-topbar-height</code> (68px including its 4px yellow rule). <code>scroll-padding-top</code> uses it so in-page links (“Book for Sat 14 Nov” → the stub) are not hidden under the bar.</li>
 </ul>
     </section>
@@ -163,7 +166,7 @@
     <div style="padding: var(--space-10) var(--space-2); border: var(--border-width-thick) solid var(--color-border-strong); font: var(--text-overline);">About · videos · photos · setlist · dates · reviews</div>
     <div class="stub" style="padding: var(--space-2); font: var(--text-overline);">Booking stub (sticky)</div>
   </div>
-</div><figcaption>Artist profile: <code>.profile-layout</code>, content plus a sticky stub from 1024px.</figcaption></figure>
+</div><figcaption>Artist profile: <code>.profile-layout</code>, content plus a sticky stub from 992px.</figcaption></figure>
 </div>
 <p>Error pages keep the shell (top bar, poster, footer) and put the <a href="../components/error-page.html">error</a> in the poster, so the booker can always navigate away.</p>
     </section>
@@ -173,10 +176,10 @@
     </section>
 
     <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
-<div class="ds-table-wrap"><table class="ds-table"><caption class="visually-hidden">Layout tokens</caption><thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>--layout-breakpoint-sm</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-sm" aria-label="Copy --layout-breakpoint-sm">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-sm"></span></td><td>640px  ticket stub moves beside the body</td></tr>
-<tr><td><code>--layout-breakpoint-md</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-md" aria-label="Copy --layout-breakpoint-md">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-md"></span></td><td>768px  8 columns, two-up grids</td></tr>
-<tr><td><code>--layout-breakpoint-lg</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-lg" aria-label="Copy --layout-breakpoint-lg">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-lg"></span></td><td>1024px 12 columns, top nav, sticky booking stub</td></tr>
-<tr><td><code>--layout-breakpoint-xl</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-xl" aria-label="Copy --layout-breakpoint-xl">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-xl"></span></td><td>1280px container stops growing</td></tr>
+<div class="ds-table-wrap"><table class="ds-table"><caption class="visually-hidden">Layout tokens</caption><thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>--layout-breakpoint-sm</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-sm" aria-label="Copy --layout-breakpoint-sm">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-sm"></span></td><td>576px SM: ticket stub moves beside the body</td></tr>
+<tr><td><code>--layout-breakpoint-md</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-md" aria-label="Copy --layout-breakpoint-md">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-md"></span></td><td>768px MD: 8 columns, two-up grids</td></tr>
+<tr><td><code>--layout-breakpoint-lg</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-lg" aria-label="Copy --layout-breakpoint-lg">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-lg"></span></td><td>992px LG: 12 columns, top nav, sticky booking stub</td></tr>
+<tr><td><code>--layout-breakpoint-xl</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-xl" aria-label="Copy --layout-breakpoint-xl">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-xl"></span></td><td>1200px XL, the widest L2 viewport class; the container caps at 1216px</td></tr>
 <tr><td><code>--layout-breakpoint-2xl</code> <button class="ds-copy" type="button" data-copy="--layout-breakpoint-2xl" aria-label="Copy --layout-breakpoint-2xl">Copy</button></td><td colspan="2"><span data-token="--layout-breakpoint-2xl"></span></td><td>1536px margins grow, content does not</td></tr>
 <tr><td><code>--layout-columns</code> <button class="ds-copy" type="button" data-copy="--layout-columns" aria-label="Copy --layout-columns">Copy</button></td><td colspan="2"><span data-token="--layout-columns"></span></td><td></td></tr>
 <tr><td><code>--layout-gutter</code> <button class="ds-copy" type="button" data-copy="--layout-gutter" aria-label="Copy --layout-gutter">Copy</button></td><td colspan="2"><span data-token="--layout-gutter"></span></td><td></td></tr>
@@ -184,7 +187,12 @@
 <tr><td><code>--layout-container-max</code> <button class="ds-copy" type="button" data-copy="--layout-container-max" aria-label="Copy --layout-container-max">Copy</button></td><td colspan="2"><span data-token="--layout-container-max"></span></td><td>1216px</td></tr>
 <tr><td><code>--layout-measure</code> <button class="ds-copy" type="button" data-copy="--layout-measure" aria-label="Copy --layout-measure">Copy</button></td><td colspan="2"><span data-token="--layout-measure"></span></td><td>prose line length</td></tr>
 <tr><td><code>--layout-sidebar-width</code> <button class="ds-copy" type="button" data-copy="--layout-sidebar-width" aria-label="Copy --layout-sidebar-width">Copy</button></td><td colspan="2"><span data-token="--layout-sidebar-width"></span></td><td>booking stub column on the artist page</td></tr>
-<tr><td><code>--layout-topbar-height</code> <button class="ds-copy" type="button" data-copy="--layout-topbar-height" aria-label="Copy --layout-topbar-height">Copy</button></td><td colspan="2"><span data-token="--layout-topbar-height"></span></td><td>68px including the 4px yellow rule</td></tr></tbody></table></div>
+<tr><td><code>--layout-topbar-height</code> <button class="ds-copy" type="button" data-copy="--layout-topbar-height" aria-label="Copy --layout-topbar-height">Copy</button></td><td colspan="2"><span data-token="--layout-topbar-height"></span></td><td>68px including the 4px yellow rule</td></tr>
+<tr><td><code>--layout-dialog-width</code> <button class="ds-copy" type="button" data-copy="--layout-dialog-width" aria-label="Copy --layout-dialog-width">Copy</button></td><td colspan="2"><span data-token="--layout-dialog-width"></span></td><td>512px default dialog (24rem small, 44rem large)</td></tr>
+<tr><td><code>--layout-drawer-width</code> <button class="ds-copy" type="button" data-copy="--layout-drawer-width" aria-label="Copy --layout-drawer-width">Copy</button></td><td colspan="2"><span data-token="--layout-drawer-width"></span></td><td>320px navigation drawer below LG (artist shell: below XL)</td></tr>
+<tr><td><code>--layout-menu-width</code> <button class="ds-copy" type="button" data-copy="--layout-menu-width" aria-label="Copy --layout-menu-width">Copy</button></td><td colspan="2"><span data-token="--layout-menu-width"></span></td><td>256px anchored account menu</td></tr>
+<tr><td><code>--layout-auth-width</code> <button class="ds-copy" type="button" data-copy="--layout-auth-width" aria-label="Copy --layout-auth-width">Copy</button></td><td colspan="2"><span data-token="--layout-auth-width"></span></td><td>448px sign-in and sign-up stub</td></tr>
+<tr><td><code>--layout-calendar-cell</code> <button class="ds-copy" type="button" data-copy="--layout-calendar-cell" aria-label="Copy --layout-calendar-cell">Copy</button></td><td colspan="2"><span data-token="--layout-calendar-cell"></span></td><td>44px minimum height of an availability day (1.75× from MD)</td></tr></tbody></table></div>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>

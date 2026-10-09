@@ -11,9 +11,11 @@
 <style>
   /* Docs only: the product top bar uses the page margin; inside narrow example frames it uses the phone margin. */
   .ds-example .topbar, .ds-themes .topbar, .ds-anatomy__figure .topbar { padding-inline: var(--space-2); }
-  /* Docs only: force the phone layout (below 1024px) inside a desktop-width page. */
+  /* Docs only: force the phone layout (below 992px) inside a desktop-width page. */
   .ds-compact .topbar__nav { display: none; }
   .ds-compact .topbar__menu { display: inline-flex; }
+  .ds-compact .topbar__theme { display: none; }
+  .ds-scroll-x { overflow-x: auto; }
   /* Docs only: frames are narrower than the viewport on phones, so tighten the bar there and let theme panels scroll. */
   @media (max-width: 30rem) { :is(.ds-example, .ds-themes, .ds-anatomy__figure) .topbar { padding-inline: var(--space-2); gap: var(--space-2); } }
   .ds-themes .ds-compact { overflow-x: auto; }
@@ -56,6 +58,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -82,6 +85,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -133,9 +138,11 @@
       <ul>
         <li><b>Brand</b> links home (Discover). The yellow <code>.brand-mark</code> holds the microphone icon.</li>
         <li><b>Primary navigation</b> (<code>.topbar__nav</code>) holds three to five <code>.nav-link</code>s. The current one has <code>aria-current="page"</code> and a yellow underline.</li>
-        <li><b>Saved</b> is a <code>.nav-link</code> button with a yellow <a href="badge.html">count badge</a>. It opens the saved-artists panel.</li>
-        <li><b>Account</b> is an initials <a href="avatar.html">avatar</a> button that opens the account <a href="menu.html">menu</a>.</li>
+        <li><b>Saved</b> is a <code>.nav-link</code> with a yellow <a href="badge.html">count badge</a>. In the mocks it links to the Saved artists page.</li>
+        <li><b>Theme toggle</b> (<code>.topbar__theme</code>) switches between the newsprint and stage themes (L2-104). From 992px it is an icon button in the bar; in the compact header it is a “Dark theme” item in the navigation drawer.</li>
+        <li><b>Account</b> is an initials <a href="avatar.html">avatar</a> button that opens the account <a href="menu.html">menu</a>. Signed out, a “Sign in” link (or “Create account” on the sign-in page) takes its place.</li>
       </ul>
+      <p>The two workspaces use the same bar with <code>.topbar--workspace</code>: a role tag after the brand, five workspace links, and no Saved button. The artist area’s tag reads “Artists”; the separate admin app under <code>/admin</code> uses the same bar with an “Admin” tag and its own five links.</p>
       <p>Use it once per page, as the first thing after the <a href="skip-link.html">skip link</a>. Do not put page actions (“Request to book”, filters) in it: those belong in the page. For sections inside an account area, use <a href="sidebar-navigation.html">sidebar navigation</a> or <a href="tabs.html">tabs</a> under the top bar.</p>
     </section>
 
@@ -146,7 +153,7 @@
             <a class="topbar__brand" href="#anatomy"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
             <nav class="topbar__nav" aria-label="Primary (anatomy example)">
               <a class="nav-link" href="#anatomy" aria-current="page">Discover</a>
-              <a class="nav-link" href="#anatomy">How it works</a>
+              <a class="nav-link" href="#anatomy">How booking works</a>
               <a class="nav-link" href="#anatomy">For artists</a>
             </nav>
             <span class="topbar__spacer"></span>
@@ -164,7 +171,7 @@
           <li><div><b>Brand</b><small><code>.topbar__brand</code>: a 32px yellow <code>.brand-mark</code> with the microphone icon (<code>aria-hidden</code>) and the word “Zamaro” in the display face. The word is the link’s name.</small></div></li>
           <li><div><b>Primary navigation</b><small><code>.topbar__nav</code> inside <code>&lt;nav aria-label="Primary"&gt;</code>. Bold 14px uppercase labels, 44px tall, 12px side padding.</small></div></li>
           <li><div><b>Current marker</b><small>A 3px yellow underline drawn with an inset shadow on the link with <code>aria-current="page"</code>.</small></div></li>
-          <li><div><b>Saved button</b><small><code>.nav-link.topbar__saved</code>: heart icon, “Saved” label and a yellow <code>.badge--count</code>. Opens the saved-artists panel.</small></div></li>
+          <li><div><b>Saved button</b><small><code>.nav-link.topbar__saved</code>: heart icon, “Saved” label and a yellow <code>.badge--count</code>. Links to the Saved artists page.</small></div></li>
           <li><div><b>Account button</b><small><code>button.avatar</code> with the booker’s initials, 40px, yellow fill with an ink ring. Opens the account menu.</small></div></li>
           <li><div><b>Stage and rule</b><small>Charcoal <code>--color-bg-stage</code> in both themes, 68px tall, with a 4px <code>--color-accent</code> rule along the bottom.</small></div></li>
         </ol>
@@ -180,27 +187,31 @@
             <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
             <nav class="topbar__nav" aria-label="Primary (signed-in example)">
               <a class="nav-link" href="#variants" aria-current="page">Discover</a>
-              <a class="nav-link" href="#variants">How it works</a>
+              <a class="nav-link" href="#variants">How booking works</a>
               <a class="nav-link" href="#variants">For artists</a>
             </nav>
             <span class="topbar__spacer"></span>
             <button class="nav-link topbar__saved" type="button" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="nav-link__text">Saved</span> <span class="badge badge--count">3<span class="visually-hidden"> artists</span></span></button>
+            <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
             <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
           </header>
         </div>
-        <div class="ds-example__caption"><span>Naomi Fraser on Discover, with three saved artists. This is the bar in every mock.</span></div>
+        <div class="ds-example__caption"><span>Naomi Fraser on Discover, with three saved artists and the theme toggle. This is the booker bar in every mock.</span></div>
         <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;header class="topbar"&gt;
   &lt;button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer"&gt;…&lt;/button&gt;
   &lt;a class="topbar__brand" href="/"&gt;&lt;span class="brand-mark" aria-hidden="true"&gt;&lt;svg …/&gt;&lt;/span&gt;Zamaro&lt;/a&gt;
   &lt;nav class="topbar__nav" aria-label="Primary"&gt;
     &lt;a class="nav-link" href="/" aria-current="page"&gt;Discover&lt;/a&gt;
-    &lt;a class="nav-link" href="/#how"&gt;How it works&lt;/a&gt;
+    &lt;a class="nav-link" href="/#how"&gt;How booking works&lt;/a&gt;
     &lt;a class="nav-link" href="/#join"&gt;For artists&lt;/a&gt;
   &lt;/nav&gt;
   &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
-  &lt;button class="nav-link topbar__saved" type="button" aria-expanded="false"&gt;
+  &lt;a class="nav-link topbar__saved" href="/saved"&gt;
     &lt;svg class="icon" aria-hidden="true" …/&gt;&lt;span class="nav-link__text"&gt;Saved&lt;/span&gt;
     &lt;span class="badge badge--count"&gt;3&lt;span class="visually-hidden"&gt; artists&lt;/span&gt;&lt;/span&gt;
+  &lt;/a&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"&gt;
+    &lt;svg class="icon" aria-hidden="true" …moon…/&gt;&lt;span class="visually-hidden"&gt;Dark theme&lt;/span&gt;
   &lt;/button&gt;
   &lt;button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false"&gt;NF&lt;/button&gt;
 &lt;/header&gt;</code></pre></details>
@@ -213,14 +224,104 @@
             <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
             <nav class="topbar__nav" aria-label="Primary (signed-out example)">
               <a class="nav-link" href="#variants">Discover</a>
-              <a class="nav-link" href="#variants">How it works</a>
+              <a class="nav-link" href="#variants">How booking works</a>
               <a class="nav-link" href="#variants" aria-current="page">For artists</a>
             </nav>
             <span class="topbar__spacer"></span>
+            <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
             <a class="nav-link" href="#variants">Sign in</a>
           </header>
         </div>
-        <div class="ds-example__caption"><span>No Saved button and no avatar: a single “Sign in” link takes their place. Not in the mocks yet; needed for the artist sign-up pages.</span></div>
+        <div class="ds-example__caption"><span>No Saved button and no avatar: a single “Sign in” link takes their place (the apply, forgot-password and reset-password mocks). On the sign-in page itself the link is <code>.topbar__auth</code>, which reads “Sign up” below 480px and “Create account” above.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;!-- On /sign-in: the account link points the other way --&gt;
+&lt;a class="nav-link topbar__auth" href="/sign-up"&gt;&lt;span class="topbar__auth-short"&gt;Sign up&lt;/span&gt;&lt;span class="topbar__auth-long"&gt;Create account&lt;/span&gt;&lt;/a&gt;</code></pre></details>
+      </div>
+
+      <h3>Artist</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-scroll-x">
+          <header class="topbar topbar--static topbar--workspace">
+            <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+            <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <span class="topbar__role">Artists</span>
+            <nav class="topbar__nav" aria-label="Primary (artist example)">
+              <a class="nav-link" href="#variants" aria-current="page">Dashboard</a>
+              <a class="nav-link" href="#variants">Requests <span class="badge badge--count">3<span class="visually-hidden"> awaiting reply</span></span></a>
+              <a class="nav-link" href="#variants">Availability</a>
+              <a class="nav-link" href="#variants">Earnings</a>
+              <a class="nav-link" href="#variants">Profile</a>
+            </nav>
+            <span class="topbar__spacer"></span>
+            <a class="nav-link topbar__link" href="#variants">View public profile</a>
+            <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+            <button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false">AM</button>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>Abigail Mensah on her dashboard. <code>.topbar--workspace</code> hides Saved, adds the <code>.topbar__role</code> tag, and keeps the menu button until 1200px because five links don’t fit at 992px. “View public profile” (<code>.topbar__link</code>) joins the bar only from 1536px; it is always in the drawer and the account menu.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;header class="topbar topbar--workspace"&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__menu" …&gt;…&lt;/button&gt;
+  &lt;a class="topbar__brand" href="/artist"&gt;…Zamaro&lt;/a&gt;
+  &lt;span class="topbar__role"&gt;Artists&lt;/span&gt;
+  &lt;nav class="topbar__nav" aria-label="Primary"&gt;
+    &lt;a class="nav-link" href="/artist" aria-current="page"&gt;Dashboard&lt;/a&gt;
+    &lt;a class="nav-link" href="/artist/requests"&gt;Requests &lt;span class="badge badge--count"&gt;3&lt;span class="visually-hidden"&gt; awaiting reply&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;
+    …Availability, Earnings, Profile
+  &lt;/nav&gt;
+  &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
+  &lt;a class="nav-link topbar__link" href="/artists/abigail-mensah"&gt;View public profile&lt;/a&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"&gt;…Dark theme&lt;/button&gt;
+  &lt;button class="avatar" type="button" aria-label="Account menu for Abigail Mensah" aria-expanded="false"&gt;AM&lt;/button&gt;
+&lt;/header&gt;</code></pre></details>
+      </div>
+
+      <h3>Admin</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--flush ds-scroll-x">
+          <header class="topbar topbar--static topbar--workspace">
+            <button class="btn btn--ghost btn--icon topbar__menu" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+            <a class="topbar__brand" href="#variants"><span class="brand-mark" aria-hidden="true"><svg class="icon icon--sm" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>Zamaro</a>
+            <span class="topbar__role">Admin</span>
+            <nav class="topbar__nav" aria-label="Primary (admin example)">
+              <a class="nav-link" href="#variants" aria-current="page">Applications <span class="badge badge--count">3<span class="visually-hidden"> waiting</span></span></a>
+              <a class="nav-link" href="#variants">Artists</a>
+              <a class="nav-link" href="#variants">Bookings <span class="badge badge--count">1<span class="visually-hidden"> held</span></span></a>
+              <a class="nav-link" href="#variants">Reviews <span class="badge badge--count">2<span class="visually-hidden"> reported</span></span></a>
+              <a class="nav-link" href="#variants">Audit log</a>
+            </nav>
+            <span class="topbar__spacer"></span>
+            <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+            <button class="avatar" type="button" aria-label="Account menu for Priya Nair" aria-expanded="false">PN</button>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>Priya Nair in the admin app (<code>/admin</code>). The same <code>.topbar--workspace</code> bar with an “Admin” role tag and the admin app’s five links; the brand goes to the applications queue. No <code>.topbar__link</code>.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;header class="topbar topbar--workspace"&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__menu" …&gt;…&lt;/button&gt;
+  &lt;a class="topbar__brand" href="/admin"&gt;…Zamaro&lt;/a&gt;
+  &lt;span class="topbar__role"&gt;Admin&lt;/span&gt;
+  &lt;nav class="topbar__nav" aria-label="Primary"&gt;
+    &lt;a class="nav-link" href="/admin/applications" aria-current="page"&gt;Applications &lt;span class="badge badge--count"&gt;3&lt;span class="visually-hidden"&gt; waiting&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;
+    …Artists, Bookings, Reviews, Audit log
+  &lt;/nav&gt;
+  &lt;span class="topbar__spacer"&gt;&lt;/span&gt;
+  &lt;button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"&gt;…Dark theme&lt;/button&gt;
+  &lt;button class="avatar" type="button" aria-label="Account menu for Priya Nair" aria-expanded="false"&gt;PN&lt;/button&gt;
+&lt;/header&gt;</code></pre></details>
+      </div>
+
+      <h3>Theme toggle</h3>
+      <p>One toggle for the whole product (L2-104). It is a toggle button with a constant name, “Dark theme”, and <code>aria-pressed="true"</code> while the stage theme is on; the name never flips to “Switch to light theme”, because a changing name and a pressed state would contradict each other. In the bar it is a ghost icon button: the moon icon fills and turns yellow when pressed. In the compact header it moves into the navigation drawer as a <code>.menu__item</code> button with the same name and state (see <a href="menu.html">Menu</a>).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stage on-stage">
+          <header class="topbar topbar--static" style="border: 0;">
+            <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+            <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+          </header>
+        </div>
+        <div class="ds-example__caption"><span>Off (newsprint) and on (stage). Shown from 992px; below that it lives in the drawer.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/&gt;&lt;/svg&gt;
+  &lt;span class="visually-hidden"&gt;Dark theme&lt;/span&gt;
+&lt;/button&gt;</code></pre></details>
       </div>
 
       <h3>Compact (phones and tablets)</h3>
@@ -234,13 +335,13 @@
             <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-expanded="false">NF</button>
           </header>
         </div>
-        <div class="ds-example__caption"><span>Below 1024px the links move into a drawer behind the menu button and “Saved” keeps only its heart and count. The word stays in the accessible name.</span></div>
-        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;!-- Same markup as the full bar: CSS hides .topbar__nav and shows .topbar__menu below 64rem --&gt;
+        <div class="ds-example__caption"><span>Below 992px (XS, SM and MD) the links and the theme toggle move into a drawer behind the menu button, and “Saved” keeps only its heart and count; the word stays in the accessible name. L2-099 requires the compact header at XS and SM; MD keeps it because the three links, Saved, the toggle and the avatar need about 870px.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;!-- Same markup as the full bar: CSS hides .topbar__nav and shows .topbar__menu below 62rem --&gt;
 &lt;button class="btn btn--ghost btn--icon topbar__menu" type="button"
         aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer"&gt;…&lt;/button&gt;</code></pre></details>
       </div>
 
-      <h3>Saved panel and account menu open</h3>
+      <h3>Account menu open</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--flush" style="padding-bottom: 11rem;">
           <header class="topbar topbar--static">
@@ -325,9 +426,10 @@
 
     <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
       <ul>
-        <li><b>1024px and wider</b> (<code>--layout-breakpoint-lg</code>): brand, primary links, a flexible spacer, Saved with its label, then the avatar. Side padding is <code>--layout-margin</code>, so the bar lines up with the page container.</li>
-        <li><b>Below 1024px</b>: <code>.topbar__nav</code> is hidden and the ghost menu button (<code>.topbar__menu</code>) appears before the brand. It opens a drawer with the same links in the same order. Saved shows only the heart and count.</li>
-        <li><b>At 360px</b>: menu (44px), brand, spacer, Saved (about 70px) and avatar (40px) share one row at the same 68px height. This fits only with the condensed display face; with a wide fallback face the word “Zamaro” runs into Saved, so the brand needs to shrink or drop to the mark alone below 400px (proposed fix).</li>
+        <li><b>992px and wider</b> (LG, <code>--layout-breakpoint-lg</code>): brand, primary links, a flexible spacer, Saved with its label, the theme toggle, then the avatar. Side padding is <code>--layout-margin</code>, so the bar lines up with the page container.</li>
+        <li><b>Below 992px</b> (XS, SM, MD): <code>.topbar__nav</code> and <code>.topbar__theme</code> are hidden and the ghost menu button (<code>.topbar__menu</code>) appears before the brand. It opens the navigation drawer with the same links in the same order plus the “Dark theme” toggle. Saved and the avatar stay visible; Saved shows only the heart and count (L2-099).</li>
+        <li><b>Workspace bar</b> (<code>.topbar--workspace</code>, artist and admin): five links need more room, so it keeps the menu button and drawer until 1200px (XL) and shows the links inline from there. <code>.topbar__link</code> (“View public profile”) shows only from 1536px.</li>
+        <li><b>At 360px</b>: menu (44px), brand, spacer, Saved (about 70px) and avatar (40px) share one row at the same 68px height. Below 576px the gaps tighten to <code>--space-2</code> and the word “Zamaro” drops to 22px (<code>--font-size-xl</code>); below 400px it drops again to 18px (<code>--font-size-lg</code>), so the row still fits when the condensed display face falls back to a wider one. The signed-out “Create account” link shortens to “Sign up” below 480px.</li>
         <li>The bar is <code>position: sticky</code>. <code>html</code> sets <code>scroll-padding-top</code> to <code>--layout-topbar-height</code> plus 16px, so in-page links (“Book for Sat 14 Nov”) and focused fields are never hidden under it.</li>
       </ul>
     </section>
@@ -345,9 +447,9 @@
       <p>The bar is a <code>&lt;header&gt;</code> that is a direct child of <code>&lt;body&gt;</code>, so it is the page’s banner landmark. The links sit in <code>&lt;nav aria-label="Primary"&gt;</code>. The menu button and the Saved button follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">APG Disclosure pattern</a> (<code>aria-expanded</code>, <code>aria-controls</code>). The account avatar follows the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/">APG Menu Button pattern</a> (<code>aria-haspopup="menu"</code>).</p>
       <h3>Keyboard</h3>
       <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
-        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through menu button (phones), brand, links, Saved and avatar, in that order.</td></tr>
-        <tr><td><kbd>Enter</kbd></td><td>Follows a link; opens the drawer, Saved panel or account menu.</td></tr>
-        <tr><td><kbd>Space</kbd></td><td>Opens the drawer, Saved panel or account menu.</td></tr>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through menu button (compact), brand, links, Saved, theme toggle (from 992px) and avatar, in that order.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows a link; opens the drawer or account menu; toggles the theme.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Opens the drawer or account menu; toggles the theme.</td></tr>
         <tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>In the open account menu: moves between items (see <a href="menu.html">Menu</a>).</td></tr>
         <tr><td><kbd>Esc</kbd></td><td>Closes the open drawer, panel or menu and returns focus to the button that opened it.</td></tr>
       </tbody></table>
@@ -372,8 +474,8 @@
 
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
-        <li>Nav labels are one to three short words, in sentence case in the source: “Discover”, “How it works”, “For artists”. CSS adds the uppercase.</li>
-        <li>Budget the width: at 1024px the bar has about 900px for content, and the brand, Saved and avatar take about 370px of it. Three links of up to 12 characters fit with room for a fourth.</li>
+        <li>Nav labels are one to three short words, in sentence case in the source: “Discover”, “How booking works”, “For artists” (L2-099). CSS adds the uppercase.</li>
+        <li>Budget the width: at 992px the bar has about 860px for content, and the brand, Saved, theme toggle and avatar take about 420px of it. The booker’s three links fit; the workspace bar’s five (artist and admin) do not, which is why <code>.topbar--workspace</code> stays compact until 1200px.</li>
         <li>Keep three to five links. Anything more belongs in the drawer, the footer or an account page.</li>
         <li>The Saved count is the number of saved artists, not a notification count. It never says “9+”; show the real number.</li>
         <li>Avatars show two initials from the booker’s name (“NF”). The menu inside names the person and church.</li>
@@ -432,10 +534,15 @@
         <tr><td><code>.topbar</code></td><td>The stage bar: sticky, 68px, yellow bottom rule.</td></tr>
         <tr><td><code>.topbar--static</code></td><td>Not sticky. For documentation and previews only.</td></tr>
         <tr><td><code>.topbar__brand</code>, <code>.brand-mark</code></td><td>Home link and its 32px yellow mark.</td></tr>
-        <tr><td><code>.topbar__nav</code></td><td>Primary links; shown from 1024px.</td></tr>
-        <tr><td><code>.topbar__menu</code></td><td>Menu button; shown below 1024px.</td></tr>
+        <tr><td><code>.topbar__nav</code></td><td>Primary links; shown from 992px (workspace bar: from 1200px).</td></tr>
+        <tr><td><code>.topbar__menu</code></td><td>Menu button; shown below 992px (workspace bar: below 1200px).</td></tr>
+        <tr><td><code>.topbar__theme</code></td><td>Theme toggle: ghost icon button, name “Dark theme”, <code>aria-pressed</code>; shown from 992px. In the compact header the toggle is a drawer item.</td></tr>
+        <tr><td><code>.topbar--workspace</code></td><td>Workspace shell (artist area and admin app): hides Saved; compact until 1200px.</td></tr>
+        <tr><td><code>.topbar__role</code></td><td>Small outlined role tag after the brand: “Artists” or “Admin”.</td></tr>
+        <tr><td><code>.topbar__link</code></td><td>Extra shortcut link (“View public profile”); shown only from 1536px.</td></tr>
+        <tr><td><code>.topbar__auth</code>, <code>.topbar__auth-short</code>, <code>.topbar__auth-long</code></td><td>Signed-out account link with a short label (“Sign up”) below 480px and a long one (“Create account”) above.</td></tr>
         <tr><td><code>.topbar__spacer</code></td><td>Pushes Saved and the avatar to the right.</td></tr>
-        <tr><td><code>.topbar__saved</code>, <code>.nav-link__text</code></td><td>Saved button; its label is hidden below 1024px.</td></tr>
+        <tr><td><code>.topbar__saved</code>, <code>.nav-link__text</code></td><td>Saved link; its label is hidden below 992px.</td></tr>
         <tr><td><code>.nav-link</code></td><td>Link or button on the stage; resets button styles.</td></tr>
         <tr><td><code>aria-current="page"</code></td><td>Current link: yellow underline.</td></tr>
         <tr><td><code>aria-expanded="true"</code></td><td>Open panel: yellow label; on the menu button, swap the icon to close.</td></tr>
@@ -448,15 +555,22 @@
       <ul>
         <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: the full bar with “Discover” current, Saved with a count of 3, the NF avatar</li>
         <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>, <a href="../../mocks/pages/discover/empty.html">empty</a> and <a href="../../mocks/pages/discover/error.html">error</a>: the same bar, unchanged while the page below loads or fails</li>
-        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the bar with no current link (a profile is below Discover), and the menu button below 1024px</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: the bar with no current link (a profile is below Discover), and the menu button below 992px</li>
         <li><a href="../../mocks/pages/artist/loading.html">pages/artist/loading</a>, <a href="../../mocks/pages/artist/empty.html">empty</a> and <a href="../../mocks/pages/artist/error.html">error</a>: the same bar on every profile state</li>
+        <li>The booker bar on every signed-in page, for example <a href="../../mocks/pages/bookings/default.html">pages/bookings/default</a>, <a href="../../mocks/pages/booking-detail/default.html">pages/booking-detail/default</a>, <a href="../../mocks/pages/saved/default.html">pages/saved/default</a> and <a href="../../mocks/pages/account/default.html">pages/account/default</a></li>
+        <li>The artist workspace bar (<code>.topbar--workspace</code>, <code>.topbar__role</code>, <code>.topbar__link</code>) on <a href="../../mocks/pages/dashboard/default.html">pages/dashboard/default</a>, <a href="../../mocks/pages/requests/default.html">pages/requests/default</a>, <a href="../../mocks/pages/availability/default.html">pages/availability/default</a>, <a href="../../mocks/pages/earnings/default.html">pages/earnings/default</a> and <a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/default</a></li>
+        <li>The admin workspace bar (<code>.topbar--workspace</code> with an “Admin” <code>.topbar__role</code>) on every admin page, for example <a href="../../mocks/pages/admin-applications/default.html">pages/admin-applications/default</a>, <a href="../../mocks/pages/admin-artists/default.html">pages/admin-artists/default</a> and <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a>; its drawer in <a href="../../mocks/dialogs/menu/admin.html">dialogs/menu/admin</a></li>
+        <li>The signed-out bar on <a href="../../mocks/pages/apply/default.html">pages/apply/default</a>, <a href="../../mocks/pages/forgot-password/default.html">pages/forgot-password/default</a> and <a href="../../mocks/pages/reset-password/default.html">pages/reset-password/default</a>; <code>.topbar__auth</code> on <a href="../../mocks/pages/sign-in/default.html">pages/sign-in/default</a></li>
+        <li>The theme toggle (<code>.topbar__theme</code>) in every mock’s bar, and its drawer item in <a href="../../mocks/dialogs/menu/default.html">dialogs/menu/default</a> and <a href="../../mocks/dialogs/menu/artist.html">dialogs/menu/artist</a></li>
       </ul>
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>The Saved button combined <code>.nav-link</code>, <code>.btn--ghost</code> and an inline <code>style="background: none; border: 0; cursor: pointer;"</code>. <code>.nav-link</code> now resets buttons itself.</li>
         <li><code>.brand-mark</code> was 1.9rem (30.4px, off the grid) and read <code>--palette-ink</code>. It is now 2rem and uses <code>--color-fg-on-accent</code>.</li>
         <li>The count badge’s minimum width was 1.4em; it is now 1.5em so “3” and “12” sit in the same box. Its outline now reads <code>--color-border-on-accent</code>, not the ink primitive.</li>
-        <li>The mocks’ “How booking works” link wrapped onto three lines in narrow frames. It is now “How it works”; the section it links to keeps its full heading.</li>
+        <li>An earlier extraction shortened “How booking works” to “How it works”. L2-099 names the link “How booking works” and every mock uses it, so the label is back; it only shows from 992px, where it fits on one line.</li>
+        <li>The product had no theme toggle although L2-104 requires one. <code>.topbar__theme</code> and the drawer item were added to every mock.</li>
+        <li>The artist bar’s five links, “View public profile” and the avatar overflowed at 992px. The artist bar now stays compact until 1200px and the extra link shows only from 1536px.</li>
         <li>The count was named with <code>aria-label</code> on a plain <code>&lt;span&gt;</code>, which screen readers do not reliably read. It now carries visually hidden text.</li>
       </ul>
     </section>

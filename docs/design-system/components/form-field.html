@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -121,9 +124,9 @@
       <p>Use <code>.field</code> around every <a href="text-field.html">text field</a>, <a href="textarea.html">textarea</a>, <a href="select.html">select</a> and <a href="date-picker.html">date picker</a>. Checkbox, radio and switch groups use a <code>&lt;fieldset&gt;</code> instead; see <a href="checkbox.html">Checkbox</a>.</p>
       <ul>
         <li><b>Label</b> (<code>.field__label</code>) is always visible and above the control. Placeholders are never labels.</li>
-        <li><b>Optional marker</b> (<code>.field__optional</code>). Most booking fields are required, so Zamaro marks the exceptions: “Message (optional)”.</li>
-        <li><b>Help</b> (<code>.field__help</code>) is one muted line under the control: a format, a limit or why we ask.</li>
-        <li><b>Error</b> (<code>.field__error</code>) replaces nothing; it appears under the control, above the help, with a warning icon.</li>
+        <li><b>Requirement marker</b> (<code>.field__optional</code> or <code>.field__required</code>): a muted, sentence-case note inside the label or legend, “Message (optional)”, “Your rating (required)”. Mark whichever is less common on a form; long forms and dialogs that mix them (account settings, every dialog with a reason) mark both.</li>
+        <li><b>Help</b> (<code>.field__help</code>) is one muted line under the control: a format, a limit or why we ask. <code>.field__help--narrow</code> caps it at 256px where it sits beside a fixed-size object instead (Edit profile’s primary photo).</li>
+        <li><b>Error</b> (<code>.field__error</code>) replaces nothing; it appears under the control, above the help, as text only: no icon. The message itself says what is wrong, and <code>aria-invalid</code> with <code>aria-describedby</code> tie it to the control, so the error never rests on colour alone.</li>
         <li><b>Success</b> uses an <a href="inline-message.html">inline message</a> (<code>.inline-msg--success</code>) as help: “Abigail is free Sat 14 Nov”.</li>
         <li><b>Counter</b> (<code>.field__counter</code>) sits on the label row for fields with a limit.</li>
       </ul>
@@ -134,10 +137,10 @@
       <div class="ds-anatomy">
         <figure class="ds-anatomy__figure">
           <div class="field" style="width: min(100%, 22rem);">
-            <div class="field__row"><label class="field__label" for="ana-message">Message <span class="field__optional">(optional)</span></label><span class="field__counter" id="ana-message-count">112 / 500</span></div>
-            <textarea class="textarea" id="ana-message" aria-invalid="true" aria-describedby="ana-message-error ana-message-help ana-message-count">Sunday service for about 180 people. Our band is two guitars and a keyboard; we’d love Goodness of God.</textarea>
-            <p class="field__error" id="ana-message-error"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Leave out phone numbers. Abigail can reply here once she accepts.</p>
-            <p class="field__help" id="ana-message-help">Your church, the room, the songs you love.</p>
+            <div class="field__row"><label class="field__label" for="ana-message">Your review <span class="field__required">(required)</span></label><span class="field__counter" id="ana-message-count">8 / 1,000</span></div>
+            <textarea class="textarea" id="ana-message" aria-invalid="true" minlength="20" maxlength="1000" aria-describedby="ana-message-error ana-message-help ana-message-count">So good!</textarea>
+            <p class="field__error" id="ana-message-error">Write at least 20 characters; you have 8.</p>
+            <p class="field__help" id="ana-message-help">20 to 1,000 characters. Shown on Abigail’s profile with your name and church.</p>
           </div>
           <span class="ds-callout" style="left: max(0.25rem, calc(50% - 13rem)); top: 2.25rem;" aria-hidden="true">1</span>
           <span class="ds-callout" style="left: max(4rem, calc(50% - 5.75rem)); top: 0.5rem;" aria-hidden="true">2</span>
@@ -149,7 +152,7 @@
         <ol class="ds-anatomy__list">
           <li><div><b>Label</b><small>Mono overline, 12px, uppercase, stamp tracking, in body ink. Names the control.</small></div></li>
           <li><div><b>Optional marker</b><small>Caption size, sentence case, muted. Part of the label, so it is part of the name.</small></div></li>
-          <li><div><b>Counter</b><small>Mono overline with tabular figures, on the label row (<code>.field__row</code>). Turns danger red and bold over the limit.</small></div></li>
+          <li><div><b>Counter</b><small>Mono overline with tabular figures, on the label row (<code>.field__row</code>). Turns danger red and bold if a value is over the limit (<code>data-over="true"</code>); with <code>maxlength</code> at the limit, typing never gets there.</small></div></li>
           <li><div><b>Control</b><small>Any input, select or textarea. It owns its own height, border and focus ring.</small></div></li>
           <li><div><b>Error</b><small>Bold caption in danger red with a 16px warning icon. Says what is wrong and how to fix it.</small></div></li>
           <li><div><b>Help</b><small>Caption in muted ink. One sentence. Parts sit 4px apart (<code>--space-1</code>).</small></div></li>
@@ -185,7 +188,7 @@
     <div class="field">
       <label class="field__label" for="ff-phone">Phone <span class="field__optional">(optional)</span></label>
       <input class="input" type="tel" id="ff-phone" name="phone" autocomplete="tel" aria-describedby="ff-phone-help">
-      <p class="field__help" id="ff-phone-help">Only shared with an artist after they accept.</p>
+      <p class="field__help" id="ff-phone-help">Only shared with the artist once the booking is confirmed.</p>
     </div>
   </div>
   <div class="ds-example__caption"><span>Help says why we ask. Success replaces help once a check passes, with an icon so it does not rely on green.</span></div>
@@ -202,7 +205,7 @@
 &lt;div class="field"&gt;
   &lt;label class="field__label" for="ff-phone"&gt;Phone &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
   &lt;input class="input" type="tel" id="ff-phone" name="phone" autocomplete="tel" aria-describedby="ff-phone-help"&gt;
-  &lt;p class="field__help" id="ff-phone-help"&gt;Only shared with an artist after they accept.&lt;/p&gt;
+  &lt;p class="field__help" id="ff-phone-help"&gt;Only shared with the artist once the booking is confirmed.&lt;/p&gt;
 &lt;/div&gt;</code></pre></details>
 </div>
       <h3>With an error</h3>
@@ -211,14 +214,14 @@
     <div class="field">
       <label class="field__label" for="ff-date-bad">Event date</label>
       <input class="input" type="date" id="ff-date-bad" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="ff-date-bad-error">
-      <p class="field__error" id="ff-date-bad-error"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
+      <p class="field__error" id="ff-date-bad-error">Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.</p>
     </div>
   </div>
   <div class="ds-example__caption"><span>The control gets <code>aria-invalid="true"</code> and a red rule with an inner stripe; the error is linked first in <code>aria-describedby</code>.</span></div>
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
   &lt;label class="field__label" for="ff-date-bad"&gt;Event date&lt;/label&gt;
   &lt;input class="input" type="date" id="ff-date-bad" name="date" value="2026-11-15" min="2026-10-09" aria-invalid="true" aria-describedby="ff-date-bad-error"&gt;
-  &lt;p class="field__error" id="ff-date-bad-error"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
+  &lt;p class="field__error" id="ff-date-bad-error"&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
 &lt;/div&gt;</code></pre></details>
 </div>
       <h3>With a counter</h3>
@@ -227,20 +230,18 @@
     <div class="field">
       <div class="field__row">
         <label class="field__label" for="ff-msg">Message <span class="field__optional">(optional)</span></label>
-        <span class="field__counter" id="ff-msg-count" data-over="true">512 / 500</span>
+        <span class="field__counter" id="ff-msg-count">234 / 2,000</span>
       </div>
-      <textarea class="textarea" id="ff-msg" name="message" aria-invalid="true" aria-describedby="ff-msg-error ff-msg-count">We’re a church of about 180 on the lakeshore. Our worship team is two guitars, a keyboard and four singers, and we’d love to learn a few songs from you for the Sunday after. Sunday service starts at 10:30, doors at 9:45, and our sound desk is small but our volunteer is keen. We would love Goodness of God, Great Is Thy Faithfulness and, if you lead it, the Twi praise medley our youth keep talking about. Parking is free behind the hall, and we can feed you lunch after.</textarea>
-      <p class="field__error" id="ff-msg-error"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Shorten your message to 500 characters. It is 12 over.</p>
+      <textarea class="textarea" id="ff-msg" name="message" maxlength="2000" aria-describedby="ff-msg-count">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</textarea>
     </div>
   </div>
-  <div class="ds-example__caption"><span>Over the limit the counter turns red and bold (<code>data-over="true"</code>) and an error says by how much. The text is kept, never cut.</span></div>
+  <div class="ds-example__caption"><span>Naomi’s request message from pages/book/default: the counter shows “used / limit” on the label row and <code>maxlength</code> equals the limit, as in every mock. If a value ever arrives over the limit (a restored draft), <code>data-over="true"</code> turns the counter red and bold.</span></div>
   <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
   &lt;div class="field__row"&gt;
     &lt;label class="field__label" for="ff-msg"&gt;Message &lt;span class="field__optional"&gt;(optional)&lt;/span&gt;&lt;/label&gt;
-    &lt;span class="field__counter" id="ff-msg-count" data-over="true"&gt;512 / 500&lt;/span&gt;
+    &lt;span class="field__counter" id="ff-msg-count"&gt;234 / 2,000&lt;/span&gt;
   &lt;/div&gt;
-  &lt;textarea class="textarea" id="ff-msg" name="message" aria-invalid="true" aria-describedby="ff-msg-error ff-msg-count"&gt;We’re a church of about 180 on the lakeshore. Our worship team is two guitars, a keyboard and four singers, and we’d love to learn a few songs from you for the Sunday after. Sunday service starts at 10:30, doors at 9:45, and our sound desk is small but our volunteer is keen. We would love Goodness of God, Great Is Thy Faithfulness and, if you lead it, the Twi praise medley our youth keep talking about. Parking is free behind the hall, and we can feed you lunch after.&lt;/textarea&gt;
-  &lt;p class="field__error" id="ff-msg-error"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Shorten your message to 500 characters. It is 12 over.&lt;/p&gt;
+  &lt;textarea class="textarea" id="ff-msg" name="message" maxlength="2000" aria-describedby="ff-msg-count"&gt;We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.&lt;/textarea&gt;
 &lt;/div&gt;</code></pre></details>
 </div>
       <h3>Inline field</h3>
@@ -271,37 +272,37 @@
           <tr><th scope="row">Text</th>
             <td><div class="field field--inline"><label class="field__label" for="m-t1">Church</label><input class="input" id="m-t1" type="text" value="Riverside" aria-describedby="m-t1-h"><p class="field__help" id="m-t1-h">Shown on your request.</p></div></td>
             <td><div class="field field--inline"><label class="field__label" for="m-t2">Church</label><input class="input" id="m-t2" type="text" value="Riverside" data-state="focus" aria-describedby="m-t2-h"><p class="field__help" id="m-t2-h">Shown on your request.</p></div></td>
-            <td><div class="field field--inline"><label class="field__label" for="m-t3">Church</label><input class="input" id="m-t3" type="text" value="" aria-invalid="true" aria-describedby="m-t3-e"><p class="field__error" id="m-t3-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</p></div></td>
+            <td><div class="field field--inline"><label class="field__label" for="m-t3">Church</label><input class="input" id="m-t3" type="text" value="" aria-invalid="true" aria-describedby="m-t3-e"><p class="field__error" id="m-t3-e">Enter your church’s name.</p></div></td>
             <td><div class="field field--inline"><label class="field__label" for="m-t4">Church</label><input class="input" id="m-t4" type="text" value="Riverside" aria-describedby="m-t4-s"><p class="inline-msg inline-msg--success" id="m-t4-s"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Matches your profile</p></div></td>
             <td><div class="field field--inline"><label class="field__label" for="m-t5">Church</label><input class="input" id="m-t5" type="text" value="Riverside" readonly aria-describedby="m-t5-h"><p class="field__help" id="m-t5-h">Change it in Church profile.</p></div></td>
             <td><div class="field field--inline"><label class="field__label" for="m-t6">Church</label><input class="input" id="m-t6" type="text" value="Riverside" disabled></div></td></tr>
           <tr><th scope="row">Select</th>
             <td><div class="field field--inline"><label class="field__label" for="m-s1">Kind of gathering</label><select class="select" id="m-s1"><option>Sunday service</option></select></div></td>
             <td><div class="field field--inline"><label class="field__label" for="m-s2">Kind of gathering</label><select class="select" id="m-s2" data-state="focus"><option>Sunday service</option></select></div></td>
-            <td><div class="field field--inline"><label class="field__label" for="m-s3">Kind of gathering</label><select class="select" id="m-s3" aria-invalid="true" aria-describedby="m-s3-e"><option>Choose one</option></select><p class="field__error" id="m-s3-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Choose a kind of gathering.</p></div></td>
+            <td><div class="field field--inline"><label class="field__label" for="m-s3">Kind of gathering</label><select class="select" id="m-s3" aria-invalid="true" aria-describedby="m-s3-e"><option>Choose one</option></select><p class="field__error" id="m-s3-e">Choose a kind of gathering.</p></div></td>
             <td><div class="field field--inline"><label class="field__label" for="m-s4">Kind of gathering</label><select class="select" id="m-s4" aria-describedby="m-s4-s"><option>Worship night</option></select><p class="inline-msg inline-msg--success" id="m-s4-s"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail leads these</p></div></td>
             <td><span class="text-caption">Selects have no read-only state</span></td>
             <td><div class="field field--inline"><label class="field__label" for="m-s6">Kind of gathering</label><select class="select" id="m-s6" disabled><option>Sunday service</option></select></div></td></tr>
           <tr><th scope="row">Textarea + counter</th>
-            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a1">Message</label><span class="field__counter" id="m-a1-c">112 / 500</span></div><textarea class="textarea" id="m-a1" aria-describedby="m-a1-c">About 180 people.</textarea></div></td>
-            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a2">Message</label><span class="field__counter" id="m-a2-c">112 / 500</span></div><textarea class="textarea" id="m-a2" data-state="focus" aria-describedby="m-a2-c">About 180 people.</textarea></div></td>
-            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a3">Message</label><span class="field__counter" id="m-a3-c" data-over="true">512 / 500</span></div><textarea class="textarea" id="m-a3" aria-invalid="true" aria-describedby="m-a3-e m-a3-c">About 180 people…</textarea><p class="field__error" id="m-a3-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>12 characters over.</p></div></td>
+            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a1">Message</label><span class="field__counter" id="m-a1-c">17 / 2,000</span></div><textarea class="textarea" id="m-a1" aria-describedby="m-a1-c">About 250 people.</textarea></div></td>
+            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a2">Message</label><span class="field__counter" id="m-a2-c">17 / 2,000</span></div><textarea class="textarea" id="m-a2" data-state="focus" aria-describedby="m-a2-c">About 250 people.</textarea></div></td>
+            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a3">Message</label><span class="field__counter" id="m-a3-c">0 / 2,000</span></div><textarea class="textarea" id="m-a3" aria-invalid="true" aria-describedby="m-a3-e m-a3-c"></textarea><p class="field__error" id="m-a3-e">Write a message first.</p></div></td>
             <td><span class="text-caption">No success state</span></td>
-            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a5">Message</label></div><textarea class="textarea" id="m-a5" readonly>About 180 people.</textarea></div></td>
-            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a6">Message</label></div><textarea class="textarea" id="m-a6" disabled>About 180 people.</textarea></div></td></tr>
+            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a5">Message</label></div><textarea class="textarea" id="m-a5" readonly>About 250 people.</textarea></div></td>
+            <td><div class="field field--inline"><div class="field__row"><label class="field__label" for="m-a6">Message</label></div><textarea class="textarea" id="m-a6" disabled>About 250 people.</textarea></div></td></tr>
         </tbody>
       </table></div>
       <h3>Both themes</h3>
       <div class="ds-themes">
         <div data-theme="light"><div class="stack">
           <div class="field"><label class="field__label" for="th-l1">Event date</label><input class="input" type="date" id="th-l1" value="2026-11-14" aria-describedby="th-l1-s"><p class="inline-msg inline-msg--success" id="th-l1-s"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p></div>
-          <div class="field"><label class="field__label" for="th-l2">Church</label><input class="input" type="text" id="th-l2" aria-invalid="true" aria-describedby="th-l2-e"><p class="field__error" id="th-l2-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</p></div>
-          <div class="field"><label class="field__label" for="th-l3">Phone <span class="field__optional">(optional)</span></label><input class="input" type="tel" id="th-l3" aria-describedby="th-l3-h"><p class="field__help" id="th-l3-h">Shared after an artist accepts.</p></div>
+          <div class="field"><label class="field__label" for="th-l2">Church</label><input class="input" type="text" id="th-l2" aria-invalid="true" aria-describedby="th-l2-e"><p class="field__error" id="th-l2-e">Enter your church’s name.</p></div>
+          <div class="field"><label class="field__label" for="th-l3">Phone <span class="field__optional">(optional)</span></label><input class="input" type="tel" id="th-l3" aria-describedby="th-l3-h"><p class="field__help" id="th-l3-h">Shared once the booking is confirmed.</p></div>
         </div></div>
         <div data-theme="dark"><div class="stack">
           <div class="field"><label class="field__label" for="th-d1">Event date</label><input class="input" type="date" id="th-d1" value="2026-11-14" aria-describedby="th-d1-s"><p class="inline-msg inline-msg--success" id="th-d1-s"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p></div>
-          <div class="field"><label class="field__label" for="th-d2">Church</label><input class="input" type="text" id="th-d2" aria-invalid="true" aria-describedby="th-d2-e"><p class="field__error" id="th-d2-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</p></div>
-          <div class="field"><label class="field__label" for="th-d3">Phone <span class="field__optional">(optional)</span></label><input class="input" type="tel" id="th-d3" aria-describedby="th-d3-h"><p class="field__help" id="th-d3-h">Shared after an artist accepts.</p></div>
+          <div class="field"><label class="field__label" for="th-d2">Church</label><input class="input" type="text" id="th-d2" aria-invalid="true" aria-describedby="th-d2-e"><p class="field__error" id="th-d2-e">Enter your church’s name.</p></div>
+          <div class="field"><label class="field__label" for="th-d3">Phone <span class="field__optional">(optional)</span></label><input class="input" type="tel" id="th-d3" aria-describedby="th-d3-h"><p class="field__help" id="th-d3-h">Shared once the booking is confirmed.</p></div>
         </div></div>
       </div>
       <ul>
@@ -365,11 +366,11 @@
     <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
       <ul>
         <li>Labels are short nouns in sentence case: “Event date”, “Kind of gathering”, “Church”. A question is fine when it reads more naturally: “How far can they drive?”</li>
-        <li>Mark optional fields, not required ones: “(optional)”. No asterisks.</li>
-        <li>Help is one sentence that says why or how: “Only shared with an artist after they accept.”</li>
+        <li>Mark the less common case in words, in brackets: “(optional)” or “(required)”, or both on a form that mixes them. Extra rules go in the same brackets: “(required, pick 1 to 4)”. No asterisks.</li>
+        <li>Help is one sentence that says why or how: “Only shared with the artist once the booking is confirmed.”</li>
         <li>Errors say what is wrong and what to do, without blame: “Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.” Not “Invalid date”.</li>
         <li>Success names the good news: “Abigail is free Sat 14 Nov”. No typed “✓”; the icon does that.</li>
-        <li>Counters show “used / limit”: “112 / 500”.</li>
+        <li>Counters show “used / limit”: “112 / 2,000”.</li>
       </ul>
     </section>
 
@@ -377,7 +378,7 @@
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-1">Event date</label><input class="input" type="date" id="dd-1" value="2026-11-14" aria-describedby="dd-1-s"><p class="inline-msg inline-msg--success" id="dd-1-s"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Abigail is free Sat 14 Nov</p></div></div><figcaption>Success as an inline message with an icon, linked by <code>aria-describedby</code>.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><label class="field"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"><span class="field__help">✓ Abigail is free Sat 14 Nov</span></label></div><figcaption>The mocks’ stub: a typed ✓ in muted help, inside the label, so the date input’s name became “Event date ✓ Abigail is free Sat 14 Nov”.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-3">Church</label><input class="input" type="text" id="dd-3" aria-invalid="true" aria-describedby="dd-3-e"><p class="field__error" id="dd-3-e"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2 21h20zM12 10v5M12 18v.5"/></svg>Enter your church’s name.</p></div></div><figcaption>An error under the field, with an icon and words, and <code>aria-invalid</code> on the control.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-3">Church</label><input class="input" type="text" id="dd-3" aria-invalid="true" aria-describedby="dd-3-e"><p class="field__error" id="dd-3-e">Enter your church’s name.</p></div></div><figcaption>An error under the field, with an icon and words, and <code>aria-invalid</code> on the control.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd-4">Church</label><input class="input" type="text" id="dd-4" style="border-color: var(--color-danger-border);"></div></div><figcaption>A red border and nothing else. It fails WCAG 1.4.1 and says nothing about how to fix it.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><div class="field field--inline"><label class="field__label" for="dd-5">Sort</label><select class="select" id="dd-5"><option>Closest first</option></select></div></div><figcaption><code>.field--inline</code> for a field in a heading row.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span><select class="select"><option>Closest first</option></select></label></div><figcaption>The mocks repeated <code>style="min-width: 12rem"</code> on four pages. One class keeps it consistent.</figcaption></figure>
@@ -407,16 +408,17 @@
   &lt;label class="field__label" for="booking-date"&gt;Event date&lt;/label&gt;
   &lt;input class="input" type="date" id="booking-date" name="date" value="2026-11-14" min="2026-10-09"
          aria-invalid="true" aria-describedby="booking-date-error booking-date-help"&gt;
-  &lt;p class="field__error" id="booking-date-error"&gt;&lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 3 2 21h20zM12 10v5M12 18v.5"/&gt;&lt;/svg&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
+  &lt;p class="field__error" id="booking-date-error"&gt;Abigail is booked Sun 15 Nov. Pick Sat 14 or Fri 20 Nov.&lt;/p&gt;
   &lt;p class="field__help" id="booking-date-help"&gt;Free dates are marked on her profile.&lt;/p&gt;
 &lt;/div&gt;</code></pre>
       <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
         <tr><td><code>.field</code></td><td>Column of label, control and messages, 4px apart. On a <code>&lt;div&gt;</code> (with <code>label for</code>) or a wrapping <code>&lt;label&gt;</code>.</td></tr>
         <tr><td><code>.field__label</code></td><td>Stamped overline label.</td></tr>
-        <tr><td><code>.field__optional</code></td><td>“(optional)” inside the label.</td></tr>
+        <tr><td><code>.field__optional</code>, <code>.field__required</code></td><td>“(optional)” or “(required)” inside the label or legend: muted caption type, no uppercase.</td></tr>
         <tr><td><code>.field__row</code></td><td>Label row with a counter or link on the right.</td></tr>
         <tr><td><code>.field__help</code></td><td>Muted help line.</td></tr>
-        <tr><td><code>.field__error</code></td><td>Bold red message with a 16px icon.</td></tr>
+        <tr><td><code>.field__help--narrow</code></td><td>Help capped at 16rem (256px), for help set beside a photo.</td></tr>
+        <tr><td><code>.field__error</code></td><td>Bold red message, text only.</td></tr>
         <tr><td><code>.field__counter</code>, <code>[data-over="true"]</code></td><td>Tabular counter; red and bold over the limit.</td></tr>
         <tr><td><code>.inline-msg.inline-msg--success</code></td><td>Success message in place of help.</td></tr>
         <tr><td><code>.field--inline</code></td><td>12rem minimum width for fields in rows.</td></tr>
@@ -435,10 +437,13 @@
       <p>Drift fixed during extraction:</p>
       <ul>
         <li>Field help “✓ Abigail is free Sat 14 Nov” was plain muted text with a typed ✓. It is now <code>.inline-msg--success</code> with an icon.</li>
+        <li>About a fifth of the mocks’ field errors carried a warning icon and the rest did not. Field errors are now text only everywhere; the icon belongs to alerts and the error summary.</li>
         <li>No field error element existed. There is now <code>.field__error</code>, wired with <code>aria-invalid</code> and <code>aria-describedby</code>; invalid styling only covered <code>.input</code> and now covers input, select and textarea.</li>
         <li>The sort field used <code>style="min-width: 12rem"</code> in four mocks. It is now <code>.field--inline</code>.</li>
+        <li>The help beside Edit profile’s primary photo used <code>style="max-width: 16rem"</code> in <a href="../../mocks/pages/edit-profile/default.html">pages/edit-profile/*</a> and every dialog over it. It is now <code>.field__help--narrow</code>.</li>
         <li>The stub’s help sat inside a wrapping label, so it was read as part of the input’s name. Fields with help now use <code>&lt;div class="field"&gt;</code> and <code>label for</code>.</li>
         <li>The optional marker was typed into the label text. It is now <code>.field__optional</code>.</li>
+        <li>The later mocks put “(required)” inside a <code>.optional</code> span (over 700 labels and legends) beside the field’s own <code>.field__optional</code>. Both markers are now field elements, <code>.field__optional</code> and <code>.field__required</code>, with one style; <code>.optional</code> is gone.</li>
       </ul>
     </section>
 

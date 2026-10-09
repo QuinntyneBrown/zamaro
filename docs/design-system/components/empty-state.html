@@ -45,6 +45,7 @@
       <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
@@ -71,6 +72,8 @@
       <li><a href="../components/rating.html">Rating</a></li>
       <li><a href="../components/setlist.html">Setlist</a></li>
       <li><a href="../components/tour-dates.html">Tour dates</a></li>
+      <li><a href="../components/stamp.html">Status stamp</a></li>
+      <li><a href="../components/booking-list.html">Booking list</a></li>
     </ul></details>
     <details open><summary>Components · Feedback</summary><ul>
       <li><a href="../components/alert.html">Alert & banner</a></li>
@@ -122,7 +125,7 @@
       <ul>
         <li><b>No results</b>: a search found nobody. Say which part of the search is the problem and offer nearby alternatives, such as other dates with the <code>.date-swap</code> list.</li>
         <li><b>Filtered out</b>: the filters hide everyone. Offer to clear the filter that matters.</li>
-        <li><b>First run</b>: the booker hasn’t done this yet (no requests sent). Explain what will appear and how to start.</li>
+        <li><b>First run</b>: the person hasn’t done this yet (no bookings, no requests, nothing saved). Explain what will appear and how to start.</li>
         <li><b>Nothing yet</b>: an artist is new and a section has no content (no videos, no reviews). Use the quiet size so the profile doesn’t look broken.</li>
       </ul>
       <p>If the content failed to load, that is an error, not an empty state: use an <a href="alert.html">alert</a> or the <a href="error-page.html">error page</a>. While it is still loading, use a <a href="skeleton.html">skeleton</a>.</p>
@@ -170,7 +173,7 @@
               </ul>
             </div>
             <div class="cluster">
-              <button class="btn btn--primary" type="button">Search within 120 km <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+              <button class="btn btn--primary" type="button">Search within 120 km · 2 free <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
               <button class="btn" type="button">Show all styles</button>
             </div>
           </div>
@@ -188,7 +191,7 @@
     &lt;/ul&gt;
   &lt;/div&gt;
   &lt;div class="cluster"&gt;
-    &lt;button class="btn btn--primary" type="button"&gt;Search within 120 km …arrow…&lt;/button&gt;
+    &lt;button class="btn btn--primary" type="button"&gt;Search within 120 km · 2 free …arrow…&lt;/button&gt;
     &lt;button class="btn" type="button"&gt;Show all styles&lt;/button&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre></details>
@@ -214,13 +217,13 @@
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--flush">
           <div class="empty">
-            <p class="empty__stamp" aria-hidden="true">Doors open</p>
-            <p class="empty__title">No requests sent yet</p>
-            <p>When you ask an artist to lead worship, the request shows here with its booking code. Nothing is charged until they accept.</p>
+            <p class="empty__stamp" aria-hidden="true">Admit one</p>
+            <p class="empty__title">No bookings yet</p>
+            <p>When you ask an artist to lead worship, the request and every step after it lives here: their reply, your deposit and the night itself.</p>
             <div class="cluster"><a class="btn btn--primary" href="#variants">Find who’s free <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Present at page load, so no live role. Explain what will fill the space.</span></div>
+        <div class="ds-example__caption"><span>From the bookings empty mock. Present at page load, so no live role. Explain what will fill the space.</span></div>
       </div>
 
       <h3>Nothing yet (new artist)</h3>
@@ -273,18 +276,18 @@
             <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li></ul></td>
             <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" data-state="hover"><strong>Sun 20 Dec</strong> 2 choirs free</button></li></ul></td>
             <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" data-state="focus"><strong>Sun 20 Dec</strong> 2 choirs free</button></li></ul></td>
-            <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" aria-busy="true"><strong>Sun 20 Dec</strong> Checking…</button></li></ul></td></tr>
+            <td><ul class="date-swap" role="list" style="width: 9rem;"><li><button type="button" aria-busy="true" aria-disabled="true"><strong>Sun 20 Dec</strong> Checking…</button></li></ul></td></tr>
           <tr><th scope="row">Primary action</th>
-            <td><button class="btn btn--primary" type="button">Search within 120 km</button></td>
-            <td><button class="btn btn--primary" type="button" data-state="hover">Search within 120 km</button></td>
-            <td><button class="btn btn--primary" type="button" data-state="focus">Search within 120 km</button></td>
-            <td><button class="btn btn--primary" type="button" aria-busy="true">Checking calendars…</button></td></tr>
+            <td><button class="btn btn--primary" type="button">Search within 120 km · 2 free</button></td>
+            <td><button class="btn btn--primary" type="button" data-state="hover">Search within 120 km · 2 free</button></td>
+            <td><button class="btn btn--primary" type="button" data-state="focus">Search within 120 km · 2 free</button></td>
+            <td><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Checking calendars…</button></td></tr>
         </tbody>
       </table></div>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Sold out</p><p class="empty__title">Nobody’s free Christmas Eve</p><ul class="date-swap" role="list"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li><li><button type="button" data-state="hover"><strong>Wed 23 Dec</strong> 1 choir free</button></li></ul><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km</button></div></div></div>
-        <div data-theme="dark"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Sold out</p><p class="empty__title">Nobody’s free Christmas Eve</p><ul class="date-swap" role="list"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li><li><button type="button" data-state="hover"><strong>Wed 23 Dec</strong> 1 choir free</button></li></ul><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km</button></div></div></div>
+        <div data-theme="light"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Sold out</p><p class="empty__title">Nobody’s free Christmas Eve</p><ul class="date-swap" role="list"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li><li><button type="button" data-state="hover"><strong>Wed 23 Dec</strong> 1 choir free</button></li></ul><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km · 2 free</button></div></div></div>
+        <div data-theme="dark"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Sold out</p><p class="empty__title">Nobody’s free Christmas Eve</p><ul class="date-swap" role="list"><li><button type="button"><strong>Sun 20 Dec</strong> 2 choirs free</button></li><li><button type="button" data-state="hover"><strong>Wed 23 Dec</strong> 1 choir free</button></li></ul><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km · 2 free</button></div></div></div>
       </div>
       <ul>
         <li><b>Appearing after a search</b>: the empty state replaces the skeletons in a container with <code>role="status"</code>, so its title and sentence are announced.</li>
@@ -297,7 +300,7 @@
       <ul>
         <li>The empty state fills its container’s width and stacks its parts in one column at every breakpoint. Text stays left-aligned, like the rest of the poster.</li>
         <li>Date swaps form a grid of 9rem-minimum cells: one column on narrow phones, two or three across on wider screens.</li>
-        <li>Action buttons wrap onto a new line. A label that is too long wraps inside the button rather than overflowing, which looks broken on a poster button, so keep labels short. The full size’s 32px side padding leaves about 260px at 360px: even “Search within 120 km” with its arrow wraps there, and the mock’s “Search within 120 km · 2 choirs free” wraps to three lines. Proposed fix: 20px side padding below 640px.</li>
+        <li>Action buttons wrap onto a new line. A label that is too long wraps inside the button rather than overflowing, which looks broken on a poster button, so keep labels short. The full size’s 32px side padding leaves about 260px at 360px: “Search within 120 km · 2 free” with its arrow wraps to two balanced lines there, and the earlier “Search within 120 km · 2 choirs free” wrapped to three. Below 576px the side padding drops to 20px (<code>--space-5</code>) for that reason.</li>
         <li>The full size keeps 32px side padding on phones, which leaves about 260px for the title and buttons at 360px. Prefer the quiet size inside narrow columns such as the profile sidebar.</li>
       </ul>
     </section>
@@ -339,7 +342,7 @@
       <ul>
         <li><b>Title</b>: what isn’t there, with the specifics the booker chose: “Nobody’s free Christmas Eve within 40 km”, “No videos yet”, “No church reviews yet”.</li>
         <li><b>Sentence</b>: why, and what to try. “Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby date, or widen the radius.”</li>
-        <li><b>Action</b>: a verb with the outcome: “Search within 120 km”, “Be her first booking”, “Remove ‘Hymns’”. One primary.</li>
+        <li><b>Action</b>: a verb with the outcome: “Search within 120 km · 2 free” (L2-011), “Be her first booking”, “Remove ‘Hymns’”. One primary.</li>
         <li><b>Stamp</b>: two or three words of gig-poster voice (“Sold out”, “Fresh on the bill”, “Opening night”, “Doors open”). Skip it if a pun would sound flippant, such as on a funeral booking.</li>
         <li>Never blame the booker (“You have no…”) and never leave an empty state without a next step.</li>
       </ul>
@@ -347,7 +350,7 @@
 
     <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
       <div class="ds-dodont">
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">Nobody’s free Christmas Eve within 40 km</p><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km</button></div></div></div><figcaption>A short action label; the count of free choirs lives in the date swaps.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">Nobody’s free Christmas Eve within 40 km</p><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km · 2 free</button></div></div></div><figcaption>The L2-011 label: the radius and a short count, “· 2 free”; the sentence above says they are choirs.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__title">Nobody’s free Christmas Eve within 40 km</p><p class="text-caption">Button: “Search within 120 km · 2 choirs free →”</p></div></div><figcaption>The mock’s 36-character label with an arrow wraps to three lines inside the empty state at 360px.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="empty empty--quiet"><p class="empty__stamp" aria-hidden="true">Fresh on the bill</p><p class="empty__title">No videos yet</p><a class="btn" href="#do-dont">Ask Miriam for a recording</a></div></div><figcaption>A new artist’s empty section explains itself and turns into something the church can do.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="text-muted">No results.</p></div><figcaption>A bare “No results.” says nothing about why, keeps no tone, and leaves the booker stuck.</figcaption></figure>
@@ -398,14 +401,16 @@
       <p>Extracted from these mocks:</p>
       <ul>
         <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: “Sold out” stamp, “Nobody’s free Christmas Eve within 40 km”, three date swaps, primary and secondary actions, <code>role="status"</code></li>
-        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a>: Miriam Haile’s quiet empty states, “No videos yet” (Fresh on the bill) and “No church reviews yet” (Opening night)</li>
+        <li><a href="../../mocks/pages/artist/empty.html">pages/artist/empty</a> and <a href="../../mocks/pages/profile-preview/empty.html">pages/profile-preview/empty</a>: Miriam Haile’s quiet empty states, “No videos yet” (Fresh on the bill) and “No church reviews yet” (Opening night); <a href="../../mocks/pages/edit-profile/empty.html">pages/edit-profile/empty</a> asks the artist to add a video</li>
+        <li>First run, full size: <a href="../../mocks/pages/bookings/empty.html">pages/bookings/empty</a> (“Admit one”, “No bookings yet”), <a href="../../mocks/pages/saved/empty.html">pages/saved/empty</a>, <a href="../../mocks/pages/dashboard/empty.html">pages/dashboard/empty</a>, <a href="../../mocks/pages/requests/empty.html">pages/requests/empty</a>, <a href="../../mocks/pages/earnings/empty.html">pages/earnings/empty</a>, <a href="../../mocks/pages/artist-reviews/empty.html">pages/artist-reviews/empty</a> and the administrator queues (<a href="../../mocks/pages/admin-applications/empty.html">pages/admin-applications/empty</a>, <a href="../../mocks/pages/admin-checks/empty.html">pages/admin-checks/empty</a>, <a href="../../mocks/pages/admin-reviews/empty.html">pages/admin-reviews/empty</a>); quiet in <a href="../../mocks/pages/availability/empty.html">pages/availability/empty</a> above the calendar</li>
+        <li>Filtered out, quiet: <a href="../../mocks/pages/bookings/no-results.html">pages/bookings/no-results</a> (“No expired bookings”, “Clear status filter”), <a href="../../mocks/pages/requests/no-results.html">pages/requests/no-results</a>, <a href="../../mocks/pages/admin-artists/no-results.html">pages/admin-artists/no-results</a>, <a href="../../mocks/pages/admin-bookings/no-results.html">pages/admin-bookings/no-results</a> and <a href="../../mocks/pages/admin-audit/no-results.html">pages/admin-audit/no-results</a></li>
+        <li>The same frame for a page the person can’t open: <a href="../../mocks/pages/booking-detail/forbidden.html">pages/booking-detail/forbidden</a> and <a href="../../mocks/pages/dashboard/forbidden.html">pages/dashboard/forbidden</a></li>
       </ul>
-      <p>Drift fixed during extraction: none in the empty-state classes; they were already token-based. Two issues are still open in the mocks:</p>
+      <p>Drift fixed during extraction: none in the empty-state classes; they were already token-based. Two issues found in the mocks, both now fixed:</p>
       <ul>
-        <li>The discover empty mock’s primary label “Search within 120 km · 2 choirs free” plus its arrow wraps to three lines at 360px. Shorten it to “Search within 120 km”.</li>
-        <li>Date swaps join the date and count with no space (<code>&lt;strong&gt;Sun 20 Dec&lt;/strong&gt;2 choirs free</code>), and the stamps are read aloud. Add the space and <code>aria-hidden</code> on the stamp.</li>
+        <li>The discover empty mock’s primary label “Search within 120 km · 2 choirs free” plus its arrow wrapped to three lines at 360px. It is now “Search within 120 km · 2 free”, the L2-011 format, with “2 choirs are free within 120 km” in the sentence above.</li>
+        <li>Date swaps joined the date and count with no space (<code>&lt;strong&gt;Sun 20 Dec&lt;/strong&gt;2 choirs free</code>), and the stamps were read aloud. The mocks now have the space and <code>aria-hidden</code> on the stamp.</li>
       </ul>
-      <p>The filtered-out and first-run variants are not in the mocks yet; they are part of the core set. The product needs them for filter chips that exclude everyone and for a booker’s requests page before the first booking.</p>
     </section>
 
     <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
