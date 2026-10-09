@@ -154,6 +154,11 @@
   --layout-measure: 58ch;          /* prose line length */
   --layout-sidebar-width: 22rem;   /* booking stub column on the artist page */
   --layout-topbar-height: 4.25rem; /* 68px including the 4px yellow rule */
+  --layout-dialog-width: 32rem;    /* 512px default dialog */
+  --layout-drawer-width: 20rem;    /* 320px navigation drawer under 64rem */
+  --layout-menu-width: 16rem;      /* 256px account menu popover */
+  --layout-auth-width: 28rem;      /* 448px sign-in / sign-up stub */
+  --layout-calendar-cell: 2.75rem; /* 44px min-height of an availability day */
 
   /* Shape: square, printed. Only avatars and the round save toggle are round. */
   --radius-xs: 0;
