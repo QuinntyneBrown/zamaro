@@ -245,6 +245,198 @@
         "stacked"
       ],
       "not_applicable": {}
+    },
+    {
+      "id": "sign-in",
+      "kind": "page",
+      "title": "Sign in",
+      "route": "/sign-in",
+      "requirements": [
+        "L2-023",
+        "L2-072",
+        "L2-073",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "invalid",
+        "submitting",
+        "error",
+        "expired"
+      ],
+      "not_applicable": {
+        "loading": "The form shows at once; there is nothing to fetch before it renders.",
+        "empty": "A form always has its fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "sign-up",
+      "kind": "page",
+      "title": "Sign up",
+      "route": "/sign-up",
+      "requirements": [
+        "L2-022",
+        "L2-072",
+        "L2-077",
+        "L2-080",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "invalid",
+        "submitting",
+        "success",
+        "error"
+      ],
+      "not_applicable": {
+        "loading": "The form shows at once; there is nothing to fetch before it renders.",
+        "empty": "A form always has its fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "forgot-password",
+      "kind": "page",
+      "title": "Forgot password",
+      "route": "/forgot-password",
+      "requirements": [
+        "L2-023",
+        "L2-077",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "invalid",
+        "submitting",
+        "success",
+        "error"
+      ],
+      "not_applicable": {
+        "loading": "The form shows at once; there is nothing to fetch before it renders.",
+        "empty": "A form always has its fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "reset-password",
+      "kind": "page",
+      "title": "Reset password",
+      "route": "/reset-password/:token",
+      "requirements": [
+        "L2-023",
+        "L2-072",
+        "L2-105",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "loading",
+        "invalid",
+        "submitting",
+        "success",
+        "error",
+        "expired"
+      ],
+      "not_applicable": {
+        "empty": "A form always has its fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "not-found",
+      "kind": "page",
+      "title": "Not found",
+      "route": "/404",
+      "requirements": [
+        "L2-021"
+      ],
+      "states": [
+        "default",
+        "artist"
+      ],
+      "not_applicable": {
+        "loading": "A static page served with its status code; nothing loads after it.",
+        "empty": "No collection; the artist state shows suggestions instead.",
+        "error": "This page is itself the error state."
+      }
+    },
+    {
+      "id": "server-error",
+      "kind": "page",
+      "title": "Server error",
+      "route": "/500",
+      "requirements": [
+        "L2-093"
+      ],
+      "states": [
+        "default"
+      ],
+      "not_applicable": {
+        "loading": "A static page served with its status code; nothing loads after it.",
+        "empty": "No collection on this page; there is nothing to be empty.",
+        "error": "This page is itself the error state."
+      }
+    },
+    {
+      "id": "offline",
+      "kind": "page",
+      "title": "Offline",
+      "route": "/offline",
+      "requirements": [
+        "L2-026",
+        "L2-027"
+      ],
+      "states": [
+        "default"
+      ],
+      "not_applicable": {
+        "loading": "Shown from the device cache; nothing loads from the network.",
+        "empty": "No collection on this page; there is nothing to be empty.",
+        "error": "This page is itself the error state."
+      }
+    },
+    {
+      "id": "apply",
+      "kind": "page",
+      "title": "Apply as an artist",
+      "route": "/artists/apply",
+      "requirements": [
+        "L2-039",
+        "L2-047",
+        "L2-052",
+        "L2-077",
+        "L2-108"
+      ],
+      "states": [
+        "default",
+        "step-2",
+        "step-3",
+        "step-4",
+        "invalid",
+        "submitting",
+        "success",
+        "error"
+      ],
+      "not_applicable": {
+        "loading": "The form needs no data before it shows.",
+        "empty": "A form always has its fields; there is no collection to be empty."
+      }
+    },
+    {
+      "id": "system-banner",
+      "kind": "notification",
+      "title": "System banner",
+      "opens_from": "discover",
+      "requirements": [
+        "L2-022",
+        "L2-026",
+        "L2-090"
+      ],
+      "states": [
+        "info",
+        "success",
+        "warning",
+        "danger",
+        "persistent"
+      ],
+      "not_applicable": {}
     }
   ]
 }
