@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Scan and serve uploads
+
+Person(artist, "Artist", "Uploads photos, videos and VSC documents")
+Person(admin, "Administrator", "Verifies VSC documents")
+Person(guest, "Guest", "Views public profile media")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(scanner, "Malware scanner", "Scans every upload; vendor <TO SUPPLY>")
+System_Ext(cdn, "CDN", "Serves public media from the media domain")
+
+Rel(artist, zamaro, "Uploads files to", "HTTPS")
+Rel(admin, zamaro, "Opens private documents through signed URLs from", "HTTPS")
+Rel(zamaro, scanner, "Sends each upload for scanning to", "HTTPS")
+Rel(zamaro, cdn, "Publishes clean public media through")
+Rel(guest, cdn, "Loads photos and video from", "HTTPS")
+@enduml

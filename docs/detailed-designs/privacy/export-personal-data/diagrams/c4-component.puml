@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Export personal data
+
+Container(web, "Zamaro Web", "Angular", "PrivacySectionComponent, PrivacyApi")
+System_Ext(email, "Email delivery service", "Transactional email")
+ContainerDb(storage, "Object storage", "S3-compatible", "Private export files")
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "data_exports and personal data")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "DataExportController", "Laravel controller", "POST, GET latest, GET download")
+  Component(request, "RequestDataExport", "Action", "Creates export or returns the pending one")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(job, "BuildDataExport", "Queued job", "Builds, stores and announces the file")
+  Component(exporter, "PersonalDataExporter", "Service", "Composes 7 export sections")
+  Component(sections, "ExportSection implementations", "Classes", "Profile, church, saved artists, bookings, messages, reviews, consent")
+  Component(notify, "DataExportReadyNotification", "Queued notification", "Link and expiry date")
+  Component(purge, "PurgeExpiredDataExports", "Scheduled command", "Deletes files after 7 days")
+}
+Rel(web, ctrl, "Calls", "JSON/HTTPS")
+Rel(ctrl, request, "Calls")
+Rel(request, db, "Inserts data_exports row", "SQL")
+Rel(request, job, "Dispatches", "Redis queue")
+Rel(ctrl, storage, "Issues signed URL", "S3 API")
+Rel(job, exporter, "build(user)")
+Rel(exporter, sections, "Runs each")
+Rel(sections, db, "Reads owned rows", "SQL")
+Rel(job, storage, "Writes JSON file", "S3 API")
+Rel(job, notify, "Queues")
+Rel(notify, email, "Sends", "HTTPS/JSON")
+Rel(purge, storage, "Deletes expired files", "S3 API")
+Rel(purge, db, "Marks Expired", "SQL")
+@enduml

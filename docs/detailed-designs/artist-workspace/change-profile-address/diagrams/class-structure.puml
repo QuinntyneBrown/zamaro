@@ -1,0 +1,94 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Change profile address
+
+package "Zamaro Web (Angular)" {
+  class ProfileAddressSectionComponent {
+    +address: Signal<ProfileAddress | null>
+    +slugControl: FormControl<string>
+    +onSave(): void
+  }
+  class ProfileAddressApi {
+    +get(): Observable<ProfileAddress>
+    +change(slug: string): Observable<ProfileAddress>
+  }
+  class ProfileAddress <<interface>> {
+    +slug: string
+    +url: string
+    +changedAt: string | null
+    +nextChangeOn: string | null
+  }
+  class artistProfileResolver <<ResolveFn>> {
+    +resolve(slug: string): PublicProfile
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ProfileAddressController {
+    +show(request: Request): ProfileAddressResource
+    +update(request: ChangeProfileAddressRequest): ProfileAddressResource
+  }
+  class ChangeProfileAddressRequest {
+    +rules(): array
+    +slug(): string
+  }
+  class ChangeArtistSlug <<action>> {
+    +handle(artist: Artist, slug: string): Artist
+  }
+  class GenerateArtistSlug <<action>> {
+    +handle(artist: Artist): string
+  }
+  class SlugRegistry {
+    +isTaken(slug: string, exceptArtistId: ?int): bool
+    +firstFree(base: string): string
+  }
+  class ArtistSlugResolver {
+    +resolve(slug: string): ?Artist
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +string displayName
+    +?string slug
+    +?CarbonImmutable slugChangedAt
+    +?CarbonImmutable publishedAt
+    +nextSlugChangeOn(): ?CarbonImmutable
+  }
+  class SlugHistory <<Eloquent>> {
+    +int id
+    +int artistId
+    +string slug
+    +?CarbonImmutable retiredAt
+  }
+  class ArtistSlugChanged <<event>> {
+    +int artistId
+    +string oldSlug
+    +string newSlug
+  }
+}
+
+ProfileAddressSectionComponent --> ProfileAddressApi
+ProfileAddressApi ..> ProfileAddress : returns
+ProfileAddressApi ..> ProfileAddressController : GET, PUT /api/v1/artist/profile/address
+ProfileAddressController ..> ChangeProfileAddressRequest : validates
+ProfileAddressController --> ChangeArtistSlug
+ChangeArtistSlug --> SlugRegistry
+GenerateArtistSlug --> SlugRegistry
+GenerateArtistSlug ..> SlugHistory : creates first
+ChangeArtistSlug --> Artist : updates
+ChangeArtistSlug ..> SlugHistory : retires old, creates new
+ChangeArtistSlug ..> ArtistSlugChanged : dispatches
+ArtistSlugResolver ..> Artist : finds
+ArtistSlugResolver ..> SlugHistory : finds
+Artist "1" *-- "1..*" SlugHistory : every slug held
+@enduml

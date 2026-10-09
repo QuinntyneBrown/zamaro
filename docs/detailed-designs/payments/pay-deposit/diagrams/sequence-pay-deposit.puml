@@ -1,0 +1,89 @@
+@startuml
+title UML sequence behaviour — Pay the deposit
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PayDepositPage" as page
+  participant "PaymentStore" as store
+  participant "PaymentsApi" as client
+  participant "CardFieldsService" as fields
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "DepositController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "StartDepositPayment" as start
+  participant "ConfirmDepositPayment" as confirm
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "PaymentGateway" as gateway
+  database "Zamaro database" as db
+  participant "Payment processor" as processor
+end box
+
+actor -> page : Open /bookings/{number}/pay
+page -> client : GET /api/v1/bookings/{number}/payment-summary
+client -> controller : HTTPS request
+controller --> client : PriceBreakdownResource (L2-036)
+page --> actor : Quoted price, HST line, deposit due now, balance after the event
+actor -> page : Tick save-card consent, activate Pay deposit (L2-037)
+page -> store : payDeposit(number)
+store -> client : POST /api/v1/bookings/{number}/deposit (Idempotency-Key)
+client -> controller : HTTPS request
+controller -> start : handle(booking, consent)
+start -> gateway : createPaymentIntent(deposit cents, save card, key deposit:{id}) (L2-041)
+gateway -> processor : Create or reuse intent
+processor --> gateway : Intent id and client secret
+start -> db : Insert Payment(Deposit, Pending)
+start --> controller : ProcessorPayment
+controller --> client : 201 DepositIntentResource
+store -> fields : confirmPayment(clientSecret)
+fields -> processor : Card number, expiry, CVC (never sent to Zamaro, L2-035)
+opt 3-D Secure required
+  processor --> actor : Challenge shown by processor
+  actor -> processor : Completes challenge (L2-035)
+end
+alt card declined
+  processor --> fields : Decline code
+  fields --> store : Declined
+  store -> client : POST .../deposit/confirm
+  client -> controller : HTTPS request
+  controller -> confirm : handle(booking, paymentId)
+  confirm -> db : Payment Failed; booking stays Accepted (L2-037)
+  confirm --> controller : Plain-language reason from DeclineReasonTranslator
+  controller --> client : 402 problem details
+  store --> page : status = declined, form values kept (L2-108)
+  page --> actor : Reason and "try another card"
+else payment succeeded
+  processor --> fields : Succeeded
+  store -> client : POST /api/v1/bookings/{number}/deposit/confirm
+  client -> controller : HTTPS request
+  controller -> confirm : handle(booking, paymentId)
+  confirm -> gateway : retrievePayment(paymentId)
+  gateway -> processor : Retrieve
+  processor --> gateway : Succeeded, brand, last 4, expiry, customer id
+  confirm -> db : BEGIN; lock artist row; check deadline and no Confirmed booking (L2-032)
+  confirm -> db : Update Payment: ids, brand, last 4, expiry only (L2-035)
+  confirm -> sm : transition(Accepted -> Confirmed)
+  sm -> db : Update status, insert BookingTransition; COMMIT
+  confirm -> confirm : Dispatch BookingConfirmed and PaymentSucceeded (emails, receipt, competing requests)
+  confirm --> controller : DepositResult confirmed
+  controller --> client : 200 DepositResultResource
+  store --> page : status = confirmed
+  page --> actor : Booking confirmed
+end
+@enduml

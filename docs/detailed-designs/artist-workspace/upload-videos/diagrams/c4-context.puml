@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Upload videos
+
+Person(artist, "Artist", "Approved worship artist")
+Person(guest, "Guest", "Watches published videos")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(vps, "Video processing service", "Transcodes to adaptive streaming renditions with poster frames")
+System_Ext(cdn, "CDN", "Serves video renditions, posters and captions from the media domain")
+
+Rel(artist, zamaro, "Uploads, titles, captions and removes videos using", "HTTPS")
+Rel(zamaro, scanner, "Scans each received file with", "HTTPS")
+Rel(zamaro, vps, "Submits clean sources to", "HTTPS/JSON")
+Rel(vps, zamaro, "Reports the result through a signed webhook to", "HTTPS/JSON")
+Rel(zamaro, cdn, "Publishes renditions through")
+Rel(guest, cdn, "Streams videos from", "HTTPS")
+@enduml

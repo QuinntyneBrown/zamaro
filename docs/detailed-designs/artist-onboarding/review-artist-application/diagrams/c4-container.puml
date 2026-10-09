@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Review an artist application
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "/admin/applications queue and review page")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Admin application endpoints under /api/v1/admin")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends decision emails")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Applications, references, users, artists, audit entries")
+  ContainerDb(cache, "Cache and queue", "Redis", "Sessions and queues")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Application videos and VSC documents")
+}
+Rel(admin, web, "Uses", "HTTPS")
+Rel(web, api, "GET, PUT and POST /api/v1/admin/artist-applications", "JSON/HTTPS")
+Rel(api, db, "Reads applications; writes decisions, artists and audit entries", "Eloquent / SQL")
+Rel(api, cache, "Reads session; queues notifications", "RESP")
+Rel(api, storage, "Signs URLs for videos and the VSC document")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, email, "Sends approved or rejected email", "HTTPS")
+@enduml

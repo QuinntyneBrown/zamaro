@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Suggest alternatives when sold out
+
+Person(booker, "Booker or guest", "Searched and found nobody")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Sold-out panel on Discover")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Alternatives endpoint under /api/v1")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, availability, Confirmed bookings")
+  ContainerDb(cache, "Cache and queue", "Redis", "Distance cache")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/search/alternatives", "JSON/HTTPS")
+Rel(api, db, "Reads availability for 15 dates", "Eloquent / SQL")
+Rel(api, cache, "Reads cached distances", "RESP")
+Rel(api, routing, "Requests uncached distances", "HTTPS/JSON, 2 s timeout")
+@enduml

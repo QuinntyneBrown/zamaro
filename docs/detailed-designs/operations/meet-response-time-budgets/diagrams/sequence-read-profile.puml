@@ -1,0 +1,76 @@
+@startuml
+title UML sequence behaviour — Read a public profile within budget
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "ArtistsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "RecordServerTiming\nSetCachePolicy\nHandleConditionalGet" as mw
+  participant "ArtistProfileController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "GetArtistProfile" as action
+  participant "ArtistProfileCache" as pcache
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CDN" as cdn
+  database "Cache and queue" as redis
+  database "Zamaro database" as db
+  participant "Metrics and alerting service" as metrics
+end box
+
+actor -> page : Open a ticket card from the lineup
+page -> client : getProfile(slug, date)
+client -> cdn : GET /api/v1/artists/{slug}?date (browser adds If-None-Match when it holds a copy)
+alt CDN entry younger than 60 s
+  cdn --> client : Cached 200, or 304 when the ETag matches (L2-089)
+else CDN miss or entry expired
+  cdn -> mw : Forward request
+  mw -> mw : Start timer, class ProfileRead (L2-085)
+  mw -> controller : show(slug)
+  controller -> action : handle(slug, date)
+  action -> pcache : remember(artistId)
+  pcache -> redis : GET artist-profile:{id}
+  alt payload cached
+    redis --> pcache : ArtistProfileData
+  else cache miss
+    pcache -> db : Artist, photos, live videos, setlist, rating aggregate (eager-loaded)
+    db --> pcache : Rows
+    pcache -> redis : SET artist-profile:{id} (TTL <TO SUPPLY>)
+  end
+  pcache --> action : ArtistProfileData
+  action -> db : Next 6 free or booked dates (L2-017)
+  db --> action : Dates
+  action --> controller : ArtistProfileData
+  controller --> mw : 200 ArtistProfileResource
+  mw -> mw : Hash body into ETag; Cache-Control public, max-age=0, s-maxage=60 (L2-089)
+  alt If-None-Match equals ETag
+    mw --> cdn : 304 Not Modified, empty body (L2-089)
+  else no match
+    mw --> cdn : 200 with ETag and body
+  end
+  mw -> metrics : Server time sample, class ProfileRead (p95 budget 300 ms, L2-085)
+  cdn --> client : Response
+end
+client --> page : ArtistProfile (304 served from the browser cache)
+page --> actor : Profile rendered
+opt signed-in booker
+  client -> mw : Saved-state request on an authenticated route
+  mw --> client : 200 with Cache-Control private, no-store (L2-089)
+end
+@enduml

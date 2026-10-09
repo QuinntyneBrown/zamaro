@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Report a review
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ReportReviewDialogComponent" as dialog
+  participant "ReviewReportsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ReviewReportsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReportReview" as action
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "NotifyAdministratorsOfReport" as notify
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+actor -> dialog : Activate Report on a review
+dialog --> actor : Reasons: Offensive, Not about this artist, Personal information, Other (L2-062)
+actor -> dialog : Choose reason, optional note, activate Send report
+dialog -> client : report(reviewId, reason, note)
+client -> controller : POST /api/v1/reviews/{review}/reports
+controller -> controller : Require sign-in, rate-limit, validate ReportReviewRequest (L2-077)
+controller -> db : Load visible review
+alt review hidden or unknown
+  controller --> client : 404 problem details
+else visible review
+  controller -> action : handle(review, reporter, reason, note)
+  action -> db : INSERT review_report ON CONFLICT (review_id, reporter_id) DO NOTHING
+  alt first report by this user
+    db --> action : Inserted
+    action -> notify : ReviewReported
+    notify -> db : Users with the Administrator role
+    notify -> email : ReviewReportedNotification linking to /admin/reviews (L2-062)
+  else repeat report
+    db --> action : Existing report, no notification
+  end
+  action --> controller : ReviewReport
+  controller --> client : 202 Accepted
+  client --> dialog : Done
+  dialog --> actor : Dialog closes, confirmation toast, focus back on Report (L2-101)
+end
+@enduml

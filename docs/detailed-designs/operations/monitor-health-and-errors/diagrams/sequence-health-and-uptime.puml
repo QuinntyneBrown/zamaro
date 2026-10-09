@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Health checks and uptime monitoring
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+participant "Hosting platform\nload balancer" as lb
+participant "Uptime monitor" as uptime
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SSR server\n(DiscoverPage, ArtistProfilePage)" as ssr
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "HealthController" as health
+  participant "Booking API route\n(probe target <TO SUPPLY>)" as bookings
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReadinessChecker" as checker
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as redis
+end box
+
+lb -> health : GET /health/live
+health --> lb : 200 while the process runs (L2-090)
+lb -> health : GET /health/ready
+health -> checker : run()
+checker -> db : SELECT 1 (timeout <TO SUPPLY>)
+checker -> redis : PING cache connection
+checker -> redis : PING queue connection
+alt every dependency answers
+  checker --> health : ready
+  health --> lb : 200 {status: ready}
+  lb -> lb : Keep the instance in rotation
+else database, cache or queue unreachable
+  checker --> health : not ready, failed check names
+  health --> lb : 503 {status: not ready, checks} (L2-090)
+  lb -> lb : Take the instance out of rotation until ready again
+end
+loop every probe interval <TO SUPPLY>
+  uptime -> ssr : GET / and GET /artists/{probe slug}
+  ssr --> uptime : 200 with full content
+  uptime -> bookings : Booking API probe
+  bookings --> uptime : 200
+end
+uptime -> uptime : Month closes: availability = successful probes / all probes,\ntarget 99.9% or higher (L2-090)
+uptime -> uptime : Publish incidents on the public status page (L2-106)
+@enduml

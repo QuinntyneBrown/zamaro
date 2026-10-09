@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Profile fails to load
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "ArtistProfileStore" as store
+  participant "ArtistProfileApi" as client
+  participant "ProfileErrorComponent" as err
+  participant "SearchStore" as search
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as controller
+end box
+
+actor -> page : Open /artists/abigail-mensah?date=2026-11-14
+page -> store : load(slug, carried date)
+store -> client : get(slug)
+client -> controller : GET /api/v1/artists/abigail-mensah
+controller --> client : 5xx problem details or network error
+client --> store : Error
+store --> page : status = error
+page -> search : lastDiscoverUrl()
+search --> page : /?date=2026-11-14&kind=...&radius=120
+page -> err : Show error with lineup URL
+err --> actor : "We couldn't reach the artist's page", Try again, "Back to the lineup" (L2-107)
+alt Try again
+  actor -> err : Activate Try again
+  err -> store : retry()
+  store -> client : get(slug)
+  client -> controller : GET /api/v1/artists/abigail-mensah
+  controller --> client : 200 ArtistProfileResource
+  client --> store : ArtistProfile
+  store --> page : status = loaded; render profile
+else Back to the lineup
+  actor -> err : Activate "Back to the lineup"
+  err -> page : Navigate to remembered Discover URL
+  page --> actor : Previous search restored (L2-009, L2-107)
+end
+@enduml

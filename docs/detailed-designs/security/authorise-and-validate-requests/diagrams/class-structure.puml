@@ -1,0 +1,94 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Authorise and validate requests
+
+package "Zamaro Web (Angular)" {
+  class MessageThreadComponent {
+    +messages: InputSignal<Message[]>
+  }
+  class MessageComposerComponent {
+    +form: FormGroup<{ body: FormControl<string> }>
+    +send(): void
+    +applyServerErrors(errors: Record<string, string[]>): void
+  }
+  class BookingMessagesApi {
+    +list(number: string): Observable<Message[]>
+    +send(number: string, body: string): Observable<Message>
+  }
+  class "Message (TS)" as MessageTs <<interface>> {
+    +id: number
+    +senderName: string
+    +body: string
+    +sentAt: string
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class LimitRequestBodySize <<middleware>> {
+    +int maxBytes = 1048576
+    +handle(request: Request, next: Closure): Response
+  }
+  class EnsureUserHasRole <<middleware>> {
+    +handle(request: Request, next: Closure, role: string): Response
+  }
+  class BookingPolicy {
+    +participate(user: User, booking: Booking): Response
+  }
+  class SendBookingMessageRequest <<FormRequest>> {
+    +rules(): array
+  }
+  class BookingMessagesController {
+    +store(request: SendBookingMessageRequest, booking: Booking): MessageResource
+  }
+  class SendBookingMessage <<action>> {
+    +handle(booking: Booking, sender: User, body: string): Message
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +string number
+    +int bookerId
+    +int artistId
+    +BookingStatus status
+  }
+  class Message <<Eloquent>> {
+    +int id
+    +int bookingId
+    +int senderId
+    +string body
+  }
+  class ProblemDetails <<value object>> {
+    +string type
+    +string title
+    +int status
+    +string detail
+    +?array errors
+  }
+  class ProblemDetailsRenderer {
+    +render(e: Throwable, request: Request): JsonResponse
+  }
+}
+
+MessageComposerComponent --> BookingMessagesApi
+MessageThreadComponent --> MessageTs : renders body as text
+BookingMessagesApi ..> BookingMessagesController : POST /api/v1/bookings/{number}/messages
+BookingMessagesController ..> BookingPolicy : authorize('participate')
+BookingMessagesController ..> SendBookingMessageRequest : validates
+BookingMessagesController --> SendBookingMessage
+SendBookingMessage ..> Message : creates
+Booking "1" *-- "*" Message
+BookingPolicy ..> Booking : checks participants
+ProblemDetailsRenderer ..> ProblemDetails : builds
+LimitRequestBodySize ..> ProblemDetailsRenderer : 413
+EnsureUserHasRole ..> ProblemDetailsRenderer : 404
+@enduml

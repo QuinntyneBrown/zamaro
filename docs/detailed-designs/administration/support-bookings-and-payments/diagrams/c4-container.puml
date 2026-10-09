@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Support bookings and payments
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(pay, "Payment processor", "Charges, refunds, payouts")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Admin booking search and detail pages")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/admin booking, refund and hold endpoints")
+  Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon", "Balance charge, notifications, receipts")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, refunds, problem_reports, audit_entries")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Job queue")
+}
+Rel(admin, web, "Uses /admin/bookings", "HTTPS")
+Rel(web, api, "Calls /api/v1/admin/bookings/...", "JSON/HTTPS")
+Rel(api, db, "Searches bookings, writes refunds and resolutions", "Eloquent / SQL")
+Rel(api, pay, "Creates refunds with idempotency keys", "HTTPS/JSON")
+Rel(api, cache, "Queues jobs and notifications", "RESP")
+Rel(worker, cache, "Consumes jobs", "RESP")
+Rel(worker, pay, "Charges released balance", "HTTPS/JSON")
+Rel(worker, email, "Sends emails", "HTTPS/JSON")
+@enduml

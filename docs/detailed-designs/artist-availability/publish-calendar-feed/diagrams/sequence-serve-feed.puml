@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Serve the calendar feed
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+participant "Calendar application" as calapp
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "CalendarFeedComponent" as comp
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "CalendarFeedController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BuildCalendarFeed" as build
+  participant "ICalendarWriter" as writer
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as cache
+  database "Zamaro database" as db
+end box
+
+actor -> comp : Copy the secret URL
+actor -> calapp : Subscribe with the URL
+calapp -> controller : GET /api/v1/calendar-feeds/{token}.ics
+controller -> cache : Count request for anonymous rate limit (L2-077)
+controller -> controller : Hash token with SHA-256; logs redact the token (L2-079)
+controller -> db : Find calendar_feeds by token_hash
+alt no feed for this hash (unknown or regenerated)
+  controller --> calapp : 404 (L2-058)
+else feed found
+  controller -> build : handle(feed)
+  build -> db : Confirmed bookings for the artist with church name and address snapshot
+  db --> build : Bookings
+  build -> writer : One VEVENT per booking: date, start time (America/Toronto), kind of gathering, church name and address (L2-058)
+  writer --> build : RFC 5545 text
+  build --> controller : Calendar body
+  controller --> calapp : 200 text/calendar; Cache-Control private, no-store; X-Robots-Tag noindex
+end
+calapp --> actor : Confirmed bookings appear in the artist's calendar
+@enduml

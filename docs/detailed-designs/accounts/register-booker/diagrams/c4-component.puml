@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Register as a booker
+
+Container(web, "Zamaro Web", "Angular", "RegisterPage, VerifyEmailPage, AuthApi")
+System_Ext(bot, "Bot challenge provider", "Human check")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends notifications")
+Container_Boundary(api, "Zamaro API") {
+  Component(regCtrl, "RegistrationController", "Laravel controller", "POST /api/v1/register")
+  Component(regReq, "RegisterBookerRequest", "FormRequest", "Validates fields, consent, challenge and password")
+  Component(policy, "PasswordPolicy", "Validation rule", "Length 12-128 and breached-list check")
+  Component(challenge, "BotChallengeVerifier", "Interface + adapter", "Verifies challenge tokens")
+  Component(register, "RegisterBooker", "Action", "Creates booker or notifies existing owner")
+  Component(consent, "RecordConsent", "Action (privacy/record-consent)", "Appends consent records")
+  Component(verCtrl, "EmailVerificationController", "Laravel controller", "POST /api/v1/email/verify and resend")
+  Component(verify, "VerifyEmail", "Action", "Consumes a single-use 24-hour token")
+  Component(gate, "EnsureEmailIsVerified", "Middleware", "Blocks booking requests from unverified bookers")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "users, email_verification_tokens, consent_records")
+  ComponentQueue(queue, "Cache and queue", "Redis", "Notification jobs")
+}
+Rel(web, regCtrl, "Registers", "JSON/HTTPS")
+Rel(web, verCtrl, "Verifies token", "JSON/HTTPS")
+Rel(regCtrl, regReq, "Validates with")
+Rel(regReq, policy, "Applies")
+Rel(policy, breach, "Range query", "HTTPS")
+Rel(regReq, challenge, "Checks token with")
+Rel(challenge, bot, "Calls", "HTTPS/JSON")
+Rel(regCtrl, register, "Calls")
+Rel(register, consent, "Records terms, privacy and marketing choices")
+Rel(register, db, "Inserts user and token", "SQL")
+Rel(register, queue, "Queues VerifyEmailNotification or DuplicateSignUpNotification")
+Rel(consent, db, "Inserts consent records", "SQL")
+Rel(verCtrl, verify, "Calls")
+Rel(verify, db, "Marks token used and email verified", "SQL")
+Rel(gate, db, "Reads email_verified_at", "SQL")
+Rel(worker, queue, "Takes jobs from", "RESP")
+@enduml

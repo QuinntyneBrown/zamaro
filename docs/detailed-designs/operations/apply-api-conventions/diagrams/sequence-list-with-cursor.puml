@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — List bookings with cursor pagination
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingsPage" as page
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ForceJsonResponse\nEnsureJsonRequest" as mw
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ListBookingsForBooker" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /bookings
+page -> client : list('upcoming')
+client -> mw : GET /api/v1/bookings?tab=upcoming\nAccept: application/json (L2-095)
+mw -> controller : index(ListBookingsRequest)
+controller -> controller : Authorise; validate tab and cursor
+controller -> action : handle(booker, tab, cursor = null, perPage)
+action -> db : WHERE booker_id = ? AND status IN (Requested, Accepted, Confirmed)\nORDER BY event_date ASC, id ASC LIMIT perPage + 1 (L2-033)
+db --> action : Rows
+action --> controller : CursorPaginator
+controller --> mw : CursorPaginatedResource
+mw --> client : 200 application/json {data, meta: {perPage, nextCursor}} (L2-095)
+client --> page : CursorPage<BookingSummary>
+page --> actor : Upcoming bookings
+opt nextCursor present and the booker asks for more
+  page -> client : list('upcoming', nextCursor)
+  client -> mw : GET /api/v1/bookings?tab=upcoming&cursor={opaque}
+  mw -> controller : index
+  controller -> action : handle(booker, tab, cursor)
+  action -> db : WHERE (event_date, id) > (cursor values) ORDER BY event_date, id
+  db --> action : Next rows
+  action --> controller : CursorPaginator
+  controller --> client : 200 next page; nextCursor null on the last page
+  client --> page : Append rows
+end
+alt malformed cursor
+  controller --> client : 422 application/problem+json, errors.cursor (L2-095)
+end
+@enduml

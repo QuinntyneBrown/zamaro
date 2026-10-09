@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Pay out artists
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(processor, "Payment processor", "Connected accounts and transfers")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "PayoutSetupPage and EarningsPage in /artist")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Onboarding link and earnings endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Creates and sends payouts")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, payouts, payments")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "Requests onboarding link and earnings", "JSON/HTTPS")
+Rel(api, processor, "Creates connected account and onboarding link", "HTTPS/JSON")
+Rel(api, db, "Reads earnings, writes payout readiness", "SQL")
+Rel(worker, db, "Reads due payouts, writes status", "SQL")
+Rel(worker, processor, "Transfers to connected account", "HTTPS/JSON + idempotency key")
+@enduml

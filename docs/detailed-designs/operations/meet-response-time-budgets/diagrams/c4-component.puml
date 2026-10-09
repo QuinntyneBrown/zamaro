@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Meet response-time budgets
+
+Container(web, "Zamaro Web", "Angular", "ArtistProfilePage, ArtistsApi, ProfileEditorPage")
+System_Ext(cdn, "CDN", "Shared cache; s-maxage 60 s")
+System_Ext(metrics, "Metrics and alerting service", "p95 per request class")
+Container_Boundary(api, "Zamaro API") {
+  Component(timing, "RecordServerTiming", "Middleware", "Measures server time and tags the request class")
+  Component(policy, "SetCachePolicy", "Middleware", "Public-shared or private, no-store headers")
+  Component(etag, "HandleConditionalGet", "Middleware", "Sets ETag and answers If-None-Match with 304")
+  Component(ctrl, "ArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}")
+  Component(get, "GetArtistProfile", "Action", "Assembles the public profile")
+  Component(pcache, "ArtistProfileCache", "Cache service", "Stores the assembled profile payload")
+  Component(upd, "UpdateArtistProfile", "Action", "Saves profile edits and raises ArtistProfileChanged")
+  Component(inval, "InvalidateArtistProfileCache", "Event listener", "Forgets the payload and queues a CDN purge")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "Artist, media, setlist, reviews, bookings")
+  ComponentDb(redis, "Cache and queue", "Redis", "Profile payloads, purge queue")
+}
+Container(worker, "Zamaro Worker", "Laravel Horizon", "Runs PurgeCdnPaths through CdnPurger")
+
+Rel(web, cdn, "GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(cdn, timing, "Forwards to", "HTTPS")
+Rel(timing, policy, "Passes to")
+Rel(policy, etag, "Passes to")
+Rel(etag, ctrl, "Passes to")
+Rel(ctrl, get, "Calls")
+Rel(get, pcache, "Reads through")
+Rel(pcache, redis, "Get and put", "RESP")
+Rel(get, db, "Loads on cache miss and reads upcoming dates", "SQL")
+Rel(web, upd, "PATCH /api/v1/artist/profile", "JSON/HTTPS")
+Rel(upd, db, "Writes in one transaction", "SQL")
+Rel(upd, inval, "Raises ArtistProfileChanged")
+Rel(inval, pcache, "Forgets")
+Rel(inval, redis, "Queues PurgeCdnPaths", "RESP")
+Rel(worker, cdn, "Purges /artists/{slug} and /api/v1/artists/{slug}", "HTTPS")
+Rel(timing, metrics, "Emits server time per request class")
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Issue receipts
+
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(zamaro, email, "Sends a receipt after each charge or refund via", "HTTPS/JSON")
+Rel(email, booker, "Delivers receipt emails to")
+Rel(booker, zamaro, "Downloads PDF receipts using", "HTTPS")
+@enduml

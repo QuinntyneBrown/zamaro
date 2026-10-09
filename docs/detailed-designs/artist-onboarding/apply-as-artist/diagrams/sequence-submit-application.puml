@@ -1,0 +1,93 @@
+@startuml
+title UML sequence behaviour — Submit an artist application
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist applicant" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ApplyPage" as page
+  participant "ApplicationStore" as store
+  participant "ArtistApplicationsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistApplicationsController" as controller
+  participant "SubmitArtistApplicationRequest" as req
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SubmitArtistApplication" as action
+  participant "ServiceArea" as area
+  participant "DistanceService" as dist
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Bot challenge provider" as bot
+  participant "Geocoding provider" as geo
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "SendApplicationReceivedEmail" as listener
+end box
+
+actor -> page : Activate "Submit application"
+page -> page : Client checks: required fields, 1–4 styles, bio 100–1,500, video, 2 references
+page -> store : submit(form)
+store -> store : Disable submit, show busy state (L2-108)
+store -> client : submit(body)
+client -> controller : POST /api/v1/artist-applications
+controller -> req : Validate fields and references (L2-047, L2-075)
+req -> bot : Verify challenge token (L2-077)
+bot --> req : Pass
+alt a reference email equals the applicant email
+  req --> controller : 422 references.*.email
+  controller --> client : Problem details "References must be someone other than you." (L2-047)
+else fields valid
+  controller -> action : handle(ApplicationData, user)
+  action -> db : Find Submitted application with same email (L2-047)
+  alt pending application exists
+    action --> controller : DuplicateApplication
+    controller --> client : 422 "You already have an application in review."
+  else no pending application
+    action -> area : locate(baseCity) (L2-001)
+    area -> geo : Geocode base city
+    alt not geocodable
+      area --> action : NotFound
+      action --> controller : 422 "We couldn't find that address. Check the street and postal code."
+    else coordinates found
+      area -> dist : between(Toronto City Hall, base)
+      dist --> area : Distance
+      alt distance > 200 km
+        area --> action : OutsideServiceArea
+        action --> controller : 422 "Zamaro serves churches within 200 km of Toronto." (L2-001)
+      else inside service area
+        area --> action : Coordinates
+        action -> db : BEGIN; insert application (Submitted), 2 references (contacts encrypted, L2-079), link videos; COMMIT
+        db --> action : ArtistApplication
+        action -> queue : Dispatch ArtistApplicationSubmitted
+        action --> controller : ArtistApplication
+        controller --> client : 201 ArtistApplicationResource
+      end
+    end
+  end
+end
+client --> store : Result or problem details
+alt submitted
+  store --> page : status = submitted
+  page --> actor : Confirmation state, focus on heading
+else rejected
+  store --> page : Field errors, every value kept (L2-108)
+  page --> actor : Inline errors, focus first invalid field
+end
+queue -> listener : ArtistApplicationSubmitted
+listener -> listener : Send ApplicationReceivedNotification within 2 minutes (L2-063)
+@enduml

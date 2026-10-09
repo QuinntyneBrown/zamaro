@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Verify a Vulnerable Sector Check
+
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(secrets, "Secrets manager", "Holds the document encryption key")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(artist, zamaro, "Uploads a Vulnerable Sector Check with its issue date using", "HTTPS")
+Rel(admin, zamaro, "Views and verifies checks using", "HTTPS")
+Rel(zamaro, scanner, "Scans each document with")
+Rel(zamaro, secrets, "Reads the document key from")
+Rel(zamaro, email, "Sends renewal reminders through", "HTTPS")
+@enduml

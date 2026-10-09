@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Search fails and is retried
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "DiscoverPage" as page
+  participant "SearchStore" as store
+  participant "SearchApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SearchController" as controller
+end box
+
+actor -> page : Activate "Show the lineup"
+page -> store : search(criteria)
+store -> client : search(criteria)
+client -> controller : GET /api/v1/search
+controller --> client : 5xx problem details or network error
+client --> store : Error
+store -> store : Increment consecutive failure count
+store --> page : status = error, criteria kept
+page --> actor : "We lost the signal" with Try again and team email (L2-106)
+actor -> page : Activate Try again
+page -> store : retry()
+store -> client : Same search(criteria) (L2-106)
+alt third consecutive failure
+  client --> store : Error
+  store --> page : status = error, failures = 3
+  page --> actor : Error state also links to the public status page (L2-106)
+else success
+  client --> store : Lineup
+  store --> page : Render lineup, reset failure count
+end
+@enduml

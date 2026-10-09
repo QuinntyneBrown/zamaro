@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Sort and filter results
+
+Person(booker, "Booker or guest", "Narrows and orders the lineup")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Sort control, style chips, summary line, URL state")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Search endpoint with sort and filters")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists, styles, prices, reviews")
+  ContainerDb(cache, "Cache and queue", "Redis", "Distance cache")
+}
+Rel(booker, web, "Uses; shares the URL", "HTTPS")
+Rel(web, api, "GET /api/v1/search?sort&styles&price", "JSON/HTTPS")
+Rel(api, db, "Pre-filters by style and price", "Eloquent / SQL")
+Rel(api, cache, "Reads cached distances", "RESP")
+Rel(api, routing, "Requests uncached distances", "HTTPS/JSON")
+@enduml

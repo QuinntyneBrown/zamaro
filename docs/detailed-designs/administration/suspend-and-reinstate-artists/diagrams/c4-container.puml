@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Suspend and reinstate artists
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(cdn, "CDN", "Edge cache")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Admin application and artist pages")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/admin application and artist endpoints")
+  Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon", "Declined-booking emails, cache purges")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artists, artist_suspensions, applications, bookings, audit_entries")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "VSC documents")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Profile and search cache, jobs")
+}
+Rel(admin, web, "Uses /admin/applications and /admin/artists", "HTTPS")
+Rel(web, api, "Calls /api/v1/admin/...", "JSON/HTTPS")
+Rel(api, db, "Reads applications, writes suspensions and bookings", "Eloquent / SQL")
+Rel(api, storage, "Signs URL for VSC document", "S3 API")
+Rel(api, cache, "Queues jobs", "RESP")
+Rel(worker, cache, "Consumes jobs, forgets cached entries", "RESP")
+Rel(worker, email, "Sends emails", "HTTPS/JSON")
+Rel(worker, cdn, "Purges profile URL", "HTTPS")
+@enduml

@@ -1,0 +1,87 @@
+@startuml
+title UML sequence behaviour — Upload a video in resumable chunks
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VideosManagerPage" as page
+  participant "ArtistVideosStore" as store
+  participant "ChunkedUploader" as up
+  participant "ArtistVideosApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistVideoUploadController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "InitiateVideoUpload" as init
+  participant "CompleteVideoUpload" as complete
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+  database "Cache and queue" as queue
+end box
+
+actor -> page : Choose file, enter title 5-100 (L2-052)
+page -> store : start(file, title)
+store -> client : start(title, size, declared type)
+client -> controller : POST /api/v1/artist/videos/uploads
+controller -> controller : EnsureArtistRole; size <= 1 GB, title 5-100 (L2-052, L2-075)
+controller -> init : handle(artist, title, size)
+init -> db : BEGIN; lock artist; count videos not Failed
+alt 8 videos already
+  init --> controller : Limit reached
+  controller --> client : 422 "You can have up to 8 videos." (L2-052)
+  client --> page : Inline error
+else under the limit
+  init -> storage : Create multipart upload under a random quarantine key
+  init -> db : Insert artist_videos (Uploading); COMMIT
+  init --> controller : VideoUploadSession (part size, part count)
+  controller --> client : 201 session
+  client --> store : Session
+  store -> up : upload(file, session)
+  loop each missing part
+    up -> client : signParts(id, next part numbers)
+    client -> controller : POST /api/v1/artist/videos/{video}/upload/parts
+    controller --> client : Short-lived pre-signed part URLs
+    up -> storage : PUT part bytes
+    storage --> up : ETag
+    up --> store : Percent uploaded (L2-052)
+    store --> page : Progress bar "42%"
+  end
+  opt connection drops mid-upload (any size, including files above 50 MB)
+    up -> up : Wait for the browser online event, back off
+    up -> client : listParts(id)
+    client -> controller : GET /api/v1/artist/videos/{video}/upload/parts
+    controller -> storage : List uploaded parts
+    controller --> client : Completed part numbers and ETags
+    up -> up : Resume from the first missing part (L2-052)
+  end
+  up -> client : complete(id, parts)
+  client -> controller : POST /api/v1/artist/videos/{video}/upload/complete
+  controller -> complete : handle(video, parts)
+  complete -> storage : Complete multipart upload; HEAD size <= 1 GB
+  complete -> db : Status Processing
+  complete -> queue : Dispatch InspectArtistVideo
+  complete --> controller : ArtistVideo
+  controller --> client : 200 ArtistVideoResource (Processing)
+  client --> store : Video
+  store --> page : Row shows "Processing" (L2-052)
+  opt caption file chosen
+    store -> client : uploadCaptions(id, file)
+    note right of client : WebVTT up to 1 MB, inspected and scanned (L2-052, L2-076)
+  end
+end
+@enduml

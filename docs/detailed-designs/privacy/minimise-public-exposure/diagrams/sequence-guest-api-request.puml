@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Guest calls the API
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Browser or Zamaro Web client" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "auth:sanctum" as auth
+  participant "Public controller" as pub
+  participant "Public resource" as res
+  participant "PublicExposureTest" as test
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> client : Call an endpoint without a session
+alt private route (bookings, messages, saved list, account)
+  client -> auth : GET /api/v1/bookings
+  auth --> client : 401 problem details, no query run (L2-083)
+else public route (search, profile, reviews)
+  client -> pub : GET /api/v1/search or /artists/{slug}
+  pub -> db : Read records
+  pub -> res : Serialise through allowlist
+  res --> client : No booker name, email, phone, church address,\nbookings or messages (L2-083)
+end
+
+== Continuous integration ==
+test -> db : Seed bookers, churches, bookings, messages and reviews with sentinel values
+loop every route in routes/api_public.php
+  test -> pub : Call as guest
+  pub --> test : Response
+  test -> test : Assert no sentinel in body or headers (L2-083)
+end
+loop every other route
+  test -> auth : Call as guest
+  auth --> test : 401
+end
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Send a transactional email
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingRequestController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "SendBookingEmails" as listener
+  participant "BookingRequestedNotification" as notif
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+controller -> controller : Booking created (L2-028); dispatch BookingRequested after commit
+controller -> listener : BookingRequested (queued)
+listener -> db : Insert EmailMessage(Queued) for the artist
+listener -> notif : notify(artist) on notifications queue
+notif -> notif : shouldSend: address deliverable? (L2-065)
+alt address marked undeliverable
+  notif -> db : EmailMessage Suppressed
+else deliverable
+  notif -> notif : Render HTML and plain text from BookingEmailData; booking number and link; no card details (L2-063)
+  notif -> email : Send
+  alt transient failure
+    email --> notif : 429 or 5xx
+    notif -> notif : Retry with exponential backoff, up to 5 tries (L2-065)
+    opt fifth failure
+      notif -> db : EmailMessage Failed; failed-jobs store
+      notif -> notif : Alert on-call (L2-092)
+    end
+  else accepted
+    email --> notif : Provider message id
+    notif -> db : EmailMessage Sent, sentAt within 2 minutes of the event (L2-063)
+  end
+end
+email --> actor : "New request" email
+actor -> page : Follow link to the booking
+@enduml

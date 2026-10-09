@@ -1,0 +1,106 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Reconcile payment events
+
+package "Zamaro Web (Angular)" {
+  class AdminBookingSearchPage {
+    +query: Signal<string>
+    +results: Signal<AdminBookingDto[]>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class PaymentWebhookController {
+    +__invoke(request: Request): Response
+  }
+  class RecordProcessorEvent <<action>> {
+    +handle(event: ProcessorWebhookEvent): ?ProcessorEvent
+  }
+  class ProcessProcessorEvent <<job>> {
+    +int processorEventId
+    +int tries = 5
+    +handle(router: ProcessorEventRouter): void
+  }
+  class ProcessorEventRouter {
+    +route(event: ProcessorEvent): void
+  }
+  class SecurityEventLogger {
+    +invalidWebhookSignature(request: Request): void
+  }
+  class ProcessorEvent <<Eloquent>> {
+    +int id
+    +string processorEventId
+    +string type
+    +array payload
+    +CarbonImmutable receivedAt
+    +?CarbonImmutable processedAt
+    +int failureCount
+  }
+  class IdempotencyKey <<value object>> {
+    +string value
+    +{static} for(booking: Booking, operation: PaymentOperation, suffix: ?string): IdempotencyKey
+  }
+  enum PaymentOperation {
+    Deposit
+    DepositRefund
+    Balance
+    Refund
+    Payout
+  }
+  class ReconcilePaymentsCommand {
+    +handle(reconciler: PaymentReconciler): int
+  }
+  class PaymentReconciler {
+    +reconcile(day: CarbonImmutable): ReconciliationRun
+  }
+  class ReconciliationRun <<Eloquent>> {
+    +CarbonImmutable day
+    +int processorRecords
+    +int zamaroRecords
+    +int mismatchCount
+    +CarbonImmutable completedAt
+  }
+  class ReconciliationMismatch <<Eloquent>> {
+    +string bookingNumber
+    +MismatchKind kind
+    +?string processorId
+    +?int zamaroCents
+    +?int processorCents
+  }
+  enum MismatchKind {
+    MissingInZamaro
+    MissingAtProcessor
+    AmountDiffers
+    StatusDiffers
+  }
+  interface PaymentGateway {
+    +verifyWebhook(payload: string, signature: string): ProcessorWebhookEvent
+    +listRecords(from: CarbonImmutable, to: CarbonImmutable): iterable
+  }
+}
+
+PaymentWebhookController --> PaymentGateway : verifyWebhook
+PaymentWebhookController --> SecurityEventLogger
+PaymentWebhookController --> RecordProcessorEvent
+RecordProcessorEvent ..> ProcessorEvent : inserts once
+RecordProcessorEvent ..> ProcessProcessorEvent : dispatches
+ProcessProcessorEvent --> ProcessorEventRouter
+IdempotencyKey --> PaymentOperation
+ReconcilePaymentsCommand --> PaymentReconciler
+PaymentReconciler --> PaymentGateway : listRecords
+PaymentReconciler ..> ReconciliationRun : writes
+ReconciliationRun "1" *-- "0..*" ReconciliationMismatch
+ReconciliationMismatch --> MismatchKind
+AdminBookingSearchPage ..> ReconciliationMismatch : booking numbers searched
+@enduml

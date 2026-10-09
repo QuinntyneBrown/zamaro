@@ -1,0 +1,75 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage email preferences
+
+package "Zamaro Web (Angular)" {
+  class NotificationSettingsPage {
+    +preferences: Signal<NotificationPreferenceDto[]>
+    +saving: Signal<boolean>
+    +toggle(category: string, enabled: boolean): void
+  }
+  class NotificationPreferencesApi {
+    +get(): Observable<NotificationPreferenceDto[]>
+    +update(changes: NotificationPreferenceDto[]): Observable<NotificationPreferenceDto[]>
+  }
+  class NotificationPreferenceDto <<interface>> {
+    +category: string
+    +enabled: boolean
+    +locked: boolean
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class NotificationPreferencesController {
+    +show(request: Request): NotificationPreferencesResource
+    +update(request: UpdateNotificationPreferencesRequest): NotificationPreferencesResource
+  }
+  class UpdateNotificationPreferencesRequest {
+    +rules(): array
+  }
+  class UpdateNotificationPreferences <<action>> {
+    +handle(user: User, changes: array): Collection<NotificationPreference>
+  }
+  class NotificationPreferenceGate {
+    +allows(user: User, category: NotificationCategory): bool
+    +forUser(user: User): array
+  }
+  class NotificationPreference <<Eloquent>> {
+    +int userId
+    +NotificationCategory category
+    +bool enabled
+    +CarbonImmutable updatedAt
+  }
+  enum NotificationCategory {
+    Transactional
+    Reminders
+    ReviewPrompts
+    +isOptional(): bool
+  }
+  abstract class TransactionalNotification <<notification>> {
+    +category(): NotificationCategory
+    +shouldSend(user: User, channel: string): bool
+  }
+}
+
+NotificationSettingsPage --> NotificationPreferencesApi
+NotificationPreferencesApi ..> NotificationPreferencesController : /api/v1/account/notification-preferences
+NotificationPreferencesController ..> UpdateNotificationPreferencesRequest : validates
+NotificationPreferencesController --> UpdateNotificationPreferences
+NotificationPreferencesController --> NotificationPreferenceGate : reads effective state
+UpdateNotificationPreferences ..> NotificationPreference : upserts
+NotificationPreference --> NotificationCategory
+NotificationPreferenceGate --> NotificationPreference
+TransactionalNotification --> NotificationPreferenceGate
+@enduml

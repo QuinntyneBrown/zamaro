@@ -1,0 +1,132 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Upload videos
+
+package "Zamaro Web (Angular)" {
+  class VideosManagerPage {
+    +store: ArtistVideosStore
+    +onFileChosen(file: File): void
+  }
+  class VideoUploadDialogComponent {
+    +title: FormControl<string>
+    +captions: FormControl<File | null>
+    +confirm(): void
+  }
+  class VideoListComponent {
+    +videos: input<ArtistVideoView[]>
+  }
+  class ArtistVideosStore {
+    +videos: Signal<ArtistVideoView[]>
+    +canAddMore: Signal<boolean>
+    +start(file: File, title: string, captions?: File): void
+    +retitle(id: string, title: string): void
+    +remove(id: string): void
+    +pollWhileProcessing(): void
+  }
+  class ChunkedUploader {
+    +upload(file: File, session: VideoUploadSession): Observable<number>
+    -resumeFromServerParts(): void
+  }
+  class ArtistVideosApi {
+    +start(meta: VideoUploadStart): Observable<VideoUploadSession>
+    +signParts(id: string, parts: number[]): Observable<PartUrl[]>
+    +listParts(id: string): Observable<CompletedPart[]>
+    +complete(id: string, parts: CompletedPart[]): Observable<ArtistVideo>
+    +get(id: string): Observable<ArtistVideo>
+    +uploadCaptions(id: string, file: File): Observable<ArtistVideo>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistVideoUploadController {
+    +start(request: InitiateVideoUploadRequest): VideoUploadSessionResource
+    +signParts(request: SignVideoPartsRequest, video: ArtistVideo): array
+    +listParts(video: ArtistVideo): array
+    +complete(request: CompleteVideoUploadRequest, video: ArtistVideo): ArtistVideoResource
+  }
+  class InitiateVideoUpload <<action>> {
+    +handle(artist: Artist, title: string, sizeBytes: int): VideoUploadSession
+  }
+  class CompleteVideoUpload <<action>> {
+    +handle(video: ArtistVideo, parts: array): ArtistVideo
+  }
+  class InspectArtistVideo <<job>> {
+    +string videoId
+    +int tries = 5
+    +handle(): void
+  }
+  class RecordVideoProcessingResult <<action>> {
+    +handle(result: TranscodeResult): void
+  }
+  class StoreVideoCaptions <<action>> {
+    +handle(video: ArtistVideo, file: UploadedFile): ArtistVideo
+  }
+  interface VideoTranscoder {
+    +submit(sourceKey: string, maxHeight: int): string
+  }
+  interface ObjectStorage {
+    +createMultipartUpload(key: string): string
+    +presignPart(key: string, uploadId: string, part: int): string
+    +listParts(key: string, uploadId: string): array
+    +completeMultipartUpload(key: string, uploadId: string, parts: array): void
+  }
+  class VideoUploadSession <<value object>> {
+    +string videoId
+    +string mode
+    +int partSizeBytes
+    +int partCount
+  }
+  class ArtistVideo <<Eloquent>> {
+    +string id
+    +int artistId
+    +int position
+    +string title
+    +ArtistVideoStatus status
+    +?string failureReason
+    +int sizeBytes
+    +?string sourceKey
+    +?string uploadId
+    +?string processorJobId
+    +?string manifestKey
+    +?string posterKey
+    +?string captionsKey
+    +?int durationSeconds
+  }
+  enum ArtistVideoStatus {
+    Uploading
+    Processing
+    Live
+    Failed
+  }
+}
+
+VideosManagerPage --> ArtistVideosStore
+VideosManagerPage *-- VideoUploadDialogComponent
+VideosManagerPage *-- VideoListComponent
+ArtistVideosStore --> ArtistVideosApi
+ArtistVideosStore --> ChunkedUploader
+ChunkedUploader --> ArtistVideosApi
+ArtistVideosApi ..> ArtistVideoUploadController : /api/v1/artist/videos/...
+ArtistVideoUploadController --> InitiateVideoUpload
+ArtistVideoUploadController --> CompleteVideoUpload
+InitiateVideoUpload --> ObjectStorage
+CompleteVideoUpload --> ObjectStorage
+InitiateVideoUpload ..> VideoUploadSession : returns
+CompleteVideoUpload ..> InspectArtistVideo : dispatches
+InspectArtistVideo --> VideoTranscoder
+RecordVideoProcessingResult --> ArtistVideo : marks Live or Failed
+StoreVideoCaptions --> ArtistVideo
+InitiateVideoUpload --> ArtistVideo : creates
+ArtistVideo --> ArtistVideoStatus
+@enduml

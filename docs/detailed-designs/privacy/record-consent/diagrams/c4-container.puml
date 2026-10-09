@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Record consent
+
+Person(user, "Guest, booker or artist", "Gives consent")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "RegisterFormComponent, AcceptTermsPage, termsGuard")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Legal documents, consent endpoint, terms gate")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "legal_documents, consent_records")
+  ContainerDb(cache, "Cache and queue", "Redis", "Current document versions")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/legal-documents/current, POST /api/v1/account/consents/terms", "JSON/HTTPS")
+Rel(api, db, "Appends consent records", "Eloquent / SQL")
+Rel(api, cache, "Reads cached current versions", "RESP")
+@enduml

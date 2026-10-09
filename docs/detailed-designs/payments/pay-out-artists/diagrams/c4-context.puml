@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Pay out artists
+
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(processor, "Payment processor", "Connected accounts and transfers for payouts")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(artist, zamaro, "Sets up payouts and reviews earnings using", "HTTPS")
+Rel(artist, processor, "Completes connected-account onboarding with", "HTTPS")
+Rel(zamaro, processor, "Creates connected accounts and transfers earnings through", "HTTPS/JSON")
+Rel(processor, zamaro, "Reports account and payout status to", "Signed webhook")
+Rel(zamaro, email, "Sends payout-sent emails via", "HTTPS/JSON")
+@enduml

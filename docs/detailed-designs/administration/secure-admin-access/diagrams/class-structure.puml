@@ -1,0 +1,88 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Secure administrator access
+
+package "Zamaro Web (Angular)" {
+  class AuthService {
+    +currentUser: Signal<CurrentUser | null>
+    +isAdministrator: Signal<boolean>
+    +refresh(): Observable<CurrentUser | null>
+    +handleUnauthorised(returnUrl: string): void
+  }
+  class adminGuard <<CanMatchFn>> {
+    +canMatch(route: Route): boolean
+  }
+  class NotFoundPage {
+    +setStatus404(): void
+  }
+  class MfaChallengePage {
+    +code: FormControl<string>
+    +submit(): void
+  }
+  class MfaApi {
+    +challenge(code: string): Observable<CurrentUser>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class EnsureAdministrator <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class EnsureMfaVerified <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class EnforceAdminIdleTimeout <<middleware>> {
+    +int timeoutMinutes = 30
+    +handle(request: Request, next: Closure): Response
+  }
+  class MfaChallengeController {
+    +__invoke(request: MfaChallengeRequest): JsonResponse
+  }
+  class VerifyMfaChallenge <<action>> {
+    +handle(pendingUserId: int, code: string, ip: string): User
+  }
+  interface TotpVerifier {
+    +verify(secret: string, code: string, window: int): bool
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string email
+    +Role[] roles
+    +bool mfaEnabled
+    +?string mfaSecret
+    +string[] mfaRecoveryCodes
+    +hasRole(role: Role): bool
+  }
+  enum Role {
+    Booker
+    Artist
+    Administrator
+  }
+  class RecordAuditEntry <<action>> {
+    +handle(actor: ?User, action: string, target: ?Model, outcome: AuditOutcome): AuditEntry
+  }
+}
+
+adminGuard ..> AuthService : reads
+adminGuard ..> NotFoundPage : falls through to
+MfaChallengePage --> MfaApi
+MfaApi ..> MfaChallengeController : POST /api/v1/auth/mfa/challenge
+MfaChallengeController --> VerifyMfaChallenge
+VerifyMfaChallenge --> TotpVerifier
+VerifyMfaChallenge ..> User : loads
+VerifyMfaChallenge ..> RecordAuditEntry : records
+EnsureAdministrator ..> User : checks role
+EnsureMfaVerified ..> User : checks session flag
+User --> Role
+@enduml

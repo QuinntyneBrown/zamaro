@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Adapt layout to screens
+
+Person(user, "Guest, booker, artist or administrator", "Any screen size")
+Container(api, "Zamaro API", "Laravel", "MeController, GET /api/v1/me")
+Container_Boundary(web, "Zamaro Web") {
+  Component(shell, "AppShellComponent", "Angular component", "Skip link, header, main, footer")
+  Component(bp, "BreakpointService", "Angular service", "Viewport class and isCompact signals from L2 breakpoints")
+  Component(topbar, "TopBarComponent", "Angular component", "Full header at MD+, compact at XS and SM")
+  Component(drawer, "NavDrawerComponent", "Angular component", "Primary links behind the menu button")
+  Component(dialogs, "DialogService", "CDK Dialog wrapper", "Full-screen panel class at XS")
+  Component(user_store, "CurrentUserStore", "Signal store", "Initials and Saved count")
+  Component(css, "Layout styles", "SCSS", "breakpoints.scss, layout.scss, touch-target rules")
+  Component(visual, "Visual suite", "Playwright", "Screenshots, overflow, target and zoom checks")
+}
+Rel(user, shell, "Views pages in")
+Rel(shell, topbar, "Renders")
+Rel(topbar, bp, "Reads isCompact")
+Rel(topbar, drawer, "Opens at XS and SM")
+Rel(topbar, user_store, "Reads initials and Saved count")
+Rel(dialogs, bp, "Reads viewport class")
+Rel(shell, css, "Styled by")
+Rel(user_store, api, "GET /api/v1/me", "JSON/HTTPS")
+Rel(visual, shell, "Captures and measures")
+@enduml

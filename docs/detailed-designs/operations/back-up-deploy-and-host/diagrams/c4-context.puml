@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Back up, deploy and host
+
+Person(dev, "Developer", "Member of the Zamaro team who merges to main")
+Person(oncall, "On-call person", "Triggers rollbacks and runs restore drills")
+Person(user, "Guest, booker or artist", "Uses Zamaro during deploys")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(ci, "CI/CD pipeline", "Checks, builds and deploys; vendor <TO SUPPLY>")
+System_Ext(hosting, "Hosting platform", "Canadian region: compute, managed PostgreSQL, Redis, object storage; vendor <TO SUPPLY>")
+System_Ext(cdn, "CDN", "Serves versioned web assets")
+System_Ext(secrets, "Secrets manager", "Runtime secrets")
+
+Rel(dev, ci, "Merges to main, which triggers")
+Rel(oncall, ci, "Triggers rollback in")
+Rel(ci, hosting, "Rolls out release images to")
+Rel(ci, cdn, "Uploads hashed assets to")
+Rel(hosting, zamaro, "Runs, backs up and restores")
+Rel(zamaro, secrets, "Reads secrets at start from")
+Rel(user, zamaro, "Uses without downtime", "HTTPS")
+Rel(oncall, hosting, "Restores to a fresh environment in")
+@enduml

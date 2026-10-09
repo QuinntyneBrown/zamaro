@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Turn off reminder emails
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "NotificationSettingsPage" as page
+  participant "NotificationPreferencesApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "NotificationPreferencesController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UpdateNotificationPreferences" as update
+  participant "NotificationPreferenceGate" as gate
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "EventReminderNotification" as notif
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /account/notifications
+page -> client : get()
+client -> controller : GET /api/v1/account/notification-preferences
+controller -> gate : forUser(user)
+gate -> db : Preference rows (missing row = enabled)
+controller --> client : Reminders on, Review prompts on, Booking and payment emails on and locked
+page --> actor : Switches; booking and payment switch disabled with explanation (L2-065)
+actor -> page : Turn off reminder emails
+page -> client : update([{Reminders, false}])
+client -> controller : PUT /api/v1/account/notification-preferences
+controller -> controller : Validate UpdateNotificationPreferencesRequest
+alt change to Transactional
+  controller --> client : 422 problem details (L2-065)
+  page --> actor : Inline error; switch unchanged
+else optional category
+  controller -> update : handle(user, changes)
+  update -> db : Upsert (user, Reminders, enabled = false)
+  controller --> client : 200 NotificationPreferencesResource
+  page --> actor : Success toast (L2-109)
+end
+== Later, when a reminder falls due ==
+notif -> gate : allows(user, Reminders)
+gate -> db : Read preference
+gate --> notif : false
+notif -> notif : shouldSend = false; EmailMessage Suppressed (L2-065)
+@enduml

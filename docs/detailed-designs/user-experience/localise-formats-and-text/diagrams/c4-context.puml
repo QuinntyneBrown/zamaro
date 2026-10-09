@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Localise formats and text
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(ci, "CI pipeline", "Runs the hard-coded text checks")
+
+Rel(guest, zamaro, "Reads en-CA dates, prices and distances in", "HTTPS")
+Rel(booker, zamaro, "Reads localised pages and deadlines in", "HTTPS")
+Rel(artist, zamaro, "Reads localised pages and deadlines in", "HTTPS")
+Rel(zamaro, email, "Sends emails rendered from the catalogue through", "HTTPS/SMTP")
+Rel(ci, zamaro, "Checks templates and code for literal text in")
+@enduml

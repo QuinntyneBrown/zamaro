@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — CI performance gate
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Developer" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ng build (production)" as build
+  participant "check-bundle-budgets" as budget
+  participant "Preview of Zamaro Web (SSR)" as preview
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Preview of Zamaro API (seeded)" as api
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CI/CD pipeline" as ci
+  participant "Lighthouse CI" as lh
+end box
+
+actor -> ci : Merge to main (or open a pull request)
+ci -> build : Build with esbuild metafile
+build -> build : angular.json budgets as an early warning (raw sizes)
+build --> ci : dist and metafile
+ci -> budget : Measure gzip size of initial files and each lazy chunk
+alt initial > 250 KB or any chunk > 150 KB gzipped
+  budget --> ci : Fail with the offending files (L2-087)
+  ci --> actor : Build failed
+else within budget
+  budget -> budget : Assert /artist and /admin chunks are absent from the Discover entry graph (L2-087)
+  budget --> ci : Pass
+  ci -> preview : Deploy preview build
+  preview -> api : Seeded profile and search data
+  api --> preview : Fixtures
+  ci -> lh : Run against / and /artists/{fixture slug}\n(mobile emulation, slow 4G throttling)
+  lh -> preview : Load each page <TO SUPPLY> times
+  preview --> lh : Pages
+  alt performance score < 90 on either page
+    lh --> ci : Fail with the report (L2-086)
+    ci --> actor : Build failed
+  else score >= 90
+    lh --> ci : Pass (L2-086)
+    ci --> actor : Gate passed; deploy continues (L2-094)
+  end
+end
+@enduml

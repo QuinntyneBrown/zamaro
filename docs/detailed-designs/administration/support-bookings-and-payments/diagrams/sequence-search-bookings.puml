@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Search bookings
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AdminBookingsPage" as page
+  participant "AdminBookingPage" as detail
+  participant "AdminBookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\BookingsController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SearchBookingsForSupport" as search
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Enter booking number, artist, church or email; activate Search
+page -> client : search(q, heldOnly)
+client -> ctrl : GET /api/v1/admin/bookings?q&held (admin only, L2-066)
+ctrl -> search : handle(q, heldOnly, cursor)
+search -> db : Exact number or email, prefix on artist or church name (L2-068)
+db --> search : Bookings with payment and refund totals
+search --> ctrl : CursorPaginator
+ctrl --> client : 200 list with status and payment totals
+client --> page : Results
+alt no matches
+  page --> actor : Empty state with the query
+else matches
+  page --> actor : Table of bookings with status and amounts (L2-068)
+  actor -> detail : Open /admin/bookings/{number}
+  detail -> client : get(number)
+  client -> ctrl : GET /api/v1/admin/bookings/{number}
+  ctrl -> db : Booking, transitions, payments, refunds, hold
+  ctrl --> client : AdminBookingResource with payment history (brand and last 4 only, L2-079)
+  client --> detail : Booking view
+  detail --> actor : Status history, payment history, refundable amount, hold banner
+end
+@enduml

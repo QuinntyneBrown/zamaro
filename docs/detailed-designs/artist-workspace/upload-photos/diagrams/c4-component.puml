@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Upload photos
+
+Container(web, "Zamaro Web", "Angular", "PhotosManagerPage, ArtistPhotosStore, ArtistPhotosApi")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+Container_Boundary(api, "Zamaro API and Worker") {
+  Component(ctrl, "ArtistPhotoController", "Laravel controller", "index, store, update, destroy")
+  Component(arrange, "ArtistPhotoOrderController / PrimaryArtistPhotoController", "Laravel controllers", "Reorder and choose the primary photo")
+  Component(req, "UploadArtistPhotoRequest", "FormRequest", "File up to 15 MB, alt text 5-150")
+  Component(store, "StoreArtistPhoto", "Action", "Inspects, scans, checks limits and quarantines the original")
+  Component(inspector, "UploadInspector", "Domain service", "Detects type from content, rejects SVG and HTML")
+  Component(scan, "MalwareScanner", "Interface + adapter", "Calls the malware scanner")
+  Component(sec, "RecordSecurityEvent", "Action", "Logs a security event")
+  Component(job, "ProcessArtistPhoto", "Queued job", "Strips EXIF, builds AVIF and WebP widths")
+  Component(img, "ImageProcessor", "Interface + Imagick adapter", "Reads dimensions, orients, strips, resizes, encodes")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artist_photos")
+  ComponentDb(storage, "Object storage", "S3-compatible", "Quarantine and media buckets")
+}
+Rel(web, ctrl, "Calls", "JSON/HTTPS")
+Rel(web, arrange, "Calls", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, store, "Calls")
+Rel(store, inspector, "Detects type")
+Rel(store, scan, "Scans before processing")
+Rel(scan, scanner, "Calls", "HTTPS")
+Rel(store, sec, "Logs infected uploads")
+Rel(store, img, "Reads dimensions")
+Rel(store, storage, "Writes original", "S3 API")
+Rel(store, db, "Creates Processing photo", "SQL")
+Rel(store, job, "Dispatches")
+Rel(job, img, "Transforms")
+Rel(job, storage, "Writes renditions, deletes original", "S3 API")
+Rel(job, db, "Marks Ready or Failed", "SQL")
+Rel(arrange, db, "Updates position and is_primary", "SQL")
+@enduml

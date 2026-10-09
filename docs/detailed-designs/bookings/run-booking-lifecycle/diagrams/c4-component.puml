@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Run the booking lifecycle
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, BookingTimelineComponent, BookingsApi")
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions")
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "Booking slice controllers", "Laravel controllers", "Accept, decline, withdraw, cancel, deposit confirm")
+  Component(actions, "Booking slice actions", "Actions", "AcceptBooking, DeclineBooking, WithdrawBooking, CancelBookingAsBooker ...")
+  Component(handler, "Exception handler", "Laravel", "Renders InvalidBookingTransition as 409 problem details")
+}
+Container_Boundary(shared, "Booking domain (shared by API and Worker)") {
+  Component(sm, "BookingStateMachine", "Domain service", "Checks the L2-029 table, updates status, records history")
+  Component(deadlines, "BookingDeadlines", "Domain service", "respondBy and eventStartsAt in America/Toronto")
+  Component(events, "Booking domain events", "Laravel events, after commit", "RequestExpired, BookingCompleted ...")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(expireCmd, "ExpireOverdueRequests", "Console command, every minute", "Finds Requested bookings past respond_by")
+  Component(expireJob, "ExpireBookingRequest", "Queued unique job", "Requested -> Expired with the system actor")
+  Component(completeCmd, "CompleteFinishedBookings", "Console command, every minute", "Finds Confirmed bookings 24 h after start")
+  Component(completeJob, "CompleteBooking", "Queued unique job", "Confirmed -> Completed with the system actor")
+  Component(listeners, "Notification listeners", "Queued listeners", "Owned by notifications/send-transactional-emails")
+}
+Rel(web, ctrl, "POST status-changing requests", "JSON/HTTPS")
+Rel(ctrl, actions, "Calls")
+Rel(actions, sm, "transition(booking, to, actor)")
+Rel(sm, handler, "Throws InvalidBookingTransition to")
+Rel(sm, db, "Conditional update and history insert", "SQL")
+Rel(sm, events, "Dispatches after commit")
+Rel(expireCmd, expireJob, "Dispatches one per booking")
+Rel(completeCmd, completeJob, "Dispatches one per booking")
+Rel(expireCmd, db, "Selects due bookings", "SQL")
+Rel(completeCmd, db, "Selects due bookings", "SQL")
+Rel(expireJob, sm, "transition(Expired, system)")
+Rel(completeJob, sm, "transition(Completed, system)")
+Rel(events, listeners, "Handled by")
+Rel(listeners, email, "Sends through", "HTTPS")
+Rel(actions, deadlines, "Computes deadlines with")
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Download the export
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "DataExportDownloadPage" as page
+  participant "PrivacyApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "DataExportController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "PurgeExpiredDataExports" as purge
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+actor -> page : Open emailed link /account/data-exports/{id}
+page -> page : authGuard: sign in first if needed
+page -> client : downloadUrl(id)
+client -> controller : GET /api/v1/account/data-exports/{id}/download
+controller -> db : Load DataExport
+alt not the owner
+  controller --> client : 404 (L2-074)
+  page --> actor : Not found
+else expired (more than 7 days after ready)
+  controller --> client : 410 problem details
+  page --> actor : Link expired, request a new export (L2-081)
+else ready and within 7 days
+  controller -> storage : Sign short-lived URL for storage key
+  controller --> client : 200 signed URL
+  page -> storage : Browser follows signed URL
+  storage --> actor : JSON file download
+end
+
+== Hourly ==
+purge -> db : Exports with expiresAt in the past
+purge -> storage : Delete files
+purge -> db : Mark Expired
+@enduml

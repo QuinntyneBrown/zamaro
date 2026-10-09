@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — List upcoming dates and pick one
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "TourDatesComponent" as tour
+  participant "ArtistProfileStore" as store
+  participant "AvailabilityApi" as client
+  participant "BookingStubComponent" as stub
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistAvailabilityController" as controller
+  participant "TourDateResource" as res
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ListTourDates" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+store -> store : Start date = carried date, else today + 3 days in America/Toronto (L2-017)
+store -> client : tourDates(slug, from)
+client -> controller : GET /api/v1/artists/abigail-mensah/tour-dates?from=2026-11-14
+controller -> action : handle(artist, from, 6)
+action -> db : Weekly rules, overrides, Confirmed bookings in the booking window
+db --> action : Rows
+action -> action : Classify each date free, booked or neither; stop after 6 free or booked
+action --> controller : TourDate[]
+controller -> res : Booked rows keep only gathering kind and city (L2-017, L2-083)
+res --> controller : JSON
+controller --> client : 200 tour dates
+client --> store : TourDate[]
+store -> tour : Render rows
+tour --> actor : "Your date" on Sat 14 Nov; "Booked · Sunday service, Oakville"; "Free · Open all day" with Pick (L2-017)
+actor -> tour : Activate Pick on Fri 20 Nov
+tour -> store : selectDate(2026-11-20, knownFree = true)
+store -> store : dateCheck = free; no request
+store -> stub : Event date = Fri 20 Nov; "✓ Abigail is free Fri 20 Nov" (L2-019)
+store --> actor : Header Book button reads "Book for Fri 20 Nov" (L2-017)
+@enduml

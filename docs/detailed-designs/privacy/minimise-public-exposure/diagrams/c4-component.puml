@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Minimise public exposure
+
+Container(web, "Zamaro Web", "Angular SSR", "ArtistProfilePage, ReviewComponent, SeoService")
+Container_Boundary(api, "Zamaro API") {
+  Component(routes, "routes/api_public.php", "Route group", "Every endpoint open to guests")
+  Component(authmw, "auth:sanctum", "Middleware", "Guards every other route with 401")
+  Component(profileCtrl, "ArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}")
+  Component(reviewCtrl, "ArtistReviewsController", "Laravel controller", "GET /api/v1/artists/{slug}/reviews")
+  Component(artistRes, "PublicArtistResource", "API resource", "Base city only; no street, email, phone, coordinates")
+  Component(reviewRes, "PublicReviewResource", "API resource", "Reviewer name, church name, city, month and year")
+  Component(lineupRes, "LineupResource", "API resource", "Search cards without contact data")
+  Component(test, "PublicExposureTest", "Acceptance test", "Calls every public route as a guest over sentinel data")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "Full records")
+}
+Rel(web, routes, "Public requests", "JSON/HTTPS")
+Rel(routes, profileCtrl, "Routes to")
+Rel(routes, reviewCtrl, "Routes to")
+Rel(profileCtrl, db, "Loads artist", "SQL")
+Rel(reviewCtrl, db, "Loads reviews with booker and church", "SQL")
+Rel(profileCtrl, artistRes, "Returns")
+Rel(reviewCtrl, reviewRes, "Returns")
+Rel(lineupRes, reviewRes, "Reuses attribution")
+Rel(test, routes, "Enumerates and calls")
+Rel(test, authmw, "Confirms private routes refuse guests")
+@enduml

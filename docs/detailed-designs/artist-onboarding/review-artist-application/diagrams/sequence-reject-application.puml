@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Reject an artist application
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ApplicationReviewPage" as page
+  participant "RejectApplicationDialogComponent" as dialog
+  participant "AdminApplicationsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "AdminArtistApplicationsController" as controller
+  participant "RejectArtistApplicationRequest" as req
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RejectArtistApplication" as action
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "SendApplicationDecisionEmail" as listener
+end box
+
+actor -> page : Activate Reject
+page -> dialog : Open dialog, trap focus (L2-101)
+actor -> dialog : Choose reason from fixed list, add optional note
+alt no reason chosen
+  dialog --> actor : Inline error on reason, no request sent (L2-048)
+else reason chosen
+  dialog -> client : reject(id, reason, note)
+  client -> controller : POST /api/v1/admin/artist-applications/{id}/rejection
+  controller -> req : Validate reason in ApplicationRejectionReason, note length (L2-048, L2-075)
+  controller -> action : handle(application, reason, note, admin)
+  action -> db : BEGIN; lock application; require status Submitted
+  action -> db : Set Rejected, reason, note, decided_at, decided_by
+  action -> audit : Record "application rejected" (L2-069)
+  action -> db : COMMIT
+  action -> queue : Dispatch ArtistApplicationRejected
+  controller --> client : 200 AdminArtistApplicationResource
+  client --> dialog : Result
+  dialog --> page : Close dialog, return focus to Reject
+  page --> actor : Status Rejected, success toast
+end
+queue -> listener : ArtistApplicationRejected
+listener -> listener : Send ApplicationRejectedNotification with reason and note (L2-048, L2-063)
+@enduml

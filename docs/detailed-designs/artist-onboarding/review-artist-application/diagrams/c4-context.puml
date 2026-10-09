@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Review an artist application
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+Person(applicant, "Artist applicant", "Person applying to join as an artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(cdn, "CDN", "Serves application videos")
+
+Rel(admin, zamaro, "Reviews applications, verifies references, approves or rejects using", "HTTPS")
+Rel(zamaro, email, "Sends approval or rejection email through", "HTTPS")
+Rel(email, applicant, "Delivers decision email to")
+Rel(zamaro, cdn, "Streams application videos through")
+@enduml

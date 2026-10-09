@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Pay the deposit
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(processor, "Payment processor", "PCI DSS Level 1; hosted card fields, 3-D Secure, saved cards")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Pays the 25% deposit on an Accepted booking using", "HTTPS")
+Rel(booker, processor, "Enters card details into hosted fields of", "HTTPS")
+Rel(zamaro, processor, "Creates and verifies deposit payments and refunds with", "HTTPS/JSON")
+Rel(processor, zamaro, "Sends signed payment events to", "HTTPS webhook")
+Rel(zamaro, email, "Sends confirmation and expiry emails via", "HTTPS/JSON")
+Rel(email, artist, "Delivers booking confirmed email to")
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Manage setlist
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(cdn, "CDN", "Caches public profile pages")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Setlist editor under /artist/setlist")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Setlist endpoints under /api/v1/artist/setlist")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Runs the cache purge listener")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "setlist_songs")
+  ContainerQueue(queue, "Cache and queue", "Redis", "ArtistProfileUpdated listeners")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "GET, POST, PATCH, DELETE songs; PUT order", "JSON/HTTPS")
+Rel(api, db, "Reads and writes songs and positions", "Eloquent / SQL")
+Rel(api, queue, "Queues cache purge", "RESP")
+Rel(worker, queue, "Takes jobs from", "RESP")
+Rel(worker, cdn, "Purges the public profile URL", "HTTPS")
+@enduml

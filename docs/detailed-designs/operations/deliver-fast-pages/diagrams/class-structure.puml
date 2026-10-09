@@ -1,0 +1,106 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Deliver fast pages
+
+package "Zamaro Web (Angular)" {
+  class RoleAwarePreloadingStrategy {
+    -auth: AuthService
+    +preload(route: Route, load: () => Observable<any>): Observable<any>
+  }
+  class roleGuard <<CanMatchFn>> {
+    +roleGuard(role: Role): CanMatchFn
+  }
+  class MediaImageComponent {
+    +image: input<MediaImage>
+    +sizes: input<string>
+    +priority: input<boolean>
+    +avifSrcset(): string
+    +webpSrcset(): string
+  }
+  class VideoPlayerComponent {
+    +video: input<VideoStream>
+    +play(): Promise<void>
+    -loadPlayerLibrary(): Promise<void>
+  }
+  class WebVitalsReporter {
+    -sampleRate: number
+    +start(): void
+    -send(metric: WebVitalSample): void
+  }
+  class MediaImage <<interface>> {
+    +alt: string
+    +width: number
+    +height: number
+    +avif: Rendition[]
+    +webp: Rendition[]
+  }
+  class Rendition <<interface>> {
+    +width: 400|800|1200|1600
+    +url: string
+  }
+  class VideoStream <<interface>> {
+    +title: string
+    +posterUrl: string
+    +manifestUrl: string
+    +captionsUrl?: string
+    +durationSeconds: number
+  }
+  class WebVitalSample <<interface>> {
+    +name: 'LCP'|'INP'|'CLS'
+    +value: number
+    +routeTemplate: string
+    +release: string
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class MediaImageData <<value object>> {
+    +string alt
+    +int width
+    +int height
+    +array avif
+    +array webp
+  }
+  class VideoStreamData <<value object>> {
+    +string title
+    +string posterUrl
+    +string manifestUrl
+    +?string captionsUrl
+    +int durationSeconds
+  }
+  class MediaUrlBuilder {
+    -cdnBaseUrl: string
+    +rendition(photo: ArtistPhoto, format: string, width: int): string
+    +manifest(video: ArtistVideo): string
+  }
+}
+
+package "Build tooling" {
+  class BundleBudgetCheck <<script>> {
+    +int initialLimitKb = 250
+    +int chunkLimitKb = 150
+    +run(metafile: string): ExitCode
+  }
+}
+
+MediaImageComponent --> MediaImage
+MediaImage "1" *-- "1..*" Rendition
+VideoPlayerComponent --> VideoStream
+WebVitalsReporter ..> WebVitalSample : sends
+RoleAwarePreloadingStrategy ..> roleGuard : mirrors
+MediaImageData ..> MediaImage : serialised as
+VideoStreamData ..> VideoStream : serialised as
+MediaUrlBuilder ..> MediaImageData : fills URLs
+MediaUrlBuilder ..> VideoStreamData : fills URLs
+@enduml

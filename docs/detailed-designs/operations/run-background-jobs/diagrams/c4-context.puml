@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Run background jobs
+
+Person(booker, "Booker", "Sees booking status change after a deadline")
+Person(artist, "Artist", "Sees requests expire and payouts arrive")
+Person(oncall, "On-call person", "Receives failed-job alerts")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(pay, "Payment processor", "Balance charges and payouts with idempotency keys")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(errors, "Error tracking service", "Job exceptions")
+System_Ext(metrics, "Metrics and alerting service", "Pages the on-call person")
+
+Rel(booker, zamaro, "Views bookings in", "HTTPS")
+Rel(artist, zamaro, "Views requests and earnings in", "HTTPS")
+Rel(zamaro, pay, "Charges balances and sends payouts through", "HTTPS")
+Rel(zamaro, email, "Sends notices and reminders through", "HTTPS")
+Rel(zamaro, errors, "Reports failed jobs to")
+Rel(zamaro, metrics, "Raises failed-job alerts in")
+Rel(metrics, oncall, "Pages")
+@enduml

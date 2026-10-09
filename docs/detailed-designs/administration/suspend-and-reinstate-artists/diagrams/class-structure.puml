@@ -1,0 +1,122 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Suspend and reinstate artists
+
+package "Zamaro Web (Angular)" {
+  class AdminApplicationPage {
+    +application: Signal<AdminApplicationView>
+    +onVerifyReference(referenceId: number, verified: boolean): void
+    +onOpenVsc(): void
+  }
+  class AdminArtistPage {
+    +artist: Signal<AdminArtistView>
+    +toResolve: Signal<BookingSummary[]>
+    +onSuspend(reason: string): void
+    +onReinstate(): void
+  }
+  class SuspendArtistDialogComponent {
+    +reason: FormControl<string>
+    +submit(): void
+  }
+  class AdminArtistsApi {
+    +application(id: number): Observable<AdminApplicationView>
+    +verifyReference(appId: number, refId: number, verified: boolean): Observable<void>
+    +suspend(artistId: number, reason: string): Observable<SuspensionOutcome>
+    +reinstate(artistId: number): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class "Admin\\ArtistSuspensionsController" as SuspCtrl {
+    +store(request: SuspendArtistRequest, artist: Artist): SuspensionOutcomeResource
+    +destroy(artist: Artist): Response
+  }
+  class "Admin\\ApplicationsController" as AppCtrl {
+    +show(application: ArtistApplication): AdminApplicationResource
+    +verifyReference(application: ArtistApplication, reference: ApplicationReference): Response
+  }
+  class SuspendArtist <<action>> {
+    +handle(artist: Artist, admin: User, reason: string): SuspensionOutcome
+  }
+  class ReinstateArtist <<action>> {
+    +handle(artist: Artist, admin: User): Artist
+  }
+  class BookingStateMachine {
+    +transition(booking: Booking, to: BookingStatus, actor: User): BookingTransition
+  }
+  class SuspensionOutcome <<value object>> {
+    +int declinedCount
+    +Booking[] bookingsToResolve
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +string slug
+    +string displayName
+    +string ticketNumber
+    +ArtistStatus status
+  }
+  class ArtistSuspension <<Eloquent>> {
+    +int id
+    +int artistId
+    +string reason
+    +int suspendedBy
+    +CarbonImmutable suspendedAt
+    +?int reinstatedBy
+    +?CarbonImmutable reinstatedAt
+  }
+  class ArtistApplication <<Eloquent>> {
+    +int id
+    +ApplicationStatus status
+  }
+  class ApplicationReference <<Eloquent>> {
+    +int id
+    +string name
+    +string contact
+    +?CarbonImmutable verifiedAt
+  }
+  class VulnerableSectorCheck <<Eloquent>> {
+    +int id
+    +?string documentPath
+    +?CarbonImmutable verifiedAt
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventDate
+  }
+  enum ArtistStatus {
+    Approved
+    Suspended
+    Deleted
+  }
+}
+
+AdminArtistPage --> AdminArtistsApi
+AdminArtistPage --> SuspendArtistDialogComponent
+AdminApplicationPage --> AdminArtistsApi
+AdminArtistsApi ..> SuspCtrl : POST / DELETE
+AdminArtistsApi ..> AppCtrl : GET / PATCH
+SuspCtrl --> SuspendArtist
+SuspCtrl --> ReinstateArtist
+SuspendArtist --> BookingStateMachine
+SuspendArtist ..> SuspensionOutcome : returns
+SuspendArtist ..> ArtistSuspension : creates
+ReinstateArtist ..> ArtistSuspension : closes
+Artist "1" *-- "0..*" ArtistSuspension
+Artist --> ArtistStatus
+Artist "1" --> "*" Booking
+SuspensionOutcome o-- "0..*" Booking
+ArtistApplication "1" *-- "2" ApplicationReference
+ArtistApplication "1" --> "0..1" VulnerableSectorCheck
+@enduml

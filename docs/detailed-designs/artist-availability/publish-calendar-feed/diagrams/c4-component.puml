@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Publish a calendar feed
+
+Container(web, "Zamaro Web", "Angular", "CalendarFeedComponent, CalendarFeedApi")
+System_Ext(calapp, "Calendar application", "Subscribes to iCalendar URLs")
+Container_Boundary(api, "Zamaro API") {
+  Component(mgmt, "ArtistCalendarFeedController", "Laravel controller", "show, enable, regenerate")
+  Component(enable, "EnableCalendarFeed", "Action", "Creates the feed with a new secret token")
+  Component(rotate, "RegenerateCalendarFeed", "Action", "Replaces the token; old URL stops working")
+  Component(tokens, "FeedTokenGenerator", "Service", "Random token, SHA-256 hash, encrypted copy")
+  Component(feedCtrl, "CalendarFeedController", "Laravel controller", "GET /api/v1/calendar-feeds/{token}.ics")
+  Component(build, "BuildCalendarFeed", "Action", "Selects Confirmed bookings")
+  Component(writer, "ICalendarWriter", "Service", "Writes RFC 5545 text")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "calendar_feeds, bookings, churches")
+}
+Rel(web, mgmt, "Manages the feed", "JSON/HTTPS")
+Rel(mgmt, enable, "Calls")
+Rel(mgmt, rotate, "Calls")
+Rel(enable, tokens, "Generates token with")
+Rel(rotate, tokens, "Generates token with")
+Rel(enable, db, "Inserts calendar_feeds row", "SQL")
+Rel(rotate, db, "Updates token hash", "SQL")
+Rel(calapp, feedCtrl, "Polls", "HTTPS")
+Rel(feedCtrl, db, "Finds feed by token hash", "SQL")
+Rel(feedCtrl, build, "Calls")
+Rel(build, db, "Reads Confirmed bookings with church snapshot", "SQL")
+Rel(build, writer, "Formats with")
+@enduml

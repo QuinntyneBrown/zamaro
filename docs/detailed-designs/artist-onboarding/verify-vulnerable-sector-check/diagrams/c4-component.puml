@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Verify a Vulnerable Sector Check
+
+Container(web, "Zamaro Web", "Angular", "VscPage, VscQueuePage, VscDocumentComponent")
+Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "ScanVulnerableSectorCheck, SendVscRenewalReminders")
+System_Ext(secrets, "Secrets manager", "Document encryption key")
+Container_Boundary(api, "Zamaro API") {
+  Component(uploadCtrl, "VulnerableSectorChecksController", "Laravel controller", "POST and GET /api/v1/artist/vulnerable-sector-checks")
+  Component(uploadReq, "UploadVulnerableSectorCheckRequest", "FormRequest", "PDF, JPEG or PNG by content, up to 10 MB, issue date")
+  Component(upload, "UploadVulnerableSectorCheck", "Action", "Encrypts, stores and queues the scan")
+  Component(linkCtrl, "DocumentLinksController", "Laravel controller", "GET /api/v1/vulnerable-sector-checks/{check}/document-link")
+  Component(policy, "VulnerableSectorCheckPolicy", "Policy", "Owner or administrator; otherwise 404")
+  Component(docCtrl, "PrivateDocumentController", "Laravel controller on media domain", "Checks signature, decrypts and streams")
+  Component(adminCtrl, "AdminVulnerableSectorChecksController", "Laravel controller", "Queue and verification under /api/v1/admin")
+  Component(verify, "VerifyVulnerableSectorCheck", "Action", "Applies the 3-year rule and marks Verified")
+  Component(vault, "DocumentVault", "Service", "Envelope encryption of private documents")
+  Component(audit, "RecordAuditEntry", "Action", "Writes AuditEntry")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "vulnerable_sector_checks, audit_entries")
+  ComponentDb(storage, "Object storage", "S3-compatible", "Private bucket")
+}
+Rel(web, uploadCtrl, "Uploads document", "multipart/HTTPS")
+Rel(web, linkCtrl, "Requests 5-minute link", "JSON/HTTPS")
+Rel(web, docCtrl, "Opens signed URL", "HTTPS")
+Rel(web, adminCtrl, "Lists and verifies", "JSON/HTTPS")
+Rel(uploadCtrl, uploadReq, "Validates with")
+Rel(uploadCtrl, upload, "Calls")
+Rel(upload, vault, "Encrypts and stores with")
+Rel(upload, db, "Inserts check (Scanning)", "SQL")
+Rel(upload, worker, "Dispatches ScanVulnerableSectorCheck", "Redis queue")
+Rel(linkCtrl, policy, "Authorises with")
+Rel(linkCtrl, audit, "Records administrator access")
+Rel(docCtrl, vault, "Decrypts with")
+Rel(vault, secrets, "Reads key", "HTTPS")
+Rel(vault, storage, "Reads and writes ciphertext", "S3 API")
+Rel(adminCtrl, verify, "Calls")
+Rel(verify, db, "Updates status and expiry", "SQL")
+Rel(verify, audit, "Records")
+@enduml

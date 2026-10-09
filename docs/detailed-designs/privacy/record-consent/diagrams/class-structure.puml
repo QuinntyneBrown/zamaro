@@ -1,0 +1,98 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Record consent
+
+package "Zamaro Web (Angular)" {
+  class AcceptTermsPage {
+    +document: Signal<LegalDocumentVersion>
+    +returnUrl: string
+    +accept(): void
+  }
+  class termsGuard <<CanActivateFn>> {
+    +canActivate(): boolean | UrlTree
+  }
+  class ConsentApi {
+    +currentDocuments(): Observable<LegalDocumentVersion[]>
+    +acceptTerms(version: string): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class RecordConsent <<action>> {
+    +handle(user: User, items: ConsentItem[], source: ConsentSource, request: Request): void
+  }
+  class ConsentItem <<value object>> {
+    +ConsentKind kind
+    +?string documentVersion
+    +bool granted
+  }
+  class AcceptCurrentTerms <<action>> {
+    +handle(user: User, version: string): void
+  }
+  class EnsureCurrentTermsAccepted <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+  }
+  class LegalDocumentRegistry {
+    +current(kind: LegalDocumentKind): LegalDocument
+    +hasAcceptedCurrentTerms(user: User): bool
+  }
+  class LegalDocument <<Eloquent>> {
+    +LegalDocumentKind kind
+    +string version
+    +CarbonImmutable publishedAt
+    +string url
+    +?string summaryOfChanges
+  }
+  class ConsentRecord <<Eloquent>> {
+    +int userId
+    +ConsentKind kind
+    +?string documentVersion
+    +bool granted
+    +CarbonImmutable recordedAt
+    +ConsentSource source
+    +string ipAddress
+    +string userAgent
+  }
+  enum ConsentKind {
+    Terms
+    PrivacyPolicy
+    MarketingEmail
+  }
+  enum ConsentSource {
+    Registration
+    TermsUpdate
+    Settings
+  }
+  enum LegalDocumentKind {
+    Terms
+    PrivacyPolicy
+  }
+  class User <<Eloquent>> {
+    +int id
+  }
+}
+
+AcceptTermsPage --> ConsentApi
+termsGuard ..> AcceptTermsPage : redirects to
+ConsentApi ..> AcceptCurrentTerms : POST /api/v1/account/consents/terms
+AcceptCurrentTerms --> LegalDocumentRegistry
+AcceptCurrentTerms --> RecordConsent
+EnsureCurrentTermsAccepted --> LegalDocumentRegistry
+RecordConsent ..> ConsentItem : takes
+RecordConsent ..> ConsentRecord : appends
+User "1" *-- "0..*" ConsentRecord
+ConsentRecord --> ConsentKind
+ConsentRecord --> ConsentSource
+LegalDocument --> LegalDocumentKind
+@enduml

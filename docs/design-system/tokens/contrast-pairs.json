@@ -477,6 +477,66 @@
       "bg": "--color-bg-surface",
       "min": 1,
       "note": "hairline dividers (decorative, exempt from 1.4.11)"
+    },
+    {
+      "fg": "--color-bg-canvas",
+      "bg": "--color-fg-default",
+      "min": 4.5,
+      "note": "pressed chip, ink button, booked day, done step"
+    },
+    {
+      "fg": "--color-success-fg",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "accepted stamp on canvas"
+    },
+    {
+      "fg": "--color-warning-fg",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "expired stamp on canvas"
+    },
+    {
+      "fg": "--color-border-strong",
+      "bg": "--color-bg-surface-raised",
+      "min": 3,
+      "note": "dialog, drawer and menu edge"
+    },
+    {
+      "fg": "--color-danger-border",
+      "bg": "--color-bg-surface-raised",
+      "min": 3,
+      "note": "danger dialog edge"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-bg-surface-raised",
+      "min": 3,
+      "note": "focus ring inside dialogs"
+    },
+    {
+      "fg": "--color-accent",
+      "bg": "--color-bg-stage",
+      "min": 3,
+      "note": "accent rule under topbar, bulk bar edge"
+    },
+    {
+      "fg": "--color-border-default",
+      "bg": "--color-bg-surface-sunken",
+      "min": 1,
+      "note": "blocked-day hatch: decorative; status is in the aria-label and legend"
+    },
+    {
+      "fg": "--color-fg-disabled",
+      "bg": "--color-bg-surface-sunken",
+      "min": 1,
+      "note": "past calendar days: disabled, exempt"
+    },
+    {
+      "fg": "--color-fg-disabled",
+      "bg": "--color-bg-surface",
+      "min": 1,
+      "note": "disabled controls, exempt"
     }
   ]
 }

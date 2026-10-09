@@ -36,12 +36,36 @@ Default search: Saturday 14 November 2026 · Burlington, ON · Sunday service ·
 Artists: Abigail Mensah (headliner, Brampton, from $650, 4.9/38), Hosanna Collective, Elijah Park,
 Grace Tabernacle Mass Choir, Luz Viva, Daniel & Ruth Okonkwo, Marcus Bell Trio.
 Empty profile: Miriam Haile, new to Zamaro (no videos or reviews yet).
+
+Signed-in artist (artist side): Abigail Mensah (AM), New Covenant Chapel, Brampton, from $650, drives 120 km.
+Artist-side empty states switch to Miriam Haile (MH), approved Mon 5 Oct 2026, from $300, nothing blocked, no requests yet.
+Applicant (apply flow): Tobi Adeyemi, Scarborough, solo vocalist and keys, leads at Cornerstone Baptist, from $400, 80 km.
+Churches: Riverside Community Church, Burlington (Naomi Fraser); St. Brendan's Anglican, Oshawa (Rev. Janet Clarke);
+Harvest Point Church, Milton (Tomi Oduya); Living Waters Fellowship, Brampton (Pastor Femi Adebayo);
+Lakeshore Alliance Church, Oakville (Pastor Dave Mwangi); Kingdom Life Centre, Mississauga (Grace Ampofo);
+Trinity Lutheran, Kitchener (declined for distance, 130 km).
+Money on a $650 booking: deposit 25% $162.50, balance $487.50, Zamaro 8% $52, artist receives $598.
+Naomi's bookings: ZAM-0114 Abigail Sat 14 Nov worship night 7 pm, Sent today (every booking-detail state reuses this id);
+ZAM-0097 Marcus Bell Trio Sun 25 Oct, Paid (deposit $237.50, balance $712.50); ZAM-0088 Luz Viva Sat 5 Dec, Accepted,
+deposit $225 due Fri 16 Oct; ZAM-0075 Grace Tabernacle Sun 20 Sep, Declined; ZAM-0080 Elijah Park Sat 3 Oct, Cancelled free;
+ZAM-0061 Abigail Sun 14 Jun, Done (matches Naomi's June review).
+Abigail's incoming requests: Riverside Sat 14 Nov $650 Sent today, reply by Mon 12 Oct (72 h); St. Brendan's Sun 22 Nov $650;
+Harvest Point Sat 5 Dec Christmas concert $800; Trinity Lutheran Sun 29 Nov, declined; St. Brendan's Sun 13 Sep, done.
+Abigail's confirmed dates: Sun 18 Oct Living Waters; Sun 15 Nov Lakeshore Alliance; Sat 21 Nov Kingdom Life women's
+conference; Sun 13 Dec Living Waters carol service.
+Abigail's calendar Nov-Dec 2026: booked 1, 15, 21 Nov, 13, 20 Dec; requested 14, 22 Nov, 5 Dec; blocked 26-27 Nov (studio),
+24-26 Dec (family), 31 Dec. Default view November 2026.
+Dashboard numbers: Awaiting reply 3 / Confirmed dates 4 / Free Saturdays in Nov 2 / Profile complete 100%. No payouts in MVP.
+Entry: naomi.fraser@riversidecc.ca; reset links expire after 1 hour; verification e-mail can be resent.
 All people and churches are fictional.
 -->
 
 - **Today:** Friday 9 October 2026
 - **Booker:** Naomi Fraser, Riverside Community Church, Burlington
 - **Featured artist:** Abigail Mensah. The empty profile shows Miriam Haile, who is new.
+- **Signed-in artist:** Abigail Mensah. Artist-side empty states switch to Miriam Haile.
+- **Applicant:** Tobi Adeyemi, Scarborough, applying through the artist form.
+- **Current booking:** ZAM-0114, Abigail for Riverside's worship night, Sat 14 Nov, 7 pm.
 
 ## How to open
 
@@ -53,6 +77,10 @@ Open `index.html` from disk. Append `?theme=dark` to force the dark theme and
 - The display face falls back to Impact when Bebas Neue/Anton/Oswald are not installed; the product would self-host one.
 - Every ticket links to Abigail’s profile, since there is only one full profile mock.
 - Deposit (25%), artist fee (8%) and 14-day free cancellation are assumed.
+- Requests expire after 72 hours without a reply; a reply-by time is shown to the artist.
+- No payout, admin review or messaging screens are in the MVP. Artist applications say "we review within 3 business days"; the only message is the one inside a request and the accept/decline note.
+- Church accounts that open an artist route see a forbidden state with a way back, not a redirect.
+- Sign-in is required before a request is sent; the book page assumes Naomi is signed in.
 
 <!-- coverage:start -->
 

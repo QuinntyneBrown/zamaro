@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Load an artist profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "ArtistProfileStore" as store
+  participant "ArtistProfileApi" as client
+  participant "ProfileHeaderComponent" as header
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as controller
+  participant "ArtistProfileResource" as res
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ResolveArtistSlug" as resolve
+  participant "ShowArtistProfile" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /artists/abigail-mensah?date=2026-11-14
+page -> store : load(slug, carried date)
+store -> store : Skeletons and aria-busy after 300 ms (L2-105)
+store -> client : get(slug)
+client -> controller : GET /api/v1/artists/abigail-mensah
+controller -> resolve : handle(slug)
+resolve --> controller : Approved, published Artist (404 and 301 in resolve-missing-artist)
+controller -> action : handle(artist)
+action -> db : Photos, Live videos only, setlist, styles, visible-review aggregate (L2-014)
+db --> action : Rows
+action --> controller : ArtistProfile
+controller -> res : Serialise public fields only; base city, no address, email or phone (L2-083)
+res --> controller : JSON with CDN media URLs
+controller --> client : 200 ArtistProfileResource
+client --> store : ArtistProfile (passed through TransferState after server render)
+store --> page : status = loaded
+page -> header : Name, headline, rating or "New · No reviews yet", city, "Drives up to 120 km", first 5 songs (L2-012)
+alt carried date present
+  header --> actor : Back link "Discover · Sat 14 Nov"; Book button "Book for Sat 14 Nov" (L2-012)
+else no carried date
+  header --> actor : Book button "Check dates" focuses the stub date field (L2-012)
+end
+page -> page : About as plain-text paragraphs, markup never executed (L2-013)
+page -> page : Videos, gallery and setlist, or each section's empty state (L2-014, L2-015, L2-016, L2-020)
+page -> page : Layout for the current breakpoint (L2-098)
+page --> actor : Profile shown
+@enduml

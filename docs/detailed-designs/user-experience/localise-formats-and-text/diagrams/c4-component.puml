@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Localise formats and text
+
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(web, "Zamaro Web") {
+  Component(loader, "CatalogueLoader", "TranslocoLoader", "Fetches the catalogue, TransferState on SSR")
+  Component(transloco, "TranslocoService", "Transloco + messageformat", "Resolves keys to ICU messages")
+  Component(format, "FormatService", "Angular service", "Short and long dates, time, money, distance")
+  Component(pipes, "Format pipes", "Angular pipes", "zShortDate, zLongDate, zTime, zMoney, zDistance")
+}
+Container_Boundary(api, "Zamaro API and Zamaro Worker (shared code)") {
+  Component(ctrl, "TranslationCatalogueController", "Laravel controller", "GET /api/v1/i18n/{locale}")
+  Component(catalogue, "Catalogue", "Service", "Locale discovery, merge, fallback to en")
+  Component(files, "resources/i18n/{locale}/*.json", "JSON files", "Catalogue source")
+  Component(icu, "IcuTranslator", "Service + @t directive", "MessageFormatter")
+  Component(fmt, "LocalFormatter", "Value formatter", "intl formats in America/Toronto")
+  Component(clock, "TorontoClock", "Domain service", "Event start and full days in Toronto time")
+  Component(notes, "App\\Notifications\\*", "Queued notifications", "HTML and plain-text emails")
+}
+Rel(pipes, format, "Delegate to")
+Rel(format, transloco, "Reads format patterns from")
+Rel(transloco, loader, "Loads through")
+Rel(loader, ctrl, "GET /api/v1/i18n/{locale}", "JSON/HTTPS")
+Rel(ctrl, catalogue, "Reads")
+Rel(catalogue, files, "Loads")
+Rel(icu, catalogue, "Resolves keys in")
+Rel(fmt, catalogue, "Reads format patterns from")
+Rel(notes, icu, "Render text with")
+Rel(notes, fmt, "Format values with")
+Rel(notes, clock, "Compute deadlines with")
+Rel(notes, email, "Sent through", "HTTPS/SMTP")
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Manage the availability calendar
+
+Container(web, "Zamaro Web", "Angular", "ArtistCalendarPage, AvailabilityStore, AvailabilityApi")
+Container(worker, "Zamaro Worker", "Laravel queue workers", "Declined-request notifications, profile cache invalidation")
+Container_Boundary(api, "Zamaro API") {
+  Component(calCtrl, "ArtistCalendarController", "Laravel controller", "GET /api/v1/artist/calendar")
+  Component(availCtrl, "ArtistAvailabilityController", "Laravel controller", "PUT weekly default and date ranges")
+  Component(req, "SetDateAvailabilityRequest", "FormRequest", "Range inside the 18-month window, state, confirmation")
+  Component(build, "BuildArtistCalendar", "Action", "Derives each day's status")
+  Component(weekly, "SetWeeklyAvailability", "Action", "Replaces the weekly default")
+  Component(dates, "SetDateAvailability", "Action", "Writes overrides and declines open requests")
+  Component(avail, "AvailabilityService", "Domain service", "Free definition shared with search and profiles")
+  Component(sm, "BookingStateMachine", "Domain service", "Allowed booking transitions and history")
+  Component(res, "CalendarResource", "API resource", "Months of days with status and request count")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "availability_rules, availability_overrides, bookings, booking_transitions")
+}
+Rel(web, calCtrl, "Loads calendar", "JSON/HTTPS")
+Rel(web, availCtrl, "Saves availability", "JSON/HTTPS")
+Rel(calCtrl, build, "Calls")
+Rel(calCtrl, res, "Returns")
+Rel(build, avail, "Resolves rules and overrides")
+Rel(build, db, "Reads Requested, Accepted and Confirmed bookings", "SQL")
+Rel(availCtrl, req, "Validates with")
+Rel(availCtrl, weekly, "Calls")
+Rel(availCtrl, dates, "Calls")
+Rel(weekly, db, "Replaces availability_rules", "SQL")
+Rel(dates, db, "Upserts availability_overrides", "SQL")
+Rel(dates, sm, "Declines open requests on confirmation")
+Rel(sm, db, "Updates bookings, inserts transitions", "SQL")
+Rel(dates, worker, "Dispatches BookingDeclined and ArtistAvailabilityChanged", "Redis queue")
+Rel(weekly, worker, "Dispatches ArtistAvailabilityChanged", "Redis queue")
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Meet accessibility standards
+
+Person(person, "Guest, booker, artist or administrator", "Keyboard and screen-reader users included")
+System_Ext(ci, "CI pipeline", "axe-core and contrast checks")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Landmarks, skip link, route focus, focus ring, live regions, accessible forms and ratings")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "422 problem details keyed by field, numeric ratings")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Artists and review aggregates; fixtures in CI")
+}
+Rel(person, web, "Uses", "HTTPS")
+Rel(web, api, "Calls", "JSON/HTTPS")
+Rel(api, db, "Reads and writes", "Eloquent / SQL")
+Rel(ci, web, "Runs axe-core on every route state, light and dark", "Playwright")
+Rel(ci, api, "Seeds fixtures", "artisan")
+@enduml

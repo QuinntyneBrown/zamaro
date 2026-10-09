@@ -1,0 +1,104 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Send transactional emails
+
+package "Zamaro Web (Angular)" {
+  class UndeliverableEmailBannerComponent {
+    +visible: Signal<boolean>
+  }
+  class AuthService {
+    +currentUser: Signal<CurrentUserDto | null>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  abstract class TransactionalNotification <<notification>> {
+    +string queue = "notifications"
+    +int tries = 5
+    +backoff(): int[]
+    +via(user: User): string[]
+    +shouldSend(user: User, channel: string): bool
+    +category(): NotificationCategory
+    +failed(e: Throwable): void
+  }
+  class BookingRequestedNotification
+  class BookingAcceptedNotification {
+    +CarbonImmutable depositDueBy
+  }
+  class BookingDeclinedNotification
+  class BookingExpiredNotification
+  class BookingConfirmedNotification
+  class BalanceChargedNotification
+  class PayoutSentNotification
+  class BookingCancelledNotification
+  class UnreadMessagesNotification
+  class ApplicationStatusNotification {
+    +ApplicationStatus status
+  }
+  class BookingEmailData <<value object>> {
+    +string bookingNumber
+    +string bookingUrl
+    +string artistName
+    +string churchName
+    +CarbonImmutable eventDate
+    +?string startTime
+  }
+  class EmailMessage <<Eloquent>> {
+    +int userId
+    +string notificationType
+    +?int bookingId
+    +EmailMessageStatus status
+    +?string providerMessageId
+    +CarbonImmutable queuedAt
+    +?CarbonImmutable sentAt
+    +int attempts
+  }
+  enum EmailMessageStatus {
+    Queued
+    Sent
+    Failed
+    Suppressed
+    Bounced
+  }
+  class RecordEmailBounce <<action>> {
+    +handle(event: EmailProviderEvent): void
+  }
+  class User <<Eloquent>> {
+    +string email
+    +?CarbonImmutable emailUndeliverableAt
+  }
+}
+
+UndeliverableEmailBannerComponent --> AuthService
+TransactionalNotification <|-- BookingRequestedNotification
+TransactionalNotification <|-- BookingAcceptedNotification
+TransactionalNotification <|-- BookingDeclinedNotification
+TransactionalNotification <|-- BookingExpiredNotification
+TransactionalNotification <|-- BookingConfirmedNotification
+TransactionalNotification <|-- BalanceChargedNotification
+TransactionalNotification <|-- PayoutSentNotification
+TransactionalNotification <|-- BookingCancelledNotification
+TransactionalNotification <|-- UnreadMessagesNotification
+TransactionalNotification <|-- ApplicationStatusNotification
+TransactionalNotification ..> BookingEmailData : renders
+TransactionalNotification ..> EmailMessage : logged as
+EmailMessage --> EmailMessageStatus
+RecordEmailBounce --> User : marks undeliverable
+RecordEmailBounce --> EmailMessage : Bounced
+BookingRequestedNotification -[hidden]down- BookingConfirmedNotification
+BookingAcceptedNotification -[hidden]down- BalanceChargedNotification
+BookingDeclinedNotification -[hidden]down- PayoutSentNotification
+BookingExpiredNotification -[hidden]down- BookingCancelledNotification
+UnreadMessagesNotification -[hidden]down- ApplicationStatusNotification
+@enduml

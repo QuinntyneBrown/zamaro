@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Cancel a booking
+
+Container(web, "Zamaro Web", "Angular", "CancelBookingDialogComponent, ArtistCancelBookingDialogComponent, CancellationPolicyNoticeComponent")
+System_Ext(pay, "Payment processor", "Refunds")
+Container_Boundary(api, "Zamaro API") {
+  Component(bctrl, "BookingCancellationController", "Laravel controller", "GET quote, POST cancel (booker)")
+  Component(actrl, "ArtistBookingCancellationController", "Invokable controller", "POST cancel (artist)")
+  Component(policy, "CancellationPolicy", "Domain service", "Free-cancellation date and quotes")
+  Component(bact, "CancelBookingAsBooker", "Action", "Recheck quote, cancel, refund or compensation")
+  Component(aact, "CancelBookingAsArtist", "Action", "Cancel with reason, full refund, 12-month count")
+  Component(sm, "BookingStateMachine", "Domain service", "Confirmed -> Cancelled with history")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, refunds, payouts, booking_transitions")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(job, "IssueCancellationRefund", "Queued job", "Retries 5 times, idempotency key per payment")
+  Component(gw, "PaymentGateway", "Interface + adapter", "refund()")
+  Component(notify, "BookingCancelled listeners", "Queued listeners", "Emails both parties; similar artists for artist cancellations")
+  Component(alert, "ArtistCancellationReviewAlert", "Notification", "Third artist cancellation in 12 months")
+}
+Rel(web, bctrl, "GET quote, POST cancel", "JSON/HTTPS")
+Rel(web, actrl, "POST cancel with reason", "JSON/HTTPS")
+Rel(bctrl, policy, "Quote from")
+Rel(bctrl, bact, "Calls")
+Rel(actrl, aact, "Calls")
+Rel(bact, policy, "Recomputes quote")
+Rel(aact, policy, "Full refund amount")
+Rel(bact, sm, "transition(Cancelled, booker)")
+Rel(aact, sm, "transition(Cancelled, artist, reason)")
+Rel(sm, db, "Writes status and history", "SQL")
+Rel(bact, db, "Pending Refund or Payout", "SQL")
+Rel(aact, db, "Pending Refunds; counts cancellations", "SQL")
+Rel(bact, job, "Dispatches after commit")
+Rel(aact, job, "Dispatches after commit")
+Rel(aact, alert, "Queues on third in 12 months")
+Rel(sm, notify, "BookingCancelled after commit")
+Rel(job, gw, "refund(paymentId, amount, key)")
+Rel(gw, pay, "Calls", "HTTPS/JSON")
+@enduml

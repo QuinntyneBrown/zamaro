@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Failing job retries, then fails and alerts
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage\nBookingStubComponent" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Horizon worker" as worker
+  participant "BookingRequestedNotification\n(queued, RetriesWithBackoff)" as job
+  participant "ReportFailedJob" as listener
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as redis
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+  participant "Error tracking service" as errors
+  participant "Metrics and alerting service" as metrics
+end box
+actor "On-call person" as oncall
+
+actor -> page : Send booking request
+page -> controller : POST /api/v1/bookings (idempotency key, L2-108)
+controller -> db : Create Requested booking
+controller -> redis : Queue BookingRequestedNotification with request ID in Context
+controller --> page : 201 Booking
+page --> actor : Request sent
+redis -> worker : Deliver job (attempt 1)
+worker -> job : handle()
+job -> email : Send to artist
+email --> job : 503 Service unavailable
+job --> worker : Exception
+loop attempts 2 to 6, delay grows exponentially (base and factor <TO SUPPLY>)
+  worker -> redis : Release job with next backoff delay (L2-092)
+  redis -> worker : Deliver job again
+  worker -> job : handle()
+  alt email service recovered
+    job -> email : Send to artist
+    email --> job : Accepted
+    job --> worker : Done; loop ends
+  else still failing
+    email --> job : Error
+    job --> worker : Exception
+  end
+end
+opt sixth attempt fails
+  worker -> db : Insert into failed_jobs with payload and exception (L2-092)
+  worker -> listener : JobFailed event
+  listener -> errors : Report with job name, request ID and release
+  listener -> metrics : Raise "job failed" alert (L2-092)
+  metrics -> oncall : Page
+  oncall -> worker : Retry from failed_jobs after the cause is fixed (queue:retry)
+end
+@enduml

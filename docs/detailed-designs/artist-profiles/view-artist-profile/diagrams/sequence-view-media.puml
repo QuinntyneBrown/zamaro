@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — View photos and play a video
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PhotoGalleryComponent" as gallery
+  participant "PhotoViewerDialogComponent" as viewer
+  participant "VideoPlayerComponent" as player
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CDN" as cdn
+  database "Object storage" as storage
+end box
+
+gallery -> cdn : Grid images via srcset, AVIF or WebP, lazy below the fold (L2-088)
+cdn --> gallery : Renditions with artist alt text (L2-015)
+actor -> gallery : Activate a photo
+gallery -> viewer : Open CDK Dialog at index n
+viewer -> cdn : Full-size rendition
+cdn --> viewer : Image
+viewer --> actor : Full-size image with previous and next controls (L2-015)
+actor -> viewer : Press Escape
+viewer -> gallery : Close; focus returns to the opening photo (L2-015)
+actor -> player : Activate "Way Maker" poster frame
+player -> cdn : Adaptive stream manifest and captions file
+cdn -> storage : Pull on cache miss
+storage --> cdn : Renditions and WebVTT
+cdn --> player : Stream segments
+player --> actor : Plays in place with standard controls and captions; no autoplay with sound (L2-014)
+@enduml

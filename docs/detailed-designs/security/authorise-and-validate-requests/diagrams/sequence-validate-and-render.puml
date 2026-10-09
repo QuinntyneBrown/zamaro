@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — Validate a request and render user text
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "MessageComposerComponent" as composer
+  participant "BookingMessagesApi" as client
+  participant "MessageThreadComponent" as thread
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "LimitRequestBodySize" as size
+  participant "BookingMessagesController" as controller
+  participant "SendBookingMessageRequest" as req
+  participant "ProblemDetailsRenderer" as problem
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendBookingMessage" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> composer : Type message and send
+composer -> composer : Check 1-2,000 characters locally
+composer -> client : send(number, body)
+client -> size : POST /api/v1/bookings/{number}/messages
+alt body larger than 1 MB
+  size -> problem : Reject before parsing
+  problem --> client : 413 problem details (L2-075)
+  client --> composer : Error toast
+else within limit
+  size -> controller : Authenticated, authorised participant
+  controller -> req : Validate type, length, format (L2-075)
+  alt invalid field
+    req -> problem : ValidationException
+    problem --> client : 422 problem details, errors.body (L2-075, L2-095)
+    client --> composer : applyServerErrors()
+    composer --> actor : Inline error on the message field
+  else valid
+    req --> controller : validated()
+    controller -> action : handle(booking, sender, body)
+    action -> db : INSERT INTO messages with bound parameters (L2-075)
+    db --> action : Message
+    action --> controller : Message
+    controller --> client : 201 MessageResource with body as JSON string
+    client --> thread : Append message
+    thread -> thread : Interpolate body as text, no innerHTML, no bypassSecurityTrust (L2-075)
+    thread --> actor : Message shown, markup displayed literally
+  end
+end
+@enduml

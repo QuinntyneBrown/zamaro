@@ -1,0 +1,73 @@
+@startuml
+title UML sequence behaviour — Accept a booking request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistRequestsPage" as page
+  participant "ArtistRequestsStore" as store
+  participant "ArtistRequestsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistRequestsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AcceptBooking" as action
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Email delivery service" as email
+end box
+
+actor -> page : Activate Accept
+page -> store : accept(number)
+store -> store : Button busy and disabled (L2-108)
+store -> client : accept(number)
+client -> controller : POST /api/v1/artist/requests/{number}/accept
+controller -> controller : BookingPolicy::respond, booking of another artist -> 404
+controller -> action : handle(booking, artist)
+action -> db : BEGIN; SELECT artist FOR UPDATE
+action -> db : Confirmed booking for artist on event date?
+alt date already Confirmed
+  db --> action : Yes
+  action -> db : ROLLBACK
+  action --> controller : 409 already-booked
+  controller --> client : "You're already booked on {date}." (L2-030)
+  client --> store : Problem
+  store --> page : Error message on the card
+else date open
+  db --> action : No
+  action -> sm : transition(booking, Accepted, artist) (L2-030)
+  alt booking no longer Requested (expired or withdrawn)
+    sm --> action : InvalidBookingTransition
+    action --> controller : 409 (L2-029)
+    controller --> client : Problem details
+    client --> store : Conflict, reload list
+  else Requested
+    sm -> db : Conditional update and history row
+    action -> db : Set accepted_at and deposit_due_by (L2-037 rule)
+    action -> db : COMMIT
+    sm -> queue : RequestAccepted after commit
+    queue -> email : Booker email with deposit link and deadline (L2-063)
+    action --> controller : Booking
+    controller --> client : 200
+    client --> store : Accepted
+    store --> page : Remove card, announce result
+    page --> actor : Request accepted
+  end
+end
+@enduml

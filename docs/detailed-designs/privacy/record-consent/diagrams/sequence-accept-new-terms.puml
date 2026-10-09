@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Accept new terms at sign-in
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "AuthService" as auth
+  participant "termsGuard" as guard
+  participant "AcceptTermsPage" as page
+  participant "ConsentApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SessionController" as session
+  participant "EnsureCurrentTermsAccepted" as gate
+  participant "ConsentController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "LegalDocumentRegistry" as docs
+  participant "AcceptCurrentTerms" as accept
+  participant "RecordConsent" as record
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> auth : Sign in
+auth -> session : POST /api/v1/session
+session -> docs : hasAcceptedCurrentTerms(user)
+docs -> db : Latest granted Terms record vs current version
+session --> auth : CurrentUserResource, termsAcceptanceRequired = true
+auth -> guard : Navigate to returnUrl
+guard --> page : Redirect to /account/accept-terms?returnUrl (L2-080)
+page --> actor : Summary of changes, link to full terms, Accept and continue
+
+opt request reaches the API before the page
+  auth -> gate : Any authenticated call
+  gate --> auth : 409 terms-acceptance-required (L2-080)
+end
+
+actor -> page : Accept and continue
+page -> client : acceptTerms(version)
+client -> controller : POST /api/v1/account/consents/terms
+controller -> gate : Exempt route
+controller -> accept : handle(user, version)
+accept -> docs : current(Terms)
+alt version is not current
+  controller --> client : 409 stale version
+  page --> actor : Reload newest terms
+else current
+  accept -> record : Terms version, granted, source terms-update
+  record -> db : Insert consent_records row with time (L2-080)
+  controller --> client : 204
+  page -> auth : refresh()
+  page --> actor : Continue to returnUrl
+end
+@enduml

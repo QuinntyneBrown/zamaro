@@ -1,0 +1,46 @@
+@startuml
+title UML sequence behaviour — Email a receipt after a charge or refund
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "IssueReceiptListener" as listener
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "IssueReceipt" as issue
+  participant "ReceiptNotification" as notif
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+listener -> issue : PaymentSucceeded or RefundSucceeded
+issue -> db : Receipt exists for this payment or refund?
+alt already issued
+  db --> issue : Yes; no effect (L2-092)
+else first time
+  issue -> issue : Lines: amount, HST share, total; last 4; business number (L2-040)
+  issue -> db : Insert Receipt with line snapshot and number
+  issue -> notif : Queue to booker
+  notif -> email : Booking number, artist, event date, amount, tax lines, last 4 (L2-040, L2-063)
+  email --> actor : Receipt email with link to /bookings/{number}
+end
+actor -> page : Follow link
+page --> actor : Booking with payments and "Download receipt"
+@enduml

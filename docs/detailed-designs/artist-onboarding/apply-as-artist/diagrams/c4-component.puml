@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Apply as an artist
+
+Container(web, "Zamaro Web", "Angular", "ApplyPage, ApplicationStore, ArtistApplicationsApi")
+System_Ext(bot, "Bot challenge provider", "Privacy-respecting challenge")
+System_Ext(geo, "Geocoding provider", "Address to latitude and longitude")
+System_Ext(routing, "Routing provider", "Driving distance")
+Container(worker, "Zamaro Worker", "Laravel queue workers", "ProcessApplicationVideo, ApplicationReceivedNotification")
+Container_Boundary(api, "Zamaro API") {
+  Component(uploadCtrl, "ApplicationVideoUploadsController", "Laravel controller", "Exposes /api/v1/artist-applications/videos")
+  Component(ctrl, "ArtistApplicationsController", "Laravel controller", "Exposes POST /api/v1/artist-applications")
+  Component(req, "SubmitArtistApplicationRequest", "FormRequest", "Validates fields, references and bot challenge")
+  Component(action, "SubmitArtistApplication", "Action", "Checks duplicates and service area, stores the application")
+  Component(area, "ServiceArea", "Domain service", "Geocodes and checks 200 km road distance from Toronto City Hall")
+  Component(geocoder, "Geocoder", "Interface + adapter", "Calls the geocoding provider")
+  Component(dist, "DistanceService", "Domain service", "Road distance with cache and fallback")
+  Component(challenge, "BotChallenge", "Interface + adapter", "Verifies challenge tokens")
+  Component(res, "ArtistApplicationResource", "API resource", "Serialises the submitted application")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artist_applications, application_references, artist_videos")
+}
+Rel(web, uploadCtrl, "Uploads video chunks", "JSON/HTTPS")
+Rel(web, ctrl, "POST /api/v1/artist-applications", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(req, challenge, "Verifies token")
+Rel(challenge, bot, "Calls", "HTTPS/JSON")
+Rel(ctrl, action, "Calls")
+Rel(action, area, "Locates base city")
+Rel(area, geocoder, "Geocodes")
+Rel(geocoder, geo, "Calls", "HTTPS/JSON")
+Rel(area, dist, "Measures distance from Toronto City Hall")
+Rel(dist, routing, "Requests uncached pairs", "HTTPS/JSON")
+Rel(action, db, "Inserts in one transaction", "SQL")
+Rel(action, worker, "Dispatches ArtistApplicationSubmitted", "Redis queue")
+Rel(uploadCtrl, worker, "Dispatches ProcessApplicationVideo", "Redis queue")
+Rel(ctrl, res, "Returns")
+@enduml

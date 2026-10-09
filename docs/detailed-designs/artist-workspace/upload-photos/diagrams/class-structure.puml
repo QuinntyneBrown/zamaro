@@ -1,0 +1,127 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Upload photos
+
+package "Zamaro Web (Angular)" {
+  class PhotosManagerPage {
+    +store: ArtistPhotosStore
+    +onFilesSelected(files: FileList): void
+    +onSaveOrder(): void
+  }
+  class PhotoUploadDialogComponent {
+    +file: input<File>
+    +altText: FormControl<string>
+    +confirm(): void
+  }
+  class PhotoGridComponent {
+    +photos: input<ArtistPhoto[]>
+    +moved: output<string[]>
+    +primaryChosen: output<string>
+  }
+  class ArtistPhotosStore {
+    +photos: Signal<ArtistPhoto[]>
+    +uploads: Signal<UploadProgress[]>
+    +canAddMore: Signal<boolean>
+    +upload(file: File, altText: string): void
+    +updateAltText(id: string, altText: string): void
+    +reorder(ids: string[]): void
+    +setPrimary(id: string): void
+    +remove(id: string): void
+  }
+  class ArtistPhotosApi {
+    +list(): Observable<ArtistPhoto[]>
+    +upload(file: File, altText: string): Observable<HttpEvent<ArtistPhoto>>
+    +update(id: string, altText: string): Observable<ArtistPhoto>
+    +reorder(ids: string[]): Observable<ArtistPhoto[]>
+    +setPrimary(id: string): Observable<ArtistPhoto[]>
+    +remove(id: string): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistPhotoController {
+    +index(): ArtistPhotoCollection
+    +store(request: UploadArtistPhotoRequest): ArtistPhotoResource
+    +update(request: UpdateArtistPhotoRequest, photo: ArtistPhoto): ArtistPhotoResource
+    +destroy(photo: ArtistPhoto): Response
+  }
+  class StoreArtistPhoto <<action>> {
+    +handle(artist: Artist, file: UploadedFile, altText: string): ArtistPhoto
+  }
+  class ReorderArtistPhotos <<action>> {
+    +handle(artist: Artist, photoIds: string[]): void
+  }
+  class SetPrimaryArtistPhoto <<action>> {
+    +handle(artist: Artist, photo: ArtistPhoto): void
+  }
+  class UploadInspector {
+    +inspect(path: string, allowed: UploadKind): DetectedType
+  }
+  interface MalwareScanner {
+    +scan(path: string): ScanResult
+  }
+  enum ScanResult {
+    Clean
+    Infected
+    Unavailable
+  }
+  interface ImageProcessor {
+    +dimensions(path: string): Dimensions
+    +render(path: string, width: int, format: string): string
+  }
+  class ProcessArtistPhoto <<job>> {
+    +int photoId
+    +int tries = 5
+    +handle(images: ImageProcessor, storage: Filesystem): void
+  }
+  class ArtistPhoto <<Eloquent>> {
+    +string id
+    +int artistId
+    +int position
+    +bool isPrimary
+    +string altText
+    +ArtistPhotoStatus status
+    +?string originalKey
+    +array renditions
+    +int width
+    +int height
+  }
+  enum ArtistPhotoStatus {
+    Processing
+    Ready
+    Failed
+  }
+  class ArtistPhotoPolicy {
+    +update(user: User, photo: ArtistPhoto): bool
+  }
+}
+
+PhotosManagerPage --> ArtistPhotosStore
+PhotosManagerPage *-- PhotoGridComponent
+PhotosManagerPage *-- PhotoUploadDialogComponent
+ArtistPhotosStore --> ArtistPhotosApi
+ArtistPhotosApi ..> ArtistPhotoController : /api/v1/artist/photos
+ArtistPhotoController --> StoreArtistPhoto
+ArtistPhotoController ..> ArtistPhotoPolicy : authorises (404 when not owner)
+StoreArtistPhoto --> UploadInspector
+StoreArtistPhoto --> MalwareScanner
+StoreArtistPhoto --> ImageProcessor
+StoreArtistPhoto ..> ProcessArtistPhoto : dispatches
+MalwareScanner ..> ScanResult : returns
+ProcessArtistPhoto --> ImageProcessor
+ProcessArtistPhoto --> ArtistPhoto : updates
+ReorderArtistPhotos --> ArtistPhoto
+SetPrimaryArtistPhoto --> ArtistPhoto
+ArtistPhoto --> ArtistPhotoStatus
+@enduml

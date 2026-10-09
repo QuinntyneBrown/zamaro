@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Leave a review
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, ReviewFormComponent, BookingReviewStore, ReviewsApi")
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "BookingReviewController", "Laravel controller", "POST /api/v1/bookings/{number}/review, PATCH /api/v1/reviews/{review}")
+  Component(req, "StoreReviewRequest / UpdateReviewRequest", "FormRequest", "1–5 stars, 20–1,000 characters")
+  Component(policy, "ReviewPolicy", "Policy", "Completed booking, own booker, 60-day and 7-day windows")
+  Component(leave, "LeaveReview", "Action", "Creates one review per booking")
+  Component(edit, "EditReview", "Action", "Rewrites a review inside the edit window")
+  Component(res, "ReviewResource", "API resource", "Serialises the review with editableUntil")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(cmd, "reviews:send-prompts", "Scheduled command", "Runs hourly")
+  Component(send, "SendReviewPrompts", "Action", "Selects due bookings and stamps prompt columns")
+  Component(notif, "ReviewPromptNotification / ReviewReminderNotification", "Queued notification", "Plain-text and HTML email")
+  Component(rating, "RecalculateArtistRating", "Queued job", "Owned by reviews/show-reviews-and-rating")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions, reviews, notification_preferences")
+
+Rel(web, ctrl, "Creates and edits a review", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, leave, "Calls")
+Rel(ctrl, edit, "Calls")
+Rel(ctrl, res, "Returns")
+Rel(leave, db, "Inserts review", "SQL")
+Rel(edit, db, "Updates review", "SQL")
+Rel(leave, rating, "Dispatches via ReviewPublished")
+Rel(edit, rating, "Dispatches via ReviewEdited")
+Rel(cmd, send, "Calls")
+Rel(send, db, "Reads due bookings, stamps prompt columns", "SQL")
+Rel(send, notif, "Queues")
+Rel(notif, email, "Sends through", "HTTPS/JSON")
+@enduml

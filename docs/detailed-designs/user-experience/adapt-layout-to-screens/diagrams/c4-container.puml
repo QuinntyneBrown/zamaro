@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Adapt layout to screens
+
+Person(user, "Guest, booker, artist or administrator", "Any screen from 320 px wide")
+System_Ext(ci, "CI pipeline", "Runs the visual suite on every build")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Application shell, compact header, drawer, full-screen dialogs, responsive CSS")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET /api/v1/me for header data")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Users and saved artists; fixture data in CI")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/me", "JSON/HTTPS")
+Rel(api, db, "Reads user and Saved count", "Eloquent / SQL")
+Rel(ci, web, "Captures every route state at 5 widths", "Playwright")
+Rel(ci, api, "Seeds VisualFixtureSeeder", "artisan")
+@enduml

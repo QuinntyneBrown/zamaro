@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Sign in and recover access
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+System_Ext(bot, "Bot challenge provider", "Privacy-respecting human check")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(booker, zamaro, "Signs in, resets password, enables MFA using", "HTTPS")
+Rel(artist, zamaro, "Signs in, resets password, enables MFA using", "HTTPS")
+Rel(admin, zamaro, "Signs in using", "HTTPS")
+Rel(zamaro, breach, "Checks new passwords against", "HTTPS")
+Rel(zamaro, bot, "Verifies reset-form challenge with", "HTTPS/JSON")
+Rel(zamaro, email, "Sends reset links and lockout notices via", "HTTPS/JSON")
+@enduml

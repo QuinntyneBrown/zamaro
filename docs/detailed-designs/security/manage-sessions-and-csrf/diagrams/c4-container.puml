@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Manage sessions and CSRF
+
+Person(user, "Booker or artist", "Signed-in user")
+System_Boundary(zamaro, "Zamaro") {
+  Container(edge, "Edge load balancer", "Managed load balancer, vendor <TO SUPPLY>", "Routes /api and /sanctum on the page origin")
+  Container(web, "Zamaro Web", "Angular SSR on Node.js", "Sends X-XSRF-TOKEN, recovers from 419 and 401")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11, Sanctum SPA mode", "Session cookie, CSRF validation, lifetime limits")
+  ContainerDb(cache, "Cache and queue", "Redis", "Sessions with 7-day expiry")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, edge, "Calls relative /api/v1 and /sanctum URLs", "JSON/HTTPS, cookies")
+Rel(edge, api, "Forwards", "HTTP, private network")
+Rel(api, cache, "Reads, writes and expires sessions", "RESP")
+@enduml

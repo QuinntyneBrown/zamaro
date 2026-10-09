@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show reviews and rating
+
+Person(reader, "Guest or booker", "Reads an artist profile")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Profile reviews section")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Profile and reviews endpoints under /api/v1")
+  Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon", "Rating recalculation job")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "reviews, review_replies, bookings, artist_ratings")
+  ContainerDb(cache, "Cache and queue", "Redis", "Profile cache and job queue")
+}
+Rel(reader, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/artists/{slug}, GET /api/v1/artists/{slug}/reviews", "JSON/HTTPS")
+Rel(api, db, "Reads visible reviews and rating summary", "Eloquent / SQL")
+Rel(api, cache, "Reads cached profile, queues recalculation", "RESP")
+Rel(worker, cache, "Consumes jobs, forgets cached entries", "RESP")
+Rel(worker, db, "Aggregates reviews, upserts artist_ratings", "SQL")
+@enduml

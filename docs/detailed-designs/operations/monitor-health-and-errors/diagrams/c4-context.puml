@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Monitor health and errors
+
+Person(user, "Guest, booker or artist", "Uses Zamaro and sees error pages")
+Person(oncall, "On-call person", "Member of the Zamaro team who responds to alerts")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(errors, "Error tracking service", "Backend and frontend exceptions")
+System_Ext(logs, "Log management service", "Structured JSON logs, Canadian region; vendor <TO SUPPLY>")
+System_Ext(metrics, "Metrics and alerting service", "Metrics, alert rules and paging; vendor <TO SUPPLY>")
+System_Ext(uptime, "Uptime monitor", "External probes and public status page; vendor <TO SUPPLY>")
+System_Ext(hosting, "Hosting platform", "Load balancer and orchestrator, Canadian region; vendor <TO SUPPLY>")
+
+Rel(user, zamaro, "Uses", "HTTPS")
+Rel(zamaro, errors, "Reports exceptions with request ID and release to")
+Rel(zamaro, logs, "Ships JSON log lines to")
+Rel(zamaro, metrics, "Emits request, queue and webhook metrics to")
+Rel(uptime, zamaro, "Probes Discover, profiles and the booking API", "HTTPS")
+Rel(hosting, zamaro, "Calls /health/live and /health/ready on each instance")
+Rel(metrics, oncall, "Pages")
+Rel(oncall, errors, "Investigates exceptions in")
+@enduml

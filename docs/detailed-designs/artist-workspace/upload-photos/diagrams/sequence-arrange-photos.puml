@@ -1,0 +1,78 @@
+@startuml
+title UML sequence behaviour — Describe, reorder and choose the primary photo
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PhotoGridComponent" as grid
+  participant "ArtistPhotosStore" as store
+  participant "ArtistPhotosApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistPhotoController" as controller
+  participant "ArtistPhotoOrderController" as orderctrl
+  participant "PrimaryArtistPhotoController" as primaryctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReorderArtistPhotos" as reorder
+  participant "SetPrimaryArtistPhoto" as primary
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+opt edit alt text
+  actor -> grid : Edit alt text
+  grid -> store : updateAltText(id, text)
+  store -> client : update(id, text)
+  client -> controller : PATCH /api/v1/artist/photos/{photo}
+  controller -> controller : ArtistPhotoPolicy (404 when not owner); alt text 5-150 (L2-051)
+  alt invalid
+    controller --> client : 422 per-field error
+  else valid
+    controller -> db : Update alt_text
+    controller --> client : 200 ArtistPhotoResource
+  end
+end
+opt reorder
+  actor -> grid : Drag, or use Move earlier and Move later buttons
+  actor -> grid : Activate "Save order"
+  grid -> store : reorder(ids)
+  store -> client : reorder(ids)
+  client -> orderctrl : PUT /api/v1/artist/photos/order
+  orderctrl -> reorder : handle(artist, ids)
+  reorder -> db : BEGIN; lock artist; ids equal the artist's photo set?
+  alt mismatch
+    reorder --> orderctrl : Invalid
+    orderctrl --> client : 422
+  else match
+    reorder -> db : Update positions; COMMIT (L2-051)
+    orderctrl --> client : 200 ordered photos
+  end
+end
+opt choose primary
+  actor -> grid : Activate "Make primary"
+  grid -> store : setPrimary(id)
+  store -> client : setPrimary(id)
+  client -> primaryctrl : PUT /api/v1/artist/photos/{photo}/primary
+  primaryctrl -> primary : handle(artist, photo)
+  primary -> db : BEGIN; clear is_primary; set on photo; COMMIT
+  note right of primary : Partial unique index allows one primary per artist (L2-051)
+  primaryctrl --> client : 200 photos
+end
+client --> store : Updated photos
+store --> grid : Re-render; LiveAnnouncer reads the change
+grid --> actor : Updated gallery order and primary badge
+@enduml

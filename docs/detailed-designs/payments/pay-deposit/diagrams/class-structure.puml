@@ -1,0 +1,127 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Pay the deposit
+
+package "Zamaro Web (Angular)" {
+  class PayDepositPage {
+    +store: PaymentStore
+    +consentGiven: Signal<boolean>
+    +onPay(): void
+  }
+  class PaymentStore {
+    +summary: Signal<PriceBreakdownDto | null>
+    +status: Signal<'idle'|'paying'|'confirmed'|'declined'|'lost'>
+    +declineMessage: Signal<string | null>
+    +payDeposit(number: string): void
+  }
+  class PaymentsApi {
+    +summary(number: string): Observable<PriceBreakdownDto>
+    +startDeposit(number: string, key: string): Observable<DepositIntentDto>
+    +confirmDeposit(number: string, paymentId: string): Observable<DepositResultDto>
+  }
+  class CardFieldsService {
+    +mount(host: HTMLElement): void
+    +confirmPayment(clientSecret: string): Promise<CardResult>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class DepositController {
+    +show(booking: Booking): PriceBreakdownResource
+    +store(request: StartDepositRequest, booking: Booking): DepositIntentResource
+    +confirm(request: ConfirmDepositRequest, booking: Booking): DepositResultResource
+  }
+  class StartDepositPayment <<action>> {
+    +handle(booking: Booking, consent: bool): ProcessorPayment
+  }
+  class ConfirmDepositPayment <<action>> {
+    +handle(booking: Booking, processorPaymentId: string): DepositResult
+  }
+  class DeclineCompetingRequests <<action>> {
+    +handle(confirmed: Booking): int
+  }
+  class ExpireUnpaidDeposits <<action>> {
+    +handle(now: CarbonImmutable): int
+  }
+  class PriceBreakdown <<value object>> {
+    +int quotedCents
+    +int hstCents
+    +int totalCents
+    +int depositCents
+    +int balanceCents
+    +{static} forBooking(booking: Booking): PriceBreakdown
+  }
+  interface PaymentGateway {
+    +ensureCustomer(user: User): string
+    +createPaymentIntent(request: PaymentIntentRequest, key: IdempotencyKey): ProcessorPayment
+    +retrievePayment(id: string): ProcessorPayment
+    +refund(paymentId: string, amountCents: int, key: IdempotencyKey): ProcessorRefund
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +string number
+    +int artistId
+    +int bookerId
+    +CarbonImmutable eventDate
+    +int quotedPriceCents
+    +int hstCents
+    +BookingStatus status
+    +CarbonImmutable depositDueBy
+  }
+  class Payment <<Eloquent>> {
+    +int id
+    +int bookingId
+    +PaymentKind kind
+    +int amountCents
+    +string processorPaymentId
+    +string processorCustomerId
+    +PaymentStatus status
+    +string cardBrand
+    +string last4
+    +int expMonth
+    +int expYear
+  }
+  class BookingStateMachine {
+    +transition(booking: Booking, to: BookingStatus, actor: ?User, reason: ?string): BookingTransition
+  }
+  enum PaymentKind {
+    Deposit
+    Balance
+  }
+  enum PaymentStatus {
+    Pending
+    RequiresAction
+    Succeeded
+    Failed
+    Refunded
+    PartiallyRefunded
+  }
+}
+
+PayDepositPage --> PaymentStore
+PaymentStore --> PaymentsApi
+PaymentStore --> CardFieldsService
+PaymentsApi ..> DepositController : /api/v1/bookings/{number}/...
+DepositController --> StartDepositPayment
+DepositController --> ConfirmDepositPayment
+StartDepositPayment ..> PriceBreakdown : computes
+StartDepositPayment --> PaymentGateway
+ConfirmDepositPayment --> PaymentGateway
+ConfirmDepositPayment --> BookingStateMachine
+ConfirmDepositPayment ..> DeclineCompetingRequests : after commit
+ExpireUnpaidDeposits --> BookingStateMachine
+Booking "1" *-- "0..*" Payment
+Payment --> PaymentKind
+Payment --> PaymentStatus
+@enduml

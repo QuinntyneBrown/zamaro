@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Issue a refund
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "IssueRefundDialogComponent" as dialog
+  participant "AdminBookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\RefundsController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "IssueRefund" as action
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "PaymentGateway" as gateway
+  participant "Payment processor" as pay
+end box
+
+actor -> dialog : Enter amount and reason, confirm the exact amount
+dialog -> client : refund(number, amountCents, reason)
+client -> ctrl : POST /api/v1/admin/bookings/{number}/refunds
+ctrl -> ctrl : Validate IssueRefundRequest (positive integer cents, reason required)
+ctrl -> action : handle(booking, amountCents, reason, admin)
+action -> db : BEGIN; lock payments FOR UPDATE
+action -> action : Refundable = succeeded charges - pending and succeeded refunds
+alt amount greater than refundable
+  action -> db : ROLLBACK
+  action --> ctrl : RefundExceedsRefundable
+  ctrl --> client : 422 errors.amountCents (L2-068)
+  client --> dialog : Inline error "Up to {refundable amount}"
+else within refundable
+  action -> db : INSERT refund Pending with idempotency key; COMMIT (L2-041)
+  action -> gateway : refund(payment, amountCents, key)
+  gateway -> pay : Create refund
+  alt processor accepts
+    pay --> gateway : Refund ID
+    action -> db : Mark refund Succeeded with processor_refund_id
+    action -> audit : refund.issued, outcome Succeeded (L2-069)
+    ctrl --> client : 201 RefundView
+    client --> dialog : Close; payment history shows the refund (L2-068)
+  else processor rejects or times out
+    pay --> gateway : Error
+    action -> db : Mark refund Failed
+    action -> audit : refund.issued, outcome Failed (L2-069)
+    ctrl --> client : 502 problem details
+    client --> dialog : Error message; amount stays refundable
+  end
+end
+@enduml

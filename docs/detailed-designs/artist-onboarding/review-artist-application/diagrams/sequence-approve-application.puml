@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Approve an artist application
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ApplicationReviewPage" as page
+  participant "ApplicationReviewStore" as store
+  participant "AdminApplicationsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "AdminArtistApplicationsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ApproveArtistApplication" as action
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "SendApplicationDecisionEmail" as listener
+end box
+
+actor -> page : Activate Approve
+page -> store : approve()
+store -> client : approve(id)
+client -> controller : POST /api/v1/admin/artist-applications/{id}/approval
+controller -> action : handle(application, admin)
+action -> db : BEGIN; lock application FOR UPDATE
+alt status is not Submitted
+  action --> controller : InvalidTransition
+  controller --> client : 409 problem details
+else a reference is not verified
+  action --> controller : ReferencesNotVerified
+  controller --> client : 422 problem details (L2-048)
+else Submitted with both references verified
+  action -> db : Resolve the applicant's user account
+  action -> db : Grant Artist role (L2-048)
+  action -> db : Create Artist (status Approved, payoutReady false, publishedAt null)
+  action -> db : Move application videos to the artist
+  action -> db : Set application Approved, decided_at, decided_by
+  action -> audit : Record "application approved" and "role change" (L2-069)
+  action -> db : COMMIT
+  action -> queue : Dispatch ArtistApplicationApproved
+  action --> controller : Artist
+  controller --> client : 200 AdminArtistApplicationResource
+end
+client --> store : Result
+store --> page : Status Approved or error
+page --> actor : Success toast, or error kept on screen (L2-109)
+queue -> listener : ArtistApplicationApproved
+listener -> listener : Send ApplicationApprovedNotification with payout setup next steps (L2-039, L2-063)
+note over db : Search and the profile route skip artists that are not payout-ready (L2-048)
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Enable multi-factor authentication
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SecurityPage" as page
+  participant "AuthApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "TwoFactorController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "EnableTwoFactor" as enable
+  participant "ConfirmTwoFactor" as confirm
+  participant "TotpVerifier" as totp
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /account/security, activate Turn on two-step sign-in
+page -> client : beginTwoFactor()
+client -> controller : POST /api/v1/account/two-factor
+controller -> enable : handle(user)
+enable -> db : Store encrypted TOTP secret, not yet confirmed
+enable --> controller : otpauth URI and secret
+controller --> client : 200 TwoFactorSetup
+page --> actor : QR code and secret for the authenticator app
+actor -> page : Enter 6-digit code
+page -> client : confirmTwoFactor(code)
+client -> controller : POST /api/v1/account/two-factor/confirm
+controller -> confirm : handle(user, code)
+confirm -> totp : verify(secret, code)
+alt code invalid
+  controller --> client : 422 code not recognised
+  page --> actor : Inline error, try again
+else code valid
+  confirm -> confirm : Generate 10 recovery codes (L2-072)
+  confirm -> db : Set mfa_enabled, store recovery code hashes
+  confirm -> audit : MFA change (L2-069)
+  controller --> client : 200 recovery codes, returned once
+  page --> actor : Show 10 single-use recovery codes with copy and download
+end
+@enduml

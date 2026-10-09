@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show loading and feedback
+
+Person(person, "Guest, booker or artist", "Loads pages and submits forms")
+System_Ext(pay, "Payment processor", "Idempotent charges")
+Container_Boundary(web, "Zamaro Web") {
+  Component(busy, "BusyRegionDirective", "Angular directive", "aria-busy and skeleton after 300 ms")
+  Component(skel, "Skeleton components", "Angular components", "Ticket, headliner and profile skeletons")
+  Component(submitter, "FormSubmitter", "TypeScript helper", "exhaustMap, keeps values on error")
+  Component(button, "SubmitButtonComponent", "Angular component", "Busy, disabled, spinner")
+  Component(keys, "IdempotencyKeyStore", "Angular service", "One key per logical submission")
+  Component(toasts, "ToastService", "Angular service", "Timers, pause, stack of 3, queue")
+  Component(region, "ToastRegionComponent", "Angular component", "Fixed region, newest first")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(mw, "EnsureIdempotency", "Laravel middleware", "Lock, replay or run")
+  Component(record, "IdempotencyRecord", "Eloquent model", "Stored responses by user and key")
+  Component(bookings, "BookingsController and payment controllers", "Laravel controllers", "Create bookings and charges")
+  Component(gateway, "PaymentGateway", "Interface + adapter", "Processor calls with key")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "idempotency_keys, bookings")
+  ComponentDb(cache, "Cache and queue", "Redis", "Locks")
+}
+Rel(person, button, "Submits with")
+Rel(busy, skel, "Shows")
+Rel(submitter, button, "Sets busy")
+Rel(submitter, keys, "Gets key")
+Rel(submitter, mw, "POST with Idempotency-Key", "JSON/HTTPS")
+Rel(submitter, toasts, "Confirms success through")
+Rel(toasts, region, "Renders in")
+Rel(mw, cache, "Locks", "RESP")
+Rel(mw, record, "Reads and stores")
+Rel(record, db, "Persists", "SQL")
+Rel(mw, bookings, "Passes first attempts to")
+Rel(bookings, gateway, "Charges through")
+Rel(gateway, pay, "Calls with key", "HTTPS/JSON")
+@enduml

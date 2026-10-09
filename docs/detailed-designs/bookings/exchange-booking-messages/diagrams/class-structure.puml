@@ -1,0 +1,132 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Exchange booking messages
+
+package "Zamaro Web (Angular)" {
+  class MessageThreadComponent {
+    +bookingNumber: InputSignal<string>
+    +readOnly: InputSignal<bool>
+  }
+  class MessageComposerComponent {
+    +body: FormControl<string>
+    +remaining: Signal<number>
+    +redactionNote: Signal<bool>
+    +send(): void
+  }
+  class BookingContactsComponent {
+    +contacts: InputSignal<BookingContacts>
+  }
+  class MessagesStore {
+    +messages: Signal<BookingMessage[]>
+    +status: Signal<'loading'|'loaded'|'sending'|'error'>
+    +load(number: string): void
+    +send(body: string): void
+    +poll(): void
+  }
+  class MessagesApi {
+    +list(number: string, after?: number): Observable<BookingMessage[]>
+    +send(number: string, body: string): Observable<SentMessage>
+    +markRead(number: string): Observable<void>
+    +adminList(number: string): Observable<BookingMessage[]>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class BookingMessagesController {
+    +index(booking: Booking): ResourceCollection
+    +store(request: SendMessageRequest, booking: Booking): MessageResource
+    +markRead(booking: Booking): Response
+  }
+  class "Admin\\BookingMessagesController" as AdminCtrl {
+    +index(booking: Booking): ResourceCollection
+  }
+  class SendMessageRequest <<FormRequest>> {
+    +rules(): array
+  }
+  class SendBookingMessage <<action>> {
+    +handle(booking: Booking, sender: User, body: string): Message
+  }
+  class ContactRedactor {
+    +redact(text: string): RedactedText
+  }
+  class RedactedText <<value object>> {
+    +string text
+    +bool changed
+  }
+  class Message <<Eloquent>> {
+    +int id
+    +int bookingId
+    +int senderId
+    +ActorKind senderRole
+    +string body
+    +string recipientBody
+    +bool redacted
+    +?CarbonImmutable readAt
+    +CarbonImmutable createdAt
+  }
+  class MessageDigest <<Eloquent>> {
+    +int bookingId
+    +int recipientId
+    +?CarbonImmutable lastSentAt
+    +?CarbonImmutable scheduledFor
+  }
+  class MessageResource <<API resource>> {
+    +int id
+    +string senderName
+    +string text
+    +bool redacted
+    +string sentAt
+  }
+  class BookingContacts <<value object>> {
+    +string churchPhone
+    +string artistPhone
+    +string artistEmail
+  }
+  class ScheduleUnreadDigest <<listener>> {
+    +handle(event: BookingMessageSent): void
+  }
+  class SendUnreadMessagesDigest <<job>> {
+    +int bookingId
+    +int recipientId
+    +int tries = 5
+    +handle(): void
+  }
+  class RecordAuditEntry <<action>> {
+    +handle(actor: User, action: string, target: string, outcome: string): void
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+  }
+}
+
+MessageThreadComponent --> MessagesStore
+MessageThreadComponent *-- MessageComposerComponent
+MessagesStore --> MessagesApi
+MessagesApi ..> BookingMessagesController : /api/v1/bookings/{number}/messages
+MessagesApi ..> AdminCtrl : /api/v1/admin/bookings/{number}/messages
+BookingMessagesController ..> SendMessageRequest : validates
+BookingMessagesController --> SendBookingMessage
+SendBookingMessage --> ContactRedactor
+ContactRedactor ..> RedactedText : returns
+SendBookingMessage ..> Message : creates
+BookingMessagesController ..> MessageResource : returns
+AdminCtrl --> RecordAuditEntry
+Booking "1" *-- "*" Message
+Booking "1" *-- "0..2" MessageDigest
+ScheduleUnreadDigest ..> SendUnreadMessagesDigest : dispatches
+ScheduleUnreadDigest --> MessageDigest
+SendUnreadMessagesDigest --> MessageDigest
+BookingContactsComponent ..> BookingContacts : renders
+@enduml

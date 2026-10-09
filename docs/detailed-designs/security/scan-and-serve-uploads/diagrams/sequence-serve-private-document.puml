@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Serve a private document through a signed URL
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VscDocumentLinkComponent" as link
+  participant "UploadsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "VscDocumentUrlController" as urlctrl
+  participant "PrivateDocumentController\n(media domain)" as docctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "VulnerableSectorCheckPolicy" as policy
+  participant "PrivateDocumentUrl" as signer
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Object storage" as storage
+end box
+
+actor -> link : Open VSC document
+link -> client : vscDocumentUrl(artistId)
+client -> urlctrl : GET /api/v1/admin/artists/{artist}/vsc/document
+urlctrl -> policy : view(user, check)
+alt not the owning artist and not an administrator
+  policy --> urlctrl : denyAsNotFound (L2-049, L2-074)
+  urlctrl --> client : 404
+else allowed
+  policy --> urlctrl : allow
+  urlctrl -> db : Load Upload object name
+  urlctrl -> signer : for(upload, 5 minutes)
+  signer --> urlctrl : https://{media domain}/documents/{random}?expires&signature (L2-076)
+  urlctrl --> client : 200 url, expiresAt
+  client --> link : Signed URL
+  link -> docctrl : Open URL in new tab
+  docctrl -> docctrl : Verify signature and expiry
+  alt signature invalid or older than 5 minutes
+    docctrl --> link : 404
+  else valid
+    docctrl -> storage : Get documents/{random}
+    storage --> docctrl : Encrypted bytes
+    docctrl -> docctrl : Decrypt with field key (L2-079)
+    docctrl --> link : 200 stream, server-set Content-Type, Content-Disposition attachment, no-store, nosniff (L2-076)
+    link --> actor : Browser downloads the document
+  end
+end
+@enduml

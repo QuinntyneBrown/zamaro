@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Render a public profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or crawler" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Angular SSR" as ssr
+  participant "ArtistProfilePage" as page
+  participant "ReviewComponent" as reviewCmp
+  participant "SeoService" as seo
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as profileCtrl
+  participant "ArtistReviewsController" as reviewCtrl
+  participant "PublicArtistResource" as artistRes
+  participant "PublicReviewResource" as reviewRes
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> ssr : GET /artists/{slug}
+ssr -> page : Render route without visitor cookies
+page -> profileCtrl : GET /api/v1/artists/{slug}
+profileCtrl -> db : Load approved artist with photos, setlist
+db --> profileCtrl : Full Artist row incl. coordinates and user
+profileCtrl -> artistRes : Narrow to allowlisted fields
+artistRes --> page : Base city only; no street, email, phone (L2-083)
+page -> reviewCtrl : GET /api/v1/artists/{slug}/reviews
+reviewCtrl -> db : Visible reviews with booker and church
+reviewCtrl -> reviewRes : Narrow each review
+reviewRes -> reviewRes : Attribution = reviewer name, church name,\ncity, month and year (L2-083)
+alt booker erased
+  reviewRes -> reviewRes : Attribution "A church in {city}" (L2-082)
+end
+reviewRes --> page : Reviews
+page -> reviewCmp : Render each review
+page -> seo : Title, Open Graph and JSON-LD from public fields only
+ssr --> actor : HTML with transfer state holding public payloads only
+@enduml

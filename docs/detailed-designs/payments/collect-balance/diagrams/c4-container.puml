@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Collect the balance
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(processor, "Payment processor", "Off-session charges")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "BookingDetailPage, report-a-problem dialog, PayBalancePage")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Problem reports and balance payment endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Finds due balances, charges and retries")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Bookings, payments, problem reports, holds")
+  ContainerQueue(cache, "Cache and queue", "Redis", "ChargeBookingBalance jobs")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(admin, web, "Uses /admin", "HTTPS")
+Rel(web, api, "Reports problems, pays balance", "JSON/HTTPS")
+Rel(api, db, "Writes problem reports and holds", "SQL")
+Rel(worker, db, "Reads due balances, writes payments", "SQL")
+Rel(worker, cache, "Queues and consumes charge jobs", "RESP")
+Rel(worker, processor, "Charges saved card", "HTTPS/JSON + idempotency key")
+Rel(worker, email, "Sends payment link and alerts", "HTTPS/JSON")
+@enduml

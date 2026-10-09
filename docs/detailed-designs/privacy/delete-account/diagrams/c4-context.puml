@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Delete an account
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(guest, "Guest", "Reads reviews on public profiles")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+
+Rel(booker, zamaro, "Deletes account with password using", "HTTPS")
+Rel(artist, zamaro, "Deletes account with password using", "HTTPS")
+Rel(guest, zamaro, "Sees erased reviewers as A church in {city} on", "HTTPS")
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Back up, deploy and host
+
+Person(dev, "Developer or on-call person", "Merges, rolls back, runs drills")
+System_Ext(hosting, "Hosting platform", "Orchestrator and managed PostgreSQL")
+System_Ext(cdn, "CDN", "Versioned assets")
+Container_Boundary(pipe, "Delivery pipeline (repository: .ci/ and ops/)") {
+  Component(checks, "Check stage", "CI jobs", "Lint, unit, acceptance, security scans, budgets, contract tests")
+  Component(compat, "MigrationCompatibilityCheck", "CI job", "Runs the previous release's API suite against the new schema")
+  Component(build, "Build stage", "Container build", "zamaro-api and zamaro-web images tagged with the release version")
+  Component(migrate, "Migrate task", "One-off container", "php artisan migrate --force (expand only)")
+  Component(rollout, "Rollout stage", "Orchestrator rolling update", "Readiness-gated, connection draining, post-deploy smoke test")
+  Component(rollback, "Rollback action", "Pipeline job", "Redeploys the previous image tag; no down-migrations")
+  Component(drill, "Restore drill runbook", "ops/restore-drill script <TO SUPPLY>", "Restores to a fresh environment and records the result")
+  ComponentDb(manifests, "Release manifests", "Pipeline artifacts", "Version, image digests, asset prefix, migrations")
+}
+Rel(dev, checks, "Merge to main starts")
+Rel(checks, compat, "Includes")
+Rel(checks, build, "On pass")
+Rel(build, manifests, "Writes")
+Rel(build, cdn, "Uploads assets under the release prefix")
+Rel(build, migrate, "Then")
+Rel(migrate, hosting, "Runs against production database")
+Rel(migrate, rollout, "Then")
+Rel(rollout, hosting, "Updates instances one at a time")
+Rel(dev, rollback, "Triggers")
+Rel(rollback, manifests, "Reads previous release")
+Rel(rollback, hosting, "Rolls out previous images")
+Rel(dev, drill, "Runs quarterly")
+Rel(drill, hosting, "Point-in-time restore into fresh environment")
+@enduml

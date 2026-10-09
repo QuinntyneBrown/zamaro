@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Switch theme
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(user, "Signed-in user", "Booker, artist or administrator")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(os, "Operating system and browser", "prefers-color-scheme and local storage")
+
+Rel(guest, zamaro, "Switches theme on one device using", "HTTPS")
+Rel(user, zamaro, "Switches theme, saved to the account, using", "HTTPS")
+Rel(zamaro, os, "Reads system colour scheme and stores device preference in")
+@enduml

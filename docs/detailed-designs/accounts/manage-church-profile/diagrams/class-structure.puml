@@ -1,0 +1,105 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage the church profile
+
+package "Zamaro Web (Angular)" {
+  class ChurchProfilePage {
+    +church: Signal<Church | null>
+    +onSave(form: ChurchForm): void
+  }
+  class ChurchRequiredDialogComponent {
+    +saved: OutputEmitterRef<Church>
+  }
+  class ChurchFormComponent {
+    +form: FormGroup<ChurchForm>
+    +serverError: Signal<string | null>
+  }
+  class ChurchApi {
+    +get(): Observable<Church | null>
+    +save(form: ChurchForm): Observable<Church>
+  }
+  class AccountMenuComponent {
+    +initials: Signal<string>
+    +name: Signal<string>
+    +churchName: Signal<string | null>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ChurchController {
+    +show(): ChurchResource
+    +update(request: SaveChurchRequest): ChurchResource
+  }
+  class SaveChurchRequest {
+    +rules(): array
+  }
+  class SaveChurch <<action>> {
+    +handle(booker: User, data: ChurchData): Church
+  }
+  interface Geocoder {
+    +geocode(address: string): ?GeocodedAddress
+  }
+  class GeocodedAddress <<value object>> {
+    +string normalisedAddress
+    +string city
+    +Coordinates point
+  }
+  class ServiceArea {
+    +Coordinates centre = (43.6534, -79.3841)
+    +int maxRoadKm = 200
+    +contains(point: Coordinates): bool
+  }
+  class DistanceService {
+    +between(from: Coordinates, to: Coordinates): Distance
+  }
+  class Church <<Eloquent>> {
+    +int bookerId
+    +string name
+    +string streetAddress
+    +string city
+    +float latitude
+    +float longitude
+    +string phone <<encrypted>>
+    +?string denomination
+    +?int typicalAttendance
+  }
+  class Booking <<Eloquent>> {
+    +int churchId
+    +string churchName
+    +string churchAddress
+    +float churchLatitude
+    +float churchLongitude
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string name
+    +initials(): string
+  }
+}
+
+ChurchProfilePage --> ChurchFormComponent
+ChurchRequiredDialogComponent --> ChurchFormComponent
+ChurchProfilePage --> ChurchApi
+ChurchRequiredDialogComponent --> ChurchApi
+ChurchApi ..> ChurchController : PUT /api/v1/account/church
+ChurchController ..> SaveChurchRequest : validates
+ChurchController --> SaveChurch
+SaveChurch --> Geocoder
+SaveChurch --> ServiceArea
+Geocoder ..> GeocodedAddress : returns
+ServiceArea --> DistanceService
+SaveChurch ..> Church : creates / updates
+User "1" o-- "0..1" Church : owns
+Booking ..> Church : snapshot copied at creation
+@enduml

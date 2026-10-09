@@ -1,0 +1,46 @@
+@startuml
+title UML sequence behaviour — Send Vulnerable Sector Check renewal reminders
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "VscPage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Scheduler" as scheduler
+  participant "SendVscRenewalReminders" as command
+  participant "VscRenewalReminderNotification" as notification
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+scheduler -> command : Run daily (L2-049)
+command -> db : Verified checks with expires_on within 60 days, no reminder sent, no newer verified check
+db --> command : Expiring checks
+loop each expiring check
+  command -> db : Set renewal_reminder_sent_at where still null
+  alt row updated
+    command -> notification : Queue for the artist
+    notification -> email : Send renewal reminder with expiry date and upload link
+    email --> actor : Renewal reminder email
+  else already sent
+    command -> command : Skip; a second run has no effect (L2-092)
+  end
+end
+actor -> page : Open /artist/vulnerable-sector-check from the email
+page --> actor : Current check with "Expires {date}" and Upload a new check
+@enduml

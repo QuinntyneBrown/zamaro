@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Pay the deposit
+
+Container(web, "Zamaro Web", "Angular", "PayDepositPage, PaymentStore, PaymentsApi")
+System_Ext(processor, "Payment processor", "Payments, refunds, 3-D Secure")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "DepositController", "Laravel controller", "GET payment-summary, POST deposit, POST deposit/confirm")
+  Component(policy, "BookingPolicy", "Policy", "Only the booking's booker; others get 404")
+  Component(start, "StartDepositPayment", "Action", "Creates or reuses the processor payment intent")
+  Component(confirm, "ConfirmDepositPayment", "Action", "Verifies the charge and confirms or refunds")
+  Component(price, "PriceBreakdown", "Value object", "Integer-cent deposit, balance and HST")
+  Component(sm, "BookingStateMachine", "Domain service", "Accepted -> Confirmed or Expired")
+  Component(compete, "DeclineCompetingRequests", "Action", "Declines other requests for the artist and date")
+  Component(translate, "DeclineReasonTranslator", "Support class", "Processor decline codes to plain language")
+  Component(gateway, "PaymentGateway", "Interface + adapter", "Wraps the processor API; requires an idempotency key")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, payments, booking_transitions")
+}
+Rel(web, ctrl, "Calls", "JSON/HTTPS")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, start, "Calls")
+Rel(ctrl, confirm, "Calls")
+Rel(start, price, "Computes deposit with")
+Rel(start, gateway, "Creates payment intent")
+Rel(confirm, gateway, "Retrieves payment, refunds on loss")
+Rel(confirm, sm, "Applies transition")
+Rel(confirm, compete, "Calls after commit")
+Rel(confirm, translate, "Explains a declined card")
+Rel(confirm, db, "Locks artist row, writes payment and status", "SQL")
+Rel(gateway, processor, "Calls", "HTTPS/JSON")
+@enduml

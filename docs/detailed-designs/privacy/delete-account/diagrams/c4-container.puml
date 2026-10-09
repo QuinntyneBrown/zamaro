@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Delete an account
+
+Person(user, "Booker or artist", "Account holder")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "DeleteAccountDialogComponent")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "DELETE /api/v1/account")
+  Container(worker, "Zamaro Worker", "Laravel scheduler and queue workers", "EraseDueAccounts, EraseAccountPersonalData, PurgeRetainedFinancialRecords")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users, bookings, payments, reviews, personal data")
+  ContainerDb(cache, "Cache and queue", "Redis", "Sessions and job queue")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Photos, videos, VSC documents, exports")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "DELETE /api/v1/account", "JSON/HTTPS")
+Rel(api, db, "Checks bookings, disables account", "Eloquent / SQL")
+Rel(api, cache, "Ends sessions", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, db, "Erases and pseudonymises", "SQL")
+Rel(worker, storage, "Deletes media and documents", "S3 API")
+@enduml

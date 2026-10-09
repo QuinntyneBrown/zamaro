@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Check a date in the booking stub
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingStubComponent" as stub
+  participant "ArtistProfileStore" as store
+  participant "AvailabilityApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistAvailabilityController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AvailabilityService" as avail
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+stub --> actor : "Book Abigail", "No. ZAM-0114", "From $650", "per service · travel included" and policy line (L2-019, L2-044)
+actor -> stub : Choose Sun 15 Nov in the event date field
+stub -> store : selectDate(2026-11-15)
+store -> store : dateCheck = checking
+store -> client : check(slug, 2026-11-15)
+client -> controller : GET /api/v1/artists/abigail-mensah/availability?date=2026-11-15
+controller -> avail : isFree(artist, date)
+avail -> db : Override, weekly rule, Confirmed booking on the date
+db --> avail : Rows
+avail --> controller : bool
+controller --> client : 200 { date, free }
+client --> store : DateCheck
+alt free
+  store -> stub : dateCheck = free
+  stub --> actor : "✓ Abigail is free Sun 15 Nov"; submit "Request to book · Sun 15 Nov" enabled (L2-019)
+  actor -> stub : Complete kind, church, message; activate submit
+  stub -> stub : Hand form value to bookings/send-booking-request
+else not free
+  store -> stub : dateCheck = booked
+  stub --> actor : "Abigail is booked Sun 15 Nov. Try another date." and submit disabled (L2-019)
+end
+@enduml

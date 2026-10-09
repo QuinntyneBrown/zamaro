@@ -1,0 +1,105 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Verify a Vulnerable Sector Check
+
+package "Zamaro Web (Angular)" {
+  class VscPage {
+    +current: Signal<VscSummary | null>
+    +upload(file: File, issuedOn: string): void
+  }
+  class VscQueuePage {
+    +checks: Signal<VscSummary[]>
+    +verify(id: number): void
+  }
+  class VscDocumentComponent {
+    +check: Input<VscSummary>
+    +open(): void
+  }
+  class VulnerableSectorChecksApi {
+    +current(): Observable<VscSummary | null>
+    +upload(file: File, issuedOn: string): Observable<VscSummary>
+    +documentLink(id: number): Observable<SignedLink>
+    +pending(cursor?: string): Observable<Page<VscSummary>>
+    +verify(id: number): Observable<VscSummary>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class UploadVulnerableSectorCheck <<action>> {
+    +handle(user: User, file: UploadedFile, issuedOn: CarbonImmutable): VulnerableSectorCheck
+  }
+  class VerifyVulnerableSectorCheck <<action>> {
+    +VALID_YEARS: int = 3
+    +handle(check: VulnerableSectorCheck, admin: User): VulnerableSectorCheck
+  }
+  class ScanVulnerableSectorCheck <<job>> {
+    +checkId: int
+    +handle(vault: DocumentVault, scanner: MalwareScanner): void
+  }
+  class SendVscRenewalReminders <<scheduled command>> {
+    +REMINDER_DAYS: int = 60
+    +handle(): void
+  }
+  class DocumentVault {
+    +put(contents: string, mime: string): StoredDocument
+    +read(key: string): string
+    +delete(key: string): void
+    +temporaryUrl(key: string, minutes: int = 5): string
+  }
+  interface MalwareScanner {
+    +scan(contents: string): ScanResult
+  }
+  class VulnerableSectorCheckPolicy {
+    +view(user: User, check: VulnerableSectorCheck): bool
+  }
+  class VulnerableSectorCheck <<Eloquent>> {
+    +int id
+    +int userId
+    +CarbonImmutable issuedOn
+    +string storageKey
+    +string mimeType
+    +int sizeBytes
+    +VscStatus status
+    +?CarbonImmutable verifiedAt
+    +?int verifiedBy
+    +?CarbonImmutable expiresOn
+    +?CarbonImmutable renewalReminderSentAt
+    +isCurrentOn(date: CarbonImmutable): bool
+  }
+  enum VscStatus {
+    Scanning
+    Pending
+    Verified
+    Blocked
+  }
+  class AvailabilityService {
+    +hasCurrentVsc(artist: Artist, date: CarbonImmutable): bool
+  }
+}
+
+VscPage --> VulnerableSectorChecksApi
+VscQueuePage --> VulnerableSectorChecksApi
+VscQueuePage --> VscDocumentComponent
+VscDocumentComponent --> VulnerableSectorChecksApi
+UploadVulnerableSectorCheck --> DocumentVault
+UploadVulnerableSectorCheck ..> VulnerableSectorCheck : creates
+UploadVulnerableSectorCheck ..> ScanVulnerableSectorCheck : dispatches
+ScanVulnerableSectorCheck --> MalwareScanner
+ScanVulnerableSectorCheck --> DocumentVault
+VerifyVulnerableSectorCheck ..> VulnerableSectorCheck : verifies
+SendVscRenewalReminders ..> VulnerableSectorCheck : reads expiring
+VulnerableSectorCheckPolicy ..> VulnerableSectorCheck : guards
+VulnerableSectorCheck --> VscStatus
+AvailabilityService ..> VulnerableSectorCheck : isCurrentOn
+@enduml

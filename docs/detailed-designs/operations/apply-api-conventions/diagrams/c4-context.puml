@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Apply API conventions
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(dev, "Developer", "Member of the Zamaro team who changes the API")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(ci, "CI/CD pipeline", "Generates the OpenAPI document and runs contract tests; vendor <TO SUPPLY>")
+
+Rel(booker, zamaro, "Lists bookings and edits the church profile using", "HTTPS")
+Rel(dev, ci, "Merges changes, which trigger")
+Rel(ci, zamaro, "Generates OpenAPI 3.1 from and contract-tests")
+@enduml

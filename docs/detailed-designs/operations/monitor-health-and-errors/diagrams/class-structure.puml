@@ -1,0 +1,109 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Monitor health and errors
+
+package "Zamaro Web (Angular)" {
+  class RequestIdTracker {
+    +lastRequestId: Signal<string | null>
+    +record(response: HttpResponseBase): void
+  }
+  class RequestIdInterceptor <<HttpInterceptorFn>> {
+    +intercept(req: HttpRequest, next: HttpHandlerFn): Observable<HttpEvent>
+  }
+  class ErrorTrackingErrorHandler {
+    -tracker: RequestIdTracker
+    -release: string
+    +handleError(error: unknown): void
+  }
+  class ErrorReferenceComponent {
+    +requestId: input<string | null>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class AssignRequestId <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+    -isWellFormed(id: ?string): bool
+  }
+  class LogRequest <<middleware>> {
+    +terminate(request: Request, response: Response): void
+  }
+  class JsonLogFormatter {
+    +format(record: LogRecord): string
+  }
+  class RedactSensitiveFields <<processor>> {
+    -keys: array
+    +__invoke(record: LogRecord): LogRecord
+  }
+  interface ErrorReporter {
+    +report(e: Throwable, requestId: string, release: string): void
+  }
+  class HealthController {
+    +live(): JsonResponse
+    +ready(checker: ReadinessChecker): JsonResponse
+  }
+  class ReadinessChecker {
+    -checks: HealthCheck[]
+    +run(): ReadinessReport
+  }
+  interface HealthCheck {
+    +name(): string
+    +check(timeoutMs: int): CheckResult
+  }
+  class DatabaseCheck
+  class CacheCheck
+  class QueueCheck
+  class ReadinessReport <<value object>> {
+    +bool ready
+    +CheckResult[] results
+  }
+  class CheckResult <<value object>> {
+    +string name
+    +bool ok
+    +int durationMs
+  }
+  class MeasureQueueLag <<command>> {
+    +handle(metrics: MetricsRecorder): void
+  }
+  class PaymentWebhookFailureTracker {
+    +int threshold = 3
+    +recordFailure(eventId: string): void
+    +recordSuccess(): void
+  }
+  interface OnCallAlerter {
+    +raise(alert: Alert): void
+  }
+  class Alert <<value object>> {
+    +string key
+    +string summary
+    +AlertSeverity severity
+  }
+}
+
+RequestIdInterceptor --> RequestIdTracker : records
+ErrorTrackingErrorHandler --> RequestIdTracker : reads
+ErrorReferenceComponent ..> RequestIdTracker : shows
+LogRequest ..> JsonLogFormatter
+JsonLogFormatter ..> RedactSensitiveFields
+HealthController --> ReadinessChecker
+ReadinessChecker "1" *-- "3" HealthCheck
+HealthCheck <|.. DatabaseCheck
+HealthCheck <|.. CacheCheck
+HealthCheck <|.. QueueCheck
+ReadinessChecker ..> ReadinessReport : returns
+ReadinessReport "1" *-- "*" CheckResult
+PaymentWebhookFailureTracker --> OnCallAlerter
+OnCallAlerter ..> Alert
+AssignRequestId ..> ErrorReporter : request ID shared via Context
+@enduml

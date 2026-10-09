@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Change the profile address
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ProfileAddressSectionComponent" as page
+  participant "ProfileAddressApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ProfileAddressController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ChangeArtistSlug" as action
+  participant "SlugRegistry" as registry
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Enter new slug, activate Save
+page -> client : change(slug)
+client -> controller : PUT /api/v1/artist/profile/address
+controller -> controller : EnsureArtistRole; validate ChangeProfileAddressRequest format (L2-075)
+controller -> action : handle(artist, slug)
+action -> db : BEGIN; lock artist row
+db --> action : slug_changed_at
+alt changed fewer than 30 days ago
+  action --> controller : SlugChangeTooSoon(nextChangeOn)
+  controller --> client : 422, slug error with the next change date (L2-055)
+  client --> page : Error
+  page --> actor : Inline error naming the date it can next be changed
+else 30 days or more, or never changed
+  action -> registry : isTaken(slug)
+  registry -> db : Search slug_histories.slug (current and retired)
+  db --> registry : Result
+  alt taken now or in the past by another artist
+    registry --> action : true
+    action --> controller : SlugTaken
+    controller --> client : 422, slug error (copy <TO SUPPLY>)
+    client --> page : Error
+    page --> actor : Inline error on slug field
+  else free
+    registry --> action : false
+    action -> db : Set retired_at on old slug row; it is never reassigned (L2-055)
+    action -> db : Insert slug_histories row for the new slug
+    action -> db : Update artists.slug, slug_changed_at = now
+    action -> db : COMMIT
+    action -> cache : Queue ArtistSlugChanged listeners (cache purge, sitemap)
+    action --> controller : Artist
+    controller --> client : 200 ProfileAddressResource with nextChangeOn
+    client --> page : ProfileAddress
+    page --> actor : New address shown with next change date
+  end
+end
+@enduml

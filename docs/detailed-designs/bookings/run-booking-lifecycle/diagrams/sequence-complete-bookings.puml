@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Complete finished bookings
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingsPage" as page
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Scheduler" as sched
+  participant "CompleteFinishedBookings" as cmd
+  participant "CompleteBooking" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+sched -> cmd : Every minute, withoutOverlapping, onOneServer
+cmd -> db : SELECT id FROM bookings WHERE status = 'Confirmed' AND event_starts_at <= now() - 24 h
+db --> cmd : Due booking IDs
+loop each due booking
+  cmd -> queue : Dispatch CompleteBooking(id), unique per booking
+end
+queue -> job : Deliver job
+job -> db : BEGIN; load booking FOR UPDATE
+alt already Completed or Cancelled
+  job -> db : ROLLBACK, no effect (L2-092)
+else Confirmed and 24 h past event start
+  job -> sm : transition(booking, Completed, system) (L2-029)
+  sm -> db : Conditional update and history row
+  job -> db : COMMIT
+  sm -> queue : BookingCompleted after commit
+  note right of queue : payments/collect-balance and\nreviews/leave-review listen
+end
+actor -> page : Open /bookings
+page -> client : list(past)
+client -> controller : GET /api/v1/bookings?group=past
+controller --> client : Completed booking with next action Leave a review
+client --> page : Bookings
+page --> actor : Booking listed under Past as Completed
+@enduml

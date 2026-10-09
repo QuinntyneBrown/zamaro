@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Export personal data
+
+Person(user, "Booker or artist", "Account holder")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "PrivacySectionComponent, DataExportDownloadPage")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "/api/v1/account/data-exports")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "BuildDataExport, PurgeExpiredDataExports")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "data_exports and the user's personal data")
+  ContainerQueue(queue, "Cache and queue", "Redis", "Job queue")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Private export files")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Requests export, fetches download URL", "JSON/HTTPS")
+Rel(api, db, "Writes data_exports", "Eloquent / SQL")
+Rel(api, queue, "Dispatches BuildDataExport", "RESP")
+Rel(api, storage, "Signs download URL", "S3 API")
+Rel(worker, queue, "Takes jobs from", "RESP")
+Rel(worker, db, "Reads personal data", "SQL")
+Rel(worker, storage, "Writes and deletes export files", "S3 API")
+Rel(worker, email, "Sends link", "HTTPS/JSON")
+Rel(user, storage, "Downloads file via signed URL", "HTTPS")
+@enduml

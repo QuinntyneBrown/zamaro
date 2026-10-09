@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Minimise public exposure
+
+Person(guest, "Guest", "Anyone not signed in")
+System_Ext(crawlers, "Search engines and link previews", "Crawlers and unfurlers")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "ArtistProfilePage, ReviewComponent, SeoService")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Public route group and public resources")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Full artist, booker, church and review records")
+}
+Rel(guest, web, "Requests public pages", "HTTPS")
+Rel(crawlers, web, "Requests public pages", "HTTPS")
+Rel(guest, api, "Calls public endpoints", "JSON/HTTPS")
+Rel(web, api, "Fetches public resources during SSR", "JSON/HTTPS, no cookies")
+Rel(api, db, "Reads full records", "Eloquent / SQL")
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Issue receipts
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, ReceiptsApi")
+System_Ext(email, "Email delivery service", "Transactional email")
+Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
+  Component(listener, "IssueReceiptListener", "Queued listener", "On PaymentSucceeded and RefundSucceeded")
+  Component(issue, "IssueReceipt", "Action", "Builds the line snapshot and receipt number")
+  Component(notif, "ReceiptNotification", "Queued notification", "HTML and plain-text receipt email")
+  Component(ctrl, "ReceiptController", "Laravel controller", "GET receipts list and PDF")
+  Component(policy, "BookingPolicy", "Policy", "Only the booker; others get 404")
+  Component(pdf, "ReceiptPdfRenderer", "Service", "Renders one receipt as PDF")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "receipts")
+}
+Rel(listener, issue, "Calls")
+Rel(issue, db, "Inserts Receipt once per payment or refund", "SQL")
+Rel(issue, notif, "Queues to booker")
+Rel(notif, email, "Sends", "HTTPS/JSON")
+Rel(web, ctrl, "Calls", "HTTPS")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, db, "Reads Receipt", "SQL")
+Rel(ctrl, pdf, "Renders with")
+@enduml

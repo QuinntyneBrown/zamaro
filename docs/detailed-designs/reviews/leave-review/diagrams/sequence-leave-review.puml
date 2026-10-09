@@ -1,0 +1,74 @@
+@startuml
+title UML sequence behaviour — Leave a review
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingReviewStore" as store
+  participant "ReviewsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingReviewController" as controller
+  participant "ReviewPolicy" as policy
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "LeaveReview" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Open /bookings/{number}#review
+page --> actor : Review form shown when review.canCreate (L2-059)
+actor -> page : Choose stars, write text, activate Post review
+page -> page : Validate 1–5 stars and 20–1,000 characters
+alt invalid input
+  page --> actor : Inline errors, focus first invalid field
+else valid input
+  page -> store : create(number, form)
+  store -> client : create(number, form)
+  client -> controller : POST /api/v1/bookings/{number}/review
+  controller -> controller : Validate StoreReviewRequest (L2-059)
+  controller -> db : Load booking with Completed transition
+  db --> controller : Booking
+  controller -> policy : create(user, booking)
+  alt not own booking, not Completed, or event over 60 days ago
+    policy --> controller : Deny
+    controller --> client : 403 problem details (L2-059)
+    client --> store : Error
+    store --> page : status = error
+    page --> actor : Inline message from problem details detail
+  else allowed
+    policy --> controller : Allow
+    controller -> action : handle(booking, stars, text)
+    action -> db : INSERT review in transaction
+    alt review already exists for booking
+      db --> action : Unique violation on booking_id
+      action --> controller : ReviewAlreadyExists
+      controller --> client : 409 problem details
+    else inserted
+      db --> action : Review
+      action -> queue : ReviewPublished dispatches RecalculateArtistRating (L2-060)
+      action --> controller : Review
+      controller --> client : 201 ReviewResource with editableUntil
+      client --> store : Review
+      store --> page : status = saved
+      page --> actor : Toast "Review posted" and edit link until editableUntil
+    end
+  end
+end
+@enduml

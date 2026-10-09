@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Reconcile payment events
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(processor, "Payment processor", "Signed webhooks; charge, refund and payout records")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(errors, "Error tracking service", "Backend exceptions and alerts")
+
+Rel(processor, zamaro, "Delivers signed payment events to", "HTTPS webhook")
+Rel(zamaro, processor, "Sends idempotent requests and lists daily records from", "HTTPS/JSON")
+Rel(zamaro, email, "Sends mismatch alerts via", "HTTPS/JSON")
+Rel(zamaro, errors, "Reports repeated webhook failures to")
+Rel(admin, zamaro, "Investigates mismatched bookings using", "HTTPS")
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Sign in and recover access
+
+Person(user, "Booker, artist or administrator", "Account holder")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+System_Ext(bot, "Bot challenge provider", "Human check")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "SignInPage, ForgotPasswordPage, ResetPasswordPage, SecurityPage")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Session, password and two-factor endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends reset and lockout emails")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Users, reset tokens, recovery codes, user_sessions, audit entries")
+  ContainerDb(cache, "Cache and queue", "Redis", "Session payloads, lockout counters, job queue")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Calls /api/v1/session, /password, /account/two-factor", "JSON/HTTPS, session cookie")
+Rel(api, db, "Reads and writes", "Eloquent / SQL")
+Rel(api, cache, "Stores sessions and counts failures", "RESP")
+Rel(api, breach, "Range query", "HTTPS")
+Rel(api, bot, "Verifies challenge", "HTTPS/JSON")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, email, "Sends email", "HTTPS/JSON")
+@enduml

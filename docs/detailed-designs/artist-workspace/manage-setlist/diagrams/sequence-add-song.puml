@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Add a song to the setlist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SetlistEditorPage" as page
+  participant "SetlistStore" as store
+  participant "SetlistApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SetlistSongController" as controller
+  participant "SetlistSongRequest" as req
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AddSetlistSong" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Enter title, writer or source, key; activate "Add song"
+page -> store : add(song)
+store -> client : add(song)
+client -> controller : POST /api/v1/artist/setlist/songs
+controller -> controller : EnsureArtistRole; non-artists receive 404 (L2-074)
+controller -> req : Title 1-100, writer up to 100, key in MusicalKey (L2-053, L2-075)
+alt invalid field
+  req --> controller : Per-field errors
+  controller --> client : 422 per-field errors
+  client --> page : Inline errors, focus first invalid field
+else valid
+  controller -> action : handle(artist, data)
+  action -> db : BEGIN; lock artist; count songs
+  alt 50 songs already
+    action --> controller : Limit reached
+    controller --> client : 422 "You can list up to 50 songs." (L2-053)
+    client --> page : Error shown at the form
+  else under the limit
+    action -> db : Insert at position count + 1; COMMIT
+    action -> cache : Queue ArtistProfileUpdated listener (L2-089)
+    action --> controller : SetlistSong
+    controller --> client : 201 SetlistSongResource
+    client --> store : Song
+    store --> page : Append to list; LiveAnnouncer reads "Added"
+    page --> actor : Song at the end of the setlist
+  end
+end
+@enduml

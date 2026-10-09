@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Pick a date and start booking
+
+Person(visitor, "Booker or guest", "Chooses a date on a profile")
+Container_Boundary(web, "Zamaro Web") {
+  Component(tour, "TourDatesComponent", "Angular component", "On tour list with Pick")
+  Component(stub, "BookingStubComponent", "Angular component", "Ticket-styled form, date check, policy line")
+  Component(store, "ArtistProfileStore", "Signal store", "selectedDate, dateCheck, tourDates")
+  Component(client, "AvailabilityApi", "Typed HTTP client", "Date check and tour dates")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ArtistAvailabilityController", "Laravel controller", "check() and tourDates()")
+  Component(list, "ListTourDates", "Action", "Next 6 free or booked dates from a start date")
+  Component(avail, "AvailabilityService", "Domain service", "isFree(artist, date)")
+  Component(res, "TourDateResource", "API resource", "Kind and city only for booked rows")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "availability_rules, availability_overrides, bookings")
+}
+Rel(visitor, tour, "Activates Pick")
+Rel(visitor, stub, "Chooses a date")
+Rel(tour, store, "selectDate()")
+Rel(stub, store, "Binds date and message")
+Rel(store, client, "Calls")
+Rel(client, ctrl, "GET /api/v1/artists/{slug}/...", "JSON/HTTPS")
+Rel(ctrl, avail, "check() uses")
+Rel(ctrl, list, "tourDates() uses")
+Rel(list, db, "Reads the booking window", "SQL")
+Rel(avail, db, "Reads one date", "SQL")
+Rel(ctrl, res, "Returns")
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Secure administrator access
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+Person(other, "Booker, artist or guest", "Any user without the Administrator role")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(authApp, "Authenticator app", "Generates TOTP codes on the administrator's device")
+
+Rel(admin, zamaro, "Signs in with password and TOTP, uses /admin", "HTTPS")
+Rel(other, zamaro, "Receives 404 for any /admin request from", "HTTPS")
+Rel(admin, authApp, "Reads 6-digit code from")
+@enduml

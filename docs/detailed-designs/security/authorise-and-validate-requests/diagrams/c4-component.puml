@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Authorise and validate requests
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage, MessageThreadComponent, BookingMessagesApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(size, "LimitRequestBodySize", "Laravel middleware", "413 above 1 MB on non-upload routes")
+  Component(auth, "auth:sanctum", "Laravel middleware", "401 without a session user")
+  Component(role, "EnsureUserHasRole", "Laravel middleware", "404 without the route's role")
+  Component(ctrl, "BookingMessagesController", "Laravel controller", "POST /api/v1/bookings/{number}/messages")
+  Component(policy, "BookingPolicy", "Laravel policy", "participate(): denyAsNotFound for non-participants")
+  Component(req, "SendBookingMessageRequest", "FormRequest", "body 1-2,000 characters")
+  Component(action, "SendBookingMessage", "Action", "Creates the Message in a transaction")
+  Component(res, "MessageResource", "API resource", "Body as a JSON string")
+  Component(problem, "ProblemDetailsRenderer", "Exception renderer", "401, 404, 413, 422 as RFC 9457")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, messages")
+}
+Rel(web, size, "POST message", "JSON/HTTPS")
+Rel(size, auth, "Passes to")
+Rel(auth, role, "Passes to")
+Rel(role, ctrl, "Routes to")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Inserts", "Eloquent, bound parameters")
+Rel(ctrl, res, "Returns")
+Rel(size, problem, "Rejects through")
+Rel(policy, problem, "Denies through")
+Rel(req, problem, "Fails through")
+@enduml

@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Expire unanswered requests
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Scheduler" as sched
+  participant "ExpireOverdueRequests" as cmd
+  participant "ExpireBookingRequest" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Email delivery service" as email
+end box
+
+sched -> cmd : Every minute, withoutOverlapping, onOneServer
+cmd -> db : SELECT id FROM bookings WHERE status = 'Requested' AND respond_by <= now() (L2-092 catch-up)
+db --> cmd : Due booking IDs
+loop each due booking
+  cmd -> queue : Dispatch ExpireBookingRequest(id), unique per booking
+end
+queue -> job : Deliver job
+job -> db : BEGIN; load booking FOR UPDATE
+db --> job : Booking
+alt status is no longer Requested or respond_by is in the future
+  job -> db : ROLLBACK
+  note right of job : Second run has no effect (L2-092)
+else still Requested and overdue
+  job -> sm : transition(booking, Expired, system) (L2-030)
+  sm -> db : Conditional update and history row (L2-029)
+  job -> db : COMMIT
+  sm -> queue : RequestExpired after commit
+  queue -> email : Expiry email to booker and artist (L2-030, L2-063)
+end
+alt job throws
+  job -> queue : Retry with exponential backoff, up to 5 tries
+  queue -> queue : Move to failed_jobs and alert (L2-092)
+end
+actor -> page : Open /bookings/{number}
+page -> client : getBooking(number)
+client -> controller : GET /api/v1/bookings/{number}
+controller --> client : BookingResource, status Expired, history entry by System
+client --> page : Booking
+page --> actor : Expired badge and timeline entry
+@enduml

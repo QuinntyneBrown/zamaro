@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Report and moderate a review
+
+Person(user, "Booker or artist", "Signed-in user")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Report dialog and admin moderation queue")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Report and admin moderation endpoints")
+  Container(worker, "Zamaro Worker", "PHP 8.3 / Laravel Horizon", "Notifications and rating recalculation")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "reviews, review_reports, audit_entries")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Job queue and profile cache")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(admin, web, "Uses /admin/reviews", "HTTPS")
+Rel(web, api, "POST /api/v1/reviews/{review}/reports, /api/v1/admin/...", "JSON/HTTPS")
+Rel(api, db, "Writes reports, hides reviews, appends audit entries", "Eloquent / SQL")
+Rel(api, cache, "Queues notifications and recalculation", "RESP")
+Rel(worker, cache, "Consumes jobs", "RESP")
+Rel(worker, db, "Recalculates artist_ratings", "SQL")
+Rel(worker, email, "Sends emails", "HTTPS/JSON")
+@enduml

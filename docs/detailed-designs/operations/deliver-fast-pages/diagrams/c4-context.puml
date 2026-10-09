@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Deliver fast pages
+
+Person(guest, "Guest", "Anyone not signed in, often on a phone")
+Person(booker, "Booker", "Signed-in church representative")
+Person(dev, "Developer", "Member of the Zamaro team who merges changes")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(cdn, "CDN", "Serves web assets, images and video")
+System_Ext(rum, "Real-user monitoring service", "Collects Core Web Vitals; vendor <TO SUPPLY>")
+System_Ext(ci, "CI/CD pipeline", "Builds, checks bundle budgets, runs Lighthouse; vendor <TO SUPPLY>")
+System_Ext(video, "Video processing service", "Produces adaptive streaming renditions and poster frames")
+
+Rel(guest, cdn, "Loads Discover and artist profiles through", "HTTPS")
+Rel(booker, cdn, "Loads pages and media through", "HTTPS")
+Rel(cdn, zamaro, "Fetches pages and media from")
+Rel(guest, rum, "Browser sends LCP, INP and CLS beacons to", "HTTPS")
+Rel(zamaro, video, "Sends uploads for transcoding to")
+Rel(dev, ci, "Merges to main, which triggers")
+Rel(ci, zamaro, "Builds and measures")
+@enduml

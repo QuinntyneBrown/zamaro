@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Manage the church profile
+
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(geo, "Geocoding provider", "Address to latitude and longitude")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+
+Rel(booker, zamaro, "Creates and edits the church profile using", "HTTPS")
+Rel(zamaro, geo, "Geocodes church addresses with", "HTTPS/JSON")
+Rel(zamaro, routing, "Measures distance from Toronto City Hall with", "HTTPS/JSON")
+@enduml

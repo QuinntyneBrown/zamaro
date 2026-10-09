@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Resolve a missing artist
+
+Container_Boundary(web, "Zamaro Web") {
+  Component(page, "ArtistProfilePage", "Angular page", "Maps API outcome to SSR status")
+  Component(client, "ArtistProfileApi", "Typed HTTP client", "Follows 301; detects slug change")
+  Component(notfound, "ArtistNotFoundComponent", "Angular component", "This artist isn't on Zamaro + suggestions")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ArtistProfileController", "Laravel controller", "show(slug)")
+  Component(resolve, "ResolveArtistSlug", "Action", "Found, Moved or Missing")
+  Component(ex, "ArtistNotFound", "Exception + renderer", "404 problem details with similarArtists")
+  Component(finder, "SimilarArtistFinder", "Domain service", "Same primary style, free on date, nearest first")
+  Component(avail, "AvailabilityService", "Domain service", "isFree(artist, date)")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists, slug_histories")
+}
+Rel(page, client, "Loads profile with")
+Rel(page, notfound, "Renders on 404")
+Rel(client, ctrl, "GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(ctrl, resolve, "Resolves slug with")
+Rel(resolve, db, "Reads artists and slug_histories", "SQL")
+Rel(ctrl, ex, "Throws on Missing")
+Rel(ex, finder, "Fills suggestions with")
+Rel(finder, avail, "Keeps artists free on the date")
+Rel(finder, db, "Reads candidates by style", "SQL")
+@enduml

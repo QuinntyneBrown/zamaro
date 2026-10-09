@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Authorise and validate requests
+
+Person(user, "Booker or artist", "Booking participant")
+System_Ext(ci, "CI pipeline", "Cross-user suite, query lint, sanitisation lint")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular SSR on Node.js", "Message thread renders bodies as text")
+  Container(edge, "Edge load balancer", "Managed load balancer, vendor <TO SUPPLY>", "Routes /api to the API")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Body limit, role and ownership checks, FormRequest validation")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Bookings and messages")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, edge, "POST /api/v1/bookings/{number}/messages", "JSON/HTTPS")
+Rel(edge, api, "Forwards", "HTTP, private network")
+Rel(api, db, "Reads and writes through bound parameters", "Eloquent / SQL")
+Rel(ci, api, "Tests every authenticated route with another user's identifier")
+@enduml

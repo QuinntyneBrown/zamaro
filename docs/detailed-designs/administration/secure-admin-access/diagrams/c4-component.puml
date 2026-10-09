@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Secure administrator access
+
+Container(web, "Zamaro Web", "Angular", "adminGuard, NotFoundPage, MfaChallengePage, MfaEnrolmentPage, AuthService")
+Container_Boundary(api, "Zamaro API") {
+  Component(signin, "SignInController", "Laravel controller", "Password step; reports mfaRequired")
+  Component(mfa, "MfaChallengeController", "Laravel controller", "POST /api/v1/auth/mfa/challenge")
+  Component(verify, "VerifyMfaChallenge", "Action", "Checks TOTP or recovery code, completes sign-in")
+  Component(totp, "TotpVerifier", "Interface + adapter", "TOTP check with one-step drift")
+  Component(role, "EnsureAdministrator", "Middleware", "404 without the Administrator role")
+  Component(mfaMw, "EnsureMfaVerified", "Middleware", "404 without mfa_verified_at")
+  Component(idle, "EnforceAdminIdleTimeout", "Middleware", "Ends admin session after 30 minutes idle")
+  Component(admin, "Admin controllers", "Laravel controllers", "Every route under /api/v1/admin")
+  Component(audit, "RecordAuditEntry", "Action", "Records sign-in and MFA outcomes")
+}
+ContainerDb(cache, "Cache and queue", "Redis", "Sessions")
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users, audit_entries")
+
+Rel(web, signin, "Submits email and password", "JSON/HTTPS")
+Rel(web, mfa, "Submits TOTP code", "JSON/HTTPS")
+Rel(web, role, "Calls admin endpoints through", "JSON/HTTPS")
+Rel(mfa, verify, "Calls")
+Rel(verify, totp, "Verifies code with")
+Rel(verify, db, "Reads encrypted MFA secret", "SQL")
+Rel(verify, cache, "Regenerates session, sets mfa_verified_at", "RESP")
+Rel(verify, audit, "Records outcome")
+Rel(signin, audit, "Records outcome")
+Rel(audit, db, "Inserts audit_entry", "SQL")
+Rel(role, mfaMw, "Passes to")
+Rel(mfaMw, idle, "Passes to")
+Rel(idle, cache, "Reads and stamps last_activity_at", "RESP")
+Rel(idle, admin, "Passes to")
+@enduml

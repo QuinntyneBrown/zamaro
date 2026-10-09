@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Meet accessibility standards
+
+Person(person, "Guest, booker, artist or administrator", "Uses a keyboard, screen reader, magnifier or reduced motion")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(ci, "CI pipeline", "Runs axe-core and contrast checks on every build")
+System_Ext(cdn, "CDN", "Serves web assets")
+
+Rel(person, zamaro, "Uses through a browser and assistive technology", "HTTPS")
+Rel(ci, zamaro, "Audits every route in both themes")
+Rel(zamaro, cdn, "Serves stylesheets and scripts through")
+@enduml

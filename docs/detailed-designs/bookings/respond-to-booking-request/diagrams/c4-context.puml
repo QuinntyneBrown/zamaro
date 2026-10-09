@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Respond to a booking request
+
+Person(artist, "Artist", "Approved worship artist")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(artist, zamaro, "Accepts or declines requests using", "HTTPS")
+Rel(zamaro, routing, "Requests distance to each church from", "HTTPS/JSON")
+Rel(zamaro, email, "Sends accepted or declined email through", "HTTPS")
+Rel(email, booker, "Delivers the outcome to")
+@enduml

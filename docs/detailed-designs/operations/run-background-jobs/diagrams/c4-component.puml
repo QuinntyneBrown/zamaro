@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Run background jobs
+
+Container(web, "Zamaro Web", "Angular", "BookingDetailPage")
+Container(api, "Zamaro API", "Laravel", "Dispatches notification jobs")
+System_Ext(pay, "Payment processor", "Charges and payouts")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(metrics, "Metrics and alerting service", "Alerts")
+System_Ext(errors, "Error tracking service", "Exceptions")
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(sched, "Scheduler", "routes/console.php, schedule:run", "Runs each due-work command onOneServer, withoutOverlapping")
+  Component(cmds, "Due-work commands", "Artisan commands", "bookings:expire-requests, bookings:expire-deposits, bookings:complete, payments:charge-balances, payouts:send, reminders:send")
+  Component(jobs, "Booking jobs", "Queued jobs, ShouldBeUnique", "ExpireBookingRequest, ExpireUnpaidDeposit, CompleteBooking, ChargeBalance, SendPayout, SendEventReminder")
+  Component(retry, "RetriesWithBackoff", "Job trait", "6 attempts: 1 plus 5 exponential retries")
+  Component(sm, "BookingStateMachine", "Domain service", "Allowed transitions (L2-029)")
+  Component(horizon, "Horizon supervisors", "Laravel Horizon", "Process queues by priority")
+  Component(failed, "ReportFailedJob", "Listener for JobFailed", "Reports and alerts")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "bookings, booking_transitions, booking_reminders, failed_jobs")
+  ComponentQueue(queue, "Cache and queue", "Redis", "Queues and locks")
+}
+Rel(sched, cmds, "Invokes on schedule")
+Rel(cmds, db, "Selects everything due as of now", "SQL")
+Rel(cmds, queue, "Dispatches one unique job per booking", "RESP")
+Rel(api, queue, "Dispatches notification jobs", "RESP")
+Rel(horizon, queue, "Pops", "RESP")
+Rel(horizon, jobs, "Runs")
+Rel(jobs, retry, "Uses")
+Rel(jobs, sm, "Checks and applies transition")
+Rel(jobs, db, "Locks booking row and writes", "SQL")
+Rel(jobs, pay, "Sends with idempotency key", "HTTPS")
+Rel(jobs, email, "Sends", "HTTPS")
+Rel(horizon, failed, "Fires JobFailed after the last attempt")
+Rel(failed, db, "Row in failed_jobs", "SQL")
+Rel(failed, errors, "Reports")
+Rel(failed, metrics, "Raises alert")
+Rel(web, api, "Reads booking status", "JSON/HTTPS")
+@enduml

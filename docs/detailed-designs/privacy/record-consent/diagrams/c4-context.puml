@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Record consent
+
+Person(guest, "Guest", "Registers and gives consent")
+Person(user, "Booker or artist", "Accepts new terms versions")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+
+Rel(guest, zamaro, "Accepts terms and privacy policy, chooses marketing email using", "HTTPS")
+Rel(user, zamaro, "Accepts a new terms version at sign-in using", "HTTPS")
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Support bookings and payments
+
+Person(admin, "Administrator", "Member of the Zamaro team")
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(pay, "Payment processor", "PCI DSS Level 1; charges, refunds, payouts, signed webhooks")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(admin, zamaro, "Searches bookings, issues refunds, resolves holds using", "HTTPS")
+Rel(zamaro, pay, "Sends refunds and released balance charges to", "HTTPS/JSON")
+Rel(pay, zamaro, "Confirms refunds through signed webhooks to", "HTTPS")
+Rel(zamaro, email, "Sends resolution and receipt emails through", "HTTPS/JSON")
+Rel(email, booker, "Delivers email to")
+Rel(email, artist, "Delivers email to")
+@enduml

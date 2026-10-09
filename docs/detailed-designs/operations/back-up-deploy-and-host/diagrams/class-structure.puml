@@ -1,0 +1,100 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Back up, deploy and host
+
+package "Delivery pipeline and operations tooling" {
+  class ReleaseManifest {
+    +string version
+    +string gitSha
+    +string apiImageDigest
+    +string webImageDigest
+    +string assetPrefix
+    +string[] migrations
+    +CarbonImmutable builtAt
+  }
+  class Deployment {
+    +string releaseVersion
+    +DeploymentKind kind
+    +DeploymentOutcome outcome
+    +CarbonImmutable startedAt
+    +?CarbonImmutable servingAt
+  }
+  enum DeploymentKind {
+    Release
+    Rollback
+  }
+  enum DeploymentOutcome {
+    Succeeded
+    FailedChecks
+    FailedSmokeTest
+    RolledBack
+  }
+  enum PipelineStage {
+    Lint
+    UnitTests
+    AcceptanceTests
+    SecurityScans
+    Budgets
+    ContractTests
+    MigrationCompatibility
+    Build
+    Migrate
+    Rollout
+    SmokeTest
+  }
+  class MigrationCompatibilityCheck {
+    +run(previous: ReleaseManifest, candidate: ReleaseManifest): bool
+  }
+  class BackupPolicy {
+    +int pointInTimeDays = 14
+    +int maxDataLossMinutes = 15
+    +string region = "Canadian"
+    +string encryption = "AES-256"
+  }
+  class RestoreDrillRecord {
+    +CarbonImmutable startedAt
+    +CarbonImmutable restoredToTimestamp
+    +CarbonImmutable completedAt
+    +int durationMinutes
+    +RestoreDrillOutcome outcome
+    +string notes
+  }
+  enum RestoreDrillOutcome {
+    WithinTarget
+    OverTarget
+    Failed
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  abstract class Migration {
+    +up(): void
+  }
+  class ExpandMigration
+  class ContractMigration {
+    +string dropsAfterRelease
+  }
+}
+
+Deployment --> ReleaseManifest : deploys
+Deployment --> DeploymentKind
+Deployment --> DeploymentOutcome
+MigrationCompatibilityCheck ..> ReleaseManifest : compares
+ReleaseManifest "1" o-- "*" Migration : lists
+Migration <|-- ExpandMigration
+Migration <|-- ContractMigration
+RestoreDrillRecord ..> BackupPolicy : verifies
+RestoreDrillRecord --> RestoreDrillOutcome
+Deployment ..> PipelineStage : passes through
+@enduml

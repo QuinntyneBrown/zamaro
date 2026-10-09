@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Issue receipts
+
+Person(booker, "Booker", "Signed-in church representative")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "BookingDetailPage with Download receipt")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Receipt list and PDF endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Issues receipts and sends receipt emails")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Receipts with line snapshots")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Receipt jobs")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "Lists receipts, downloads PDF", "JSON or application/pdf over HTTPS")
+Rel(api, db, "Reads receipts", "SQL")
+Rel(worker, cache, "Consumes IssueReceipt jobs", "RESP")
+Rel(worker, db, "Writes receipts", "SQL")
+Rel(worker, email, "Sends ReceiptNotification", "HTTPS/JSON")
+@enduml

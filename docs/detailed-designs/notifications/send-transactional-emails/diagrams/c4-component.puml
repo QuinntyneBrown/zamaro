@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Send transactional emails
+
+Container(web, "Zamaro Web", "Angular", "UndeliverableEmailBannerComponent")
+System_Ext(email, "Email delivery service", "Transactional email with bounce webhooks")
+Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
+  Component(events, "Domain events", "Laravel events", "BookingRequested, BookingAccepted, BookingConfirmed, ...")
+  Component(listeners, "SendBookingEmails", "Queued listeners", "Map each event to recipients and notification")
+  Component(base, "TransactionalNotification", "Abstract notification", "mail channel, notifications queue, 5 tries with backoff")
+  Component(data, "BookingEmailData", "Value object", "Booking number, link, parties; no card data")
+  Component(log, "EmailMessageLogger", "Listener", "Records queued, sent, failed, suppressed")
+  Component(hook, "EmailWebhookController", "Laravel controller", "POST /api/v1/webhooks/email")
+  Component(bounce, "RecordEmailBounce", "Action", "Hard bounce marks address undeliverable")
+  Component(dns, "CheckEmailDnsCommand", "Scheduled command", "email:check-dns, daily")
+  Component(me, "MeController", "Laravel controller", "GET /api/v1/me with emailUndeliverable")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "email_messages, users")
+}
+Rel(events, listeners, "Dispatches to")
+Rel(listeners, base, "Queues subclasses of")
+Rel(base, data, "Renders from")
+Rel(base, email, "Sends", "HTTPS/JSON")
+Rel(base, log, "Raises sending and sent events to")
+Rel(log, db, "Writes", "SQL")
+Rel(email, hook, "POSTs bounce", "HTTPS")
+Rel(hook, bounce, "Calls")
+Rel(bounce, db, "Sets users.email_undeliverable_at", "SQL")
+Rel(web, me, "Reads current user", "JSON/HTTPS")
+Rel(me, db, "Reads users.email_undeliverable_at", "SQL")
+@enduml

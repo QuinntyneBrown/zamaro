@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — List the booker's bookings
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingsPage" as page
+  participant "BookingsStore" as store
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ListBookerBookings" as list
+  participant "BookingNextAction" as next
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /bookings
+page -> store : load()
+store -> store : Skeleton rows while loading (L2-105)
+store -> client : list(upcoming)
+client -> controller : GET /api/v1/bookings?group=upcoming
+controller -> controller : Booker role; validate ListBookingsRequest
+controller -> list : handle(booker, upcoming, cursor)
+list -> db : WHERE booker_id = me AND status IN (Requested, Accepted, Confirmed)\nORDER BY event_date ASC, id (L2-033)
+db --> list : Bookings with artist and sums of payments and refunds
+loop each booking
+  list -> next : for(booking, booker)
+  next --> list : Pay deposit, Message, Cancel or none
+end
+list --> controller : Page
+controller --> client : 200 BookingSummaryResource[] and next cursor
+client --> store : Upcoming group
+store -> client : list(past)
+client -> controller : GET /api/v1/bookings?group=past
+controller -> list : handle(booker, past, cursor)
+list -> db : Other statuses ORDER BY event_date DESC, id DESC (L2-033)
+db --> list : Bookings
+list -> next : for(booking, booker) per row
+next --> list : Leave a review when eligible (L2-059) or none
+list --> controller : Page
+controller --> client : 200 with next cursor
+client --> store : Past group
+store --> page : Render both sections
+page --> actor : Number, artist, date, kind, status, amount paid, next action (L2-033)
+@enduml

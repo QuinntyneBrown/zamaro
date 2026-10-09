@@ -1,0 +1,93 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Reply to a review
+
+package "Zamaro Web (Angular)" {
+  class ArtistReviewsPage {
+    +store: ArtistReviewsStore
+    +onReply(reviewId: number, text: string): void
+    +onEditReply(reviewId: number, text: string): void
+  }
+  class ReviewReplyFormComponent {
+    +text: FormControl<string>
+    +remaining: Signal<number>
+    +editableUntil: Input<string | null>
+    +submitted: Output<string>
+  }
+  class ArtistReviewsStore {
+    +reviews: Signal<ArtistReviewView[]>
+    +status: Signal<'idle'|'saving'|'saved'|'error'>
+    +postReply(reviewId: number, text: string): void
+    +editReply(reviewId: number, text: string): void
+  }
+  class ArtistReviewsApi {
+    +list(cursor?: string): Observable<ArtistReviewPage>
+    +postReply(reviewId: number, text: string): Observable<ReviewReplyView>
+    +editReply(reviewId: number, text: string): Observable<ReviewReplyView>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistReviewReplyController {
+    +store(request: StoreReviewReplyRequest, review: Review): ReviewReplyResource
+    +update(request: UpdateReviewReplyRequest, review: Review): ReviewReplyResource
+  }
+  class ReviewReplyPolicy {
+    +create(user: User, review: Review): Response
+    +update(user: User, reply: ReviewReply): Response
+  }
+  class ReplyToReview <<action>> {
+    +handle(review: Review, artist: Artist, text: string): ReviewReply
+  }
+  class EditReviewReply <<action>> {
+    +handle(reply: ReviewReply, text: string): ReviewReply
+  }
+  class Review <<Eloquent>> {
+    +int id
+    +int artistId
+    +int stars
+    +string text
+    +?CarbonImmutable hiddenAt
+    +isVisible(): bool
+  }
+  class ReviewReply <<Eloquent>> {
+    +int id
+    +int reviewId
+    +int artistId
+    +string text
+    +CarbonImmutable createdAt
+    +?CarbonImmutable editedAt
+    +editableUntil(): CarbonImmutable
+  }
+  class Artist <<Eloquent>> {
+    +int id
+    +int userId
+    +string displayName
+    +ArtistStatus status
+  }
+}
+
+ArtistReviewsPage --> ArtistReviewsStore
+ArtistReviewsPage --> ReviewReplyFormComponent
+ArtistReviewsStore --> ArtistReviewsApi
+ArtistReviewsApi ..> ArtistReviewReplyController : POST / PATCH
+ArtistReviewReplyController ..> ReviewReplyPolicy : authorises
+ArtistReviewReplyController --> ReplyToReview
+ArtistReviewReplyController --> EditReviewReply
+ReplyToReview ..> ReviewReply : creates
+EditReviewReply ..> ReviewReply : mutates
+Review "1" --> "0..1" ReviewReply
+Artist "1" --> "*" Review : is reviewed in
+Artist "1" --> "*" ReviewReply : writes
+@enduml

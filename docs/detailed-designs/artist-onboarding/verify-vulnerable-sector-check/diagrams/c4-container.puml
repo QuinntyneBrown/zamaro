@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Verify a Vulnerable Sector Check
+
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(secrets, "Secrets manager", "Document encryption key")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "/artist/vulnerable-sector-check and /admin/vulnerable-sector-checks")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Upload, verification and signed document endpoints")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Scans uploads; daily renewal reminders")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "vulnerable_sector_checks, audit_entries")
+  ContainerDb(cache, "Cache and queue", "Redis", "Queues")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Encrypted documents in a private bucket")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(admin, web, "Uses", "HTTPS")
+Rel(web, api, "Calls /api/v1 endpoints; opens signed document URL on the media domain", "JSON/HTTPS")
+Rel(api, secrets, "Reads key", "HTTPS")
+Rel(api, storage, "Writes and reads ciphertext", "S3 API")
+Rel(api, db, "Reads and writes checks and audit entries", "Eloquent / SQL")
+Rel(api, cache, "Queues scan job", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, scanner, "Scans decrypted bytes", "HTTPS")
+Rel(worker, storage, "Reads or deletes object", "S3 API")
+Rel(worker, db, "Updates status; finds expiring checks", "SQL")
+Rel(worker, email, "Sends renewal reminder", "HTTPS")
+@enduml

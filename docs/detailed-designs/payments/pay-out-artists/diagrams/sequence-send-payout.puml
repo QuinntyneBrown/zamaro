@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Pay an artist after the balance is collected
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "EarningsPage" as page
+  participant "PayoutsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EarningsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "CreatePayoutListener" as listener
+  participant "SendDuePayoutsCommand" as cmd
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "CreatePayout" as create
+  participant "SendPayout" as send
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "PaymentGateway" as gateway
+end box
+
+listener -> create : BalanceCharged(booking)
+create -> create : collected = deposit + balance; fee = 8% half-up (L2-039)
+note right of create : $650 collected -> $52.00 fee, $598.00 payout
+create -> db : Insert Payout(Scheduled, dueBy = 2 business days) unique per booking (L2-092)
+cmd -> db : Payouts Scheduled, booking not held, artist payout ready
+db --> cmd : Due payouts
+loop each payout
+  cmd -> send : handle(payout)
+  send -> gateway : createTransfer(accountId, amount, key payout:{bookingId}) (L2-041)
+  alt transfer accepted
+    gateway --> send : Transfer id
+    send -> db : status Sent, sentAt; AuditEntry for payout (L2-069)
+    send -> send : Dispatch PayoutSent -> artist email (L2-063)
+  else transfer rejected
+    gateway --> send : Error
+    send -> db : status Failed
+    send -> send : AlertAdministrators(PayoutFailed)
+  end
+end
+actor -> page : Open /artist/earnings
+page -> client : earnings()
+client -> controller : GET /api/v1/artist/earnings
+controller -> db : Bookings with payments and payouts for this artist, cursor page
+controller --> client : Total, fee, payout amount, status, date per booking (L2-039)
+page --> actor : Earnings table
+@enduml

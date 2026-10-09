@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show reviews and rating
+
+Container(web, "Zamaro Web", "Angular", "ArtistProfilePage, ReviewsSectionComponent, ProfileReviewsStore, ArtistReviewsApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ArtistReviewsController", "Laravel controller", "GET /api/v1/artists/{slug}/reviews")
+  Component(profile, "ArtistProfileResource", "API resource", "Embeds rating summary and first 4 reviews")
+  Component(list, "ListArtistReviews", "Query action", "Visible reviews, newest first, cursor pages")
+  Component(res, "ReviewResource / ReviewReplyResource", "API resource", "Reviewer, church, city, month and year, reply")
+  Component(listener, "QueueRatingRecalculation", "Event listener", "Reacts to ReviewPublished, ReviewEdited, ReviewHidden")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(job, "RecalculateArtistRating", "Queued job, unique per artist", "Mean stars to one decimal and distinct churches")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "reviews, review_replies, bookings, artist_ratings")
+ContainerDb(cache, "Cache and queue", "Redis", "Profile and search cache, queues")
+
+Rel(web, ctrl, "Requests next page of 10", "JSON/HTTPS")
+Rel(web, profile, "Receives with the profile", "JSON/HTTPS")
+Rel(ctrl, list, "Calls")
+Rel(profile, list, "Takes first 4 from")
+Rel(ctrl, res, "Returns")
+Rel(list, db, "Reads visible reviews and replies", "SQL")
+Rel(profile, db, "Reads artist_ratings", "SQL")
+Rel(listener, cache, "Dispatches job onto", "RESP")
+Rel(job, db, "Aggregates and upserts", "SQL")
+Rel(job, cache, "Forgets profile and search entries", "RESP")
+@enduml

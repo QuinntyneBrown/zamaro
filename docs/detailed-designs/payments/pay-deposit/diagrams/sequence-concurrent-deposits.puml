@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Two bookers pay for the same artist and date
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker B" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PayDepositPage" as page
+  participant "PaymentsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "DepositController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ConfirmDepositPayment" as confirm
+  participant "BookingStateMachine" as sm
+  participant "DeclineCompetingRequests" as compete
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "PaymentGateway" as gateway
+end box
+
+note over controller, db : Booker A's confirmation for booking A holds the artist row lock and commits first
+actor -> page : Card payment for booking B succeeds at the processor
+page -> client : POST /api/v1/bookings/{B}/deposit/confirm
+client -> controller : HTTPS request
+controller -> confirm : handle(booking B, paymentId)
+confirm -> db : BEGIN; SELECT artist FOR UPDATE (waits for A to commit)
+db --> confirm : Lock acquired; booking A is Confirmed for the date
+alt another Confirmed booking exists (L2-032)
+  confirm -> sm : transition(B: Accepted -> Expired, reason "booked by another church")
+  sm -> db : Update status, insert BookingTransition
+  confirm -> db : COMMIT
+  confirm -> gateway : refund(paymentId, full deposit, key deposit-refund:{B}) (L2-041)
+  gateway --> confirm : Refund pending
+  confirm -> db : Insert Refund
+  confirm --> controller : DepositResult lost
+  controller --> client : 409 problem details
+  client --> page : Lost the date
+  page --> actor : "{first name} was booked by another church moments ago." (L2-032)
+else partial unique index rejects a second Confirmed row
+  db --> confirm : Unique violation on bookings_one_confirmed_per_artist_date
+  confirm -> confirm : Roll back, then run the Expired and refund branch above
+end
+== After booking A commits ==
+confirm -> compete : handle(booking A)
+compete -> db : Requested or Accepted bookings, same artist and date, no deposit in flight
+compete -> sm : transition(-> Declined, "Booked by another church") (L2-032)
+compete -> compete : Dispatch BookingDeclined for each booker (L2-063)
+@enduml

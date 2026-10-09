@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Record consent
+
+Container(web, "Zamaro Web", "Angular", "RegisterFormComponent, AcceptTermsPage, ConsentApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(register, "RegisterBooker", "Action (accounts/register-booker)", "Creates the booker")
+  Component(record, "RecordConsent", "Action", "Appends ConsentRecord rows")
+  Component(gate, "EnsureCurrentTermsAccepted", "Middleware", "409 terms-acceptance-required when stale")
+  Component(ctrl, "ConsentController", "Laravel controller", "POST /api/v1/account/consents/terms")
+  Component(accept, "AcceptCurrentTerms", "Action", "Checks version and records acceptance")
+  Component(docs, "LegalDocumentRegistry", "Service", "Current version of each legal document")
+  Component(docCtrl, "LegalDocumentController", "Laravel controller", "GET /api/v1/legal-documents/current")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "legal_documents, consent_records")
+  ComponentDb(cache, "Cache and queue", "Redis", "Cached versions")
+}
+Rel(web, docCtrl, "Reads current versions", "JSON/HTTPS")
+Rel(web, ctrl, "Accepts new terms", "JSON/HTTPS")
+Rel(web, gate, "Every authenticated request passes", "JSON/HTTPS")
+Rel(register, record, "Terms, privacy, marketing")
+Rel(ctrl, accept, "Calls")
+Rel(accept, docs, "Reads current terms version")
+Rel(accept, record, "Appends acceptance")
+Rel(gate, docs, "Reads current terms version")
+Rel(gate, db, "Reads latest terms record", "SQL")
+Rel(docCtrl, docs, "Reads")
+Rel(docs, cache, "Caches", "RESP")
+Rel(docs, db, "Reads legal_documents", "SQL")
+Rel(record, db, "Inserts consent_records", "SQL")
+@enduml

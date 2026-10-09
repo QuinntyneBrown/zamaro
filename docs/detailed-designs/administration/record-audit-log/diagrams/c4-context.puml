@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Record the audit log
+
+Person(user, "Booker or artist", "Signs in and changes credentials")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(pay, "Payment processor", "Refunds and payouts, signed webhooks")
+
+Rel(user, zamaro, "Signs in and changes password or MFA in", "HTTPS")
+Rel(admin, zamaro, "Takes admin actions and reads the audit log in", "HTTPS")
+Rel(pay, zamaro, "Reports refund and payout results to", "HTTPS webhooks")
+@enduml

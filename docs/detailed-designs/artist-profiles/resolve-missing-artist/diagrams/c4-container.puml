@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Resolve a missing artist
+
+Person(visitor, "Booker or guest", "Follows a profile link")
+System_Ext(crawlers, "Search engines and link previews", "Crawlers and unfurlers")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR on Node.js", "Sets 301 or 404 on the rendered page")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Resolves slugs; 200, 301 or 404 problem")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artists, slug_histories, availability")
+}
+Rel(visitor, web, "GET /artists/{slug}", "HTTPS")
+Rel(crawlers, web, "GET /artists/{slug}", "HTTPS")
+Rel(web, api, "GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(api, db, "Looks up slug and slug history", "Eloquent / SQL")
+@enduml

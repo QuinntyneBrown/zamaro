@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Show loading and feedback
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(pay, "Payment processor", "Hosted card fields, idempotent charges")
+
+Rel(guest, zamaro, "Waits for searches and profiles in", "HTTPS")
+Rel(booker, zamaro, "Submits requests and payments, receives toasts in", "HTTPS")
+Rel(artist, zamaro, "Submits forms, receives toasts in", "HTTPS")
+Rel(zamaro, pay, "Charges with the submission's idempotency key", "HTTPS/JSON")
+@enduml

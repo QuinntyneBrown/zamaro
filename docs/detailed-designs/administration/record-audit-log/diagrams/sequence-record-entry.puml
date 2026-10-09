@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Record sign-in and administrator actions
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User or administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SignInPage" as signin
+  participant "Admin page" as adminPage
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SignInController" as sctrl
+  participant "AuditAdminRequests" as mw
+  participant "Admin controller" as actrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "AuditAuthenticationEvents" as sub
+  participant "Admin action" as action
+  participant "RecordAuditEntry" as record
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+== Sign-in ==
+actor -> signin : Email and password
+signin -> sctrl : POST /api/v1/auth/sign-in
+alt credentials valid
+  sctrl -> sub : Login event
+  sub -> record : auth.sign_in, actor, outcome Succeeded (L2-069)
+else credentials invalid
+  sctrl -> sub : Failed event
+  sub -> record : auth.sign_in_failed, actor or null, outcome Failed (L2-069)
+end
+record -> record : Request IP via trusted proxies; redact context (L2-079)
+record -> db : INSERT audit_entry (actor, action, target, occurred_at, ip_address, outcome)
+sctrl --> signin : Sign-in response
+
+== Administrator action ==
+actor -> adminPage : Take an admin action
+adminPage -> mw : POST /api/v1/admin/...
+mw -> actrl : next
+actrl -> action : handle(...)
+action -> db : BEGIN; apply the change
+alt action succeeds
+  action -> record : Action name, target, outcome Succeeded (L2-069)
+  record -> db : INSERT audit_entry; COMMIT with the change
+  actrl --> mw : 2xx
+else action fails or is refused
+  action -> db : ROLLBACK
+  actrl --> mw : 4xx or 5xx
+  mw -> record : terminate(): route name, outcome Failed or Denied (L2-069)
+  record -> db : INSERT audit_entry
+end
+mw --> adminPage : Response
+@enduml

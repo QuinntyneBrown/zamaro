@@ -1,0 +1,75 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Send event reminders
+
+package "Zamaro Web (Angular)" {
+  class BookingDetailPage {
+    +booking: Signal<BookingDto>
+    +thread: Signal<MessageDto[]>
+  }
+}
+
+package "Zamaro Worker (Laravel)" {
+  class SendEventRemindersCommand {
+    +handle(find: FindDueReminders, dispatch: DispatchEventReminder): int
+  }
+  class FindDueReminders {
+    +due(now: CarbonImmutable): Collection<DueReminder>
+  }
+  class DueReminder <<value object>> {
+    +Booking booking
+    +ReminderKind kind
+  }
+  class DispatchEventReminder <<action>> {
+    +handle(booking: Booking, kind: ReminderKind): ?ReminderDispatch
+  }
+  class EventReminderNotification <<notification>> {
+    +int bookingId
+    +ReminderKind kind
+    +category(): NotificationCategory
+    +shouldSend(user: User, channel: string): bool
+    +toMail(user: User): MailMessage
+  }
+  abstract class TransactionalNotification <<notification>>
+  class NotificationPreferenceGate {
+    +allows(user: User, category: NotificationCategory): bool
+  }
+  class ReminderDispatch <<Eloquent>> {
+    +int bookingId
+    +ReminderKind kind
+    +CarbonImmutable dispatchedAt
+  }
+  enum ReminderKind {
+    SevenDays
+    OneDay
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventStartsAt
+  }
+}
+
+SendEventRemindersCommand --> FindDueReminders
+SendEventRemindersCommand --> DispatchEventReminder
+FindDueReminders ..> DueReminder : returns
+DispatchEventReminder ..> ReminderDispatch : inserts once
+DispatchEventReminder ..> EventReminderNotification : queues
+TransactionalNotification <|-- EventReminderNotification
+EventReminderNotification --> NotificationPreferenceGate
+EventReminderNotification --> Booking : re-reads
+Booking "1" *-- "0..2" ReminderDispatch
+ReminderDispatch --> ReminderKind
+EventReminderNotification ..> BookingDetailPage : links to thread
+@enduml

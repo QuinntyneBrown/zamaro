@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Resolve a missing artist
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(crawlers, "Search engines and link previews", "Crawlers and unfurlers")
+
+Rel(guest, zamaro, "Follows profile links to", "HTTPS")
+Rel(booker, zamaro, "Follows profile links to", "HTTPS")
+Rel(crawlers, zamaro, "Requests profile addresses; receives 301 or 404 from", "HTTPS")
+@enduml

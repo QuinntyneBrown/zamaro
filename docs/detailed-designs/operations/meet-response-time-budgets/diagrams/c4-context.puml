@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Meet response-time budgets
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(cdn, "CDN", "Caches public profile responses for up to 60 s")
+System_Ext(metrics, "Metrics and alerting service", "Stores server-time histograms; vendor <TO SUPPLY>")
+System_Ext(ci, "CI/CD pipeline", "Runs the load test against a performance environment; vendor <TO SUPPLY>")
+
+Rel(guest, cdn, "Reads public artist profiles through", "HTTPS")
+Rel(booker, zamaro, "Reads profiles and writes bookings using", "HTTPS")
+Rel(artist, zamaro, "Edits their profile using", "HTTPS")
+Rel(cdn, zamaro, "Revalidates or fetches profile responses from", "HTTPS")
+Rel(zamaro, cdn, "Purges edited profile paths in")
+Rel(zamaro, metrics, "Reports server time per request class to")
+Rel(ci, zamaro, "Drives 50 requests per second against", "HTTPS")
+@enduml

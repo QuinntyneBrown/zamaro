@@ -1,0 +1,90 @@
+@startuml
+title UML sequence behaviour — Booker cancels a Confirmed booking
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "CancelBookingDialogComponent" as dialog
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingCancellationController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "IssueCancellationRefund" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "CancelBookingAsBooker" as action
+  participant "CancellationPolicy" as policy
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Payment processor" as pay
+end box
+
+actor -> page : Open Confirmed booking
+page --> actor : "Free cancellation until Sat 31 Oct" (L2-044)
+actor -> page : Activate Cancel booking
+page -> dialog : Open
+dialog -> client : cancellationQuote(number)
+client -> controller : GET /api/v1/bookings/{number}/cancellation-quote
+controller -> policy : forBooker(booking, now)
+policy --> controller : CancellationQuote
+controller --> client : 200 CancellationQuoteResource
+client --> dialog : Quote
+alt early (on or before event date - 14 days)
+  dialog --> actor : "You'll get $162.50 back" (L2-042)
+else late
+  dialog --> actor : "Your $162.50 deposit won't be refunded" (L2-042)
+end
+actor -> dialog : Continue, then confirm a second time (L2-042)
+dialog -> client : cancel(number, expectedRefundCents)
+client -> controller : POST /api/v1/bookings/{number}/cancel
+controller -> action : handle(booking, booker, expectedRefundCents)
+action -> db : BEGIN; booking FOR UPDATE
+action -> policy : forBooker(booking, now)
+policy --> action : Fresh quote
+alt quote differs from expectedRefundCents
+  action -> db : ROLLBACK
+  action --> controller : 409 cancellation-terms-changed with fresh quote
+  controller --> client : 409
+  client --> dialog : Show new outcome, ask again
+else quote unchanged
+  action -> sm : transition(booking, Cancelled, booker) (L2-029)
+  sm -> db : Conditional update and history row
+  alt early
+    action -> db : INSERT pending Refund of the full deposit (L2-042)
+  else late
+    action -> db : INSERT pending Payout = deposit - 8 % fee (L2-042)
+  end
+  action -> db : COMMIT; date no longer held by a Confirmed booking (L2-042)
+  sm -> queue : BookingCancelled after commit, emails both parties (L2-063)
+  opt early
+    action -> queue : Dispatch IssueCancellationRefund
+    queue -> job : Deliver
+    job -> pay : refund(payment, amount, key cancel-refund:{booking}:{payment}) (L2-041)
+    pay --> job : Processor refund ID
+    job -> db : Record processor refund ID
+  end
+  action --> controller : Booking
+  controller --> client : 200 BookingResource
+  client --> dialog : Close
+  dialog --> page : Status Cancelled
+  page --> actor : Booking cancelled; balance never charged
+end
+@enduml

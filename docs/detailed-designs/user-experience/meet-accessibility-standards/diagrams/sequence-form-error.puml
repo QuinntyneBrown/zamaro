@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Form error reaches assistive technology
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Screen-reader user" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Feature form page" as page
+  participant "ProblemDetailsMapper" as mapper
+  participant "FieldErrorDirective" as fielderr
+  participant "AnnouncerService" as announcer
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Feature controller" as ctrl
+  participant "{Verb}{Noun}Request" as req
+  participant "ProblemDetailsRenderer" as renderer
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "Feature action" as action
+end box
+
+actor -> page : Submit the form
+page -> ctrl : POST or PUT /api/v1/...
+ctrl -> req : Validate
+alt validation fails
+  req -> renderer : ValidationException
+  renderer --> page : 422 problem details, errors keyed by field (L2-095)
+  page -> mapper : applyTo(form, problem)
+  mapper -> fielderr : setErrors on each matching control
+  fielderr -> fielderr : aria-invalid="true", aria-describedby=error id (L2-102)
+  page -> page : Focus first invalid control
+  page --> actor : Field name, invalid state and message read together (L2-102)
+else valid
+  ctrl -> action : handle(...)
+  action --> ctrl : Result
+  ctrl --> page : 200 resource
+  page -> announcer : polite(toast text) (L2-102)
+  announcer --> actor : Toast text read when the reader is idle
+end
+@enduml

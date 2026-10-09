@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Invalidate cached copies after a profile edit
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ProfileEditorPage" as page
+  participant "ArtistProfileApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistWorkspaceProfileController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UpdateArtistProfile" as action
+  participant "InvalidateArtistProfileCache" as listener
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "PurgeCdnPaths" as job
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as redis
+  participant "CDN" as cdn
+end box
+
+actor -> page : Save profile details
+page -> client : updateProfile(changes)
+client -> controller : PATCH /api/v1/artist/profile
+controller -> controller : Authorise artist, validate UpdateArtistProfileRequest (L2-050)
+controller -> action : handle(artist, data)
+action -> db : Update artist inside DB::transaction
+db --> action : Committed
+action -> listener : ArtistProfileChanged (after commit)
+listener -> redis : DEL artist-profile:{id}
+listener -> redis : Queue PurgeCdnPaths on the high-priority queue
+action --> controller : Artist
+controller --> client : 200 with Cache-Control private, no-store (L2-089)
+client --> page : Saved profile
+page --> actor : Saved state shown
+redis -> job : Deliver PurgeCdnPaths
+job -> cdn : Purge /artists/{slug} and /api/v1/artists/{slug}
+alt purge accepted
+  cdn --> job : Purged; next read fetches the new profile (L2-089)
+else purge fails
+  cdn --> job : Error
+  job -> job : Retry with backoff (L2-092)
+  note right of job : CDN entries expire at s-maxage 60 s,\nso cached copies are stale for at most 60 s (L2-089)
+end
+@enduml

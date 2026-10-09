@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show loading and feedback
+
+Person(person, "Guest, booker or artist", "Loads pages and submits forms")
+System_Ext(pay, "Payment processor", "Idempotent charges")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Skeletons, busy regions, busy buttons, idempotency keys, toasts")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "EnsureIdempotency on booking and payment endpoints")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "idempotency_keys, bookings.idempotency_key unique")
+  ContainerDb(cache, "Cache and queue", "Redis", "Per-key idempotency locks")
+}
+Rel(person, web, "Uses", "HTTPS")
+Rel(web, api, "Calls with Idempotency-Key", "JSON/HTTPS")
+Rel(api, db, "Reads and writes idempotency records and bookings", "Eloquent / SQL")
+Rel(api, cache, "Locks user and key", "RESP")
+Rel(api, pay, "Forwards the idempotency key", "HTTPS/JSON")
+@enduml

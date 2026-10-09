@@ -1,0 +1,121 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Apply as an artist
+
+package "Zamaro Web (Angular)" {
+  class ApplyPage {
+    +store: ApplicationStore
+    +onSubmit(form: ApplicationForm): void
+  }
+  class ApplicationStore {
+    +videos: Signal<UploadedVideo[]>
+    +status: Signal<'editing'|'submitting'|'submitted'|'error'>
+    +errors: Signal<FieldErrors>
+    +submit(form: ApplicationForm): void
+  }
+  class ArtistApplicationsApi {
+    +uploadVideo(file: File): Observable<UploadProgress>
+    +submit(body: ApplicationForm): Observable<SubmittedApplication>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistApplicationsController {
+    +store(request: SubmitArtistApplicationRequest): ArtistApplicationResource
+  }
+  class SubmitArtistApplicationRequest {
+    +rules(): array
+    +toData(): ApplicationData
+  }
+  class ApplicationData <<value object>> {
+    +string name
+    +string email
+    +ActType actType
+    +string baseCity
+    +string[] styles
+    +string bio
+    +int fromPriceCents
+    +int maxDriveKm
+    +int[] videoIds
+    +ReferenceData[] references
+  }
+  class SubmitArtistApplication <<action>> {
+    +handle(data: ApplicationData, user: ?User): ArtistApplication
+  }
+  class ServiceArea {
+    +CITY_HALL: Coordinates
+    +MAX_ROAD_KM: int = 200
+    +locate(place: string): Coordinates
+  }
+  interface Geocoder {
+    +geocode(place: string): ?Coordinates
+  }
+  class ArtistApplication <<Eloquent>> {
+    +int id
+    +?int userId
+    +string name
+    +string email
+    +ActType actType
+    +string baseCity
+    +float baseLatitude
+    +float baseLongitude
+    +string bio
+    +int fromPriceCents
+    +int maxDriveKm
+    +ApplicationStatus status
+    +CarbonImmutable submittedAt
+  }
+  class ApplicationReference <<Eloquent>> {
+    +int id
+    +int applicationId
+    +string name
+    +string church
+    +?string phone <<encrypted>>
+    +?string email <<encrypted>>
+    +?CarbonImmutable verifiedAt
+  }
+  class ArtistVideo <<Eloquent>> {
+    +int id
+    +?int applicationId
+    +?int artistId
+    +string title
+    +VideoStatus status
+  }
+  enum ActType {
+    Solo
+    Duo
+    Band
+    Choir
+  }
+  enum ApplicationStatus {
+    Submitted
+    Approved
+    Rejected
+  }
+}
+
+ApplyPage --> ApplicationStore
+ApplicationStore --> ArtistApplicationsApi
+ArtistApplicationsApi ..> ArtistApplicationsController : POST /api/v1/artist-applications
+ArtistApplicationsController ..> SubmitArtistApplicationRequest : validates
+SubmitArtistApplicationRequest ..> ApplicationData : creates
+ArtistApplicationsController --> SubmitArtistApplication
+SubmitArtistApplication --> ServiceArea
+ServiceArea --> Geocoder
+SubmitArtistApplication ..> ArtistApplication : creates
+ArtistApplication "1" *-- "2" ApplicationReference
+ArtistApplication "1" o-- "1..*" ArtistVideo
+ArtistApplication --> ApplicationStatus
+ArtistApplication --> ActType
+@enduml

@@ -1,0 +1,108 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Collect the balance
+
+package "Zamaro Web (Angular)" {
+  class BookingDetailPage {
+    +booking: Signal<BookingDto>
+    +openReportProblem(): void
+  }
+  class ReportProblemDialogComponent {
+    +description: FormControl<string>
+    +submit(): void
+  }
+  class PayBalancePage {
+    +store: PaymentStore
+    +onPay(): void
+  }
+  class BookingsApi {
+    +reportProblem(number: string, description: string): Observable<ProblemReportDto>
+  }
+  class PaymentsApi {
+    +startBalance(number: string, key: string): Observable<DepositIntentDto>
+    +confirmBalance(number: string, paymentId: string): Observable<PaymentResultDto>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class ProblemReportController {
+    +store(request: ReportProblemRequest, booking: Booking): ProblemReportResource
+  }
+  class ReportBookingProblem <<action>> {
+    +handle(booking: Booking, booker: User, description: string): ProblemReport
+  }
+  class ChargeDueBalancesCommand {
+    +handle(due: FindDueBalances): int
+  }
+  class FindDueBalances {
+    +bookings(now: CarbonImmutable): Collection<Booking>
+  }
+  class ChargeBookingBalance <<job>> {
+    +int bookingId
+    +int attempt
+    +int tries = 5
+    +handle(action: CollectBalance): void
+  }
+  class CollectBalance <<action>> {
+    +handle(booking: Booking, attempt: int): Payment
+  }
+  class AlertAdministrators <<action>> {
+    +handle(kind: AdminAlertKind, subject: Model, detail: string): AdminAlert
+  }
+  class ProblemReport <<Eloquent>> {
+    +int id
+    +int bookingId
+    +int reporterId
+    +string description
+    +CarbonImmutable reportedAt
+    +?CarbonImmutable resolvedAt
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventStartsAt
+    +?CarbonImmutable heldAt
+  }
+  class Payment <<Eloquent>> {
+    +PaymentKind kind
+    +int amountCents
+    +PaymentStatus status
+    +int attempt
+    +?CarbonImmutable nextRetryAt
+    +?string failureCode
+  }
+  class PriceBreakdown <<value object>> {
+    +int balanceCents
+  }
+  interface PaymentGateway {
+    +chargeSavedCard(customerId: string, amountCents: int, key: IdempotencyKey): ProcessorPayment
+  }
+}
+
+BookingDetailPage --> ReportProblemDialogComponent
+ReportProblemDialogComponent --> BookingsApi
+PayBalancePage --> PaymentsApi
+BookingsApi ..> ProblemReportController : POST problem-reports
+ProblemReportController --> ReportBookingProblem
+ReportBookingProblem ..> ProblemReport : creates
+ReportBookingProblem --> AlertAdministrators
+ChargeDueBalancesCommand --> FindDueBalances
+ChargeDueBalancesCommand ..> ChargeBookingBalance : dispatches
+ChargeBookingBalance --> CollectBalance
+CollectBalance --> PaymentGateway
+CollectBalance ..> PriceBreakdown : reads balance
+CollectBalance --> AlertAdministrators
+Booking "1" *-- "0..*" Payment
+Booking "1" *-- "0..*" ProblemReport
+@enduml

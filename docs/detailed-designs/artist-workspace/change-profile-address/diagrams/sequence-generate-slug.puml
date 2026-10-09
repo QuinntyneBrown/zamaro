@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Generate the first slug at publication
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Admin application review page" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Approval endpoint (approval slice)" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "PublishArtistProfile" as publish
+  participant "GenerateArtistSlug" as gen
+  participant "SlugRegistry" as registry
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Approve application
+page -> controller : Approve request
+controller -> publish : handle(artist)
+publish -> gen : handle(artist)
+gen -> gen : Transliterate display name to lowercase ASCII, hyphenate (L2-055)
+note right of gen : "Abigail Mensah" becomes abigail-mensah
+gen -> registry : firstFree(base)
+loop base, base-2, base-3, ... until free
+  registry -> db : Candidate in slug_histories.slug?
+  db --> registry : Taken or free
+end
+registry --> gen : First free candidate
+gen --> publish : slug
+publish -> db : Set artists.slug and published_at; insert slug_histories row; slug_changed_at stays null
+alt unique index violation from a concurrent publish
+  db --> publish : Conflict
+  publish -> gen : Retry with the next suffix
+else saved
+  db --> publish : Commit
+end
+publish --> controller : Published artist
+controller --> page : 200
+page --> actor : Profile live at /artists/{slug}
+@enduml

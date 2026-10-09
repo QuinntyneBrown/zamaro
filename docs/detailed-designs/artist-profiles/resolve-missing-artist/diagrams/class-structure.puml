@@ -1,0 +1,94 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Resolve a missing artist
+
+package "Zamaro Web (Angular)" {
+  class ArtistProfilePage {
+    -responseInit: ResponseInit | null
+    -onMoved(newSlug: string): void
+    -onNotFound(problem: ArtistNotFoundProblem): void
+  }
+  class ArtistNotFoundComponent {
+    +similar: InputSignal<SimilarArtist[]>
+    +carriedDate: InputSignal<string | null>
+  }
+  class ArtistNotFoundProblem <<interface>> {
+    +type: string
+    +title: string
+    +status: 404
+    +similarArtists: SimilarArtist[]
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistProfileController {
+    +show(slug: string, request: Request): Response
+  }
+  class ResolveArtistSlug <<action>> {
+    +handle(slug: string): SlugResolution
+  }
+  interface SlugResolution
+  class Found {
+    +Artist artist
+  }
+  class Moved {
+    +string newSlug
+  }
+  class Missing {
+    +?MissingArtistContext context
+  }
+  class MissingArtistContext <<value object>> {
+    +?Style primaryStyle
+    +?Coordinates base
+  }
+  class ArtistNotFound <<exception>> {
+    +SimilarArtist[] similarArtists
+    +render(request: Request): JsonResponse
+  }
+  class SimilarArtistFinder {
+    +forMissingArtist(context: MissingArtistContext, date: ?CarbonImmutable, limit: int = 3): Artist[]
+  }
+  class SlugHistory <<Eloquent>> {
+    +string oldSlug
+    +int artistId
+    +CarbonImmutable replacedAt
+  }
+  class Artist <<Eloquent>> {
+    +string slug
+    +ArtistStatus status
+    +?CarbonImmutable publishedAt
+    +isViewable(): bool
+  }
+  enum ArtistStatus {
+    Approved
+    Suspended
+    Deleted
+  }
+}
+
+SlugResolution <|.. Found
+SlugResolution <|.. Moved
+SlugResolution <|.. Missing
+Missing --> MissingArtistContext
+ResolveArtistSlug ..> SlugResolution : returns
+ResolveArtistSlug ..> SlugHistory : reads
+ResolveArtistSlug ..> Artist : reads
+SlugHistory "*" --> "1" Artist
+Artist --> ArtistStatus
+ArtistProfileController --> ResolveArtistSlug
+ArtistProfileController ..> ArtistNotFound : throws
+ArtistNotFound ..> SimilarArtistFinder : uses
+ArtistProfilePage ..> ArtistNotFoundProblem : reads
+ArtistProfilePage ..> ArtistNotFoundComponent : renders
+@enduml

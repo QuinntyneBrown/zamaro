@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Suggest alternatives when sold out
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(routing, "Routing provider", "Driving distance and drive time")
+
+Rel(guest, zamaro, "Sees nearby dates and wider radii from", "HTTPS")
+Rel(booker, zamaro, "Sees nearby dates and wider radii from", "HTTPS")
+Rel(zamaro, routing, "Requests uncached driving distances from", "HTTPS/JSON")
+@enduml

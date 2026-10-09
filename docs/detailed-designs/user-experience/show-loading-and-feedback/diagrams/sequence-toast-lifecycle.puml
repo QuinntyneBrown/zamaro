@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Toasts after saving artists
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SaveToggleComponent" as save
+  participant "ToastService" as toasts
+  participant "ToastRegionComponent" as region
+  participant "AnnouncerService" as announcer
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SavedArtistsController" as ctrl
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> save : Activate Save on a ticket card
+save -> ctrl : POST /api/v1/saved-artists (L2-026)
+alt saved
+  ctrl -> db : Insert saved artist
+  db --> ctrl : Row
+  ctrl --> save : 201
+  save -> toasts : show(success, "Saved {artist name}", Undo)
+  toasts -> toasts : Start 5 s timer (L2-109)
+  toasts -> region : Add at top of stack, newest first
+  toasts -> announcer : polite(toast text) (L2-102)
+  opt booker hovers or focuses the toast
+    region -> toasts : pause(id), resume(id) on leave with remaining time (L2-109)
+  end
+  toasts -> region : Remove after 5 s
+else request fails
+  ctrl --> save : 5xx or network error
+  save -> save : Revert toggle
+  save -> toasts : show(danger, "Couldn't save {artist name}. Try again.")
+  toasts -> region : Add at top, no timer, stays until dismissed (L2-109)
+end
+opt a fourth toast arrives
+  toasts -> toasts : Move oldest visible to the queue, pause its timer
+  toasts -> region : Show 3 newest, newest first (L2-109)
+end
+@enduml

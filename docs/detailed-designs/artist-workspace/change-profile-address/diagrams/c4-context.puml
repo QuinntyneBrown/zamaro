@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Change profile address
+
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+Person(guest, "Guest", "Anyone not signed in")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(cdn, "CDN", "Caches public profile pages")
+System_Ext(seo, "Search engines and link previews", "Crawlers and link unfurlers")
+
+Rel(admin, zamaro, "Approves an artist, which publishes the profile and generates its slug, using", "HTTPS")
+Rel(artist, zamaro, "Changes the profile address using", "HTTPS")
+Rel(guest, zamaro, "Opens an old profile link and is redirected by", "HTTPS")
+Rel(seo, zamaro, "Follows 301 redirects from old slugs on", "HTTPS")
+Rel(zamaro, cdn, "Purges old and new profile URLs from", "HTTPS")
+@enduml

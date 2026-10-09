@@ -1,0 +1,13 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Export personal data
+
+Person(user, "Booker or artist", "Signed-in account holder")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+
+Rel(user, zamaro, "Requests and downloads a data export using", "HTTPS")
+Rel(zamaro, email, "Sends the download link via", "HTTPS/JSON")
+Rel(email, user, "Delivers the link to")
+@enduml

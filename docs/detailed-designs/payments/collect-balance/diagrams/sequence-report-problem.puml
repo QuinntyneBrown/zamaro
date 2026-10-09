@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Booker reports a problem after the event
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "ReportProblemDialogComponent" as dialog
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ProblemReportController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReportBookingProblem" as action
+  participant "AlertAdministrators" as alert
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Activate "Report a problem"
+page -> dialog : Open dialog
+actor -> dialog : Describe the problem, submit
+dialog -> client : reportProblem(number, description)
+client -> controller : POST /api/v1/bookings/{number}/problem-reports
+controller -> controller : BookingPolicy (404 for others), validate ReportProblemRequest
+controller -> action : handle(booking, booker, description)
+alt within 48 hours of event start (L2-038)
+  action -> db : BEGIN; insert ProblemReport; set bookings.held_at (blocks balance and payout); COMMIT
+  action -> alert : handle(BookingHeld, booking) (L2-038)
+  alert -> db : Insert AdminAlert
+  action --> controller : ProblemReport
+  controller --> client : 201 ProblemReportResource
+  dialog --> actor : Report sent; balance and payout on hold
+else window closed or balance already charged
+  action --> controller : Rejected
+  controller --> client : 422 problem details
+  dialog --> actor : Inline message with team email link
+end
+@enduml

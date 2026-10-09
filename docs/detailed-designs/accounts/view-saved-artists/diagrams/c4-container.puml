@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — View saved artists
+
+Person(booker, "Booker", "Signed-in church representative")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "SavedArtistsPage at /saved")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET /api/v1/saved-artists")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "saved_artists, artists, availability, bookings, reviews")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "GET /api/v1/saved-artists?date", "JSON/HTTPS")
+Rel(api, db, "Reads shortlist and availability", "Eloquent / SQL")
+@enduml

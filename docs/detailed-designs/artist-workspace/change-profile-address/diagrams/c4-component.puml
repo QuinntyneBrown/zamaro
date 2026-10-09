@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Change profile address
+
+Container(web, "Zamaro Web", "Angular", "ProfileAddressSectionComponent, ProfileAddressApi, artistProfileResolver")
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ProfileAddressController", "Laravel controller", "GET and PUT /api/v1/artist/profile/address")
+  Component(req, "ChangeProfileAddressRequest", "FormRequest", "Validates slug format")
+  Component(change, "ChangeArtistSlug", "Action", "Applies the 30-day rule and retires the old slug")
+  Component(gen, "GenerateArtistSlug", "Action", "Builds the first slug from the display name at publication")
+  Component(registry, "SlugRegistry", "Domain service", "Checks a slug against every slug ever held")
+  Component(resolver, "ArtistSlugResolver", "Domain service", "Maps any current or retired slug to the artist")
+  Component(pub, "PublicArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}, owned by the public profile slice")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists.slug; slug_histories.slug unique across all artists")
+}
+Rel(web, ctrl, "GET, PUT /api/v1/artist/profile/address", "JSON/HTTPS")
+Rel(web, pub, "GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, change, "Calls")
+Rel(change, registry, "Checks availability")
+Rel(gen, registry, "Finds the first free candidate")
+Rel(gen, db, "Sets artist slug, inserts slug_histories row", "SQL")
+Rel(registry, db, "Reads slug_histories", "SQL")
+Rel(change, db, "Updates artist slug, retires old slug_histories row, inserts new one", "SQL")
+Rel(pub, resolver, "Resolves the requested slug")
+Rel(resolver, db, "Reads artists then slug_histories", "SQL")
+@enduml

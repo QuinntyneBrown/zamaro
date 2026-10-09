@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Run background jobs
+
+Person(booker, "Booker or artist", "Sees the result of jobs")
+System_Ext(pay, "Payment processor", "Charges and payouts")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(errors, "Error tracking service", "Job exceptions")
+System_Ext(metrics, "Metrics and alerting service", "Alerts")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Bookings, requests and earnings pages")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Dispatches jobs from requests")
+  Container(worker, "Zamaro Worker", "Laravel Horizon and scheduler", "Runs scheduled commands and queued jobs")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Bookings, payments, reminders, failed_jobs")
+  ContainerQueue(queue, "Cache and queue", "Redis", "Queues, unique-job locks, scheduler mutexes")
+}
+Rel(booker, web, "Uses", "HTTPS")
+Rel(web, api, "Calls", "JSON/HTTPS")
+Rel(api, queue, "Pushes jobs", "RESP")
+Rel(worker, queue, "Pops jobs; holds locks", "RESP")
+Rel(worker, db, "Selects due bookings; applies transitions; stores failed jobs", "SQL")
+Rel(api, db, "Reads booking state", "SQL")
+Rel(worker, pay, "Charges and pays out with idempotency keys", "HTTPS")
+Rel(worker, email, "Sends queued notifications", "HTTPS")
+Rel(worker, errors, "Reports exhausted jobs")
+Rel(worker, metrics, "Raises failed-job alerts")
+@enduml

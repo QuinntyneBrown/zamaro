@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Manage sessions and CSRF
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(other, "Third-party website", "Any other origin the user visits while signed in")
+
+Rel(booker, zamaro, "Signs in and changes bookings, saved artists and settings using", "HTTPS, session cookie")
+Rel(artist, zamaro, "Signs in and manages profile and requests using", "HTTPS, session cookie")
+Rel(other, zamaro, "Triggers cross-site requests that are rejected with 419", "HTTPS")
+@enduml

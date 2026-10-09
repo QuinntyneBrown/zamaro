@@ -1,0 +1,78 @@
+@startuml
+title UML sequence behaviour — Artist cancels a Confirmed booking
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistBookingPage" as page
+  participant "ArtistCancelBookingDialogComponent" as dialog
+  participant "ArtistBookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistBookingCancellationController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "IssueCancellationRefund" as job
+  participant "BookingCancelled listener" as listener
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "CancelBookingAsArtist" as action
+  participant "CancellationPolicy" as policy
+  participant "BookingStateMachine" as sm
+  participant "SimilarArtistFinder" as similar
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Payment processor" as pay
+  participant "Email delivery service" as email
+end box
+
+actor -> page : Open /artist/bookings/{number}
+actor -> page : Activate Cancel booking
+page -> dialog : Open
+actor -> dialog : Enter required reason and confirm
+dialog -> client : cancel(number, reason)
+client -> controller : POST /api/v1/artist/bookings/{number}/cancel
+controller -> controller : Artist of the booking, else 404; reason required (422)
+controller -> action : handle(booking, artist, reason)
+action -> db : BEGIN; booking FOR UPDATE
+action -> policy : forArtist(booking)
+policy --> action : refund = every amount paid (L2-043)
+action -> sm : transition(booking, Cancelled, artist, reason)
+sm -> db : Conditional update and history row with reason
+action -> db : INSERT pending Refund per succeeded payment
+action -> db : Count artist cancellations in last 12 months
+action -> db : COMMIT
+opt third or more in 12 months
+  action -> queue : ArtistCancellationReviewAlert to administrators (L2-043)
+end
+loop each pending refund
+  action -> queue : Dispatch IssueCancellationRefund
+  queue -> job : Deliver
+  job -> pay : refund(payment, amount, idempotency key) (L2-041)
+  pay --> job : Processor refund ID
+end
+sm -> queue : BookingCancelled after commit
+queue -> listener : BookingCancelled
+listener -> similar : freeOn(artist, date, church, 3)
+similar --> listener : Up to 3 similar free artists
+listener -> email : Booker email with full refund and similar artists (L2-043);\nartist confirmation (L2-063)
+action --> controller : Booking
+controller --> client : 200 BookingResource
+client --> dialog : Close
+dialog --> page : Status Cancelled
+page --> actor : Booking cancelled, church refunded in full
+@enduml

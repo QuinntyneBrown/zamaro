@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Edit profile details
+
+Container(web, "Zamaro Web", "Angular", "ArtistProfileEditorPage, ProfilePreviewPage, ArtistProfileEditorStore, ArtistProfileApi")
+System_Ext(geo, "Geocoding provider", "Address to latitude and longitude")
+Container_Boundary(api, "Zamaro API") {
+  Component(mw, "EnsureArtistRole", "Middleware", "Answers 404 to anyone who is not an approved artist")
+  Component(ctrl, "ArtistProfileController", "Laravel controller", "GET and PUT /api/v1/artist/profile")
+  Component(pctrl, "ArtistProfilePreviewController", "Invokable controller", "POST /api/v1/artist/profile/preview")
+  Component(req, "UpdateArtistProfileRequest", "FormRequest", "Validates each field, including the base city service-area rule")
+  Component(action, "UpdateArtistProfile", "Action", "Saves ArtistProfileData in one transaction")
+  Component(preview, "BuildProfilePreview", "Action", "Overlays unsaved values on the saved profile without persisting")
+  Component(area, "ServiceArea", "Domain service", "Checks a point is within 200 km road distance of Toronto")
+  Component(geocoder, "Geocoder", "Interface + adapter", "Calls the geocoding provider")
+  Component(res, "ArtistProfileResource / PublicProfileResource", "API resources", "Editor payload and public profile payload")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists, artist_styles")
+}
+Rel(web, mw, "Calls", "JSON/HTTPS")
+Rel(mw, ctrl, "Passes approved artists to")
+Rel(mw, pctrl, "Passes approved artists to")
+Rel(ctrl, req, "Validates with")
+Rel(pctrl, req, "Validates with the same rules")
+Rel(ctrl, action, "Calls")
+Rel(pctrl, preview, "Calls")
+Rel(req, geocoder, "Geocodes a changed base city")
+Rel(req, area, "Checks the base city is inside the service area")
+Rel(geocoder, geo, "Calls", "HTTPS/JSON")
+Rel(action, db, "Updates artist and styles", "SQL")
+Rel(preview, db, "Reads saved profile, Live media and setlist", "SQL")
+Rel(ctrl, res, "Returns")
+Rel(pctrl, res, "Returns")
+@enduml

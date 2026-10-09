@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Recalculate the rating
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "QueueRatingRecalculation" as listener
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "RecalculateArtistRating" as job
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  queue "Cache and queue" as cache
+  database "Zamaro database" as db
+end box
+
+[-> listener : ReviewPublished, ReviewEdited or ReviewHidden
+listener -> cache : Dispatch RecalculateArtistRating(artistId) on high-priority queue, unique per artist
+cache -> job : Deliver job
+job -> db : AVG(stars), COUNT(DISTINCT church_id) over reviews where hidden_at is null (L2-060)
+db --> job : Mean and church count
+job -> job : Round mean to one decimal, 4.86 becomes 4.9 (L2-060)
+job -> db : Upsert artist_ratings
+job -> cache : Forget cached profile and search entries for the artist (L2-089)
+note over job, db : Completes within 60 seconds of ReviewHidden (L2-060)
+actor -> page : Open /artists/{slug}
+page --> actor : Updated rating and count; hidden review absent
+@enduml

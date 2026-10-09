@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Run the booking lifecycle
+
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Ext(errors, "Error tracking service", "Backend and frontend exceptions")
+
+Rel(booker, zamaro, "Requests, withdraws and cancels bookings using", "HTTPS")
+Rel(artist, zamaro, "Accepts, declines and cancels bookings using", "HTTPS")
+Rel(admin, zamaro, "Reads booking history using", "HTTPS")
+Rel(zamaro, email, "Sends status emails through", "HTTPS")
+Rel(zamaro, errors, "Reports failed jobs to", "HTTPS")
+@enduml

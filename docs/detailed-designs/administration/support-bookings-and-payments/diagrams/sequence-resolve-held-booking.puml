@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Resolve a held booking
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ResolveHeldBookingDialogComponent" as dialog
+  participant "AdminBookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Admin\\HeldBookingsController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ResolveHeldBooking" as action
+  participant "IssueRefund" as refund
+  participant "RecordAuditEntry" as audit
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ChargeBookingBalance" as charge
+  participant "HeldBookingResolvedNotification" as notif
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as email
+end box
+
+actor -> dialog : Choose resolution, amount for partial refund, reason
+dialog -> client : resolveHold(number, body)
+client -> ctrl : POST /api/v1/admin/bookings/{number}/hold/resolution
+ctrl -> ctrl : Validate ResolveHeldBookingRequest
+ctrl -> action : handle(booking, resolution, amountCents, reason, admin)
+action -> db : Lock booking and open problem_report
+alt booking not held
+  action --> ctrl : NotHeld
+  ctrl --> client : 409 problem details
+else held (L2-038)
+  alt Release balance
+    action -> db : Resolve hold as ReleaseBalance
+    action -> charge : Dispatch; charges 75% balance, payout follows (L2-038, L2-039)
+  else Partial refund
+    action -> refund : handle(booking, amountCents, reason, admin) (L2-068)
+    note right of refund : Balance charge and payout adjustment <TO SUPPLY>
+    action -> db : Resolve hold as PartialRefund
+  else Full refund
+    action -> refund : handle(booking, refundable amount, reason, admin)
+    action -> db : Cancel pending balance charge and payout; resolve hold as FullRefund
+  end
+  action -> audit : problem_report.resolved with resolution (L2-069)
+  action -> notif : HeldBookingResolved
+  notif -> email : Email booker and artist with the resolution (L2-068)
+  ctrl --> client : 204 No Content
+  client --> dialog : Close; hold banner removed
+end
+@enduml

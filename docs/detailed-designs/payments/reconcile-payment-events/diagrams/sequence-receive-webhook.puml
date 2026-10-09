@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Receive a payment processor webhook
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "PaymentWebhookController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "ProcessProcessorEvent" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RecordProcessorEvent" as record
+  participant "ProcessorEventRouter" as router
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Payment processor" as processor
+  participant "PaymentGateway" as gateway
+  database "Zamaro database" as db
+end box
+
+processor -> controller : POST /api/v1/webhooks/payments (signature header)
+controller -> gateway : verifyWebhook(raw body, signature)
+alt signature invalid or timestamp too old
+  gateway --> controller : Invalid
+  controller -> controller : SecurityEventLogger: invalid webhook signature (L2-041)
+  controller --> processor : 400
+else signature valid
+  gateway --> controller : ProcessorWebhookEvent
+  controller -> record : handle(event)
+  record -> db : INSERT processor_events ON CONFLICT (processor_event_id) DO NOTHING
+  alt duplicate delivery
+    db --> record : 0 rows
+    record --> controller : null; no effect (L2-041)
+  else new event
+    db --> record : Inserted
+    record -> job : dispatch(processorEventId)
+  end
+  controller --> processor : 200
+end
+job -> router : route(event)
+alt payment succeeded
+  router -> router : ConfirmDepositPayment or record balance payment
+else refund succeeded or failed
+  router -> db : Update Refund; dispatch RefundSucceeded
+else payout paid or failed
+  router -> db : Update Payout Paid or Failed
+else connected account updated
+  router -> router : SyncConnectedAccount
+end
+router -> db : processed_at = now
+note over job : Failures retry up to 5 times;\n3 consecutive webhook failures alert on-call (L2-092, L2-093)
+actor -> page : Open /bookings/{number}
+page --> actor : Payment status reflects the processed event
+@enduml

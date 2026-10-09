@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Manage setlist
+
+Person(artist, "Artist", "Approved worship artist")
+Person(booker, "Booker", "Reads the setlist on the public profile")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(cdn, "CDN", "Caches public profile pages")
+
+Rel(artist, zamaro, "Adds, edits, orders and removes setlist songs using", "HTTPS")
+Rel(booker, zamaro, "Reads the setlist and header strip on profiles in", "HTTPS")
+Rel(zamaro, cdn, "Purges the cached profile after a change through", "HTTPS")
+@enduml

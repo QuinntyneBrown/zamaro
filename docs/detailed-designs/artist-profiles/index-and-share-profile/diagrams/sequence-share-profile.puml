@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Share a profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ShareButtonComponent" as share
+  participant "Web Share API" as native
+  participant "Clipboard (CDK)" as clip
+  participant "ToastService" as toast
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CDN" as cdn
+end box
+
+actor -> share : Activate Share
+alt navigator.share available
+  share -> native : share({ url: canonical URL, title }) (L2-113)
+  native --> actor : Native share sheet
+  opt recipient app builds a preview
+    native -> cdn : Unfurler fetches the profile URL
+    cdn --> native : HTML with Open Graph and Twitter card tags (L2-113)
+  end
+  alt visitor dismisses the sheet
+    native --> share : AbortError; nothing else happens
+  end
+else no Web Share API
+  share -> clip : copy(canonical URL)
+  clip --> share : true
+  share -> toast : show("Link copied") (L2-113)
+  toast --> actor : Toast announced politely (L2-102)
+end
+@enduml

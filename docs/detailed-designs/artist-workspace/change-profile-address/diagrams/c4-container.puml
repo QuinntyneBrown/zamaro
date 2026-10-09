@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Change profile address
+
+Person(artist, "Artist", "Approved worship artist")
+Person(guest, "Guest", "Opens an old profile link")
+System_Ext(cdn, "CDN", "Caches public profile pages")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Profile address section; SSR profile route answers 301 for old slugs")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Address endpoints under /api/v1/artist/profile/address; public profile lookup")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Purges caches and refreshes the sitemap after a change")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artists.slug and slug_histories (every slug ever held)")
+  ContainerDb(cache, "Cache and queue", "Redis", "Queue for ArtistSlugChanged listeners")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(guest, web, "GET /artists/{old-slug}", "HTTPS")
+Rel(web, api, "GET, PUT /api/v1/artist/profile/address; GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(api, db, "Reads and writes slugs under a unique index", "Eloquent / SQL")
+Rel(api, cache, "Queues listeners", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, cdn, "Purges old and new profile URLs", "HTTPS")
+@enduml

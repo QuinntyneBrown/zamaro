@@ -1,0 +1,92 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Delete an account
+
+package "Zamaro Web (Angular)" {
+  class DeleteAccountDialogComponent {
+    +password: FormControl<string>
+    +blockers: Signal<BlockingBooking[]>
+    +confirm(): void
+  }
+  class PrivacyApi {
+    +deleteAccount(password: string): Observable<void>
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class RequestAccountDeletion <<action>> {
+    +handle(user: User): void
+  }
+  class FutureConfirmedBookingsException {
+    +Booking[] bookings
+  }
+  class EraseDueAccounts <<command>> {
+    +handle(): int
+  }
+  class EraseAccountPersonalData <<job>> {
+    +int userId
+    +int tries = 5
+    +handle(eraser: AccountEraser): void
+  }
+  class AccountEraser {
+    +erase(user: User): void
+    -pseudonymiseReviews(user: User): void
+    -stripFinancialRecords(user: User): void
+    -deleteOwnedData(user: User): void
+    -deleteMedia(user: User): void
+  }
+  class User <<Eloquent>> {
+    +int id
+    +?string name
+    +?string email
+    +?CarbonImmutable disabledAt
+    +?CarbonImmutable eraseAfter
+    +?CarbonImmutable erasedAt
+    +isDisabled(): bool
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +BookingStatus status
+    +CarbonImmutable eventDate
+    +?string bookerName
+    +?string bookerEmail
+    +CarbonImmutable retainUntil
+  }
+  class Payment <<Eloquent>> {
+    +int bookingId
+    +int amountCents
+    +CarbonImmutable retainUntil
+  }
+  class Review <<Eloquent>> {
+    +?int bookerId
+    +?string reviewerDisplayCity
+    +reviewerLabel(): string
+  }
+}
+
+DeleteAccountDialogComponent --> PrivacyApi
+PrivacyApi ..> RequestAccountDeletion : DELETE /api/v1/account
+RequestAccountDeletion ..> FutureConfirmedBookingsException : throws
+FutureConfirmedBookingsException --> Booking
+RequestAccountDeletion ..> User : disables
+EraseDueAccounts ..> EraseAccountPersonalData : dispatches
+EraseAccountPersonalData --> AccountEraser
+AccountEraser ..> User : erases
+AccountEraser ..> Booking : strips personal details
+AccountEraser ..> Payment : sets retainUntil
+AccountEraser ..> Review : sets display city
+User "1" o-- "0..*" Booking : booker or artist
+Booking "1" *-- "0..*" Payment
+User "0..1" o-- "0..*" Review : author
+@enduml

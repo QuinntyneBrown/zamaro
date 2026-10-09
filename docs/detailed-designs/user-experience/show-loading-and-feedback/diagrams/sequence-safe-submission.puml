@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Booking request retried after a network failure
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingStubComponent" as form
+  participant "FormSubmitter" as submitter
+  participant "IdempotencyKeyStore" as keys
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "EnsureIdempotency" as mw
+  participant "BookingsController" as ctrl
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "SendBookingRequest" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Cache and queue" as cache
+  database "Zamaro database" as db
+end box
+
+actor -> form : Activate "Send request"
+form -> submitter : submit(value)
+submitter -> keys : keyFor(submission)
+keys --> submitter : key K (new uuid)
+submitter -> form : busy = true, button disabled, "Sending request…" (L2-108)
+actor -> form : Activate again while pending
+form -> submitter : submit(value)
+submitter -> submitter : exhaustMap drops second submission (L2-108)
+submitter -> client : create(value, K)
+client -> mw : POST /api/v1/bookings, Idempotency-Key: K
+mw -> cache : Lock user + K
+mw -> db : Find idempotency record (user, K)
+db --> mw : None
+mw -> ctrl : Continue
+ctrl -> action : handle(...)
+action -> db : Insert booking (unique idempotency_key = K)
+db --> action : Committed
+action --> ctrl : Booking
+ctrl --> mw : 201 BookingResource
+mw -> db : Store response for (user, K)
+mw --> client : 201 lost on the network
+client --> submitter : Network error
+submitter -> form : busy = false, keep every value, show error (L2-108)
+submitter -> keys : No final answer, keep K
+actor -> form : Activate "Send request" to retry
+submitter -> client : create(value, K) with the same key (L2-108)
+client -> mw : POST /api/v1/bookings, Idempotency-Key: K
+mw -> db : Find idempotency record (user, K)
+db --> mw : Completed, same fingerprint
+mw --> client : Replay 201, Idempotent-Replayed: true
+client --> submitter : Booking
+submitter -> keys : settle(K)
+submitter --> actor : "Request sent to {first name}", one booking exists (L2-108)
+@enduml

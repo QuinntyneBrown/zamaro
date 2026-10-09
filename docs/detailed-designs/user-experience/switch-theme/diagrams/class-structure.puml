@@ -1,0 +1,81 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Switch theme
+
+package "Zamaro Web (Angular)" {
+  class ThemeService {
+    +preference: WritableSignal<ThemePreference | null>
+    +system: Signal<'light'|'dark'>
+    +effective: Signal<'light'|'dark'>
+    +toggle(): void
+    +reconcile(account: ThemePreference | null): void
+    -writeDevice(value: ThemePreference): void
+  }
+  class ThemeToggleComponent {
+    +pressed: Signal<boolean>
+    +label: Signal<string>
+    +onClick(): void
+  }
+  class PreferencesApi {
+    +update(body: PreferencesUpdate): Observable<Me>
+  }
+  class PreferencesUpdate {
+    +themePreference: ThemePreference | null
+  }
+  class CurrentUserStore {
+    +user: Signal<Me | null>
+    +load(): void
+  }
+  enum "ThemePreference (TS)" as TsPref {
+    light
+    dark
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class PreferencesController {
+    +update(request: UpdatePreferencesRequest): MeResource
+  }
+  class UpdatePreferencesRequest {
+    +rules(): array
+  }
+  class UpdateUserPreferences <<action>> {
+    +handle(user: User, theme: ?ThemePreference): User
+  }
+  class MeResource {
+    +toArray(request: Request): array
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string name
+    +?ThemePreference theme_preference
+  }
+  enum ThemePreference {
+    Light = 'light'
+    Dark = 'dark'
+  }
+}
+
+ThemeToggleComponent --> ThemeService
+ThemeService --> PreferencesApi
+ThemeService --> TsPref
+CurrentUserStore ..> ThemeService : reconcile(account)
+PreferencesApi ..> PreferencesUpdate : sends
+PreferencesApi ..> PreferencesController : PATCH /api/v1/me/preferences
+PreferencesController ..> UpdatePreferencesRequest : validates
+PreferencesController --> UpdateUserPreferences
+UpdateUserPreferences --> User : updates
+PreferencesController ..> MeResource : returns
+User --> ThemePreference : theme_preference
+@enduml

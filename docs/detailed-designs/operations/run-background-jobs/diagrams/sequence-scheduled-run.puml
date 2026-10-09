@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Scheduled request expiry runs once per booking
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Scheduler" as sched
+  participant "ExpireBookingRequestsCommand" as cmd
+  participant "ExpireBookingRequest" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as redis
+end box
+
+sched -> redis : Acquire onOneServer and withoutOverlapping mutex
+sched -> cmd : bookings:expire-requests (frequency <TO SUPPLY>)
+cmd -> db : SELECT Requested bookings WHERE respond_by <= now()
+note right of cmd : No "since last run" window, so a run missed\nduring downtime is caught up by the next run (L2-092)
+db --> cmd : Due bookings, chunked by id
+loop each due booking
+  cmd -> redis : Dispatch ExpireBookingRequest, unique per booking id
+end
+redis -> job : Deliver job
+job -> db : BEGIN; SELECT booking FOR UPDATE
+db --> job : Booking
+job -> sm : can(booking, Expired)
+alt still Requested and past respond_by
+  sm --> job : Allowed
+  job -> sm : transition(booking, Expired) (L2-029)
+  sm -> db : Update status, insert BookingTransition
+  job -> db : COMMIT
+  job -> redis : Queue "request expired" notices for both parties (after commit)
+else already Accepted, Declined, Withdrawn or Expired
+  sm --> job : Not allowed
+  job -> db : ROLLBACK; no effect (L2-092)
+end
+actor -> page : Open /bookings/{number}
+page -> controller : GET /api/v1/bookings/{number}
+controller -> db : Read booking
+db --> controller : Status Expired
+controller --> page : Booking
+page --> actor : Status shows Expired
+@enduml

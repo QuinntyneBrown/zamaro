@@ -1,0 +1,110 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage setlist
+
+package "Zamaro Web (Angular)" {
+  class SetlistEditorPage {
+    +store: SetlistStore
+    +onAdd(song: SetlistSongInput): void
+    +onSaveOrder(): void
+  }
+  class SetlistSongFormComponent {
+    +form: FormGroup<SetlistSongForm>
+    +keys: MusicalKeyOption[]
+    +submitted: output<SetlistSongInput>
+  }
+  class SetlistListComponent {
+    +songs: input<SetlistSong[]>
+    +headerStripCount = 5
+    +moved: output<string[]>
+  }
+  class SetlistStore {
+    +songs: Signal<SetlistSong[]>
+    +orderDirty: Signal<boolean>
+    +canAddMore: Signal<boolean>
+    +add(song: SetlistSongInput): void
+    +update(id: string, song: SetlistSongInput): void
+    +move(id: string, toIndex: number): void
+    +saveOrder(): void
+    +remove(id: string): void
+  }
+  class SetlistApi {
+    +list(): Observable<SetlistSong[]>
+    +add(song: SetlistSongInput): Observable<SetlistSong>
+    +update(id: string, song: SetlistSongInput): Observable<SetlistSong>
+    +reorder(ids: string[]): Observable<SetlistSong[]>
+    +remove(id: string): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SetlistSongController {
+    +index(): SetlistSongCollection
+    +store(request: SetlistSongRequest): SetlistSongResource
+    +update(request: SetlistSongRequest, song: SetlistSong): SetlistSongResource
+    +destroy(song: SetlistSong): Response
+  }
+  class SetlistOrderController {
+    +__invoke(request: ReorderSetlistRequest): SetlistSongCollection
+  }
+  class SetlistSongRequest {
+    +rules(): array
+  }
+  class AddSetlistSong <<action>> {
+    +int LIMIT = 50
+    +handle(artist: Artist, data: array): SetlistSong
+  }
+  class ReorderSetlist <<action>> {
+    +handle(artist: Artist, songIds: string[]): void
+  }
+  class RemoveSetlistSong <<action>> {
+    +handle(song: SetlistSong): void
+  }
+  class SetlistSong <<Eloquent>> {
+    +string id
+    +int artistId
+    +int position
+    +string title
+    +?string writer
+    +MusicalKey key
+  }
+  enum MusicalKey {
+    CMajor
+    CMinor
+    ...
+    BMajor
+    BMinor
+    AnyKey
+    +label(): string
+  }
+  class Artist <<Eloquent>> {
+    +headerStripSongs(): Collection
+  }
+}
+
+SetlistEditorPage --> SetlistStore
+SetlistEditorPage *-- SetlistSongFormComponent
+SetlistEditorPage *-- SetlistListComponent
+SetlistStore --> SetlistApi
+SetlistApi ..> SetlistSongController : /api/v1/artist/setlist/songs
+SetlistApi ..> SetlistOrderController : PUT /api/v1/artist/setlist/order
+SetlistSongController ..> SetlistSongRequest : validates
+SetlistSongController --> AddSetlistSong
+SetlistSongController --> RemoveSetlistSong
+SetlistOrderController --> ReorderSetlist
+AddSetlistSong ..> SetlistSong : creates
+ReorderSetlist --> SetlistSong : updates position
+SetlistSong --> MusicalKey
+Artist "1" *-- "0..50" SetlistSong : ordered by position
+@enduml

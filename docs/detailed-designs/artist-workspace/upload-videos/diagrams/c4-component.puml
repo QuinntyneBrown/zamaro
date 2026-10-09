@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Upload videos
+
+Container(web, "Zamaro Web", "Angular", "VideosManagerPage, ArtistVideosStore, ArtistVideosApi, ChunkedUploader")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(vps, "Video processing service", "Transcodes")
+Container_Boundary(api, "Zamaro API and Worker") {
+  Component(upctrl, "ArtistVideoUploadController", "Laravel controller", "Start, sign parts, list parts, complete")
+  Component(vctrl, "ArtistVideoController and ArtistVideoCaptionsController", "Laravel controllers", "List, show, retitle, delete; caption files")
+  Component(init, "InitiateVideoUpload", "Action", "Applies the 8-video limit and opens an upload session")
+  Component(complete, "CompleteVideoUpload", "Action", "Closes the session and queues inspection")
+  Component(inspect, "InspectArtistVideo", "Queued job", "Type by content, malware scan, duration probe, submit")
+  Component(insp, "UploadInspector", "Domain service", "Detects type from content")
+  Component(scan, "MalwareScanner", "Interface + adapter", "Calls the malware scanner")
+  Component(probe, "VideoProbe", "ffprobe wrapper", "Reads duration and source height")
+  Component(tx, "VideoTranscoder", "Interface + adapter", "Calls the video processing service")
+  Component(hook, "VideoProcessingWebhookController", "Laravel controller", "Verifies signature, records result")
+  Component(record, "RecordVideoProcessingResult", "Action", "Marks Live or Failed, idempotent per processor job")
+  Component(objs, "ObjectStorage", "Interface + S3 adapter", "Multipart sessions and pre-signed part URLs")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artist_videos")
+}
+Rel(web, upctrl, "Calls", "JSON/HTTPS")
+Rel(web, vctrl, "Calls", "JSON/HTTPS")
+Rel(upctrl, init, "Calls")
+Rel(upctrl, complete, "Calls")
+Rel(init, objs, "Opens multipart upload")
+Rel(complete, objs, "Completes multipart upload")
+Rel(init, db, "Inserts Uploading video", "SQL")
+Rel(complete, inspect, "Dispatches")
+Rel(inspect, insp, "Detects type")
+Rel(inspect, scan, "Scans")
+Rel(scan, scanner, "Calls", "HTTPS")
+Rel(inspect, probe, "Probes duration")
+Rel(inspect, tx, "Submits")
+Rel(tx, vps, "Calls", "HTTPS/JSON")
+Rel(vps, hook, "Posts result", "HTTPS/JSON")
+Rel(hook, record, "Calls")
+Rel(record, db, "Updates status and rendition keys", "SQL")
+@enduml

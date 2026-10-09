@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Scan and serve uploads
+
+Container(web, "Zamaro Web", "Angular", "VscUploadComponent, UploadsApi, VscDocumentLinkComponent")
+System_Ext(scanner, "Malware scanner", "Vendor <TO SUPPLY>")
+ContainerDb(storage, "Object storage", "S3-compatible", "quarantine/, documents/, originals/")
+Container_Boundary(api, "Zamaro API") {
+  Component(upctrl, "VscDocumentController", "Laravel controller", "POST /api/v1/artist/vsc")
+  Component(receive, "ReceiveUpload", "Action", "Allow-list check, quarantine write, dispatch scan")
+  Component(detect, "ContentTypeDetector", "Service (finfo)", "Type from bytes; refuses SVG and HTML")
+  Component(urlctrl, "VscDocumentUrlController", "Laravel controller", "Policy check, returns 5-minute signed URL")
+  Component(docctrl, "PrivateDocumentController", "Laravel controller, signed middleware", "Decrypts and streams with server-set headers")
+}
+Container_Boundary(worker, "Zamaro Worker") {
+  Component(scan, "ScanUpload", "Queued job", "Streams quarantined file to scanner")
+  Component(adapter, "MalwareScanner", "Interface + adapter", "Returns ScanVerdict")
+  Component(promote, "PromoteUpload", "Action", "Random name, metadata, encrypt documents")
+  Component(reject, "RejectInfectedUpload", "Action", "Deletes file, marks Rejected")
+  Component(event, "RecordSecurityEvent", "Action", "Writes to security log channel")
+}
+Rel(web, upctrl, "Uploads file", "multipart/HTTPS")
+Rel(upctrl, receive, "Calls")
+Rel(receive, detect, "Detects type with")
+Rel(receive, storage, "Writes quarantine/{uuid}", "S3 API")
+Rel(receive, scan, "Dispatches", "Redis queue")
+Rel(scan, adapter, "Scans with")
+Rel(adapter, scanner, "Calls", "HTTPS")
+Rel(scan, promote, "Clean")
+Rel(scan, reject, "Infected")
+Rel(reject, event, "Logs")
+Rel(promote, storage, "Writes permanent object", "S3 API")
+Rel(web, urlctrl, "Requests document link", "JSON/HTTPS")
+Rel(web, docctrl, "Opens signed URL on media domain", "HTTPS")
+Rel(docctrl, storage, "Reads encrypted document", "S3 API")
+@enduml

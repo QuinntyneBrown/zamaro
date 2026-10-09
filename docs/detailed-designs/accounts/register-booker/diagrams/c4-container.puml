@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Register as a booker
+
+Person(guest, "Guest", "Anyone not signed in")
+System_Ext(bot, "Bot challenge provider", "Human check")
+System_Ext(breach, "Breached-password service", "k-anonymity range query")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "RegisterPage, CheckEmailPage, VerifyEmailPage")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Registration and verification endpoints under /api/v1")
+  Container(worker, "Zamaro Worker", "Laravel queue workers", "Sends queued notifications")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Users, verification tokens, consent records")
+  ContainerQueue(cache, "Cache and queue", "Redis", "Sessions, rate-limit counters, notification queue")
+}
+Rel(guest, web, "Uses", "HTTPS")
+Rel(web, api, "POST /api/v1/register, /api/v1/email/verify", "JSON/HTTPS")
+Rel(api, bot, "Verifies challenge", "HTTPS/JSON")
+Rel(api, breach, "Range query", "HTTPS")
+Rel(api, db, "Writes user, token and consent", "Eloquent / SQL")
+Rel(api, cache, "Counts attempts and enqueues jobs", "RESP")
+Rel(worker, cache, "Takes jobs from", "RESP")
+Rel(worker, email, "Sends email", "HTTPS/JSON")
+@enduml

@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Post a reply
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistReviewsPage" as page
+  participant "ArtistReviewsStore" as store
+  participant "ArtistReviewsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistReviewReplyController" as controller
+  participant "ReviewReplyPolicy" as policy
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReplyToReview" as action
+  participant "ForgetArtistProfileCache" as listener
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+actor -> page : Activate Reply on a review
+actor -> page : Write text, activate Post reply
+page -> page : Validate 1–500 characters (L2-061)
+page -> store : postReply(reviewId, text)
+store -> client : postReply(reviewId, text)
+client -> controller : POST /api/v1/artist/reviews/{review}/reply
+controller -> controller : Require Artist role, validate StoreReviewReplyRequest
+controller -> db : Load review
+db --> controller : Review
+controller -> policy : create(user, review)
+alt review about another artist or hidden
+  policy --> controller : Deny as not found
+  controller --> client : 404 problem details (L2-074)
+else own visible review
+  policy --> controller : Allow
+  controller -> action : handle(review, artist, text)
+  action -> db : INSERT review_reply in transaction
+  alt reply already exists
+    db --> action : Unique violation on review_id
+    action --> controller : ReplyAlreadyExists
+    controller --> client : 409 problem details (L2-061)
+  else inserted
+    db --> action : ReviewReply
+    action -> listener : ReviewReplyPosted
+    listener -> cache : Forget cached profile (L2-089)
+    action --> controller : ReviewReply
+    controller --> client : 201 ReviewReplyResource with editableUntil
+    client --> store : Reply
+    store --> page : Show reply under the review
+    page --> actor : Toast "Reply posted"; profile shows "Reply from {artist name}" (L2-018)
+  end
+end
+@enduml

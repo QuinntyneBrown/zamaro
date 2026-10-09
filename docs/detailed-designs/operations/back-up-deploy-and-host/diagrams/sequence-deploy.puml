@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Deploy a merge to production without downtime
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Developer" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Zamaro Web\n(SSR instances)" as web
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Zamaro API\n(instances)" as api
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "Zamaro Worker" as worker
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "CI/CD pipeline" as ci
+  participant "CDN" as cdn
+  participant "Hosting platform\nload balancer" as lb
+  database "Zamaro database" as db
+end box
+
+actor -> ci : Merge to main
+ci -> ci : Lint, unit tests, acceptance tests, security scans,\nbudgets, contract tests (L2-094, L2-078, L2-087, L2-095)
+ci -> ci : MigrationCompatibilityCheck: previous release's API suite\nagainst the migrated schema (L2-094)
+alt any check fails
+  ci --> actor : Pipeline failed; production unchanged
+else all checks pass
+  ci -> ci : Build images tagged with release version; write ReleaseManifest
+  ci -> cdn : Upload hashed assets under the release prefix (previous kept)
+  ci -> db : php artisan migrate --force (expand only; old code still works)
+  loop each API and Web instance, one at a time
+    ci -> api : Start new instance with APP_RELEASE
+    api -> api : Read secrets from the secrets manager (L2-078)
+    lb -> api : GET /health/ready
+    api --> lb : 200
+    lb -> lb : Add new instance, drain and stop an old one
+    ci -> web : Same rolling step for SSR instances
+  end
+  ci -> worker : horizon:terminate; new workers start on the new image
+  ci -> web : Post-deploy smoke test: /, /artists/{slug}, booking API
+  alt smoke test passes
+    ci --> actor : Release live with no downtime (L2-094)
+  else smoke test fails
+    ci -> ci : Start rollback (see rollback sequence)
+  end
+end
+@enduml

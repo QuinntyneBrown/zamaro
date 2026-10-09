@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Open one booking
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingDetailStore" as store
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "Booking::visibleTo" as scope
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /bookings/{number}
+page -> store : load(number)
+store -> client : get(number)
+client -> controller : GET /api/v1/bookings/{number}
+controller -> scope : Resolve {booking:number} for the signed-in user
+scope -> db : WHERE number = ? AND (booker_id = me OR artist.user_id = me)
+alt no match (another booker's booking or unknown number)
+  db --> scope : No row
+  scope --> controller : ModelNotFoundException
+  controller --> client : 404 problem details, no data (L2-033, L2-074)
+  client --> store : Not found
+  store --> page : status not-found
+  page --> actor : Not-found state
+else party to the booking
+  db --> scope : Booking
+  scope --> controller : Booking
+  controller -> sm : allowedFrom(status), filtered by policy abilities
+  sm --> controller : Allowed actions
+  controller -> db : History, payments, refunds, contacts if Confirmed
+  db --> controller : Related rows
+  controller --> client : 200 BookingResource
+  client --> store : BookingDetail
+  store --> page : Render summary, timeline, thread and allowed actions
+  page --> actor : Booking detail
+end
+@enduml

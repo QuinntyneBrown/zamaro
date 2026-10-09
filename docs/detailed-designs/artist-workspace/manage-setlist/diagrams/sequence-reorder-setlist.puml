@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Reorder the setlist
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SetlistListComponent" as list
+  participant "SetlistStore" as store
+  participant "SetlistApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "SetlistOrderController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ReorderSetlist" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  database "Cache and queue" as cache
+end box
+
+loop each move
+  actor -> list : Drag a song, or use Move up and Move down
+  list -> store : move(id, toIndex)
+  store --> list : Local order, orderDirty = true
+  list --> actor : First 5 marked "In profile header"; LiveAnnouncer reads new position
+end
+actor -> list : Activate "Save order"
+list -> store : saveOrder()
+store -> client : reorder(ids)
+client -> controller : PUT /api/v1/artist/setlist/order
+controller -> controller : EnsureArtistRole; validate ReorderSetlistRequest
+controller -> action : handle(artist, ids)
+action -> db : BEGIN; lock artist; load song IDs
+alt list differs from the artist's songs
+  action --> controller : Mismatch
+  controller --> client : 422 "Setlist changed; reload" (copy <TO SUPPLY>)
+  client --> store : Reload songs
+else same set
+  action -> db : Set position = index + 1 (unique constraint deferred to commit)
+  action -> db : COMMIT
+  action -> cache : Queue ArtistProfileUpdated listener (L2-089)
+  action --> controller : Done
+  controller --> client : 200 ordered songs
+  client --> store : Songs, orderDirty = false
+  store --> list : Saved order
+  list --> actor : Saved; public header strip shows the first 5 (L2-053, L2-012)
+end
+@enduml

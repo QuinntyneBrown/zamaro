@@ -1,0 +1,21 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Send event reminders
+
+Person(party, "Booker or artist", "Party to a Confirmed booking")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "BookingDetailPage with message thread")
+  Container(worker, "Zamaro Worker", "Laravel scheduler and Horizon", "Finds due reminders and sends them")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "bookings, reminder_dispatches, notification_preferences")
+  ContainerQueue(cache, "Cache and queue", "Redis", "notifications queue")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Booking and thread endpoints")
+}
+Rel(worker, db, "Reads Confirmed bookings, writes dispatches", "SQL")
+Rel(worker, cache, "Queues and consumes reminders", "RESP")
+Rel(worker, email, "Sends reminder", "HTTPS/JSON")
+Rel(party, web, "Follows thread link", "HTTPS")
+Rel(web, api, "Loads booking and thread", "JSON/HTTPS")
+Rel(api, db, "Reads", "SQL")
+@enduml

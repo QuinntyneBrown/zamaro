@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Upload videos
+
+Person(artist, "Artist", "Approved worship artist")
+System_Ext(scanner, "Malware scanner", "Scans every upload")
+System_Ext(vps, "Video processing service", "Transcodes and makes poster frames")
+System_Ext(cdn, "CDN", "Media domain")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Videos manager under /artist/videos; chunked uploader")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Upload sessions, video metadata and processing webhook")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Inspects, scans and probes sources; prunes abandoned uploads")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "artist_videos")
+  ContainerQueue(queue, "Cache and queue", "Redis", "InspectArtistVideo jobs")
+  ContainerDb(storage, "Object storage", "S3-compatible, Canadian region", "Quarantined sources, renditions, posters, captions")
+}
+Rel(artist, web, "Uses", "HTTPS")
+Rel(web, api, "Starts, signs and completes uploads; edits videos", "JSON/HTTPS")
+Rel(web, storage, "PUTs file chunks to pre-signed URLs", "HTTPS")
+Rel(api, storage, "Creates and completes multipart uploads", "S3 API")
+Rel(api, db, "Reads and writes video rows", "SQL")
+Rel(api, queue, "Dispatches InspectArtistVideo", "RESP")
+Rel(worker, queue, "Takes jobs from", "RESP")
+Rel(worker, storage, "Reads source bytes", "S3 API")
+Rel(worker, scanner, "Scans source", "HTTPS")
+Rel(worker, vps, "Submits transcode", "HTTPS/JSON")
+Rel(vps, storage, "Reads source, writes renditions and poster", "S3 API")
+Rel(vps, api, "POST /api/v1/webhooks/video-processing", "HTTPS/JSON, signed")
+Rel(cdn, storage, "Pulls renditions from", "HTTPS")
+@enduml

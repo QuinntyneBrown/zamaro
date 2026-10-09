@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Decline a booking request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistRequestsPage" as page
+  participant "DeclineRequestDialogComponent" as dialog
+  participant "ArtistRequestsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistRequestsController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "RequestDeclined listener" as listener
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "DeclineBooking" as action
+  participant "BookingStateMachine" as sm
+  participant "SimilarArtistFinder" as similar
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Email delivery service" as email
+end box
+
+actor -> page : Activate Decline
+page -> dialog : Open
+actor -> dialog : Optional reason, up to 500 characters
+dialog -> client : decline(number, reason)
+client -> controller : POST /api/v1/artist/requests/{number}/decline
+controller -> controller : BookingPolicy::respond; validate DeclineBookingRequest (422)
+controller -> action : handle(booking, artist, reason)
+action -> sm : transition(booking, Declined, artist, reason) (L2-030)
+sm -> db : Conditional update, history row with reason
+action -> db : COMMIT, decline_reason stored
+sm -> queue : RequestDeclined after commit
+action --> controller : Booking
+controller --> client : 200
+client --> page : Remove card, close dialog
+page --> actor : Request declined
+queue -> listener : RequestDeclined
+listener -> similar : freeOn(artist, date, church, 3) (L2-030)
+similar -> db : Free, travel-matched artists for the date
+similar --> listener : Up to 3 artists
+listener -> email : Booker email with reason and similar artists (L2-030, L2-063)
+@enduml

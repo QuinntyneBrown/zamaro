@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Protect secrets and data
+
+Container(web, "Zamaro Web", "Angular", "ChurchProfileFormComponent, AccountApi, ErrorTrackingService")
+System_Ext(secrets, "Secrets manager", "Vendor <TO SUPPLY>")
+System_Ext(errors, "Error tracking service", "Redacted exceptions")
+Container_Boundary(api, "Zamaro API") {
+  Component(safety, "ProductionSafetyServiceProvider", "Service provider", "Refuses to boot with APP_DEBUG true or a missing secret")
+  Component(logreq, "LogRequest", "Laravel middleware", "One JSON line per request, no bodies or headers")
+  Component(ctrl, "ChurchController", "Laravel controller", "PUT /api/v1/account/church")
+  Component(action, "UpdateChurch", "Action", "Saves the Church in a transaction")
+  Component(cast, "EncryptedField", "Eloquent cast", "Encrypts phone on write, decrypts on read")
+  Component(enc, "FieldEncrypter", "Service", "AES-256-GCM with versioned field key")
+  Component(redact, "RedactSensitiveData", "Monolog processor", "Redacts secrets, tokens, bodies; last 4 for payment IDs")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "churches.phone as ciphertext")
+}
+Rel(secrets, safety, "Provides environment checked by", "Platform integration")
+Rel(secrets, enc, "Provides FIELD_ENCRYPTION_KEY to", "Platform integration")
+Rel(web, logreq, "PUT church", "JSON/HTTPS")
+Rel(logreq, ctrl, "Passes to")
+Rel(ctrl, action, "Calls")
+Rel(action, cast, "Sets phone through")
+Rel(cast, enc, "Encrypts with")
+Rel(action, db, "Saves", "SQL")
+Rel(logreq, redact, "Logs through")
+Rel(redact, errors, "Also cleans events sent to", "HTTPS")
+@enduml

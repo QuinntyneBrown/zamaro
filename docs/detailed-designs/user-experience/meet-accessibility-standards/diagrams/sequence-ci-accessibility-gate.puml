@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Accessibility gate in CI
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "CI pipeline" as ci
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Playwright a11y suite" as suite
+  participant "Zamaro Web (SSR build)" as web
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Zamaro API" as api
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "check_contrast.py" as contrast
+end box
+
+ci -> api : Seed fixtures
+api -> db : Insert fixture data
+ci -> contrast : Check tokens.css pairs in light and dark (L2-103)
+contrast --> ci : Pass or list failing pairs
+ci -> suite : Run e2e/a11y
+loop each route and state in routes.manifest.ts
+  loop theme in light, dark
+    suite -> web : Load with data-theme forced
+    web -> api : Page data
+    api --> web : Fixture JSON
+    web --> suite : Rendered page
+    suite -> suite : AxeBuilder WCAG 2.2 A and AA tags (L2-100)
+  end
+end
+suite -> suite : Keyboard checks: skip link, route focus, dialog focus return (L2-101)
+alt any serious or critical violation, or a contrast failure
+  suite --> ci : Fail build with the violation report
+else none
+  suite --> ci : Pass; release still needs the manual audit (L2-100)
+end
+@enduml

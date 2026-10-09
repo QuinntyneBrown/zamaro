@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Back up, deploy and host
+
+Person(oncall, "Developer or on-call person", "Merges, rolls back, runs drills")
+System_Ext(ci, "CI/CD pipeline", "Checks, image build, migrate, rollout")
+System_Ext(cdn, "CDN", "Versioned assets")
+System_Ext(secrets, "Secrets manager", "Runtime secrets")
+System_Ext(lb, "Hosting platform", "Load balancer, orchestrator, managed services; Canadian region")
+System_Boundary(zamaro, "Zamaro (Canadian region, L2-084)") {
+  Container(web, "Zamaro Web", "Angular SSR image", "Rolling update")
+  Container(api, "Zamaro API", "Laravel image", "Rolling update; runs migrations as a release task")
+  Container(worker, "Zamaro Worker", "Same Laravel image", "Graceful horizon:terminate on update")
+  ContainerDb(db, "Zamaro database", "Managed PostgreSQL 16", "Point-in-time recovery, 14 days")
+  ContainerDb(cache, "Cache and queue", "Managed Redis", "Rebuildable; not a recovery source")
+  ContainerDb(storage, "Object storage", "S3-compatible", "Media and exports; versioning <TO SUPPLY>")
+  ContainerDb(backup, "Backup storage", "Encrypted object storage", "Base backups and WAL archive")
+}
+Rel(oncall, ci, "Merges or triggers rollback")
+Rel(ci, api, "Runs php artisan migrate --force, then rolls out", "Release task")
+Rel(ci, web, "Rolls out")
+Rel(ci, worker, "Rolls out")
+Rel(ci, cdn, "Uploads hashed assets")
+Rel(lb, api, "Gates traffic on /health/ready", "HTTP")
+Rel(api, secrets, "Reads at start")
+Rel(api, db, "Reads and writes", "SQL")
+Rel(worker, db, "Reads and writes", "SQL")
+Rel(api, cache, "Uses", "RESP")
+Rel(db, backup, "Archives WAL continuously; daily base backup")
+Rel(api, storage, "Stores media", "HTTPS")
+@enduml

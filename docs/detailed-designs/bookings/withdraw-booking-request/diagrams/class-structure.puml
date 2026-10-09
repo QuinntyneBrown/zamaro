@@ -1,0 +1,78 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Withdraw a booking request
+
+package "Zamaro Web (Angular)" {
+  class BookingDetailPage {
+    +store: BookingDetailStore
+    +canWithdraw: Signal<bool>
+    +canCancel: Signal<bool>
+    +onWithdraw(): void
+  }
+  class WithdrawRequestDialogComponent {
+    +busy: InputSignal<bool>
+    +confirmed: OutputEmitterRef<void>
+  }
+  class BookingDetailStore {
+    +booking: Signal<BookingDetail | null>
+    +withdraw(): void
+    +reload(): void
+  }
+  class BookingsApi {
+    +withdraw(number: string): Observable<BookingDetail>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class BookingWithdrawalController {
+    +__invoke(booking: Booking): BookingResource
+  }
+  class BookingPolicy {
+    +withdraw(user: User, booking: Booking): bool
+  }
+  class WithdrawBooking <<action>> {
+    +handle(booking: Booking, booker: User): Booking
+  }
+  class BookingStateMachine {
+    +transition(booking: Booking, to: BookingStatus, actor: TransitionActor, reason: ?string): BookingTransition
+    +allowedFrom(from: BookingStatus): BookingStatus[]
+  }
+  class BookingResource <<API resource>> {
+    +string number
+    +BookingStatus status
+    +string[] allowedActions
+    +BookingHistoryEntry[] history
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +int bookerId
+    +BookingStatus status
+  }
+  class RequestWithdrawn <<event>> {
+    +int bookingId
+  }
+}
+
+BookingDetailPage --> BookingDetailStore
+BookingDetailPage ..> WithdrawRequestDialogComponent : opens
+BookingDetailStore --> BookingsApi
+BookingsApi ..> BookingWithdrawalController : POST withdraw
+BookingWithdrawalController ..> BookingPolicy : authorises
+BookingWithdrawalController --> WithdrawBooking
+BookingWithdrawalController ..> BookingResource : returns
+WithdrawBooking --> BookingStateMachine
+BookingStateMachine ..> Booking : updates
+BookingStateMachine ..> RequestWithdrawn : dispatches
+BookingResource --> Booking
+@enduml

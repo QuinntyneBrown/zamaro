@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Show reviews on the profile
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "ReviewsSectionComponent" as section
+  participant "ProfileReviewsStore" as store
+  participant "ArtistReviewsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistReviewsController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ListArtistReviews" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /artists/{slug}
+page --> section : Profile payload with RatingSummary and first 4 visible reviews (L2-018)
+alt no visible reviews
+  section --> actor : "New" and the quiet empty state (L2-020)
+else visible reviews exist
+  section --> actor : Rating "4.9", "38 churches", 4 newest reviews with replies (L2-018, L2-060)
+  opt more than 4 visible reviews
+    actor -> section : Activate "Show all {n} reviews"
+    section -> store : loadMore(slug)
+    store -> client : list(slug, cursor)
+    client -> controller : GET /api/v1/artists/{slug}/reviews?cursor
+    controller -> db : Resolve slug to an approved, published artist
+    alt artist suspended, deleted or unknown
+      controller --> client : 404 problem details (L2-021)
+    else artist found
+      controller -> action : handle(artist, 10, cursor)
+      action -> db : Visible reviews ordered created_at desc, id desc, with church snapshot and reply
+      db --> action : Up to 10 reviews
+      action --> controller : CursorPaginator
+      controller --> client : 200 ReviewResource collection with next cursor
+      client --> store : ReviewPage
+      store --> section : Append 10, newest first (L2-018)
+      section --> actor : New reviews shown, focus on the first new review
+    end
+  end
+end
+@enduml

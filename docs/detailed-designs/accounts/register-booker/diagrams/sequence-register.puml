@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Register as a booker
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "RegisterPage" as page
+  participant "AuthApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "RegistrationController" as controller
+  participant "RegisterBookerRequest" as request
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RegisterBooker" as action
+  participant "RecordConsent" as consent
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Bot challenge provider" as bot
+  participant "Breached-password service" as breach
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+end box
+
+actor -> page : Enter name, email, password, accept terms, marketing choice
+page -> page : Check required fields and 12-128 password length (L2-072)
+page -> client : register(form)
+client -> controller : POST /api/v1/register (XSRF token)
+controller -> request : Validate
+request -> bot : Verify challenge token (L2-077)
+bot --> request : Pass
+request -> breach : Range query on SHA-1 prefix (L2-072)
+breach --> request : Matching suffixes
+alt invalid input or breached password
+  request --> controller : 422 with per-field reasons
+  controller --> client : Problem details
+  client --> page : Field errors, values kept (L2-108)
+  page --> actor : Inline errors
+else valid input
+  controller -> action : handle(RegistrationData)
+  action -> db : Find user by normalised email
+  alt email is new
+    action -> db : Insert User with Booker role and Argon2id hash (L2-022, L2-072)
+    action -> consent : Terms and privacy versions, marketing choice and time (L2-080)
+    consent -> db : Insert ConsentRecord rows
+    action -> db : Insert EmailVerificationToken hash, expires in 24 h
+    action -> queue : Queue VerifyEmailNotification
+  else email already registered
+    action -> queue : Queue DuplicateSignUpNotification to existing owner (L2-022)
+  end
+  action --> controller : RegistrationResult
+  controller --> client : 202 "Check your email to finish signing up"
+  client --> page : Navigate to CheckEmailPage
+  page --> actor : Same message for new and repeat addresses (L2-022)
+end
+@enduml

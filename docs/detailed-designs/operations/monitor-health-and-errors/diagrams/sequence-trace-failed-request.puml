@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Trace a failed request to an alert
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "ArtistsApi\n+ RequestIdInterceptor" as client
+  participant "ErrorTrackingErrorHandler" as feh
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "AssignRequestId\n+ LogRequest" as mw
+  participant "ArtistProfileController" as controller
+  participant "Exception handler" as handler
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Error tracking service" as errors
+  participant "Log management service" as logs
+  participant "Metrics and alerting service" as metrics
+end box
+actor "On-call person" as oncall
+
+actor -> page : Open /artists/{slug}
+page -> client : getProfile(slug)
+client -> mw : GET /api/v1/artists/{slug}
+mw -> mw : No well-formed X-Request-Id, so create one; add to Context (L2-093)
+mw -> controller : show(slug)
+controller -> db : Query
+db --> controller : Connection timeout
+controller -> handler : Unhandled QueryException
+handler -> errors : Report with request_id and release version (L2-093)
+handler --> mw : 500 application/problem+json with requestId (L2-095)
+mw -> logs : JSON line: timestamp, level, request_id, release,\nroute, status 500, duration_ms; secrets redacted (L2-079)
+mw -> metrics : Count request, status class 5xx
+mw --> client : 500 with X-Request-Id header
+client -> client : RequestIdTracker records the ID
+client --> page : Error
+page --> actor : "We couldn't reach the artist's page" with Try again (L2-107)\nand the request ID as a reference (L2-093)
+opt unhandled exception in the browser
+  page -> feh : handleError(error)
+  feh -> errors : Report with last request ID and release version (L2-093)
+end
+opt 5xx rate above 1% for 5 minutes
+  metrics -> oncall : Page with rule name and dashboard link (L2-093)
+  oncall -> errors : Look up the request ID
+end
+@enduml

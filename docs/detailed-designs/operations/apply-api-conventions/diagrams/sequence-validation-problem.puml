@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Validation failure as problem details
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ChurchProfilePage" as page
+  participant "AccountApi\n+ ApiProblemInterceptor" as client
+  participant "FormErrorMapper" as mapper
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ChurchController" as controller
+  participant "UpdateChurchRequest" as form
+  participant "ProblemDetailsRenderer" as renderer
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "Geocoding provider" as geo
+end box
+
+actor -> page : Save church address in Ottawa, ON
+page -> client : updateChurch(form value)
+client -> controller : PUT /api/v1/account/church (JSON body)
+controller -> form : Validate
+form -> geo : Geocode address (L2-001)
+geo --> form : Coordinates about 450 km from Toronto
+form --> controller : ValidationException, address outside service area
+controller -> renderer : render(exception)
+renderer -> renderer : Build ProblemDetails: type {base}/validation-failed,\ntitle, status 422, detail, requestId, errors keyed by field (L2-095)
+renderer --> client : 422 application/problem+json\n{"errors": {"address": ["Zamaro serves churches within 200 km of Toronto."]}}
+client -> client : Parse body as ApiProblem
+client --> page : ApiProblem
+page -> mapper : apply(form, problem)
+mapper -> mapper : Set server error on the address control
+page --> actor : Inline error on address; every value kept (L2-108)
+alt any other error status
+  renderer --> client : application/problem+json with type, title, status, detail, requestId
+  client --> page : ApiProblem shown by the page's error state
+end
+@enduml

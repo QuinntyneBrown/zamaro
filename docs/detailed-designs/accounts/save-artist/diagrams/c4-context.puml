@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Save an artist
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+
+Rel(booker, zamaro, "Saves and unsaves artists using", "HTTPS")
+Rel(guest, zamaro, "Signs in or registers to save an artist using", "HTTPS")
+@enduml

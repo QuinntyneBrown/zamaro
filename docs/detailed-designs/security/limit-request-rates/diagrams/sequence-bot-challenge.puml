@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Bot challenge on registration
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "RegisterPage" as page
+  participant "BotChallengeComponent" as widget
+  participant "AuthApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "VerifyBotChallenge" as mw
+  participant "RegisterController" as controller
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  participant "BotChallengeVerifier adapter" as verifier
+  participant "Bot challenge provider" as provider
+end box
+
+actor -> page : Open registration form
+page -> widget : Render with site key and action "register"
+widget -> provider : Load widget and run challenge
+provider --> widget : Single-use token
+widget --> page : tokenChange(token), enable submit
+actor -> page : Submit name, email, password
+page -> client : register(form with challengeToken)
+client -> mw : POST /api/v1/auth/register
+mw -> verifier : verify(token, client IP, "register")
+verifier -> provider : Verify token with site secret
+provider --> verifier : Result
+alt token missing, invalid, reused or wrong action (L2-077)
+  verifier --> mw : passed = false
+  mw --> client : 422, errors.challengeToken (copy <TO SUPPLY>)
+  client --> page : Error
+  page -> widget : reset()
+  page --> actor : Ask to complete the challenge again
+else passed
+  verifier --> mw : passed = true
+  mw -> controller : Proceed to registration (L2-022)
+  controller --> client : 201 "Check your email to finish signing up"
+  client --> page : Success
+  page --> actor : Confirmation shown
+end
+@enduml

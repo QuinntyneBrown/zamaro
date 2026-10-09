@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Renamed slug
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker, guest or crawler" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "ArtistProfileApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistProfileController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "ResolveArtistSlug" as resolve
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : GET /artists/abigail-mensah-music?date=2026-11-14 (server render)
+page -> client : get('abigail-mensah-music')
+client -> controller : GET /api/v1/artists/abigail-mensah-music
+controller -> resolve : handle(slug)
+resolve -> db : artists.slug = old slug
+db --> resolve : No row
+resolve -> db : slug_histories.old_slug = old slug
+db --> resolve : artist_id of a viewable artist
+resolve --> controller : Moved('abigail-mensah')
+controller --> client : 301 Location: /api/v1/artists/abigail-mensah (L2-021, L2-055)
+client -> controller : GET /api/v1/artists/abigail-mensah (fetch follows the redirect)
+controller --> client : 200 ArtistProfileResource with slug abigail-mensah
+client --> page : Profile whose slug differs from the route slug
+alt server render
+  page --> actor : 301 Location: /artists/abigail-mensah?date=2026-11-14 (L2-021)
+else browser navigation
+  page -> page : router.navigateByUrl(new URL, replaceUrl)
+  page --> actor : Profile shown at the current slug
+end
+@enduml

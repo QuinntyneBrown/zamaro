@@ -1,0 +1,88 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Pick a date and start booking
+
+package "Zamaro Web (Angular)" {
+  class TourDatesComponent {
+    +dates: InputSignal<TourDate[]>
+    +carriedDate: InputSignal<string | null>
+    +picked: OutputEmitterRef<string>
+  }
+  class BookingStubComponent {
+    +profile: InputSignal<ArtistProfile>
+    +form: FormGroup<BookingStubForm>
+    +focusDate(): void
+    +submit(): void
+  }
+  class ArtistProfileStore {
+    +tourDates: Signal<TourDate[]>
+    +selectedDate: WritableSignal<string | null>
+    +dateCheck: Signal<'unknown'|'checking'|'free'|'booked'>
+    +bookLabel: Signal<string>
+    +selectDate(date: string, knownFree?: boolean): void
+  }
+  class AvailabilityApi {
+    +check(slug: string, date: string): Observable<DateCheck>
+    +tourDates(slug: string, from: string): Observable<TourDate[]>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ArtistAvailabilityController {
+    +check(slug: string, request: CheckDateRequest): JsonResponse
+    +tourDates(slug: string, request: TourDatesRequest): AnonymousResourceCollection
+  }
+  class ListTourDates <<action>> {
+    +handle(artist: Artist, from: CarbonImmutable, limit: int = 6): TourDate[]
+  }
+  class AvailabilityService {
+    +isFree(artist: Artist, date: CarbonImmutable): bool
+  }
+  class TourDate <<value object>> {
+    +CarbonImmutable date
+    +TourDateStatus status
+    +?GatheringKind kind
+    +?string city
+  }
+  enum TourDateStatus {
+    Free
+    Booked
+  }
+  class TourDateResource {
+    +toArray(request: Request): array
+  }
+  class CancellationPolicy <<value object>> {
+    +int freeCancellationDays = 14
+    +freeCancellationUntil(eventDate: CarbonImmutable): CarbonImmutable
+  }
+  class Booking <<Eloquent>> {
+    +CarbonImmutable eventDate
+    +GatheringKind gatheringKind
+    +string churchCitySnapshot
+    +BookingStatus status
+  }
+}
+
+TourDatesComponent ..> ArtistProfileStore : selectDate()
+BookingStubComponent --> ArtistProfileStore
+ArtistProfileStore --> AvailabilityApi
+AvailabilityApi ..> ArtistAvailabilityController : GET /api/v1/artists/{slug}/...
+ArtistAvailabilityController --> AvailabilityService
+ArtistAvailabilityController --> ListTourDates
+ListTourDates ..> Booking : reads Confirmed
+ListTourDates ..> TourDate : builds
+TourDate --> TourDateStatus
+ArtistAvailabilityController ..> TourDateResource : returns
+BookingStubComponent ..> CancellationPolicy : states policy (via catalogue)
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Reply to a review
+
+Container(web, "Zamaro Web", "Angular", "ArtistReviewsPage, ReviewReplyFormComponent, ArtistReviewsStore, ArtistReviewsApi")
+Container_Boundary(api, "Zamaro API") {
+  Component(list, "ArtistReviewsController", "Laravel controller", "GET /api/v1/artist/reviews")
+  Component(ctrl, "ArtistReviewReplyController", "Laravel controller", "POST and PATCH /api/v1/artist/reviews/{review}/reply")
+  Component(req, "StoreReviewReplyRequest / UpdateReviewReplyRequest", "FormRequest", "1–500 characters")
+  Component(policy, "ReviewReplyPolicy", "Policy", "Own profile, visible review, 7-day edit window")
+  Component(reply, "ReplyToReview", "Action", "Inserts one reply per review")
+  Component(edit, "EditReviewReply", "Action", "Rewrites the reply")
+  Component(forget, "ForgetArtistProfileCache", "Event listener", "Clears the cached profile")
+}
+ContainerDb(db, "Zamaro database", "PostgreSQL 16", "reviews, review_replies")
+ContainerDb(cache, "Cache and queue", "Redis", "Cached artist profiles")
+
+Rel(web, list, "Lists reviews of own profile", "JSON/HTTPS")
+Rel(web, ctrl, "Posts and edits a reply", "JSON/HTTPS")
+Rel(list, db, "Reads visible reviews and replies", "SQL")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, policy, "Authorises with")
+Rel(ctrl, reply, "Calls")
+Rel(ctrl, edit, "Calls")
+Rel(reply, db, "Inserts reply", "SQL")
+Rel(edit, db, "Updates reply", "SQL")
+Rel(reply, forget, "Dispatches ReviewReplyPosted to")
+Rel(edit, forget, "Dispatches ReviewReplyEdited to")
+Rel(forget, cache, "Forgets profile entry", "RESP")
+@enduml

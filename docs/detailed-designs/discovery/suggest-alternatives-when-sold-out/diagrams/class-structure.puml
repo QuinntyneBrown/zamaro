@@ -1,0 +1,85 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Suggest alternatives when sold out
+
+package "Zamaro Web (Angular)" {
+  class SoldOutComponent {
+    +alternatives: InputSignal<SearchAlternatives | null>
+    +dateDescription: InputSignal<string>
+    +radiusKm: InputSignal<number>
+    +nearbyDatePicked: OutputEmitterRef<string>
+    +widenRadius: OutputEmitterRef<number>
+    +showAllStyles: OutputEmitterRef<void>
+  }
+  class SearchStore {
+    +alternatives: Signal<SearchAlternatives | null>
+    +loadAlternatives(): void
+    +pickNearbyDate(date: string): void
+    +widenRadius(km: number): void
+    +clearFilters(): void
+  }
+  class SearchApi {
+    +alternatives(criteria: SearchCriteria): Observable<SearchAlternatives>
+  }
+  class DateDescriptionPipe {
+    +transform(date: string): string
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SearchAlternativesController {
+    +__invoke(request: SearchArtistsRequest): SearchAlternativesResource
+  }
+  class FindSearchAlternatives <<action>> {
+    +handle(criteria: SearchCriteria): SearchAlternatives
+    -nearbyDates(criteria: SearchCriteria): NearbyDate[]
+    -widerRadius(criteria: SearchCriteria): ?WiderRadius
+  }
+  class AvailabilityService {
+    +freeArtistIdsByDate(ids: array, dates: CarbonImmutable[]): array<string, int[]>
+  }
+  class DistanceService {
+    +between(from: Coordinates, to: Coordinates): Distance
+  }
+  class SoldOutExplainer {
+    +explain(criteria: SearchCriteria, alternatives: SearchAlternatives): string
+  }
+  class SearchAlternatives <<value object>> {
+    +NearbyDate[] nearbyDates
+    +?WiderRadius widerRadius
+    +bool filtersApplied
+    +string explanation
+  }
+  class NearbyDate <<value object>> {
+    +CarbonImmutable date
+    +int freeCount
+  }
+  class WiderRadius <<value object>> {
+    +int radiusKm
+    +int freeCount
+  }
+}
+
+SoldOutComponent ..> SearchStore : emits choices to
+SearchStore --> SearchApi
+SoldOutComponent ..> DateDescriptionPipe : uses
+SearchApi ..> SearchAlternativesController : GET /api/v1/search/alternatives
+SearchAlternativesController --> FindSearchAlternatives
+FindSearchAlternatives --> AvailabilityService
+FindSearchAlternatives --> DistanceService
+FindSearchAlternatives --> SoldOutExplainer
+FindSearchAlternatives ..> SearchAlternatives : builds
+SearchAlternatives "1" *-- "0..3" NearbyDate
+SearchAlternatives "1" *-- "0..1" WiderRadius
+@enduml

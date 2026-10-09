@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Skip link and route change
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Keyboard and screen-reader user" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "SkipLinkComponent" as skip
+  participant "Router" as router
+  participant "ArtistProfilePage" as page
+  participant "ZamaroTitleStrategy" as title
+  participant "RouteFocusService" as focus
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistsController" as ctrl
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> skip : First Tab on the page
+skip --> actor : "Skip to content" visible with two-tone focus ring (L2-101)
+actor -> skip : Enter
+skip -> skip : Focus main#main (L2-101)
+actor -> router : Activate a ticket card link
+router -> page : Activate /artists/{slug}
+page -> ctrl : GET /api/v1/artists/{slug}
+ctrl -> db : Artist, rating aggregate
+db --> ctrl : Row
+ctrl --> page : 200 ArtistResource (rating, reviewCount as numbers)
+router -> title : updateTitle()
+title -> title : document.title = "{artist} · Zamaro" (L2-101)
+router -> focus : NavigationEnd
+focus -> focus : afterNextRender, focus h1[data-route-heading] (L2-101)
+focus --> actor : Screen reader reads the artist name heading
+page --> actor : Rating read as "Rated 4.9 out of 5 by 38 churches" (L2-102)
+@enduml

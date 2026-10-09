@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — View an artist profile
+
+Person(visitor, "Booker or guest", "Considers an artist")
+System_Ext(cdn, "CDN", "Serves images and video")
+Container_Boundary(web, "Zamaro Web") {
+  Component(page, "ArtistProfilePage", "Angular page", "Route /artists/:slug; two-column layout from LG")
+  Component(store, "ArtistProfileStore", "Signal store", "Profile, carried date, status, stub draft")
+  Component(client, "ArtistProfileApi", "Typed HTTP client", "GET /api/v1/artists/{slug}")
+  Component(header, "ProfileHeaderComponent", "Angular component", "Name, rating, city, range, setlist strip, actions")
+  Component(sections, "About, Videos, Gallery, Setlist", "Angular components", "Section content and empty states")
+  Component(err, "ProfileErrorComponent", "Angular component", "Server or network error state")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "ArtistProfileController", "Laravel controller", "show(slug)")
+  Component(action, "ShowArtistProfile", "Action", "Loads public profile data")
+  Component(res, "ArtistProfileResource", "API resource", "Public fields only")
+  Component(signer, "MediaUrlSigner", "Service", "CDN URLs for renditions and streams")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists, artist_photos, artist_videos, setlist_songs, reviews")
+}
+Rel(visitor, page, "Opens", "HTTPS")
+Rel(page, store, "Loads with")
+Rel(page, header, "Contains")
+Rel(page, sections, "Contains")
+Rel(page, err, "Shows on failure")
+Rel(store, client, "Fetches with")
+Rel(client, ctrl, "GET /api/v1/artists/{slug}", "JSON/HTTPS")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Reads", "SQL")
+Rel(ctrl, res, "Returns")
+Rel(res, signer, "Builds media URLs with")
+Rel(sections, cdn, "Loads images and streams video from", "HTTPS")
+@enduml

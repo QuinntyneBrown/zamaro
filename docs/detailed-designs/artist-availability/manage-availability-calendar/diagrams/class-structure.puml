@@ -1,0 +1,120 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage the availability calendar
+
+package "Zamaro Web (Angular)" {
+  class ArtistCalendarPage {
+    +store: AvailabilityStore
+    +onMarkRange(from: string, to: string, state: OverrideState): void
+    +onSaveWeekly(weekdays: number[]): void
+  }
+  class CalendarMonthComponent {
+    +month: Input<CalendarMonth>
+    +rangeSelected: Output<DateRange>
+  }
+  class ConfirmDeclineDialogComponent {
+    +count: Input<number>
+    +confirmed: Output<void>
+  }
+  class AvailabilityStore {
+    +months: Signal<CalendarMonth[]>
+    +weeklyUnavailable: Signal<number[]>
+    +pendingConfirmation: Signal<PendingChange | null>
+    +load(): void
+    +saveWeekly(weekdays: number[]): void
+    +saveRange(change: RangeChange, confirm: boolean): void
+  }
+  class AvailabilityApi {
+    +calendar(): Observable<CalendarMonth[]>
+    +putWeekly(weekdays: number[]): Observable<void>
+    +putDates(change: RangeChange, confirm: boolean): Observable<RangeResult>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class BuildArtistCalendar <<action>> {
+    +MONTHS: int = 18
+    +handle(artist: Artist, today: CarbonImmutable): CalendarMonth[]
+  }
+  class SetWeeklyAvailability <<action>> {
+    +handle(artist: Artist, unavailableWeekdays: int[]): void
+  }
+  class SetDateAvailability <<action>> {
+    +handle(artist: Artist, from: CarbonImmutable, to: CarbonImmutable, state: OverrideState, confirm: bool): RangeResult
+  }
+  class AvailabilityService {
+    +isFree(artist: Artist, date: CarbonImmutable): bool
+    +isUnavailableByChoice(artist: Artist, date: CarbonImmutable): bool
+  }
+  class BookingStateMachine {
+    +transition(booking: Booking, to: BookingStatus, actor: User, reason: ?string): void
+  }
+  class AvailabilityRule <<Eloquent>> {
+    +int id
+    +int artistId
+    +int weekday
+    +bool unavailable
+  }
+  class AvailabilityOverride <<Eloquent>> {
+    +int id
+    +int artistId
+    +CarbonImmutable date
+    +OverrideState state
+  }
+  class Booking <<Eloquent>> {
+    +int id
+    +int artistId
+    +CarbonImmutable eventDate
+    +BookingStatus status
+  }
+  class CalendarDay <<value object>> {
+    +CarbonImmutable date
+    +DayStatus status
+    +int requestCount
+    +bool editable
+  }
+  class RangeResult <<value object>> {
+    +int changedDays
+    +CarbonImmutable[] skippedBookedDates
+    +int declinedRequests
+  }
+  enum DayStatus {
+    Free
+    Unavailable
+    Requested
+    Booked
+  }
+  enum OverrideState {
+    Free
+    Unavailable
+  }
+}
+
+ArtistCalendarPage --> AvailabilityStore
+ArtistCalendarPage --> CalendarMonthComponent
+ArtistCalendarPage --> ConfirmDeclineDialogComponent
+AvailabilityStore --> AvailabilityApi
+BuildArtistCalendar --> AvailabilityService
+BuildArtistCalendar ..> CalendarDay : builds
+CalendarDay --> DayStatus
+SetWeeklyAvailability ..> AvailabilityRule : replaces
+SetDateAvailability ..> AvailabilityOverride : upserts
+SetDateAvailability --> BookingStateMachine
+SetDateAvailability ..> RangeResult : returns
+BookingStateMachine ..> Booking : transitions
+AvailabilityService ..> AvailabilityRule : reads
+AvailabilityService ..> AvailabilityOverride : reads
+AvailabilityService ..> Booking : reads Confirmed
+AvailabilityOverride --> OverrideState
+@enduml

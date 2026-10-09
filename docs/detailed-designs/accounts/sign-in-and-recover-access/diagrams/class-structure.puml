@@ -1,0 +1,129 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Sign in and recover access
+
+package "Zamaro Web (Angular)" {
+  class AuthService {
+    +currentUser: Signal<CurrentUser | null>
+    +signIn(email: string, password: string, returnUrl: string): Promise<SignInOutcome>
+    +signOut(): Promise<void>
+    +refresh(): Promise<void>
+  }
+  class AuthApi {
+    +signIn(credentials: Credentials): Observable<SignInResult>
+    +completeTwoFactor(code: string): Observable<CurrentUser>
+    +signOut(): Observable<void>
+    +forgotPassword(email: string, challengeToken: string): Observable<void>
+    +resetPassword(token: string, password: string): Observable<void>
+    +beginTwoFactor(): Observable<TwoFactorSetup>
+    +confirmTwoFactor(code: string): Observable<string[]>
+  }
+  class SignInPage {
+    +returnUrl: string
+    +onSubmit(): void
+  }
+  class SecurityPage {
+    +setup: Signal<TwoFactorSetup | null>
+    +recoveryCodes: Signal<string[]>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SessionController {
+    +store(request: SignInRequest): JsonResponse
+    +twoFactor(request: TwoFactorChallengeRequest): JsonResponse
+    +destroy(): Response
+  }
+  class AttemptSignIn <<action>> {
+    +handle(email: string, password: string, ip: string): SignInResult
+  }
+  class SignInThrottle {
+    +int maxAttempts = 5
+    +int windowMinutes = 15
+    +int blockMinutes = 15
+    +isLocked(user: User): bool
+    +recordFailure(user: User): bool
+    +clear(user: User): void
+  }
+  class SignInResult <<value object>> {
+    +SignInStatus status
+    +?User user
+  }
+  enum SignInStatus {
+    SignedIn
+    TwoFactorRequired
+    InvalidCredentials
+    Locked
+  }
+  class ResetPassword <<action>> {
+    +handle(token: string, password: string): void
+  }
+  class PasswordPolicy <<rule>> {
+    +validate(attribute: string, value: string, fail: Closure): void
+  }
+  interface BreachedPasswordChecker {
+    +isBreached(password: string): bool
+  }
+  class SessionRegistry {
+    +register(user: User, sessionId: string, request: Request): void
+    +endAll(user: User): void
+    +endAllExcept(user: User, sessionId: string): void
+    +end(user: User, userSessionId: string): void
+  }
+  interface TotpVerifier {
+    +verify(secret: string, code: string): bool
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string email
+    +string password
+    +bool mfaEnabled
+    +?string twoFactorSecret
+  }
+  class PasswordResetToken <<Eloquent>> {
+    +string tokenHash
+    +CarbonImmutable expiresAt
+    +?CarbonImmutable usedAt
+  }
+  class RecoveryCode <<Eloquent>> {
+    +string codeHash
+    +?CarbonImmutable usedAt
+  }
+  class UserSession <<Eloquent>> {
+    +string id
+    +string deviceLabel
+    +?string approximateCity
+    +CarbonImmutable lastActiveAt
+  }
+}
+
+SignInPage --> AuthService
+SecurityPage --> AuthApi
+AuthService --> AuthApi
+AuthApi ..> SessionController : /api/v1/session
+SessionController --> AttemptSignIn
+AttemptSignIn --> SignInThrottle
+AttemptSignIn ..> SignInResult : returns
+SignInResult --> SignInStatus
+AttemptSignIn ..> SessionRegistry : registers session
+AttemptSignIn ..> TotpVerifier : defers to challenge
+ResetPassword --> PasswordPolicy
+ResetPassword --> SessionRegistry
+ResetPassword ..> PasswordResetToken : consumes
+PasswordPolicy --> BreachedPasswordChecker
+User "1" *-- "0..10" RecoveryCode
+User "1" *-- "0..*" PasswordResetToken
+User "1" *-- "0..*" UserSession
+SessionRegistry ..> UserSession : manages
+@enduml

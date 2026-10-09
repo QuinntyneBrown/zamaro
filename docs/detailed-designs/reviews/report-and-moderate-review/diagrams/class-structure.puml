@@ -1,0 +1,113 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Report and moderate a review
+
+package "Zamaro Web (Angular)" {
+  class ReportReviewDialogComponent {
+    +reason: FormControl<ReviewReportReason>
+    +note: FormControl<string>
+    +submit(): void
+  }
+  class ReviewReportsApi {
+    +report(reviewId: number, reason: ReviewReportReason, note?: string): Observable<void>
+  }
+  class AdminReviewReportsPage {
+    +store: AdminReviewsStore
+    +onHide(reviewId: number): void
+    +onDismiss(reportId: number): void
+  }
+  class HideReviewDialogComponent {
+    +reason: FormControl<string>
+    +submit(): void
+  }
+  class AdminReviewsStore {
+    +queue: Signal<ReportedReviewView[]>
+    +hide(reviewId: number, reason: string): void
+    +dismiss(reportId: number): void
+  }
+  class AdminReviewsApi {
+    +openReports(cursor?: string): Observable<ReportedReviewPage>
+    +hide(reviewId: number, reason: string): Observable<void>
+    +dismiss(reportId: number): Observable<void>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ReviewReportsController {
+    +store(request: ReportReviewRequest, review: Review): JsonResponse
+  }
+  class "Admin\\ReviewModerationController" as ModCtrl {
+    +index(request: Request): AnonymousResourceCollection
+    +hide(request: HideReviewRequest, review: Review): Response
+    +dismiss(report: ReviewReport): Response
+  }
+  class ReportReview <<action>> {
+    +handle(review: Review, reporter: User, reason: ReviewReportReason, note: ?string): ReviewReport
+  }
+  class HideReview <<action>> {
+    +handle(review: Review, admin: User, reason: string): Review
+  }
+  class DismissReviewReport <<action>> {
+    +handle(report: ReviewReport, admin: User): ReviewReport
+  }
+  class RecordAuditEntry <<action>> {
+    +handle(actor: ?User, action: string, target: Model, outcome: AuditOutcome): AuditEntry
+  }
+  class Review <<Eloquent>> {
+    +int id
+    +int artistId
+    +int bookerId
+    +?CarbonImmutable hiddenAt
+    +?string hiddenReason
+    +?int hiddenBy
+  }
+  class ReviewReport <<Eloquent>> {
+    +int id
+    +int reviewId
+    +int reporterId
+    +ReviewReportReason reason
+    +?string note
+    +?CarbonImmutable resolvedAt
+    +?int resolvedBy
+    +?ReportResolution resolution
+  }
+  enum ReviewReportReason {
+    Offensive
+    NotAboutThisArtist
+    PersonalInformation
+    Other
+  }
+  enum ReportResolution {
+    Hidden
+    Dismissed
+  }
+}
+
+ReportReviewDialogComponent --> ReviewReportsApi
+ReviewReportsApi ..> ReviewReportsController : POST
+AdminReviewReportsPage --> AdminReviewsStore
+AdminReviewReportsPage --> HideReviewDialogComponent
+AdminReviewsStore --> AdminReviewsApi
+AdminReviewsApi ..> ModCtrl : GET / POST
+ReviewReportsController --> ReportReview
+ModCtrl --> HideReview
+ModCtrl --> DismissReviewReport
+HideReview --> RecordAuditEntry
+DismissReviewReport --> RecordAuditEntry
+ReportReview ..> ReviewReport : creates
+HideReview ..> Review : hides
+Review "1" *-- "0..*" ReviewReport
+ReviewReport --> ReviewReportReason
+ReviewReport --> ReportResolution
+@enduml

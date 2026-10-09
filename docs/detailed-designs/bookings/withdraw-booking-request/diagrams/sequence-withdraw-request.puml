@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Withdraw a booking request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "BookingDetailStore" as store
+  participant "BookingsApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "BookingWithdrawalController" as controller
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "WithdrawBooking" as action
+  participant "BookingStateMachine" as sm
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  participant "Email delivery service" as email
+end box
+
+actor -> page : Open /bookings/{number}
+page -> page : allowedActions has withdraw (Requested or Accepted);\nConfirmed shows Cancel instead (L2-031)
+actor -> page : Activate "Withdraw request" and confirm in dialog
+page -> store : withdraw()
+store -> client : withdraw(number)
+client -> controller : POST /api/v1/bookings/{number}/withdraw
+controller -> controller : BookingPolicy::withdraw, another booker -> 404 (L2-074)
+controller -> action : handle(booking, booker)
+action -> db : BEGIN
+action -> sm : transition(booking, Withdrawn, booker)
+alt status is Confirmed or terminal, or a deposit confirmed first
+  sm --> action : InvalidBookingTransition
+  action -> db : ROLLBACK
+  action --> controller : 409 problem details (L2-029)
+  controller --> client : 409
+  client --> store : Conflict
+  store -> client : Reload booking
+  store --> page : Error toast; Cancel offered if Confirmed
+else Requested or Accepted
+  sm -> db : Conditional update and history row
+  action -> db : COMMIT, no payment call (L2-031)
+  sm -> queue : RequestWithdrawn after commit
+  queue -> email : Withdrawal email to artist (L2-031)
+  action --> controller : Booking
+  controller --> client : 200 BookingResource
+  client --> store : Booking
+  store --> page : Status Withdrawn, timeline entry
+  page --> actor : Request withdrawn, nothing charged
+end
+@enduml

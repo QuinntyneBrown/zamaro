@@ -1,0 +1,90 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — View saved artists
+
+package "Zamaro Web (Angular)" {
+  class SavedArtistsPage {
+    +list: Signal<SavedArtistList | null>
+    +status: Signal<'loading'|'loaded'|'error'>
+    +date: Signal<string | null>
+  }
+  class SearchStore {
+    +lastSearchDate: Signal<string | null>
+  }
+  class SavedArtistsApi {
+    +list(date?: string): Observable<SavedArtistList>
+  }
+  class TicketCardComponent {
+    +card: InputSignal<SavedArtistCard>
+  }
+  class EmptyStateComponent {
+    +title: string
+    +actionLink: string
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class SavedArtistController {
+    +index(request: ListSavedArtistsRequest): SavedArtistListResource
+  }
+  class ListSavedArtists <<action>> {
+    +handle(booker: User, date: ?CarbonImmutable): SavedArtistList
+  }
+  class AvailabilityService {
+    +freeArtistIds(ids: array, date: CarbonImmutable): array
+  }
+  class SavedArtistList <<value object>> {
+    +SavedArtistCard[] cards
+    +int total
+    +?CarbonImmutable date
+  }
+  class SavedArtistCard <<value object>> {
+    +Artist artist
+    +CarbonImmutable savedAt
+    +?Availability availability
+    +?float rating
+    +int reviewCount
+  }
+  enum Availability {
+    Free
+    Booked
+  }
+  class SavedArtist <<Eloquent>> {
+    +int userId
+    +int artistId
+    +CarbonImmutable createdAt
+  }
+  class Artist <<Eloquent>> {
+    +string slug
+    +string displayName
+    +string baseCity
+    +int fromPriceCents
+    +ArtistStatus status
+  }
+}
+
+SavedArtistsPage --> SavedArtistsApi
+SavedArtistsPage --> SearchStore : reads last date
+SavedArtistsPage *-- TicketCardComponent
+SavedArtistsPage *-- EmptyStateComponent
+SavedArtistsApi ..> SavedArtistController : GET /api/v1/saved-artists
+SavedArtistController --> ListSavedArtists
+ListSavedArtists --> AvailabilityService
+ListSavedArtists ..> SavedArtist : reads
+ListSavedArtists ..> SavedArtistList : builds
+SavedArtistList "1" *-- "0..200" SavedArtistCard
+SavedArtistCard --> Artist
+SavedArtistCard --> Availability
+SavedArtist --> Artist
+@enduml

@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Request and build a data export
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or artist" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "PrivacySectionComponent" as section
+  participant "PrivacyApi" as client
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "DataExportController" as controller
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "BuildDataExport" as job
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "RequestDataExport" as request
+  participant "PersonalDataExporter" as exporter
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  queue "Cache and queue" as queue
+  database "Object storage" as storage
+  participant "Email delivery service" as email
+end box
+
+actor -> section : Activate "Download my data"
+section -> client : requestExport()
+client -> controller : POST /api/v1/account/data-exports
+controller -> request : handle(user)
+request -> db : Find export in Requested or Building
+alt one already pending
+  request --> controller : Existing DataExport
+else none pending
+  request -> db : Insert DataExport status Requested
+  request -> queue : Dispatch BuildDataExport
+  request --> controller : New DataExport
+end
+controller --> client : 202 DataExportResource
+section --> actor : "We'll email you a link within 24 hours" (L2-081)
+
+queue -> job : Deliver job
+job -> db : Mark Building
+job -> exporter : build(user)
+exporter -> db : Profile, church, saved artists, bookings,\nmessages, reviews, consent records (L2-081)
+exporter --> job : Export document
+job -> storage : Put private JSON file under random key
+job -> db : Ready, readyAt = now, expiresAt = now + 7 days (L2-081)
+job -> queue : Queue DataExportReadyNotification
+queue -> email : Send link and expiry date
+alt job fails
+  job -> queue : Retry with backoff, up to 5 times (L2-092)
+end
+@enduml

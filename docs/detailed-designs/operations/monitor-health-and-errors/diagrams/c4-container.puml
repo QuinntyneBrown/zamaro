@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Monitor health and errors
+
+Person(user, "Guest, booker or artist", "Browser")
+Person(oncall, "On-call person", "Receives pages")
+System_Ext(errors, "Error tracking service", "Exceptions")
+System_Ext(logs, "Log management service", "JSON logs")
+System_Ext(metrics, "Metrics and alerting service", "Alert rules, paging")
+System_Ext(uptime, "Uptime monitor", "Monthly availability, status page")
+System_Ext(lb, "Hosting platform", "Load balancer health checks")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Assigns request IDs for page renders; reports browser exceptions")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "Request IDs, JSON logs, exception reports, /health endpoints")
+  Container(worker, "Zamaro Worker", "Laravel Horizon and scheduler", "Carries request IDs into jobs; measures queue lag")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "Readiness dependency")
+  ContainerDb(cache, "Cache and queue", "Redis", "Readiness dependency; queue lag source")
+}
+Rel(user, web, "Uses", "HTTPS")
+Rel(web, api, "Calls with X-Request-Id", "JSON/HTTPS")
+Rel(web, errors, "Reports browser and SSR exceptions", "HTTPS")
+Rel(api, errors, "Reports unhandled exceptions", "HTTPS")
+Rel(worker, errors, "Reports job exceptions", "HTTPS")
+Rel(api, logs, "Writes JSON lines to stdout, shipped by the platform")
+Rel(worker, metrics, "Emits queue lag every minute")
+Rel(api, metrics, "Emits request counts by status class")
+Rel(api, db, "Checks with SELECT 1", "SQL")
+Rel(api, cache, "Checks with PING", "RESP")
+Rel(lb, api, "GET /health/live, /health/ready", "HTTP")
+Rel(uptime, web, "Probes / and /artists/{slug}", "HTTPS")
+Rel(uptime, api, "Probes the booking API", "HTTPS")
+Rel(metrics, oncall, "Pages when a rule fires")
+@enduml
