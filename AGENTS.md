@@ -118,6 +118,7 @@ zamaro/
 │   │   ├── api/                   # library: HTTP access and the contracts pages depend on
 │   │   │   └── src/
 │   │   │       ├── lib/services/  # per subsystem: contract, injection token, HTTP implementation
+│   │   │       ├── lib/http/      # HTTP plumbing: the SSR API-origin backend (ADR-0007)
 │   │   │       ├── lib/models/    # request and response types (models/admin/ for admin endpoints)
 │   │   │       ├── lib/auth/      # session, CSRF, interceptors, and route guards for both applications
 │   │   │       ├── lib/i18n/      # translation catalogues; date, money, and distance formatting

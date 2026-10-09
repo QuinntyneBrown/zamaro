@@ -46,8 +46,9 @@ and through the seeded API that the visual test suite runs against.
   `isCompact: Signal<boolean>` (true below LG). Components read it only where
   behaviour changes, not to lay out content. During server-side rendering it reports
   `xs`, so the first paint of a phone needs no client correction.
-- **`AppShellComponent`** — root layout holding the skip link, `TopBarComponent`,
-  the routed `<main>` and `FooterComponent`.
+- **`AppShellComponent`** (`app/shell`, ADR-0007) — root layout holding the skip link,
+  `TopBarComponent`, the routed `<main>` and `FooterComponent` (`zm-top-bar` and
+  `zm-footer` in the components library).
 - **`TopBarComponent`** — the design-system top bar. From LG it shows Discover,
   How booking works and For artists inline, with the theme toggle from
   `user-experience/switch-theme`. Below LG it uses the compact header: the three

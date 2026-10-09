@@ -62,12 +62,15 @@ Worker, and CI checks on both codebases.
   recipient's language. The control a person uses to choose French, and whether
   `Accept-Language` sets a guest's locale, are `<TO SUPPLY>`.
 
-**Frontend (Zamaro Web, `core/i18n`)**
+**Frontend (Zamaro Web, `projects/api/src/lib/i18n`, ADR-0007)**
 
 - **`TranslocoService`** — runtime catalogue with `@jsverse/transloco-messageformat`
   for ICU messages. `CatalogueLoader` implements `TranslocoLoader` and calls
-  `GET /api/v1/i18n/{locale}`. During server-side rendering the catalogue travels to
-  the browser through `TransferState`, so hydration makes no second request.
+  `GET /api/v1/i18n/{locale}`; `provideI18n()` loads it in an app initializer, before
+  the first render. During server-side rendering the catalogue travels to the browser
+  through the HTTP transfer cache, so hydration makes no second request. On the server,
+  `ApiOriginBackend` sends the call to `API_ORIGIN` below the interceptors, so the cache
+  key is the same relative URL the browser uses.
   Templates use the `transloco` pipe or the `*transloco` structural directive; code
   uses `translate()`.
 - **`FormatService`** — single entry point for display formats, backed by `Intl` with
