@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Button — Zamaro design system</title>
+<meta name="description" content="Buttons trigger actions: request a booking, try again, save an artist. Six variants, three sizes, every state, in both themes.">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Zamaro DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components · Actions</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/save-toggle.html">Save toggle</a></li>
+    </ul></details>
+    <details open><summary>Components · Inputs</summary><ul>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/date-picker.html">Date picker</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+    </ul></details>
+    <details open><summary>Components · Navigation</summary><ul>
+      <li><a href="../components/top-bar.html">Top bar</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/footer.html">Footer</a></li>
+    </ul></details>
+    <details open><summary>Components · Containers & overlays</summary><ul>
+      <li><a href="../components/container.html">Container & stack</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+    </ul></details>
+    <details open><summary>Components · Data display</summary><ul>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/rating.html">Rating</a></li>
+      <li><a href="../components/setlist.html">Setlist</a></li>
+      <li><a href="../components/tour-dates.html">Tour dates</a></li>
+    </ul></details>
+    <details open><summary>Components · Feedback</summary><ul>
+      <li><a href="../components/alert.html">Alert & banner</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/progress-bar.html">Progress bar</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Components · Zamaro signatures</summary><ul>
+      <li><a href="../components/poster.html">Poster hero</a></li>
+      <li><a href="../components/marquee.html">Marquee</a></li>
+      <li><a href="../components/booking-form.html">Booking ticket</a></li>
+      <li><a href="../components/ticket.html">Ticket card</a></li>
+      <li><a href="../components/headliner.html">Headliner</a></li>
+      <li><a href="../components/steps.html">Steps</a></li>
+      <li><a href="../components/review.html">Review</a></li>
+      <li><a href="../components/artwork.html">Artwork</a></li>
+      <li><a href="../components/video-card.html">Video card</a></li>
+      <li><a href="../components/band.html">Band</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback & loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty & error states</a></li>
+      <li><a href="../patterns/navigation-and-page-structure.html">Navigation & page structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs & overlays</a></li>
+      <li><a href="../patterns/data-tables-and-lists.html">Data tables & lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content & tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Actions</p>
+      <h1>Button</h1>
+      <p class="ds-lead">Buttons let a booker act: show the lineup, request a booking, try again. One yellow button per view says what matters most.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Native <code>&lt;button&gt;</code></span><span class="ds-pill">Class <code>.btn</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a button when activating it changes something: it submits the booking request, retries a failed load, saves an artist or opens a menu. Use a <a href="link.html">link</a> when it only goes somewhere. Use the round <a href="save-toggle.html">save toggle</a> on tickets, where space is tight.</p>
+      <ul>
+        <li><b>Primary</b> (yellow fill, ink outline) is the one action the view exists for: “Show the lineup”, “Request to book”. Never two in the same view.</li>
+        <li><b>Secondary</b> (the default look: paper with a charcoal rule) is for every other action.</li>
+        <li><b>Ink</b> (solid charcoal) is a strong secondary that sits beside yellow without competing, such as “See Abigail’s profile” on the headliner.</li>
+        <li><b>Ghost</b> has no frame. Use it in dense places such as the top bar and toolbars.</li>
+        <li><b>Link</b> looks like a link but acts like a button. Use it for minor actions inside a sentence.</li>
+        <li><b>Danger</b> is for destructive actions (cancel a booking, remove an artist) and only appears inside a confirmation <a href="dialog.html">dialog</a>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <button class="btn btn--primary btn--lg" type="button">Show the lineup <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+          <span class="ds-callout" style="left: 28%; top: 20%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 68%; top: 20%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 24%; top: 74%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 76%; top: 74%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small>Bold sans, 14px, uppercase, 0.08em tracking. It is the accessible name.</small></div></li>
+          <li><div><b>Icon (optional)</b><small>20px, square-capped 2.25 stroke, <code>currentColor</code>, <code>aria-hidden</code>. A trailing arrow means “go on”.</small></div></li>
+          <li><div><b>Container</b><small>Height from <code>--control-height-*</code>, square corners, 2px rule, 20px side padding.</small></div></li>
+          <li><div><b>Print shadow (hover)</b><small>A hard 4px offset in <code>--color-shadow</code> while the button lifts 4px up and to the left: ink on newsprint, yellow on stage.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Variants change emphasis, not meaning. Choose by how much attention the action deserves in this view.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn btn--primary" type="button">Request to book</button>
+          <button class="btn" type="button">Share</button>
+          <button class="btn btn--ink" type="button">See profile</button>
+          <button class="btn btn--ghost" type="button">Edit search</button>
+          <button class="btn btn--link" type="button">Show all styles</button>
+          <button class="btn btn--danger" type="button">Cancel booking</button>
+        </div>
+        <div class="ds-example__caption"><span>Primary, secondary, ink, ghost, link, danger: emphasis from highest to lowest. Danger is only for destructive confirmations.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;button class="btn btn--primary" type="button"&gt;Request to book&lt;/button&gt;
+&lt;button class="btn" type="button"&gt;Share&lt;/button&gt;
+&lt;button class="btn btn--ink" type="button"&gt;See profile&lt;/button&gt;
+&lt;button class="btn btn--ghost" type="button"&gt;Edit search&lt;/button&gt;
+&lt;button class="btn btn--link" type="button"&gt;Show all styles&lt;/button&gt;
+&lt;button class="btn btn--danger" type="button"&gt;Cancel booking&lt;/button&gt;</code></pre></details>
+      </div>
+      <h3>With icons, icon-only, toggle and block</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+          <a class="btn btn--ink" href="../../mocks/pages/artist/default.html">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+          <button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button>
+          <button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button>
+          <button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button>
+          <button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </div>
+        <div class="ds-example__canvas ds-example__canvas--stack" style="padding-top: 0;">
+          <button class="btn btn--primary btn--lg btn--block" type="button">Request to book · Sat 14 Nov</button>
+        </div>
+        <div class="ds-example__caption"><span>A toggle button (“Saved”) uses <code>aria-pressed</code> and fills yellow when on. Icon-only buttons carry <code>aria-label</code>. Block buttons fill the booking stub.</span></div>
+      </div>
+      <h3>On the stage and on the yellow band</h3>
+      <p>The button reads its surroundings. On the charcoal stage (<code>.on-stage</code>, the top bar, the poster) secondary buttons become paper outlines and primary keeps its yellow fill. On the yellow <a href="band.html">band</a> the button is solid charcoal.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stage on-stage">
+          <a class="btn btn--primary" href="#book">Book for Sat 14 Nov</a>
+          <button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button>
+          <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share</button>
+        </div>
+        <div class="ds-example__canvas" style="padding-top: 0;">
+          <div class="band" style="width: 100%;"><p><b>Lead worship? Get on the bill.</b></p><button class="btn btn--lg" type="button">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></div>
+        </div>
+        <div class="ds-example__caption"><span id="book">Same markup in every context; the surrounding surface changes the button’s tokens.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Medium is the default and already meets the 44px comfortable target. Use large for the action a whole surface exists for: the booking bar submit, the booking stub, the band. Use small inside list rows, such as “Pick” on tour dates.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn btn--primary btn--sm" type="button">Small · 36px</button>
+          <button class="btn btn--primary" type="button">Medium · 44px</button>
+          <button class="btn btn--primary btn--lg" type="button">Large · 56px</button>
+        </div>
+        <div class="ds-example__caption"><span>Heights <code>--control-height-sm/md/lg</code>; side padding <code>--space-3/5/6</code>; label <code>--font-size-xs/sm/md</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Every variant has the same states. Hover, focus and active are forced here with <code>data-state</code> so you can review them without a mouse. Real pages get them from <code>:hover</code>, <code>:focus-visible</code>, <code>:active</code>, <code>:disabled</code> and <code>aria-busy</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Disabled</th><th scope="col">Loading</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Book</button></td><td><button class="btn btn--primary" type="button" data-state="hover">Book</button></td><td><button class="btn btn--primary" type="button" data-state="focus">Book</button></td><td><button class="btn btn--primary" type="button" data-state="active">Book</button></td><td><button class="btn btn--primary" type="button" disabled>Book</button></td><td><button class="btn btn--primary" type="button" aria-busy="true">Booking…</button></td></tr>
+          <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Share</button></td><td><button class="btn" type="button" data-state="hover">Share</button></td><td><button class="btn" type="button" data-state="focus">Share</button></td><td><button class="btn" type="button" data-state="active">Share</button></td><td><button class="btn" type="button" disabled>Share</button></td><td><button class="btn" type="button" aria-busy="true">Share</button></td></tr>
+          <tr><th scope="row">Ink</th><td><button class="btn btn--ink" type="button">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="hover">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="focus">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="active">Profile</button></td><td><button class="btn btn--ink" type="button" disabled>Profile</button></td><td><button class="btn btn--ink" type="button" aria-busy="true">Profile</button></td></tr>
+          <tr><th scope="row">Ghost</th><td><button class="btn btn--ghost" type="button">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="hover">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="focus">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="active">Edit</button></td><td><button class="btn btn--ghost" type="button" disabled>Edit</button></td><td><button class="btn btn--ghost" type="button" aria-busy="true">Edit</button></td></tr>
+          <tr><th scope="row">Link</th><td><button class="btn btn--link" type="button">Show all</button></td><td><button class="btn btn--link" type="button" data-state="hover">Show all</button></td><td><button class="btn btn--link" type="button" data-state="focus">Show all</button></td><td><button class="btn btn--link" type="button" data-state="active">Show all</button></td><td><button class="btn btn--link" type="button" disabled>Show all</button></td><td><button class="btn btn--link" type="button" aria-busy="true">Show all</button></td></tr>
+          <tr><th scope="row">Danger</th><td><button class="btn btn--danger" type="button">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="hover">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="focus">Cancel</button></td><td><button class="btn btn--danger" type="button" data-state="active">Cancel</button></td><td><button class="btn btn--danger" type="button" disabled>Cancel</button></td><td><button class="btn btn--danger" type="button" aria-busy="true">Cancelling…</button></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Toggle and menu states</h3>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">State</th><th scope="col">Off / closed</th><th scope="col">On / open</th><th scope="col">On, hover</th><th scope="col">On, focus</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Pressed (<code>aria-pressed</code>)</th>
+            <td><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></td>
+            <td><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></td>
+            <td><button class="btn" type="button" aria-pressed="true" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></td>
+            <td><button class="btn" type="button" aria-pressed="true" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></td></tr>
+          <tr><th scope="row">Expanded (<code>aria-expanded</code>)</th>
+            <td><button class="btn" type="button" aria-expanded="false">Sort: closest</button></td>
+            <td><button class="btn" type="button" aria-expanded="true">Sort: closest</button></td>
+            <td><button class="btn" type="button" aria-expanded="true" data-state="hover">Sort: closest</button></td>
+            <td><button class="btn" type="button" aria-expanded="true" data-state="focus">Sort: closest</button></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster cluster--lg"><button class="btn btn--primary" type="button">Primary</button><button class="btn" type="button">Secondary</button><button class="btn btn--ink" type="button">Ink</button><button class="btn btn--ghost" type="button">Ghost</button><button class="btn btn--danger" type="button">Danger</button><button class="btn" type="button" data-state="hover">Hover</button><button class="btn" type="button" data-state="focus">Focus</button></div></div>
+        <div data-theme="dark"><div class="cluster cluster--lg"><button class="btn btn--primary" type="button">Primary</button><button class="btn" type="button">Secondary</button><button class="btn btn--ink" type="button">Ink</button><button class="btn btn--ghost" type="button">Ghost</button><button class="btn btn--danger" type="button">Danger</button><button class="btn" type="button" data-state="hover">Hover</button><button class="btn" type="button" data-state="focus">Focus</button></div></div>
+      </div>
+      <ul>
+        <li><b>Hover</b> lifts the button 4px up and to the left over a hard print shadow, like a misregistered screen print. Ghost and link buttons highlight instead of lifting.</li>
+        <li><b>Active</b> presses the button back flat. The shadow disappears, which reads as “pressed into the paper”.</li>
+        <li><b>Loading</b> sets <code>aria-busy="true"</code>, adds a spinner after the label and ignores further clicks. The label may change to a present-tense verb (“Checking calendars…”), but the button never gets narrower.</li>
+        <li><b>Disabled</b> uses the native attribute. It is not focusable and turns grey on a sunken fill, so a disabled primary is no longer yellow. Prefer leaving the button enabled and explaining what is missing when it is pressed.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Buttons never truncate or wrap their label (<code>white-space: nowrap</code>). If a label does not fit at 360px, shorten it. “Request to book · Sat 14 Nov” is the longest allowed and still fits inside the booking stub at 360px.</li>
+        <li>Below <code>--layout-breakpoint-sm</code> (640px), a form’s submit button fills its container (<code>.btn--block</code>), as in the booking bar and stub.</li>
+        <li>Button rows use <code>.cluster</code> and wrap onto a new line. In <a href="alert.html">alerts</a> and <a href="dialog.html">dialogs</a> the primary action comes first in the DOM and on the left. On phones, dialog footer buttons stretch to equal widths.</li>
+        <li>Touch: every size is at least 36px tall. Small buttons are only used inside list rows that have 16px of vertical padding, so their effective target is 44px or more.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The button reads semantic tokens only, through component tokens that each variant and context overrides: <code>--btn-bg</code>, <code>--btn-fg</code>, <code>--btn-border</code>, <code>--btn-bg-hover</code>, <code>--btn-fg-hover</code>, <code>--btn-bg-active</code>, <code>--btn-shadow-hover</code>, <code>--btn-transform-hover</code>, <code>--btn-height</code>, <code>--btn-padding</code>, <code>--btn-font-size</code>. A theme changes semantic tokens, a surface (stage, band, toast) overrides component tokens, and neither touches the button rules themselves.</p>
+      <pre><code>/* How the yellow band re-skins any button inside it */
+.band .btn { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); }</code></pre>
+      <p>In the dark theme the accent stays the same butter yellow, and its label stays ink (8:1 on light, the same pair on dark). The secondary button turns into a charcoal surface with a light <code>--color-border-strong</code> outline. Hover shadows switch from ink to yellow (<code>--color-shadow</code>), so lifted buttons glow like stage lights.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;button type="button"&gt;</code>, or <code>type="submit"</code> inside a form. A button-styled link (“Book for Sat 14 Nov”, which jumps to the stub) stays an <code>&lt;a href&gt;</code>. Toggle buttons follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button pattern</a> with <code>aria-pressed</code>. Never use a <code>&lt;div&gt;</code> with a click handler.</p>
+      <h3>Keyboard</h3>
+      <table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves focus to and from the button in DOM order.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Activates the button (and follows a button-styled link).</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Activates a <code>&lt;button&gt;</code> on key up, so moving away before releasing cancels it. It does not activate links.</td></tr>
+      </tbody></table>
+      <h3>Focus</h3>
+      <p>On newsprint the ring is a 3px ink outline with a 3px offset. On the stage and in dark mode it turns yellow. It appears on <code>:focus-visible</code> only, so mouse clicks don’t show it. On a yellow primary button the offset gap shows the page behind, so the ink ring sits 11:1 against the canvas.</p>
+      <h3>Labelling</h3>
+      <p>The visible label is the accessible name. Icon-only buttons have an <code>aria-label</code> that names the object, for example “Share Abigail Mensah’s profile”. A short visible label can be extended with <code>aria-label</code> only if the label text stays at the start of the name (“Pick” becomes “Pick Fri 20 Nov”), which satisfies WCAG 2.5.3 Label in Name. Loading buttons keep their name and add <code>aria-busy</code>. Progress is announced through the page’s <code>role="status"</code> region.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Label on primary</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Label on primary (hover)</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent-hover" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Ink button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Label on danger</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Secondary rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: label on primary</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair" data-theme="dark"><span>Dark: secondary rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The lift, shadow and fill change take <code>--duration-fast</code> (90ms). Under <code>prefers-reduced-motion</code> the tokens drop to near zero, so states change instantly. The loading spinner keeps turning on <code>--duration-loop</code> because it is a status indicator, not decoration.</p>
+      <h3>Touch</h3>
+      <p>Medium (44px) and large (56px) meet the comfortable target. Small (36px) still clears the 24px minimum and only appears inside 44px-plus rows. Buttons in a cluster are 8px apart. Nothing depends on hover: the lift is decoration.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Start with a verb, in sentence case in the source (CSS adds the uppercase): “Request to book”, “Try again”, “Apply as an artist”. Never “OK”, “Submit” or “Click here”.</li>
+        <li>Name the object or the date when the context is ambiguous: “Book for Sat 14 Nov”, “Search within 120 km · 2 choirs free”. A middle dot (·) separates the action from its detail.</li>
+        <li>Destructive labels name what is lost: “Cancel booking”, not “Confirm”.</li>
+        <li>Keep it to four words or fewer before the dot. The label must fit at 360px.</li>
+        <li>Loading labels use the present tense with an ellipsis: “Checking calendars…”, “Sending request…”.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Search within 120 km</button><button class="btn" type="button">Show all styles</button></div><figcaption>One yellow action with a secondary beside it, as in the Christmas Eve empty state.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Search wider</button><button class="btn btn--primary" type="button">Show all styles</button></div><figcaption>Two yellow buttons compete, and neither reads as the main path.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></div><figcaption>A toggle exposes <code>aria-pressed</code> and looks pressed: yellow fill, filled heart.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><span class="nav-link" style="color: var(--color-fg-default);"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</span></div><figcaption>The mocks’ top-bar “Saved” mixed <code>.nav-link</code> and <code>.btn--ghost</code> with an inline style reset. Use one class (<code>.nav-link</code> now resets buttons itself).</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary btn--lg" type="submit" aria-busy="true">Checking calendars…</button></div><figcaption>A busy submit keeps its place and says what is happening.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" style="opacity: 0.5;">Book</button></div><figcaption>Fading a yellow button to suggest “disabled”. Use the <code>disabled</code> attribute, which also drops the yellow fill.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Primary fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Primary fill, hover</td><td><code>--color-accent-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-hover" data-swatch></i><span data-token="--color-accent-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-hover" data-swatch></i><span data-token="--color-accent-hover"></span></span></td></tr>
+          <tr><td>Primary label and outline</td><td><code>--color-fg-on-accent</code> / <code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+          <tr><td>Secondary fill / rule</td><td><code>--color-bg-surface</code> / <code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Ink fill / label</td><td><code>--color-bg-inverse</code> / <code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+          <tr><td>Ghost hover</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Danger fill / label</td><td><code>--color-danger-solid</code> / <code>--color-fg-on-danger</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+          <tr><td>Hover shadow</td><td><code>--shadow-1</code> (<code>--color-shadow</code>)</td><td><span data-theme="light" data-token="--shadow-1"></span></td><td><span data-theme="dark" data-token="--shadow-1"></span></td></tr>
+          <tr><td>Hover lift</td><td><code>--transform-lift</code></td><td colspan="2"><span data-token="--transform-lift"></span></td></tr>
+          <tr><td>Focus ring</td><td><code>--color-focus-ring</code>, <code>--focus-ring-width</code>, <code>--focus-ring-offset</code></td><td><span data-theme="light" data-token="--color-focus-ring"></span></td><td><span data-theme="dark" data-token="--color-focus-ring"></span></td></tr>
+          <tr><td>Height sm / md / lg</td><td><code>--control-height-sm/md/lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+          <tr><td>Side padding sm / md / lg</td><td><code>--space-3/5/6</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-5"></span> / <span data-token="--space-6"></span></td></tr>
+          <tr><td>Rule</td><td><code>--border-width-thick</code>, <code>--radius-md</code></td><td colspan="2"><span data-token="--border-width-thick"></span>, radius <span data-token="--radius-md"></span></td></tr>
+          <tr><td>Label font</td><td><code>--text-label</code>, <code>--letter-spacing-wide</code></td><td colspan="2"><span data-token="--text-label"></span></td></tr>
+          <tr><td>Transition / spinner</td><td><code>--duration-fast</code>, <code>--ease-standard</code>, <code>--duration-loop</code></td><td colspan="2"><span data-token="--duration-fast"></span> · <span data-token="--duration-loop"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;button class="btn btn--primary btn--lg" type="submit"&gt;Show the lineup&lt;/button&gt;
+
+&lt;a class="btn btn--ink" href="/artists/abigail-mensah"&gt;
+  See Abigail’s profile
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M4 12h15M13 6l6 6-6 6"/&gt;&lt;/svg&gt;
+&lt;/a&gt;
+
+&lt;button class="btn" type="button" aria-pressed="true"&gt;…Saved&lt;/button&gt;
+&lt;button class="btn btn--primary btn--lg" type="submit" aria-busy="true"&gt;Checking calendars…&lt;/button&gt;
+&lt;button class="btn btn--sm" type="button" aria-label="Pick Fri 20 Nov"&gt;Pick&lt;/button&gt;</code></pre>
+      <table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.btn</code></td><td>Base: secondary look, medium size.</td></tr>
+        <tr><td><code>.btn--primary</code> <code>.btn--ink</code> <code>.btn--ghost</code> <code>.btn--link</code> <code>.btn--danger</code></td><td>Variant.</td></tr>
+        <tr><td><code>.btn--sm</code> <code>.btn--lg</code></td><td>Size; leave off for medium.</td></tr>
+        <tr><td><code>.btn--icon</code></td><td>Square, icon-only; needs <code>aria-label</code>.</td></tr>
+        <tr><td><code>.btn--block</code></td><td>Full width.</td></tr>
+        <tr><td><code>aria-pressed="true|false"</code></td><td>Toggle button; on = yellow fill, filled icon.</td></tr>
+        <tr><td><code>aria-expanded</code></td><td>Opens a menu or panel; open = subtle fill, no lift.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>Loading: spinner after the label, clicks ignored.</td></tr>
+        <tr><td><code>disabled</code></td><td>Disabled; not focusable; grey on sunken fill.</td></tr>
+        <tr><td><code>.on-stage</code>, <code>.topbar</code>, <code>.band</code>, <code>.toast</code> ancestors</td><td>Re-map the button’s component tokens for that surface.</td></tr>
+        <tr><td><code>data-state="hover|focus|active"</code></td><td>Documentation and mocks only: forces a pointer or focus state.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/discover/default.html">pages/discover/default</a>: booking bar submit (primary, large), “See Abigail’s profile” (ink), “Apply as an artist” on the band, top-bar menu (ghost icon)</li>
+        <li><a href="../../mocks/pages/discover/loading.html">pages/discover/loading</a>: busy submit “Checking calendars…”</li>
+        <li><a href="../../mocks/pages/discover/empty.html">pages/discover/empty</a>: primary with trailing arrow beside a secondary</li>
+        <li><a href="../../mocks/pages/discover/error.html">pages/discover/error</a>: “Try again” with a leading icon, button-styled mail link</li>
+        <li><a href="../../mocks/pages/artist/default.html">pages/artist/default</a>: stage buttons (Book, Saved toggle, Share), small “Pick” buttons, block submit in the stub</li>
+      </ul>
+      <p>Drift fixed during extraction:</p>
+      <ul>
+        <li>Primary, count badge and band buttons read the primitive <code>--palette-ink</code> for their outline. They now use <code>--color-border-on-accent</code>, or <code>--color-bg-stage</code> on the band.</li>
+        <li><code>.btn--ink</code> borrowed <code>--color-fg-default</code> and <code>--color-bg-canvas</code>. It now uses the inverse pair.</li>
+        <li>A disabled primary kept its yellow fill. Disabled now drops to the sunken fill for every variant.</li>
+        <li><code>aria-pressed="true"</code> (“Saved” on the profile) had no visual state. Pressed is now a yellow fill with a filled icon.</li>
+        <li>Ghost hover had no <code>data-state</code> hook, and the top-bar “Saved” button needed an inline style reset. Both are fixed in <code>components.css</code>.</li>
+      </ul>
+    </section>
+
+    <footer class="ds-footer"><span>Zamaro design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

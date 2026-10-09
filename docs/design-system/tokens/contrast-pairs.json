@@ -1,0 +1,470 @@
+{
+  "$comment": "Foreground/background token pairs checked by check_contrast.py for both themes. 4.5:1 is WCAG 2.2 AA for normal text (1.4.3); 3:1 is AA for large text, UI component edges and focus indicators (1.4.11, 2.4.11). min 1 marks a decorative pairing that is listed so its ratio is visible but not enforced.",
+  "pairs": [
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "body text on canvas"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "body text on surface"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-bg-surface-raised",
+      "min": 4.5,
+      "note": "body text on surface-raised"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-bg-surface-sunken",
+      "min": 4.5,
+      "note": "body text on surface-sunken"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-bg-subtle",
+      "min": 4.5,
+      "note": "body text on subtle"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-bg-subtle-hover",
+      "min": 4.5,
+      "note": "body text on subtle-hover"
+    },
+    {
+      "fg": "--color-fg-muted",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "secondary text on canvas (meta, help, booked badge)"
+    },
+    {
+      "fg": "--color-fg-muted",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "secondary text on surface (meta, help, booked badge)"
+    },
+    {
+      "fg": "--color-fg-muted",
+      "bg": "--color-bg-surface-raised",
+      "min": 4.5,
+      "note": "secondary text on surface-raised (meta, help, booked badge)"
+    },
+    {
+      "fg": "--color-fg-muted",
+      "bg": "--color-bg-surface-sunken",
+      "min": 4.5,
+      "note": "secondary text on surface-sunken (meta, help, booked badge)"
+    },
+    {
+      "fg": "--color-fg-muted",
+      "bg": "--color-bg-subtle",
+      "min": 4.5,
+      "note": "secondary text on subtle (meta, help, booked badge)"
+    },
+    {
+      "fg": "--color-fg-subtle",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "placeholder / metadata on canvas"
+    },
+    {
+      "fg": "--color-fg-subtle",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "placeholder / metadata on surface"
+    },
+    {
+      "fg": "--color-fg-subtle",
+      "bg": "--color-bg-surface-raised",
+      "min": 4.5,
+      "note": "placeholder / metadata on surface-raised"
+    },
+    {
+      "fg": "--color-fg-subtle",
+      "bg": "--color-bg-surface-sunken",
+      "min": 4.5,
+      "note": "placeholder / metadata on surface-sunken"
+    },
+    {
+      "fg": "--color-fg-inverse",
+      "bg": "--color-bg-inverse",
+      "min": 4.5,
+      "note": "ink button, pressed chip, tooltip, art tag"
+    },
+    {
+      "fg": "--color-fg-link",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "links on page"
+    },
+    {
+      "fg": "--color-fg-link",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "links on cards"
+    },
+    {
+      "fg": "--color-fg-link-hover",
+      "bg": "--color-accent-subtle",
+      "min": 4.5,
+      "note": "hovered link on its highlighter background"
+    },
+    {
+      "fg": "--color-fg-accent",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "accent text on page (ink on light, yellow on dark)"
+    },
+    {
+      "fg": "--color-fg-accent",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "accent text on cards, current nav item"
+    },
+    {
+      "fg": "--color-fg-accent",
+      "bg": "--color-accent-subtle",
+      "min": 4.5,
+      "note": "current nav item on its highlight"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-accent-subtle",
+      "min": 4.5,
+      "note": "hovered chip label"
+    },
+    {
+      "fg": "--color-fg-on-accent",
+      "bg": "--color-accent",
+      "min": 4.5,
+      "note": "primary button, free badge, count badge, skip link, band text"
+    },
+    {
+      "fg": "--color-fg-on-accent",
+      "bg": "--color-accent-hover",
+      "min": 4.5,
+      "note": "primary button label (hover)"
+    },
+    {
+      "fg": "--color-fg-on-accent",
+      "bg": "--color-accent-active",
+      "min": 4.5,
+      "note": "primary button label (active)"
+    },
+    {
+      "fg": "--color-border-on-accent",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "ink outline that separates a yellow fill from paper",
+      "themes": [
+        "light"
+      ]
+    },
+    {
+      "fg": "--color-border-on-accent",
+      "bg": "--color-bg-canvas",
+      "min": 3,
+      "note": "ink outline around yellow fills on the canvas",
+      "themes": [
+        "light"
+      ]
+    },
+    {
+      "fg": "--color-accent",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "yellow fill edge against dark surfaces",
+      "themes": [
+        "dark"
+      ]
+    },
+    {
+      "fg": "--color-accent",
+      "bg": "--color-bg-canvas",
+      "min": 3,
+      "note": "yellow fill edge against the dark canvas",
+      "themes": [
+        "dark"
+      ]
+    },
+    {
+      "fg": "--color-border-strong",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "control and card edges (1.4.11)"
+    },
+    {
+      "fg": "--color-border-strong",
+      "bg": "--color-bg-canvas",
+      "min": 3,
+      "note": "control edges on the page"
+    },
+    {
+      "fg": "--color-border-strong",
+      "bg": "--color-bg-surface-sunken",
+      "min": 3,
+      "note": "control edges in sunken wells"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "focus ring vs card (2.4.11)"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-bg-canvas",
+      "min": 3,
+      "note": "focus ring vs page"
+    },
+    {
+      "fg": "--color-focus-ring-offset",
+      "bg": "--color-focus-ring",
+      "min": 3,
+      "note": "inner and outer focus rings separate from each other"
+    },
+    {
+      "fg": "--color-focus-ring",
+      "bg": "--color-accent",
+      "min": 3,
+      "note": "focus ring around a primary button",
+      "themes": [
+        "light"
+      ]
+    },
+    {
+      "fg": "--color-fg-on-stage",
+      "bg": "--color-bg-stage",
+      "min": 4.5,
+      "note": "text on the stage (topbar, poster, footer)"
+    },
+    {
+      "fg": "--color-fg-on-stage-muted",
+      "bg": "--color-bg-stage",
+      "min": 4.5,
+      "note": "secondary text on the stage"
+    },
+    {
+      "fg": "--color-accent-on-stage",
+      "bg": "--color-bg-stage",
+      "min": 4.5,
+      "note": "yellow kicker, date and current-link text on the stage"
+    },
+    {
+      "fg": "--color-fg-on-stage",
+      "bg": "--color-bg-stage-raised",
+      "min": 4.5,
+      "note": "text on raised stage panels"
+    },
+    {
+      "fg": "--color-accent-on-stage",
+      "bg": "--color-bg-stage-raised",
+      "min": 4.5,
+      "note": "yellow text on raised stage panels"
+    },
+    {
+      "fg": "--color-fg-on-danger",
+      "bg": "--color-danger-solid",
+      "min": 4.5,
+      "note": "destructive button label"
+    },
+    {
+      "fg": "--color-fg-on-danger",
+      "bg": "--color-danger-solid-hover",
+      "min": 4.5,
+      "note": "destructive button label (hover)"
+    },
+    {
+      "fg": "--color-danger-solid",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "destructive button and invalid input edge"
+    },
+    {
+      "fg": "--color-danger-border",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "invalid control border, danger alert border"
+    },
+    {
+      "fg": "--color-danger-fg",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "field error text under a control"
+    },
+    {
+      "fg": "--color-danger-fg",
+      "bg": "--color-bg-canvas",
+      "min": 4.5,
+      "note": "field error text on the page"
+    },
+    {
+      "fg": "--color-info-fg",
+      "bg": "--color-info-bg",
+      "min": 4.5,
+      "note": "info alert / toast text"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-info-bg",
+      "min": 4.5,
+      "note": "info alert body text"
+    },
+    {
+      "fg": "--color-info-icon",
+      "bg": "--color-info-bg",
+      "min": 3,
+      "note": "info alert icon"
+    },
+    {
+      "fg": "--color-info-fg",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "info inline message on cards"
+    },
+    {
+      "fg": "--color-info-solid",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "solid info badge edge vs card"
+    },
+    {
+      "fg": "--color-success-fg",
+      "bg": "--color-success-bg",
+      "min": 4.5,
+      "note": "success alert / toast text"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-success-bg",
+      "min": 4.5,
+      "note": "success alert body text"
+    },
+    {
+      "fg": "--color-success-icon",
+      "bg": "--color-success-bg",
+      "min": 3,
+      "note": "success alert icon"
+    },
+    {
+      "fg": "--color-success-fg",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "success inline message on cards"
+    },
+    {
+      "fg": "--color-success-solid",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "solid success badge edge vs card"
+    },
+    {
+      "fg": "--color-warning-fg",
+      "bg": "--color-warning-bg",
+      "min": 4.5,
+      "note": "warning alert / toast text"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-warning-bg",
+      "min": 4.5,
+      "note": "warning alert body text"
+    },
+    {
+      "fg": "--color-warning-icon",
+      "bg": "--color-warning-bg",
+      "min": 3,
+      "note": "warning alert icon"
+    },
+    {
+      "fg": "--color-warning-fg",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "warning inline message on cards"
+    },
+    {
+      "fg": "--color-warning-solid",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "solid warning badge edge vs card"
+    },
+    {
+      "fg": "--color-danger-fg",
+      "bg": "--color-danger-bg",
+      "min": 4.5,
+      "note": "danger alert / toast text"
+    },
+    {
+      "fg": "--color-fg-default",
+      "bg": "--color-danger-bg",
+      "min": 4.5,
+      "note": "danger alert body text"
+    },
+    {
+      "fg": "--color-danger-icon",
+      "bg": "--color-danger-bg",
+      "min": 3,
+      "note": "danger alert icon"
+    },
+    {
+      "fg": "--color-danger-fg",
+      "bg": "--color-bg-surface",
+      "min": 4.5,
+      "note": "danger inline message on cards"
+    },
+    {
+      "fg": "--color-danger-solid",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "solid danger badge edge vs card"
+    },
+    {
+      "fg": "--color-fg-inverse",
+      "bg": "--color-info-solid",
+      "min": 4.5,
+      "note": "label on solid info badge or progress fill"
+    },
+    {
+      "fg": "--color-fg-inverse",
+      "bg": "--color-success-solid",
+      "min": 4.5,
+      "note": "label on solid success badge or progress fill"
+    },
+    {
+      "fg": "--color-fg-inverse",
+      "bg": "--color-warning-solid",
+      "min": 4.5,
+      "note": "label on solid warning badge or progress fill"
+    },
+    {
+      "fg": "--color-success-border",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "success alert border"
+    },
+    {
+      "fg": "--color-info-border",
+      "bg": "--color-bg-surface",
+      "min": 3,
+      "note": "info alert border"
+    },
+    {
+      "fg": "--color-warning-border",
+      "bg": "--color-bg-surface",
+      "min": 1,
+      "note": "warning alert border (decorative; icon and text carry meaning)"
+    },
+    {
+      "fg": "--color-border-default",
+      "bg": "--color-bg-surface",
+      "min": 1,
+      "note": "hairline dividers (decorative, exempt from 1.4.11)"
+    }
+  ]
+}
