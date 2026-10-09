@@ -1,0 +1,95 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Adapt layout to screens
+
+package "Zamaro Web (Angular)" {
+  enum ViewportClass {
+    xs
+    sm
+    md
+    lg
+    xl
+  }
+  class BreakpointService {
+    +viewportClass: Signal<ViewportClass>
+    +isCompact: Signal<boolean>
+    -observer: BreakpointObserver
+  }
+  class AppShellComponent {
+    +mainId: string = 'main'
+  }
+  class TopBarComponent {
+    +compact: Signal<boolean>
+    +drawerOpen: Signal<boolean>
+    +toggleMenu(): void
+  }
+  class NavDrawerComponent {
+    +links: NavLink[]
+    +close(): void
+  }
+  class NavLink {
+    +label: string
+    +route: string
+  }
+  class DialogService {
+    +open<T>(component: Type<T>, config?: DialogConfig): DialogRef<T>
+    -panelClassFor(vc: ViewportClass): string[]
+  }
+  class CurrentUserStore {
+    +user: Signal<Me | null>
+    +initials: Signal<string | null>
+    +savedCount: Signal<number>
+    +load(): void
+  }
+  class Me {
+    +name: string
+    +initials: string
+    +roles: Role[]
+    +savedCount: number
+    +themePreference: 'light'|'dark'|null
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class MeController {
+    +show(request: Request): MeResource
+  }
+  class MeResource {
+    +toArray(request: Request): array
+  }
+  class User <<Eloquent>> {
+    +int id
+    +string name
+    +string email
+    +?ThemePreference theme_preference
+    +savedArtists(): HasMany
+  }
+  class VisualFixtureSeeder <<seeder>> {
+    +run(): void
+  }
+}
+
+AppShellComponent --> TopBarComponent
+TopBarComponent --> BreakpointService
+TopBarComponent --> NavDrawerComponent : opens when compact
+NavDrawerComponent "1" *-- "3" NavLink
+TopBarComponent --> CurrentUserStore
+DialogService --> BreakpointService
+BreakpointService --> ViewportClass
+CurrentUserStore --> Me
+CurrentUserStore ..> MeController : GET /api/v1/me
+MeController ..> MeResource : returns
+MeResource ..> User : serialises
+VisualFixtureSeeder ..> User : creates fixtures
+@enduml

@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Toggle the theme
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or signed-in user" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ThemeToggleComponent" as toggle
+  participant "ThemeService" as service
+  participant "PreferencesApi" as prefapi
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "PreferencesController" as ctrl
+  participant "UpdatePreferencesRequest" as req
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "UpdateUserPreferences" as action
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> toggle : Activate "Switch to dark theme"
+toggle -> service : toggle()
+service -> service : preference = opposite of effective theme
+service -> service : html[data-theme] = dark, aria-pressed = true
+service -> service : localStorage zamaro.theme = dark (L2-104)
+service --> actor : Page repaints in the stage theme
+opt signed in
+  service -> prefapi : update({ themePreference: dark })
+  prefapi -> ctrl : PATCH /api/v1/me/preferences
+  ctrl -> ctrl : auth:sanctum and XSRF check (L2-073)
+  ctrl -> req : Validate themePreference
+  alt invalid
+    req --> prefapi : 422 problem details
+  else valid
+    ctrl -> action : handle(user, ThemePreference::Dark)
+    action -> db : UPDATE users SET theme_preference = 'dark' (L2-104)
+    db --> action : Updated
+    action --> ctrl : User
+    ctrl --> prefapi : 200 MeResource
+  end
+  alt request failed
+    prefapi --> service : Error, device preference still applies
+  else saved
+    prefapi --> service : Account and device agree
+  end
+end
+@enduml

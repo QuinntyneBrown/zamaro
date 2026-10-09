@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Switch theme
+
+Person(person, "Guest or signed-in user", "Chooses light or dark")
+System_Ext(browser, "Browser", "prefers-color-scheme, localStorage")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "Theme boot script, ThemeService, ThemeToggleComponent")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET /api/v1/me, PATCH /api/v1/me/preferences")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users.theme_preference")
+}
+Rel(person, web, "Uses the toggle", "HTTPS")
+Rel(web, browser, "Reads system scheme, stores zamaro.theme")
+Rel(web, api, "Reads and saves the account preference", "JSON/HTTPS")
+Rel(api, db, "Reads and writes theme_preference", "Eloquent / SQL")
+@enduml

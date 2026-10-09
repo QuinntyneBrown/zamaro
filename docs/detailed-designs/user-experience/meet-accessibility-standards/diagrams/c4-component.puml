@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Meet accessibility standards
+
+Person(person, "Keyboard or screen-reader user", "Any role")
+Container(api, "Zamaro API", "Laravel", "ProblemDetailsRenderer, ArtistResource, LineupResource")
+Container_Boundary(web, "Zamaro Web") {
+  Component(shell, "AppShellComponent", "Angular component", "Skip link, header, nav, main, footer")
+  Component(skip, "SkipLinkComponent", "Angular component", "Moves focus to main")
+  Component(routefocus, "RouteFocusService", "Angular service", "Focuses the h1 after navigation")
+  Component(title, "ZamaroTitleStrategy", "Angular TitleStrategy", "Sets the page title")
+  Component(dialogs, "DialogService", "CDK Dialog wrapper", "Focus trap, Escape, focus return")
+  Component(announcer, "AnnouncerService", "CDK LiveAnnouncer", "Polite announcements")
+  Component(fielderr, "FieldErrorDirective", "Angular directive", "aria-invalid and aria-describedby")
+  Component(mapper, "ProblemDetailsMapper", "TypeScript", "422 errors to control errors")
+  Component(rating, "RatingComponent", "Angular component", "Spoken rating label")
+  Component(motion, "MotionService", "Angular service", "Reduced-motion signal")
+}
+Rel(person, shell, "Navigates")
+Rel(shell, skip, "Renders first")
+Rel(shell, routefocus, "Notifies on NavigationEnd")
+Rel(shell, title, "Uses")
+Rel(shell, motion, "Disables animations through")
+Rel(mapper, api, "Reads 422 problem details from", "JSON/HTTPS")
+Rel(mapper, fielderr, "Feeds errors to")
+Rel(rating, api, "Reads rating and reviewCount from", "JSON/HTTPS")
+Rel(shell, dialogs, "Opens dialogs through")
+Rel(shell, announcer, "Hosts the polite live region of")
+@enduml

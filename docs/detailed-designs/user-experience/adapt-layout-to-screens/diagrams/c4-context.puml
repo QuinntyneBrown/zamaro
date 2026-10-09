@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Adapt layout to screens
+
+Person(guest, "Guest", "Anyone not signed in")
+Person(booker, "Booker", "Signed-in church representative")
+Person(artist, "Artist", "Approved worship artist")
+Person(admin, "Administrator", "Member of the Zamaro team")
+System(zamaro, "Zamaro", "Books Christian praise and worship artists around Toronto")
+System_Ext(cdn, "CDN", "Serves web assets, images and video")
+
+Rel(guest, zamaro, "Uses on phones, tablets and desktops", "HTTPS")
+Rel(booker, zamaro, "Uses on phones, tablets and desktops", "HTTPS")
+Rel(artist, zamaro, "Uses on phones, tablets and desktops", "HTTPS")
+Rel(admin, zamaro, "Uses on tablets and desktops", "HTTPS")
+Rel(zamaro, cdn, "Serves stylesheets, scripts and fonts through")
+@enduml

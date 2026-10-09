@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Visual regression check in CI
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "CI pipeline" as ci
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "Playwright visual suite" as suite
+  participant "Zamaro Web (SSR build)" as web
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "Zamaro API" as api
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+ci -> api : php artisan migrate --seed VisualFixtureSeeder
+api -> db : Insert fixture artists, bookings, reviews
+db --> api : Seeded
+ci -> suite : Run e2e/visual
+loop each route and state in routes.manifest.ts
+  loop widths 320, 576, 768, 992, 1200 px
+    suite -> web : Load route (loading and error states intercepted)
+    web -> api : API calls for the page
+    api --> web : Fixture data
+    web --> suite : Rendered page
+    suite -> suite : toHaveScreenshot() against baseline (L2-096)
+  end
+  suite -> suite : At 320 px: scrollWidth <= viewport, no clipped text (L2-096)
+  suite -> suite : Touch emulation: each control >= 44 x 44 px (L2-096)
+  suite -> suite : Root font at 200 %: each action visible and operable (L2-096)
+end
+alt any difference or assertion fails
+  suite --> ci : Fail build with diff images
+  ci --> ci : Reviewer approves new baselines in the pull request
+else all match
+  suite --> ci : Pass
+end
+@enduml

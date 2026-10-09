@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Render a localised page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+  participant "TranslocoService" as transloco
+  participant "CatalogueLoader" as loader
+  participant "FormatService" as format
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "TranslationCatalogueController" as cat
+  participant "BookingsController" as bookings
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "Catalogue" as catalogue
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /bookings/{number}
+page -> transloco : Ensure active locale en
+transloco -> loader : getTranslation(en)
+loader -> cat : GET /api/v1/i18n/en, If-None-Match
+cat -> catalogue : messages(en)
+alt ETag matches
+  cat --> loader : 304 Not Modified
+else changed or first load
+  cat --> loader : 200 catalogue JSON with ETag
+end
+page -> bookings : GET /api/v1/bookings/{number}
+bookings -> db : Booking
+db --> bookings : Row
+bookings --> page : eventDate 2026-11-14, startTime 19:00, quotedPriceCents 65000, depositCents 16250, distanceKm 44
+page -> format : shortDate, time, money, distance
+format -> format : Intl en-CA, timeZone America/Toronto (L2-110)
+format -> transloco : Patterns format.date.short, format.time.pm, format.distance.km (L2-111)
+format --> page : "Sat 14 Nov", "7:00 p.m.", "$650", "$162.50", "44 km" (L2-110)
+page --> actor : Booking shown with Ontario formats, every string from the catalogue
+@enduml

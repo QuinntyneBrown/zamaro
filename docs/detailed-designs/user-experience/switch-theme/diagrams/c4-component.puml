@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Switch theme
+
+Person(person, "Guest or signed-in user", "Chooses light or dark")
+System_Ext(browser, "Browser", "prefers-color-scheme, localStorage")
+Container_Boundary(web, "Zamaro Web") {
+  Component(boot, "theme-boot.js", "Inline head script", "Applies stored preference before first paint")
+  Component(service, "ThemeService", "Angular service", "preference, system and effective theme signals")
+  Component(toggle, "ThemeToggleComponent", "Angular component", "aria-pressed toggle in the top bar")
+  Component(prefapi, "PreferencesApi", "Typed HTTP client", "PATCH /api/v1/me/preferences")
+  Component(users, "CurrentUserStore", "Signal store", "Loads GET /api/v1/me")
+}
+Container_Boundary(api, "Zamaro API") {
+  Component(ctrl, "PreferencesController", "Laravel controller", "PATCH /api/v1/me/preferences")
+  Component(req, "UpdatePreferencesRequest", "FormRequest", "themePreference is light, dark or null")
+  Component(action, "UpdateUserPreferences", "Action", "Writes the preference")
+  Component(me, "MeController", "Laravel controller", "GET /api/v1/me with themePreference")
+  ComponentDb(db, "Zamaro database", "PostgreSQL 16", "users.theme_preference")
+}
+Rel(person, toggle, "Activates")
+Rel(boot, browser, "Reads zamaro.theme")
+Rel(toggle, service, "toggle()")
+Rel(service, browser, "Writes zamaro.theme, listens to colour-scheme changes")
+Rel(service, prefapi, "Saves for signed-in users")
+Rel(users, service, "Hands account preference to")
+Rel(prefapi, ctrl, "PATCH", "JSON/HTTPS")
+Rel(users, me, "GET", "JSON/HTTPS")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(action, db, "Updates", "SQL")
+Rel(me, db, "Reads", "SQL")
+@enduml

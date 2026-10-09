@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Localise formats and text
+
+Person(person, "Guest, booker or artist", "Reads pages and emails")
+System_Ext(email, "Email delivery service", "Transactional email")
+System_Boundary(zamaro, "Zamaro") {
+  Container(web, "Zamaro Web", "Angular with SSR", "TranslocoService, FormatService, format pipes")
+  Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET /api/v1/i18n/{locale}, raw wire formats")
+  Container(worker, "Zamaro Worker", "Laravel queue workers and scheduler", "Localised notifications, Toronto deadlines")
+  ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users.locale, bookings and deadlines in UTC")
+}
+Rel(person, web, "Uses", "HTTPS")
+Rel(web, api, "Loads catalogue and data", "JSON/HTTPS")
+Rel(api, db, "Reads and writes", "Eloquent / SQL")
+Rel(worker, db, "Reads bookings and recipient locale", "Eloquent / SQL")
+Rel(worker, email, "Sends HTML and plain-text parts", "HTTPS/SMTP")
+Rel(email, person, "Delivers emails to")
+@enduml

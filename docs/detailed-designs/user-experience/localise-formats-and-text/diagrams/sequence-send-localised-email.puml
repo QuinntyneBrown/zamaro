@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Send a localised email with a Toronto deadline
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "BookingDetailPage" as page
+end box
+box "Backend — Zamaro Worker (queue and scheduler)" #D1FADF
+  participant "BookingAcceptedNotification" as note
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "TorontoClock" as clock
+  participant "IcuTranslator" as icu
+  participant "LocalFormatter" as fmt
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+  participant "Email delivery service" as mail
+end box
+
+note -> db : Load booking, acceptance time and recipient
+db --> note : Booking, User (locale = en)
+note -> clock : eventStart(booking)
+clock -> clock : Event date + start time in America/Toronto (L2-110)
+clock --> note : Event instant
+note -> clock : Deposit deadline (L2-037)
+clock --> note : Deadline as UTC instant, DST-correct (L2-110)
+note -> icu : t('email.booking.accepted.*', params, en) (L2-111)
+icu --> note : Subject and body text
+note -> fmt : longDate, time, money in America/Toronto
+fmt --> note : "Saturday 14 November 2026", "7:00 p.m.", "$162.50" (L2-110)
+note -> note : Render HTML and plain-text views with @t only
+note -> mail : Send
+mail --> actor : Email in Ontario formats
+actor -> page : Follow the booking link
+page --> actor : Same deadline shown by FormatService
+@enduml

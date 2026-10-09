@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Skeletons while a profile loads
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Booker or guest" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ArtistProfilePage" as page
+  participant "BusyRegionDirective" as busy
+  participant "ProfileStore" as store
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "ArtistsController" as ctrl
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> page : Open /artists/{slug}
+page -> store : load(slug)
+store -> store : status = loading
+store -> ctrl : GET /api/v1/artists/{slug}
+busy -> busy : Start 300 ms threshold, keep previous content
+alt response within 300 ms
+  ctrl --> store : 200 ArtistResource
+  store --> page : status = loaded, no skeleton shown
+else slower than 300 ms
+  busy -> busy : aria-busy="true", swap in profile skeletons (L2-105)
+  busy --> actor : Skeletons in the final layout, status line announced
+  ctrl -> db : Artist, photos, videos, setlist, reviews
+  db --> ctrl : Rows
+  ctrl --> store : 200 ArtistResource
+  store --> page : status = loaded
+  busy -> busy : aria-busy removed, content replaces skeletons in place
+  page --> actor : Profile shown, layout shift from swap <= 0.05 (L2-105)
+end
+@enduml

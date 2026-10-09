@@ -1,0 +1,78 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Meet accessibility standards
+
+package "Zamaro Web (Angular)" {
+  class SkipLinkComponent {
+    +target: string = '#main'
+    +activate(): void
+  }
+  class RouteFocusService {
+    -router: Router
+    +onNavigationEnd(e: NavigationEnd): void
+    -focusHeading(): void
+  }
+  class ZamaroTitleStrategy {
+    +updateTitle(snapshot: RouterStateSnapshot): void
+    +setDataTitle(title: string): void
+  }
+  class DialogService {
+    +open<T>(component: Type<T>, config?: DialogConfig): DialogRef<T>
+  }
+  class AnnouncerService {
+    -live: LiveAnnouncer
+    +polite(message: string): Promise<void>
+  }
+  class FieldErrorDirective {
+    +control: NgControl
+    +errorId: string
+    -sync(): void
+  }
+  class ProblemDetailsMapper {
+    +applyTo(form: FormGroup, problem: ProblemDetails): string | null
+  }
+  class ProblemDetails {
+    +type: string
+    +title: string
+    +status: number
+    +detail: string
+    +errors?: Record<string, string[]>
+  }
+  class RatingComponent {
+    +rating: InputSignal<number | null>
+    +reviewCount: InputSignal<number>
+    +label: Signal<string>
+  }
+  class MotionService {
+    +reducedMotion: Signal<boolean>
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class ProblemDetailsRenderer {
+    +render(e: ValidationException): JsonResponse
+  }
+  class ArtistResource {
+    +toArray(request: Request): array
+  }
+}
+
+RouteFocusService ..> ZamaroTitleStrategy : runs after the title update
+DialogService ..> MotionService : skips open animation when reduced
+ProblemDetailsMapper ..> ProblemDetails : reads
+ProblemDetailsMapper ..> FieldErrorDirective : sets control errors shown by
+ProblemDetailsRenderer ..> ProblemDetails : produces (JSON)
+RatingComponent ..> ArtistResource : rating, reviewCount
+SkipLinkComponent ..> RouteFocusService : shares main target
+@enduml

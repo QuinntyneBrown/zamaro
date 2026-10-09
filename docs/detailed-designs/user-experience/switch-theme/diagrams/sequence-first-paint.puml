@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — First paint and sign-in reconciliation
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guest or signed-in user" as actor
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "theme-boot.js" as boot
+  participant "Browser CSS (tokens.css)" as css
+  participant "ThemeService" as service
+  participant "CurrentUserStore" as users
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "MeController" as me
+  participant "PreferencesController" as prefs
+end box
+box "Backend — Zamaro Infrastructure" #FFF4E5
+  database "Zamaro database" as db
+end box
+
+actor -> boot : Open any page (HTML received)
+boot -> boot : Read localStorage zamaro.theme
+alt stored light or dark
+  boot -> css : Set html[data-theme] before first paint (L2-104)
+  css --> actor : First paint in the stored theme, no flash of light (L2-104)
+else nothing stored (first visit)
+  css -> css : prefers-color-scheme media query
+  css --> actor : First paint in the system theme (L2-104)
+end
+service -> service : Init preference from device, watch prefers-color-scheme
+users -> me : GET /api/v1/me
+alt signed in
+  me -> db : Select user with theme_preference
+  db --> me : Row
+  me --> users : 200 MeResource { themePreference }
+  users -> service : reconcile(themePreference)
+  alt account value set
+    service -> service : Apply account value, write device (L2-104)
+  else account null and device set
+    service -> prefs : PATCH /api/v1/me/preferences with device value (via PreferencesApi)
+    prefs -> db : UPDATE users.theme_preference
+    prefs --> service : 200 MeResource
+  end
+else guest
+  me --> users : 401
+  users -> service : Keep device or system theme
+end
+@enduml

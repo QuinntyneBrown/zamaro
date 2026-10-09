@@ -1,0 +1,88 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Localise formats and text
+
+package "Zamaro Web (Angular)" {
+  class CatalogueLoader {
+    +getTranslation(lang: string): Observable<Translation>
+  }
+  class FormatService {
+    -zone: string = 'America/Toronto'
+    +shortDate(date: string): string
+    +longDate(date: string): string
+    +time(hhmm: string): string
+    +money(cents: number): string
+    +distance(km: number, approximate: boolean): string
+  }
+  class ZMoneyPipe {
+    +transform(cents: number): string
+  }
+  class TranslocoService {
+    +translate(key: string, params?: object): string
+    +setActiveLang(lang: string): void
+  }
+}
+
+package "Zamaro API and Worker (Laravel)" {
+  class TranslationCatalogueController {
+    +index(): JsonResponse
+    +show(locale: string): JsonResponse
+  }
+  class Catalogue {
+    +locales(): string[]
+    +messages(locale: string): array
+    +get(key: string, locale: string): string
+  }
+  class IcuTranslator {
+    +t(key: string, params: array, locale: ?string): string
+  }
+  class LocalFormatter {
+    +shortDate(date: CarbonImmutable, locale: string): string
+    +longDate(date: CarbonImmutable, locale: string): string
+    +time(time: string, locale: string): string
+    +money(cents: int, locale: string): string
+    +distance(km: int, approximate: bool, locale: string): string
+  }
+  class TorontoClock {
+    +now(): CarbonImmutable
+    +eventStart(booking: Booking): CarbonImmutable
+    +fullDaysBefore(eventDate: CarbonImmutable, at: CarbonImmutable): int
+  }
+  class User <<Eloquent>> {
+    +string locale
+    +preferredLocale(): string
+  }
+  interface HasLocalePreference
+  class BookingAcceptedNotification <<queued>> {
+    +toMail(notifiable: User): MailMessage
+  }
+  class CheckTranslationsCommand <<artisan i18n:check>> {
+    +handle(): int
+  }
+}
+
+ZMoneyPipe --> FormatService
+FormatService --> TranslocoService : format patterns
+TranslocoService --> CatalogueLoader
+CatalogueLoader ..> TranslationCatalogueController : GET /api/v1/i18n/{locale}
+TranslationCatalogueController --> Catalogue
+IcuTranslator --> Catalogue
+LocalFormatter --> Catalogue : format patterns
+User ..|> HasLocalePreference
+BookingAcceptedNotification ..> IcuTranslator
+BookingAcceptedNotification ..> LocalFormatter
+BookingAcceptedNotification ..> TorontoClock
+BookingAcceptedNotification ..> User : preferredLocale()
+CheckTranslationsCommand ..> Catalogue : verifies keys exist
+@enduml

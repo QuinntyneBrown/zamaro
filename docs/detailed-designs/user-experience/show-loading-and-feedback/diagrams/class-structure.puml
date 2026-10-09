@@ -1,0 +1,94 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show loading and feedback
+
+package "Zamaro Web (Angular)" {
+  class "LoadState<T>" as LoadState {
+    +status: 'idle'|'loading'|'loaded'|'error'
+    +data?: T
+    +error?: ProblemDetails
+  }
+  class BusyRegionDirective {
+    +loading: InputSignal<boolean>
+    +skeleton: TemplateRef<unknown>
+    +busy: Signal<boolean>
+  }
+  class SubmitButtonComponent {
+    +busy: InputSignal<boolean>
+    +busyLabel: InputSignal<string>
+  }
+  class "FormSubmitter<T>" as FormSubmitter {
+    +pending: Signal<boolean>
+    +submit(value: T): void
+    -send(value: T, key?: string): Observable<unknown>
+  }
+  class IdempotencyKeyStore {
+    +keyFor(submissionId: string): string
+    +settle(submissionId: string, status: number): void
+  }
+  class ToastService {
+    +visible: Signal<Toast[]>
+    -queue: Toast[]
+    +show(input: ToastInput): string
+    +dismiss(id: string): void
+    +pause(id: string): void
+    +resume(id: string): void
+  }
+  class Toast {
+    +id: string
+    +kind: 'success'|'info'|'warning'|'danger'
+    +title: string
+    +body?: string
+    +action?: ToastAction
+    +remainingMs: number | null
+  }
+  class ToastRegionComponent {
+    +maxVisible: number = 3
+  }
+}
+
+package "Zamaro API (Laravel)" {
+  class EnsureIdempotency <<middleware>> {
+    +handle(request: Request, next: Closure): Response
+    -fingerprint(request: Request): string
+  }
+  class IdempotencyRecord <<Eloquent>> {
+    +int user_id
+    +string key
+    +string request_fingerprint
+    +?int response_status
+    +?array response_body
+    +CarbonImmutable created_at
+  }
+  class Booking <<Eloquent>> {
+    +string number
+    +string idempotency_key
+    +BookingStatus status
+  }
+  interface PaymentGateway {
+    +charge(payment: Payment, idempotencyKey: string): ChargeResult
+  }
+}
+
+BusyRegionDirective ..> LoadState : reads status
+FormSubmitter --> SubmitButtonComponent : sets busy
+FormSubmitter --> IdempotencyKeyStore
+FormSubmitter ..> ToastService : success toast
+ToastService "1" *-- "0..3" Toast : visible
+ToastRegionComponent --> ToastService
+FormSubmitter ..> EnsureIdempotency : Idempotency-Key header
+EnsureIdempotency --> IdempotencyRecord : reads / writes
+EnsureIdempotency ..> Booking : guarded creation
+Booking ..> PaymentGateway : charged via
+@enduml

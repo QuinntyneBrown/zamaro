@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Hard-coded text check in CI
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "CI pipeline" as ci
+box "Frontend — Zamaro Web (Angular)" #E0F2FE
+  participant "ESLint zamaro/no-hardcoded-text" as eslint
+  participant "Transloco keys check" as keys
+end box
+box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
+  participant "php artisan i18n:check" as check
+end box
+box "Backend — Zamaro Application and Domain" #ECFDF3
+  participant "Catalogue" as catalogue
+end box
+
+ci -> eslint : Lint templates and TypeScript
+eslint -> eslint : Flag literal text nodes, aria-label, title, alt, placeholder (L2-111)
+eslint -> eslint : Flag literals passed to ToastService, AnnouncerService, Title
+eslint --> ci : Findings with file and line
+ci -> keys : Compare used keys with resources/i18n/en
+keys --> ci : Missing keys
+ci -> check : Scan resources/views/emails and app/Notifications
+check -> check : Flag text outside @t or IcuTranslator (L2-111)
+check -> catalogue : Every used key exists in en
+catalogue --> check : Missing keys
+check --> ci : Findings
+alt any finding
+  ci --> ci : Fail the build
+else none
+  ci --> ci : Pass; a new locale needs only catalogue files (L2-111)
+end
+@enduml
