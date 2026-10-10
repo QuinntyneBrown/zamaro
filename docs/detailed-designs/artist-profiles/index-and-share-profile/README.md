@@ -92,6 +92,51 @@ public response is therefore identical for every viewer and is safe for a shared
   deleted artists (L2-112). The response is cached in Redis
   and cleared by the same `ArtistProfileUpdated` listener.
 
+**As built in M1 (S16)**
+
+- **Layout (ADR-0007):** the designs' `features/artist-profile` becomes `pages/artist`. The head is
+  written by `PageMeta` (`app/shared/page-meta.ts`), which every page calls with a `PageMetadata`
+  (title, description, path, type, image, structured data, `index`); each call replaces the title,
+  description, robots, canonical link, Open Graph and Twitter tags and the one JSON-LD block, so
+  client-side navigation leaves nothing of the previous page behind. `ProfileSeo`
+  (`pages/artist/profile-seo.ts`) plays `ProfileSeoService` and `ProfileJsonLdBuilder`; `ProfileMetadata`
+  is the `PageMetadata` it builds. `ShareButtonComponent` is a `zm-button` with the `share` icon in the
+  profile header (after Book, as in the mock) calling `ShareLink` (`app/shared/share-link.ts`), and
+  `ToastService` is the library's (`docs/specs/components/toast.md`).
+- **Site origin (ADR-0013):** absolute URLs use the origin the request arrived at (Angular's
+  `REQUEST` on the server, `document.location` in the browser), not a configured `https://zamaro.ca`.
+  e2e therefore sees `http://localhost:4000/artists/abigail-mensah` as the canonical URL.
+- **`<TO SUPPLY>` description length (accepted default, 2026-10-10):** 160 characters.
+  `artist.meta.description` is "{headline}. {bio}", collapsed to one line and cut at the last whole
+  word that fits, with "…".
+- **Tags:** `og:title` and `twitter:title` are the page title; `og:site_name` is Zamaro; `og:type` is
+  `profile` on a profile and `website` elsewhere; `og:image:alt` and `twitter:image:alt` carry the
+  photo's alt text. A profile with no photos has no image tags, and its Twitter card is `summary`.
+  The JSON-LD address is `{ addressLocality: city, addressRegion: ON, addressCountry: CA }`;
+  `aggregateRating` carries `bestRating` 5 and `worstRating` 1 and appears when `reviewCount` is above
+  0.
+- **Other pages:** Discover is "Worship artists within driving distance of Toronto · Zamaro" with the
+  poster's introduction as its description and `/` as its canonical address (a search's query string
+  is never canonical). The generic 404 ("Page not found · Zamaro"), the missing artist ("Artist not
+  found · Zamaro") and the profile error ("This profile didn’t load · Zamaro") are `noindex` with no
+  canonical link.
+- **Share:** a rejection other than `AbortError` (the sheet could not open) falls back to copying. If
+  the CDK `Clipboard` cannot copy, no toast is shown. The toast is `kind` "Shared", title "Link
+  copied", key `share`, so pressing Share again replaces it.
+- **robots.txt and the sitemap:** both are Express routes in `server.ts`, not static files, so they
+  can name the site's own origin. robots.txt adds `Allow: /artists/`, because `Disallow: /artist`
+  alone would also match every public profile by prefix. `GET /api/v1/sitemap` returns JSON
+  `{ data: [{ slug, lastModified }] }` from the visible scope (approved, payout ready, published) and
+  the SSR server writes the XML with `/` first; it is not cached in Redis in M1, since nothing edits
+  a profile yet.
+- **Caching:** `cache.headers:etag` on the profile, tour-dates and availability routes, with the hash
+  Laravel computes (xxh128, strong). The tour-dates and availability responses keep S14's `public,
+  max-age=0, s-maxage=60` rather than `public, no-cache`; the ETag makes them revalidate all the same.
+  Not built in M1: the SSR server's `Cache-Control` and `ETag` on profile HTML (with the CDN, M10);
+  `PurgeProfileCache`, `CdnPurger` and `ArtistProfileUpdated` (with profile editing, M4); and
+  `PrivateNoStore` (L2-089.3), because M1 serves no personal data; it arrives with the first personal
+  route in M2.
+
 **Mocks**
 
 - [Artist profile · default](../../../mocks/pages/artist/default.html) — the Share

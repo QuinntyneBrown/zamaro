@@ -7,7 +7,8 @@ milestones get their own plan in this folder when they start.
 ## Current status (2026-10-10)
 
 **Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is
-nearly done: S0–S15 are built; S16 (optional) remains.
+nearly done: S0–S16 are built. The visual-parity and axe suites follow as a separate step before
+M1 is complete.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -28,13 +29,13 @@ nearly done: S0–S15 are built; S16 (optional) remains.
 | S13 | Reviews on the profile | Done | `eb1853c`, `7724bea`, `d9ed059` |
 | S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | Done | `b1e73c7`, `0dccb9e`, `ce741f7` (ADR-0012) |
 | S15 | Missing artist, renamed slug, generic 404 | Done | `511efcb`, `bf69dd7`, `f87ceb4` (ADR-0011) |
-| S16 | Index and share (optional, last) | **Next** | |
+| S16 | Index and share: page heads, ETags, robots and sitemap, Share and toasts | Done | `8fe4033`, `f4c2106`, `c963eb9` (ADR-0013) |
 
 **Checks at the last commit:**
-- Backend: 112 Feature tests pass, with OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean.
+- Backend: 119 Feature tests pass, with OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean.
 - Frontend: lint and `format:check` are clean.
-- e2e: 73 Playwright tests pass in Chromium against a freshly seeded e2e database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `ErrorPage` is a new scenario (253 ms at the default 200 iterations).
+- e2e: 91 Playwright tests pass in Chromium against a freshly seeded e2e database.
+- Perf: `--fail-on-regression` against the base build flags no rows. `Toast` (201 ms) and `ToastStack` (268 ms) are new scenarios at the default 200 iterations.
 
 **Open items carried forward:**
 - **L2-009.2:** Back restores the Discover results but not the scroll position yet.
@@ -46,6 +47,10 @@ nearly done: S0–S15 are built; S16 (optional) remains.
 - **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest lists six route states.
 - **Later, with their screens:** `zm-error-stage` (the profile error is still page markup), the 500 page sending 500 and the offline page; the browser-side move to a renamed slug has no in-app link to test until M2's saved list.
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
+- **M2:** `PrivateNoStore` (`Cache-Control: private, no-store`, L2-089.3) arrives with the first route that returns personal data; M1 has none. Toasts gain actions with the save toggle, and the `Toast` scenario its Undo.
+- **M4:** `ArtistProfileUpdated`, `PurgeProfileCache` and the `CdnPurger` port (L2-089.2) arrive with profile editing; until then the 60-second `s-maxage` is the only bound. The sitemap is not cached in Redis until then either.
+- **M10:** `Cache-Control` and `ETag` on the server-rendered profile HTML (with the CDN); `security.allowedHosts` and trusted proxy headers for the public hosts, which the canonical and sitemap URLs depend on (ADR-0013); secondary hosts redirect to the primary.
+- **Toasts, later:** the stack of three and its queue, `persistent` (M3), `update()`, holding toasts behind a dialog, and adding `ToastStack` to the `DarkTheme` composite (it raises an existing scenario's cost, so a maintainer must review it).
 - **M4:** object storage replaces the local `media` disk (`zamaro.media.disk`); the poster shows the primary photo; `zm-video-card` gains `manage` mode.
 
 ---
@@ -255,6 +260,16 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **Drift recorded in the design:** the generic 404 has one action ("Your saved artists" waits for M2); suggestion tickets have no Save (M2); with no suggestions the lead keeps its first sentence and "Find who’s free" leads to Discover.
   - **Tests:** `tests/Feature/ArtistProfiles/ResolveMissingArtistTest.php` (11) and `e2e/specs/artist-profiles/resolve-missing-artist.spec.ts` (7, asserting the 404, 301 and 200 statuses through `NotFoundPage`). The Discover-search case stands in for an artist hidden after the lineup listed them by rewriting the browser's profile request. `ArtistProfilePage`'s intercepts now match the profile URL with any query string.
   - **Not covered end to end:** the browser-side move (an in-app link to a retired slug); no screen links to one until M2's saved list.
+- **S16 is done** (`8fe4033` red tests, `f4c2106` API, `c963eb9` pages, server and components, then ADR-0013 and docs).
+  - **API (L2-089.1, L2-112.3):** `cache.headers:etag` on the profile, tour-dates and availability routes gives a strong ETag of the body (Laravel's xxh128) and a bodiless 304 on a matching `If-None-Match`; a 404 or 301 has none. The profile keeps `public, max-age=0, s-maxage=60`; tour dates and the date check keep S14's headers rather than the design's `no-cache` (drift recorded in the design). `GET /api/v1/sitemap` (`SitemapController`, `ListPublishedProfiles`) returns `{ data: [{ slug, lastModified }] }` for the visible scope.
+  - **Heads (L2-112.1–2, L2-113.1):** `PageMeta` (`app/shared`) writes the title, description, robots, canonical link, Open Graph and Twitter tags and one JSON-LD block, and replaces all of it on each call. `ProfileSeo` (`pages/artist`) builds the profile's head: "{name} · Worship artist in {city} · Zamaro"; "{headline}. {bio}" cut at a word to **160 characters (the design's `<TO SUPPLY>`; OK, accepted default, 2026-10-10, recorded in the design)**; the primary photo's 1200 px rendition; and `Person` or `MusicGroup` with `aggregateRating` when `reviewCount > 0`. Discover ("Worship artists within driving distance of Toronto · Zamaro", canonical `/`), the generic 404, the missing artist and the profile error set their own; the last three are `noindex`.
+  - **ADR-0013 (OK, accepted default, 2026-10-10):** absolute URLs use the origin the request arrived at (Angular's `REQUEST` on the server, `document.location` in the browser), so e2e sees `http://localhost:4000/...`. `allowedHosts` guards it, and there is no `SITE_ORIGIN` setting.
+  - **robots.txt and sitemap.xml (L2-112.3–4):** Express routes in `server.ts` (`crawler-files.ts`). robots.txt adds `Allow: /artists/`, because `Disallow: /artist` alone would hide every profile by prefix. The sitemap lists `/` and every published profile with `lastmod`.
+  - **Share (L2-113.2–3):** a `zm-button` with the new `share` icon after Book, as in the mock (Save still waits for M2). `ShareLink` (`app/shared`) calls `navigator.share({ title, url })` with the page title and the canonical address. `AbortError` ends it there; any other failure, or no share sheet at all, copies the address with the CDK `Clipboard` and shows "Link copied" (kind "Shared", key `share`).
+  - **Components:** `zm-toast-region`, `zm-toast` (internal) and `ToastService` in the components library, with the region last in the shell. Built: timed and danger toasts, pausing on hover, focus and a hidden tab, replacing by key, and Escape and dismiss with focus return. The CRD records what waits for later callers. Perf: no rows flagged; `Toast` and `ToastStack` are new.
+  - **Lint:** `zamaro/no-hardcoded-text` now also flags string literals passed as toast text, to `Title.setTitle` and to `AnnouncerService.polite` (the call-site checks S2c deferred).
+  - **Tests:** `tests/Feature/ArtistProfiles/IndexAndShareProfileTest.php` (7) and `e2e/specs/artist-profiles/index-and-share-profile.spec.ts` (18). They use the `Crawler` page object (raw HTML parsed without running script, robots, sitemap), `readHead` for the live head, toasts on `Shell`, and `startClock` and `passTime` for the toast timer. The share sheet is stubbed on `Navigator.prototype`; the fallback deletes it and grants the clipboard permissions.
+  - **Not built (open items above):** `PrivateNoStore` (M2, since M1 serves no personal data), the CDN purge (M4), and cache headers on the server-rendered HTML (M10).
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
