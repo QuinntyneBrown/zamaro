@@ -6,16 +6,19 @@ use Database\Seeders\CastSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\Concerns\AssertsOpenApiContract;
+use Tests\Concerns\UsesTheWebApp;
 use Tests\TestCase;
 
 /**
  * L2-077.2: more than 30 searches a minute from one address are refused with a 429 problem that
- * says when to try again.
+ * says when to try again. A signed-in booker also has 30 a minute on their account, wherever they
+ * search from.
  */
 class SearchRateLimitTest extends TestCase
 {
     use AssertsOpenApiContract;
     use RefreshDatabase;
+    use UsesTheWebApp;
 
     private const SEARCH = '/api/v1/search?date=2026-11-14&kind=worship-night&lat=43.325&lng=-79.799&radius=120';
 
@@ -60,5 +63,24 @@ class SearchRateLimitTest extends TestCase
         }
 
         $this->withServerVariables(['REMOTE_ADDR' => '203.0.113.7'])->getJson(self::SEARCH)->assertOk();
+    }
+
+    public function test_a_signed_in_bookers_31st_search_in_a_minute_is_refused_from_any_address(): void
+    {
+        $session = $this->signIn('naomi.fraser@riversidecc.ca')->getCookie('zamaro_session')->getValue();
+        $searchAsNaomiFrom = fn (string $ip) => $this->asANewRequest()->fromTheWebApp()
+            ->withCookie('zamaro_session', $session)
+            ->withServerVariables(['REMOTE_ADDR' => $ip])
+            ->getJson(self::SEARCH);
+
+        for ($i = 1; $i <= 30; $i++) {
+            $searchAsNaomiFrom("198.51.100.{$i}")->assertOk();
+        }
+
+        $response = $searchAsNaomiFrom('203.0.113.99');
+
+        $response->assertStatus(429)
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/too-many-requests');
+        $this->assertMatchesContract($response);
     }
 }
