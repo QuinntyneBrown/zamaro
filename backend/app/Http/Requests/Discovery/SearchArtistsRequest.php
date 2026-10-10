@@ -3,10 +3,14 @@
 namespace App\Http\Requests\Discovery;
 
 use App\Enums\GatheringKind;
+use App\Enums\SearchSort;
+use App\Enums\Style;
 use App\Services\Discovery\Coordinates;
+use App\Services\Discovery\LineupFilter;
 use App\Services\Discovery\SearchCriteria;
 use App\Services\Discovery\ServiceArea;
 use Carbon\CarbonImmutable;
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -18,6 +22,8 @@ use Illuminate\Validation\Validator;
 class SearchArtistsRequest extends FormRequest
 {
     public const RADII_KM = [40, 80, 120, 200];
+
+    public const UNDER_800 = 'under-800';
 
     private const TIME_ZONE = 'America/Toronto';
 
@@ -44,6 +50,16 @@ class SearchArtistsRequest extends FormRequest
             'lng' => ['required', 'numeric', 'between:-180,180'],
             /** Driving radius in kilometres. */
             'radius' => ['required', 'integer', Rule::in(self::RADII_KM)],
+            /** How the tickets are ordered; Closest first by default. */
+            'sort' => ['nullable', Rule::enum(SearchSort::class)],
+            /** Comma-separated style slugs, any of which matches, e.g. `band,gospel-choir`. */
+            'styles' => ['nullable', 'string', function (string $attribute, string $value, Closure $fail) {
+                if (collect(explode(',', $value))->contains(fn (string $style) => Style::tryFrom($style) === null)) {
+                    $fail('Pick styles from the chips.');
+                }
+            }],
+            /** `under-800`: only artists whose From price is below $800. */
+            'price' => ['nullable', 'string', Rule::in([self::UNDER_800])],
         ];
     }
 
@@ -88,7 +104,19 @@ class SearchArtistsRequest extends FormRequest
             GatheringKind::from($this->validated('kind')),
             $this->location(),
             (int) $this->validated('radius'),
+            SearchSort::tryFrom((string) $this->validated('sort')) ?? SearchSort::Closest,
+            new LineupFilter($this->styles(), $this->validated('price') === self::UNDER_800),
         );
+    }
+
+    /**
+     * @return list<Style>
+     */
+    public function styles(): array
+    {
+        $styles = (string) $this->validated('styles');
+
+        return $styles === '' ? [] : array_map(fn (string $style) => Style::from($style), explode(',', $styles));
     }
 
     private function location(): Coordinates

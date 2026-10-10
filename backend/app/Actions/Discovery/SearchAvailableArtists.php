@@ -9,6 +9,7 @@ use App\Services\Discovery\DistanceService;
 use App\Services\Discovery\HeadlinerPicker;
 use App\Services\Discovery\Lineup;
 use App\Services\Discovery\LineupCard;
+use App\Services\Discovery\LineupSorter;
 use App\Services\Discovery\SearchCriteria;
 use App\Services\Discovery\Season;
 use Carbon\CarbonImmutable;
@@ -26,6 +27,7 @@ class SearchAvailableArtists
         private readonly AvailabilityService $availability,
         private readonly DistanceService $distances,
         private readonly HeadlinerPicker $headliners,
+        private readonly LineupSorter $sorter,
     ) {}
 
     public function handle(SearchCriteria $criteria): Lineup
@@ -38,7 +40,10 @@ class SearchAvailableArtists
             $headliner,
             $headliner ? $this->headliners->quoteFor($headliner) : null,
             Season::of($today),
-            array_values(array_filter($cards, fn (LineupCard $card) => $card !== $headliner)),
+            $this->sorter->sort(
+                array_values(array_filter($cards, fn (LineupCard $card) => $card !== $headliner)),
+                $criteria->sort,
+            ),
         );
     }
 
@@ -50,6 +55,7 @@ class SearchAvailableArtists
         $candidates = Artist::query()
             ->visible()
             ->where(fn (Builder $query) => $this->withinBoundingBox($query, $criteria))
+            ->where(fn (Builder $query) => $criteria->filter->applyTo($query))
             ->with(['styles', 'rating'])
             ->get()
             ->keyBy('id');
@@ -69,9 +75,6 @@ class SearchAvailableArtists
                 $cards[] = new LineupCard($artist, $distance);
             }
         }
-
-        usort($cards, fn (LineupCard $a, LineupCard $b) => [$a->distance->km, -($a->artist->rating?->rating ?? 0), $a->artist->id]
-            <=> [$b->distance->km, -($b->artist->rating?->rating ?? 0), $b->artist->id]);
 
         return $cards;
     }
