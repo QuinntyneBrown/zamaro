@@ -39,12 +39,12 @@ therefore paints the system theme from the first frame with no script (L2-104). 
 explicit preference sets `data-theme` on `<html>`. The stage and paper islands of the
 design system keep their own surfaces in either theme.
 
-**Frontend (Zamaro Web, `core/theme`)**
+**Frontend (Zamaro Web, `app/shell`, ADR-0007)**
 
-- **Theme boot script (`theme-boot.js`)** — fewer than 1 KB, inlined in the `<head>`
-  of `index.html` before any stylesheet. It reads `localStorage['zamaro.theme']` and,
-  when the value is `light` or `dark`, sets `document.documentElement.dataset.theme`
-  and the `color-scheme` meta tag. The page then paints dark from the first frame when
+- **Theme boot script** — a few lines inlined in the `<head>` of `index.html` before any
+  stylesheet. It reads `localStorage['zamaro.theme']` and, when the value is `light` or
+  `dark`, sets `document.documentElement.dataset.theme`; `tokens.css` sets
+  `color-scheme` for each theme, so no meta tag is needed. The page then paints dark from the first frame when
   dark is stored (L2-104). The script runs on cached server-rendered HTML as well,
   because it reads only the device. The Content-Security-Policy allows it by its
   SHA-256 hash, not by `unsafe-inline` (L2-071). Any storage error leaves the system
@@ -52,15 +52,19 @@ design system keep their own surfaces in either theme.
 - **`ThemeService`** — root signal service. `preference: Signal<ThemePreference |
   null>` holds the explicit choice; `system: Signal<'light' | 'dark'>` follows
   `matchMedia('(prefers-color-scheme: dark)')` and its change events;
-  `effective: Signal<'light' | 'dark'>` is computed from the two. An `effect` writes
-  `data-theme` on `<html>` and updates the `theme-color` meta tag. `toggle()` sets the
+  `effective: Signal<'light' | 'dark'>` is computed from the two. An `effect` writes the
+  preference to `data-theme` on `<html>`, or removes the attribute when there is none, so
+  `tokens.css` keeps following the system. The `theme-color` meta tag arrives with the
+  installable app (M9). `toggle()` sets the
   preference to the opposite of the effective theme, writes the device preference and,
   when a user is signed in, calls `PreferencesApi` (L2-104). During server-side
   rendering the service does nothing, leaving the boot script in charge.
-- **`ThemeToggleComponent`** — the design system's `.topbar__theme` icon button in
-  `TopBarComponent`, shown in the full header (from LG). In the compact header there is
-  no room beside the menu button, Saved and the account initials at 320 px, so the
-  same component renders as the "Dark theme" item of `NavDrawerComponent`. Both are a
+- **Theme toggle** — the design system's `.topbar__theme` icon button, rendered by
+  `zm-top-bar` from its `themeLabel`/`themePressed` inputs and shown in the full header
+  (from LG). In the compact header there is no room beside the menu button, Saved and
+  the account initials at 320 px, so the toggle is the "Dark theme" item (a `toggle`
+  item of `zm-menu`) in the navigation drawer. There is no separate toggle component;
+  both forms follow `ThemeService.isDark()`. Both are a
   `button` with `aria-pressed="true"` while the effective theme is dark and a constant
   accessible name from the catalogue, "Dark theme", so screen readers announce the
   state rather than a changing label. Both meet the 44 px target size.

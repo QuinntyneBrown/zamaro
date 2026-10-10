@@ -59,9 +59,15 @@ and through the seeded API that the visual test suite runs against.
   The workspace bar (`topbar--workspace`: the artist area and the admin app) has five
   primary links and stays compact until XL. The Saved
   button keeps its word in the accessible name when only the heart and count show.
-- **`NavDrawerComponent`** — CDK overlay holding the primary links. It traps focus,
-  closes on Escape, on backdrop click and on `NavigationEnd`, and returns focus to
-  the menu button.
+- **`NavDrawerComponent`** (`app/dialogs/menu`, `MenuDialog`) — a CDK `Dialog` with the
+  `zm-dialog` drawer frame holding the primary links (`zm-menu`) and the theme toggle. The
+  menu button carries `aria-controls="nav-drawer"`, the dialog's id. Initial focus goes to
+  the close button, which comes first (as in `docs/mocks/dialogs/menu`). The drawer traps focus,
+  closes on Escape, on backdrop click and when a link is chosen, and returns focus to
+  the menu button. The guest drawer omits the mock's "Saved artists and your account
+  stay in the top bar" line, because guests have neither; it returns with sign-in (M2).
+  The open/close behaviour needs no `BreakpointService`: CSS shows the menu button only
+  below LG.
 - **`DialogService`** — wrapper around the CDK `Dialog` used by every dialog. Its
   panel uses the design-system `.dialog` classes, which at XS fill the screen:
   `100vw` by `100dvh`, the header holding the title and close button at the top, a
