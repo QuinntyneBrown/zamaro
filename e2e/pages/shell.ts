@@ -53,6 +53,11 @@ export class Shell {
     return this.page.getByRole('banner').getByRole('link', { name: 'Sign in' });
   }
 
+  /** The sign-in page's header link: "Create account", "Sign up" below 480 px. */
+  createAccountLink(): Locator {
+    return this.page.getByRole('banner').getByRole('link', { name: /^(Create account|Sign up)/ });
+  }
+
   async openAccountMenu(): Promise<AccountMenuDialog> {
     await this.accountButton().click();
     return new AccountMenuDialog(this.page);

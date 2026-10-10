@@ -77,6 +77,11 @@ export class SignInPage {
     return this.card().getByRole('button');
   }
 
+  /** The card's "Create an account" link. */
+  createAccountLink(): Locator {
+    return this.card().getByRole('link', { name: 'Create an account' });
+  }
+
   /** "Couldn’t sign you in" with one link per problem. */
   errorSummary(): Locator {
     return this.card().locator('.error-summary');

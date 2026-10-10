@@ -124,7 +124,10 @@ test.describe('The signed-in header and footer', () => {
       'Artists',
       'Your account',
     ]);
-    await expect(discover.shell.footerColumn('Your account')).toHaveText(['Sign in']);
+    await expect(discover.shell.footerColumn('Your account')).toHaveText([
+      'Sign in',
+      'Create an account',
+    ]);
   });
 
   test('Sign in in the header returns the guest to the page they were on', async ({ page }) => {

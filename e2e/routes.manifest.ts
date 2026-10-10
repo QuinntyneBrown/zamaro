@@ -132,9 +132,12 @@ export const routes: RouteState[] = [
   },
   // Any address that is no page: "No show", served with a 404.
   { name: 'not-found', path: '/no-such-page', app: 'zamaro', mock: 'not-found/default.html' },
-  // Sign in: the "Admit one · Your account" card on the stage. Its links to "Forgot your password?"
-  // and "Create an account" join when those pages exist (M2 S8, S5).
+  // Sign in: the "Admit one · Your account" card on the stage, with "Create account" in the header
+  // and "Create an account" on the card. "Forgot your password?" joins with its page (M2 S8).
   { name: 'sign-in', path: '/sign-in', app: 'zamaro', mock: 'sign-in/default.html' },
+  // Sign up: the "Admit one · New account" card with the required terms box and the separate,
+  // unticked news box.
+  { name: 'sign-up', path: '/sign-up', app: 'zamaro', mock: 'sign-up/default.html' },
   // A session that ended: "Your session ended" above the fields. Opened directly, the email is empty
   // (the app fills it in when it sends the person here). The line names the kept draft from M5.
   {
