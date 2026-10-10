@@ -9,14 +9,32 @@
 | S0 | Groundwork: Sanctum, Redis sessions, Horizon queues, Mailpit, e2e account fixtures | Done | `dd82204`, `c57df76` (ADR-0015) |
 | S1 | Sign in | Done | `193c96c` red tests, `e2a97ff` (ADR-0016) |
 | S2 | Signed-in header, account menu and sign-out | Done | `4210c1f` red tests, `23effd2` (ADR-0017) |
-| S3–S18 | | Not started | |
+| S3 | CSRF and session limits | Done | `81b4823` red tests, `82f6684` (ADR-0018) |
+| S4–S18 | | Not started | |
 
-**Checks at the last commit (S2, 2026-10-10):** 139 backend Feature tests pass with the contract
+**Checks at the last commit (S3, 2026-10-10):** 149 backend Feature tests pass with the contract
 assertions; `scramble:export --fail-on-unknown` and Pint are clean; frontend lint, format and
-`ng build zamaro` are clean; `npx playwright test` passes 203 tests on win32 (171 specs, a11y and perf,
-32 visual), and `npm run test:docker -- visual a11y` passes 96 in the Linux image. The perf test
-against the S1 build flags no row; AvatarButton (126 ms), MenuAccount (278 ms) and TopBarSignedIn
-(at 110 iterations) are new.
+`ng build zamaro` are clean; `npx playwright test` passes 213 tests on win32, and
+`npm run test:docker -- visual a11y` passes 102 in the Linux image. S3 changes no `zm-*` component, so
+no perf run was needed; S2's run against the S1 build flagged no row (AvatarButton 126 ms,
+MenuAccount 278 ms and TopBarSignedIn at 110 iterations are new).
+
+**S3 acceptance criteria (as tested):**
+- Given Naomi signed in, when `DELETE /api/v1/session` arrives without `X-XSRF-TOKEN`, with a wrong
+  one, or marked `Sec-Fetch-Site: same-origin` without one, then it gets the 419
+  `csrf-token-mismatch` problem and she is still signed in; with the `XSRF-TOKEN` cookie's value it
+  gets 204. Every state-changing `/api/v1` route refuses a request without the token.
+- Given a session, when it is used again within 7 days it works, and after 7 days and a minute idle it
+  gets 401. Given a session used every 6 days, then a minute before 30 days it works and at 30 days it
+  gets 401, on `/me` and once on an anonymous route, after which requests are a guest's.
+- Given a booker whose CSRF token is spoiled, when they sign out, then the first request gets 419, the
+  app fetches the cookie, the repeat gets 204 and the header shows "Sign in".
+- Given every sign-out refused with 419, then after the retry a danger toast reads "Failed", "That
+  didn’t go through.", "Reload the page and try again." and Naomi is still signed in.
+- Given Naomi on her search when the API starts answering 401, when she changes the sort, then she
+  lands on `/sign-in?returnUrl=…&ended=1` with "Your session ended" and "Sign in again to carry on.
+  Nothing you typed is lost.", her email filled in and focus in Password; signing in returns her to
+  the sorted search. Opened directly, the page starts in an empty Email.
 
 **S2 acceptance criteria (as tested):**
 - Given Naomi signed in, when she sends `DELETE /api/v1/session`, then she gets 204 (private, no-store),
@@ -127,6 +145,29 @@ against the S1 build flags no row; AvatarButton (126 ms), MenuAccount (278 ms) a
   some widths, so a plain update would have kept stale images. Discover states now wait for the
   lineup's cards (`shows: 'lineup'`) or the sold-out panel before capture: the S1 flake was a capture
   taken before a late client-side search answered.
+- **S3 — The token on every request (ADR-0018).** Laravel 13 lets `Sec-Fetch-Site: same-origin`
+  requests through without a CSRF token, so Chromium never got a 419. Zamaro's `ValidateCsrfToken`
+  drops that bypass, as L2-073.2 and the design require.
+- **S3 — `ToastService` already exists** in the components library (M1 S16), with `zm-toast` and
+  `zm-toast-region` and their `Toast` and `ToastStack` scenarios, so no `app/shared/ToastService` or new
+  component was built. The api library reports a second 419 through the `CSRF_REFUSED` token, which the
+  zamaro app binds to the toast (`app/shared/session-notices.ts`).
+- **S3 — The retry sets its own header.** Angular's XSRF interceptor runs before the app's
+  interceptors, so `csrfRecoveryInterceptor` repeats the request with the new cookie's token itself.
+- **S3 — Ended sessions in e2e.** The frozen clock cannot age a session, and with the cookie cleared
+  only an authenticated call answers 401, which S3 has none of besides sign-out. The spec answers 401
+  for every API call (`Session.endOnServer()`); `SessionLifetimeTest` proves when the API does so.
+- **S3 — Sign-out's 401 is not "session ended".** A sign-out whose session had already ended clears
+  the person and shows "Sign in", without the sign-in page.
+- **S3 — The email is carried to the sign-in page** as navigation state, as the expired mock shows it
+  filled in; opened directly, `/sign-in?ended=1` starts empty (route state `sign-in-ended`, the line
+  masked for M5's draft copy).
+- **S3 — A session with no `auth.started_at`** predates the rule and is ended, not trusted.
+- **S3 — Tests send cookies.** JSON test requests sent no cookies (Laravel sends them only with
+  `withCredentials()`), so S1's session-ID test passed without sending its cookie, and in-memory guard
+  and session state hid ended sessions. `UsesTheWebApp` now sends credentials, and `asANewRequest()`
+  forgets the guard and session data between requests; time-travel tests use UTC so 30 days are
+  30 × 24 hours across the 1 Nov clock change.
 
 ## Context
 
@@ -217,9 +258,9 @@ shown and are recorded in the slice's ADR or the design.
 | D5 | TOTP library (sign-in-and-recover-access) | `pragmarx/google2fa` with `bacon/bacon-qr-code` (SVG), behind `Services/Accounts/TotpVerifier` | |
 | D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK |
 | D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | |
-| D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK |
-| D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK |
-| D10 | Problem types for 401, 419 and the new cases | `unauthenticated`, `csrf-token-mismatch`, `link-expired` (410), `payload-too-large`, `unsupported-media-type`, `saved-artist-limit`, `terms-acceptance-required`, `sign-in-paused` (429). Bad credentials: 422 with `errors.credentials` | OK (accepted default, 2026-10-10); `unauthenticated` and `errors.credentials` built in S1 |
+| D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK (accepted default, 2026-10-10); built in S3 as kind "Failed", title "That didn’t go through.", text "Reload the page and try again." |
+| D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK (accepted default, 2026-10-10); built in S3 |
+| D10 | Problem types for 401, 419 and the new cases | `unauthenticated`, `csrf-token-mismatch`, `link-expired` (410), `payload-too-large`, `unsupported-media-type`, `saved-artist-limit`, `terms-acceptance-required`, `sign-in-paused` (429). Bad credentials: 422 with `errors.credentials` | OK (accepted default, 2026-10-10); `unauthenticated` and `errors.credentials` built in S1, `csrf-token-mismatch` in S3 |
 | D11 | Email-change link lifetime (manage-account-settings) | 24 hours, like the verification link | OK |
 | D12 | `TrackSessionActivity` interval (manage-account-settings) | 5 minutes | |
 | D13 | Source of the approximate city (manage-account-settings) | `Contracts/IpLocator` with a fake table; unknown IPs show no city | |

@@ -26,3 +26,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0015](0015-same-origin-cookie-sessions.md) | Same-origin cookie sessions with Sanctum's SPA mode and Redis, no bearer tokens | Accepted |
 | [0016](0016-current-user-names.md) | One name each for the current user: `AuthService`, `CurrentUserResource`, `MeController` | Accepted |
 | [0017](0017-server-rendering-and-personal-data.md) | The server renders every page signed out; personal data reaches the page only in the browser | Accepted |
+| [0018](0018-csrf-token-on-every-state-changing-request.md) | Every state-changing request carries the CSRF token, same-origin or not | Accepted |

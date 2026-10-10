@@ -231,6 +231,9 @@ library is `<TO SUPPLY>`. The breached-password service vendor is `<TO SUPPLY>`.
 - **Sign out:** `AuthService.signOut()` calls `DELETE /api/v1/session`, treats a 401 (the session had
   already ended) as signed out, clears `currentUser` and dismisses every toast; the header then shows
   "Sign in".
+
+**As built in M2 (S3):** the `expired` state ("Your session ended", `?ended=1`) is built as the sessions
+design describes; see `security/manage-sessions-and-csrf`.
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from
