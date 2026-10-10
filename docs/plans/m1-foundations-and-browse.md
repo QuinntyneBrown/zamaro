@@ -6,9 +6,9 @@ milestones get their own plan in this folder when they start.
 
 ## Current status (2026-10-10)
 
-**Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is
-nearly done: S0–S16 are built. The visual-parity and axe suites follow as a separate step before
-M1 is complete.
+**Status: Done (2026-10-10).** Branch `feat/m1-foundations-and-browse`, opened as a pull request
+against `main`. S0–S16 are built, then the close: L2-009.2 scroll restoration, the visual-parity and
+axe suites (ADR-0014), Pint, and the end-of-M1 verification below.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -30,28 +30,31 @@ M1 is complete.
 | S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | Done | `b1e73c7`, `0dccb9e`, `ce741f7` (ADR-0012) |
 | S15 | Missing artist, renamed slug, generic 404 | Done | `511efcb`, `bf69dd7`, `f87ceb4` (ADR-0011) |
 | S16 | Index and share: page heads, ETags, robots and sitemap, Share and toasts | Done | `8fe4033`, `f4c2106`, `c963eb9` (ADR-0013) |
+| Close | L2-009.2 scroll restoration | Done | `e9546a6` red test, `5a54fed` |
+| Close | Visual-parity and axe suites, Bebas Neue self-hosted, parity fixes | Done | `f5b3c0f`, `9e14329`, `956564e` (ADR-0014) |
+| Close | Pint on the five flagged files (formatting only) | Done | `1fb681d` |
 
-**Checks at the last commit:**
-- Backend: 119 Feature tests pass, with OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean.
-- Frontend: lint and `format:check` are clean.
-- e2e: 91 Playwright tests pass in Chromium against a freshly seeded e2e database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `Toast` (201 ms) and `ToastStack` (268 ms) are new scenarios at the default 200 iterations.
+**Checks at the last commit (the end-of-M1 verification, 2026-10-10):**
+1. `docker compose --profile e2e up -d --wait`, then `php artisan test`: **119 Feature tests pass** (916 assertions) with the OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean; Pint passes on all 160 files.
+2. `php artisan db:seed` twice on the dev database: the row count of every table is the same after both runs (43 artists, 38 reviews, 48 bookings, 81 users, 44 slug histories, 6 photos, 5 videos, …).
+3. Frontend: `lint` and `format:check` are clean; `ng build zamaro` and `NG_BUILD_MANGLE=0 ng build perf-test` succeed.
+4. `npx playwright test`: **170 tests pass** in Chromium against a freshly seeded e2e database: 92 specs and `perf/`, 26 `visual/` tests (130 captures) and 52 `a11y/` tests. The visual suite also passed twice more with `--repeat-each=2`, and `npm run test:docker -- visual` and `-- a11y` pass in the Playwright image.
+5. Perf against the build of `7fbfee6` (the state before S12, built in a temporary worktree, since removed): the first run flagged **Artwork** (88.0 → 108.1 ms); the single permitted re-run did not flag it (89.3 → 112.1 ms, runs overlapping), and no other row was flagged. Skeleton (104.6 → 107.6) and Button (108.8 → 114.4) are unflagged after this close's changes. The Artwork cost is consistent at about +20 ms, so it is carried forward below rather than called noise. Fifteen scenarios are new since that base.
+6. Manual check, driven by a script against `npm start` and the compose `api`: the Burlington chip with Sat 14 Nov shows "Sat 14 Nov · 7 free · within 120 km"; Abigail's profile opens from the headliner; Pick sets the stub's date to 2026-11-14; the header toggle paints the dark theme; at 320 px the page does not scroll sideways; no console errors.
 
-**Open items carried forward:**
-- **L2-009.2:** Back restores the Discover results but not the scroll position yet.
-- **S12:** serve the seeded photos and videos from the API's local disk; object storage waits for M4 (user decision).
-- **M7:** only Abigail's rating has reviews behind it; the rest of the cast keeps seeded summaries, so their profiles show "No church reviews yet" under a rating. `QueueRatingRecalculation` and the review events arrive with leaving and moderating reviews.
-- **M5:** the stub's "Request to book" renders only when the `bookingRequests` flag is on (ADR-0012; off, a user decision). M5 adds the `/artists/:slug/book` route, hands the stub's values to it on submit, and turns the flag on in dev and e2e.
-- **M3:** the Discover band ships without "Apply as an artist"; the action joins with the application page.
-- **Later, with their screens:** `zm-tour-dates` `schedule` variant (M4), `zm-inline-message` `busy` (needs `zm-spinner`), the stepper and timeline (M3, M5), the other description-list variants, and the booking form's `auth` variant (M2). The `zm-form-field` split its CRD asks for is still to do.
-- **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest lists six route states.
-- **Later, with their screens:** `zm-error-stage` (the profile error is still page markup), the 500 page sending 500 and the offline page; the browser-side move to a renamed slug has no in-app link to test until M2's saved list.
+**Open items carried forward (owner milestone):**
+- **M2:** `zm-ticket-skeleton` (ticket CRD D-5) with the saved list's loading state; it replaces the Discover lineup's page skeletons, which lack the ticket frame, notches and perforation, and whose status line sits under the filters instead of above them (recorded in `adapt-layout-to-screens`).
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
 - **M2:** `PrivateNoStore` (`Cache-Control: private, no-store`, L2-089.3) arrives with the first route that returns personal data; M1 has none. Toasts gain actions with the save toggle, and the `Toast` scenario its Undo.
-- **M4:** `ArtistProfileUpdated`, `PurgeProfileCache` and the `CdnPurger` port (L2-089.2) arrive with profile editing; until then the 60-second `s-maxage` is the only bound. The sitemap is not cached in Redis until then either.
-- **M10:** `Cache-Control` and `ETag` on the server-rendered profile HTML (with the CDN); `security.allowedHosts` and trusted proxy headers for the public hosts, which the canonical and sitemap URLs depend on (ADR-0013); secondary hosts redirect to the primary.
-- **Toasts, later:** the stack of three and its queue, `persistent` (M3), `update()`, holding toasts behind a dialog, and adding `ToastStack` to the `DarkTheme` composite (it raises an existing scenario's cost, so a maintainer must review it).
-- **M4:** object storage replaces the local `media` disk (`zamaro.media.disk`); the poster shows the primary photo; `zm-video-card` gains `manage` mode.
+- **M2:** the signed-in states join the routes manifest, the visual suite masks the signed-in top bar, and the booking form's `auth` variant is built. The browser-side move to a renamed slug is tested once the saved list links to one.
+- **M3:** the Discover band ships without "Apply as an artist"; the action joins with the application page. Toasts gain `persistent`; the stepper arrives with the application.
+- **M4:** object storage replaces the local `media` disk (`zamaro.media.disk`); the poster shows the primary photo; `zm-video-card` gains `manage` mode; `zm-tour-dates` gains `schedule`. `ArtistProfileUpdated`, `PurgeProfileCache` and the `CdnPurger` port (L2-089.2) arrive with profile editing; until then the 60-second `s-maxage` is the only bound, and the sitemap is not cached in Redis.
+- **M4:** profile the **Artwork** scenario before `zm-artwork` changes again (+20 ms since S12's `ratio`, `photo` and `priority`; see check 5).
+- **M5:** the stub's "Request to book" renders only when the `bookingRequests` flag is on (ADR-0012; off, a user decision). M5 adds the `/artists/:slug/book` route, hands the stub's values to it on submit, and turns the flag on in dev and e2e. The timeline arrives with the booking page.
+- **M7:** only Abigail's rating has reviews behind it; the rest of the cast keeps seeded summaries. `QueueRatingRecalculation` and the review events arrive with leaving and moderating reviews.
+- **M9:** `layout.spec.ts` from `adapt-layout-to-screens` (overflow, 44 px targets and 200 % zoom over the whole manifest); the forced-colours outline on `zm-skeleton`; `zm-error-stage`, the 500 page sending 500, and the offline page; the toast stack of three, its queue, `update()` and holding toasts behind a dialog.
+- **M10:** the CI e2e job, which runs `npm run test:docker` against the `-linux` baselines; `Cache-Control` and `ETag` on the server-rendered profile HTML (with the CDN); `security.allowedHosts` and trusted proxy headers for the public hosts (ADR-0013); secondary hosts redirect to the primary.
+- **With their screens (no fixed milestone):** `zm-inline-message` `busy` (needs `zm-spinner`), the other description-list variants, the `zm-form-field` split its CRD asks for, the remaining `zm-skeleton` shapes and `zm-button` surface mappings (band-on-stage ordering, D-9), and adding `ToastStack` to the `DarkTheme` composite (it raises an existing scenario's cost, so a maintainer must review it).
 
 ---
 
@@ -270,6 +273,14 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **Lint:** `zamaro/no-hardcoded-text` now also flags string literals passed as toast text, to `Title.setTitle` and to `AnnouncerService.polite` (the call-site checks S2c deferred).
   - **Tests:** `tests/Feature/ArtistProfiles/IndexAndShareProfileTest.php` (7) and `e2e/specs/artist-profiles/index-and-share-profile.spec.ts` (18). They use the `Crawler` page object (raw HTML parsed without running script, robots, sitemap), `readHead` for the live head, toasts on `Shell`, and `startClock` and `passTime` for the toast timer. The share sheet is stubbed on `Navigator.prototype`; the fallback deletes it and grants the clipboard permissions.
   - **Not built (open items above):** `PrivateNoStore` (M2, since M1 serves no personal data), the CDN purge (M4), and cache headers on the server-rendered HTML (M10).
+- **M1 close (2026-10-10).**
+  - **L2-009.2** (`e9546a6` red, `5a54fed`): `LastSearch` keeps the lineup as last shown, with every loaded page and the sold-out ways forward. On a Back or Forward (`popstate`) to that search, Discover shows it without searching, and the router's `scrollPositionRestoration: 'enabled'` restores the position. Any other way to the same address searches afresh, so the cache is never stale (recorded in `sort-and-filter-results`). Search, sort, chip and sold-out navigations pass `scroll: 'manual'`; every other forward navigation starts at the top, so a profile opened from deep in the lineup opens at its top.
+  - **Visual and axe suites (ADR-0014, OK, accepted default, 2026-10-10 for M9 D22):** the manifest names 13 states (the six M1 had, plus Discover loading, error, rate-limited and sold out, and the profile's loading and error). `e2e/fixtures/route-states.ts` opens each through the page objects. `visual/` captures full pages at 320, 576, 768, 992 and 1200 px in both themes with `maxDiffPixelRatio: 0.001` and masks the rate-limit countdown; `a11y/` runs axe with the WCAG 2.0, 2.1 and 2.2 A and AA tags in both themes at XS and XL and fails on any violation. It found none.
+  - **Where the suites run (the risk below):** both locally on this Windows host and in `mcr.microsoft.com/playwright:v1.64.0-noble` through `npm run test:docker`, which seeds the e2e database on the host and points the container's web server at `host.docker.internal:8001`. Each platform keeps its own baselines (`-win32` and `-linux`, about 55 MB together); an intended design change regenerates both.
+  - **Bebas Neue** is self-hosted from `@fontsource/bebas-neue` (an asset glob copies the `woff2` files to `/fonts` in every app; the zamaro shell preloads the Latin file).
+  - **Parity bugs fixed** after reviewing the baselines against `docs/mocks/pages` (rendered with Playwright): the CDK live announcer's text printed under the footer (its visually-hidden style never reached the hydrated page; the CDK `a11y-prebuilt.css` is now global); Share on the profile's stage was a filled button instead of the paper outline (button CRD's `.on-stage` mapping); skeletons on the stage were paper-coloured (skeleton CRD AC-10); the profile's loading state lacked the video block and the stub card (new `control`, `control-lg` and `wide` shapes); the profile poster lacked the halftone corner. Perf: Skeleton and Button unflagged.
+  - **Deliberate differences** from the mocks are listed in `adapt-layout-to-screens` (display face, signed-out shell, M3 and M5 actions, no carried search in the manifest, seeded photos, editorial subtitles, the Discover loading tickets).
+  - **Pint** (`1fb681d`): imports instead of fully qualified names in the five files it flagged; formatting only.
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
@@ -506,8 +517,10 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **SSR transfer cache:** proved in S2. Responses with personal data must not be transfer-cached from M2 on.
 - **Visual parity:**
   - Run the visual and axe suites in the Playwright Docker image, with Bebas Neue self-hosted.
-  - Mask the signed-in top bar until M2.
+    *Resolved at the close (ADR-0014):* they run locally and in the image, with one baseline set per platform.
+  - Mask the signed-in top bar until M2. *M1 renders no signed-in state, so nothing is masked yet.*
   - Mock-only copy (for example Miriam's "filming her first live set") will cause diffs: update those mocks or mask them.
+    *As built:* baselines come from the app, so mock-only copy causes no diff; it is reviewed by hand and listed in `adapt-layout-to-screens`.
 - **Windows:** `MSYS_NO_PATHCONV=1`, LF line endings, `vendor/` in a volume, `PHP_CLI_SERVER_WORKERS` for e2e.
 - **Perf runner:** brand-new scenarios have no baseline and must not be flagged. CI builds the base branch from S2 on.
 - **PostGIS:** not needed for M1 (bounding box plus B-tree).

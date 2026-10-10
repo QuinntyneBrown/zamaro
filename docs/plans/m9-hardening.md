@@ -76,7 +76,7 @@ project owner must confirm before the slice that uses them starts.
 | D19 | Field-key rotation procedure (`protect-secrets-and-data`) | `security:rotate-field-key` re-encrypts the `EncryptedField` columns and VSC objects in id-ordered batches. Older keys stay in `FIELD_ENCRYPTION_PREVIOUS_KEYS` until the command reports zero rows on the old version. | No |
 | D20 | Service worker library | `@angular/service-worker` with `navigationRequestStrategy: "freshness"`, so navigations still get SSR HTML when online. `index.csr.html` serves as the cached shell. No `dataGroups`. | No |
 | D21 | Accessibility issue tracker and release gate (`meet-accessibility-standards`) | GitHub issues labelled `a11y`. The release workflow step (M10) fails while any open issue carries `a11y` and `wcag-aa`. The checklist lives in `docs/runbooks/a11y-release-audit.md`. | No |
-| D22 | Visual diff threshold, and whether every capture runs in both themes (`adapt-layout-to-screens`) | `maxDiffPixelRatio: 0.001`, light and dark, unless M1 already fixed a value. | No |
+| D22 | Visual diff threshold, and whether every capture runs in both themes (`adapt-layout-to-screens`) | `maxDiffPixelRatio: 0.001`, light and dark, unless M1 already fixed a value. | OK (accepted default, 2026-10-10; applied at the M1 close, ADR-0014) |
 
 ## Design conflicts and resolutions
 
