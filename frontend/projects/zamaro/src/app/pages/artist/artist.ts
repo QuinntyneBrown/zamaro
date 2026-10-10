@@ -6,13 +6,15 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { type CalendarDate, FormatService, type MusicalKey } from 'api';
 import {
   Alert,
-  Artwork,
+  ArtistPoster,
   Breadcrumb,
   Button,
   ButtonLink,
   type Crumb,
   Icon,
   Marquee,
+  type PosterFact,
+  type PosterScore,
   Setlist,
   Skeleton,
 } from 'components';
@@ -32,7 +34,7 @@ const STRIP_SONGS = 5;
   selector: 'zm-artist-page',
   imports: [
     Alert,
-    Artwork,
+    ArtistPoster,
     Breadcrumb,
     Button,
     ButtonLink,
@@ -122,12 +124,31 @@ export class ArtistPage {
     return profile.reviewCount === 0 ? this.t('artist.kicker.new', { headline }) : headline;
   });
 
-  protected readonly ratingLabel = computed(() => {
+  /** "★ 4.9", read as "Rated 4.9 out of 5 by 38 churches"; "New" before the first review. */
+  protected readonly score = computed<PosterScore>(() => {
     const profile = this.store.profile()!;
-    return this.t('common.rating.label', {
-      rating: profile.rating?.toFixed(1),
-      count: profile.reviewCount,
-    });
+    if (profile.rating === null) return { text: this.t('common.rating.new') };
+    return {
+      text: `★ ${profile.rating.toFixed(1)}`,
+      label: this.t('common.rating.label', {
+        rating: profile.rating.toFixed(1),
+        count: profile.reviewCount,
+      }),
+    };
+  });
+
+  /** "38 churches" (already in the score's label), the base city and the driving range. */
+  protected readonly facts = computed<PosterFact[]>(() => {
+    const profile = this.store.profile()!;
+    const reviews =
+      profile.rating === null
+        ? { text: this.t('artist.facts.noReviews') }
+        : { text: this.t('common.rating.churches', { count: profile.reviewCount }), hidden: true };
+    return [
+      reviews,
+      { text: this.t('artist.facts.city', { city: profile.baseCity }) },
+      { text: this.t('artist.facts.drives', { km: profile.maxDriveKm }) },
+    ];
   });
 
   protected readonly bookLabel = computed(() => {

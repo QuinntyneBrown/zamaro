@@ -1,0 +1,44 @@
+<section class="poster on-stage" [attr.aria-labelledby]="headingId()">
+  <div class="container stack stack--lg">
+    <ng-content select="[slot=breadcrumb]" />
+    @if (loading()) {
+      <div class="artist-poster" aria-hidden="true">
+        <zm-skeleton shape="portrait" />
+        <div class="stack">
+          <zm-skeleton width="short" />
+          <zm-skeleton shape="poster" />
+          <zm-skeleton shape="poster" width="medium" />
+          <zm-skeleton />
+        </div>
+      </div>
+      <h1 class="visually-hidden" [id]="headingId()">{{ name() }}</h1>
+      <p class="visually-hidden" role="status">{{ status() }}</p>
+    } @else if (art(); as art) {
+      <div class="artist-poster">
+        <zm-artwork [variant]="art" [yellow]="true" />
+        <div class="stack">
+          <p class="overline poster__kicker">{{ kicker() }}</p>
+          <h1 class="artist-poster__name" [id]="headingId()">{{ name() }}</h1>
+          <p class="artist-poster__facts">
+            @if (score(); as score) {
+              <strong>
+                @if (score.label) {
+                  <span role="img" [attr.aria-label]="score.label">{{ score.text }}</span>
+                } @else {
+                  {{ score.text }}
+                }
+              </strong>
+            }
+            @for (fact of facts(); track $index) {
+              <span [attr.aria-hidden]="fact.hidden ? 'true' : null">{{ fact.text }}</span>
+            }
+          </p>
+          <div class="cluster"><ng-content select="[slot=actions]" /></div>
+        </div>
+      </div>
+    } @else {
+      <p class="overline poster__kicker">{{ kicker() }}</p>
+      <h1 class="artist-poster__name" [id]="headingId()">{{ name() }}</h1>
+    }
+  </div>
+</section>

@@ -16,10 +16,10 @@ skinparam package {
 }
 actor "Booker on a phone (XS)" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "AppShellComponent" as shell
+  participant "Shell" as shell
   participant "BreakpointService" as bp
-  participant "TopBarComponent" as topbar
-  participant "NavDrawerComponent" as drawer
+  participant "zm-top-bar" as topbar
+  participant "MenuDialog" as drawer
   participant "DialogService" as dialogs
   participant "CurrentUserStore" as users
 end box

@@ -1,41 +1,23 @@
 @if (store.status() === 'loaded' && store.profile(); as profile) {
-  <section class="poster on-stage" aria-labelledby="artist-name">
-    <div class="container stack stack--lg">
-      <zm-breadcrumb [crumbs]="crumbs()" [label]="'artist.breadcrumb.label' | transloco" />
-      <div class="artist-poster">
-        <zm-artwork [variant]="profile.actType === 'solo' ? 'solo' : 'group'" [yellow]="true" />
-        <div class="stack">
-          <p class="poster__kicker">{{ kicker() }}</p>
-          <h1 id="artist-name" class="artist-poster__name">{{ profile.displayName }}</h1>
-          <p class="artist-poster__facts">
-            @if (profile.rating !== null) {
-              <strong
-                ><span role="img" [attr.aria-label]="ratingLabel()"
-                  >★ {{ profile.rating.toFixed(1) }}</span
-                ></strong
-              >
-              <span aria-hidden="true">{{
-                t('common.rating.churches', { count: profile.reviewCount })
-              }}</span>
-            } @else {
-              <strong>{{ 'common.rating.new' | transloco }}</strong>
-              <span>{{ 'artist.facts.noReviews' | transloco }}</span>
-            }
-            <span>{{ t('artist.facts.city', { city: profile.baseCity }) }}</span>
-            <span>{{ t('artist.facts.drives', { km: profile.maxDriveKm }) }}</span>
-          </p>
-          <div class="cluster">
-            <zm-button variant="primary" (click)="book()">{{ bookLabel() }}</zm-button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <zm-artist-poster
+    [kicker]="kicker()"
+    [name]="profile.displayName"
+    [art]="profile.actType === 'solo' ? 'solo' : 'group'"
+    [score]="score()"
+    [facts]="facts()"
+  >
+    <zm-breadcrumb
+      slot="breadcrumb"
+      [crumbs]="crumbs()"
+      [label]="'artist.breadcrumb.label' | transloco"
+    />
+    <zm-button slot="actions" variant="primary" (click)="book()">{{ bookLabel() }}</zm-button>
+  </zm-artist-poster>
   <zm-marquee [items]="strip()" />
   <div class="container profile-layout">
     <div>
       <section class="section" aria-labelledby="about-title">
-        <p class="section__kicker">{{ 'artist.about.kicker' | transloco }}</p>
+        <p class="overline section__kicker">{{ 'artist.about.kicker' | transloco }}</p>
         <h2 id="about-title">{{ aboutHeading() }}</h2>
         <div class="stack section__body">
           @for (paragraph of paragraphs(); track $index; let first = $first) {
@@ -46,7 +28,7 @@
       <section class="section" aria-labelledby="songs-title">
         <div class="section__head">
           <div>
-            <p class="section__kicker">{{ 'artist.setlist.kicker' | transloco }}</p>
+            <p class="overline section__kicker">{{ 'artist.setlist.kicker' | transloco }}</p>
             <h2 id="songs-title">{{ t('artist.setlist.title', { name: profile.firstName }) }}</h2>
           </div>
           <p class="text-muted">{{ 'artist.setlist.note' | transloco }}</p>
@@ -56,13 +38,17 @@
     </div>
   </div>
 } @else if (store.status() === 'error') {
-  <section class="poster on-stage" aria-labelledby="error-title">
-    <div class="container stack stack--lg">
-      <zm-breadcrumb [crumbs]="crumbs()" [label]="'artist.breadcrumb.label' | transloco" />
-      <p class="poster__kicker">{{ 'artist.error.kicker' | transloco }}</p>
-      <h1 id="error-title" class="artist-poster__name">{{ 'artist.error.title' | transloco }}</h1>
-    </div>
-  </section>
+  <zm-artist-poster
+    headingId="error-title"
+    [kicker]="'artist.error.kicker' | transloco"
+    [name]="'artist.error.title' | transloco"
+  >
+    <zm-breadcrumb
+      slot="breadcrumb"
+      [crumbs]="crumbs()"
+      [label]="'artist.breadcrumb.label' | transloco"
+    />
+  </zm-artist-poster>
   <div class="container page-error">
     <zm-alert variant="danger" [heading]="'artist.error.unreachable' | transloco">
       <p>{{ 'artist.error.body' | transloco }}</p>
@@ -75,23 +61,18 @@
     </zm-alert>
   </div>
 } @else if (store.showSkeletons()) {
-  <section class="poster on-stage" aria-labelledby="artist-name">
-    <div class="container stack stack--lg">
-      <zm-breadcrumb [crumbs]="crumbs()" [label]="'artist.breadcrumb.label' | transloco" />
-      <div class="artist-poster" aria-hidden="true">
-        <zm-skeleton shape="portrait" />
-        <div class="stack">
-          <zm-skeleton width="short" />
-          <zm-skeleton shape="poster" />
-          <zm-skeleton shape="poster" width="medium" />
-          <zm-skeleton />
-        </div>
-      </div>
-      <h1 id="artist-name" class="visually-hidden">{{ 'artist.loading.title' | transloco }}</h1>
-      <p class="visually-hidden" role="status">{{ 'artist.loading.status' | transloco }}</p>
-    </div>
-  </section>
-  <zm-skeleton class="strip-skeleton" shape="block" aria-hidden="true" />
+  <zm-artist-poster
+    [loading]="true"
+    [name]="'artist.loading.title' | transloco"
+    [status]="'artist.loading.status' | transloco"
+  >
+    <zm-breadcrumb
+      slot="breadcrumb"
+      [crumbs]="crumbs()"
+      [label]="'artist.breadcrumb.label' | transloco"
+    />
+  </zm-artist-poster>
+  <zm-skeleton shape="strip" aria-hidden="true" />
   <div class="container profile-layout" aria-hidden="true">
     <div class="stack stack--lg">
       <div class="stack">

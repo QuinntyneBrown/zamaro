@@ -1,75 +1,8 @@
-// The profile's layout from docs/design-system/assets/components.css (poster, artist-poster,
-// profile-layout, section heads). The setlist and breadcrumb style themselves.
+// The profile's layout from docs/design-system/assets/components.css (profile-layout). The poster,
+// setlist and breadcrumb style themselves; sections and type come from the global utilities.
 
 :host {
   display: block;
-}
-
-.stack--lg {
-  gap: var(--space-8);
-}
-
-.poster {
-  position: relative;
-  overflow: hidden;
-  padding-block: var(--space-12) var(--space-16);
-}
-
-.poster > * {
-  position: relative;
-  z-index: var(--z-raised);
-}
-
-.poster__kicker,
-.section__kicker {
-  font: var(--text-overline);
-  letter-spacing: var(--letter-spacing-stamp);
-  text-transform: uppercase;
-}
-
-.poster__kicker {
-  color: var(--color-accent-on-stage);
-}
-
-.artist-poster {
-  display: grid;
-  gap: var(--space-8);
-}
-
-.artist-poster__name {
-  font: var(--text-poster);
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
-}
-
-.artist-poster__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
-  font: var(--text-stub);
-  text-transform: uppercase;
-  color: var(--color-fg-on-stage-muted);
-}
-
-.artist-poster__facts strong {
-  color: var(--color-accent-on-stage);
-  font-weight: inherit;
-}
-
-.artist-poster > zm-artwork,
-.artist-poster > zm-skeleton {
-  max-width: 18rem;
-}
-
-.artist-poster > zm-artwork {
-  border-color: var(--color-fg-on-stage);
-}
-
-// The strip's skeleton is the strip's height, so nothing jumps when the songs land (L2-105.2).
-.strip-skeleton {
-  width: 100%;
-  min-height: 0;
-  height: calc(var(--font-size-xl) + 2 * var(--space-3) + 2 * var(--border-width-thick));
 }
 
 .profile-layout {
@@ -87,57 +20,11 @@
   padding-top: 0;
 }
 
-.section__kicker {
-  display: inline-block;
-  margin-bottom: var(--space-2);
-}
-
-.section__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: var(--space-4) var(--space-8);
-  margin-bottom: var(--space-6);
-}
-
-.section__body {
-  margin-top: var(--space-6);
-}
-
-.lead {
-  font: var(--text-body-lg);
-}
-
-.text-muted {
-  color: var(--color-fg-muted);
-}
-
 .page-error {
   padding-block: var(--space-10);
 }
 
-@media (min-width: 48rem) {
-  .artist-poster {
-    grid-template-columns: 1fr 15rem;
-    align-items: end;
-  }
-
-  .artist-poster > zm-artwork,
-  .artist-poster > zm-skeleton {
-    order: 2;
-  }
-}
-
 @media (min-width: 62rem) {
-  .poster {
-    padding-block: var(--space-16) var(--space-20);
-  }
-
-  .artist-poster {
-    grid-template-columns: 1fr 20rem;
-  }
-
   .profile-layout {
     grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-width);
     align-items: start;

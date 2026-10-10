@@ -3,6 +3,10 @@
   min-width: 0;
 }
 
+:host(.field--inline) {
+  min-width: 12rem;
+}
+
 .field {
   display: flex;
   flex-direction: column;

@@ -4,23 +4,22 @@
   aria-labelledby="lineup-title"
   [attr.aria-busy]="store.showSkeletons() ? 'true' : null"
 >
-  <div class="container lineup-section">
+  <div class="container stack stack--lg">
     <div class="section__head">
       <div>
-        <p class="section__kicker">{{ kicker() }}</p>
+        <p class="overline section__kicker">{{ kicker() }}</p>
         <h2 id="lineup-title">{{ 'discover.lineup.title' | transloco }}</h2>
       </div>
       <zm-form-field
-        class="sort"
         fieldId="lineup-sort"
         type="select"
+        [inline]="true"
         [label]="'discover.lineup.sort' | transloco"
         [options]="sorts"
         [formControl]="sortControl"
       />
     </div>
-    <fieldset class="filters">
-      <legend>{{ 'discover.filters.legend' | transloco }}</legend>
+    <zm-filter-group [legend]="'discover.filters.legend' | transloco">
       @for (style of styles; track style) {
         <zm-chip
           [pressed]="isPressed(style)"
@@ -35,7 +34,7 @@
         (click)="toggleUnder800()"
         >{{ 'discover.filters.under800' | transloco }}</zm-chip
       >
-    </fieldset>
+    </zm-filter-group>
 
     @if (store.showSkeletons()) {
       <p class="lead">
@@ -45,29 +44,10 @@
             : t('discover.lineup.finding', { date: longDate() })
         }}</span>
       </p>
-      <div class="headliner-skeleton" aria-hidden="true">
-        <zm-skeleton shape="portrait" />
-        <div class="headliner-skeleton__body">
-          <zm-skeleton width="short" />
-          <zm-skeleton shape="poster" />
-          <zm-skeleton />
-          <zm-skeleton width="long" />
-        </div>
-      </div>
+      <zm-headliner-skeleton />
       <ul class="lineup" role="list" aria-hidden="true">
         @for (index of skeletonTickets; track index) {
-          <li class="ticket-skeleton">
-            <zm-skeleton shape="block" class="ticket-skeleton__art" />
-            <div class="ticket-skeleton__body">
-              <zm-skeleton width="short" />
-              <zm-skeleton shape="title" />
-              <zm-skeleton />
-            </div>
-            <div class="ticket-skeleton__stub">
-              <zm-skeleton shape="title" width="short" />
-              <zm-skeleton shape="target" />
-            </div>
-          </li>
+          <li><zm-ticket-skeleton /></li>
         }
       </ul>
     } @else if (store.status() === 'error') {

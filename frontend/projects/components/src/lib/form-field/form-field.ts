@@ -22,6 +22,7 @@ export interface FieldOption {
  */
 @Component({
   selector: 'zm-form-field',
+  host: { '[class.field--inline]': 'inline()' },
   providers: [
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => FormField), multi: true },
   ],
@@ -38,6 +39,8 @@ export class FormField implements ControlValueAccessor {
   readonly min = input<string>();
   readonly max = input<string>();
   readonly autocomplete = input<string>();
+  /** Sits in a row beside other content, such as the lineup's sort, at a usable minimum width. */
+  readonly inline = input(false);
 
   protected readonly value = signal('');
   protected readonly disabled = signal(false);
