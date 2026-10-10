@@ -15,6 +15,7 @@ export * from './lib/chip/chip';
 export * from './lib/description-list/description-list';
 export * from './lib/dialog/dialog';
 export * from './lib/empty-state/empty-state';
+export * from './lib/error-page/error-page';
 export * from './lib/footer/footer';
 export * from './lib/form-field/form-field';
 export * from './lib/headliner/headliner';

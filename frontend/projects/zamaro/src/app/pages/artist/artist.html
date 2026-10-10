@@ -262,6 +262,12 @@
       </form>
     </aside>
   </div>
+} @else if (store.status() === 'missing' && store.similarArtists(); as similar) {
+  <zm-artist-not-found-page
+    [similar]="similar"
+    [place]="carriedPlace()"
+    [lineupParams]="lineupParams()"
+  />
 } @else if (store.status() === 'error') {
   <section class="poster on-stage" aria-labelledby="error-title">
     <div class="container stack stack--lg">

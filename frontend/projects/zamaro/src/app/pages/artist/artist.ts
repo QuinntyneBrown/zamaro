@@ -16,6 +16,7 @@ import {
   addDays,
   addMonths,
   type CalendarDate,
+  type CarriedSearch,
   FeatureFlags,
   FormatService,
   GATHERING_KINDS,
@@ -46,6 +47,7 @@ import {
 } from 'components';
 import { map } from 'rxjs';
 import { LastSearch } from '../../shared/last-search';
+import { ArtistNotFoundPage } from '../not-found/artist-not-found';
 import { ArtistProfileStore } from './artist-profile.store';
 import { BookingDateStore } from './booking-date.store';
 import { ProfileReviewsStore } from './profile-reviews.store';
@@ -61,12 +63,14 @@ const REVIEWS_PER_PAGE = 10;
  * of songs, About, videos, photos, the setlist, the upcoming dates, what churches say, and the
  * booking stub. A `?date=` carried from Discover names the date on the back link and starts the
  * dates and the stub there (L2-012.2, L2-017). Sending the request waits behind the
- * `bookingRequests` flag (M5).
+ * `bookingRequests` flag (M5). A missing or hidden artist shows the not-found page in its place
+ * (L2-021).
  */
 @Component({
   selector: 'zm-artist-page',
   imports: [
     Alert,
+    ArtistNotFoundPage,
     Artwork,
     BookingForm,
     Breadcrumb,
@@ -145,7 +149,7 @@ export class ArtistPage {
       .subscribe((slug) => {
         const date = this.date();
         const search = this.lastSearch.search();
-        this.store.load(slug);
+        this.store.load(slug, this.carriedSearch(date));
         this.dates.load(slug, date);
         this.request.reset({
           date: date ?? '',
@@ -161,6 +165,25 @@ export class ArtistPage {
   private readonly shortDate = computed(() => {
     const date = this.dates.selectedDate();
     return date ? this.format.shortDate(date) : null;
+  });
+
+  /**
+   * The search to suggest similar artists from if the artist is missing (L2-021.1): the last
+   * lineup's when it was for the carried date, otherwise the date alone.
+   */
+  private carriedSearch(date: CalendarDate | null): CarriedSearch {
+    const search = this.lastSearch.search();
+    if (!date) return {};
+    if (search?.date !== date) return { date };
+    const { kind, lat, lng, radius } = search.params;
+    return { date, kind, lat, lng, radius };
+  }
+
+  /** The town the carried search was near ("Burlington"), for the missing-artist page. */
+  protected readonly carriedPlace = computed(() => {
+    const search = this.lastSearch.search();
+    const place = search && search.date === this.date() ? String(search.params['place'] ?? '') : '';
+    return place.split(',')[0].trim() || null;
   });
 
   /** Back to the last lineup, or to Discover with the carried date (L2-009.2, L2-107). */

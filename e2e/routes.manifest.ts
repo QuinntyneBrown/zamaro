@@ -31,4 +31,14 @@ export const routes: RouteState[] = [
   { path: '/artists/miriam-haile', app: 'zamaro', mock: 'artist/empty.html' },
   // A band with no photos or videos: the act-type illustration and "No videos yet".
   { path: '/artists/marcus-bell-trio', app: 'zamaro', mock: 'artist/no-photos.html' },
+  // Selah Brooks is suspended: the missing-artist 404 with solo vocalists free Sat 14 Nov. Opened
+  // without a search, they are measured from Toronto, so the names and distances differ from the
+  // mock's Burlington search.
+  {
+    path: '/artists/selah-brooks?date=2026-11-14',
+    app: 'zamaro',
+    mock: 'not-found/artist.html',
+  },
+  // Any address that is no page: "No show", served with a 404.
+  { path: '/no-such-page', app: 'zamaro', mock: 'not-found/default.html' },
 ];

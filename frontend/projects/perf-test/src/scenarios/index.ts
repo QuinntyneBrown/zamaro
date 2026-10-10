@@ -20,6 +20,7 @@ export const scenarios: Record<string, Scenario> = {
   DescriptionList: () => import('./DescriptionList'),
   Dialog: () => import('./Dialog'),
   EmptyState: () => import('./EmptyState'),
+  ErrorPage: () => import('./ErrorPage'),
   Footer: () => import('./Footer'),
   FormField: () => import('./FormField'),
   Headliner: () => import('./Headliner'),

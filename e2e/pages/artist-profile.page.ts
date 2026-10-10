@@ -2,6 +2,11 @@ import type { Locator, Page } from '@playwright/test';
 import { PhotoViewerDialog } from './photo-viewer.dialog';
 import { Shell } from './shell';
 
+/** The profile request for a slug, with or without the carried search in its query string. */
+function profileUrl(slug: string): RegExp {
+  return new RegExp(`/api/v1/artists/${slug}(\\?|$)`);
+}
+
 /** An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist). */
 export class ArtistProfilePage {
   readonly shell: Shell;
@@ -28,7 +33,7 @@ export class ArtistProfilePage {
 
   /** Replaces part of the profile the API returns, for the next loads made by the browser. */
   async alterProfile(slug: string, change: Record<string, unknown>): Promise<void> {
-    await this.page.route(`**/api/v1/artists/${slug}`, async (route) => {
+    await this.page.route(profileUrl(slug), async (route) => {
       const response = await route.fetch();
       const body = await response.json();
       await route.fulfill({
@@ -39,7 +44,7 @@ export class ArtistProfilePage {
   }
 
   async failProfile(slug: string): Promise<void> {
-    await this.page.route(`**/api/v1/artists/${slug}`, (route) =>
+    await this.page.route(profileUrl(slug), (route) =>
       route.fulfill({
         status: 500,
         contentType: 'application/problem+json',
@@ -49,14 +54,14 @@ export class ArtistProfilePage {
   }
 
   async delayProfile(slug: string, ms: number): Promise<void> {
-    await this.page.route(`**/api/v1/artists/${slug}`, async (route) => {
+    await this.page.route(profileUrl(slug), async (route) => {
       await new Promise((resolve) => setTimeout(resolve, ms));
       await route.continue();
     });
   }
 
   async restoreProfile(slug: string): Promise<void> {
-    await this.page.unroute(`**/api/v1/artists/${slug}`);
+    await this.page.unroute(profileUrl(slug));
   }
 
   async goBack(): Promise<void> {

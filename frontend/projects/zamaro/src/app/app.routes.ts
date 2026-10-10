@@ -9,4 +9,8 @@ export const routes: Routes = [
     path: 'artists/:slug',
     loadComponent: () => import('./pages/artist/artist').then((m) => m.ArtistPage),
   },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFoundPage),
+  },
 ];

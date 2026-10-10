@@ -1,4 +1,4 @@
-import type { ActType, Money, Style } from './discovery';
+import type { ActType, LineupCard, Money, Style } from './discovery';
 import type { ProfileReviews } from './reviews';
 
 /** A setlist song's key: `E`, `B-flat`, `F-sharp-minor`, or `any`. */
@@ -69,4 +69,26 @@ export interface ArtistProfile {
   videos: ProfileVideo[];
   /** The newest reviews; `GET /artists/{slug}/reviews` pages the rest. */
   reviews: ProfileReviews;
+}
+
+/**
+ * The Discover search a profile was opened from. It only matters when the artist is missing: the
+ * API suggests similar artists free on that date near that place (L2-021.1).
+ */
+export interface CarriedSearch {
+  /** `YYYY-MM-DD`. */
+  date?: string;
+  kind?: string;
+  lat?: number;
+  lng?: number;
+  radius?: number;
+}
+
+/** The artist-not-found problem's suggestions: free on `date` within `radiusKm`, nearest first. */
+export interface SimilarArtists {
+  /** The carried date, or the first bookable day when none was carried. */
+  date: string;
+  radiusKm: number;
+  /** Up to 3; measured from the carried location, or from Toronto City Hall. */
+  items: LineupCard[];
 }
