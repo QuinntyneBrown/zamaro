@@ -90,7 +90,10 @@ Until the headliner lands (S6), the tickets start at "No. 01".
   Each card links to `/artists/{slug}` with the search date carried forward.
 - **`SearchErrorComponent`** — the "We lost the signal" state with Try again, the
   team email link and, after the third consecutive failure, the status-page link
-  (L2-106).
+  (L2-106). The status link is "Check status.zamaro.ca" (`https://status.zamaro.ca`). It is
+  rendered in `pages/discover/lineup` with `zm-alert`, as is the rate-limited state. In the
+  error states the poster keeps its introduction: the mock's "Seven … are usually free" needs
+  data the API does not have.
 
 Layout follows L2-097: one column at XS with stubs beneath card bodies, two-column
 form at SM and MD with stubs to the right, and poster beside form with two cards per
