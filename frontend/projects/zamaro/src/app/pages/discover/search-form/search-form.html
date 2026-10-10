@@ -6,7 +6,7 @@
   >
     @if (errorCount()) {
       <zm-error-summary
-        class="span-all"
+        class="span-full"
         [heading]="'discover.errors.summary' | transloco: { count: errorCount() }"
         [items]="summaryItems()"
         (pick)="focusField($event)"
@@ -44,7 +44,7 @@
       [label]="'discover.form.radius' | transloco"
       [options]="radii"
     />
-    <zm-filter-group class="span-all" [legend]="'discover.form.cities' | transloco">
+    <zm-filter-group class="span-full" [legend]="'discover.form.cities' | transloco">
       @for (city of cities; track city) {
         <zm-chip size="sm" [pressed]="place()?.city === city" (click)="pickCity(city)">{{
           city
@@ -52,7 +52,7 @@
       }
     </zm-filter-group>
     <zm-button
-      class="span-all"
+      class="span-full"
       variant="primary"
       size="lg"
       type="submit"
