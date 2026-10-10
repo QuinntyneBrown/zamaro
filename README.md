@@ -1,4 +1,6 @@
-<img src="docs/assets/zamaro-mark.svg" alt="Zamaro logo" width="96" height="96">
+<p align="center">
+  <img src="docs/assets/zamaro-mark.svg" alt="Zamaro logo" width="96" height="96">
+</p>
 
 # Zamaro
 
