@@ -43,16 +43,17 @@ class SearchAvailableArtistsTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('meta.total', 7)
+            ->assertJsonPath('headliner.name', 'Abigail Mensah')
+            ->assertJsonPath('headliner.distance.km', 44)
             ->assertJsonPath('data.*.name', [
                 'Marcus Bell Trio',
                 'Hosanna Collective',
-                'Abigail Mensah',
                 'Luz Viva',
                 'Elijah Park',
                 'Grace Tabernacle Mass Choir',
                 'Daniel & Ruth Okonkwo',
             ])
-            ->assertJsonPath('data.*.distance.km', [14, 32, 44, 63, 74, 81, 97])
+            ->assertJsonPath('data.*.distance.km', [14, 32, 63, 74, 81, 97])
             ->assertJsonPath('data.0', [
                 'slug' => 'marcus-bell-trio',
                 'name' => 'Marcus Bell Trio',
@@ -71,9 +72,9 @@ class SearchAvailableArtistsTest extends TestCase
 
     public function test_a_40_km_radius_leaves_out_abigail_44_km_away(): void
     {
-        $this->search(['date' => '2026-11-14', 'kind' => 'worship-night', 'radius' => 40])
-            ->assertOk()
-            ->assertJsonPath('data.*.name', ['Marcus Bell Trio', 'Hosanna Collective']);
+        $response = $this->search(['date' => '2026-11-14', 'kind' => 'worship-night', 'radius' => 40])->assertOk();
+
+        $this->assertSame(['Marcus Bell Trio', 'Hosanna Collective'], $this->lineupNames($response));
     }
 
     public function test_an_artist_whose_own_limit_is_shorter_than_the_drive_is_left_out(): void
@@ -91,8 +92,8 @@ class SearchAvailableArtistsTest extends TestCase
 
         $this->search(['date' => '2026-11-14', 'kind' => 'worship-night', 'radius' => 120])
             ->assertOk()
-            ->assertJsonPath('data.6.name', 'Daniel & Ruth Okonkwo')
-            ->assertJsonPath('data.6.distance.km', 120);
+            ->assertJsonPath('data.5.name', 'Daniel & Ruth Okonkwo')
+            ->assertJsonPath('data.5.distance.km', 120);
     }
 
     // L2-005: free on the date.
@@ -139,9 +140,12 @@ class SearchAvailableArtistsTest extends TestCase
         Artist::where('slug', 'hosanna-collective')->update(['published_at' => null]);
         Artist::where('slug', 'luz-viva')->update(['payout_ready' => false]);
 
-        $this->search(['date' => '2026-11-14', 'kind' => 'worship-night', 'radius' => 120])
-            ->assertOk()
-            ->assertJsonPath('data.*.name', ['Abigail Mensah', 'Elijah Park', 'Grace Tabernacle Mass Choir', 'Daniel & Ruth Okonkwo']);
+        $response = $this->search(['date' => '2026-11-14', 'kind' => 'worship-night', 'radius' => 120])->assertOk();
+
+        $this->assertSame(
+            ['Abigail Mensah', 'Elijah Park', 'Grace Tabernacle Mass Choir', 'Daniel & Ruth Okonkwo'],
+            $this->lineupNames($response),
+        );
     }
 
     public function test_a_youth_event_needs_a_verified_check_still_valid_on_the_event_date(): void
@@ -151,9 +155,19 @@ class SearchAvailableArtistsTest extends TestCase
         $grace = Artist::where('slug', 'grace-tabernacle-mass-choir')->firstOrFail();
         VulnerableSectorCheck::create(['user_id' => $grace->user_id, 'issued_on' => '2026-09-30', 'expires_on' => '2029-09-30', 'status' => VscStatus::Pending]);
 
-        $this->search(['date' => '2026-11-14', 'kind' => 'youth-event', 'radius' => 120])
-            ->assertOk()
-            ->assertJsonPath('data.*.name', ['Abigail Mensah']);
+        $response = $this->search(['date' => '2026-11-14', 'kind' => 'youth-event', 'radius' => 120])->assertOk();
+
+        $this->assertSame(['Abigail Mensah'], $this->lineupNames($response));
+    }
+
+    /**
+     * Everyone in the lineup in order: the headliner, then the tickets.
+     *
+     * @return list<string>
+     */
+    private function lineupNames(TestResponse $response): array
+    {
+        return array_values(array_filter([$response->json('headliner.name'), ...$response->json('data.*.name')]));
     }
 
     private function routing(): FakeRoutingProvider

@@ -15,6 +15,7 @@ use App\Models\ArtistRating;
 use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
+use App\Models\Review;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
 use Illuminate\Database\Seeder;
@@ -43,17 +44,34 @@ class CastSeeder extends Seeder
         'miriam-haile' => ['Miriam Haile', 'ACT-0041', ActType::Solo, [Style::SoloVocalist], 'Etobicoke', 40, 300, null, 0, '2026-10-05'],
     ];
 
-    /** Abigail's calendar: number => [status, date, kind, church, city]. */
-    private const ABIGAIL_BOOKINGS = [
-        'ZAM-0101' => [BookingStatus::Confirmed, '2026-10-18', GatheringKind::SundayService, 'Living Waters Fellowship', 'Brampton'],
-        'ZAM-0104' => [BookingStatus::Confirmed, '2026-11-01', GatheringKind::SundayService, 'St. Brendan’s Anglican', 'Oshawa'],
-        'ZAM-0108' => [BookingStatus::Confirmed, '2026-11-15', GatheringKind::SundayService, 'Lakeshore Alliance', 'Oakville'],
-        'ZAM-0110' => [BookingStatus::Confirmed, '2026-11-21', GatheringKind::WorshipNight, 'Harvest Point', 'Milton'],
-        'ZAM-0116' => [BookingStatus::Confirmed, '2026-12-13', GatheringKind::SundayService, 'Kingdom Life Centre', 'Mississauga'],
-        'ZAM-0118' => [BookingStatus::Confirmed, '2026-12-20', GatheringKind::SundayService, 'St. Brendan’s Anglican', 'Oshawa'],
-        'ZAM-0114' => [BookingStatus::Requested, '2026-11-14', GatheringKind::WorshipNight, 'Riverside Community Church', 'Burlington'],
-        'ZAM-0120' => [BookingStatus::Requested, '2026-11-22', GatheringKind::SundayService, 'Harvest Point', 'Milton'],
-        'ZAM-0121' => [BookingStatus::Requested, '2026-12-05', GatheringKind::ConferenceOrRetreat, 'Kingdom Life Centre', 'Mississauga'],
+    /**
+     * number => [artist, status, date, kind, church, city, confirmed at (null if never confirmed)].
+     * Abigail has six bookings confirmed this autumn and Marcus one, so Abigail is the headliner.
+     */
+    private const BOOKINGS = [
+        'ZAM-0101' => ['abigail-mensah', BookingStatus::Confirmed, '2026-10-18', GatheringKind::SundayService, 'Living Waters Fellowship', 'Brampton', '2026-09-08 14:00'],
+        'ZAM-0104' => ['abigail-mensah', BookingStatus::Confirmed, '2026-11-01', GatheringKind::SundayService, 'Harvest Point Church', 'Milton', '2026-09-15 11:20'],
+        'ZAM-0108' => ['abigail-mensah', BookingStatus::Confirmed, '2026-11-15', GatheringKind::SundayService, 'Lakeshore Alliance', 'Oakville', '2026-09-22 16:05'],
+        'ZAM-0110' => ['abigail-mensah', BookingStatus::Confirmed, '2026-11-21', GatheringKind::WorshipNight, 'Kingdom Life Centre', 'Mississauga', '2026-09-29 10:40'],
+        'ZAM-0116' => ['abigail-mensah', BookingStatus::Confirmed, '2026-12-13', GatheringKind::SundayService, 'Living Waters Fellowship', 'Brampton', '2026-10-01 13:15'],
+        'ZAM-0118' => ['abigail-mensah', BookingStatus::Confirmed, '2026-12-20', GatheringKind::SundayService, 'Lakeshore Alliance', 'Oakville', '2026-10-06 09:30'],
+        'ZAM-0114' => ['abigail-mensah', BookingStatus::Requested, '2026-11-14', GatheringKind::WorshipNight, 'Riverside Community Church', 'Burlington', null],
+        'ZAM-0120' => ['abigail-mensah', BookingStatus::Requested, '2026-11-22', GatheringKind::SundayService, 'Harvest Point Church', 'Milton', null],
+        'ZAM-0121' => ['abigail-mensah', BookingStatus::Requested, '2026-12-05', GatheringKind::ConferenceOrRetreat, 'Kingdom Life Centre', 'Mississauga', null],
+        // Completed engagements behind Abigail's profile reviews (confirmed before this season).
+        'ZAM-0052' => ['abigail-mensah', BookingStatus::Completed, '2026-05-10', GatheringKind::SundayService, 'Living Waters Fellowship', 'Brampton', '2026-04-08 10:00'],
+        'ZAM-0061' => ['abigail-mensah', BookingStatus::Completed, '2026-06-14', GatheringKind::SundayService, 'Riverside Community Church', 'Burlington', '2026-05-20 10:00'],
+        'ZAM-0078' => ['abigail-mensah', BookingStatus::Completed, '2026-08-16', GatheringKind::SundayService, 'Harvest Point Church', 'Milton', '2026-07-10 10:00'],
+        'ZAM-0089' => ['abigail-mensah', BookingStatus::Completed, '2026-09-13', GatheringKind::SundayService, 'St. Brendan’s Anglican', 'Oshawa', '2026-08-12 10:00'],
+        'ZAM-0097' => ['marcus-bell-trio', BookingStatus::Confirmed, '2026-10-25', GatheringKind::SundayService, 'Riverside Community Church', 'Burlington', '2026-09-18 15:00'],
+    ];
+
+    /** booking number => [reviewer, account, stars, written at, text] (docs/mocks/pages/artist). */
+    private const REVIEWS = [
+        'ZAM-0089' => ['Rev. Janet Clarke', 'janet-clarke', 5, '2026-09-15 19:00', 'She had the whole congregation singing in three-part harmony by the last verse.'],
+        'ZAM-0078' => ['Tomi Oduya', 'tomi-oduya', 5, '2026-08-18 20:00', 'She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.'],
+        'ZAM-0061' => ['Naomi Fraser', 'naomi-fraser', 5, '2026-06-16 18:00', 'Our seniors asked for hymns and our youth asked for Jireh.'],
+        'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart.'],
     ];
 
     private const ABIGAIL_UNAVAILABLE = ['2026-11-26', '2026-11-27', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-31'];
@@ -65,7 +83,44 @@ class CastSeeder extends Seeder
                 $this->artist($slug, ...$row);
             }
             $this->abigailsCalendar(Artist::where('slug', 'abigail-mensah')->firstOrFail());
+            $this->bookings();
+            $this->reviews();
         });
+    }
+
+    private function bookings(): void
+    {
+        foreach (self::BOOKINGS as $number => [$slug, $status, $date, $kind, $church, $city, $confirmedAt]) {
+            $booking = Booking::updateOrCreate(['number' => $number], [
+                'artist_id' => Artist::where('slug', $slug)->value('id'),
+                'status' => $status,
+                'event_date' => $date,
+                'kind' => $kind,
+                'church_name' => $church,
+                'church_city' => $city,
+            ]);
+            if ($confirmedAt !== null) {
+                DB::table('booking_transitions')->updateOrInsert(
+                    ['booking_id' => $booking->id, 'to_status' => BookingStatus::Confirmed->value],
+                    ['from_status' => BookingStatus::Accepted->value, 'actor_kind' => 'booker', 'occurred_at' => $confirmedAt],
+                );
+            }
+        }
+    }
+
+    private function reviews(): void
+    {
+        foreach (self::REVIEWS as $number => [$reviewer, $account, $stars, $writtenAt, $text]) {
+            $booker = User::firstOrCreate(['email' => "{$account}@cast.zamaro.test"], ['name' => $reviewer, 'password' => Str::random(40)]);
+            $booking = Booking::where('number', $number)->firstOrFail();
+            Review::updateOrCreate(['booking_id' => $booking->id], [
+                'artist_id' => $booking->artist_id,
+                'booker_id' => $booker->id,
+                'stars' => $stars,
+                'text' => $text,
+                'created_at' => $writtenAt,
+            ]);
+        }
     }
 
     /**
@@ -113,17 +168,6 @@ class CastSeeder extends Seeder
                 ['artist_id' => $abigail->id, 'date' => $date],
                 ['state' => OverrideState::Unavailable],
             );
-        }
-
-        foreach (self::ABIGAIL_BOOKINGS as $number => [$status, $date, $kind, $church, $city]) {
-            Booking::updateOrCreate(['number' => $number], [
-                'artist_id' => $abigail->id,
-                'status' => $status,
-                'event_date' => $date,
-                'kind' => $kind,
-                'church_name' => $church,
-                'church_city' => $city,
-            ]);
         }
 
         VulnerableSectorCheck::updateOrCreate(

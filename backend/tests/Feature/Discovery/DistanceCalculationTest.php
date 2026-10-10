@@ -32,7 +32,7 @@ class DistanceCalculationTest extends TestCase
         $this->search()->assertOk();
         $callsAfterFirstSearch = $this->routing()->calls();
 
-        $this->search()->assertOk()->assertJsonPath('data.2.distance.km', 44);
+        $this->search()->assertOk()->assertJsonPath('headliner.distance.km', 44);
 
         $this->assertGreaterThan(0, $callsAfterFirstSearch);
         $this->assertSame($callsAfterFirstSearch, $this->routing()->calls());
@@ -56,17 +56,18 @@ class DistanceCalculationTest extends TestCase
 
         $this->search()
             ->assertOk()
+            ->assertJsonPath('headliner.name', 'Abigail Mensah')
+            ->assertJsonPath('headliner.distance', ['km' => 59, 'driveMinutes' => 45, 'approximate' => true])
             ->assertJsonPath('data.*.name', [
                 'Marcus Bell Trio',
                 'Hosanna Collective',
-                'Abigail Mensah',
                 'Luz Viva',
                 'Grace Tabernacle Mass Choir',
                 'Elijah Park',
                 'Daniel & Ruth Okonkwo',
             ])
-            ->assertJsonPath('data.*.distance.km', [13, 41, 59, 75, 88, 91, 111])
-            ->assertJsonPath('data.*.distance.approximate', array_fill(0, 7, true));
+            ->assertJsonPath('data.*.distance.km', [13, 41, 75, 88, 91, 111])
+            ->assertJsonPath('data.*.distance.approximate', array_fill(0, 6, true));
         Log::shouldHaveReceived('warning')->withArgs(fn (string $message) => $message === 'routing.unavailable');
     }
 
@@ -78,8 +79,8 @@ class DistanceCalculationTest extends TestCase
         $this->routing()->recover();
         $this->search()
             ->assertOk()
-            ->assertJsonPath('data.2.name', 'Abigail Mensah')
-            ->assertJsonPath('data.2.distance', ['km' => 44, 'driveMinutes' => 35, 'approximate' => false]);
+            ->assertJsonPath('headliner.name', 'Abigail Mensah')
+            ->assertJsonPath('headliner.distance', ['km' => 44, 'driveMinutes' => 35, 'approximate' => false]);
     }
 
     private function routing(): FakeRoutingProvider

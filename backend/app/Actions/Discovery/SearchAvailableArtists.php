@@ -6,13 +6,17 @@ use App\Models\Artist;
 use App\Services\ArtistAvailability\AvailabilityService;
 use App\Services\Discovery\Coordinates;
 use App\Services\Discovery\DistanceService;
+use App\Services\Discovery\HeadlinerPicker;
+use App\Services\Discovery\Lineup;
 use App\Services\Discovery\LineupCard;
 use App\Services\Discovery\SearchCriteria;
+use App\Services\Discovery\Season;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Who is free on the date and within range (L2-003, L2-005), closest first; ties go to the higher
- * rating, then the lower artist id.
+ * Who is free on the date and within range (L2-003, L2-005): the headliner first (L2-006), then the
+ * tickets closest first; ties go to the higher rating, then the lower artist id.
  */
 class SearchAvailableArtists
 {
@@ -21,12 +25,27 @@ class SearchAvailableArtists
     public function __construct(
         private readonly AvailabilityService $availability,
         private readonly DistanceService $distances,
+        private readonly HeadlinerPicker $headliners,
     ) {}
+
+    public function handle(SearchCriteria $criteria): Lineup
+    {
+        $today = CarbonImmutable::now('America/Toronto');
+        $cards = $this->matches($criteria);
+        $headliner = $this->headliners->pick($cards, $today);
+
+        return new Lineup(
+            $headliner,
+            $headliner ? $this->headliners->quoteFor($headliner) : null,
+            Season::of($today),
+            array_values(array_filter($cards, fn (LineupCard $card) => $card !== $headliner)),
+        );
+    }
 
     /**
      * @return list<LineupCard>
      */
-    public function handle(SearchCriteria $criteria): array
+    private function matches(SearchCriteria $criteria): array
     {
         $candidates = Artist::query()
             ->visible()
