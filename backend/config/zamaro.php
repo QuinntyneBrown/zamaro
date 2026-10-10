@@ -54,6 +54,11 @@ return [
     'i18n' => [
         // One directory per locale, one JSON file per namespace (L2-111).
         'path' => env('ZAMARO_I18N_PATH', resource_path('i18n')),
+        // What `php artisan i18n:check` scans for hard-coded text and missing keys (L2-111.1).
+        'check' => [
+            'email_views' => resource_path('views/emails'),
+            'notifications' => app_path('Notifications'),
+        ],
     ],
 
 ];

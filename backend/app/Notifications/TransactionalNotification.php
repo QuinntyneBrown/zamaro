@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Jobs\Concerns\RetriesWithBackoff;
 use App\Services\UserExperience\Catalogue;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,12 +12,12 @@ use Illuminate\Notifications\Notification;
 /**
  * Every Zamaro email (notifications/send-transactional-emails, ADR-0019): queued on `notifications`
  * once the transaction that raised it commits, sent from Zamaro <hello@zamaro.ca> (D16) as Markdown
- * mail with HTML and text parts, every word from the `emails` catalogue (L2-111). Retries and failure
- * reporting join in M2 S6.
+ * mail with HTML and text parts, every word from the `emails` catalogue (L2-111). A send that fails is
+ * retried 5 times with growing delays, then stored in `failed_jobs` and alerted (L2-065.2).
  */
 abstract class TransactionalNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, RetriesWithBackoff;
 
     public function __construct()
     {

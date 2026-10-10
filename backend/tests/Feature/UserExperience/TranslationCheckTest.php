@@ -45,8 +45,7 @@ class TranslationCheckTest extends TestCase
             BLADE]);
 
         $this->artisan('i18n:check')
-            ->expectsOutputToContain("{$this->dir}/views/welcome.blade.php:3")
-            ->expectsOutputToContain('"Welcome"')
+            ->expectsOutputToContain("{$this->dir}/views/welcome.blade.php:3  hard-coded text \"Welcome\"")
             ->assertFailed();
     }
 
@@ -89,8 +88,7 @@ class TranslationCheckTest extends TestCase
             PHP]);
 
         $this->artisan('i18n:check')
-            ->expectsOutputToContain("{$this->dir}/Notifications/WelcomeNotification.php:7")
-            ->expectsOutputToContain('emails.welcome.subject')
+            ->expectsOutputToContain("{$this->dir}/Notifications/WelcomeNotification.php:7  missing key emails.welcome.subject")
             ->doesntExpectOutputToContain('emails.verify.greeting')
             ->assertFailed();
     }
@@ -112,8 +110,7 @@ class TranslationCheckTest extends TestCase
             PHP]);
 
         $this->artisan('i18n:check')
-            ->expectsOutputToContain("{$this->dir}/Notifications/WelcomeNotification.php:8")
-            ->expectsOutputToContain('"Welcome to Zamaro"')
+            ->expectsOutputToContain("{$this->dir}/Notifications/WelcomeNotification.php:8  hard-coded text \"Welcome to Zamaro\"")
             ->assertFailed();
     }
 

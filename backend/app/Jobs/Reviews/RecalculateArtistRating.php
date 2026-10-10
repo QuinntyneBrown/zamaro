@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Reviews;
 
+use App\Jobs\Concerns\RetriesWithBackoff;
 use App\Models\ArtistRating;
 use App\Models\Review;
 use Illuminate\Bus\Queueable;
@@ -19,7 +20,7 @@ use Illuminate\Queue\SerializesModels;
  */
 class RecalculateArtistRating implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, RetriesWithBackoff, SerializesModels;
 
     public function __construct(public readonly int $artistId)
     {

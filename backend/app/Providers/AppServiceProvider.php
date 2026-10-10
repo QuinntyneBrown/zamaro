@@ -4,10 +4,14 @@ namespace App\Providers;
 
 use App\Contracts\BotChallenge;
 use App\Contracts\BreachedPasswordChecker;
+use App\Contracts\ErrorReporter;
 use App\Contracts\Geocoder;
+use App\Contracts\OnCallAlerter;
 use App\Contracts\RoutingProvider;
+use App\Integrations\Alerting\FakeOnCallAlerter;
 use App\Integrations\BotChallenge\FakeBotChallenge;
 use App\Integrations\BreachedPasswords\FakeBreachedPasswordChecker;
+use App\Integrations\ErrorTracking\FakeErrorReporter;
 use App\Integrations\Geocoding\FakeGeocoder;
 use App\Integrations\Routing\FakeRoutingProvider;
 use Carbon\CarbonImmutable;
@@ -27,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
         RoutingProvider::class => FakeRoutingProvider::class,
         BotChallenge::class => FakeBotChallenge::class,
         BreachedPasswordChecker::class => FakeBreachedPasswordChecker::class,
+        ErrorReporter::class => FakeErrorReporter::class,
+        OnCallAlerter::class => FakeOnCallAlerter::class,
     ];
 
     public function register(): void

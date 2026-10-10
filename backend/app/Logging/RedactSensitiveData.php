@@ -31,10 +31,12 @@ class RedactSensitiveData implements ProcessorInterface
     }
 
     /**
+     * The same redaction for data that leaves Zamaro by another way than the log, such as an error report.
+     *
      * @param  array<array-key, mixed>  $data
      * @return array<array-key, mixed>
      */
-    private function redact(array $data): array
+    public function redact(array $data): array
     {
         foreach ($data as $key => $value) {
             $name = strtolower((string) $key);
