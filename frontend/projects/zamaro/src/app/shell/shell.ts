@@ -11,7 +11,6 @@ import {
 import { RouterOutlet } from '@angular/router';
 import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 import { Footer, type FooterColumn, SkipLink, TopBar, type TopBarLink } from 'components';
-import { MENU_TITLE_ID, MenuDialog } from '../dialogs/menu/menu';
 import { ThemeService } from './theme.service';
 
 const CONTACT_EMAIL = 'hello@zamaro.ca';
@@ -31,8 +30,12 @@ export class Shell {
   private readonly dialog = inject(Dialog);
   private readonly injector = inject(Injector);
 
-  /** The drawer traps focus, closes on Escape or the backdrop, and returns focus to the menu button. */
-  protected openMenu(): void {
+  /**
+   * The drawer traps focus, closes on Escape or the backdrop, and returns focus to the menu button.
+   * It loads on first use: it only shows below LG and only after a tap.
+   */
+  protected async openMenu(): Promise<void> {
+    const { MENU_TITLE_ID, MenuDialog } = await import('../dialogs/menu/menu');
     const ref = this.dialog.open(MenuDialog, {
       id: this.menuId,
       ariaLabelledBy: MENU_TITLE_ID,

@@ -1,0 +1,27 @@
+.lineup-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.section__kicker {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+}
+
+.lineup {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 62rem) {
+  .lineup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

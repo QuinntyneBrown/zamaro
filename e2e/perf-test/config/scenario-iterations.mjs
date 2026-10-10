@@ -6,6 +6,7 @@ export const defaultIterations = 200;
 export const scenarioIterations = {
   DarkTheme: 60,
   Footer: 100,
+  Lineup: 25,
   Menu: 90,
   TopBar: 120,
 };

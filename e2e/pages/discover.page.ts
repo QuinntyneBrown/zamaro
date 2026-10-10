@@ -1,18 +1,53 @@
-import type { Page, Request } from '@playwright/test';
+import type { Locator, Page, Request } from '@playwright/test';
+import { FROZEN_NOW } from '../fixtures/clock';
+import { Lineup } from './lineup';
+import { SearchForm } from './search-form';
 import { Shell, type Theme } from './shell';
 
 /** Discover: the home page at `/` (docs/mocks/pages/discover). */
 export class DiscoverPage {
   readonly shell: Shell;
+  readonly form: SearchForm;
+  readonly lineup: Lineup;
   private readonly catalogueRequests: Request[] = [];
+  private readonly searchRequests: Request[] = [];
 
   constructor(private readonly page: Page) {
     this.shell = new Shell(page);
+    this.form = new SearchForm(page);
+    this.lineup = new Lineup(page);
     page.on('request', (request) => {
-      if (new URL(request.url()).pathname.startsWith('/api/v1/i18n/')) {
-        this.catalogueRequests.push(request);
-      }
+      const path = new URL(request.url()).pathname;
+      if (path.startsWith('/api/v1/i18n/')) this.catalogueRequests.push(request);
+      if (path === '/api/v1/search') this.searchRequests.push(request);
     });
+  }
+
+  /** The app's today is Fri 9 Oct 2026 (docs/mocks/README.md). */
+  async freezeClock(): Promise<void> {
+    await this.page.clock.setFixedTime(FROZEN_NOW);
+  }
+
+  /** "Who’s free Sat 14 Nov". */
+  posterHeadline(): Locator {
+    return this.page.getByRole('heading', { level: 1 });
+  }
+
+  searchesSent(): number {
+    return this.searchRequests.length;
+  }
+
+  /** Marks the current document so a full page load can be detected later. */
+  async markDocument(): Promise<void> {
+    await this.page.evaluate(() => ((window as unknown as { zmMarker: boolean }).zmMarker = true));
+  }
+
+  async documentWasReloaded(): Promise<boolean> {
+    return this.page.evaluate(() => !(window as unknown as { zmMarker?: boolean }).zmMarker);
+  }
+
+  focusedElement(): Locator {
+    return this.page.locator(':focus');
   }
 
   async open(): Promise<void> {

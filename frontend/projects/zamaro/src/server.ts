@@ -5,6 +5,7 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
@@ -13,16 +14,13 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
+ * Browser calls to /api go to the Zamaro API. In production the load balancer routes /api before
+ * requests reach this server; locally and in e2e this proxy stands in for it.
  */
+const apiOrigin = process.env['API_ORIGIN'];
+if (apiOrigin) {
+  app.use(createProxyMiddleware({ target: apiOrigin, changeOrigin: true, pathFilter: '/api' }));
+}
 
 /**
  * Serve static files from /browser

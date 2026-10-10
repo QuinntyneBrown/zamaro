@@ -97,6 +97,12 @@ export type ButtonVariant = 'secondary' | 'primary' | 'ghost';
       --btn-transform-hover: none;
     }
 
+    .btn--lg {
+      --btn-height: var(--control-height-lg);
+      --btn-padding: var(--space-6);
+      --btn-font-size: var(--font-size-md);
+    }
+
     .btn--icon {
       --btn-padding: 0;
       width: var(--btn-height);
@@ -150,7 +156,10 @@ export class Button {
   readonly expanded = input<boolean>();
   readonly controls = input<string>();
 
+  readonly size = input<'md' | 'lg'>('md');
+
   protected readonly classes = computed(
-    () => `btn btn--${this.variant()}${this.iconOnly() ? ' btn--icon' : ''}`,
+    () =>
+      `btn btn--${this.variant()}${this.size() === 'lg' ? ' btn--lg' : ''}${this.iconOnly() ? ' btn--icon' : ''}`,
   );
 }

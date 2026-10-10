@@ -6,7 +6,7 @@ import {
   withHttpTransferCacheOptions,
 } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideI18n } from 'api';
+import { DISCOVERY_API, HttpDiscoveryApi, provideI18n } from 'api';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -17,5 +17,6 @@ export const appConfig: ApplicationConfig = {
     // GET responses made while rendering on the server are replayed in the browser, not re-fetched.
     provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
     provideI18n(),
+    { provide: DISCOVERY_API, useClass: HttpDiscoveryApi },
   ],
 };
