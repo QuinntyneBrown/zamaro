@@ -24,6 +24,45 @@ export class Lineup {
   ticket(name: string): Ticket {
     return new Ticket(this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }));
   }
+
+  headliner(): Headliner {
+    return new Headliner(this.section().getByRole('article'));
+  }
+}
+
+/** The featured first result (L2-006). */
+export class Headliner {
+  constructor(private readonly card: Locator) {}
+
+  root(): Locator {
+    return this.card;
+  }
+
+  /** "No. 01 · Most booked this autumn". */
+  kicker(): Locator {
+    return this.card.locator('.headliner__kicker');
+  }
+
+  name(): Locator {
+    return this.card.getByRole('heading', { level: 3 });
+  }
+
+  meta(): Locator {
+    return this.card.locator('.headliner__meta');
+  }
+
+  quote(): Locator {
+    return this.card.locator('.headliner__quote');
+  }
+
+  /** "Free Sat 14 Nov". */
+  badge(): Locator {
+    return this.card.locator('.badge');
+  }
+
+  profileLink(): Locator {
+    return this.card.getByRole('link', { name: /^See / });
+  }
 }
 
 export class Ticket {

@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 /** The Discover search bar ("Your event"). */
 export class SearchForm {
@@ -45,8 +45,10 @@ export class SearchForm {
     if (search.kind) await this.kindField().selectOption({ label: search.kind });
   }
 
+  /** Activates a quick-pick chip and waits until the location field holds the city. */
   async pickCity(city: string): Promise<void> {
-    await this.form().getByRole('button', { name: city, exact: true }).click();
+    await this.cityChip(city).click();
+    await expect(this.locationField()).toHaveValue(new RegExp(`^${city}`));
   }
 
   cityChip(city: string): Locator {

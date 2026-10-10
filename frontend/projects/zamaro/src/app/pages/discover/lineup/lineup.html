@@ -4,26 +4,48 @@
       <p class="section__kicker">{{ summary() }}</p>
       <h2 id="lineup-title">{{ 'discover.lineup.title' | transloco }}</h2>
     </div>
-    <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
-      @for (ticket of tickets(); track ticket.card.slug) {
-        <li>
-          <zm-ticket
-            [positionLabel]="ticket.positionLabel"
-            [name]="ticket.card.name"
-            [link]="'/artists/' + ticket.card.slug"
-            [queryParams]="{ date: query().date }"
-            [actLine]="ticket.actLine"
-            [placeLine]="ticket.placeLine"
-            [priceLabel]="'discover.ticket.from' | transloco"
-            [price]="ticket.price"
-            [rating]="ticket.card.rating"
-            [ratingLabel]="ticket.ratingLabel"
-            [ratingCount]="ticket.ratingCount"
-            [ratingNew]="'common.rating.new' | transloco"
-            [artVariant]="artVariant(ticket.card)"
-          />
-        </li>
-      }
-    </ol>
+    @if (headliner(); as headliner) {
+      <zm-headliner
+        [kicker]="headliner.kicker"
+        [name]="headliner.card.name"
+        [link]="'/artists/' + headliner.card.slug"
+        [queryParams]="{ date: query().date }"
+        [artTag]="'discover.headliner.tag' | transloco"
+        [actLine]="headliner.actLine"
+        [placeLine]="headliner.placeLine"
+        [priceLine]="headliner.priceLine"
+        [rating]="headliner.card.rating"
+        [ratingLabel]="headliner.ratingLabel"
+        [ratingCount]="headliner.ratingCount"
+        [ratingNew]="'common.rating.new' | transloco"
+        [quote]="headliner.quote"
+        [attribution]="headliner.attribution"
+        [badge]="headliner.badge"
+        [profileLabel]="headliner.profileLabel"
+      />
+    }
+    @if (tickets().length) {
+      <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
+        @for (ticket of tickets(); track ticket.card.slug) {
+          <li>
+            <zm-ticket
+              [positionLabel]="ticket.positionLabel"
+              [name]="ticket.card.name"
+              [link]="'/artists/' + ticket.card.slug"
+              [queryParams]="{ date: query().date }"
+              [actLine]="ticket.actLine"
+              [placeLine]="ticket.placeLine"
+              [priceLabel]="'discover.ticket.from' | transloco"
+              [price]="ticket.price"
+              [rating]="ticket.card.rating"
+              [ratingLabel]="ticket.ratingLabel"
+              [ratingCount]="ticket.ratingCount"
+              [ratingNew]="'common.rating.new' | transloco"
+              [artVariant]="artVariant(ticket.card)"
+            />
+          </li>
+        }
+      </ol>
+    }
   </div>
 </section>

@@ -84,6 +84,7 @@ export class SearchForm {
   protected readonly errors = signal<Partial<Record<FieldName, string>>>({});
   protected readonly errorCount = computed(() => Object.keys(this.errors()).length);
 
+  private pendingCity: Promise<void> = Promise.resolve();
   private readonly dateField = viewChild.required<FormField>('dateField');
   private readonly locationField = viewChild.required<FormField>('locationField');
 
@@ -95,15 +96,19 @@ export class SearchForm {
     });
   }
 
-  protected async pickCity(city: string): Promise<void> {
-    const place = await firstValueFrom(this.api.lookUpPlace(city));
-    if (place) {
-      this.place.set(place);
-      this.form.controls.location.setValue(place.label);
-    }
+  protected pickCity(city: string): Promise<void> {
+    this.pendingCity = firstValueFrom(this.api.lookUpPlace(city)).then((place) => {
+      if (place) {
+        this.place.set(place);
+        this.form.controls.location.setValue(place.label);
+      }
+    });
+    return this.pendingCity;
   }
 
   protected async submit(): Promise<void> {
+    // A chip pressed just before submitting still counts.
+    await this.pendingCity;
     const { date, kind, location, radius } = this.form.getRawValue();
     const errors: Partial<Record<FieldName, string>> = {};
     const dateError = this.dateError(date);

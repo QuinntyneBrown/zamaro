@@ -33,24 +33,46 @@ test.describe('Searching for who is free', () => {
     await expect(discover.lineup.ticketNames()).toHaveText([
       'Marcus Bell Trio',
       'Hosanna Collective',
-      'Abigail Mensah',
       'Luz Viva',
       'Elijah Park',
       'Grace Tabernacle Mass Choir',
       'Daniel & Ruth Okonkwo',
     ]);
     const marcus = discover.lineup.ticket(cast.artists.closest.name);
-    await expect(marcus.position()).toContainText('No. 01');
+    await expect(marcus.position()).toContainText('No. 02');
     await expect(marcus.meta()).toHaveText(/Band · Acoustic, Hymns\s*Hamilton · 14 km from you/);
     await expect(marcus.price()).toHaveText('From$950');
     await expect(marcus.rating()).toHaveAccessibleName('Rated 4.6 out of 5 by 17 churches');
     await expect(discover.lineup.ticket('Hosanna Collective').price()).toHaveText('From$1,800');
-    await expect(discover.lineup.ticket('Abigail Mensah').meta()).toContainText('Solo vocalist · Hymns');
     await expect(discover.lineup.ticket('Daniel & Ruth Okonkwo').meta()).toContainText(
       'Duo · Acoustic, Hymns',
     );
     await expect(marcus.link()).toHaveAttribute('href', '/artists/marcus-bell-trio?date=2026-11-14');
     expect(await discover.documentWasReloaded()).toBe(false);
+  });
+
+  // L2-006.2, .5
+  test('the artist most booked this autumn headlines the lineup with a quote', async () => {
+    await discover.form.fill({ date: cast.search.date, kind: cast.search.kind });
+    await discover.form.pickCity(cast.search.city);
+
+    await discover.form.showTheLineup();
+
+    const headliner = discover.lineup.headliner();
+    await expect(headliner.root()).toHaveAccessibleName('Abigail Mensah');
+    await expect(headliner.kicker()).toHaveText('No. 01 · Most booked this autumn');
+    await expect(headliner.meta()).toContainText('Solo vocalist · Hymns');
+    await expect(headliner.meta()).toContainText('Brampton · 44 km');
+    await expect(headliner.meta()).toContainText('From $650');
+    await expect(headliner.quote()).toHaveText(
+      '“She had the whole congregation singing in three-part harmony by the last verse.” — Rev. Janet Clarke, Oshawa',
+    );
+    await expect(headliner.badge()).toHaveText('Free Sat 14 Nov');
+    await expect(headliner.profileLink()).toHaveAccessibleName('See Abigail’s profile');
+    await expect(headliner.profileLink()).toHaveAttribute(
+      'href',
+      '/artists/abigail-mensah?date=2026-11-14',
+    );
   });
 
   test('submitting without a date or location shows inline errors and focuses the date', async () => {

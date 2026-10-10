@@ -1,7 +1,13 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { catchError, map, type Observable, of, throwError } from 'rxjs';
-import type { LineupCard, Place, SearchQuery, SearchResult } from '../models/discovery';
+import type {
+  HeadlinerCard,
+  LineupCard,
+  Place,
+  SearchQuery,
+  SearchResult,
+} from '../models/discovery';
 
 /** Search and place lookup for Discover. Pages depend on the token, never the implementation. */
 export interface DiscoveryApi {
@@ -19,8 +25,18 @@ export class HttpDiscoveryApi implements DiscoveryApi {
   search(query: SearchQuery): Observable<SearchResult> {
     const params = new HttpParams({ fromObject: { ...query } });
     return this.http
-      .get<{ data: LineupCard[]; meta: { total: number } }>('/api/v1/search', { params })
-      .pipe(map((response) => ({ cards: response.data, total: response.meta.total })));
+      .get<{
+        data: LineupCard[];
+        headliner: HeadlinerCard | null;
+        meta: { total: number };
+      }>('/api/v1/search', { params })
+      .pipe(
+        map((response) => ({
+          headliner: response.headliner,
+          cards: response.data,
+          total: response.meta.total,
+        })),
+      );
   }
 
   lookUpPlace(text: string): Observable<Place | null> {

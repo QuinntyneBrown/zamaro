@@ -1,0 +1,33 @@
+<article class="headliner" [attr.aria-labelledby]="nameId()">
+  <zm-artwork [yellow]="true" [tag]="artTag()" />
+  <div class="headliner__body">
+    <p class="headliner__kicker">{{ kicker() }}</p>
+    <h3 class="headliner__name" [id]="nameId()">
+      <a [routerLink]="link()" [queryParams]="queryParams()">{{ name() }}</a>
+    </h3>
+    <div class="headliner__meta">
+      <span>{{ actLine() }}</span>
+      <span>{{ placeLine() }}</span>
+      <span
+        ><zm-rating
+          [score]="rating()"
+          [label]="ratingLabel()"
+          [countText]="ratingCount()"
+          [newText]="ratingNew()"
+      /></span>
+      <span>{{ priceLine() }}</span>
+    </div>
+    @if (quote(); as quote) {
+      <p class="headliner__quote">
+        “{{ quote }}” <span class="headliner__attribution">— {{ attribution() }}</span>
+      </p>
+    }
+    <div class="headliner__actions">
+      <zm-badge variant="free">{{ badge() }}</zm-badge>
+      <zm-button-link variant="ink" [link]="link()" [queryParams]="queryParams()"
+        >{{ profileLabel() }} <zm-icon name="arrow-right"
+      /></zm-button-link>
+      <ng-content />
+    </div>
+  </div>
+</article>

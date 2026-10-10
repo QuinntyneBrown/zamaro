@@ -50,8 +50,20 @@ export interface LineupCard {
   fromPrice: Money;
 }
 
+export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
+
+/** The most booked artist this season, featured first (L2-006). */
+export interface HeadlinerCard extends LineupCard {
+  season: Season;
+  /** The newest visible 5-star review, at most 160 characters; null when there is none. */
+  quote: { text: string; reviewerName: string; city: string } | null;
+}
+
 export interface SearchResult {
+  headliner: HeadlinerCard | null;
+  /** The other artists, closest first. */
   cards: LineupCard[];
+  /** Everyone free, the headliner included. */
   total: number;
 }
 
