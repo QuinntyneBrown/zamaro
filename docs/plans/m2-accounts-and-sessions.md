@@ -11,12 +11,54 @@
 | S2 | Signed-in header, account menu and sign-out | Done | `4210c1f` red tests, `23effd2` (ADR-0017) |
 | S3 | CSRF and session limits | Done | `81b4823` red tests, `82f6684` (ADR-0018) |
 | S4 | The request gate | Done | `c9d2d56` red tests, `1014b36` |
-| S5–S18 | | Not started | |
+| S5 | Register a booker, with consent | Done | `690da3b` red tests, `c6902ed` (ADR-0019) |
+| S6–S18 | | Not started | |
 
-**Checks at the last commit (S4, 2026-10-10):** 172 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown`, Pint and Larastan are clean; frontend lint, format
-and `ng build zamaro` are clean; `npx playwright test` passes 213 tests on win32. S4 changes no
-screen and no `zm-*` component, so no baselines and no perf run changed.
+**Checks at the last commit (S5, 2026-10-10):** 193 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, Pint and Larastan are clean; frontend lint, format and
+`ng build zamaro` are clean; `npx playwright test` passes 228 tests on win32, and
+`npm run test:docker -- visual a11y` passes 108 in the Linux image. The perf run against the S3 build
+flagged no row (Checkbox 146 ms at 200 iterations is new; FormField 140 ms, ButtonLink 174 ms).
+
+**S5 acceptance criteria (as tested):**
+- Given a guest with a full name, an email, a 12–128 character password, the terms box ticked, the
+  versions the form showed and a passing bot check, when they register, then they get 202 with the
+  address in lower case, a booker with an Argon2id hash and no verified address exists, they are not
+  signed in, and `VerifyEmailNotification` is queued on `notifications`.
+- Given that email, then it is from Zamaro <hello@zamaro.ca>, "Verify your email for Zamaro", with HTML
+  and text parts, "Hi Ruth,", and a `{web}/verify-email?token=…&returnUrl=…` link whose token is
+  stored only as its SHA-256 and expires in 24 hours.
+- Given an address that has an account, in any case, then the answer is the same 202 and body, nothing
+  changes, and its owner gets "Someone tried to sign up with your email" with a sign-in link.
+- Given a 9- or 129-character password, a breached one ("This password appears in a known data breach.
+  Choose another."), an unticked terms box, a blank name or a bad email, then 422 on that field and no
+  account. The 11th registration in an hour from one address gets 429.
+- Given registration, then three consent records are written (terms 2026-10, privacy-policy 2026-10,
+  marketing-email false, or true when ticked), each with the time, source `registration`, the address
+  and the browser; they cannot be updated or deleted. Versions no longer current get 409
+  `legal-document-outdated` and nothing is written. `GET /legal-documents/current` is public, and
+  before Thu 8 Oct it names the March terms.
+- Given a `fail`, missing or unverifiable bot token, then 422 on `challengeToken` ("We couldn’t check
+  that you’re a person. Try again; if it keeps happening, email hello@zamaro.ca.") before validation,
+  with no account and no email.
+- Given `/sign-up`, then focus is in Full name, the terms and news boxes are separate and unticked, and
+  the password is described by "12 to 128 characters. Passwords found in known data breaches are
+  refused." Registering shows "Check your email to finish signing up" (focused) with "We sent a link to
+  {email}. It works for 24 hours.", and Mailpit holds the verification email; a known address shows
+  the same and its owner is emailed.
+- Given the request pending, then the button reads "Creating account…" with `aria-busy` and
+  `aria-disabled`, the fields are read-only, the boxes disabled and still ticked, and a second press
+  sends nothing.
+- Given "grace2026" and an unticked terms box, then the focused summary reads "Fix 2 things to
+  continue" with "Use at least 12 characters for your password" and "Accept the terms and privacy
+  policy"; the fields show "This one has 9 characters. Use at least 12." and "Accept the terms and
+  privacy policy to create an account.", are `aria-invalid` and described by them; every value stays
+  and nothing is sent; the summary's link focuses the box.
+- Given a failed bot check, then "We couldn’t check that you’re a person" and every value, both boxes
+  included, stays; given a 500, then "We couldn’t create your account" and the password stays.
+- Given `/sign-in`, then the header shows "Create account" and the card "Create an account", both to
+  `/sign-up`, whose "Already have an account? Sign in" leads back; a guest's footer lists "Sign in" and
+  "Create an account".
 
 **S4 acceptance criteria (as tested):**
 - Given a booker, when they call a `role:artist` or `role:admin` route, then they get the
@@ -213,6 +255,41 @@ screen and no `zm-*` component, so no baselines and no perf run changed.
 - **S4 — Larastan at level 0.** The raw-SQL rule lives in `backend/tools/phpstan/` (AGENTS.md tree)
   and runs in `.ci/backend-test.sh`; it found `Artist::styles()` interpolating the style order, which
   is now a bound array. Raising the level is left for M9.
+- **S5 — e2e runs the queue in `worker-e2e` (ADR-0019).** The open item from S0/S1: `api-e2e` queued
+  mail on its own Redis prefix, which no worker read. `worker-e2e` runs `queue:work` on the high,
+  notifications and default queues with `api-e2e`'s environment, shared through one
+  `x-e2e-environment` anchor (database, prefixes, frozen clock, raised limits, `ZAMARO_WEB_URL`); M4 D6
+  and M7 reuse it. Restart it with `api-e2e` after a PHP change. `mailbox.ts` needed no change.
+- **S5 — The 202 carries the address.** An empty 202 would still get a `text/html` content type, so the
+  answer is `{ data: { email } }`, identical for a new and a known address.
+- **S5 — "Check your email" is a state of `/sign-up`**, a region named by its heading, not a route, so the
+  address never sits in a URL. Its "Resend the email" button and the "Nothing after 5 minutes?" line
+  join with resend (S7). "Wrong address? Start again" returns to the form with every value kept, in
+  Email. The form's "Apply as an artist" fine print joins with `/artists/apply` (M3).
+- **S5 — Copy without a mock.** The mocks cover a short password and the terms box only. A blank name
+  ("Enter your full name."), a bad email ("Enter an email address like name@church.ca."), a long
+  password ("This one has {count} characters. Use at most 128.") and a breached one ("This password
+  appears in a known data breach. Choose another.") follow their pattern, each with a summary line.
+  The page checks what it can before sending and maps the API's 422 fields onto the same copy; a 409
+  fetches the new versions and shows "We couldn’t create your account".
+- **S5 — Server validation messages are English literals**, as S1's `errors.credentials` is; the page
+  shows its own catalogue copy by field. Emails, which no page translates, use the `emails` catalogue.
+- **S5 — A March privacy policy is seeded** beside Terms 2026-03, so a version of each document is current
+  on every day (the registry 404s otherwise). Tomi's records are Terms and Privacy 2026-03; Naomi's are
+  the October versions with marketing off.
+- **S5 — No cache for current versions.** `LegalDocumentRegistry` reads two indexed rows on demand, so a new
+  version applies on its first day; the record-consent design said Redis.
+- **S5 — Timestamptz columns written by the app** (`consent_records`, `email_verification_tokens`) set
+  `$dateFormat` with the offset; without it Toronto times were stored as UTC, 4 hours off.
+- **S5 — Interim component additions.** `zm-checkbox` is built standalone with the choice and stub variants
+  (checkbox CRD, Implementation notes); the check variant and `zm-checkbox-group` come with their first
+  screens. The form field gained `help` and `zm-button-link` `block`, both already in their CRDs.
+- **S5 — The test suite's memory limit is 512 MB** (`phpunit.xml`): each test class asserting the contract
+  generates the OpenAPI document once, and the suite outgrew PHP's 128 MB.
+- **S5 — Baselines.** The footer's "Create an account" changes every signed-out page, and `/sign-in` gains
+  its links, so every visual baseline was rewritten on win32 and linux (`--update-snapshots=all`).
+  One a11y run in the Linux image timed out once on `discover-results-naomi` (dark, XL) and passed alone
+  and in the next full run; watch it as S1's Discover flake was watched.
 - **S4 — The ESLint bans** cover `bypassSecurityTrust*` and `[innerHTML]`/`[outerHTML]`, inline
   templates included; nothing in the app needed an exception.
 
@@ -299,11 +376,11 @@ shown and are recorded in the slice's ADR or the design.
 | # | Question (source) | Recommended default | OK |
 |---|---|---|---|
 | D1 | Argon2id memory and iterations (register-booker) | Laravel defaults (65,536 KiB, 4 passes, 1 thread); minimum cost in `testing` | OK (accepted default, 2026-10-10) |
-| D2 | Bot challenge vendor (register-booker, limit-request-rates) | `Contracts/BotChallenge` with a fake until M10 | |
-| D3 | Bot provider unreachable (limit-request-rates) | Fail closed, with the usual challenge message | OK |
-| D4 | Breached-password vendor (sign-in-and-recover-access) | `Contracts/BreachedPasswordChecker`; the fake rejects a configured list; the HIBP range adapter in M10 | |
+| D2 | Bot challenge vendor (register-booker, limit-request-rates) | `Contracts/BotChallenge` with a fake until M10 | OK (accepted default, 2026-10-10); built in S5, with `BOT_CHALLENGE` in Zamaro Web |
+| D3 | Bot provider unreachable (limit-request-rates) | Fail closed, with the usual challenge message | OK (accepted default, 2026-10-10); built in S5 |
+| D4 | Breached-password vendor (sign-in-and-recover-access) | `Contracts/BreachedPasswordChecker`; the fake rejects a configured list; the HIBP range adapter in M10 | OK (accepted default, 2026-10-10); built in S5 (`zamaro.fakes.breached_passwords`) |
 | D5 | TOTP library (sign-in-and-recover-access) | `pragmarx/google2fa` with `bacon/bacon-qr-code` (SVG), behind `Services/Accounts/TotpVerifier` | |
-| D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK |
+| D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK (accepted default, 2026-10-10); register built in S5 |
 | D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | OK (accepted default, 2026-10-10); built in S4 |
 | D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK (accepted default, 2026-10-10); built in S3 as kind "Failed", title "That didn’t go through.", text "Reload the page and try again." |
 | D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK (accepted default, 2026-10-10); built in S3 |
@@ -313,7 +390,7 @@ shown and are recorded in the slice's ADR or the design.
 | D13 | Source of the approximate city (manage-account-settings) | `Contracts/IpLocator` with a fake table; unknown IPs show no city | |
 | D14 | Most recent search date: per browser or per account (view-saved-artists) | Per browser: `LastSearch` writes `localStorage['zamaro.lastSearchDate']` | OK |
 | D15 | Does a new privacy-policy version trigger the terms gate? (record-consent) | No. Only Terms do (L2-080.3); the privacy version is recorded at registration | OK |
-| D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK |
+| D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK (accepted default, 2026-10-10); built in S5 (ADR-0019) |
 | D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | |
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
 | D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | OK (accepted default, 2026-10-10); `{email}` built in S1, the options join with their slices |

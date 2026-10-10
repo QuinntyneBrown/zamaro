@@ -110,15 +110,19 @@ failed bot challenge is
   `<TO SUPPLY>`.
 - **`App\Http\Middleware\VerifyBotChallenge`** — route middleware on
   `POST /api/v1/register`, `POST /api/v1/password/forgot` and
-  `POST /api/v1/artist-applications`. It reads `challengeToken` from the body and calls
-  `BotChallengeVerifier`. A missing or failed token returns 422 with an error on
-  `challengeToken`: "We couldn't check that you're a person. Try again; if it keeps
-  happening, email hello@zamaro.ca." Behaviour when the provider is
-  unreachable is `<TO SUPPLY>`.
-- **`App\Services\Security\BotChallengeVerifier`** — interface with one adapter for the
-  bot challenge provider (vendor `<TO SUPPLY>`). It sends the token, the client IP and
-  the expected form action with the site secret from the secrets manager, and returns
-  a `ChallengeResult`.
+  `POST /api/v1/artist-applications`, as `bot-challenge:{action}`. It reads
+  `challengeToken` from the body and asks the `BotChallenge` port before validation. A
+  missing or failed token returns 422 with an error on `challengeToken`: "We couldn’t
+  check that you’re a person. Try again; if it keeps happening, email hello@zamaro.ca."
+  A provider that does not answer (`BotChallengeUnavailable`) is reported and gets the
+  same 422: the form fails closed (M2 D3).
+- **`App\Contracts\BotChallenge`** — the port (ADR-0002), with
+  `passes($token, $ip, $action)`. The adapter for the provider (vendor chosen in M10)
+  sends the token, the client IP and the expected form action with the site secret
+  from the secrets manager. Until then `FakeBotChallenge` passes every token but
+  `fail`, and Zamaro Web's `BOT_CHALLENGE` fake yields `pass` (M2 D2).
+- **`register` limiter** — 10 registrations an hour per address (M2 D6); the e2e API
+  raises it with `ZAMARO_REGISTER_LIMIT_PER_HOUR`.
 
 **Data**
 

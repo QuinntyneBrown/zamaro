@@ -84,20 +84,28 @@ every value stays (L2-022 AC4).
 **Backend (Zamaro API)**
 
 - **`RegistrationController`** — invokable controller for `POST /api/v1/register`,
-  behind the registration rate limiter and the `VerifyBotChallenge` route middleware
-  of `security/limit-request-rates`, which checks `challengeToken` through
-  `BotChallengeVerifier` before the controller runs (L2-077). It returns
-  `202 Accepted` with the same body for every valid submission.
-- **`RegisterBookerRequest`** — FormRequest that validates name, email format,
-  `accepted_terms` (rejected unless true), `marketing_opt_in`
-  (boolean, default false), and the password through the `PasswordPolicy` rule
-  (12–128 characters, not in the breached-password list; L2-072).
+  behind the `register` rate limiter (10 an hour per address, M2 D6) and the
+  `bot-challenge:register` route middleware (`VerifyBotChallenge`) of
+  `security/limit-request-rates`, which checks `challengeToken` through the
+  `Contracts\BotChallenge` port before validation runs (L2-077). It returns
+  `202 Accepted` with `{ "data": { "email": … } }`, the address in lower case, for
+  every valid submission, new or known. The guest is not signed in.
+- **`RegisterBookerRequest`** — FormRequest that validates `name`, `email` format,
+  `acceptedTerms` (rejected unless true), `marketingOptIn` (boolean, default false),
+  the `termsVersion` and `privacyPolicyVersion` the form showed, `challengeToken`, an
+  optional `returnUrl` for the link, and the password through the `PasswordPolicy`
+  rule (12–128 characters, not reported by the `Contracts\BreachedPasswordChecker`
+  port; L2-072). The page checks name, email, length and the terms box first, with
+  its own copy, and maps the API's 422 fields onto the same messages.
 - **`RegisterBooker`** — action run inside `DB::transaction`. When the email is new
   it creates a `User` with the `Booker` role and an Argon2id password hash, calls
   `RecordConsent` for the terms, the privacy policy and the marketing choice, issues
   an `EmailVerificationToken`, and queues `VerifyEmailNotification`. When the email
-  already exists it changes nothing and queues `DuplicateSignUpNotification` to the
-  existing owner. Both paths return the same `RegistrationResult`.
+  already exists (in any case) it changes nothing, hashes the password anyway so both
+  paths take as long, and queues `DuplicateSignUpNotification` to the existing owner.
+  Both paths return the same address. Stale document versions are refused with 409
+  `legal-document-outdated` before either path. `IssueEmailVerificationToken` issues
+  the link's token; S7's resend reuses it.
 - **`EmailVerificationController`** — `POST /api/v1/email/verify` and
   `POST /api/v1/email/verification-notification`.
 - **`VerifyEmail`** — action that hashes the presented token, finds an unused,
@@ -110,9 +118,11 @@ every value stays (L2-022 AC4).
   (`bookings/send-booking-request`). An unverified booker receives a `403` problem
   detail of type `email-not-verified`, and no booking is created (L2-022).
 - **`VerifyEmailNotification`**, **`DuplicateSignUpNotification`** — queued
-  notifications sent through the email delivery service with plain-text and HTML
-  parts. The duplicate notice reads "Someone tried to sign up with your email" and
-  links to sign-in and password reset.
+  notifications on `TransactionalNotification` (ADR-0019), sent with plain-text and
+  HTML parts. The verification email, "Verify your email for Zamaro", links to
+  `{web}/verify-email?token=…&returnUrl=…`. The duplicate notice reads "Someone tried
+  to sign up with your email" and links to sign-in; its password-reset link joins
+  with the reset page (M2 S8).
 - **`RecordConsent`** — action owned by `privacy/record-consent`; this slice calls it
   and does not define it.
 
@@ -125,8 +135,16 @@ every value stays (L2-022 AC4).
 - `consent_records` — written through `RecordConsent`.
 
 The response for a repeat address is generated without waiting on the email job, so
-both paths return in comparable time. The exact Argon2id memory and iteration
-settings are `<TO SUPPLY>`. The bot challenge vendor is `<TO SUPPLY>`.
+both paths return in comparable time. Argon2id uses Laravel's defaults (65,536 KiB,
+4 passes, 1 thread; M2 D1). The bot challenge vendor is chosen in M10; until then
+`FakeBotChallenge` passes every token but `fail`, in the API and, as
+`FakeBotChallenge`, in Zamaro Web (M2 D2).
+
+**As built (M2 S5).** `CheckEmailPage` is the sign-up page's own "sent" state, a
+region named "Check your email to finish signing up", not a route. Its "Resend the
+email" button and the "Nothing after 5 minutes?" line join with resend (S7); "Wrong
+address? Start again" returns to the form with every value kept. The card's "Apply as
+an artist" fine print joins with the application page (M3, `/artists/apply`).
 
 ## Requirements
 

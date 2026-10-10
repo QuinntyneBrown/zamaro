@@ -50,7 +50,8 @@ zamaro/
 │   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
 │       └── components/            # CRDs: <component>.md + <component>.html, trace to L2
-├── docker-compose.yml             # local dev: postgres, redis, mailpit, api, api-e2e, worker, scheduler (ADR-0002)
+├── docker-compose.yml             # local dev: postgres, redis, mailpit, api, api-e2e, worker-e2e, worker,
+│                                  # scheduler (ADR-0002, ADR-0019)
 ├── backend/                       # Laravel 13 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
 │   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
@@ -62,7 +63,8 @@ zamaro/
 │   │   ├── Contracts/             # ports for outside services (PaymentGateway, MediaScanner, ...)
 │   │   ├── Integrations/          # adapters that implement Contracts/
 │   │   ├── Policies/              # ownership and role authorisation
-│   │   ├── Notifications/         # transactional email
+│   │   ├── Notifications/         # transactional email (TransactionalNotification, ADR-0019)
+│   │   ├── Rules/                 # validation rules shared by FormRequests (PasswordPolicy)
 │   │   ├── Console/Commands/      # artisan commands (i18n:check, ...)
 │   │   ├── Support/               # cross-cutting code with no subsystem (Problems/ for RFC 9457)
 │   │   └── Http/

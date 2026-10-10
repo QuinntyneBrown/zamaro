@@ -554,6 +554,9 @@ Nothing animates. Errors, help and success appear without a transition; under
 `readonly` (the dashed sunken look of the design system), `invalid` (ORs `aria-invalid` with `error`,
 text-field CRD D-6) and `describedBy` (IDs appended to `aria-describedby`, "credentials-error"). They
 are the text field's inputs, carried by the field until the split. `.field__optional` keeps its M1 look.
+In S5 the sign-up card added `help` as specified above: one `.field__help` per line after the error,
+IDs `{fieldId}-help`, `-help-2`, …, listed after the error in `aria-describedby` and hidden while a
+slotted message shows. The perf run against S3 flagged no row (FormField 140 ms).
 
 **Interim additions in M1 (S14), before the split:** for the booking stub the monolithic field
 gained `type="textarea"`, `placeholder`, `optionalMarker`, `live` (a visually hidden

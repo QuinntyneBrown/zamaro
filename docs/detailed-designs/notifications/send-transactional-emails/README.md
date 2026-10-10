@@ -70,9 +70,14 @@ Other slices add notifications on the same base class: `ReceiptNotification`
   calls `notify()`. Events dispatch after the database transaction commits, so no
   email describes a rolled-back change.
 - **`TransactionalNotification`** — abstract base class in `App\Notifications`. Every
-  Zamaro email extends it.
+  Zamaro email extends it (ADR-0019; built in M2 S5 for the registration emails).
   - It uses the `mail` channel on the `notifications` queue, which Horizon runs with
-    dedicated workers to meet the 2-minute target (L2-063).
+    dedicated workers to meet the 2-minute target (L2-063), and is queued
+    `afterCommit()`.
+  - `email($subject, $view, $data)` renders a Markdown view in
+    `resources/views/emails/` with Zamaro's header and footer; every word comes from
+    `resources/i18n/en/emails.json` through `Catalogue::message()`, and links use
+    `zamaro.web_url`. The sender is `Zamaro <hello@zamaro.ca>` (M2 D16).
   - It sets `tries = 5` with an exponential `backoff()` (intervals `<TO SUPPLY>`).
     After the fifth failure, `failed()` marks the `EmailMessage` `Failed`, and the job
     moves to the failed-jobs store and alerts (L2-065, L2-092).

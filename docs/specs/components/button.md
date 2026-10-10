@@ -489,6 +489,8 @@ this CRD:
   `.btn--danger:disabled` and `.btn--ghost:disabled, .btn--link:disabled`).
 - Add the `sm` size and its coarse-pointer rule.
 - Add `block`, with `:host` becoming `display: flex`, to all three components.
+  `zm-button` and (M2 S5, for the sign-up card's "Keep browsing artists")
+  `zm-button-link` have it; `zm-button-anchor` still needs it.
 - Add `iconOnly`, `label` and `describedBy` to `zm-button-link` and
   `zm-button-anchor`; add `describedBy` to `zm-button`.
 - Accept `type="reset"`.

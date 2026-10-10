@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-checkbox`, `zm-checkbox-group` |
 | Library path | `frontend/projects/components/src/lib/checkbox/` |
-| Status | planned |
+| Status | partial: standalone `zm-checkbox` (choice and stub) built in M2 S5 |
 | Traces to | L2-022, L2-037, L2-048, L2-050, L2-056, L2-065, L2-068, L2-080, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 |
 | Design system | [`checkbox.html`](../../design-system/components/checkbox.html) |
 | Source mocks | [`pages/sign-up/invalid`](../../mocks/pages/sign-up/invalid.html), [`pages/edit-profile/default`](../../mocks/pages/edit-profile/default.html), [`pages/account/default`](../../mocks/pages/account/default.html), [`dialogs/weekly-default/default`](../../mocks/dialogs/weekly-default/default.html), [`dialogs/pay-deposit/invalid`](../../mocks/dialogs/pay-deposit/invalid.html), [`pages/admin-application/default`](../../mocks/pages/admin-application/default.html), [`pages/admin-bookings/default`](../../mocks/pages/admin-bookings/default.html), and every other screen with a checkbox (see Usage) |
@@ -566,7 +566,17 @@ change is instant.
 
 ## Implementation notes
 
-Planned. To build it:
+**Built in M2 S5, for the sign-up card:** `checkbox.ts` (`Checkbox`, `zm-checkbox`) with the
+`choice` and `stub` variants, `name`, `description`, `requiredMarker`, `required`, `id`,
+`describedBy`, `error`, `invalid`, `disabled`, `full` and `focus()`, as a standalone boolean
+`ControlValueAccessor`, with its `Checkbox` scenario (146 ms at 200 iterations, new). The host
+never carries the `id` (`[attr.id]` is null), so the error summary's link reaches the input. The
+label slot is one `<ng-content>` because only the choice-row markup exists yet. Still to build, with
+their first screens: the `check` variant with `indeterminate`, `controls`, `label` and `indent`
+(and its icons), `optionalMarker`, `value`, the group token, `zm-checkbox-group` and the
+`CheckboxGroup` scenario.
+
+To finish it:
 
 - Folder `frontend/projects/components/src/lib/checkbox/` with `checkbox.ts`
   (`Checkbox`, selector `zm-checkbox`), `checkbox-group.ts` (`CheckboxGroup`,

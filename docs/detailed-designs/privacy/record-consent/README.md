@@ -64,15 +64,19 @@ on [`pages/account`](../../../mocks/pages/account/default.html).
 **Backend (Zamaro API)**
 
 - **`LegalDocumentRegistry`** — service that returns the current version of each
-  legal document from the `legal_documents` table, cached in Redis.
+  legal document from the `legal_documents` table: the latest whose `effective_from`
+  date has come. It reads two indexed rows on demand rather than caching them, so a
+  new version applies on its first day without a cache to clear (M2 S5).
 - **`LegalDocumentController`** — `GET /api/v1/legal-documents/current`, public, used
   by the registration form and the accept-terms page.
 - **`RecordConsent`** — action that appends one `ConsentRecord` per item with
   `user_id`, `kind`, `document_version`, `granted`, `recorded_at`, `source`,
   `ip_address` and `user_agent`. `RegisterBooker` calls it inside its transaction
   with three items: terms, privacy policy and marketing email (L2-080). A
-  submission whose displayed versions are no longer current is refused with `409`,
-  so the stored version is always the one the person saw.
+  submission whose displayed versions are no longer current is refused with `409`
+  `legal-document-outdated` before anything is written, so the stored version is
+  always the one the person saw. The sign-up page fetches the new versions and shows
+  "We couldn’t create your account"; the next submission sends them.
 - **`EnsureCurrentTermsAccepted`** — middleware on every authenticated route except
   sign-out, the current user endpoint, the accept endpoint and the legal documents
   endpoint. It compares the user's latest granted terms record with the current
@@ -92,19 +96,24 @@ through `RecordConsent` with source `settings`.
 
 **Data**
 
-- `legal_documents` — `kind` (`Terms`, `PrivacyPolicy`), `version`, `published_at`,
-  `url`, `summary_of_changes`.
+- `legal_documents` — `kind` (`terms`, `privacy-policy`), `version`,
+  `effective_from` (a date), `url`, `summary_of_changes`. `GET
+  /legal-documents/current` answers `{ terms, privacyPolicy }`, each with `version`,
+  `effectiveFrom`, `url` and `summaryOfChanges`. The seed has Terms and Privacy policy
+  2026-03 (from Sun 1 Mar) and 2026-10 (from Thu 8 Oct), so a version is current on
+  every day.
 - `consent_records` — `user_id`, `kind` (`ConsentKind`: `Terms`, `PrivacyPolicy`,
   `MarketingEmail`), `document_version` (null for marketing), `granted`,
   `recorded_at`, `source` (`registration`, `terms-update`, `settings`),
   `ip_address`, `user_agent`. The table has no update or delete path in the
-  application.
+  application, and a database trigger refuses any `UPDATE` and any direct `DELETE`;
+  only the cascade from deleting the account (M9) removes rows.
 
 A version is identified by the year and month it takes effect, for example
 `2026-10`, which the accept-terms page shows with its start date ("Terms of use,
-version 2026-10, from Thu 8 Oct 2026"). Whether a new privacy policy version also
-triggers the terms gate, and the retention period for consent records after account
-deletion, are `<TO SUPPLY>`.
+version 2026-10, from Thu 8 Oct 2026"). A new privacy policy version does not
+trigger the terms gate; its version is recorded at registration (M2 D15). The
+retention period for consent records after account deletion is `<TO SUPPLY>`.
 
 ## Requirements
 
