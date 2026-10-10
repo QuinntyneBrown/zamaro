@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skeleton — Component requirements rendering</title>
+<meta name="description" content="Every shape, width and surface of zm-skeleton, composed as the loading screens use it, in light and dark, keyed to the acceptance criteria in skeleton.md.">
+<meta name="crd:component" content="skeleton">
+<!-- The real design-system styles: what renders here is the component, not a picture of it. -->
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+.ds-section .lineup > li + li { margin-top: 0; } .ds-section .lineup { grid-template-columns: minmax(0, 1fr); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Skeleton</h1>
+    <p class="ds-lead">Every shape and width, the composed loading screens, every surface and both themes. Requirements: <a href="skeleton.md">skeleton.md</a>. Design system: <a href="../../design-system/components/skeleton.html">skeleton</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selector <code>zm-skeleton</code></span><span class="ds-pill">Status: built</span><span class="ds-pill">Traces to L2-086, L2-096, L2-100–L2-105</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Shapes</a></li><li><a href="#sizes">Widths</a></li><li><a href="#composed">Composed</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Shapes</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack">
+<div class="grid grid--cards" style="--layout-gutter: var(--space-6);" aria-hidden="true"><div class="stack stack--sm"><span class="text-caption"><code>text</code> · 16 px · 70 %</span><span class="skeleton skeleton--text" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>title</code> · 28 px · 55 %</span><span class="skeleton skeleton--title" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>figure</code> · 40 px · 50 %</span><span class="skeleton skeleton--figure" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>poster</code> · clamp · 80 %</span><span class="skeleton skeleton--poster" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>control</code> · 44 px</span><span class="skeleton skeleton--control" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>control-sm</code> · 36 px</span><span class="skeleton skeleton--control-sm" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>control-lg</code> · 56 px</span><span class="skeleton skeleton--control-lg" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>target</code> · 44 × 44</span><span class="skeleton skeleton--target" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>circle</code> · 40 × 40</span><span class="skeleton skeleton--circle" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>block</code> · ≥ 96 px</span><span class="skeleton skeleton--block" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>portrait</code> · 4:5</span><span class="skeleton skeleton--portrait" style="max-width: 12rem" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>wide</code> · 16:9</span><span class="skeleton skeleton--wide" style="max-width: 12rem" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>strip</code> · marquee height</span><span class="skeleton skeleton--strip" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>date</code> · 48 px</span><span class="skeleton skeleton--date" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>amount</code> · 96 × 32</span><span class="skeleton skeleton--amount" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>stamp</code> · 96 × 24</span><span class="skeleton skeleton--stamp" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>badge</code> · 56 × 24</span><span class="skeleton skeleton--badge" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>thumb</code> · 80 × 80</span><span class="skeleton skeleton--thumb" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>thumb-lg</code> · 128 × 128</span><span class="skeleton skeleton--thumb-lg" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>none</code> + one token height</span><span class="skeleton skeleton--short" style="height: var(--space-10)" aria-hidden="true"></span></div></div>
+</div><div class="ds-example__caption"><span>Every shape at its height and default width; <code>none</code> with a one-off <code>--space-10</code> height. <span class="crd-ac">AC-1, AC-2, AC-8</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Widths</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack">
+<div class="stack" style="width: 25rem; max-width: 100%;" aria-hidden="true"><div class="stack stack--sm"><span class="text-caption"><code>text</code> + <code>short</code> · 40 %</span><span class="skeleton skeleton--text skeleton--short" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>text</code> + <code>medium</code> · 60 %</span><span class="skeleton skeleton--text skeleton--medium" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>text</code> + <code>long</code> · 90 %</span><span class="skeleton skeleton--text skeleton--long" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>text</code> + <code>full</code> · 100 %</span><span class="skeleton skeleton--text skeleton--full" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>text</code> + <code>day</code> · 20 px</span><span class="skeleton skeleton--text skeleton--day" aria-hidden="true"></span></div><div class="stack stack--sm"><span class="text-caption"><code>title</code> + <code>price</code> · 80 px</span><span class="skeleton skeleton--title skeleton--price" aria-hidden="true"></span></div></div>
+</div><div class="ds-example__caption"><span>In a 400 px column: 160, 240, 280 (default), 360, 400 px; day 20 px; price 80 px. <span class="crd-ac">AC-3</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="composed"><h2>Composed</h2>
+    <h3>The lineup while calendars load</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<section class="stack" aria-labelledby="sk-lineup" aria-busy="true">
+  <h2 class="card__title" id="sk-lineup" style="margin:0">The lineup</h2>
+  <p class="lead"><span role="status">Finding who’s free on Saturday 14 November 2026…</span></p>
+  <ul class="lineup" role="list" aria-hidden="true" style="grid-template-columns: minmax(0, 1fr);"><li class="ticket ticket--loading" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <span class="skeleton ticket__art" aria-hidden="true"></span>
+  <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+  <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+</li><li class="ticket ticket--loading" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <span class="skeleton ticket__art" aria-hidden="true"></span>
+  <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title skeleton--long"></span><span class="skeleton skeleton--text skeleton--medium"></span></div>
+  <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+</li></ul>
+</section>
+</div><div class="ds-example__caption"><span>Region <code>aria-busy</code>, list <code>aria-hidden</code>, one status line; the art block is <code>shape="none"</code> sized by <code>ticket__art</code>; the second ticket varies its widths. <span class="crd-ac">AC-4, AC-11, AC-12</span></span></div></div>
+    <h3>The artist poster and song strip on the stage</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="sk-artist" style="padding-block: var(--space-8);">
+  <div class="container stack stack--lg">
+    <div class="artist-poster" aria-hidden="true">
+      <span class="skeleton skeleton--portrait"></span>
+      <div class="stack"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--poster skeleton--medium"></span><span class="skeleton skeleton--text"></span></div>
+    </div>
+    <h2 id="sk-artist" class="visually-hidden">Artist profile</h2>
+    <p class="visually-hidden" role="status">Loading the artist’s profile…</p>
+  </div>
+</section>
+<div class="skeleton skeleton--strip" aria-hidden="true"></div>
+</div><div class="ds-example__caption"><span>Stage greys inside <code>.on-stage</code>; the strip is the marquee's exact height. <span class="crd-ac">AC-5, AC-6, AC-10</span></span></div></div>
+    <h3>The booking stub</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="stub" aria-hidden="true" style="width: 100%; max-width: 22rem;">
+  <span class="skeleton skeleton--title"></span><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--control"></span><span class="skeleton skeleton--control"></span><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--control-lg"></span>
+</div>
+</div><div class="ds-example__caption"><span>Title, figure, two controls, block and the large submit at their real heights. <span class="crd-ac">AC-2, AC-6</span></span></div></div>
+    <h3>Rows, calendar days and an inline subtitle</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<div class="card" aria-hidden="true" style="padding: var(--space-4);"><div class="cluster cluster--between" style="align-items:center">
+<span class="skeleton skeleton--date" style="width: var(--space-12)"></span>
+<div class="stack stack--sm" style="flex:1;min-width:8rem"><span class="skeleton skeleton--title skeleton--medium"></span><span class="skeleton skeleton--text skeleton--long"></span></div>
+<span class="skeleton skeleton--amount"></span><span class="skeleton skeleton--stamp"></span><span class="skeleton skeleton--badge"></span></div></div><div class="cluster" aria-hidden="true"><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span><span style="display:inline-grid;place-items:center;width:var(--space-10);height:var(--space-10);border:var(--border-width-hairline) solid var(--color-border-default)"><span class="skeleton skeleton--text skeleton--day"></span></span></div><div class="page-head"><div><p class="overline">Riverside Community Church</p><h2 class="page-head__title" style="margin:0">Your bookings</h2>
+<p class="page-head__sub"><span class="skeleton skeleton--text skeleton--medium" style="display: inline-block; vertical-align: middle;" aria-hidden="true"></span><span class="visually-hidden" role="status">Loading your bookings</span></p></div></div>
+</div><div class="ds-example__caption"><span>Booking-list row (<code>date</code>, <code>amount</code>, <code>stamp</code>, <code>badge</code>), calendar day numbers (<code>day</code>), and the bookings subtitle with an inline block (rendered here with an inline style; the component adds <code>.skeleton--inline</code>). <span class="crd-ac">AC-2, AC-3, AC-7</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>A skeleton is loading or gone. The surface changes its colours; “Still” is what <code>prefers-reduced-motion</code> users see (forced here with <code>animation: none</code>).</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Shape</th><th scope="col">On the page</th><th scope="col">On a card</th><th scope="col">On the stage</th><th scope="col">Still</th></tr></thead>
+      <tbody><tr><th scope="row">Text</th><td><div style="width: 9rem;"><span class="skeleton skeleton--text skeleton--long" aria-hidden="true"></span></div></td><td><div class="card" style="width: 9rem; padding: var(--space-3);"><span class="skeleton skeleton--text skeleton--long" aria-hidden="true"></span></div></td><td><div class="on-stage" style="padding: var(--space-3); width: fit-content; background: var(--color-bg-stage);"><div style="width: 9rem;"><span class="skeleton skeleton--text skeleton--long" aria-hidden="true"></span></div></div></td><td><div style="width: 9rem;"><span class="skeleton skeleton--text skeleton--long" style="animation: none;" aria-hidden="true"></span></div></td></tr><tr><th scope="row">Title</th><td><div style="width: 9rem;"><span class="skeleton skeleton--title skeleton--long" aria-hidden="true"></span></div></td><td><div class="card" style="width: 9rem; padding: var(--space-3);"><span class="skeleton skeleton--title skeleton--long" aria-hidden="true"></span></div></td><td><div class="on-stage" style="padding: var(--space-3); width: fit-content; background: var(--color-bg-stage);"><div style="width: 9rem;"><span class="skeleton skeleton--title skeleton--long" aria-hidden="true"></span></div></div></td><td><div style="width: 9rem;"><span class="skeleton skeleton--title skeleton--long" style="animation: none;" aria-hidden="true"></span></div></td></tr><tr><th scope="row">Control</th><td><div style="width: 9rem;"><span class="skeleton skeleton--control" aria-hidden="true"></span></div></td><td><div class="card" style="width: 9rem; padding: var(--space-3);"><span class="skeleton skeleton--control" aria-hidden="true"></span></div></td><td><div class="on-stage" style="padding: var(--space-3); width: fit-content; background: var(--color-bg-stage);"><div style="width: 9rem;"><span class="skeleton skeleton--control" aria-hidden="true"></span></div></div></td><td><div style="width: 9rem;"><span class="skeleton skeleton--control" style="animation: none;" aria-hidden="true"></span></div></td></tr><tr><th scope="row">Target</th><td><div style="width: 9rem;"><span class="skeleton skeleton--target" aria-hidden="true"></span></div></td><td><div class="card" style="width: 9rem; padding: var(--space-3);"><span class="skeleton skeleton--target" aria-hidden="true"></span></div></td><td><div class="on-stage" style="padding: var(--space-3); width: fit-content; background: var(--color-bg-stage);"><div style="width: 9rem;"><span class="skeleton skeleton--target" aria-hidden="true"></span></div></div></td><td><div style="width: 9rem;"><span class="skeleton skeleton--target" style="animation: none;" aria-hidden="true"></span></div></td></tr></tbody>
+    </table></div>
+    <span class="crd-ac">AC-9, AC-10, AC-18</span>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="card" style="padding: var(--space-5);" aria-hidden="true"><div class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short" aria-hidden="true"></span><span class="skeleton skeleton--title" aria-hidden="true"></span><span class="skeleton skeleton--text skeleton--long" aria-hidden="true"></span><div class="cluster cluster--between"><span class="skeleton skeleton--figure" aria-hidden="true"></span><span class="skeleton skeleton--target" aria-hidden="true"></span></div></div></div><div class="on-stage" style="background: var(--color-bg-stage); padding: var(--space-5); margin-top: var(--space-4);" aria-hidden="true"><div class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short" aria-hidden="true"></span><span class="skeleton skeleton--poster" aria-hidden="true"></span><span class="skeleton skeleton--text" aria-hidden="true"></span></div></div></div>
+      <div data-theme="dark"><div class="card" style="padding: var(--space-5);" aria-hidden="true"><div class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short" aria-hidden="true"></span><span class="skeleton skeleton--title" aria-hidden="true"></span><span class="skeleton skeleton--text skeleton--long" aria-hidden="true"></span><div class="cluster cluster--between"><span class="skeleton skeleton--figure" aria-hidden="true"></span><span class="skeleton skeleton--target" aria-hidden="true"></span></div></div></div><div class="on-stage" style="background: var(--color-bg-stage); padding: var(--space-5); margin-top: var(--space-4);" aria-hidden="true"><div class="stack stack--sm"><span class="skeleton skeleton--text skeleton--short" aria-hidden="true"></span><span class="skeleton skeleton--poster" aria-hidden="true"></span><span class="skeleton skeleton--text" aria-hidden="true"></span></div></div></div>
+    </div>
+    <span class="crd-ac">AC-10, AC-13, AC-14</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: each frame is an iframe at that width, so the ticket's 576 px breakpoint and the poster's <code>12vw</code> height apply.</p>
+    <div class="crd-frames">
+<figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-15, AC-16</span><iframe title="320 pixel wide frame, light theme" width="320" height="460" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ul class=&quot;lineup&quot; role=&quot;list&quot; aria-hidden=&quot;true&quot; style=&quot;margin:0;padding:0&quot;&gt;&lt;li class=&quot;ticket ticket--loading&quot; style=&quot;--ticket-notch-bg: var(--color-bg-surface);&quot;&gt;
+  &lt;span class=&quot;skeleton ticket__art&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--title&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;span class=&quot;skeleton skeleton--figure&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--target&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;div style=&quot;margin-top:12px&quot;&gt;&lt;div class=&quot;card&quot; aria-hidden=&quot;true&quot; style=&quot;padding: var(--space-4);&quot;&gt;&lt;div class=&quot;cluster cluster--between&quot; style=&quot;align-items:center&quot;&gt;
+&lt;span class=&quot;skeleton skeleton--date&quot; style=&quot;width: var(--space-12)&quot;&gt;&lt;/span&gt;
+&lt;div class=&quot;stack stack--sm&quot; style=&quot;flex:1;min-width:8rem&quot;&gt;&lt;span class=&quot;skeleton skeleton--title skeleton--medium&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;span class=&quot;skeleton skeleton--amount&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--stamp&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--badge&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · light · AC-17, AC-10</span><iframe title="360 pixel wide frame, light theme" width="360" height="640" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;poster on-stage&quot; style=&quot;padding:16px;margin:-12px -12px 0&quot;&gt;&lt;div class=&quot;artist-poster&quot; aria-hidden=&quot;true&quot;&gt;&lt;span class=&quot;skeleton skeleton--portrait&quot;&gt;&lt;/span&gt;&lt;div class=&quot;stack&quot;&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--poster&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;skeleton skeleton--strip&quot; style=&quot;margin:0 -12px&quot; aria-hidden=&quot;true&quot;&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-14, AC-7</span><iframe title="360 pixel wide frame, dark theme" width="360" height="460" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ul class=&quot;lineup&quot; role=&quot;list&quot; aria-hidden=&quot;true&quot; style=&quot;margin:0;padding:0&quot;&gt;&lt;li class=&quot;ticket ticket--loading&quot; style=&quot;--ticket-notch-bg: var(--color-bg-surface);&quot;&gt;
+  &lt;span class=&quot;skeleton ticket__art&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--title&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;span class=&quot;skeleton skeleton--figure&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--target&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;div class=&quot;page-head&quot;&gt;&lt;div&gt;&lt;p class=&quot;overline&quot;&gt;Riverside Community Church&lt;/p&gt;&lt;h2 class=&quot;page-head__title&quot; style=&quot;margin:0&quot;&gt;Your bookings&lt;/h2&gt;
+&lt;p class=&quot;page-head__sub&quot;&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--medium&quot; style=&quot;display: inline-block; vertical-align: middle;&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;span class=&quot;visually-hidden&quot; role=&quot;status&quot;&gt;Loading your bookings&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:794px"><span class="crd-ac">768 px · light · AC-15</span><iframe title="768 pixel wide frame, light theme" width="768" height="700" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ul class=&quot;lineup&quot; role=&quot;list&quot; aria-hidden=&quot;true&quot; style=&quot;margin:0;padding:0&quot;&gt;&lt;li class=&quot;ticket ticket--loading&quot; style=&quot;--ticket-notch-bg: var(--color-bg-surface);&quot;&gt;
+  &lt;span class=&quot;skeleton ticket__art&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--title&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;span class=&quot;skeleton skeleton--figure&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--target&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ul&gt;&lt;div style=&quot;margin-top:24px&quot;&gt;&lt;div class=&quot;stub&quot; aria-hidden=&quot;true&quot; style=&quot;width: 100%; max-width: 22rem;&quot;&gt;
+  &lt;span class=&quot;skeleton skeleton--title&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--figure&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--control&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--control&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--block&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--control-lg&quot;&gt;&lt;/span&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p><span class="crd-ac">AC-6, AC-19: layout-shift and perf measurements, not renderable here; AC-16: 200 % zoom is checked in the browser</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+<div class="ds-pair"><span>Status line on the page</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Block on a card (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-bg-subtle|--color-bg-surface" data-min="1"></span></div>
+<div class="ds-pair"><span>Stage block (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-bg-stage-raised|--color-bg-stage" data-min="1"></span></div>
+<div class="ds-pair"><span>Loading ticket frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: status line on the page</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: block on a card (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-bg-subtle|--color-bg-surface" data-min="1"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: loading ticket frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-13</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+<tr><td>Block</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+<tr><td>Sweep</td><td><code>--color-bg-subtle-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle-hover" data-swatch></i><span data-token="--color-bg-subtle-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle-hover" data-swatch></i><span data-token="--color-bg-subtle-hover"></span></span></td></tr>
+<tr><td>Stage block</td><td><code>--color-bg-stage-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td></tr>
+<tr><td>Stage sweep</td><td><code>--color-bg-stage-raised-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage-raised-hover" data-swatch></i><span data-token="--color-bg-stage-raised-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage-raised-hover" data-swatch></i><span data-token="--color-bg-stage-raised-hover"></span></span></td></tr>
+<tr><td>Control heights</td><td><code>--control-height-sm / --control-height-md / --control-height-lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+<tr><td>Target</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+<tr><td>Circle</td><td><code>--radius-full</code></td><td colspan="2"><span data-token="--radius-full"></span></td></tr>
+<tr><td>Day / price widths</td><td><code>--space-5 / --space-20</code></td><td colspan="2"><span data-token="--space-5"></span> / <span data-token="--space-20"></span></td></tr>
+<tr><td>Thumbs</td><td><code>--space-20 / --space-32</code></td><td colspan="2"><span data-token="--space-20"></span> / <span data-token="--space-32"></span></td></tr>
+<tr><td>Sweep duration</td><td><code>--duration-deliberate</code></td><td colspan="2"><span data-token="--duration-deliberate"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

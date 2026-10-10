@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avatar — Component requirements rendering</title>
+<meta name="description" content="Every variant, size and state of zm-avatar, zm-avatar-button and zm-avatar-group, in light and dark, at phone and tablet widths, keyed to the acceptance criteria in avatar.md.">
+<meta name="crd:component" content="avatar">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+.crd-list .crd-ac { display: inline; margin: 0 0 0 var(--space-2); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Avatar</h1>
+    <p class="ds-lead">Every variant, size and state of the avatar family. Requirements: <a href="avatar.md">avatar.md</a>. Design system: <a href="../../design-system/components/avatar.html">avatar</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-avatar</code> <code>zm-avatar-button</code> <code>zm-avatar-group</code></span><span class="ds-pill">Status: planned</span><span class="ds-pill">Traces to L2-024, L2-086, L2-088, L2-096, L2-099, L2-100, L2-101, L2-103, L2-104, L2-105, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Variants</h2>
+    <p>The photo is a placeholder silhouette; the product loads the person’s own photo from the CDN.</p>
+    
+<div class="ds-example"><div class="ds-example__canvas">
+  <button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu">NF</button>
+  <span class="cluster"><span class="avatar" aria-hidden="true">NF</span><span>Naomi Fraser</span></span>
+  <span class="cluster"><span class="avatar avatar--ink" aria-hidden="true">HC</span><span>Hosanna Collective</span></span>
+  <span class="cluster"><span class="avatar avatar--ink" aria-hidden="true">RC</span><span>Riverside Community Church</span></span>
+  <span class="cluster"><span class="avatar" aria-hidden="true"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23c9b98f'/%3E%3Ccircle cx='20' cy='15' r='7'/%3E%3Cpath d='M6 40c0-9 6-14 14-14s14 5 14 14z'/%3E%3C/svg%3E" width="40" height="40" alt=""></span><span>Abigail Mensah</span></span>
+  <span class="avatar avatar--icon" role="img" aria-label="Miriam Haile, no photo yet"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></svg></span>
+  <span class="cluster"><span class="avatar-wrap"><span class="avatar" aria-hidden="true">AM</span><span class="avatar__status" role="img" aria-label="Online now"></span></span><span>Abigail Mensah <span class="text-muted">· online now</span></span></span>
+</div><div class="ds-example__caption"><span>The account button; initials beside a name (person yellow, group act and church ink); a photo beside a name (<code>alt=""</code>); Miriam Haile’s icon avatar standing alone; the online dot backed by text. <span class="crd-ac">AC-1, AC-3, AC-4, AC-5, AC-12, AC-17</span></span></div></div>
+
+<h3>Initials from names</h3>
+<div class="ds-example"><div class="ds-example__canvas">
+  <span class="cluster"><span class="avatar" aria-hidden="true">NF</span><span>Naomi Fraser</span></span><span class="cluster"><span class="avatar" aria-hidden="true">AM</span><span>Abigail Mensah</span></span><span class="cluster"><span class="avatar" aria-hidden="true">PN</span><span>Priya Nair</span></span><span class="cluster"><span class="avatar" aria-hidden="true">MH</span><span>Miriam Haile</span></span><span class="cluster"><span class="avatar" aria-hidden="true">TA</span><span>Tobi Adeyemi</span></span><span class="cluster"><span class="avatar avatar--ink" aria-hidden="true">MB</span><span>Marcus Bell Trio</span></span><span class="cluster"><span class="avatar avatar--ink" aria-hidden="true">DR</span><span>Daniel &amp; Ruth Okonkwo</span></span><span class="cluster"><span class="avatar avatar--ink" aria-hidden="true">GT</span><span>Grace Tabernacle Mass Choir</span></span><span class="cluster"><span class="avatar avatar--ink" aria-hidden="true">SB</span><span>St. Brendan’s Anglican</span></span>
+</div><div class="ds-example__caption"><span>People take first and last; groups and churches take the first two words, skipping “&amp;”. <span class="crd-ac">AC-2</span></span></div></div>
+
+<h3>Standalone image</h3>
+<div class="ds-example"><div class="ds-example__canvas">
+  <span class="avatar avatar--lg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%23c9b98f'/%3E%3Ccircle cx='20' cy='15' r='7'/%3E%3Cpath d='M6 40c0-9 6-14 14-14s14 5 14 14z'/%3E%3C/svg%3E" width="56" height="56" alt="Abigail Mensah"></span>
+  <span class="cluster"><span class="avatar" aria-hidden="true">AM</span><span>Abigail Mensah <span class="text-muted">· photo failed to load: initials instead</span></span></span>
+</div><div class="ds-example__caption"><span><code>standalone</code>: the image’s <code>alt</code> is the name. A failed photo falls back to initials on the same disc. <span class="crd-ac">AC-6, AC-17</span></span></div></div>
+
+<h3>Group</h3>
+<div class="ds-example"><div class="ds-example__canvas">
+  <span class="avatar-group" role="img" aria-label="7 artists free Sat 14 Nov: Abigail Mensah, Hosanna Collective, Elijah Park and 4 more"><span class="avatar" aria-hidden="true">AM</span><span class="avatar avatar--ink" aria-hidden="true">HC</span><span class="avatar" aria-hidden="true">EP</span><span class="avatar avatar--ink" aria-hidden="true">+4</span></span><span class="text-muted">7 artists free Sat 14 Nov</span>
+  <span class="avatar-group" role="img" aria-label="7 artists free Sat 14 Nov: Abigail Mensah, Hosanna Collective and 5 more"><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--sm" aria-hidden="true">AM</span><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--ink avatar--sm" aria-hidden="true">HC</span><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--ink avatar--sm" aria-hidden="true">+5</span></span><span class="text-muted">max 2, small: overlap <code>--space-1</code> (D-11)</span>
+</div><div class="ds-example__caption"><span>At most three faces, then an ink count; one named image. <span class="crd-ac">AC-7, AC-8</span></span></div></div>
+
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Sizes</h2>
+<div class="ds-example"><div class="ds-example__canvas">
+  <span class="avatar avatar--sm" aria-hidden="true">NF</span><span class="avatar" aria-hidden="true">NF</span><span class="avatar avatar--lg" aria-hidden="true">NF</span>
+  <span class="skeleton skeleton--circle" aria-hidden="true"></span>
+</div><div class="ds-example__caption"><span>Small 32 px, medium 40 px, large 56 px; the loading skeleton circle at medium. <span class="crd-ac">AC-3, AC-11, AC-23</span></span></div></div>
+</section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>Only the button has pointer and focus states, forced here with <code>data-state</code>.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Menu open</th></tr></thead>
+      <tbody><tr><th scope="row">Initials button<span class="crd-ac">AC-1, AC-9, AC-10, AC-13</span></th><td><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu">NF</button></td><td><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="hover">NF</button></td><td><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">NF</button></td><td><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="true" aria-controls="account-menu" data-state="focus">NF</button></td></tr><tr><th scope="row">Ink button (church)<span class="crd-ac">AC-4, AC-13</span></th><td><button class="avatar avatar--ink" type="button" aria-label="Account menu for Riverside Community Church" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu">RC</button></td><td><button class="avatar avatar--ink" type="button" aria-label="Account menu for Riverside Community Church" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="hover">RC</button></td><td><button class="avatar avatar--ink" type="button" aria-label="Account menu for Riverside Community Church" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">RC</button></td><td><button class="avatar avatar--ink" type="button" aria-label="Account menu for Riverside Community Church" aria-haspopup="dialog" aria-expanded="true" aria-controls="account-menu" data-state="focus">RC</button></td></tr><tr><th scope="row">On the stage<span class="crd-ac">AC-13, AC-14</span></th><td class="on-stage" style="background: var(--color-bg-stage);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu">NF</button></td><td class="on-stage" style="background: var(--color-bg-stage);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="hover">NF</button></td><td class="on-stage" style="background: var(--color-bg-stage);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">NF</button></td><td class="on-stage" style="background: var(--color-bg-stage);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="true" aria-controls="account-menu" data-state="focus">NF</button></td></tr><tr><th scope="row">Static span<span class="crd-ac">AC-10, AC-15</span></th><td><span class="avatar" aria-hidden="true">NF</span></td><td><span class="text-muted">No change</span></td><td><span class="text-muted">Not focusable</span></td><td><span class="text-muted">—</span></td></tr><tr><th scope="row">Loading<span class="crd-ac">AC-11</span></th><td><span class="skeleton skeleton--circle" aria-hidden="true"></span></td><td><span class="text-muted">—</span></td><td><span class="text-muted">Not focusable</span></td><td><span class="text-muted">—</span></td></tr></tbody>
+    </table></div>
+    <p>Not renderable statically:</p>
+    <ul class="crd-list">
+      <li>keyboard activation and focus returning from the menu <span class="crd-ac">AC-14</span></li>
+      <li>screen-reader output and axe <span class="crd-ac">AC-16, AC-18</span></li>
+      <li>the French label <span class="crd-ac">AC-24</span></li>
+      <li>reduced motion <span class="crd-ac">AC-25</span></li>
+      <li>the coarse-pointer target, which the component’s <code>::before</code> hit area adds <span class="crd-ac">AC-22</span></li>
+      <li>the perf-test scenarios <span class="crd-ac">AC-26</span></li>
+    </ul>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="cluster cluster--lg"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu">NF</button><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">NF</button><span class="avatar avatar--ink" aria-hidden="true">HC</span><span class="avatar-group" role="img" aria-label="Abigail Mensah, Hosanna Collective and 4 more"><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--sm" aria-hidden="true">AM</span><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--ink avatar--sm" aria-hidden="true">HC</span><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--ink avatar--sm" aria-hidden="true">+4</span></span><span class="avatar-wrap"><span class="avatar" aria-hidden="true">AM</span><span class="avatar__status" role="img" aria-label="Online now"></span></span></div><div class="on-stage" style="background: var(--color-bg-stage); padding: var(--space-3); margin-top: var(--space-4);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">NF</button></div></div>
+      <div data-theme="dark"><div class="cluster cluster--lg"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu">NF</button><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">NF</button><span class="avatar avatar--ink" aria-hidden="true">HC</span><span class="avatar-group" role="img" aria-label="Abigail Mensah, Hosanna Collective and 4 more"><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--sm" aria-hidden="true">AM</span><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--ink avatar--sm" aria-hidden="true">HC</span><span style="margin-left: calc(var(--space-1) * -1);" class="avatar avatar--ink avatar--sm" aria-hidden="true">+4</span></span><span class="avatar-wrap"><span class="avatar" aria-hidden="true">AM</span><span class="avatar__status" role="img" aria-label="Online now"></span></span></div><div class="on-stage" style="background: var(--color-bg-stage); padding: var(--space-3); margin-top: var(--space-4);"><button class="avatar" type="button" aria-label="Account menu for Naomi Fraser" aria-haspopup="dialog" aria-expanded="false" aria-controls="account-menu" data-state="focus">NF</button></div></div>
+    </div>
+    <span class="crd-ac">AC-19, AC-20</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>The avatar itself never changes size; the frames show the top bar at phone widths, where the account initials must stay visible (L2-099).</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:348px"><span class="crd-ac">320 px · light · AC-21</span><iframe title="320 pixel wide frame, light theme" width="320" height="120" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;header class=&quot;topbar&quot;&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__menu&quot; type=&quot;button&quot; aria-label=&quot;Open menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 7h16M4 12h16M4 17h16&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;a class=&quot;topbar__brand&quot; href=&quot;#top&quot;&gt;&lt;span class=&quot;brand-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icon icon--sm&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class=&quot;topbar__nav&quot; aria-label=&quot;Primary&quot;&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot; aria-current=&quot;page&quot;&gt;Discover&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;How booking works&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;For artists&lt;/a&gt;&lt;/nav&gt;
+  &lt;span class=&quot;topbar__spacer&quot;&gt;&lt;/span&gt;
+  &lt;a class=&quot;nav-link topbar__saved&quot; href=&quot;#top&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;nav-link__text&quot;&gt;Saved&lt;/span&gt; &lt;span class=&quot;badge badge--count&quot;&gt;3&lt;span class=&quot;visually-hidden&quot;&gt; artists&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__theme&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;visually-hidden&quot;&gt;Dark theme&lt;/span&gt;&lt;/button&gt;
+  &lt;button class=&quot;avatar&quot; type=&quot;button&quot; aria-label=&quot;Account menu for Naomi Fraser&quot; aria-haspopup=&quot;dialog&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;account-menu&quot;&gt;NF&lt;/button&gt;
+&lt;/header&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:388px"><span class="crd-ac">360 px · light · AC-21</span><iframe title="360 pixel wide frame, light theme" width="360" height="120" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;header class=&quot;topbar&quot;&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__menu&quot; type=&quot;button&quot; aria-label=&quot;Open menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 7h16M4 12h16M4 17h16&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;a class=&quot;topbar__brand&quot; href=&quot;#top&quot;&gt;&lt;span class=&quot;brand-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icon icon--sm&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class=&quot;topbar__nav&quot; aria-label=&quot;Primary&quot;&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot; aria-current=&quot;page&quot;&gt;Discover&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;How booking works&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;For artists&lt;/a&gt;&lt;/nav&gt;
+  &lt;span class=&quot;topbar__spacer&quot;&gt;&lt;/span&gt;
+  &lt;a class=&quot;nav-link topbar__saved&quot; href=&quot;#top&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;nav-link__text&quot;&gt;Saved&lt;/span&gt; &lt;span class=&quot;badge badge--count&quot;&gt;3&lt;span class=&quot;visually-hidden&quot;&gt; artists&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__theme&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;visually-hidden&quot;&gt;Dark theme&lt;/span&gt;&lt;/button&gt;
+  &lt;button class=&quot;avatar&quot; type=&quot;button&quot; aria-label=&quot;Account menu for Naomi Fraser&quot; aria-haspopup=&quot;dialog&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;account-menu&quot;&gt;NF&lt;/button&gt;
+&lt;/header&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:388px"><span class="crd-ac">360 px · dark · AC-21, AC-19</span><iframe title="360 pixel wide frame, dark theme" width="360" height="120" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;header class=&quot;topbar&quot;&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__menu&quot; type=&quot;button&quot; aria-label=&quot;Open menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 7h16M4 12h16M4 17h16&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;a class=&quot;topbar__brand&quot; href=&quot;#top&quot;&gt;&lt;span class=&quot;brand-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icon icon--sm&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class=&quot;topbar__nav&quot; aria-label=&quot;Primary&quot;&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot; aria-current=&quot;page&quot;&gt;Discover&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;How booking works&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;For artists&lt;/a&gt;&lt;/nav&gt;
+  &lt;span class=&quot;topbar__spacer&quot;&gt;&lt;/span&gt;
+  &lt;a class=&quot;nav-link topbar__saved&quot; href=&quot;#top&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;nav-link__text&quot;&gt;Saved&lt;/span&gt; &lt;span class=&quot;badge badge--count&quot;&gt;3&lt;span class=&quot;visually-hidden&quot;&gt; artists&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__theme&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;visually-hidden&quot;&gt;Dark theme&lt;/span&gt;&lt;/button&gt;
+  &lt;button class=&quot;avatar&quot; type=&quot;button&quot; aria-label=&quot;Account menu for Naomi Fraser&quot; aria-haspopup=&quot;dialog&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;account-menu&quot;&gt;NF&lt;/button&gt;
+&lt;/header&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:796px"><span class="crd-ac">768 px · light · AC-21</span><iframe title="768 pixel wide frame, light theme" width="768" height="120" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;header class=&quot;topbar&quot;&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__menu&quot; type=&quot;button&quot; aria-label=&quot;Open menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 7h16M4 12h16M4 17h16&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;a class=&quot;topbar__brand&quot; href=&quot;#top&quot;&gt;&lt;span class=&quot;brand-mark&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icon icon--sm&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Zamaro&lt;/a&gt;
+  &lt;nav class=&quot;topbar__nav&quot; aria-label=&quot;Primary&quot;&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot; aria-current=&quot;page&quot;&gt;Discover&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;How booking works&lt;/a&gt;&lt;a class=&quot;nav-link&quot; href=&quot;#top&quot;&gt;For artists&lt;/a&gt;&lt;/nav&gt;
+  &lt;span class=&quot;topbar__spacer&quot;&gt;&lt;/span&gt;
+  &lt;a class=&quot;nav-link topbar__saved&quot; href=&quot;#top&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;nav-link__text&quot;&gt;Saved&lt;/span&gt; &lt;span class=&quot;badge badge--count&quot;&gt;3&lt;span class=&quot;visually-hidden&quot;&gt; artists&lt;/span&gt;&lt;/span&gt;&lt;/a&gt;
+  &lt;button class=&quot;btn btn--ghost btn--icon topbar__theme&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;visually-hidden&quot;&gt;Dark theme&lt;/span&gt;&lt;/button&gt;
+  &lt;button class=&quot;avatar&quot; type=&quot;button&quot; aria-label=&quot;Account menu for Naomi Fraser&quot; aria-haspopup=&quot;dialog&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;account-menu&quot;&gt;NF&lt;/button&gt;
+&lt;/header&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Initials on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Ink initials</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="light"><span>Light: outline on paper</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Disc against the top bar</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-stage" data-min="3"></span></div>
+      <div class="ds-pair"><span>Status dot</span><span class="ds-pair__ratio" data-contrast="--color-success-solid|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Focus ring on the page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+      <div class="ds-pair"><span>Focus ring in the top bar</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: initials on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: ink initials</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: disc edge on surface</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: status dot</span><span class="ds-pair__ratio" data-contrast="--color-success-solid|--color-bg-surface" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-20</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Disc</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+        <tr><td>Initials</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+        <tr><td>Outline</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+        <tr><td>Ink disc</td><td><code>--color-bg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+        <tr><td>Ink initials</td><td><code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-inverse" data-swatch></i><span data-token="--color-fg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-inverse" data-swatch></i><span data-token="--color-fg-inverse"></span></span></td></tr>
+        <tr><td>Status dot</td><td><code>--color-success-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-solid" data-swatch></i><span data-token="--color-success-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-solid" data-swatch></i><span data-token="--color-success-solid"></span></span></td></tr>
+        <tr><td>Group and dot ring</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+        <tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+        <tr><td>Size</td><td><code>--avatar-size</code></td><td colspan="2">2rem / 2.5rem / 3.5rem</td></tr>
+        <tr><td>Initials</td><td><code>--text-stub</code>, <code>--font-weight-bold</code></td><td colspan="2"><span data-token="--text-stub"></span></td></tr>
+        <tr><td>Group overlap</td><td><code>--space-2</code></td><td colspan="2"><span data-token="--space-2"></span></td></tr>
+        <tr><td>Hover</td><td><code>--duration-fast</code>, <code>--ease-spring</code></td><td colspan="2"><span data-token="--duration-fast"></span> · <span data-token="--ease-spring"></span></td></tr>
+        <tr><td>Touch target</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

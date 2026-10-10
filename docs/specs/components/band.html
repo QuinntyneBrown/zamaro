@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Band — Component requirements rendering</title>
+<meta name="description" content="Every variant and state of zm-band, in light and dark, at phone, tablet and desktop widths, keyed to the acceptance criteria in band.md.">
+<meta name="crd:component" content="band">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: none; }
+/* As on the design-system page: ds.css styles every h2 and p in a section; give the specimens their product styles back. */
+.ds-section .band h2 { font: var(--text-h1); margin: 0; border: 0; padding: 0; }
+.ds-section .band p { margin: 0; }
+.ds-matrix .band { min-width: 30rem; }
+.ds-section .ds-themes { grid-template-columns: minmax(0, 1fr); }
+/* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed="true"]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state="focus"] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state="hover"] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Band</h1>
+    <p class="ds-lead">Every variant and state of the band. Requirements: <a href="band.md">band.md</a>. Design system: <a href="../../design-system/components/band.html">band</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selector <code>zm-band</code></span><span class="ds-pill">Status: planned</span><span class="ds-pill">Traces to L2-047, L2-086, L2-096, L2-100–L2-104, L2-108, L2-111, L2-112</span></div>
+    <ul class="ds-toc">
+      <li><a href="#discover">Discover</a></li><li><a href="#states">States</a></li><li><a href="#stage">On the stage</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="discover"><h2>Discover “For artists”</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="d1">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div>
+    </div><div class="ds-example__caption"><span>The page owns <code>&lt;section id="join" aria-labelledby="join-title"&gt;</code> and the container; <code>zm-band</code> is <code>.band</code>. The action is a <code>zm-button-link</code> secondary lg to <code>/artists/apply</code>, re-skinned to the stage fill. Rendered unchanged in every Discover state. <span class="crd-ac">AC-1, AC-2, AC-3, AC-4, AC-6, AC-7, AC-13, AC-15</span></span></div></div>
+    <h3>With a text link</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="d2">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you. <a href="#top">See what artists earn</a>.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div>
+    </div><div class="ds-example__caption"><span>The link is part of the projected body paragraph and inherits ink. Two links with different text. <span class="crd-ac">AC-5, AC-11</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>The band is static; its action and links have states, forced here with <code>data-state</code>. Link hover is required (D-5): a specimen-only style draws the paper <code>--color-fg-on-stage</code> highlight in both themes.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">State</th><th scope="col">Band</th><th scope="col">Trigger</th></tr></thead>
+      <tbody><tr><th scope="row">Default</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="m1">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></td><td>—<span class="crd-ac">AC-1, AC-4</span></td></tr><tr><th scope="row">Action hover</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="m2">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
+  </div>
+  <a class="btn btn--lg" href="#top" data-state="hover">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></td><td><code>:hover</code>: lift over a paper shadow<span class="crd-ac">AC-8</span></td></tr><tr><th scope="row">Action focus</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="m3">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
+  </div>
+  <a class="btn btn--lg" href="#top" data-state="focus">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></td><td><code>:focus-visible</code>: ink ring<span class="crd-ac">AC-12</span></td></tr><tr><th scope="row">Action active</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="m4">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.</p>
+  </div>
+  <a class="btn btn--lg" href="#top" data-state="active">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></td><td><code>:active</code>: pressed flat<span class="crd-ac">AC-8</span></td></tr><tr><th scope="row">Link hover</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="m5">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you. <a href="#top" data-state="hover">See what artists earn</a>.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></td><td>paper <code>--color-fg-on-stage</code> highlight (D-5)<span class="crd-ac">AC-5</span></td></tr><tr><th scope="row">Link focus</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="m6">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you. <a href="#top" data-state="focus">See what artists earn</a>.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></td><td>ink ring on the link<span class="crd-ac">AC-11, AC-12</span></td></tr><tr><th scope="row">In-place form</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For churches</p>
+    <h2 id="m7">Booking for Christmas Eve?</h2>
+    <p>Most choirs fill up by mid-November. Save the date now and we’ll tell you who’s free.</p>
+  </div>
+  <form class="cluster" novalidate onsubmit="return false"><button class="btn btn--lg" type="submit">Notify me</button></form>
+</div></td><td>projected <code>&lt;form&gt;</code> + submit<span class="crd-ac">AC-9</span></td></tr><tr><th scope="row">Busy</th><td><div class="band">
+  <div class="stack">
+    <p class="overline">For churches</p>
+    <h2 id="m8">Booking for Christmas Eve?</h2>
+    <p>Most choirs fill up by mid-November. Save the date now and we’ll tell you who’s free.</p>
+  </div>
+  <form class="cluster" novalidate onsubmit="return false"><button class="btn btn--lg" type="submit" aria-busy="true" aria-disabled="true">Sending…</button></form>
+</div></td><td><code>aria-busy</code> + <code>aria-disabled</code><span class="crd-ac">AC-9</span></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="ds-section" id="stage"><h2>On the stage</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage ds-example__canvas--block">
+      <div class="band">
+  <div class="stack">
+    <p class="overline">For churches</p>
+    <h2 id="s1">Booking for Christmas Eve?</h2>
+    <p>Most choirs fill up by mid-November. Save the date now and we’ll tell you who’s free.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Start a Christmas search</a>
+</div>
+    </div><div class="ds-example__caption"><span>Required (D-4): the band keeps its stage button and ink text on a charcoal page. A specimen-only style applies the band’s rules over the stage’s, because today’s <code>.on-stage .btn</code> selector outranks <code>.band .btn</code>. <span class="crd-ac">AC-10</span></span></div></div>
+    <h3>Current (drift)</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage ds-example__canvas--block crd-drift">
+      <div class="band">
+  <div class="stack">
+    <p class="overline">For churches</p>
+    <h2 id="s2">Booking for Christmas Eve?</h2>
+    <p>Most choirs fill up by mid-November.</p>
+  </div>
+  <a class="btn btn--lg" href="#top">Start a Christmas search</a>
+</div>
+    </div><div class="ds-example__caption"><span>Current (drift): without the fix the stage rule wins and the action becomes a paper outline with paper text on yellow. This is the defect D-4 records; the component must not render this. <span class="crd-ac">AC-10</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="t1">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you. <a href="#top">See what artists earn</a>.</p>
+  </div>
+  <a class="btn btn--lg" href="#top" data-state="hover">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></div>
+      <div data-theme="dark"><div class="band">
+  <div class="stack">
+    <p class="overline">For artists</p>
+    <h2 id="t2">Lead worship? Get on the bill.</h2>
+    <p>Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you. <a href="#top">See what artists earn</a>.</p>
+  </div>
+  <a class="btn btn--lg" href="#top" data-state="hover">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+</div></div>
+    </div>
+    <span class="crd-ac">AC-14, AC-15, AC-16</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: each frame is an iframe at that width inside the page’s section and container, so the 992 px breakpoint applies. Wide frames scroll inside their box.</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:322px"><span class="crd-ac">320 px · light · AC-19, AC-20, AC-21</span><iframe title="320 pixel wide frame, light theme" width="320" height="620" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)} /* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed=&quot;true&quot;]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state=&quot;focus&quot;] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state=&quot;hover&quot;] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;join-title&quot; style=&quot;padding-block: var(--space-4);&quot;&gt;&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;band&quot;&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;p class=&quot;overline&quot;&gt;For artists&lt;/p&gt;
+    &lt;h2 id=&quot;join-title&quot;&gt;Lead worship? Get on the bill.&lt;/h2&gt;
+    &lt;p&gt;Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;a class=&quot;btn btn--lg&quot; href=&quot;#top&quot;&gt;Apply as an artist &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:362px"><span class="crd-ac">360 px · light · AC-17</span><iframe title="360 pixel wide frame, light theme" width="360" height="560" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)} /* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed=&quot;true&quot;]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state=&quot;focus&quot;] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state=&quot;hover&quot;] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;join-title&quot; style=&quot;padding-block: var(--space-4);&quot;&gt;&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;band&quot;&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;p class=&quot;overline&quot;&gt;For artists&lt;/p&gt;
+    &lt;h2 id=&quot;join-title&quot;&gt;Lead worship? Get on the bill.&lt;/h2&gt;
+    &lt;p&gt;Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;a class=&quot;btn btn--lg&quot; href=&quot;#top&quot;&gt;Apply as an artist &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:362px"><span class="crd-ac">360 px · dark · AC-15, AC-17</span><iframe title="360 pixel wide frame, dark theme" width="360" height="560" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)} /* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed=&quot;true&quot;]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state=&quot;focus&quot;] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state=&quot;hover&quot;] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;join-title&quot; style=&quot;padding-block: var(--space-4);&quot;&gt;&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;band&quot;&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;p class=&quot;overline&quot;&gt;For artists&lt;/p&gt;
+    &lt;h2 id=&quot;join-title&quot;&gt;Lead worship? Get on the bill.&lt;/h2&gt;
+    &lt;p&gt;Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;a class=&quot;btn btn--lg&quot; href=&quot;#top&quot;&gt;Apply as an artist &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:770px"><span class="crd-ac">768 px · light · AC-17</span><iframe title="768 pixel wide frame, light theme" width="768" height="440" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)} /* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed=&quot;true&quot;]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state=&quot;focus&quot;] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state=&quot;hover&quot;] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;join-title&quot; style=&quot;padding-block: var(--space-4);&quot;&gt;&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;band&quot;&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;p class=&quot;overline&quot;&gt;For artists&lt;/p&gt;
+    &lt;h2 id=&quot;join-title&quot;&gt;Lead worship? Get on the bill.&lt;/h2&gt;
+    &lt;p&gt;Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;a class=&quot;btn btn--lg&quot; href=&quot;#top&quot;&gt;Apply as an artist &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:1282px"><span class="crd-ac">1280 px · light · AC-18</span><iframe title="1280 pixel wide frame, light theme" width="1280" height="380" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)} /* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed=&quot;true&quot;]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state=&quot;focus&quot;] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state=&quot;hover&quot;] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;join-title&quot; style=&quot;padding-block: var(--space-4);&quot;&gt;&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;band&quot;&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;p class=&quot;overline&quot;&gt;For artists&lt;/p&gt;
+    &lt;h2 id=&quot;join-title&quot;&gt;Lead worship? Get on the bill.&lt;/h2&gt;
+    &lt;p&gt;Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;a class=&quot;btn btn--lg&quot; href=&quot;#top&quot;&gt;Apply as an artist &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:1282px"><span class="crd-ac">1280 px · dark · AC-18, AC-15</span><iframe title="1280 pixel wide frame, dark theme" width="1280" height="380" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas)} /* Specimen only, not product CSS: band D-4 (the band beats the stage) */ :is(.on-stage, .topbar) .band:not(.crd-drift .band) .btn:not(.btn--primary):not([aria-pressed=&quot;true&quot;]) { --btn-bg: var(--color-bg-stage); --btn-fg: var(--color-fg-on-stage); --btn-border: var(--color-bg-stage); --btn-bg-hover: var(--color-bg-stage); --btn-fg-hover: var(--color-fg-on-stage); --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage); --btn-transform-hover: var(--transform-lift); } :is(.on-stage, .topbar) .band:not(.crd-drift .band) :focus-visible, :is(.on-stage, .topbar) .band:not(.crd-drift .band) [data-state=&quot;focus&quot;] { outline-color: var(--color-border-on-accent); box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-focus-ring-offset); } /* Specimen only, not product CSS: band D-5 (link hover highlight is paper in both themes) */ .band:not(.crd-drift .band) a:not(.btn):hover, .band:not(.crd-drift .band) a:not(.btn)[data-state=&quot;hover&quot;] { background: var(--color-fg-on-stage); color: var(--color-fg-on-accent); }
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;join-title&quot; style=&quot;padding-block: var(--space-4);&quot;&gt;&lt;div class=&quot;container&quot;&gt;&lt;div class=&quot;band&quot;&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;p class=&quot;overline&quot;&gt;For artists&lt;/p&gt;
+    &lt;h2 id=&quot;join-title&quot;&gt;Lead worship? Get on the bill.&lt;/h2&gt;
+    &lt;p&gt;Your dates, your radius, your rate. Free to join; Zamaro keeps 8% when a church books you.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;a class=&quot;btn btn--lg&quot; href=&quot;#top&quot;&gt;Apply as an artist &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p><span class="crd-ac">AC-22, AC-23: motion and measurement, not renderable here</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Text on the band</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Link on its hover highlight</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-fg-on-stage" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Frame and focus ring on the band</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-accent" data-min="3"></span></div>
+      <div class="ds-pair"><span>Action label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Action edge on the band</span><span class="ds-pair__ratio" data-contrast="--color-bg-stage|--color-accent" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="light"><span>Light: band frame against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-canvas" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: text on the band</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: link on its hover highlight</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-fg-on-stage" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: ink on the surface token (why D-5)</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: action label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: band against the page</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-canvas" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-5, AC-16</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+        <tr><td>Text</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+        <tr><td>Frame, focus ring</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+        <tr><td>Action fill</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+        <tr><td>Action label, hover shadow, link highlight</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+        <tr><td>Frame width</td><td><code>--border-width-poster</code></td><td colspan="2"><span data-token="--border-width-poster"></span></td></tr>
+        <tr><td>Padding (below / from 992 px)</td><td><code>--space-10</code> <code>--space-8</code> / <code>--space-12</code></td><td colspan="2"><span data-token="--space-10"></span> <span data-token="--space-8"></span> / <span data-token="--space-12"></span></td></tr>
+        <tr><td>Gap (below / from 992 px)</td><td><code>--space-6</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-10"></span></td></tr>
+        <tr><td>Headline</td><td><code>--text-h1</code></td><td colspan="2"><span data-token="--text-h1"></span></td></tr>
+        <tr><td>Hover shadow offset</td><td><code>--size-offset-2</code></td><td colspan="2"><span data-token="--size-offset-2"></span></td></tr>
+        <tr><td>Action height</td><td><code>--control-height-lg</code></td><td colspan="2"><span data-token="--control-height-lg"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

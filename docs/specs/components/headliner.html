@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Headliner — Component requirements rendering</title>
+<meta name="description" content="Every variant and state of the headliner and its skeleton, in light and dark, at phone, tablet and desktop widths, keyed to the acceptance criteria in headliner.md.">
+<meta name="crd:component" content="headliner">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; box-sizing: border-box; }
+.crd-frame iframe { display: block; border: 0; max-width: none; }
+.crd-note { font: var(--text-body-sm); color: var(--color-fg-muted); }
+/* As on the design-system page: ds.css restyles every h3 in a section, and the display size is clamp()ed to the
+   viewport while specimens sit in the narrower docs column. Restore the type, scaled to fit. */
+.ds-section .headliner__name { font: var(--text-display); font-size: clamp(2.5rem, 4vw, 3.75rem); margin: 0; }
+.ds-section .ds-themes { grid-template-columns: minmax(0, 1fr); }
+.ds-matrix .headliner__name { font: var(--text-h2); }
+.ds-section .headliner p { margin: 0; }
+/* Specimen only, not product CSS: headliner D-8 (skeleton rows) */ @media (min-width: 36rem) { .headliner__skeleton--below-sm { display: none; } } @media (min-width: 62rem) { .headliner__skeleton--below-lg { display: none; } }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Headliner</h1>
+    <p class="ds-lead">Every variant and state of the headliner and its skeleton, in light and dark, at phone, tablet and desktop widths, keyed to the acceptance criteria in headliner.md. Requirements: <a href="headliner.md">headliner.md</a>. Design system: <a href="../../design-system/components/headliner.html">headliner</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-headliner</code> <code>zm-headliner-skeleton</code></span><span class="ds-pill">Status: built</span><span class="ds-pill">Traces to L2-006, L2-007, L2-026, L2-086, L2-088, L2-096, L2-097, L2-100–L2-105, L2-110, L2-111</span></div>
+    <ul class="ds-toc"><li><a href="#discover">Discover</a></li><li><a href="#content">Content states</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li></ul>
+  </header>
+
+  <section class="ds-section" id="discover"><h2>Discover</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><article class="headliner" aria-labelledby="zm-headliner-name-0">
+  <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-0"><a href="#top">Abigail Mensah</a></h3>
+    <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
+    <p class="headliner__quote"><q>She had the whole congregation singing in three-part harmony by the last verse.</q> <span class="text-muted headliner__attribution">— Rev. Janet Clarke, Oshawa</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div><div class="ds-example__caption"><span>Abigail Mensah, saved: the kicker, the name as an <code>h3</code> link, four facts, Rev. Janet Clarke’s quote in a <code>&lt;q&gt;</code>, the free badge, the ink button with its arrow and the projected save toggle. <span class="crd-ac">AC-1, AC-2, AC-4, AC-5, AC-12, AC-20, AC-21, AC-22</span></span></div></div>
+    <h3>Primary photo, not saved</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><article class="headliner" aria-labelledby="zm-headliner-name-1">
+  <div class="art art--yellow art--group"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 50'%3E%3Crect width='40' height='50' fill-opacity='.12'/%3E%3Ccircle cx='12' cy='20' r='5' fill-opacity='.55'/%3E%3Ccircle cx='28' cy='18' r='5' fill-opacity='.55'/%3E%3Cpath d='M0 50c0-12 5-22 12-22s10 6 10 12c0-8 3-14 6-14 7 0 12 10 12 24z' fill-opacity='.7'/%3E%3C/svg%3E" width="800" height="1000" alt="Daniel and Ruth Okonkwo singing together at a piano" loading="eager" fetchpriority="high" decoding="async"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-1"><a href="#top">Daniel &amp; Ruth Okonkwo</a></h3>
+    <div class="headliner__meta"><span>Duo · Acoustic, Hymns</span><span>Ajax · 97 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 14 churches">★ 4.9 · 14 churches</span></span><span>From $700</span></div>
+    <p class="headliner__quote"><q>Ruth took the melody, Daniel took the harmony, and the whole church followed them.</q> <span class="text-muted headliner__attribution">— Pastor Femi Adebayo, Brampton</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top">See Daniel &amp; Ruth Okonkwo’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="false" aria-label="Save Daniel &amp; Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div><div class="ds-example__caption"><span>Daniel &amp; Ruth Okonkwo: the photo sits inside the yellow art, greyscale and multiplied, loaded eagerly; the button uses the full name. A simple shape stands in for the photo. <span class="crd-ac">AC-3, AC-6</span></span></div></div>
+    <h3>Group headliner, long name</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><article class="headliner" aria-labelledby="zm-headliner-name-2">
+  <div class="art art--yellow art--group" role="img" aria-label="Grace Tabernacle Mass Choir in gold robes, three rows deep"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-2"><a href="#top">Grace Tabernacle Mass Choir</a></h3>
+    <div class="headliner__meta"><span>Gospel choir</span><span>Scarborough · 81 km</span><span><span role="img" aria-label="Rated 4.8 out of 5 by 26 churches">★ 4.8 · 26 churches</span></span><span>From $2,400</span></div>
+    <p class="headliner__quote"><q>Forty voices in gold robes, and every one of them knew our hymnal better than we did.</q> <span class="text-muted headliner__attribution">— Naomi Fraser, Burlington</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top">See Grace Tabernacle Mass Choir’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="false" aria-label="Save Grace Tabernacle Mass Choir to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div><div class="ds-example__caption"><span>Grace Tabernacle Mass Choir: group silhouette on yellow; the name wraps at word boundaries. <span class="crd-ac">AC-11, AC-32</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="content"><h2>Content states</h2>
+    <h3>Quote longer than 160 characters</h3>
+    <p class="crd-note">Source (227 characters): “She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday. Our seniors asked for hymns, our youth asked for Jireh, and somehow it all felt like one service. We have already booked her for Easter.”<br>Shown (159 characters): “She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday. Our seniors asked for hymns, our youth asked for Jireh, and somehow…”</p>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><article class="headliner" aria-labelledby="zm-headliner-name-3">
+  <div class="art art--yellow art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-3"><a href="#top">Hosanna Collective</a></h3>
+    <div class="headliner__meta"><span>Band · Hymns</span><span>Mississauga · 32 km</span><span><span role="img" aria-label="Rated 4.8 out of 5 by 21 churches">★ 4.8 · 21 churches</span></span><span>From $1,800</span></div>
+    <p class="headliner__quote"><q>She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday. Our seniors asked for hymns, our youth asked for Jireh, and somehow…</q> <span class="text-muted headliner__attribution">— Tomi Oduya, Milton</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top">See Hosanna Collective’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="false" aria-label="Save Hosanna Collective to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div><div class="ds-example__caption"><span>Cut at the last space within the first 160 characters, trailing punctuation dropped, “…” added. A quote of 160 characters or fewer (Rev. Janet Clarke’s, 81) is shown unchanged. <span class="crd-ac">AC-7, AC-8, AC-32</span></span></div></div>
+    <h3>No reviews, no quote</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><article class="headliner" aria-labelledby="zm-headliner-name-4">
+  <div class="art art--yellow" role="img" aria-label="Miriam Haile seated at an upright piano, smiling"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-4"><a href="#top">Miriam Haile</a></h3>
+    <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Etobicoke · 12 km</span><span><span role="img" aria-label="No reviews yet">New</span></span><span>From $300</span></div>
+    
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top">See Miriam’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="false" aria-label="Save Miriam Haile to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div><div class="ds-example__caption"><span>An artist with the most bookings and no reviews yet: the rating fact reads “New” (named “No reviews yet”) and there is no quote paragraph. <span class="crd-ac">AC-9, AC-10</span></span></div></div>
+    <h3>Booked while the page is open</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><article class="headliner" aria-labelledby="zm-headliner-name-5">
+  <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-5"><a href="#top">Abigail Mensah</a></h3>
+    <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
+    <p class="headliner__quote"><q>She had the whole congregation singing in three-part harmony by the last verse.</q> <span class="text-muted headliner__attribution">— Rev. Janet Clarke, Oshawa</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--booked">Booked Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div><div class="ds-example__caption"><span>The badge becomes <code>.badge--booked</code>; nothing else changes. <span class="crd-ac">AC-17</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>The frame does not react to the pointer; its three controls do. Hover, focus and active are forced with <code>data-state</code>.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Part</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active / on</th><th scope="col">Busy</th></tr></thead>
+      <tbody><tr><th scope="row">Name link<span class="crd-ac">AC-13, AC-18</span></th><td><p class="headliner__name"><a href="#top">Abigail</a></p></td><td><p class="headliner__name"><a href="#top" data-state="hover">Abigail</a></p></td><td><p class="headliner__name"><a href="#top" data-state="focus">Abigail</a></p></td><td>—</td><td>—</td></tr><tr><th scope="row">Profile button<span class="crd-ac">AC-18, AC-19</span></th><td><a class="btn btn--ink" href="#top">See profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="btn btn--ink" href="#top" data-state="hover">See profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="btn btn--ink" href="#top" data-state="focus">See profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td><a class="btn btn--ink" href="#top" data-state="active">See profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></td><td>—</td></tr><tr><th scope="row">Save toggle<span class="crd-ac">AC-5, AC-6</span></th><td><button class="save" type="button" aria-pressed="false" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" data-state="focus" aria-label="Save Abigail Mensah to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr><tr><th scope="row">Badge<span class="crd-ac">AC-17</span></th><td><span class="badge badge--free">Free Sat 14 Nov</span></td><td>—</td><td>—</td><td><span class="badge badge--booked">Booked Sat 14 Nov</span></td><td>—</td></tr></tbody>
+    </table></div>
+    <h3>Loading</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block"><div class="headliner" aria-hidden="true">
+  <span class="skeleton skeleton--portrait"></span>
+  <div class="stack">
+    <span class="skeleton skeleton--text skeleton--short"></span>
+    <span class="skeleton skeleton--poster"></span>
+    <span class="skeleton skeleton--poster skeleton--medium"></span>
+    <span class="skeleton skeleton--text"></span>
+    <span class="skeleton skeleton--text skeleton--short headliner__skeleton--below-sm"></span>
+    <span class="skeleton skeleton--text skeleton--long"></span>
+    <span class="skeleton skeleton--text skeleton--long"></span>
+    <span class="skeleton skeleton--text skeleton--medium"></span>
+    <span class="skeleton skeleton--control skeleton--medium"></span>
+    <span class="skeleton skeleton--control skeleton--short headliner__skeleton--below-lg"></span>
+    <span class="skeleton skeleton--target headliner__skeleton--below-sm"></span>
+  </div>
+</div></div><div class="ds-example__caption"><span><code>zm-headliner-skeleton</code>: the same frame, <code>aria-hidden</code>, not an article, with rows for the kicker, two name lines, the meta, three quote lines and the actions. Required (D-8): rows marked below-sm and below-lg show only where the real content wraps, drawn by a specimen-only style. <span class="crd-ac">AC-14, AC-16</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><article class="headliner" aria-labelledby="zm-headliner-name-6">
+  <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-6"><a href="#top">Abigail Mensah</a></h3>
+    <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
+    <p class="headliner__quote"><q>She had the whole congregation singing in three-part harmony by the last verse.</q> <span class="text-muted headliner__attribution">— Rev. Janet Clarke, Oshawa</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top" data-state="hover">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div>
+      <div data-theme="dark"><article class="headliner" aria-labelledby="zm-headliner-name-7">
+  <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"><span class="art__tag">Headliner</span></div>
+  <div class="stack headliner__body">
+    <p class="overline headliner__kicker">No. 01 · Most booked this autumn</p>
+    <h3 class="headliner__name" id="zm-headliner-name-7"><a href="#top">Abigail Mensah</a></h3>
+    <div class="headliner__meta"><span>Solo vocalist · Hymns</span><span>Brampton · 44 km</span><span><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9 · 38 churches</span></span><span>From $650</span></div>
+    <p class="headliner__quote"><q>She had the whole congregation singing in three-part harmony by the last verse.</q> <span class="text-muted headliner__attribution">— Rev. Janet Clarke, Oshawa</span></p>
+    <div class="cluster headliner__actions">
+      <span class="badge badge--free">Free Sat 14 Nov</span>
+      <a class="btn btn--ink" href="#top" data-state="hover">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div>
+  </div>
+</article></div>
+    </div>
+    <span class="crd-ac">AC-23, AC-24, AC-25</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: each frame is an iframe at that width, so the 768 and 992 px breakpoints apply. The skeleton sits under the headliner in each frame so their heights can be compared.</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="width:346px"><span class="crd-ac">320 px · light · AC-28, AC-30</span><iframe title="320 pixel wide frame, light theme" width="320" height="1500" style="width:320px" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;article class=&quot;headliner&quot; aria-labelledby=&quot;zm-headliner-name-8&quot;&gt;
+  &lt;div class=&quot;art art--yellow art--group&quot; role=&quot;img&quot; aria-label=&quot;Grace Tabernacle Mass Choir in gold robes, three rows deep&quot;&gt;&lt;span class=&quot;art__tag&quot;&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;stack headliner__body&quot;&gt;
+    &lt;p class=&quot;overline headliner__kicker&quot;&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 class=&quot;headliner__name&quot; id=&quot;zm-headliner-name-8&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Grace Tabernacle Mass Choir&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class=&quot;headliner__meta&quot;&gt;&lt;span&gt;Gospel choir&lt;/span&gt;&lt;span&gt;Scarborough · 81 km&lt;/span&gt;&lt;span&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.8 out of 5 by 26 churches&quot;&gt;★ 4.8 · 26 churches&lt;/span&gt;&lt;/span&gt;&lt;span&gt;From $2,400&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;headliner__quote&quot;&gt;&lt;q&gt;Forty voices in gold robes, and every one of them knew our hymnal better than we did.&lt;/q&gt; &lt;span class=&quot;text-muted headliner__attribution&quot;&gt;— Naomi Fraser, Burlington&lt;/span&gt;&lt;/p&gt;
+    &lt;div class=&quot;cluster headliner__actions&quot;&gt;
+      &lt;span class=&quot;badge badge--free&quot;&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class=&quot;btn btn--ink&quot; href=&quot;#top&quot;&gt;See Grace Tabernacle Mass Choir’s profile &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+      &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Grace Tabernacle Mass Choir to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="width:386px"><span class="crd-ac">360 px · light · required (D-8) · AC-15, AC-26, AC-29</span><iframe title="360 pixel wide frame, light theme" width="360" height="1960" style="width:360px" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}/* Specimen only, not product CSS: headliner D-8 (skeleton rows) */ @media (min-width: 36rem) { .headliner__skeleton--below-sm { display: none; } } @media (min-width: 62rem) { .headliner__skeleton--below-lg { display: none; } }&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;article class=&quot;headliner&quot; aria-labelledby=&quot;zm-headliner-name-9&quot;&gt;
+  &lt;div class=&quot;art art--yellow&quot; role=&quot;img&quot; aria-label=&quot;Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone&quot;&gt;&lt;span class=&quot;art__tag&quot;&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;stack headliner__body&quot;&gt;
+    &lt;p class=&quot;overline headliner__kicker&quot;&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 class=&quot;headliner__name&quot; id=&quot;zm-headliner-name-9&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class=&quot;headliner__meta&quot;&gt;&lt;span&gt;Solo vocalist · Hymns&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.9 out of 5 by 38 churches&quot;&gt;★ 4.9 · 38 churches&lt;/span&gt;&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;headliner__quote&quot;&gt;&lt;q&gt;She had the whole congregation singing in three-part harmony by the last verse.&lt;/q&gt; &lt;span class=&quot;text-muted headliner__attribution&quot;&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
+    &lt;div class=&quot;cluster headliner__actions&quot;&gt;
+      &lt;span class=&quot;badge badge--free&quot;&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class=&quot;btn btn--ink&quot; href=&quot;#top&quot;&gt;See Abigail’s profile &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+      &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot; aria-label=&quot;Remove Abigail Mensah from your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;&lt;div style=&quot;height:16px&quot;&gt;&lt;/div&gt;&lt;div class=&quot;headliner&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;span class=&quot;skeleton skeleton--portrait&quot;&gt;&lt;/span&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--poster&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--poster skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--short headliner__skeleton--below-sm&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--control skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--control skeleton--short headliner__skeleton--below-lg&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--target headliner__skeleton--below-sm&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="width:386px"><span class="crd-ac">360 px · dark · AC-24, AC-26</span><iframe title="360 pixel wide frame, dark theme" width="360" height="1000" style="width:360px" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;article class=&quot;headliner&quot; aria-labelledby=&quot;zm-headliner-name-10&quot;&gt;
+  &lt;div class=&quot;art art--yellow&quot; role=&quot;img&quot; aria-label=&quot;Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone&quot;&gt;&lt;span class=&quot;art__tag&quot;&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;stack headliner__body&quot;&gt;
+    &lt;p class=&quot;overline headliner__kicker&quot;&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 class=&quot;headliner__name&quot; id=&quot;zm-headliner-name-10&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class=&quot;headliner__meta&quot;&gt;&lt;span&gt;Solo vocalist · Hymns&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.9 out of 5 by 38 churches&quot;&gt;★ 4.9 · 38 churches&lt;/span&gt;&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;headliner__quote&quot;&gt;&lt;q&gt;She had the whole congregation singing in three-part harmony by the last verse.&lt;/q&gt; &lt;span class=&quot;text-muted headliner__attribution&quot;&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
+    &lt;div class=&quot;cluster headliner__actions&quot;&gt;
+      &lt;span class=&quot;badge badge--free&quot;&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class=&quot;btn btn--ink&quot; href=&quot;#top&quot;&gt;See Abigail’s profile &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+      &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot; aria-label=&quot;Remove Abigail Mensah from your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="width:794px"><span class="crd-ac">768 px · light · required (D-8) · AC-15, AC-27</span><iframe title="768 pixel wide frame, light theme" width="768" height="1180" style="width:768px" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}/* Specimen only, not product CSS: headliner D-8 (skeleton rows) */ @media (min-width: 36rem) { .headliner__skeleton--below-sm { display: none; } } @media (min-width: 62rem) { .headliner__skeleton--below-lg { display: none; } }&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;article class=&quot;headliner&quot; aria-labelledby=&quot;zm-headliner-name-11&quot;&gt;
+  &lt;div class=&quot;art art--yellow&quot; role=&quot;img&quot; aria-label=&quot;Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone&quot;&gt;&lt;span class=&quot;art__tag&quot;&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;stack headliner__body&quot;&gt;
+    &lt;p class=&quot;overline headliner__kicker&quot;&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 class=&quot;headliner__name&quot; id=&quot;zm-headliner-name-11&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class=&quot;headliner__meta&quot;&gt;&lt;span&gt;Solo vocalist · Hymns&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.9 out of 5 by 38 churches&quot;&gt;★ 4.9 · 38 churches&lt;/span&gt;&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;headliner__quote&quot;&gt;&lt;q&gt;She had the whole congregation singing in three-part harmony by the last verse.&lt;/q&gt; &lt;span class=&quot;text-muted headliner__attribution&quot;&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
+    &lt;div class=&quot;cluster headliner__actions&quot;&gt;
+      &lt;span class=&quot;badge badge--free&quot;&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class=&quot;btn btn--ink&quot; href=&quot;#top&quot;&gt;See Abigail’s profile &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+      &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot; aria-label=&quot;Remove Abigail Mensah from your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;&lt;div style=&quot;height:16px&quot;&gt;&lt;/div&gt;&lt;div class=&quot;headliner&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;span class=&quot;skeleton skeleton--portrait&quot;&gt;&lt;/span&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--poster&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--poster skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--short headliner__skeleton--below-sm&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--control skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--control skeleton--short headliner__skeleton--below-lg&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--target headliner__skeleton--below-sm&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="width:1050px"><span class="crd-ac">1024 px · light · required (D-8) · AC-15, AC-27</span><iframe title="1024 pixel wide frame, light theme" width="1024" height="1200" style="width:1024px" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}/* Specimen only, not product CSS: headliner D-8 (skeleton rows) */ @media (min-width: 36rem) { .headliner__skeleton--below-sm { display: none; } } @media (min-width: 62rem) { .headliner__skeleton--below-lg { display: none; } }&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;article class=&quot;headliner&quot; aria-labelledby=&quot;zm-headliner-name-12&quot;&gt;
+  &lt;div class=&quot;art art--yellow&quot; role=&quot;img&quot; aria-label=&quot;Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone&quot;&gt;&lt;span class=&quot;art__tag&quot;&gt;Headliner&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;stack headliner__body&quot;&gt;
+    &lt;p class=&quot;overline headliner__kicker&quot;&gt;No. 01 · Most booked this autumn&lt;/p&gt;
+    &lt;h3 class=&quot;headliner__name&quot; id=&quot;zm-headliner-name-12&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Abigail Mensah&lt;/a&gt;&lt;/h3&gt;
+    &lt;div class=&quot;headliner__meta&quot;&gt;&lt;span&gt;Solo vocalist · Hymns&lt;/span&gt;&lt;span&gt;Brampton · 44 km&lt;/span&gt;&lt;span&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.9 out of 5 by 38 churches&quot;&gt;★ 4.9 · 38 churches&lt;/span&gt;&lt;/span&gt;&lt;span&gt;From $650&lt;/span&gt;&lt;/div&gt;
+    &lt;p class=&quot;headliner__quote&quot;&gt;&lt;q&gt;She had the whole congregation singing in three-part harmony by the last verse.&lt;/q&gt; &lt;span class=&quot;text-muted headliner__attribution&quot;&gt;— Rev. Janet Clarke, Oshawa&lt;/span&gt;&lt;/p&gt;
+    &lt;div class=&quot;cluster headliner__actions&quot;&gt;
+      &lt;span class=&quot;badge badge--free&quot;&gt;Free Sat 14 Nov&lt;/span&gt;
+      &lt;a class=&quot;btn btn--ink&quot; href=&quot;#top&quot;&gt;See Abigail’s profile &lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;
+      &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot; aria-label=&quot;Remove Abigail Mensah from your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;&lt;div style=&quot;height:16px&quot;&gt;&lt;/div&gt;&lt;div class=&quot;headliner&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;span class=&quot;skeleton skeleton--portrait&quot;&gt;&lt;/span&gt;
+  &lt;div class=&quot;stack&quot;&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--poster&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--poster skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--short headliner__skeleton--below-sm&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--long&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--text skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--control skeleton--medium&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--control skeleton--short headliner__skeleton--below-lg&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;skeleton skeleton--target headliner__skeleton--below-sm&quot;&gt;&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p class="crd-note">Measured with the design-system styles: Abigail’s headliner is 934, 549 and 558 px tall at 360, 768 and 1280 px; the skeleton 924, 552 and 580 px. <span class="crd-ac">AC-15</span></p>
+    <p class="crd-note">Not renderable here: AC-19 (keyboard activation), AC-31 (reduced motion), AC-33 (perf-test measurement).</p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-pair"><span>Name, meta, quote</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Reviewer</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Tag and ink button</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div><div class="ds-pair"><span>Free badge, name hover</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div><div class="ds-pair"><span>Frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div><div class="ds-pair"><span>Focus ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: name, meta, quote</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: reviewer</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: tag and ink button</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: focus ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div></div>
+    <span class="crd-ac">AC-25</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody><tr><td>Frame surface</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr><tr><td>Frame rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr><tr><td>Name, meta, quote</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr><tr><td>Reviewer</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr><tr><td>Yellow art, name hover, free badge</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr><tr><td>Text on yellow</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr><tr><td>Tag and ink button</td><td><code>--color-bg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr><tr><td>Tag and ink button label</td><td><code>--color-fg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-inverse" data-swatch></i><span data-token="--color-fg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-inverse" data-swatch></i><span data-token="--color-fg-inverse"></span></span></td></tr><tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr><tr><td>Print shadow</td><td><code>--shadow-3</code></td><td colspan="2"><span data-token="--shadow-3"></span></td></tr><tr><td>Frame width</td><td><code>--border-width-poster</code></td><td colspan="2"><span data-token="--border-width-poster"></span></td></tr><tr><td>Padding and gap (phone / LG)</td><td><code>--space-8</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-8"></span> / <span data-token="--space-10"></span></td></tr><tr><td>Body gap</td><td><code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr><tr><td>Meta gaps</td><td><code>--space-2</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-2"></span> / <span data-token="--space-4"></span></td></tr><tr><td>Name / meta type</td><td><code>--text-display</code> / <code>--text-stub</code></td><td colspan="2"><span data-token="--text-display"></span> / <span data-token="--text-stub"></span></td></tr></tbody></table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

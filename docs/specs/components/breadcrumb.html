@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breadcrumb — Component requirements rendering</title>
+<meta name="description" content="Every variant and state of zm-breadcrumb, in light and dark, at phone and tablet widths, keyed to the acceptance criteria in breadcrumb.md.">
+<meta name="crd:component" content="breadcrumb">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+.ds-matrix { overflow-x: auto; }
+.ds-section .stack > nav + nav { margin-top: var(--space-3); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Breadcrumb</h1>
+    <p class="ds-lead">Every trail the mocks use, on the stage and on paper, plus the collapsed form for deep trails. Requirements: <a href="breadcrumb.md">breadcrumb.md</a>. Design system: <a href="../../design-system/components/breadcrumb.html">breadcrumb</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-breadcrumb</code></span><span class="ds-pill">Status: built</span><span class="ds-pill">Traces to L2-009, L2-012, L2-086, L2-096, L2-100–L2-104, L2-111</span></div>
+    <ul class="ds-toc"><li><a href="#trails">Trails</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li></ul>
+  </header>
+
+<section class="ds-section" id="trails"><h2>Every trail in the mocks</h2>
+
+  <h3>On the stage (profile poster)</h3>
+  <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+      <nav aria-label="Breadcrumb, profile"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav>
+    </div><div class="ds-example__caption"><span>Opened from Naomi’s search: the first crumb carries the date and the search in its URL; the current crumb is bold text. <span class="crd-ac">AC-1, AC-2, AC-5, AC-14</span></span></div></div>
+  <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+      <nav aria-label="Breadcrumb, no date"><ol class="breadcrumb"><li><a href="#top">Discover</a></li><li aria-current="page">Miriam Haile</li></ol></nav>
+    </div><div class="ds-example__caption"><span>Miriam Haile’s profile opened from a shared link with no search date. <span class="crd-ac">AC-3</span></span></div></div>
+  <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+      <div class="stack"><nav aria-label="Breadcrumb, loading"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Loading artist</li></ol></nav><nav aria-label="Breadcrumb, error"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Artist</li></ol></nav></div>
+    </div><div class="ds-example__caption"><span>Loading and error: the page passes placeholder copy as the current crumb; the way back still carries the search. <span class="crd-ac">AC-1</span></span></div></div>
+  <h3>On paper (record pages, <code>page-crumbs</code> on the host)</h3>
+  <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas">
+      <div class="stack"><nav class="page-crumbs" aria-label="Breadcrumb, request"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li><a href="#top">Abigail Mensah</a></li><li aria-current="page">Request to book</li></ol></nav><nav class="page-crumbs" aria-label="Breadcrumb, booking"><ol class="breadcrumb"><li><a href="#top">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav><nav class="page-crumbs" aria-label="Breadcrumb, forbidden"><ol class="breadcrumb"><li><a href="#top">Your bookings</a></li><li aria-current="page">Booking not found</li></ol></nav></div>
+    </div><div class="ds-example__caption"><span>The request page’s three crumbs, Naomi’s booking and the not-found booking. Two separators for three crumbs. <span class="crd-ac">AC-4, AC-5, AC-6, AC-12</span></span></div></div>
+  <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas">
+      <div class="stack"><nav aria-label="Breadcrumb, application"><ol class="breadcrumb"><li><a href="#top">Applications</a></li><li aria-current="page">Tobi Adeyemi</li></ol></nav><nav aria-label="Breadcrumb, artist"><ol class="breadcrumb"><li><a href="#top">Artists</a></li><li aria-current="page">Marcus Bell Trio</li></ol></nav><nav aria-label="Breadcrumb, held booking"><ol class="breadcrumb"><li><a href="#top">Bookings</a></li><li aria-current="page">ZAM-0104</li></ol></nav><nav aria-label="Breadcrumb, checks"><ol class="breadcrumb"><li><a href="#top">Artists</a></li><li aria-current="page">Vulnerable Sector Checks</li></ol></nav></div>
+    </div><div class="ds-example__caption"><span>Priya Nair’s admin records. The checks page puts the trail inside its page head, with no <code>page-crumbs</code>. <span class="crd-ac">AC-5, AC-6</span></span></div></div>
+
+</section>
+<section class="ds-section" id="states"><h2>States</h2>
+
+  <p>Hover and focus are forced with <code>data-state</code>; the real component uses <code>:hover</code> and <code>:focus-visible</code>. The current crumb is the last item in each specimen.</p>
+  <div class="ds-matrix"><table>
+    <thead><tr><th scope="col">Surface</th><th scope="col">Default + current</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">More</th><th scope="col">More, focus</th></tr></thead>
+    <tbody><tr><th scope="row">Stage</th><td><div class="on-stage" style="padding: var(--space-4);"><nav aria-label="Stage default"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div></td><td><div class="on-stage" style="padding: var(--space-4);"><nav aria-label="Stage hover"><ol class="breadcrumb"><li><a href="#top" data-state="hover">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div></td><td><div class="on-stage" style="padding: var(--space-4);"><nav aria-label="Stage focus"><ol class="breadcrumb"><li><a href="#top" data-state="focus">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div></td><td><div class="on-stage" style="padding: var(--space-4);"><ol class="breadcrumb"><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-label="Show 3 more levels">…</button></li></ol></div></td><td><div class="on-stage" style="padding: var(--space-4);"><ol class="breadcrumb"><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-label="Show 3 more levels" data-state="focus">…</button></li></ol></div></td></tr><tr><th scope="row">Paper</th><td><nav aria-label="Paper default"><ol class="breadcrumb"><li><a href="#top">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav></td><td><nav aria-label="Paper hover"><ol class="breadcrumb"><li><a href="#top" data-state="hover">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav></td><td><nav aria-label="Paper focus"><ol class="breadcrumb"><li><a href="#top" data-state="focus">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav></td><td><ol class="breadcrumb"><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-label="Show 3 more levels">…</button></li></ol></td><td><ol class="breadcrumb"><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-label="Show 3 more levels" data-state="focus">…</button></li></ol></td></tr></tbody>
+  </table></div>
+  <span class="crd-ac">AC-7, AC-13</span>
+  <h3>Collapsed and expanded</h3>
+  <div class="ds-example"><div class="ds-example__canvas">
+      <div class="stack"><nav aria-label="Breadcrumb, collapsed"><ol class="breadcrumb" id="crumbs-collapsed"><li><a href="#top">Dashboard</a></li><li><button class="breadcrumb__more" type="button" aria-expanded="false" aria-controls="crumbs-collapsed" aria-label="Show 3 more levels">…</button></li><li hidden><a href="#top">Requests</a></li><li hidden><a href="#top">ZAM-0114</a></li><li hidden><a href="#top">Thread</a></li><li aria-current="page">Messages</li></ol></nav><nav aria-label="Breadcrumb, expanded"><ol class="breadcrumb" id="crumbs-expanded"><li><a href="#top">Dashboard</a></li><li><a href="#top">Requests</a></li><li><a href="#top">ZAM-0114</a></li><li><a href="#top">Thread</a></li><li aria-current="page">Messages</li></ol></nav></div>
+    </div><div class="ds-example__caption"><span>Five crumbs. Collapsed (below MD): first, “…”, current; exactly two separators. Expanded after “…”: the button is gone and focus is on “Requests”. The component hides the middle with <code>.breadcrumb__middle</code> under a media query; this specimen uses <code>hidden</code> for the same picture. <span class="crd-ac">AC-8, AC-9, AC-11, AC-15</span></span></div></div>
+
+</section>
+<section class="ds-section" id="themes"><h2>Both themes</h2>
+
+  <div class="ds-themes">
+    <div data-theme="light"><div class="on-stage" style="padding: var(--space-4);"><nav aria-label="Light stage"><ol class="breadcrumb"><li><a href="#top" data-state="hover">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div><div style="padding: var(--space-4);"><nav aria-label="Light paper"><ol class="breadcrumb"><li><a href="#top" data-state="hover">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav></div></div>
+    <div data-theme="dark"><div class="on-stage" style="padding: var(--space-4);"><nav aria-label="Dark stage"><ol class="breadcrumb"><li><a href="#top" data-state="hover">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav></div><div style="padding: var(--space-4);"><nav aria-label="Dark paper"><ol class="breadcrumb"><li><a href="#top" data-state="hover">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav></div></div>
+  </div>
+  <span class="crd-ac">AC-17, AC-16</span>
+
+</section>
+<section class="ds-section" id="responsive"><h2>Responsive</h2>
+
+  <p>Real viewports: the collapse rule is a viewport media query, so each frame is an iframe at that width.</p>
+  <div class="crd-frames">
+    <figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-19</span><iframe title="320 pixel wide frame, light theme" width="320" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;nav aria-label=&quot;320&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Abigail Mensah&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Request to book&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    <figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-19, AC-17</span><iframe title="360 pixel wide frame, dark theme" width="360" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas);color:var(--color-fg-default)}.on-stage{padding:12px}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;&quot;&gt;&lt;div class=&quot;on-stage&quot;&gt;&lt;nav aria-label=&quot;360&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Grace Tabernacle Mass Choir&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    <figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · light · AC-8</span><iframe title="360 pixel wide frame, light theme" width="360" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;nav aria-label=&quot;Breadcrumb, 360&quot;&gt;&lt;ol class=&quot;breadcrumb&quot; id=&quot;crumbs-360&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Dashboard&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;button class=&quot;breadcrumb__more&quot; type=&quot;button&quot; aria-expanded=&quot;false&quot; aria-controls=&quot;crumbs-360&quot; aria-label=&quot;Show 3 more levels&quot;&gt;…&lt;/button&gt;&lt;/li&gt;&lt;li hidden&gt;&lt;a href=&quot;#top&quot;&gt;Requests&lt;/a&gt;&lt;/li&gt;&lt;li hidden&gt;&lt;a href=&quot;#top&quot;&gt;ZAM-0114&lt;/a&gt;&lt;/li&gt;&lt;li hidden&gt;&lt;a href=&quot;#top&quot;&gt;Thread&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Messages&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    <figure class="crd-frame" style="max-width:794px"><span class="crd-ac">768 px · light · AC-10</span><iframe title="768 pixel wide frame, light theme" width="768" height="140" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;background:var(--color-bg-canvas);color:var(--color-fg-default)}&lt;/style&gt;&lt;/head&gt;&lt;body class=&quot;&quot;&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;nav aria-label=&quot;Breadcrumb, 768&quot;&gt;&lt;ol class=&quot;breadcrumb&quot; id=&quot;crumbs-768&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Dashboard&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Requests&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;ZAM-0114&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Thread&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Messages&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+  </div>
+  <p>Not renderable here: router navigation (AC-2), tab order (AC-12), screen-reader output (AC-14, AC-15), axe (AC-16), coarse-pointer targets (AC-20), French copy (AC-21) and the perf scenario (AC-22). <span class="crd-ac">AC-2, AC-12, AC-20, AC-21, AC-22</span></p>
+
+</section>
+<section class="ds-section" id="contrast"><h2>Contrast</h2>
+<div class="ds-example__canvas ds-example__canvas--stack"><div class="ds-pair"><span>Crumbs on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div><div class="ds-pair"><span>Hovered crumb on the stage</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div><div class="ds-pair"><span>Crumbs on paper</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div><div class="ds-pair"><span>Hovered crumb on its highlighter</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div><div class="ds-pair"><span>Focus ring on paper</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: crumbs on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: crumbs on the canvas</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: hovered crumb on its highlighter</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div><div class="ds-pair" data-theme="dark"><span>Dark: focus ring on the canvas</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div></div><span class="crd-ac">AC-18</span>
+</section>
+<section class="ds-section" id="tokens"><h2>Tokens</h2>
+<div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+<tr><td>Text on the stage</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+<tr><td>Hover on the stage, stage ring</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+<tr><td>Stage</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+<tr><td>Text on paper</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+<tr><td>Hover highlighter on paper</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+<tr><td>Paper focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+<tr><td>Type</td><td><code>--text-stub</code></td><td colspan="2"><span data-token="--text-stub"></span></td></tr>
+<tr><td>Current weight</td><td><code>--font-weight-bold</code></td><td colspan="2"><span data-token="--font-weight-bold"></span></td></tr>
+<tr><td>Item height / coarse pointer</td><td><code>--target-min</code> / <code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-min"></span> / <span data-token="--target-comfortable"></span></td></tr>
+<tr><td>Gap and separator space</td><td><code>--space-2</code></td><td colspan="2"><span data-token="--space-2"></span></td></tr>
+<tr><td>Collapse breakpoint</td><td><code>--layout-breakpoint-md</code></td><td colspan="2"><span data-token="--layout-breakpoint-md"></span></td></tr>
+      </tbody>
+    </table></div>
+</section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

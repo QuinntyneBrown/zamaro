@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marquee — Component requirements rendering</title>
+<meta name="description" content="Both variants and every state of zm-marquee, in light and dark, at phone and tablet widths, keyed to the acceptance criteria in marquee.md.">
+<meta name="crd:component" content="marquee">
+<!-- The real design-system styles: what renders here is the component, not a picture of it. -->
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Marquee</h1>
+    <p class="ds-lead">The yellow bill under the poster: cities on Discover, songs on a profile. Requirements: <a href="marquee.md">marquee.md</a>. Design system: <a href="../../design-system/components/marquee.html">marquee</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selector <code>zm-marquee</code></span><span class="ds-pill">Status: built</span><span class="ds-pill">Traces to L2-004, L2-012, L2-086, L2-096, L2-100, L2-101, L2-103–L2-105</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Variants</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<div class="on-stage" style="background:var(--color-bg-stage);height:var(--space-8)"></div><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga ✦</span><span>Brampton ✦</span><span>Hamilton ✦</span><span>Markham ✦</span><span>Ajax ✦</span><span>Oshawa ✦</span><span>Barrie ✦</span><span>Kitchener ✦</span><span>Niagara</span></div>
+</div><div class="ds-example__caption"><span>Default, the eleven Discover cities, clipped at the right edge; “Niagara” has no separator. <span class="crd-ac">AC-1, AC-7, AC-9</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<div class="on-stage" style="background:var(--color-bg-stage);height:var(--space-8)"></div><div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance</span></div>
+</div><div class="ds-example__caption"><span>Default, Abigail’s first five setlist songs in order. <span class="crd-ac">AC-2</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<div class="marquee" aria-hidden="true"><span>Goodness of God ✦</span><span>It Is Well With My Soul ✦</span><span>Abide With Me ✦</span><span>Firm Foundation</span></div>
+</div><div class="ds-example__caption"><span>Short list: Miriam Haile’s four songs; the rest stays empty yellow. <span class="crd-ac">AC-3</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<div class="on-stage" style="background:var(--color-bg-stage);height:var(--space-8)"></div><div class="marquee marquee--stage" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God ✦</span><span>Great Is Thy Faithfulness ✦</span><span>Jireh ✦</span><span>Blessed Assurance</span></div><div class="on-stage" style="background:var(--color-bg-stage);height:var(--space-8)"></div>
+</div><div class="ds-example__caption"><span>Stage variant between charcoal surfaces. <span class="crd-ac">AC-5</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Sizes</h2>
+    <p class="ds-na">One size, 50 px tall: one line of <code>--text-h4</code>, <code>--space-3</code> padding and two thick rules. Width is the viewport's.</p>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<div style="display:grid;grid-template-columns:1fr 1fr;align-items:start"><div class="marquee" aria-hidden="true"><span>Way Maker ✦</span><span>Goodness of God</span></div><span class="skeleton skeleton--strip" aria-hidden="true"></span></div>
+</div><div class="ds-example__caption"><span>The strip beside <code>.skeleton--strip</code>: the same height, so the swap does not move the page. <span class="crd-ac">AC-6</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Short list</th><th scope="col">Loading (page)</th><th scope="col">Empty</th></tr></thead>
+      <tbody><tr><th scope="row">Default</th><td><div style="width:16rem;overflow:hidden"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div></div></td><td><div style="width:16rem;overflow:hidden"><div class="marquee" aria-hidden="true"><span>Jireh ✦</span><span>Way Maker</span></div></div></td><td><div style="width:16rem"><span class="skeleton skeleton--strip" aria-hidden="true"></span></div></td><td><p class="text-caption">Not rendered (<code>hidden</code>)</p></td></tr><tr><th scope="row">Stage</th><td><div style="width:16rem;overflow:hidden"><div class="marquee marquee--stage" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div></div></td><td><div style="width:16rem;overflow:hidden"><div class="marquee marquee--stage" aria-hidden="true"><span>Jireh ✦</span><span>Way Maker</span></div></div></td><td><div style="width:16rem"><span class="skeleton skeleton--strip" aria-hidden="true"></span></div></td><td><p class="text-caption">Not rendered (<code>hidden</code>)</p></td></tr></tbody>
+    </table></div>
+    <span class="crd-ac">AC-3, AC-4, AC-6, AC-8, AC-15</span>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div><div style="height:var(--space-4)"></div><div class="marquee marquee--stage" aria-hidden="true"><span>Jireh ✦</span><span>Blessed Assurance</span></div></div>
+      <div data-theme="dark"><div class="marquee" aria-hidden="true"><span>Toronto ✦</span><span>Burlington ✦</span><span>Mississauga</span></div><div style="height:var(--space-4)"></div><div class="marquee marquee--stage" aria-hidden="true"><span>Jireh ✦</span><span>Blessed Assurance</span></div></div>
+    </div>
+    <span class="crd-ac">AC-10, AC-11, AC-12</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports. Type and padding never change; the strip only clips more or less.</p>
+    <div class="crd-frames">
+<figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-13</span><iframe title="320 pixel wide frame, light theme" width="320" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;background:var(--color-bg-stage);height:var(--space-8)&quot;&gt;&lt;/div&gt;&lt;div class=&quot;marquee&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;Toronto ✦&lt;/span&gt;&lt;span&gt;Burlington ✦&lt;/span&gt;&lt;span&gt;Mississauga ✦&lt;/span&gt;&lt;span&gt;Brampton ✦&lt;/span&gt;&lt;span&gt;Hamilton ✦&lt;/span&gt;&lt;span&gt;Markham ✦&lt;/span&gt;&lt;span&gt;Ajax ✦&lt;/span&gt;&lt;span&gt;Oshawa ✦&lt;/span&gt;&lt;span&gt;Barrie ✦&lt;/span&gt;&lt;span&gt;Kitchener ✦&lt;/span&gt;&lt;span&gt;Niagara&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · light · AC-14</span><iframe title="360 pixel wide frame, light theme" width="360" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;background:var(--color-bg-stage);height:var(--space-8)&quot;&gt;&lt;/div&gt;&lt;div class=&quot;marquee&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;Toronto ✦&lt;/span&gt;&lt;span&gt;Burlington ✦&lt;/span&gt;&lt;span&gt;Mississauga ✦&lt;/span&gt;&lt;span&gt;Brampton ✦&lt;/span&gt;&lt;span&gt;Hamilton ✦&lt;/span&gt;&lt;span&gt;Markham ✦&lt;/span&gt;&lt;span&gt;Ajax ✦&lt;/span&gt;&lt;span&gt;Oshawa ✦&lt;/span&gt;&lt;span&gt;Barrie ✦&lt;/span&gt;&lt;span&gt;Kitchener ✦&lt;/span&gt;&lt;span&gt;Niagara&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-11, AC-14</span><iframe title="360 pixel wide frame, dark theme" width="360" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;background:var(--color-bg-stage);height:var(--space-8)&quot;&gt;&lt;/div&gt;&lt;div class=&quot;marquee&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;&lt;span&gt;Great Is Thy Faithfulness ✦&lt;/span&gt;&lt;span&gt;Jireh ✦&lt;/span&gt;&lt;span&gt;Blessed Assurance&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:794px"><span class="crd-ac">768 px · light · AC-2</span><iframe title="768 pixel wide frame, light theme" width="768" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;background:var(--color-bg-stage);height:var(--space-8)&quot;&gt;&lt;/div&gt;&lt;div class=&quot;marquee&quot; aria-hidden=&quot;true&quot;&gt;&lt;span&gt;Way Maker ✦&lt;/span&gt;&lt;span&gt;Goodness of God ✦&lt;/span&gt;&lt;span&gt;Great Is Thy Faithfulness ✦&lt;/span&gt;&lt;span&gt;Jireh ✦&lt;/span&gt;&lt;span&gt;Blessed Assurance&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p><span class="crd-ac">AC-15, AC-16: motion over time and the perf measurement, not renderable here</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+<div class="ds-pair"><span>Type on the yellow strip</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Ink rule against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-canvas" data-min="3"></span></div>
+<div class="ds-pair"><span>Stage variant type</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: type on the yellow strip</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: yellow strip against the page</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-canvas" data-min="3"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: stage variant type</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+    </div>
+    <span class="crd-ac">AC-12</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+<tr><td>Strip fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+<tr><td>Type</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+<tr><td>Rules</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+<tr><td>Stage fill</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+<tr><td>Stage type and rules</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+<tr><td>Type size</td><td><code>--font-size-xl</code></td><td colspan="2"><span data-token="--font-size-xl"></span></td></tr>
+<tr><td>Padding (vertical / item)</td><td><code>--space-3 / --space-5</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-5"></span></td></tr>
+<tr><td>Rules</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

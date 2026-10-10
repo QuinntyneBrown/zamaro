@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Divider — Component requirements rendering</title>
+<meta name="description" content="Every variant of zm-divider on every paper surface, in light and dark, at phone widths, keyed to the acceptance criteria in divider.md.">
+<meta name="crd:component" content="divider">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+/* Docs only, as on the design-system page: a paper card to show dividers in context. */
+.ds-paper { width: 100%; padding: var(--space-6); background: var(--color-bg-surface); border: var(--border-width-thick) solid var(--color-border-strong); }
+.ds-matrix td { min-width: 10rem; }
+.ds-section .panel__title { font: var(--text-h4); }
+</style>
+<style>
+/* Requirements this CRD adds that components.css does not have yet: .divider--flush (D-4) and the wrapping label (D-3). */
+.divider--flush { margin-block: 0; } .divider--label { text-align: center; } .divider--label::before, .divider--label::after { min-width: var(--space-4); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Divider</h1>
+    <p class="ds-lead">Every variant of the divider on the surfaces it sits on. Requirements: <a href="divider.md">divider.md</a>. Design system: <a href="../../design-system/components/divider.html">divider</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selector <code>zm-divider</code></span><span class="ds-pill">Status: planned</span><span class="ds-pill">Traces to L2-048, L2-086, L2-096, L2-100–L2-104, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Variants</h2>
+    <h3>In the product: Tobi Adeyemi's references</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <div style="max-width: 40rem;"><section class="panel" aria-labelledby="refs-title-a">
+  <div class="panel__head"><h3 id="refs-title-a" class="panel__title">Church references</h3><span class="text-caption">0 of 2 verified</span></div>
+  <div class="stack stack--sm">
+    <dl class="definition definition--two">
+      <div class="definition__row"><dt>Name</dt><dd>Pastor Samuel Osei</dd></div>
+      <div class="definition__row"><dt>Church</dt><dd>Cornerstone Baptist, Scarborough</dd></div>
+    </dl>
+    <p class="text-muted">Reference verified: not yet</p>
+  </div>
+  <hr class="divider">
+  <div class="stack stack--sm">
+    <dl class="definition definition--two">
+      <div class="definition__row"><dt>Name</dt><dd>Ruth Kim</dd></div>
+      <div class="definition__row"><dt>Church</dt><dd>Agincourt Community Church</dd></div>
+    </dl>
+    <p class="text-muted">Reference verified: not yet</p>
+  </div>
+</section></div>
+    </div><div class="ds-example__caption"><span>The only divider in the mocks: a hairline between the two references on the admin application page. <span class="crd-ac">AC-1, AC-2, AC-8</span></span></div></div>
+
+    <h3>Horizontal and labelled</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-paper"><p class="overline">Hairline</p><hr class="divider"><p class="overline">Strong</p><hr class="divider divider--strong"><p class="overline">Perforated</p><hr class="divider divider--perforated"><p class="divider divider--label">Or pick a nearby date</p></div>
+    </div><div class="ds-example__caption"><span><code>hr.divider</code>, <code>.divider--strong</code>, <code>.divider--perforated</code>, and <code>p.divider--label</code>, read as text. <span class="crd-ac">AC-2, AC-3, AC-5, AC-10</span></span></div></div>
+
+    <h3>Perforated, in a booking summary</h3>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <div class="ds-paper" style="max-width: 24rem;">
+  <div class="cluster cluster--between"><span>Abigail Mensah · Sun 1 Nov</span><span>$650</span></div>
+  <div class="cluster cluster--between" style="margin-top: var(--space-2);"><span class="text-muted">Zamaro fee (8%)</span><span class="text-muted">included</span></div>
+  <hr class="divider divider--perforated">
+  <div class="cluster cluster--between"><b>Deposit due now (25%)</b><b>$162.50</b></div>
+</div>
+    </div><div class="ds-example__caption"><span>One tear line, above what you pay. <span class="crd-ac">AC-3</span></span></div></div>
+
+    <h3>Vertical</h3>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <div class="cluster" style="flex-wrap: nowrap;"><span class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>Brampton · 44 km</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>From $650</span></div>
+    </div><div class="ds-example__caption"><span><code>span.divider--vertical[role=separator][aria-orientation=vertical]</code> stretches to the row and sits <code>--space-2</code> from each neighbour. <span class="crd-ac">AC-4, AC-9</span></span></div></div>
+
+    <h3>Flush, inside a stack</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-paper"><div class="stack"><p>Nothing is charged until Abigail accepts.</p><hr class="divider divider--flush"><p class="text-muted">Cancel free up to 14 days before.</p></div></div>
+    </div><div class="ds-example__caption"><span><code>flush</code> adds <code>.divider--flush</code>: the stack's <code>--space-4</code> gap is the only space on each side. <span class="crd-ac">AC-6</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Sizes</h2>
+    <p class="ds-na">One weight per variant: hairline and vertical use <code>--border-width-hairline</code>, strong and perforated <code>--border-width-thick</code>. Width is the container's; a vertical rule takes the row's height.</p>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>Dividers are not interactive: no hover, focus, disabled or busy state, and Tab never stops on one. What changes is the surface under them. <span class="crd-ac">AC-7</span></p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Variant</th><th scope="col">On canvas</th><th scope="col">On a card</th><th scope="col">In a sunken well</th></tr></thead>
+      <tbody><tr><th scope="row">Hairline<span class="crd-ac">AC-2</span></th><td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider"></div></td><td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider"></div></td><td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider"></div></td></tr><tr><th scope="row">Strong<span class="crd-ac">AC-3</span></th><td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider divider--strong"></div></td><td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider divider--strong"></div></td><td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider divider--strong"></div></td></tr><tr><th scope="row">Perforated<span class="crd-ac">AC-3</span></th><td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider divider--perforated"></div></td><td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider divider--perforated"></div></td><td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><hr style="margin-block: var(--space-2);" class="divider divider--perforated"></div></td></tr><tr><th scope="row">Label<span class="crd-ac">AC-5</span></th><td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><p style="margin: 0;" class="divider divider--label">Or</p></div></td><td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><p style="margin: 0;" class="divider divider--label">Or</p></div></td><td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><p style="margin: 0;" class="divider divider--label">Or</p></div></td></tr><tr><th scope="row">Vertical<span class="crd-ac">AC-4</span></th><td><div style="background: var(--color-bg-canvas); padding: var(--space-2);"><div class="cluster" style="flex-wrap: nowrap;"><span>4.9</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>44 km</span></div></div></td><td><div style="background: var(--color-bg-surface); padding: var(--space-2);"><div class="cluster" style="flex-wrap: nowrap;"><span>4.9</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>44 km</span></div></div></td><td><div style="background: var(--color-bg-surface-sunken); padding: var(--space-2);"><div class="cluster" style="flex-wrap: nowrap;"><span>4.9</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>44 km</span></div></div></td></tr></tbody>
+    </table></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="ds-paper"><p class="overline">Hairline</p><hr class="divider"><p class="overline">Strong</p><hr class="divider divider--strong"><p class="overline">Perforated</p><hr class="divider divider--perforated"><p class="divider divider--label">Or pick a nearby date</p></div><div class="ds-paper" style="margin-top: var(--space-4);"><div class="cluster" style="flex-wrap: nowrap;"><span class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>Brampton · 44 km</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>From $650</span></div></div></div>
+      <div data-theme="dark"><div class="ds-paper"><p class="overline">Hairline</p><hr class="divider"><p class="overline">Strong</p><hr class="divider divider--strong"><p class="overline">Perforated</p><hr class="divider divider--perforated"><p class="divider divider--label">Or pick a nearby date</p></div><div class="ds-paper" style="margin-top: var(--space-4);"><div class="cluster" style="flex-wrap: nowrap;"><span class="rating" role="img" aria-label="Rated 4.9 out of 5 by 38 churches"><span class="rating__score">4.9</span><span class="rating__count">38 churches</span></span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>Brampton · 44 km</span><span class="divider divider--vertical" role="separator" aria-orientation="vertical"></span><span>From $650</span></div></div></div>
+    </div>
+    <span class="crd-ac">AC-11, AC-12</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>The divider does not change across breakpoints. These real viewports show that rules keep the container's width at 320 px, and that the label wraps rather than clips: the 160 px frame is a 320 px phone at 200 % zoom.</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:350px"><span class="crd-ac">320 px · light · AC-14</span><iframe title="320 pixel wide frame, light theme" width="320" height="300" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.divider--flush { margin-block: 0; } .divider--label { text-align: center; } .divider--label::before, .divider--label::after { min-width: var(--space-4); } body{margin:0;padding:12px;background:var(--color-bg-canvas)} .ds-paper{padding:var(--space-4);background:var(--color-bg-surface);border:var(--border-width-thick) solid var(--color-border-strong)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;ds-paper&quot;&gt;&lt;hr style=&quot;margin-top:0&quot; class=&quot;divider&quot;&gt;&lt;hr class=&quot;divider divider--strong&quot;&gt;&lt;hr class=&quot;divider divider--perforated&quot;&gt;&lt;p class=&quot;divider divider--label&quot;&gt;Or pick a nearby date&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:190px"><span class="crd-ac">320 px at 200 % · AC-15</span><iframe title="320 pixel phone at 200 percent zoom, light theme" width="160" height="220" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.divider--flush { margin-block: 0; } .divider--label { text-align: center; } .divider--label::before, .divider--label::after { min-width: var(--space-4); } body{margin:0;padding:12px;background:var(--color-bg-canvas)} .ds-paper{padding:var(--space-4);background:var(--color-bg-surface);border:var(--border-width-thick) solid var(--color-border-strong)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;ds-paper&quot;&gt;&lt;p class=&quot;divider divider--label&quot;&gt;Or pick a nearby date&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:390px"><span class="crd-ac">360 px · French · AC-16</span><iframe title="360 pixel wide frame, light theme" width="360" height="160" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.divider--flush { margin-block: 0; } .divider--label { text-align: center; } .divider--label::before, .divider--label::after { min-width: var(--space-4); } body{margin:0;padding:12px;background:var(--color-bg-canvas)} .ds-paper{padding:var(--space-4);background:var(--color-bg-surface);border:var(--border-width-thick) solid var(--color-border-strong)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;ds-paper&quot;&gt;&lt;p class=&quot;divider divider--label&quot;&gt;Ou choisissez une date proche&lt;/p&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:390px"><span class="crd-ac">360 px · dark · AC-12</span><iframe title="360 pixel wide frame, dark theme" width="360" height="180" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.divider--flush { margin-block: 0; } .divider--label { text-align: center; } .divider--label::before, .divider--label::after { min-width: var(--space-4); } body{margin:0;padding:12px;background:var(--color-bg-canvas)} .ds-paper{padding:var(--space-4);background:var(--color-bg-surface);border:var(--border-width-thick) solid var(--color-border-strong)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;ds-paper&quot;&gt;&lt;p class=&quot;divider divider--label&quot;&gt;Or pick a nearby date&lt;/p&gt;&lt;hr class=&quot;divider divider--perforated&quot;&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Strong and perforated on a card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Strong and perforated on the page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+      <div class="ds-pair"><span>Strong and perforated in a sunken well</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface-sunken" data-min="3"></span></div>
+      <div class="ds-pair"><span>Label on a card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Label on the page</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Hairline (decorative, exempt)</span><span class="ds-pair__ratio" data-contrast="--color-border-default|--color-bg-surface" data-min="1"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: strong and perforated on a card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: strong and perforated in a sunken well</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface-sunken" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: label on a card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: label on the page</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+    </div>
+    <span class="crd-ac">AC-13</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Hairline, vertical, label lines</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+        <tr><td>Strong, perforated</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+        <tr><td>Label text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+        <tr><td>Hairline / rule width</td><td><code>--border-width-hairline</code> / <code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-hairline"></span> / <span data-token="--border-width-thick"></span></td></tr>
+        <tr><td>Block margin / vertical margin / label gap / minimum line</td><td><code>--space-6</code> / <code>--space-2</code> / <code>--space-3</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-2"></span> / <span data-token="--space-3"></span> / <span data-token="--space-4"></span></td></tr>
+        <tr><td>Label type</td><td><code>--text-overline</code>, <code>--letter-spacing-stamp</code></td><td colspan="2"><span data-token="--text-overline"></span></td></tr>
+      </tbody>
+    </table></div>
+    <p>Performance (AC-17) is measured by the perf-test runner, not rendered here.</p>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

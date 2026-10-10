@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Save toggle — Component requirements rendering</title>
+<meta name="description" content="Every value and state of zm-save-toggle, on its own, in a ticket stub and beside the headliner's actions, in light and dark, keyed to the acceptance criteria in save-toggle.md.">
+<meta name="crd:component" content="save-toggle">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+/* As on the ticket CRD: ds.css styles every h3 and li in a section; give the specimens their product styles back. */
+.ds-section .ticket__name { font: var(--text-h3); margin: 0; }
+.ds-section .lineup > li + li { margin-top: 0; }
+.ds-section .lineup { grid-template-columns: minmax(0, 1fr); max-width: 44rem; }
+.ds-section .ds-themes .lineup { margin-top: var(--space-4); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Save toggle</h1>
+    <p class="ds-lead">The round heart that saves an artist, in every value and state. Requirements: <a href="save-toggle.md">save-toggle.md</a>. Design system: <a href="../../design-system/components/save-toggle.html">save toggle</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selector <code>zm-save-toggle</code></span><span class="ds-pill">Status: planned</span><span class="ds-pill">Traces to L2-006, L2-021, L2-026, L2-027, L2-086, L2-096, L2-100–L2-104, L2-108, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#values">Values</a></li><li><a href="#placements">Placements</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="values"><h2>Values</h2>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div><div class="ds-example__caption"><span>Off: “Save Marcus Bell Trio to your saved artists”. On: “Remove Luz Viva from your saved artists”. “&amp;” is spoken as “and”: “Save Daniel and Ruth Okonkwo to your saved artists”. <span class="crd-ac">AC-1, AC-2, AC-3, AC-17, AC-18</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="placements"><h2>Placements</h2>
+    <h3>In a ticket stub (Discover, Saved artists, similar artists)</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <ol class="lineup" role="list" aria-label="More artists free Saturday 14 November 2026"><li class="ticket">
+  <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+  <div class="ticket__body"><span class="ticket__no">No. 02 · ★ 4.6 · 17 churches</span><h3 class="ticket__name"><a href="#top">Marcus Bell Trio</a></h3><p class="ticket__meta">Band · Acoustic, Hymns<br>Hamilton · 14 km from you</p></div>
+  <div class="ticket__stub"><p class="ticket__price"><small>From</small>$950</p><button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+</li><li class="ticket">
+  <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+  <div class="ticket__body"><span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span><h3 class="ticket__name"><a href="#top">Luz Viva</a></h3><p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p></div>
+  <div class="ticket__stub"><p class="ticket__price"><small>From</small>$900</p><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+</li><li class="ticket">
+  <div class="art ticket__art art--tilt" role="img" aria-label="Daniel and Ruth Okonkwo singing together, one with a guitar"></div>
+  <div class="ticket__body"><span class="ticket__no">No. 07 · ★ 4.9 · 14 churches</span><h3 class="ticket__name"><a href="#top">Daniel &amp; Ruth Okonkwo</a></h3><p class="ticket__meta">Duo · Acoustic, Hymns<br>Ajax · 97 km from you</p></div>
+  <div class="ticket__stub"><p class="ticket__price"><small>From</small>$700</p><button class="save" type="button" aria-pressed="false" aria-label="Save Daniel and Ruth Okonkwo to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+</li></ol>
+    </div><div class="ds-example__caption"><span>Raised above the stretched name link by the ticket, so a press saves instead of opening the profile. Saved artists show every toggle pressed. <span class="crd-ac">AC-4, AC-5, AC-11</span></span></div></div>
+    <h3>After the headliner’s actions</h3>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <div class="cluster"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--ink" href="#top">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+    </div><div class="ds-example__caption"><span>Last in the cluster: the tab order reads profile, then save. <span class="crd-ac">AC-14</span></span></div></div>
+    <h3>A press, then busy, then a revert</h3>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva to your saved artists, step 1"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="text-caption">→</span><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Luz Viva from your saved artists, step 2"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><span class="text-caption">→ request fails →</span><button class="save" type="button" aria-pressed="false" aria-label="Save Luz Viva to your saved artists, step 3"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+    </div><div class="ds-example__caption"><span>The store flips the value at once and marks it busy; extra presses are ignored; on failure it flips back and the page shows “Couldn’t save Luz Viva. Try again.” Focus never moves. <span class="crd-ac">AC-6, AC-7, AC-8, AC-9, AC-10, AC-15</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Sizes</h2>
+    <p class="ds-na">One size: a <code>--target-comfortable</code> circle at every width and pointer. <span class="crd-ac">AC-22</span></p>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>Hover, focus and active are forced with <code>data-state</code>; busy and disabled use the real attributes.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Value</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Busy</th><th scope="col">Disabled</th></tr></thead>
+      <tbody><tr><th scope="row">Off<span class="crd-ac">AC-1, AC-6, AC-12</span></th><td><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Elijah Park to your saved artists, hover example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" data-state="focus" aria-label="Save Elijah Park to your saved artists, focus example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" data-state="active" aria-label="Save Elijah Park to your saved artists, active example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" aria-busy="true" aria-disabled="true" aria-label="Save Elijah Park to your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="false" disabled aria-label="Save Elijah Park to your saved artists, disabled example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr><tr><th scope="row">On<span class="crd-ac">AC-2, AC-7, AC-13</span></th><td><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" data-state="hover" aria-label="Remove Abigail Mensah from your saved artists, hover example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Remove Abigail Mensah from your saved artists, focus example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" data-state="active" aria-label="Remove Abigail Mensah from your saved artists, active example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Abigail Mensah from your saved artists, busy example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td><td><button class="save" type="button" aria-pressed="true" disabled aria-label="Remove Abigail Mensah from your saved artists, disabled example"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></td></tr></tbody>
+    </table></div>
+    <h3>Focus inside a ticket</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <ol class="lineup" role="list" aria-label="Focus example"><li class="ticket">
+  <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+  <div class="ticket__body"><span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span><h3 class="ticket__name"><a href="#top">Luz Viva</a></h3><p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p></div>
+  <div class="ticket__stub"><p class="ticket__price"><small>From</small>$900</p><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+</li></ol>
+    </div><div class="ds-example__caption"><span>The ring is drawn around the circle’s box and is not clipped by the stub. <span class="crd-ac">AC-16</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="cluster cluster--lg"><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Hover to your saved artists, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Remove Focus from your saved artists, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Luz Viva from your saved artists, light theme busy"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" disabled aria-label="Save Disabled to your saved artists, light theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><ol class="lineup" role="list" aria-label="light theme lineup"><li class="ticket">
+  <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+  <div class="ticket__body"><span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span><h3 class="ticket__name"><a href="#top">Luz Viva</a></h3><p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p></div>
+  <div class="ticket__stub"><p class="ticket__price"><small>From</small>$900</p><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+</li></ol></div>
+      <div data-theme="dark"><div class="cluster cluster--lg"><button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" data-state="hover" aria-label="Save Hover to your saved artists, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" data-state="focus" aria-label="Remove Focus from your saved artists, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Luz Viva from your saved artists, dark theme busy"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button><button class="save" type="button" aria-pressed="false" disabled aria-label="Save Disabled to your saved artists, dark theme"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div><ol class="lineup" role="list" aria-label="dark theme lineup"><li class="ticket">
+  <div class="art ticket__art art--group" role="img" aria-label="Luz Viva, a four-piece band with congas, singing in a church fellowship hall"></div>
+  <div class="ticket__body"><span class="ticket__no">No. 04 · ★ 5.0 · 6 churches</span><h3 class="ticket__name"><a href="#top">Luz Viva</a></h3><p class="ticket__meta">Band · Acoustic, Spanish<br>North York · 63 km from you</p></div>
+  <div class="ticket__stub"><p class="ticket__price"><small>From</small>$900</p><button class="save" type="button" aria-pressed="true" aria-label="Remove Luz Viva from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button></div>
+</li></ol></div>
+    </div>
+    <span class="crd-ac">AC-19, AC-20, AC-21</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>The toggle itself never changes; it moves with the ticket stub. Each frame is an iframe at that width.</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-23</span><iframe title="320 pixel wide frame, light theme" width="320" height="330" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;320 example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--tilt&quot; role=&quot;img&quot; aria-label=&quot;Daniel and Ruth Okonkwo singing together, one with a guitar&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;ticket__no&quot;&gt;No. 07 · ★ 4.9 · 14 churches&lt;/span&gt;&lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Daniel &amp;amp; Ruth Okonkwo&lt;/a&gt;&lt;/h3&gt;&lt;p class=&quot;ticket__meta&quot;&gt;Duo · Acoustic, Hymns&lt;br&gt;Ajax · 97 km from you&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$700&lt;/p&gt;&lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Daniel and Ruth Okonkwo to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · light · AC-22</span><iframe title="360 pixel wide frame, light theme" width="360" height="300" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;360 example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group&quot; role=&quot;img&quot; aria-label=&quot;Marcus Bell Trio, piano, upright bass and drums, under warm stage lights&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;ticket__no&quot;&gt;No. 02 · ★ 4.6 · 17 churches&lt;/span&gt;&lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Marcus Bell Trio&lt;/a&gt;&lt;/h3&gt;&lt;p class=&quot;ticket__meta&quot;&gt;Band · Acoustic, Hymns&lt;br&gt;Hamilton · 14 km from you&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$950&lt;/p&gt;&lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Marcus Bell Trio to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-22, AC-20</span><iframe title="360 pixel wide frame, dark theme" width="360" height="300" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;360 dark example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group&quot; role=&quot;img&quot; aria-label=&quot;Luz Viva, a four-piece band with congas, singing in a church fellowship hall&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;ticket__no&quot;&gt;No. 04 · ★ 5.0 · 6 churches&lt;/span&gt;&lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Luz Viva&lt;/a&gt;&lt;/h3&gt;&lt;p class=&quot;ticket__meta&quot;&gt;Band · Acoustic, Spanish&lt;br&gt;North York · 63 km from you&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$900&lt;/p&gt;&lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot; aria-label=&quot;Remove Luz Viva from your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:794px"><span class="crd-ac">768 px · light · AC-22</span><iframe title="768 pixel wide frame, light theme" width="768" height="240" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;768 example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group&quot; role=&quot;img&quot; aria-label=&quot;Luz Viva, a four-piece band with congas, singing in a church fellowship hall&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;&lt;span class=&quot;ticket__no&quot;&gt;No. 04 · ★ 5.0 · 6 churches&lt;/span&gt;&lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Luz Viva&lt;/a&gt;&lt;/h3&gt;&lt;p class=&quot;ticket__meta&quot;&gt;Band · Acoustic, Spanish&lt;br&gt;North York · 63 km from you&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;&lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$900&lt;/p&gt;&lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot; aria-label=&quot;Remove Luz Viva from your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p>Not renderable here: <span class="crd-ac">AC-24 (French catalogue through the text token), AC-25 (reduced motion), AC-26 (perf-test measurement)</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Circle rule on ticket</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Heart (off) on ticket</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Heart on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+      <div class="ds-pair"><span>Pressed edge (ink rule) on ticket</span><span class="ds-pair__ratio" data-contrast="--color-border-on-accent|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Focus ring on ticket</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: circle rule on ticket</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: heart (off)</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: heart on yellow</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: pressed edge (yellow fill) on ticket</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: focus ring on ticket</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-21</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Fill, off (--save-bg)</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+        <tr><td>Rule, off (--save-border)</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+        <tr><td>Heart, off (--save-fg)</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+        <tr><td>Fill, on</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+        <tr><td>Heart, on</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+        <tr><td>Rule, on</td><td><code>--color-border-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-on-accent" data-swatch></i><span data-token="--color-border-on-accent"></span></span></td></tr>
+        <tr><td>Disabled fill</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+        <tr><td>Disabled heart and rule</td><td><code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+        <tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+        <tr><td>Size / shape</td><td><code>--target-comfortable</code> / <code>--radius-full</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+        <tr><td>Rule width</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+        <tr><td>Grow and squeeze</td><td><code>--duration-fast</code>, <code>--ease-spring</code></td><td colspan="2"><span data-token="--duration-fast"></span> · <span data-token="--ease-spring"></span></td></tr>
+        <tr><td>Busy pulse</td><td><code>--duration-loop</code></td><td colspan="2"><span data-token="--duration-loop"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

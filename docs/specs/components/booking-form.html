@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking ticket — Component requirements rendering</title>
+<meta name="description" content="The booking bar, booking stub, auth card and stub skeleton of zm-booking-form in every state, in light and dark, at phone and tablet widths, keyed to the acceptance criteria in booking-form.md.">
+<meta name="crd:component" content="booking-form">
+<!-- The real design-system styles: what renders here is the component, not a picture of it. -->
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+.ds-section .stub h2, .ds-section .booking-bar h2, .ds-section .error-summary h3 { margin: 0; } .ds-section .stub__title { font: var(--text-h3); } .ds-section .booking-bar__title { font: var(--text-h4); } .ds-section .auth-card__title { font: var(--text-h2); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Booking ticket</h1>
+    <p class="ds-lead">The Discover search bar, the profile booking stub and the “Admit one” auth card: one ticket frame. Requirements: <a href="booking-form.md">booking-form.md</a>. Design system: <a href="../../design-system/components/booking-form.html">booking ticket</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-booking-form</code> <code>zm-booking-form-skeleton</code></span><span class="ds-pill">Status: built / planned</span><span class="ds-pill">Traces to L2-004, L2-019, L2-022, L2-023, L2-044, L2-086, L2-096–L2-105, L2-108, L2-110, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#bar">Booking bar</a></li><li><a href="#stub">Booking stub</a></li><li><a href="#auth">Auth card</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="bar"><h2>Booking bar</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+<form class="booking-bar" data-theme="light" aria-labelledby="b1-t" style="width: 100%; max-width: 34rem;" action="#top" novalidate>
+  <h2 id="b1-t" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"></label><label class="field"><span class="field__label">Kind of gathering</span><select class="select"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label><label class="field"><span class="field__label">Church location</span><input class="input" type="text" value="Burlington, ON"></label><label class="field"><span class="field__label">How far can they drive?</span><select class="select"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+</form>
+</div><div class="ds-example__caption"><span>Paper island on the stage; four fields in two columns from 576 px; the submit spans both. <span class="crd-ac">AC-1, AC-2</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+<form class="booking-bar" data-theme="light" aria-labelledby="b2-t" aria-busy="true" style="width: 100%; max-width: 34rem;" action="#top" novalidate>
+  <h2 id="b2-t" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field" style="opacity:.6;pointer-events:none"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"></label><label class="field" style="opacity:.6;pointer-events:none"><span class="field__label">Kind of gathering</span><select class="select"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label><label class="field" style="opacity:.6;pointer-events:none"><span class="field__label">Church location</span><input class="input" type="text" value="Burlington, ON"></label><label class="field" style="opacity:.6;pointer-events:none"><span class="field__label">How far can they drive?</span><select class="select"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Checking calendars…</button>
+</form>
+</div><div class="ds-example__caption"><span>Busy: fields faded and kept, submit “Checking calendars…”, presses ignored. <span class="crd-ac">AC-9, AC-28</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+<form class="booking-bar" data-theme="light" aria-labelledby="b3-t" style="width: 100%; max-width: 34rem;" action="#top" novalidate>
+  <h2 id="b3-t" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2><div class="error-summary" role="alert" aria-labelledby="b3-es"><h3 id="b3-es" class="error-summary__title">Two things before we can search</h3><ul><li><a href="#b3-date">Pick your event date.</a></li><li><a href="#b3-place">Enter your church’s location.</a></li></ul></div>
+  <div class="field"><label class="field__label" for="b3-date">Event date</label><input class="input" type="date" id="b3-date" value="" aria-invalid="true" aria-describedby="b3-de"><span class="field__error" id="b3-de">Pick your event date.</span></div><label class="field"><span class="field__label">Kind of gathering</span><select class="select"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label><div class="field"><label class="field__label" for="b3-place">Church location</label><input class="input" type="text" id="b3-place" value="" aria-invalid="true" aria-describedby="b3-pe"><span class="field__error" id="b3-pe">Enter your church’s address or town, or pick a city below.</span></div><label class="field"><span class="field__label">How far can they drive?</span><select class="select"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label><fieldset class="filters"><legend>Or pick a city</legend><button class="chip chip--sm" type="button" aria-pressed="false">Toronto</button><button class="chip chip--sm" type="button" aria-pressed="false">Burlington</button><button class="chip chip--sm" type="button" aria-pressed="false">Mississauga</button><button class="chip chip--sm" type="button" aria-pressed="false">Brampton</button><button class="chip chip--sm" type="button" aria-pressed="false">Hamilton</button><button class="chip chip--sm" type="button" aria-pressed="false">Markham</button><button class="chip chip--sm" type="button" aria-pressed="false">Ajax</button><button class="chip chip--sm" type="button" aria-pressed="false">Oshawa</button><button class="chip chip--sm" type="button" aria-pressed="false">Barrie</button><button class="chip chip--sm" type="button" aria-pressed="false">Kitchener</button><button class="chip chip--sm" type="button" aria-pressed="false">Niagara</button></fieldset>
+  <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+</form>
+</div><div class="ds-example__caption"><span>Invalid: the error summary, the field errors and the city chips span the full width; focus goes to the date. <span class="crd-ac">AC-3, AC-17</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+<form class="booking-bar" data-theme="light" aria-labelledby="b4-t" style="width: 100%; max-width: 34rem;" action="#top" novalidate>
+  <h2 id="b4-t" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"></label><label class="field"><span class="field__label">Kind of gathering</span><select class="select"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label><label class="field"><span class="field__label">Church location</span><input class="input" type="text" value="Burlington, ON"></label><label class="field"><span class="field__label">How far can they drive?</span><select class="select"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit" data-state="focus">Show the lineup</button>
+</form>
+</div><div class="ds-example__caption"><span>Focus inside the paper bar is ink, not stage yellow. <span class="crd-ac">AC-16</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="stub"><h2>Booking stub</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="cluster" style="align-items:flex-start;gap:var(--space-8)"><form class="stub" aria-labelledby="s1-t" action="#top" style="width: 100%; max-width: var(--layout-sidebar-width);">
+  <div class="stub__head"><h2 id="s1-t" class="stub__title" tabindex="-1">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
+  <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
+  <div class="field"><label class="field__label" for="s1-d">Event date</label><input class="input" type="date" id="s1-d" value="2026-11-14" aria-describedby="s1-h"><span class="inline-msg inline-msg--success" id="s1-h"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Abigail is free Sat 14 Nov</span></div>
+  <div class="field"><label class="field__label" for="s1-k">Kind of gathering</label><select class="select" id="s1-k"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+  <div class="field"><label class="field__label" for="s1-c">Church</label><input class="input" type="text" id="s1-c" value="Riverside Community Church, Burlington"></div>
+  <div class="field"><div class="field__row"><label class="field__label" for="s1-m">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="s1-m" placeholder="Your church, the room, the songs you love."></textarea></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
+  <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#top">Cancel free up to 14 days before</a>.</p>
+</form><form class="stub" aria-labelledby="s2-t" action="#top" style="width: 100%; max-width: var(--layout-sidebar-width);">
+  <div class="stub__head"><h2 id="s2-t" class="stub__title" tabindex="-1">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
+  <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
+  <div class="field"><label class="field__label" for="s2-d">Event date</label><input class="input" type="date" id="s2-d" value="2026-11-15" aria-invalid="true" aria-describedby="s2-e"><p class="field__error" id="s2-e">Abigail is booked Sun 15 Nov. Try another date.</p></div>
+  <div class="field"><label class="field__label" for="s2-k">Kind of gathering</label><select class="select" id="s2-k"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+  <div class="field"><label class="field__label" for="s2-c">Church</label><input class="input" type="text" id="s2-c" value="Riverside Community Church, Burlington"></div>
+  <div class="field"><div class="field__row"><label class="field__label" for="s2-m">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="s2-m" placeholder="Your church, the room, the songs you love."></textarea></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit" disabled>Request to book · Sun 15 Nov</button>
+  <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#top">Cancel free up to 14 days before</a>.</p>
+</form></div>
+</div><div class="ds-example__caption"><span>Abigail free on Sat 14 Nov; booked on Sun 15 Nov with the submit disabled. The stub never goes busy: it opens the request page. <span class="crd-ac">AC-4, AC-5, AC-10, AC-11, AC-12, AC-19</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="cluster" style="align-items:flex-start;gap:var(--space-8)"><form class="stub" aria-labelledby="s3-t" action="#top" style="width: 100%; max-width: var(--layout-sidebar-width);">
+  <div class="stub__head"><h2 id="s3-t" class="stub__title" tabindex="-1">Book Miriam</h2><span class="stub__code" aria-hidden="true">No. ACT-0154</span></div>
+  <p><span class="stub__price">From $300</span><br><span class="text-muted">per service · travel included</span></p>
+  <div class="field"><label class="field__label" for="s3-d">Event date</label><input class="input" type="date" id="s3-d"></div>
+  <div class="field"><label class="field__label" for="s3-k">Kind of gathering</label><select class="select" id="s3-k"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+  <div class="field"><label class="field__label" for="s3-c">Church</label><input class="input" type="text" id="s3-c" value="Riverside Community Church, Burlington"></div>
+  <div class="field"><div class="field__row"><label class="field__label" for="s3-m">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="s3-m" placeholder="Your church, the room, the songs you love."></textarea></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book</button>
+  <p class="stub__fine">Nothing is charged until Miriam accepts. <a href="#top">Cancel free up to 14 days before</a>.</p>
+</form><form class="stub" aria-labelledby="s4-t" action="#top" style="width: 100%; max-width: var(--layout-sidebar-width);">
+  <div class="stub__head"><h2 id="s4-t" class="stub__title" tabindex="-1">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
+  <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
+  <div class="field"><label class="field__label" for="s4-d">Event date</label><input class="input" type="date" id="s4-d" disabled></div>
+  <div class="field"><label class="field__label" for="s4-k">Kind of gathering</label><select class="select" id="s4-k" disabled><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+  <div class="field"><label class="field__label" for="s4-c">Church</label><input class="input" type="text" id="s4-c" disabled></div>
+  <div class="field"><div class="field__row"><label class="field__label" for="s4-m">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="s4-m" placeholder="Your church, the room, the songs you love." disabled></textarea></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit" disabled>Request to book</button>
+  <p class="stub__fine">Nothing is charged until Abigail accepts. Cancel free up to 14 days before.</p>
+</form><div class="stub" aria-hidden="true" style="width: 100%; max-width: var(--layout-sidebar-width);"><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--control"></span><span class="skeleton skeleton--control"></span><span class="skeleton skeleton--block"></span><span class="skeleton skeleton--control-lg"></span></div></div>
+</div><div class="ds-example__caption"><span>Miriam before a date is chosen; the profile preview with every control disabled; the stub skeleton. <span class="crd-ac">AC-8, AC-15</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="auth"><h2>Auth card</h2>
+    <div class="ds-example"><div class="ds-example__canvas ">
+<div class="poster on-stage" style="padding: var(--space-8) var(--space-4);"><div class="auth-layout" style="min-height:0"><form class="stub auth-card" aria-labelledby="a1-t" novalidate action="#top">
+  <div class="stub__head"><span class="stub__code" aria-hidden="true">Admit one · Your account</span><h2 id="a1-t" class="auth-card__title">Sign in</h2></div>
+  <p class="text-muted">Welcome back. Your saved artists and requests are waiting.</p>
+  <div class="field"><label class="field__label" for="a1-e">Email <span class="field__required">(required)</span></label><input class="input" type="email" id="a1-e"></div>
+  <div class="field"><label class="field__label" for="a1-p">Password <span class="field__required">(required)</span></label><input class="input" type="password" id="a1-p"></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit">Sign in</button>
+  <div class="auth-card__links"><a href="#top">Forgot your password?</a><a href="#top">Create an account</a></div>
+  <p class="stub__fine">Artists sign in here too.</p>
+</form></div></div>
+</div><div class="ds-example__caption"><span>Sign in: kicker over the heading (an h1 in the product), links, fine print. <span class="crd-ac">AC-6</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ">
+<div class="poster on-stage" style="padding: var(--space-8) var(--space-4);"><div class="auth-layout" style="min-height:0"><form class="stub auth-card" aria-labelledby="a2-t" novalidate action="#top" aria-busy="true">
+  <div class="stub__head"><span class="stub__code" aria-hidden="true">Admit one · Your account</span><h2 id="a2-t" class="auth-card__title">Sign in</h2></div>
+  <p class="text-muted">Welcome back. Your saved artists and requests are waiting.</p>
+  <div class="field" style="opacity:.6"><label class="field__label" for="a2-e">Email <span class="field__required">(required)</span></label><input class="input" type="email" id="a2-e" value="naomi.fraser@riversidecc.ca" readonly></div>
+  <div class="field" style="opacity:.6"><label class="field__label" for="a2-p">Password <span class="field__required">(required)</span></label><input class="input" type="password" id="a2-p" readonly></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit" aria-busy="true" aria-disabled="true">Signing in…</button>
+  <div class="auth-card__links"><a href="#top">Forgot your password?</a><a href="#top">Create an account</a></div>
+  <p class="stub__fine">Artists sign in here too.</p>
+</form></div></div>
+</div><div class="ds-example__caption"><span>Submitting: busy card, read-only faded fields, “Signing in…”. <span class="crd-ac">AC-13</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ">
+<div class="poster on-stage" style="padding: var(--space-8) var(--space-4);"><div class="auth-layout" style="min-height:0"><form class="stub auth-card" aria-labelledby="a3-t" novalidate action="#top">
+  <div class="stub__head"><span class="stub__code" aria-hidden="true">Admit one · Your account</span><h2 id="a3-t" class="auth-card__title">Sign in</h2></div>
+  <div class="error-summary" role="alert" aria-labelledby="a3-st"><h2 id="a3-st" class="error-summary__title">Couldn’t sign you in</h2><ul><li><a href="#a3-e">Email or password is incorrect.</a></li></ul></div>
+  <div class="field"><label class="field__label" for="a3-e">Email <span class="field__required">(required)</span></label><input class="input" type="email" id="a3-e" value="naomi.fraser@riversidecc.ca" aria-invalid="true" aria-describedby="a3-ce"></div>
+  <div class="field"><label class="field__label" for="a3-p">Password <span class="field__required">(required)</span></label><input class="input" type="password" id="a3-p" aria-invalid="true" aria-describedby="a3-ce"></div>
+  <p class="field__error" id="a3-ce">Email or password is incorrect.</p><button class="btn btn--primary btn--lg btn--block" type="submit">Sign in</button>
+  <div class="auth-card__links"><a href="#top">Forgot your password?</a><a href="#top">Create an account</a></div>
+  <p class="stub__fine">Artists sign in here too.</p>
+</form></div></div>
+</div><div class="ds-example__caption"><span>Invalid credentials: summary and one shared field error. <span class="crd-ac">AC-14</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ">
+<div class="poster on-stage" style="padding: var(--space-8) var(--space-4);"><div class="auth-layout" style="min-height:0"><section class="stub auth-card" role="region" aria-labelledby="su-t">
+  <div class="stub__head"><span class="stub__code" aria-hidden="true">Admit one · Almost there</span><h2 id="su-t" class="auth-card__title">Check your email to finish signing up</h2></div>
+  <p class="lead">We sent a link to <strong>naomi.fraser@riversidecc.ca</strong>. It works for 24 hours.</p>
+  <div class="stack stack--sm"><a class="btn btn--primary btn--lg btn--block" href="#top">Keep browsing artists</a><button class="btn btn--block" type="button">Resend the email</button></div>
+  <div class="auth-card__links"><a href="#top">Wrong address? Start again</a><a href="#top">Sign in</a></div>
+  <p class="stub__fine">Nothing after 5 minutes? Check spam or junk, then resend.</p>
+</section></div></div>
+</div><div class="ds-example__caption"><span>A status card with no form: a region named by its heading. <span class="crd-ac">AC-7</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="stack"><form class="stub" aria-labelledby="t1-t" action="#top">
+  <div class="stub__head"><h2 id="t1-t" class="stub__title" tabindex="-1">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
+  <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
+  <div class="field"><label class="field__label" for="t1-d">Event date</label><input class="input" type="date" id="t1-d" value="2026-11-14" aria-describedby="t1-h"><span class="inline-msg inline-msg--success" id="t1-h"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Abigail is free Sat 14 Nov</span></div>
+  <div class="field"><label class="field__label" for="t1-k">Kind of gathering</label><select class="select" id="t1-k"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+  <div class="field"><label class="field__label" for="t1-c">Church</label><input class="input" type="text" id="t1-c" value="Riverside Community Church, Burlington"></div>
+  <div class="field"><div class="field__row"><label class="field__label" for="t1-m">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="t1-m" placeholder="Your church, the room, the songs you love."></textarea></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
+  <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#top">Cancel free up to 14 days before</a>.</p>
+</form><div class="on-stage" style="padding: var(--space-6); background: var(--color-bg-stage);"><form class="booking-bar" data-theme="light" aria-labelledby="t2-t" action="#top" novalidate>
+  <h2 id="t2-t" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"></label><label class="field"><span class="field__label">Kind of gathering</span><select class="select"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label><label class="field"><span class="field__label">Church location</span><input class="input" type="text" value="Burlington, ON"></label><label class="field"><span class="field__label">How far can they drive?</span><select class="select"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+</form></div></div></div>
+      <div data-theme="dark"><div class="stack"><form class="stub" aria-labelledby="t3-t" action="#top">
+  <div class="stub__head"><h2 id="t3-t" class="stub__title" tabindex="-1">Book Abigail</h2><span class="stub__code" aria-hidden="true">No. ACT-0027</span></div>
+  <p><span class="stub__price">From $650</span><br><span class="text-muted">per service · travel included</span></p>
+  <div class="field"><label class="field__label" for="t3-d">Event date</label><input class="input" type="date" id="t3-d" value="2026-11-14" aria-describedby="t3-h"><span class="inline-msg inline-msg--success" id="t3-h"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>Abigail is free Sat 14 Nov</span></div>
+  <div class="field"><label class="field__label" for="t3-k">Kind of gathering</label><select class="select" id="t3-k"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></div>
+  <div class="field"><label class="field__label" for="t3-c">Church</label><input class="input" type="text" id="t3-c" value="Riverside Community Church, Burlington"></div>
+  <div class="field"><div class="field__row"><label class="field__label" for="t3-m">Message</label><span class="field__optional">(optional)</span></div><textarea class="textarea" id="t3-m" placeholder="Your church, the room, the songs you love."></textarea></div>
+  <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
+  <p class="stub__fine">Nothing is charged until Abigail accepts. <a href="#top">Cancel free up to 14 days before</a>.</p>
+</form><div class="on-stage" style="padding: var(--space-6); background: var(--color-bg-stage);"><form class="booking-bar" data-theme="light" aria-labelledby="t4-t" action="#top" novalidate>
+  <h2 id="t4-t" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" value="2026-11-14"></label><label class="field"><span class="field__label">Kind of gathering</span><select class="select"><option>Sunday service</option><option selected>Worship night</option><option>Youth event</option><option>Conference or retreat</option><option>Wedding</option><option>Funeral or memorial</option></select></label><label class="field"><span class="field__label">Church location</span><input class="input" type="text" value="Burlington, ON"></label><label class="field"><span class="field__label">How far can they drive?</span><select class="select"><option value="40">40 km · 30 min</option><option value="80">80 km · 1 hr</option><option value="120" selected>120 km · 1.5 hr</option><option value="200">200 km · 2.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+</form></div></div></div>
+    </div>
+    <span class="crd-ac">AC-20, AC-21, AC-22</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: the bar is one column below 576 px and two from there; the stub is full width below 992 px.</p>
+    <div class="crd-frames">
+<figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-26, AC-3</span><iframe title="320 pixel wide frame, light theme" width="320" height="1200" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;padding: var(--space-6); background: var(--color-bg-stage);&quot;&gt;&lt;form class=&quot;booking-bar&quot; data-theme=&quot;light&quot; aria-labelledby=&quot;f1-t&quot; action=&quot;#top&quot; novalidate&gt;
+  &lt;h2 id=&quot;f1-t&quot; class=&quot;booking-bar__title&quot;&gt;Your event &lt;small aria-hidden=&quot;true&quot;&gt;Admit one church&lt;/small&gt;&lt;/h2&gt;&lt;div class=&quot;error-summary&quot; role=&quot;alert&quot; aria-labelledby=&quot;f1-es&quot;&gt;&lt;h3 id=&quot;f1-es&quot; class=&quot;error-summary__title&quot;&gt;Two things before we can search&lt;/h3&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;#f1-date&quot;&gt;Pick your event date.&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#f1-place&quot;&gt;Enter your church’s location.&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f1-date&quot;&gt;Event date&lt;/label&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; id=&quot;f1-date&quot; value=&quot;&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;f1-de&quot;&gt;&lt;span class=&quot;field__error&quot; id=&quot;f1-de&quot;&gt;Pick your event date.&lt;/span&gt;&lt;/div&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Kind of gathering&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f1-place&quot;&gt;Church location&lt;/label&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; id=&quot;f1-place&quot; value=&quot;&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;f1-pe&quot;&gt;&lt;span class=&quot;field__error&quot; id=&quot;f1-pe&quot;&gt;Enter your church’s address or town, or pick a city below.&lt;/span&gt;&lt;/div&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;How far can they drive?&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option value=&quot;40&quot;&gt;40 km · 30 min&lt;/option&gt;&lt;option value=&quot;80&quot;&gt;80 km · 1 hr&lt;/option&gt;&lt;option value=&quot;120&quot; selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;option value=&quot;200&quot;&gt;200 km · 2.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;fieldset class=&quot;filters&quot;&gt;&lt;legend&gt;Or pick a city&lt;/legend&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Toronto&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Burlington&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Mississauga&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Brampton&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Hamilton&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Markham&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Ajax&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Oshawa&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Barrie&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Kitchener&lt;/button&gt;&lt;button class=&quot;chip chip--sm&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;Niagara&lt;/button&gt;&lt;/fieldset&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg&quot; type=&quot;submit&quot;&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · light · AC-23, AC-25</span><iframe title="360 pixel wide frame, light theme" width="360" height="1500" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;padding: var(--space-6); background: var(--color-bg-stage);&quot;&gt;&lt;form class=&quot;booking-bar&quot; data-theme=&quot;light&quot; aria-labelledby=&quot;f2-t&quot; action=&quot;#top&quot; novalidate&gt;
+  &lt;h2 id=&quot;f2-t&quot; class=&quot;booking-bar__title&quot;&gt;Your event &lt;small aria-hidden=&quot;true&quot;&gt;Admit one church&lt;/small&gt;&lt;/h2&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Event date&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; value=&quot;2026-11-14&quot;&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Kind of gathering&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Church location&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Burlington, ON&quot;&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;How far can they drive?&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option value=&quot;40&quot;&gt;40 km · 30 min&lt;/option&gt;&lt;option value=&quot;80&quot;&gt;80 km · 1 hr&lt;/option&gt;&lt;option value=&quot;120&quot; selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;option value=&quot;200&quot;&gt;200 km · 2.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg&quot; type=&quot;submit&quot;&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;&lt;/div&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;form class=&quot;stub&quot; aria-labelledby=&quot;f2s-t&quot; action=&quot;#top&quot;&gt;
+  &lt;div class=&quot;stub__head&quot;&gt;&lt;h2 id=&quot;f2s-t&quot; class=&quot;stub__title&quot; tabindex=&quot;-1&quot;&gt;Book Abigail&lt;/h2&gt;&lt;span class=&quot;stub__code&quot; aria-hidden=&quot;true&quot;&gt;No. ACT-0027&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;&lt;span class=&quot;stub__price&quot;&gt;From $650&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;text-muted&quot;&gt;per service · travel included&lt;/span&gt;&lt;/p&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f2s-d&quot;&gt;Event date&lt;/label&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; id=&quot;f2s-d&quot; value=&quot;2026-11-14&quot; aria-describedby=&quot;f2s-h&quot;&gt;&lt;span class=&quot;inline-msg inline-msg--success&quot; id=&quot;f2s-h&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M5 12l4 4 10-10&quot;/&gt;&lt;/svg&gt;Abigail is free Sat 14 Nov&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f2s-k&quot;&gt;Kind of gathering&lt;/label&gt;&lt;select class=&quot;select&quot; id=&quot;f2s-k&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f2s-c&quot;&gt;Church&lt;/label&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; id=&quot;f2s-c&quot; value=&quot;Riverside Community Church, Burlington&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;div class=&quot;field__row&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f2s-m&quot;&gt;Message&lt;/label&gt;&lt;span class=&quot;field__optional&quot;&gt;(optional)&lt;/span&gt;&lt;/div&gt;&lt;textarea class=&quot;textarea&quot; id=&quot;f2s-m&quot; placeholder=&quot;Your church, the room, the songs you love.&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg btn--block&quot; type=&quot;submit&quot;&gt;Request to book · Sat 14 Nov&lt;/button&gt;
+  &lt;p class=&quot;stub__fine&quot;&gt;Nothing is charged until Abigail accepts. &lt;a href=&quot;#top&quot;&gt;Cancel free up to 14 days before&lt;/a&gt;.&lt;/p&gt;
+&lt;/form&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-21, AC-11</span><iframe title="360 pixel wide frame, dark theme" width="360" height="1500" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;padding: var(--space-6); background: var(--color-bg-stage);&quot;&gt;&lt;form class=&quot;booking-bar&quot; data-theme=&quot;light&quot; aria-labelledby=&quot;f3-t&quot; action=&quot;#top&quot; novalidate&gt;
+  &lt;h2 id=&quot;f3-t&quot; class=&quot;booking-bar__title&quot;&gt;Your event &lt;small aria-hidden=&quot;true&quot;&gt;Admit one church&lt;/small&gt;&lt;/h2&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Event date&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; value=&quot;2026-11-14&quot;&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Kind of gathering&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Church location&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Burlington, ON&quot;&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;How far can they drive?&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option value=&quot;40&quot;&gt;40 km · 30 min&lt;/option&gt;&lt;option value=&quot;80&quot;&gt;80 km · 1 hr&lt;/option&gt;&lt;option value=&quot;120&quot; selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;option value=&quot;200&quot;&gt;200 km · 2.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg&quot; type=&quot;submit&quot;&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;&lt;/div&gt;&lt;div style=&quot;padding:12px&quot;&gt;&lt;form class=&quot;stub&quot; aria-labelledby=&quot;f3s-t&quot; action=&quot;#top&quot;&gt;
+  &lt;div class=&quot;stub__head&quot;&gt;&lt;h2 id=&quot;f3s-t&quot; class=&quot;stub__title&quot; tabindex=&quot;-1&quot;&gt;Book Abigail&lt;/h2&gt;&lt;span class=&quot;stub__code&quot; aria-hidden=&quot;true&quot;&gt;No. ACT-0027&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;&lt;span class=&quot;stub__price&quot;&gt;From $650&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;text-muted&quot;&gt;per service · travel included&lt;/span&gt;&lt;/p&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f3s-d&quot;&gt;Event date&lt;/label&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; id=&quot;f3s-d&quot; value=&quot;2026-11-15&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;f3s-e&quot;&gt;&lt;p class=&quot;field__error&quot; id=&quot;f3s-e&quot;&gt;Abigail is booked Sun 15 Nov. Try another date.&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f3s-k&quot;&gt;Kind of gathering&lt;/label&gt;&lt;select class=&quot;select&quot; id=&quot;f3s-k&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f3s-c&quot;&gt;Church&lt;/label&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; id=&quot;f3s-c&quot; value=&quot;Riverside Community Church, Burlington&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;field&quot;&gt;&lt;div class=&quot;field__row&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;f3s-m&quot;&gt;Message&lt;/label&gt;&lt;span class=&quot;field__optional&quot;&gt;(optional)&lt;/span&gt;&lt;/div&gt;&lt;textarea class=&quot;textarea&quot; id=&quot;f3s-m&quot; placeholder=&quot;Your church, the room, the songs you love.&quot;&gt;&lt;/textarea&gt;&lt;/div&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg btn--block&quot; type=&quot;submit&quot; disabled&gt;Request to book · Sun 15 Nov&lt;/button&gt;
+  &lt;p class=&quot;stub__fine&quot;&gt;Nothing is charged until Abigail accepts. &lt;a href=&quot;#top&quot;&gt;Cancel free up to 14 days before&lt;/a&gt;.&lt;/p&gt;
+&lt;/form&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:794px"><span class="crd-ac">768 px · light · AC-23</span><iframe title="768 pixel wide frame, light theme" width="768" height="560" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;on-stage&quot; style=&quot;padding: var(--space-6); background: var(--color-bg-stage);&quot;&gt;&lt;form class=&quot;booking-bar&quot; data-theme=&quot;light&quot; aria-labelledby=&quot;f4-t&quot; action=&quot;#top&quot; novalidate&gt;
+  &lt;h2 id=&quot;f4-t&quot; class=&quot;booking-bar__title&quot;&gt;Your event &lt;small aria-hidden=&quot;true&quot;&gt;Admit one church&lt;/small&gt;&lt;/h2&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Event date&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; value=&quot;2026-11-14&quot;&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Kind of gathering&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;option&gt;Youth event&lt;/option&gt;&lt;option&gt;Conference or retreat&lt;/option&gt;&lt;option&gt;Wedding&lt;/option&gt;&lt;option&gt;Funeral or memorial&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Church location&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Burlington, ON&quot;&gt;&lt;/label&gt;&lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;How far can they drive?&lt;/span&gt;&lt;select class=&quot;select&quot;&gt;&lt;option value=&quot;40&quot;&gt;40 km · 30 min&lt;/option&gt;&lt;option value=&quot;80&quot;&gt;80 km · 1 hr&lt;/option&gt;&lt;option value=&quot;120&quot; selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;option value=&quot;200&quot;&gt;200 km · 2.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg&quot; type=&quot;submit&quot;&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p><span class="crd-ac">AC-18, AC-24: profile layout and focus hand-over, checked on the page; AC-27: French catalogue; AC-29: formatting; AC-30: perf measurement</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+<div class="ds-pair"><span>Labels and values on the ticket</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Code, price note, fine print</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Frame and field edges</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+<div class="ds-pair"><span>Availability message</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Date error</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Submit label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Focus ring inside the bar</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: stub labels</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: stub frame</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: availability message</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: date error</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+    </div>
+    <span class="crd-ac">AC-22</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+<tr><td>Ticket surface</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+<tr><td>Frame, perforation</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+<tr><td>Code, note, fine print</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+<tr><td>Bar and auth shadow</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+<tr><td>Stub shadow colour</td><td><code>--color-shadow</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-shadow" data-swatch></i><span data-token="--color-shadow"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-shadow" data-swatch></i><span data-token="--color-shadow"></span></span></td></tr>
+<tr><td>Availability</td><td><code>--color-success-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td></tr>
+<tr><td>Date error</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+<tr><td>Stub shadow</td><td><code>--shadow-3</code></td><td colspan="2"><span data-token="--shadow-3"></span></td></tr>
+<tr><td>Bar shadow offset</td><td><code>--size-offset-3</code></td><td colspan="2"><span data-token="--size-offset-3"></span></td></tr>
+<tr><td>Padding / bar gap / stub gap</td><td><code>--space-6 / --space-4 / --space-5</code></td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-4"></span> / <span data-token="--space-5"></span></td></tr>
+<tr><td>Stub column / auth width</td><td><code>--layout-sidebar-width / --layout-auth-width</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span> / <span data-token="--layout-auth-width"></span></td></tr>
+<tr><td>Field / submit height</td><td><code>--control-height-md / --control-height-lg</code></td><td colspan="2"><span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

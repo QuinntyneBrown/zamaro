@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Button — Component requirements rendering</title>
+<meta name="description" content="Every variant, size and state of zm-button, zm-button-link and zm-button-anchor, in light and dark, keyed to the acceptance criteria in button.md.">
+<meta name="crd:component" content="button">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: grid; gap: var(--space-6); }
+.crd-frame { border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); overflow: auto; background: var(--color-bg-surface); }
+.crd-frame > .crd-ac { margin: 0 0 var(--space-2); }
+.crd-frame--320 { max-width: 320px; } .crd-frame--360 { max-width: 360px; } .crd-frame--768 { max-width: 768px; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Button</h1>
+    <p class="ds-lead">Every variant, size and state of the button family. Requirements: <a href="button.md">button.md</a>. Design system: <a href="../../design-system/components/button.html">button</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-button</code> <code>zm-button-link</code> <code>zm-button-anchor</code></span><span class="ds-pill">Status: built</span><span class="ds-pill">Traces to L2-026, L2-086, L2-096, L2-100, L2-101, L2-103, L2-104, L2-108, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#toggles">Toggle and menu</a></li><li><a href="#links">Links</a></li><li><a href="#surfaces">Surfaces</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Variants</h2>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <button class="btn btn--primary" type="button">Request to book</button>
+      <button class="btn" type="button">Share</button>
+      <button class="btn btn--ink" type="button">See profile</button>
+      <button class="btn btn--ghost" type="button">Edit search</button>
+      <button class="btn btn--link" type="button">Show all styles</button>
+      <button class="btn btn--danger" type="button">Cancel booking</button>
+    </div><div class="ds-example__caption"><span>Primary, secondary, ink, ghost, link, danger. <span class="crd-ac">AC-1, AC-2</span></span></div></div>
+
+    <h3>With icons and icon-only</h3>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg>Try again</button>
+      <a class="btn btn--ink" href="#variants">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <button class="btn btn--icon" type="button" aria-label="Share Abigail Mensah’s profile"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Remove photo 2"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Move Goodness of God up"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+      <button class="btn btn--ghost btn--icon" type="button" aria-label="Move Goodness of God down" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+      <button class="btn btn--icon" type="button" aria-label="Previous month, October 2026"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    </div><div class="ds-example__caption"><span>Icons are <code>aria-hidden</code>; icon-only buttons are named by <code>label</code>. The last move button is disabled at the end of the list. <span class="crd-ac">AC-19, AC-9</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Sizes</h2>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <button class="btn btn--primary btn--sm" type="button">Small · 36px</button>
+      <button class="btn btn--primary" type="button">Medium · 44px</button>
+      <button class="btn btn--primary btn--lg" type="button">Large · 56px</button>
+      <button class="btn btn--sm" type="button" aria-label="Pick Fri 20 Nov">Pick</button>
+    </div>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button>
+    </div>
+    <div class="ds-example__caption"><span>Small grows to 44 px under a coarse pointer. “Pick” is named “Pick Fri 20 Nov”. Block fills its container. <span class="crd-ac">AC-2, AC-3, AC-20, AC-25</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>Hover, focus and active are forced with <code>data-state</code>. Busy uses <code>aria-busy</code> + <code>aria-disabled</code>; disabled uses the native attribute.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Disabled</th><th scope="col">Busy</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Pay $162.50</button></td><td><button class="btn btn--primary" type="button" data-state="hover">Pay $162.50</button></td><td><button class="btn btn--primary" type="button" data-state="focus">Pay $162.50</button></td><td><button class="btn btn--primary" type="button" data-state="active">Pay $162.50</button></td><td><button class="btn btn--primary" type="button" disabled>Pay $162.50</button></td><td><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Paying $162.50…</button></td></tr>
+        <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Share</button></td><td><button class="btn" type="button" data-state="hover">Share</button></td><td><button class="btn" type="button" data-state="focus">Share</button></td><td><button class="btn" type="button" data-state="active">Share</button></td><td><button class="btn" type="button" disabled>Share</button></td><td><button class="btn" type="button" aria-busy="true" aria-disabled="true">Sending…</button></td></tr>
+        <tr><th scope="row">Ink</th><td><button class="btn btn--ink" type="button">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="hover">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="focus">Profile</button></td><td><button class="btn btn--ink" type="button" data-state="active">Profile</button></td><td><button class="btn btn--ink" type="button" disabled>Profile</button></td><td><button class="btn btn--ink" type="button" aria-busy="true" aria-disabled="true">Profile</button></td></tr>
+        <tr><th scope="row">Ghost</th><td><button class="btn btn--ghost" type="button">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="hover">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="focus">Edit</button></td><td><button class="btn btn--ghost" type="button" data-state="active">Edit</button></td><td><button class="btn btn--ghost" type="button" disabled>Edit</button></td><td><button class="btn btn--ghost" type="button" aria-busy="true" aria-disabled="true">Saving…</button></td></tr>
+        <tr><th scope="row">Link</th><td><button class="btn btn--link" type="button">Show all</button></td><td><button class="btn btn--link" type="button" data-state="hover">Show all</button></td><td><button class="btn btn--link" type="button" data-state="focus">Show all</button></td><td><button class="btn btn--link" type="button" data-state="active">Show all</button></td><td><button class="btn btn--link" type="button" disabled>Show all</button></td><td><button class="btn btn--link" type="button" aria-busy="true" aria-disabled="true">Show all</button></td></tr>
+        <tr><th scope="row">Danger</th><td><button class="btn btn--danger" type="button">Cancel booking</button></td><td><button class="btn btn--danger" type="button" data-state="hover">Cancel booking</button></td><td><button class="btn btn--danger" type="button" data-state="focus">Cancel booking</button></td><td><button class="btn btn--danger" type="button" data-state="active">Cancel booking</button></td><td><button class="btn btn--danger" type="button" disabled>Cancel booking</button></td><td><button class="btn btn--danger" type="button" aria-busy="true" aria-disabled="true">Cancelling…</button></td></tr>
+      </tbody>
+    </table></div>
+    <span class="crd-ac">Busy: AC-6, AC-7, AC-8, AC-10 · Disabled: AC-9 · Focus: AC-15, AC-17</span>
+    <h3>Busy keeps its width</h3>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+      <button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Checking calendars…</button>
+    </div><div class="ds-example__caption"><span>The busy label is the verb in progress; the spinner follows it; focus stays. <span class="crd-ac">AC-6, AC-8</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="toggles"><h2>Toggle and menu</h2>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">State</th><th scope="col">Off / closed</th><th scope="col">On / open</th><th scope="col">On, hover</th><th scope="col">On, focus</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Pressed</th>
+          <td><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button></td>
+          <td><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></td>
+          <td><button class="btn" type="button" aria-pressed="true" data-state="hover"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></td>
+          <td><button class="btn" type="button" aria-pressed="true" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button></td></tr>
+        <tr><th scope="row">Expanded</th>
+          <td><button class="btn" type="button" aria-expanded="false">Sort: closest</button></td>
+          <td><button class="btn" type="button" aria-expanded="true">Sort: closest</button></td>
+          <td><button class="btn" type="button" aria-expanded="true" data-state="hover">Sort: closest</button></td>
+          <td><button class="btn" type="button" aria-expanded="true" data-state="focus">Sort: closest</button></td></tr>
+      </tbody>
+    </table></div>
+    <h3>Top bar</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage on-stage">
+      <div class="topbar" style="width: 100%; display: flex; gap: var(--space-2); justify-content: flex-end;">
+        <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+        <button class="btn btn--ghost btn--icon topbar__theme" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><span class="visually-hidden">Dark theme</span></button>
+        <button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-menu"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="true" aria-controls="site-menu"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <button class="btn btn--ghost btn--icon" type="button" aria-label="Open menu" aria-expanded="false" data-state="focus"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      </div>
+    </div><div class="ds-example__caption"><span>Theme toggle off and on; menu closed, open, and focused with the stage ring. <span class="crd-ac">AC-12, AC-13, AC-14, AC-16</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="links"><h2>Links styled as buttons</h2>
+    <div class="ds-example"><div class="ds-example__canvas">
+      <a class="btn btn--ink" href="#links">See Abigail’s profile <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn--ghost btn--sm" href="mailto:hello@zamaro.ca">Email hello@zamaro.ca</a>
+      <a class="btn btn--sm" href="#links" target="_blank" rel="noopener noreferrer">View document of Abigail Mensah’s check (opens in a new tab)</a>
+      <a class="btn" aria-disabled="true" tabindex="-1">Back to profile</a>
+      <button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Sending request…</button>
+    </div><div class="ds-example__caption"><span>Router link, mail link, new-tab link, and a disabled link beside a busy submit (pages/book/submitting). <span class="crd-ac">AC-4, AC-5, AC-11, AC-18</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="surfaces"><h2>Surfaces</h2>
+    <div class="ds-example">
+      <div class="ds-example__canvas ds-example__canvas--stage on-stage">
+        <a class="btn btn--primary" href="#surfaces">Book for Sat 14 Nov</a>
+        <button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button>
+        <button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v13M7 8l5-5 5 5M5 14v7h14v-7"/></svg>Share</button>
+        <button class="btn" type="button" data-state="hover">Share</button>
+      </div>
+      <div class="ds-example__canvas">
+        <div class="band" style="width: 100%;"><p><b>Lead worship? Get on the bill.</b></p><a class="btn btn--lg" href="#surfaces">Apply as an artist <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+      <div class="ds-example__canvas">
+        <div class="toast" role="status" style="position: static;"><p class="toast__message">Saved Abigail Mensah</p><button class="btn btn--sm" type="button">Undo</button></div>
+        <div class="toast toast--danger" role="status" style="position: static;"><p class="toast__message">Couldn’t save Abigail Mensah. Try again.</p><button class="btn btn--sm" type="button">Try again</button></div>
+      </div>
+      <div class="ds-example__caption"><span>Stage (outlines; primary and pressed keep yellow), band (stage fill), toast and danger toast. <span class="crd-ac">AC-24</span></span></div>
+    </div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="cluster cluster--lg"><button class="btn btn--primary" type="button">Primary</button><button class="btn" type="button">Secondary</button><button class="btn btn--ink" type="button">Ink</button><button class="btn btn--ghost" type="button">Ghost</button><button class="btn btn--link" type="button">Link</button><button class="btn btn--danger" type="button">Danger</button><button class="btn" type="button" data-state="hover">Hover</button><button class="btn" type="button" data-state="focus">Focus</button><button class="btn" type="button" aria-pressed="true">Saved</button><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Saving…</button><button class="btn btn--primary" type="button" disabled>Disabled</button></div></div>
+      <div data-theme="dark"><div class="cluster cluster--lg"><button class="btn btn--primary" type="button">Primary</button><button class="btn" type="button">Secondary</button><button class="btn btn--ink" type="button">Ink</button><button class="btn btn--ghost" type="button">Ghost</button><button class="btn btn--link" type="button">Link</button><button class="btn btn--danger" type="button">Danger</button><button class="btn" type="button" data-state="hover">Hover</button><button class="btn" type="button" data-state="focus">Focus</button><button class="btn" type="button" aria-pressed="true">Saved</button><button class="btn btn--primary" type="button" aria-busy="true" aria-disabled="true">Saving…</button><button class="btn btn--primary" type="button" disabled>Disabled</button></div></div>
+    </div>
+    <span class="crd-ac">AC-21, AC-22, AC-23</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <div class="crd-frames">
+      <div class="crd-frame crd-frame--320"><span class="crd-ac">320 px · AC-26</span><button class="btn btn--primary btn--lg btn--block" type="submit">Request to book · Sat 14 Nov</button></div>
+      <div class="crd-frame crd-frame--320"><span class="crd-ac">320 px, 200 % text · AC-26, AC-27</span><div style="font-size: 200%;"><button class="btn btn--primary btn--lg btn--block" type="submit">Envoyer une demande de réservation · sam. 14 nov.</button></div></div>
+      <div class="crd-frame crd-frame--360"><span class="crd-ac">360 px dialog footer · AC-3</span><div class="dialog__footer" style="display: flex; gap: var(--space-2);"><button class="btn btn--danger" type="submit">Cancel booking</button><button class="btn" type="button">Keep booking</button></div></div>
+      <div class="crd-frame crd-frame--768"><span class="crd-ac">768 px · AC-2</span><div class="cluster"><button class="btn btn--primary" type="button">Search within 120 km · 2 free</button><button class="btn" type="button">Show all styles</button></div></div>
+    </div>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Label on primary</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Label on primary, hover</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent-hover" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Ink label</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Danger label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Secondary label</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Secondary rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+      <div class="ds-pair"><span>Outline label on stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: label on primary</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: danger label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: secondary rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: focus ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-23</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Primary fill</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+        <tr><td>Primary hover</td><td><code>--color-accent-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-hover" data-swatch></i><span data-token="--color-accent-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-hover" data-swatch></i><span data-token="--color-accent-hover"></span></span></td></tr>
+        <tr><td>Primary label / rule</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+        <tr><td>Secondary fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+        <tr><td>Secondary rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+        <tr><td>Ink fill</td><td><code>--color-bg-inverse</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-inverse" data-swatch></i><span data-token="--color-bg-inverse"></span></span></td></tr>
+        <tr><td>Ghost hover</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+        <tr><td>Link hover</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+        <tr><td>Danger fill</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+        <tr><td>Disabled label / rule</td><td><code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+        <tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+        <tr><td>Hover shadow</td><td><code>--shadow-1</code></td><td><span data-theme="light" data-token="--shadow-1"></span></td><td><span data-theme="dark" data-token="--shadow-1"></span></td></tr>
+        <tr><td>Height sm / md / lg</td><td><code>--control-height-sm</code> / <code>-md</code> / <code>-lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+        <tr><td>Coarse-pointer target</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+        <tr><td>Transition / spinner</td><td><code>--duration-fast</code> / <code>--duration-loop</code></td><td colspan="2"><span data-token="--duration-fast"></span> / <span data-token="--duration-loop"></span></td></tr>
+      </tbody>
+    </table></div>
+    <span class="crd-ac">AC-28, AC-29: behaviour and measurement, not renderable here</span>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

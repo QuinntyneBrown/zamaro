@@ -9,6 +9,8 @@ Zamaro is a full-stack platform for booking Christian praise and worship artists
 ## Repository layout
 
 - `docs/specs/` — requirements (`L1.md` high-level, `L2.md` detailed with acceptance criteria)
+- `docs/specs/components/` — component requirements documents (CRDs): `<component>.md` and
+  `<component>.html` per `zm-*` component, tracing to L2; see `docs/specs/components/README.md`
 - `docs/detailed-designs/` — one detailed design per feature, grouped by subsystem; see `docs/detailed-designs/README.md`
 - `docs/mocks/` — static design reference (every page and state, light and dark); see `docs/mocks/README.md`
 - `docs/design-system/` — tokens, foundations, components, and patterns extracted from the mocks
@@ -47,6 +49,7 @@ zamaro/
 │   ├── mocks/                     # pages/, dialogs/, notifications/, assets/
 │   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
+│       └── components/            # CRDs: <component>.md + <component>.html, trace to L2
 ├── docker-compose.yml             # local dev: postgres, redis, api, api-e2e, worker, scheduler (ADR-0002)
 ├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
@@ -191,6 +194,16 @@ behavioral changes to existing features, such as changing how a page behaves.
 This requirement applies to production-code changes only; documentation-only,
 design-system-only, mock-only, and test-only changes are out of scope unless
 they are part of implementing a production behavior change.
+
+A component in the `components` library also MUST have a component requirements
+document (CRD) in `docs/specs/components/` before it is built or changed. Write
+it with the `writing-component-requirements-documents` skill
+(`.claude/skills/writing-component-requirements-documents` and
+`.agents/skills/writing-component-requirements-documents`), and only after L1/L2
+and the design system or mocks exist. The CRD is complete enough to build the
+whole component without later API changes, and its Given-When-Then criteria
+are the slices' acceptance criteria. If a component's behaviour has to change,
+the CRD changes first.
 
 Every production behavior implementation MUST invoke and follow the
 `implementing-incrementally` skill (`.claude/skills/implementing-incrementally`

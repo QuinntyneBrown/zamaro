@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticket card — Component requirements rendering</title>
+<meta name="description" content="Every variant and state of zm-ticket and zm-ticket-skeleton, in light and dark, at phone and tablet widths, keyed to the acceptance criteria in ticket.md.">
+<meta name="crd:component" content="ticket">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+/* As on the design-system page: ds.css styles every h2, h3 and li in a section; give the specimens their product styles back. */
+.ds-section .ticket__name { font: var(--text-h3); margin: 0; }
+.ds-section .lineup > li + li { margin-top: 0; }
+.ds-section .lineup { grid-template-columns: minmax(0, 1fr); }
+.ds-matrix .ticket { min-width: 32rem; }
+.ds-section .ds-themes { grid-template-columns: minmax(0, 1fr); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Ticket card</h1>
+    <p class="ds-lead">Every variant and state of the ticket and its skeleton. Requirements: <a href="ticket.md">ticket.md</a>. Design system: <a href="../../design-system/components/ticket.html">ticket card</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-ticket</code> <code>zm-ticket-skeleton</code></span><span class="ds-pill">Status: built</span><span class="ds-pill">Traces to L2-006, L2-007, L2-021, L2-027, L2-086, L2-088, L2-096, L2-097, L2-100–L2-105, L2-110, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#lineup">Lineup</a></li><li><a href="#saved">Saved artists</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="lineup"><h2>Discover lineup</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <ol class="lineup" role="list" aria-label="More artists free Saturday 14 November 2026"><li class="ticket">
+  <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 02 · <span role="img" aria-label="Rated 4.6 out of 5 by 17 churches">★ 4.6 · 17 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Marcus Bell Trio</a></h3>
+    <p class="ticket__meta">Band · Acoustic, Hymns<br>Hamilton · 14 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$950</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li><li class="ticket">
+  <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Elijah Park</a></h3>
+    <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$350</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li><li class="ticket">
+  <div class="art ticket__art art--group art--tilt" role="img" aria-label="Grace Tabernacle Mass Choir in gold robes, three rows deep"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 06 · <span role="img" aria-label="Rated 4.8 out of 5 by 26 churches">★ 4.8 · 26 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Grace Tabernacle Mass Choir</a></h3>
+    <p class="ticket__meta">Gospel choir<br>Scarborough · 81 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$2,400</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Grace Tabernacle Mass Choir to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li><li class="ticket">
+  <div class="art ticket__art art--tilt" role="img" aria-label="Miriam Haile singing with a hand-held microphone"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="No reviews yet">New</span></span>
+    <h3 class="ticket__name"><a href="#top">Miriam Haile</a></h3>
+    <p class="ticket__meta">Solo vocalist · Hymns<br>Oakville · 21 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$400</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Miriam Haile to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol>
+    </div><div class="ds-example__caption"><span>Numbered from No. 02 in the sort order; one link per ticket; the save toggle in the stub; “New” for an artist with no reviews; Grace Tabernacle’s name wraps. <span class="crd-ac">AC-1, AC-2, AC-4, AC-5, AC-10, AC-11, AC-18, AC-19, AC-20, AC-31</span></span></div></div>
+    <h3>Matched styles (tags)</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block">
+      <ol class="lineup" role="list" aria-label="Tags example"><li class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 03 · <span role="img" aria-label="Rated 4.8 out of 5 by 21 churches">★ 4.8 · 21 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Hosanna Collective</a></h3>
+    <p class="ticket__meta">Band · Hymns<br>Mississauga · 32 km from you</p><div class="ticket__tags"><span class="chip chip--static">Hymns</span></div>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$1,800</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol>
+    </div><div class="ds-example__caption"><span>Static chips in the tags slot; notches set to the surface with <code>--zm-ticket-notch-bg</code>. <span class="crd-ac">AC-8, AC-23</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="saved"><h2>Saved artists</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <ol class="lineup" role="list" aria-label="Your saved artists, most recently saved first"><li class="ticket">
+  <div class="art ticket__art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">Saved Wed 7 Oct</span>
+    <h2 class="ticket__name"><a href="#top">Abigail Mensah</a></h2>
+    <p class="ticket__meta">Solo vocalist · Hymns<br>Brampton · 44 km from you</p><div class="ticket__actions"><span class="badge badge--free">Free Sat 14 Nov</span><a class="btn btn--sm" href="#top" aria-label="Request Abigail Mensah for Sat 14 Nov">Request</a></div>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$650</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li><li class="ticket ticket--booked">
+  <div class="art ticket__art art--group" role="img" aria-label="Hosanna Collective, five musicians on a lit stage with guitars and a drum kit"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">Saved Sun 27 Sep</span>
+    <h2 class="ticket__name"><a href="#top">Hosanna Collective</a></h2>
+    <p class="ticket__meta">Band · Hymns<br>Mississauga · 32 km from you</p><div class="ticket__actions"><span class="badge badge--booked">Booked Sun 15 Nov</span></div>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$1,800</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Hosanna Collective from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol>
+    </div><div class="ds-example__caption"><span>Kicker is the save date with no rating; the name is an <code>h2</code>; actions hold the availability badge and “Request”; a booked artist is muted and says when. <span class="crd-ac">AC-3, AC-6, AC-7, AC-9, AC-17</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>Hover and focus are forced with <code>data-state</code>; real pages use <code>:hover</code> and <code>:focus-within</code>. Specimens sit on a paper cell, so each sets the notch fill to the surface.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">State</th><th scope="col">Ticket</th><th scope="col">Trigger</th></tr></thead>
+      <tbody><tr><th scope="row">Default</th><td><ol class="lineup" role="list" aria-label="Default example"><li class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Elijah Park</a></h3>
+    <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$350</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td>—<span class="crd-ac">AC-1</span></td></tr><tr><th scope="row">Hover</th><td><ol class="lineup" role="list" aria-label="Hover example"><li class="ticket" data-state="hover" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Elijah Park</a></h3>
+    <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$350</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td><code>:hover</code>: lift, −0.4° tilt, <code>--shadow-2</code><span class="crd-ac">AC-13</span></td></tr><tr><th scope="row">Focus</th><td><ol class="lineup" role="list" aria-label="Focus example"><li class="ticket" data-state="hover" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
+    <h3 class="ticket__name"><a href="#top" data-state="focus">Elijah Park</a></h3>
+    <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$350</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Elijah Park to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td><code>:focus-within</code>: ring on the name, ticket lifts<span class="crd-ac">AC-16</span></td></tr><tr><th scope="row">Saved</th><td><ol class="lineup" role="list" aria-label="Saved example"><li class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Elijah Park</a></h3>
+    <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$350</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td>projected toggle <code>aria-pressed="true"</code><span class="crd-ac">AC-5</span></td></tr><tr><th scope="row">Saving</th><td><ol class="lineup" role="list" aria-label="Saving example"><li class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art " role="img" aria-label="Elijah Park seated on a stool with an acoustic guitar"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="Rated 4.7 out of 5 by 9 churches">★ 4.7 · 9 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Elijah Park</a></h3>
+    <p class="ticket__meta">Solo vocalist · Acoustic<br>Markham · 74 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$350</p>
+    <button class="save" type="button" aria-pressed="true" aria-busy="true" aria-disabled="true" aria-label="Remove Elijah Park from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td>projected toggle <code>aria-busy="true"</code><span class="crd-ac">AC-5</span></td></tr><tr><th scope="row">No reviews</th><td><ol class="lineup" role="list" aria-label="No reviews example"><li class="ticket" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--tilt" role="img" aria-label="Miriam Haile singing with a hand-held microphone"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 05 · <span role="img" aria-label="No reviews yet">New</span></span>
+    <h3 class="ticket__name"><a href="#top">Miriam Haile</a></h3>
+    <p class="ticket__meta">Solo vocalist · Hymns<br>Oakville · 21 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$400</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Miriam Haile to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td><code>rating</code> null → “New”<span class="crd-ac">AC-2</span></td></tr><tr><th scope="row">Booked</th><td><ol class="lineup" role="list" aria-label="Booked example"><li class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">Saved Wed 7 Oct</span>
+    <h2 class="ticket__name"><a href="#top">Abigail Mensah</a></h2>
+    <p class="ticket__meta">Solo vocalist · Hymns<br>Brampton · 44 km from you</p><div class="ticket__actions"><span class="badge badge--booked">Booked Sun 15 Nov</span></div>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$650</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></td><td><code>booked</code> + badge in actions<span class="crd-ac">AC-7</span></td></tr><tr><th scope="row">Loading</th><td><ol class="lineup" role="list" aria-label="Loading example"><li class="ticket ticket--loading" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <span class="skeleton ticket__art"></span>
+  <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+  <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+</li></ol></td><td><code>zm-ticket-skeleton</code><span class="crd-ac">AC-14</span></td></tr></tbody>
+    </table></div>
+    <h3>Loading list</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--block">
+      <p class="lead"><span role="status">Finding who’s free on Saturday 14 November 2026…</span></p>
+      <ul class="lineup" role="list" aria-hidden="true"><li class="ticket ticket--loading">
+  <span class="skeleton ticket__art"></span>
+  <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+  <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+</li><li class="ticket ticket--loading">
+  <span class="skeleton ticket__art"></span>
+  <div class="ticket__body"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--title"></span><span class="skeleton skeleton--text"></span></div>
+  <div class="ticket__stub"><span class="skeleton skeleton--figure"></span><span class="skeleton skeleton--target"></span></div>
+</li></ul>
+    </div><div class="ds-example__caption"><span>Same grid and height as a ticket, so the swap does not shift the page. <span class="crd-ac">AC-14, AC-15</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><ol class="lineup" role="list" aria-label="Light theme example"><li class="ticket" data-state="hover" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 02 · <span role="img" aria-label="Rated 4.6 out of 5 by 17 churches">★ 4.6 · 17 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Marcus Bell Trio</a></h3>
+    <p class="ticket__meta">Band · Acoustic, Hymns<br>Hamilton · 14 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$950</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li><li class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">Saved Wed 7 Oct</span>
+    <h2 class="ticket__name"><a href="#top">Abigail Mensah</a></h2>
+    <p class="ticket__meta">Solo vocalist · Hymns<br>Brampton · 44 km from you</p><div class="ticket__actions"><span class="badge badge--booked">Booked Sun 15 Nov</span></div>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$650</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></div>
+      <div data-theme="dark"><ol class="lineup" role="list" aria-label="Dark theme example"><li class="ticket" data-state="hover" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--group" role="img" aria-label="Marcus Bell Trio, piano, upright bass and drums, under warm stage lights"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">No. 02 · <span role="img" aria-label="Rated 4.6 out of 5 by 17 churches">★ 4.6 · 17 churches</span></span>
+    <h3 class="ticket__name"><a href="#top">Marcus Bell Trio</a></h3>
+    <p class="ticket__meta">Band · Acoustic, Hymns<br>Hamilton · 14 km from you</p>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$950</p>
+    <button class="save" type="button" aria-pressed="false" aria-label="Save Marcus Bell Trio to your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li><li class="ticket ticket--booked" style="--ticket-notch-bg: var(--color-bg-surface);">
+  <div class="art ticket__art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+  <div class="ticket__body">
+    <span class="ticket__no">Saved Wed 7 Oct</span>
+    <h2 class="ticket__name"><a href="#top">Abigail Mensah</a></h2>
+    <p class="ticket__meta">Solo vocalist · Hymns<br>Brampton · 44 km from you</p><div class="ticket__actions"><span class="badge badge--booked">Booked Sun 15 Nov</span></div>
+  </div>
+  <div class="ticket__stub">
+    <p class="ticket__price"><small>From</small>$650</p>
+    <button class="save" type="button" aria-pressed="true" aria-label="Remove Abigail Mensah from your saved artists"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+  </div>
+</li></ol></div>
+    </div>
+    <span class="crd-ac">AC-21, AC-22, AC-24</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: each frame is an iframe at that width, so the ticket’s own breakpoint at 576 px applies.</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:322px"><span class="crd-ac">320 px · light · AC-27, AC-29</span><iframe title="320 pixel wide frame, light theme" width="320" height="360" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;320 example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group art--tilt&quot; role=&quot;img&quot; aria-label=&quot;Grace Tabernacle Mass Choir in gold robes, three rows deep&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;
+    &lt;span class=&quot;ticket__no&quot;&gt;No. 06 · &lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.8 out of 5 by 26 churches&quot;&gt;★ 4.8 · 26 churches&lt;/span&gt;&lt;/span&gt;
+    &lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Grace Tabernacle Mass Choir&lt;/a&gt;&lt;/h3&gt;
+    &lt;p class=&quot;ticket__meta&quot;&gt;Gospel choir&lt;br&gt;Scarborough · 81 km from you&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;
+    &lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$2,400&lt;/p&gt;
+    &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Grace Tabernacle Mass Choir to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:362px"><span class="crd-ac">360 px · light · AC-25, AC-28</span><iframe title="360 pixel wide frame, light theme" width="360" height="360" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;360 example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group&quot; role=&quot;img&quot; aria-label=&quot;Marcus Bell Trio, piano, upright bass and drums, under warm stage lights&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;
+    &lt;span class=&quot;ticket__no&quot;&gt;No. 02 · &lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.6 out of 5 by 17 churches&quot;&gt;★ 4.6 · 17 churches&lt;/span&gt;&lt;/span&gt;
+    &lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Marcus Bell Trio&lt;/a&gt;&lt;/h3&gt;
+    &lt;p class=&quot;ticket__meta&quot;&gt;Band · Acoustic, Hymns&lt;br&gt;Hamilton · 14 km from you&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;
+    &lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$950&lt;/p&gt;
+    &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Marcus Bell Trio to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:362px"><span class="crd-ac">360 px · dark · AC-25, AC-22</span><iframe title="360 pixel wide frame, dark theme" width="360" height="360" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;360 dark example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group&quot; role=&quot;img&quot; aria-label=&quot;Marcus Bell Trio, piano, upright bass and drums, under warm stage lights&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;
+    &lt;span class=&quot;ticket__no&quot;&gt;No. 02 · &lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.6 out of 5 by 17 churches&quot;&gt;★ 4.6 · 17 churches&lt;/span&gt;&lt;/span&gt;
+    &lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Marcus Bell Trio&lt;/a&gt;&lt;/h3&gt;
+    &lt;p class=&quot;ticket__meta&quot;&gt;Band · Acoustic, Hymns&lt;br&gt;Hamilton · 14 km from you&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;
+    &lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$950&lt;/p&gt;
+    &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Marcus Bell Trio to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:770px"><span class="crd-ac">768 px · light · AC-26</span><iframe title="768 pixel wide frame, light theme" width="768" height="260" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;ol class=&quot;lineup&quot; role=&quot;list&quot; aria-label=&quot;768 example&quot;&gt;&lt;li class=&quot;ticket&quot;&gt;
+  &lt;div class=&quot;art ticket__art art--group&quot; role=&quot;img&quot; aria-label=&quot;Marcus Bell Trio, piano, upright bass and drums, under warm stage lights&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;ticket__body&quot;&gt;
+    &lt;span class=&quot;ticket__no&quot;&gt;No. 02 · &lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.6 out of 5 by 17 churches&quot;&gt;★ 4.6 · 17 churches&lt;/span&gt;&lt;/span&gt;
+    &lt;h3 class=&quot;ticket__name&quot;&gt;&lt;a href=&quot;#top&quot;&gt;Marcus Bell Trio&lt;/a&gt;&lt;/h3&gt;
+    &lt;p class=&quot;ticket__meta&quot;&gt;Band · Acoustic, Hymns&lt;br&gt;Hamilton · 14 km from you&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;ticket__stub&quot;&gt;
+    &lt;p class=&quot;ticket__price&quot;&gt;&lt;small&gt;From&lt;/small&gt;$950&lt;/p&gt;
+    &lt;button class=&quot;save&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Save Marcus Bell Trio to your saved artists&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p>From 992 px the page’s lineup shows two tickets per row; the ticket itself does not change. <span class="crd-ac">AC-26, AC-30, AC-32: motion and measurement, not renderable here; AC-12: photo art needs CDN media</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Name and price on ticket</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Kicker, meta, booked text</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Frame on ticket</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Frame against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+      <div class="ds-pair"><span>Focus ring on ticket</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: name and price</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: kicker and meta</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: frame against the page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-24</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Ticket surface</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+        <tr><td>Frame</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+        <tr><td>Booked frame</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+        <tr><td>Notch fill (default)</td><td><code>--color-bg-canvas</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-canvas" data-swatch></i><span data-token="--color-bg-canvas"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-canvas" data-swatch></i><span data-token="--color-bg-canvas"></span></span></td></tr>
+        <tr><td>Name, price</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+        <tr><td>Kicker, meta, booked text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+        <tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+        <tr><td>Hover shadow</td><td><code>--shadow-2</code></td><td><span data-theme="light" data-token="--shadow-2"></span></td><td><span data-theme="dark" data-token="--shadow-2"></span></td></tr>
+        <tr><td>Hover lift / duration</td><td><code>--transform-lift</code> / <code>--duration-base</code></td><td colspan="2"><span data-token="--transform-lift"></span> · <span data-token="--duration-base"></span></td></tr>
+        <tr><td>Body / stub padding</td><td><code>--space-5</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-5"></span> / <span data-token="--space-4"></span></td></tr>
+        <tr><td>Raised layer</td><td><code>--z-raised</code></td><td colspan="2"><span data-token="--z-raised"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

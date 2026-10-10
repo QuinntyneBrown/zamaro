@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poster hero — Component requirements rendering</title>
+<meta name="description" content="The search poster and the artist poster with every state, in light and dark, at phone and tablet widths, keyed to the acceptance criteria in poster.md.">
+<meta name="crd:component" content="poster">
+<!-- The real design-system styles: what renders here is the component, not a picture of it. -->
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+.ds-section .poster h2.poster__title { font: var(--text-h1); } .ds-section .poster h2.artist-poster__name { font: var(--text-poster); overflow-wrap: anywhere; } .ds-themes .poster { padding: var(--space-6); }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Poster hero</h1>
+    <p class="ds-lead">The charcoal stage at the top of Discover and of every profile. Requirements: <a href="poster.md">poster.md</a>. Design system: <a href="../../design-system/components/poster.html">poster hero</a>. Specimens use <code>h2</code> on this page so it keeps one <code>h1</code>; the product renders <code>h1</code> (frames below).</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-poster</code> <code>zm-artist-poster</code> <code>zm-artist-poster-skeleton</code></span><span class="ds-pill">Status: built / planned</span><span class="ds-pill">Traces to L2-004, L2-011, L2-012, L2-020, L2-086, L2-088, L2-096–L2-105, L2-110–L2-112</span></div>
+    <ul class="ds-toc">
+      <li><a href="#search">Search poster</a></li><li><a href="#artist">Artist poster</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="search"><h2>Search poster (Discover)</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="v1">
+  <div class="container poster__grid">
+    <div class="stack">
+      <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+      <h2 id="v1" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h2>
+      <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+    </div>
+    <form class="booking-bar" data-theme="light" aria-labelledby="v1-f" action="#top">
+  <h2 id="v1-f" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" name="date" value="2026-11-14"></label>
+  <label class="field"><span class="field__label">Kind of gathering</span><select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option></select></label>
+  <label class="field"><span class="field__label">Church location</span><input class="input" type="text" name="place" value="Burlington, ON"></label>
+  <label class="field"><span class="field__label">How far can they drive?</span><select class="select" name="radius"><option value="120" selected>120 km · 1.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+</form>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Who’s free Sat 14 Nov: the date as two no-wrap spans; the booking bar beside it from 992 px. <span class="crd-ac">AC-1, AC-8, AC-13, AC-20</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="v2">
+  <div class="container poster__grid">
+    <div class="stack">
+      <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+      <h2 id="v2" class="poster__title">Who’s free <span class="poster__date"><span>Pick</span> <span>a date</span></span></h2>
+      <p class="poster__sub">Tell us the date and where your church is. We’ll show who’s free and will drive to you.</p>
+    </div>
+    <form class="booking-bar" data-theme="light" aria-labelledby="v2-f" action="#top">
+  <h2 id="v2-f" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" name="date" value="2026-11-14"></label>
+  <label class="field"><span class="field__label">Kind of gathering</span><select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option></select></label>
+  <label class="field"><span class="field__label">Church location</span><input class="input" type="text" name="place" value="Burlington, ON"></label>
+  <label class="field"><span class="field__label">How far can they drive?</span><select class="select" name="radius"><option value="120" selected>120 km · 1.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit">Show the lineup</button>
+</form>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Before a search: “Pick a date”. <span class="crd-ac">AC-2</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="v3">
+  <div class="container poster__grid">
+    <div class="stack">
+      <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+      <h2 id="v3" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h2>
+      <p class="poster__sub">Checking the calendars of every artist who drives to Burlington…</p>
+    </div>
+    <form class="booking-bar" data-theme="light" aria-labelledby="v3-f" action="#top">
+  <h2 id="v3-f" class="booking-bar__title">Your event <small aria-hidden="true">Admit one church</small></h2>
+  <label class="field"><span class="field__label">Event date</span><input class="input" type="date" name="date" value="2026-11-14"></label>
+  <label class="field"><span class="field__label">Kind of gathering</span><select class="select" name="kind"><option>Sunday service</option><option selected>Worship night</option></select></label>
+  <label class="field"><span class="field__label">Church location</span><input class="input" type="text" name="place" value="Burlington, ON"></label>
+  <label class="field"><span class="field__label">How far can they drive?</span><select class="select" name="radius"><option value="120" selected>120 km · 1.5 hr</option></select></label>
+  <button class="btn btn--primary btn--lg" type="submit" aria-busy="true" aria-disabled="true">Checking calendars…</button>
+</form>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Searching: only the sub line changes; the bar’s submit is busy. <span class="crd-ac">AC-11</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="v4">
+  <div class="container poster__grid">
+    <div class="stack">
+      <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+      <h2 id="v4" class="poster__title">Who’s free <span class="poster__date"><span>Sun</span> <span>20 Dec</span></span></h2>
+      <p class="poster__sub">Two choirs are free that Sunday and will drive to Burlington.</p>
+    </div>
+    
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>After a nearby date is picked from the empty state. <span class="crd-ac">AC-3</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="artist"><h2>Artist poster (profile)</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="a1">
+  <div class="container stack stack--lg">
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav>
+    <div class="artist-poster">
+      <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+      <div class="stack">
+        <p class="overline poster__kicker">Headliner · Gospel &amp; contemporary vocalist</p>
+        <h2 id="a1" class="artist-poster__name">Abigail Mensah</h2>
+        <p class="artist-poster__facts"><strong><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9</span></strong><span aria-hidden="true">38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
+        <div class="cluster"><a class="btn btn--primary" href="#top">Book for Sat 14 Nov</a><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button><button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/></svg>Share</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Abigail Mensah: breadcrumb, yellow art, the rating once as an image and “38 churches” hidden from screen readers, then Book, Saved, Share. <span class="crd-ac">AC-4, AC-14</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="m1">
+  <div class="container stack stack--lg">
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#top">Discover</a></li><li aria-current="page">Miriam Haile</li></ol></nav>
+    <div class="artist-poster">
+      <div class="art" role="img" aria-label="Miriam Haile seated at an upright piano, smiling toward the camera"></div>
+      <div class="stack">
+        <p class="overline poster__kicker">New to Zamaro · Solo vocalist &amp; pianist</p>
+        <h2 id="m1" class="artist-poster__name">Miriam Haile</h2>
+        <p class="artist-poster__facts"><strong>New</strong><span>No reviews yet</span><span>Etobicoke, ON</span><span>Drives up to 40 km</span></p>
+        <div class="cluster"><a class="btn btn--primary" href="#top">Check dates</a><button class="btn" type="button" aria-pressed="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button><button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/></svg>Share</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Miriam Haile, new: “New · No reviews yet”, plain halftone, “Check dates”. <span class="crd-ac">AC-5</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="p1">
+  <div class="container stack stack--lg">
+    
+    <div class="artist-poster">
+      <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+      <div class="stack">
+        <p class="overline poster__kicker">Gospel &amp; contemporary vocalist</p>
+        <h2 id="p1" class="artist-poster__name">Abigail Mensah</h2>
+        <p class="artist-poster__facts"><strong><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9</span></strong><span aria-hidden="true">38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
+        <div class="cluster"><button class="btn btn--primary" type="button" disabled>Book for Sat 14 Nov</button><button class="btn" type="button" aria-pressed="false" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Save</button><button class="btn" type="button" disabled><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/></svg>Share</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Profile preview: no breadcrumb, actions disabled. <span class="crd-ac">AC-6</span></span></div></div>
+    <p><span class="crd-ac">AC-7: a real photo needs CDN media; the rendering shows the halftone</span></p>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="k1" aria-busy="true">
+  <div class="container stack stack--lg">
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Loading artist</li></ol></nav>
+    <div class="artist-poster" aria-hidden="true">
+      <span class="skeleton skeleton--portrait"></span>
+      <div class="stack"><span class="skeleton skeleton--text skeleton--short"></span><span class="skeleton skeleton--poster"></span><span class="skeleton skeleton--poster skeleton--medium"></span><span class="skeleton skeleton--text"></span></div>
+    </div>
+    <h2 id="k1" class="visually-hidden">Artist profile</h2>
+    <p class="visually-hidden" role="status">Loading the artist’s profile…</p>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Loading: stage skeletons, <code>aria-busy</code>, a hidden heading and one status line. <span class="crd-ac">AC-9, AC-10, AC-15, AC-26</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush">
+<section class="poster on-stage" aria-labelledby="f1">
+  <div class="container stack stack--lg">
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#top">Discover · Sat 14 Nov</a></li><li aria-current="page">Abigail Mensah</li></ol></nav>
+    <div class="artist-poster">
+      <div class="art art--yellow" role="img" aria-label="Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone"></div>
+      <div class="stack">
+        <p class="overline poster__kicker">Headliner · Gospel &amp; contemporary vocalist</p>
+        <h2 id="f1" class="artist-poster__name">Abigail Mensah</h2>
+        <p class="artist-poster__facts"><strong><span role="img" aria-label="Rated 4.9 out of 5 by 38 churches">★ 4.9</span></strong><span aria-hidden="true">38 churches</span><span>Brampton, ON</span><span>Drives up to 120 km</span></p>
+        <div class="cluster"><a class="btn btn--primary" href="#top" data-state="focus">Book for Sat 14 Nov</a><button class="btn" type="button" aria-pressed="true"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Saved</button><button class="btn" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/></svg>Share</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div><div class="ds-example__caption"><span>Focus on “Book for Sat 14 Nov”: the yellow ring on the stage, not clipped. <span class="crd-ac">AC-12</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><section class="poster on-stage" aria-labelledby="t1">
+  <div class="container poster__grid">
+    <div class="stack">
+      <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+      <h2 id="t1" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h2>
+      <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+    </div>
+    
+  </div>
+</section></div>
+      <div data-theme="dark"><section class="poster on-stage" aria-labelledby="t2">
+  <div class="container poster__grid">
+    <div class="stack">
+      <p class="overline poster__kicker">Worship artists within driving distance of Toronto</p>
+      <h2 id="t2" class="poster__title">Who’s free <span class="poster__date"><span>Sat</span> <span>14 Nov</span></span></h2>
+      <p class="poster__sub">Seven artists are free that Saturday and will drive to Burlington.</p>
+    </div>
+    
+  </div>
+</section></div>
+    </div>
+    <span class="crd-ac">AC-16, AC-17, AC-18</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: the bar stacks below 992 px; the portrait moves right from 768 px.</p>
+    <div class="crd-frames">
+<figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-23</span><iframe title="320 pixel wide frame, light theme" width="320" height="1100" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;poster on-stage&quot; aria-labelledby=&quot;g320&quot;&gt;
+  &lt;div class=&quot;container stack stack--lg&quot;&gt;
+    &lt;nav aria-label=&quot;Breadcrumb&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Grace Tabernacle Mass Choir&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;
+    &lt;div class=&quot;artist-poster&quot;&gt;
+      &lt;div class=&quot;art&quot; role=&quot;img&quot; aria-label=&quot;Grace Tabernacle Mass Choir in gold robes, three rows deep&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;stack&quot;&gt;
+        &lt;p class=&quot;overline poster__kicker&quot;&gt;Gospel choir · Scarborough&lt;/p&gt;
+        &lt;h1 id=&quot;g320&quot; class=&quot;artist-poster__name&quot;&gt;Grace Tabernacle Mass Choir&lt;/h1&gt;
+        &lt;p class=&quot;artist-poster__facts&quot;&gt;&lt;strong&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.8 out of 5 by 26 churches&quot;&gt;★ 4.8&lt;/span&gt;&lt;/strong&gt;&lt;span aria-hidden=&quot;true&quot;&gt;26 churches&lt;/span&gt;&lt;span&gt;Scarborough, ON&lt;/span&gt;&lt;span&gt;Drives up to 100 km&lt;/span&gt;&lt;/p&gt;
+        &lt;div class=&quot;cluster&quot;&gt;&lt;a class=&quot;btn btn--primary&quot; href=&quot;#top&quot;&gt;Check dates&lt;/a&gt;&lt;button class=&quot;btn&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;Save&lt;/button&gt;&lt;button class=&quot;btn&quot; type=&quot;button&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 3v12M7 8l5-5 5 5M5 14v6h14v-6&quot;/&gt;&lt;/svg&gt;Share&lt;/button&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · light · AC-19, AC-22</span><iframe title="360 pixel wide frame, light theme" width="360" height="1000" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;poster on-stage&quot; aria-labelledby=&quot;s360&quot;&gt;
+  &lt;div class=&quot;container poster__grid&quot;&gt;
+    &lt;div class=&quot;stack&quot;&gt;
+      &lt;p class=&quot;overline poster__kicker&quot;&gt;Worship artists within driving distance of Toronto&lt;/p&gt;
+      &lt;h1 id=&quot;s360&quot; class=&quot;poster__title&quot;&gt;Who’s free &lt;span class=&quot;poster__date&quot;&gt;&lt;span&gt;Sat&lt;/span&gt; &lt;span&gt;14 Nov&lt;/span&gt;&lt;/span&gt;&lt;/h1&gt;
+      &lt;p class=&quot;poster__sub&quot;&gt;Seven artists are free that Saturday and will drive to Burlington.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;form class=&quot;booking-bar&quot; data-theme=&quot;light&quot; aria-labelledby=&quot;s360-f&quot; action=&quot;#top&quot;&gt;
+  &lt;h2 id=&quot;s360-f&quot; class=&quot;booking-bar__title&quot;&gt;Your event &lt;small aria-hidden=&quot;true&quot;&gt;Admit one church&lt;/small&gt;&lt;/h2&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Event date&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;date&quot; name=&quot;date&quot; value=&quot;2026-11-14&quot;&gt;&lt;/label&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Kind of gathering&lt;/span&gt;&lt;select class=&quot;select&quot; name=&quot;kind&quot;&gt;&lt;option&gt;Sunday service&lt;/option&gt;&lt;option selected&gt;Worship night&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;Church location&lt;/span&gt;&lt;input class=&quot;input&quot; type=&quot;text&quot; name=&quot;place&quot; value=&quot;Burlington, ON&quot;&gt;&lt;/label&gt;
+  &lt;label class=&quot;field&quot;&gt;&lt;span class=&quot;field__label&quot;&gt;How far can they drive?&lt;/span&gt;&lt;select class=&quot;select&quot; name=&quot;radius&quot;&gt;&lt;option value=&quot;120&quot; selected&gt;120 km · 1.5 hr&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg&quot; type=&quot;submit&quot;&gt;Show the lineup&lt;/button&gt;
+&lt;/form&gt;
+  &lt;/div&gt;
+&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-27, AC-9, AC-17</span><iframe title="360 pixel wide frame, dark theme" width="360" height="1000" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;poster on-stage&quot; aria-labelledby=&quot;s360d&quot;&gt;
+  &lt;div class=&quot;container poster__grid&quot;&gt;
+    &lt;div class=&quot;stack&quot;&gt;
+      &lt;p class=&quot;overline poster__kicker&quot;&gt;Worship artists within driving distance of Toronto&lt;/p&gt;
+      &lt;h1 id=&quot;s360d&quot; class=&quot;poster__title&quot;&gt;Who’s free &lt;span class=&quot;poster__date&quot;&gt;&lt;span&gt;Sat&lt;/span&gt; &lt;span&gt;9 Jan 2027&lt;/span&gt;&lt;/span&gt;&lt;/h1&gt;
+      &lt;p class=&quot;poster__sub&quot;&gt;Seven artists are free that Saturday and will drive to Burlington.&lt;/p&gt;
+    &lt;/div&gt;
+    
+  &lt;/div&gt;
+&lt;/section&gt;&lt;section class=&quot;poster on-stage&quot; aria-labelledby=&quot;k360&quot; aria-busy=&quot;true&quot;&gt;
+  &lt;div class=&quot;container stack stack--lg&quot;&gt;
+    &lt;nav aria-label=&quot;Breadcrumb&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Loading artist&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;
+    &lt;div class=&quot;artist-poster&quot; aria-hidden=&quot;true&quot;&gt;
+      &lt;span class=&quot;skeleton skeleton--portrait&quot;&gt;&lt;/span&gt;
+      &lt;div class=&quot;stack&quot;&gt;&lt;span class=&quot;skeleton skeleton--text skeleton--short&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--poster&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--poster skeleton--medium&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton skeleton--text&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;p id=&quot;k360&quot; class=&quot;visually-hidden&quot;&gt;Artist profile&lt;/p&gt;
+    &lt;p class=&quot;visually-hidden&quot; role=&quot;status&quot;&gt;Loading the artist’s profile…&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+<figure class="crd-frame" style="max-width:794px"><span class="crd-ac">768 px · light · AC-21</span><iframe title="768 pixel wide frame, light theme" width="768" height="720" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas);color:var(--color-fg-default)}body{padding:0}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;section class=&quot;poster on-stage&quot; aria-labelledby=&quot;a768&quot;&gt;
+  &lt;div class=&quot;container stack stack--lg&quot;&gt;
+    &lt;nav aria-label=&quot;Breadcrumb&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Discover · Sat 14 Nov&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;Abigail Mensah&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;
+    &lt;div class=&quot;artist-poster&quot;&gt;
+      &lt;div class=&quot;art art--yellow&quot; role=&quot;img&quot; aria-label=&quot;Abigail Mensah, eyes closed and one hand raised, singing into a vintage microphone&quot;&gt;&lt;/div&gt;
+      &lt;div class=&quot;stack&quot;&gt;
+        &lt;p class=&quot;overline poster__kicker&quot;&gt;Headliner · Gospel &amp;amp; contemporary vocalist&lt;/p&gt;
+        &lt;h1 id=&quot;a768&quot; class=&quot;artist-poster__name&quot;&gt;Abigail Mensah&lt;/h1&gt;
+        &lt;p class=&quot;artist-poster__facts&quot;&gt;&lt;strong&gt;&lt;span role=&quot;img&quot; aria-label=&quot;Rated 4.9 out of 5 by 38 churches&quot;&gt;★ 4.9&lt;/span&gt;&lt;/strong&gt;&lt;span aria-hidden=&quot;true&quot;&gt;38 churches&lt;/span&gt;&lt;span&gt;Brampton, ON&lt;/span&gt;&lt;span&gt;Drives up to 120 km&lt;/span&gt;&lt;/p&gt;
+        &lt;div class=&quot;cluster&quot;&gt;&lt;a class=&quot;btn btn--primary&quot; href=&quot;#top&quot;&gt;Book for Sat 14 Nov&lt;/a&gt;&lt;button class=&quot;btn&quot; type=&quot;button&quot; aria-pressed=&quot;true&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z&quot;/&gt;&lt;/svg&gt;Saved&lt;/button&gt;&lt;button class=&quot;btn&quot; type=&quot;button&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M12 3v12M7 8l5-5 5 5M5 14v6h14v-6&quot;/&gt;&lt;/svg&gt;Share&lt;/button&gt;&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/section&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <p><span class="crd-ac">AC-20: the 1280 px side-by-side grid is the first example above; AC-24, AC-25: 200 % zoom and the French catalogue are checked in the browser; AC-28: perf measurement</span></p>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+<div class="ds-pair"><span>Title and name on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Kicker, date and rating fact</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Sub line and facts</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+<div class="ds-pair"><span>Primary button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: title on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: date on the stage</span><span class="ds-pair__ratio" data-contrast="--color-accent-on-stage|--color-bg-stage" data-min="4.5"></span></div>
+<div class="ds-pair" data-theme="dark"><span>Dark: sub line on the stage</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-stage-muted|--color-bg-stage" data-min="4.5"></span></div>
+    </div>
+    <span class="crd-ac">AC-18</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+<tr><td>Stage</td><td><code>--color-bg-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage" data-swatch></i><span data-token="--color-bg-stage"></span></span></td></tr>
+<tr><td>Title, name</td><td><code>--color-fg-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage" data-swatch></i><span data-token="--color-fg-on-stage"></span></span></td></tr>
+<tr><td>Sub line, facts</td><td><code>--color-fg-on-stage-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-stage-muted" data-swatch></i><span data-token="--color-fg-on-stage-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-stage-muted" data-swatch></i><span data-token="--color-fg-on-stage-muted"></span></span></td></tr>
+<tr><td>Kicker, date, dots</td><td><code>--color-accent-on-stage</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-on-stage" data-swatch></i><span data-token="--color-accent-on-stage"></span></span></td></tr>
+<tr><td>Stage skeleton</td><td><code>--color-bg-stage-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-stage-raised" data-swatch></i><span data-token="--color-bg-stage-raised"></span></span></td></tr>
+<tr><td>Title / date / name sizes</td><td><code>--font-size-4xl / --font-size-5xl / --font-size-6xl</code></td><td colspan="2"><span data-token="--font-size-4xl"></span> / <span data-token="--font-size-5xl"></span> / <span data-token="--font-size-6xl"></span></td></tr>
+<tr><td>Padding phone</td><td><code>--space-12 / --space-16</code></td><td colspan="2"><span data-token="--space-12"></span> / <span data-token="--space-16"></span></td></tr>
+<tr><td>Padding from LG</td><td><code>--space-16 / --space-20</code></td><td colspan="2"><span data-token="--space-16"></span> / <span data-token="--space-20"></span></td></tr>
+<tr><td>Grid gap / from LG</td><td><code>--space-10 / --space-16</code></td><td colspan="2"><span data-token="--space-10"></span> / <span data-token="--space-16"></span></td></tr>
+<tr><td>Artist grid gap</td><td><code>--space-8</code></td><td colspan="2"><span data-token="--space-8"></span></td></tr>
+<tr><td>Above the corner</td><td><code>--z-raised</code></td><td colspan="2"><span data-token="--z-raised"></span></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

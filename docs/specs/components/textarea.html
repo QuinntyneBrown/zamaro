@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Textarea — Component requirements rendering</title>
+<meta name="description" content="Every variant and state of zm-textarea, in light and dark, at phone widths, keyed to the acceptance criteria in textarea.md.">
+<meta name="crd:component" content="textarea">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here (except the overflow-wrap rule the CRD adds). */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+.crd-grid { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); align-items: start; }
+.ds-matrix .textarea { width: 11rem; }
+.textarea { overflow-wrap: anywhere; }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Textarea</h1>
+    <p class="ds-lead">Every variant and state of the textarea, in the fields the product uses. Requirements: <a href="textarea.md">textarea.md</a>. Design system: <a href="../../design-system/components/textarea.html">textarea</a>.</p>
+    <div class="ds-meta"><span class="ds-pill">Selector <code>zm-textarea</code></span><span class="ds-pill">Status: planned</span><span class="ds-pill">Traces to L2-019, L2-028, L2-030, L2-045, L2-047, L2-050, L2-059, L2-086, L2-096, L2-100–L2-104, L2-108, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Variants</a></li><li><a href="#usage">In the product</a></li><li><a href="#states">States</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Variants</h2>
+    <div class="crd-grid">
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="thread">Message to Abigail</label><textarea class="textarea" id="thread" rows="3" maxlength="2000" aria-describedby="thread-help"></textarea><span class="field__help" id="thread-help">Plain text, 1 to 2,000 characters. Abigail gets an email at most every 15 minutes.</span></div></div>
+        <div class="ds-example__caption"><span>Default: three rows, <code>maxlength="2000"</code>, vertical resize only; the label and help are the field’s. <span class="crd-ac">AC-1, AC-3, AC-14</span></span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="grow">Message <span class="field__optional">(optional)</span></label><span class="field__counter" id="grow-count">234 / 2,000</span></div><textarea class="textarea textarea--autogrow" id="grow" rows="3" maxlength="2000" aria-describedby="grow-count">We’re hosting a worship night for churches across Burlington, about 250 people. We’d love Goodness of God and Great Is Thy Faithfulness, and our youth band would like to join you for two songs. If it’s easier, call me on 905-555-0123.</textarea></div></div>
+        <div class="ds-example__caption"><span>Auto-grow (<code>.textarea--autogrow</code>): grows with Naomi’s 234-character message where the browser supports <code>field-sizing</code>, capped at 20 rem; elsewhere it keeps the 6 rem box and its handle. The counter is the field’s, fed by the reported length. <span class="crd-ac">AC-4, AC-12, AC-13, AC-20, AC-29</span></span></div></div>
+    </div>
+  </section>
+
+  <section class="ds-section" id="usage"><h2>In the product</h2>
+    <div class="crd-grid">
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="review">Your review <span class="field__required">(required)</span></label><span class="field__counter" id="review-count">8 / 1,000</span></div><textarea class="textarea" id="review" rows="5" minlength="20" maxlength="1000" required aria-invalid="true" aria-describedby="review-error review-help review-count">So good!</textarea><span class="field__error" id="review-error">Write at least 20 characters; you have 8.</span><span class="field__help" id="review-help">20 to 1,000 characters. Shown on Abigail’s profile with your name and church.</span></div></div>
+        <div class="ds-example__caption"><span>dialogs/write-review/invalid: <code>minlength="20" maxlength="1000"</code>, invalid with the error first in <code>aria-describedby</code>. <span class="crd-ac">AC-4, AC-7, AC-17, AC-18</span></span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><div class="field__row"><label class="field__label" for="reply-busy">Your reply <span class="field__required">(required)</span></label><span class="field__counter" id="reply-busy-count">103 / 500</span></div><textarea class="textarea" id="reply-busy" rows="4" maxlength="500" required readonly aria-describedby="reply-busy-help reply-busy-count">Thank you, Janet. St. Brendan’s sang like a choir of hundreds. I can’t wait to come back on Sun 22 Nov.</textarea><span class="field__help" id="reply-busy-help">1 to 500 characters. Shown under the review as “Reply from Abigail Mensah”.</span></div></div>
+        <div class="ds-example__caption"><span>dialogs/reply-review/busy: <code>readonly</code> while “Post reply” is pending — sunken, dashed, focusable, value kept. <span class="crd-ac">AC-9, AC-10</span></span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="bio">About you <span class="field__required">(required)</span></label><textarea class="textarea" id="bio" rows="7" required aria-describedby="bio-help">I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone. I’ve led worship at New Covenant Chapel for nine years.
+
+I lead in English and Twi, bring my own tracks if you don’t have a band, and I’m happy to rehearse with your volunteers. My aim is a congregation that sings.</textarea><span class="field__help" id="bio-help">100 to 1,500 characters · 322 used. Write it the way you’d introduce yourself to a pastor.</span></div></div>
+        <div class="ds-example__caption"><span>pages/edit-profile: “About you (required)”, <code>rows="7"</code>, Abigail’s two paragraphs with the line break kept. <span class="crd-ac">AC-2, AC-20, AC-22</span></span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="decline">Note to Naomi <span class="field__optional">(optional)</span></label><textarea class="textarea" id="decline" rows="6" maxlength="500" aria-invalid="true" aria-describedby="decline-error decline-help">I’m so sorry — I’m leading at New Covenant Chapel that weekend and can’t make the drive back in time. I’m leading at New Covenant Chapel that weekend and can’t make the drive back in time. I’m leading at New Covenant Chapel that weekend and can’t make the drive back in time. I’m leading at New Covenant Chapel that weekend and can’t make the drive back in time. I’m leading at New Covenant Chapel that weekend and can’t make the drive back in time. I’m leading at New Covenant Chapel that weekend and can’t make the drive back in time. </textarea><span class="field__error" id="decline-error">Keep your note to 500 characters; it’s 526 now.</span><span class="field__help" id="decline-help">Up to 500 characters. Naomi sees it with your reason.</span></div></div>
+        <div class="ds-example__caption"><span>dialogs/decline-request/invalid: a restored note over the 500 limit keeps every character until shortened. <span class="crd-ac">AC-21</span></span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stage">
+        <form class="stub" data-theme="light" action="#usage" style="width: min(100%, 22rem);"><div class="field"><label class="field__label" for="stub-msg">Message <span class="field__optional">(optional)</span></label><textarea class="textarea" id="stub-msg" rows="3" maxlength="2000" placeholder="Your church, the room, the songs you love."></textarea></div><div class="field"><label class="field__label" for="preview-msg">Message <span class="field__optional">(optional)</span></label><textarea class="textarea" id="preview-msg" rows="3" disabled placeholder="Your church, the room, the songs you love."></textarea></div></form></div>
+        <div class="ds-example__caption"><span>The booking stub’s “Message (optional)” with its placeholder, then the profile preview’s disabled copy; the stub is a paper island in both themes. <span class="crd-ac">AC-5, AC-11, AC-24, AC-27</span></span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><textarea class="textarea" rows="3" aria-label="Message to Abigail"></textarea></div>
+        <div class="ds-example__caption"><span>Standalone, named by <code>label</code> (<code>aria-label="Message to Abigail"</code>). <span class="crd-ac">AC-6</span></span></div></div>
+    </div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>States</h2>
+    <p>Hover and focus are forced with <code>data-state</code>; real pages use <code>:hover</code> and <code>:focus-visible</code>.</p>
+    <div class="ds-matrix"><table>
+      <thead><tr><th scope="col">Content</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Read-only</th><th scope="col">Disabled</th></tr></thead>
+      <tbody><tr><th scope="row">Value</th><td><textarea class="textarea" rows="3" aria-label="Message, default">About 250 people.</textarea></td><td><textarea class="textarea" rows="3" data-state="hover" aria-label="Message, hover">About 250 people.</textarea></td><td><textarea class="textarea" rows="3" data-state="focus" aria-label="Message, focus">About 250 people.</textarea></td><td><textarea class="textarea" rows="3" aria-invalid="true" aria-label="Message, invalid">About 250 people.</textarea></td><td><textarea class="textarea" rows="3" readonly aria-label="Message, read-only">About 250 people.</textarea></td><td><textarea class="textarea" rows="3" disabled aria-label="Message, disabled">About 250 people.</textarea></td></tr><tr><th scope="row">Placeholder</th><td><textarea class="textarea" rows="3" placeholder="Your church, the room…" aria-label="Message, default"></textarea></td><td><textarea class="textarea" rows="3" data-state="hover" placeholder="Your church, the room…" aria-label="Message, hover"></textarea></td><td><textarea class="textarea" rows="3" data-state="focus" placeholder="Your church, the room…" aria-label="Message, focus"></textarea></td><td><textarea class="textarea" rows="3" aria-invalid="true" placeholder="Your church, the room…" aria-label="Message, invalid"></textarea></td><td><textarea class="textarea" rows="3" readonly placeholder="Your church, the room…" aria-label="Message, read-only"></textarea></td><td><textarea class="textarea" rows="3" disabled placeholder="Your church, the room…" aria-label="Message, disabled"></textarea></td></tr></tbody>
+    </table></div>
+    <span class="crd-ac">AC-7, AC-8, AC-9, AC-11, AC-16, AC-19</span>
+    <p>Keyboard behaviour (Enter inserts a line, Tab leaves), screen-reader output, reduced motion and the perf budget are behaviour, not pictures: <span class="crd-ac">AC-15, AC-18, AC-28, AC-29 are verified by tests, not renderable here</span></p>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="stack">
+      <textarea class="textarea" rows="3" aria-label="light: default">About 250 people, across Burlington.</textarea>
+      <textarea class="textarea" rows="3" data-state="focus" aria-label="light: focus">About 250 people, across Burlington.</textarea>
+      <textarea class="textarea" rows="3" aria-invalid="true" aria-label="light: invalid">So good!</textarea>
+      <textarea class="textarea" rows="3" readonly aria-label="light: read-only">Sent Fri 9 Oct · About 250 people.</textarea>
+      <textarea class="textarea" rows="3" placeholder="Your church, the room, the songs you love." aria-label="light: placeholder"></textarea>
+      <textarea class="textarea" rows="3" disabled aria-label="light: disabled"></textarea>
+    </div></div>
+      <div data-theme="dark"><div class="stack">
+      <textarea class="textarea" rows="3" aria-label="dark: default">About 250 people, across Burlington.</textarea>
+      <textarea class="textarea" rows="3" data-state="focus" aria-label="dark: focus">About 250 people, across Burlington.</textarea>
+      <textarea class="textarea" rows="3" aria-invalid="true" aria-label="dark: invalid">So good!</textarea>
+      <textarea class="textarea" rows="3" readonly aria-label="dark: read-only">Sent Fri 9 Oct · About 250 people.</textarea>
+      <textarea class="textarea" rows="3" placeholder="Your church, the room, the songs you love." aria-label="dark: placeholder"></textarea>
+      <textarea class="textarea" rows="3" disabled aria-label="dark: disabled"></textarea>
+    </div></div>
+    </div>
+    <span class="crd-ac">AC-19, AC-23</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: each frame is an iframe at that width. The textarea is full width of its field at every breakpoint; the frames check wrapping of long text and the label row with a counter.</p>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-25, AC-26</span><iframe title="320 pixel wide frame, light theme" width="320" height="420" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)} .textarea{overflow-wrap:anywhere}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;n-link&quot;&gt;Message to Abigail&lt;/label&gt;&lt;textarea class=&quot;textarea&quot; id=&quot;n-link&quot; rows=&quot;3&quot; maxlength=&quot;2000&quot; aria-describedby=&quot;n-link-help&quot;&gt;Our event page: https://www.riversidecc.ca/events/2026/worship-night-across-burlington-churches-sat-14-nov&lt;/textarea&gt;&lt;span class=&quot;field__help&quot; id=&quot;n-link-help&quot;&gt;Plain text, 1 to 2,000 characters.&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:346px"><span class="crd-ac">320 px · light · AC-7, AC-26</span><iframe title="320 pixel wide frame, light theme" width="320" height="420" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)} .textarea{overflow-wrap:anywhere}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;field&quot;&gt;&lt;div class=&quot;field__row&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;n-rev&quot;&gt;Your review &lt;span class=&quot;field__required&quot;&gt;(required)&lt;/span&gt;&lt;/label&gt;&lt;span class=&quot;field__counter&quot; id=&quot;n-rev-count&quot;&gt;8 / 1,000&lt;/span&gt;&lt;/div&gt;&lt;textarea class=&quot;textarea&quot; id=&quot;n-rev&quot; rows=&quot;5&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;n-rev-error n-rev-count&quot;&gt;So good!&lt;/textarea&gt;&lt;span class=&quot;field__error&quot; id=&quot;n-rev-error&quot;&gt;Write at least 20 characters; you have 8.&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:386px"><span class="crd-ac">360 px · dark · AC-23, AC-25</span><iframe title="360 pixel wide frame, dark theme" width="360" height="520" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;body{margin:0;padding:12px;background:var(--color-bg-canvas)} .textarea{overflow-wrap:anywhere}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;field&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;n-link&quot;&gt;Message to Abigail&lt;/label&gt;&lt;textarea class=&quot;textarea&quot; id=&quot;n-link&quot; rows=&quot;3&quot; maxlength=&quot;2000&quot; aria-describedby=&quot;n-link-help&quot;&gt;Our event page: https://www.riversidecc.ca/events/2026/worship-night-across-burlington-churches-sat-14-nov&lt;/textarea&gt;&lt;span class=&quot;field__help&quot; id=&quot;n-link-help&quot;&gt;Plain text, 1 to 2,000 characters.&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;field&quot;&gt;&lt;div class=&quot;field__row&quot;&gt;&lt;label class=&quot;field__label&quot; for=&quot;n-rev&quot;&gt;Your review &lt;span class=&quot;field__required&quot;&gt;(required)&lt;/span&gt;&lt;/label&gt;&lt;span class=&quot;field__counter&quot; id=&quot;n-rev-count&quot;&gt;8 / 1,000&lt;/span&gt;&lt;/div&gt;&lt;textarea class=&quot;textarea&quot; id=&quot;n-rev&quot; rows=&quot;5&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;n-rev-error n-rev-count&quot;&gt;So good!&lt;/textarea&gt;&lt;span class=&quot;field__error&quot; id=&quot;n-rev-error&quot;&gt;Write at least 20 characters; you have 8.&lt;/span&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Text on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Placeholder</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Read-only text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-sunken" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Rule on page</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-canvas" data-min="3"></span></div>
+      <div class="ds-pair"><span>Invalid rule</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair"><span>Focus ring, outer</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: text on field</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: placeholder</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: rule on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: invalid rule</span><span class="ds-pair__ratio" data-contrast="--color-danger-border|--color-bg-surface" data-min="3"></span></div>
+    </div>
+    <span class="crd-ac">AC-23</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+<tr><td>Fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+<tr><td>Text</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+<tr><td>Rule</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+<tr><td>Placeholder</td><td><code>--color-fg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td></tr>
+<tr><td>Invalid rule</td><td><code>--color-danger-border</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-border" data-swatch></i><span data-token="--color-danger-border"></span></span></td></tr>
+<tr><td>Read-only fill</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+<tr><td>Disabled fill</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+<tr><td>Disabled text and rule</td><td><code>--color-fg-disabled</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-disabled" data-swatch></i><span data-token="--color-fg-disabled"></span></span></td></tr>
+<tr><td>Focus ring, inner</td><td><code>--color-focus-ring-offset</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring-offset" data-swatch></i><span data-token="--color-focus-ring-offset"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring-offset" data-swatch></i><span data-token="--color-focus-ring-offset"></span></span></td></tr>
+<tr><td>Focus ring, outer</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+        <tr><td>Focus ring</td><td><code>--shadow-focus</code></td><td><span data-theme="light" data-token="--shadow-focus"></span></td><td><span data-theme="dark" data-token="--shadow-focus"></span></td></tr>
+        <tr><td>Padding</td><td><code>--space-2</code> × <code>--space-3</code></td><td colspan="2"><span data-token="--space-2"></span> × <span data-token="--space-3"></span></td></tr>
+        <tr><td>Rule width / radius</td><td><code>--border-width-thick</code> / <code>--radius-md</code></td><td colspan="2"><span data-token="--border-width-thick"></span> / <span data-token="--radius-md"></span></td></tr>
+        <tr><td>Line height</td><td><code>--line-height-normal</code></td><td colspan="2"><span data-token="--line-height-normal"></span></td></tr>
+        <tr><td>Transition</td><td><code>--duration-fast</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-fast"></span></td></tr>
+      </tbody>
+    </table></div>
+    <p>The 6 rem minimum and the 20 rem auto-grow cap are fixed values, not tokens.</p>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>
