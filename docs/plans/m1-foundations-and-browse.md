@@ -7,7 +7,7 @@ milestones get their own plan in this folder when they start.
 ## Current status (2026-10-10)
 
 **Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is
-nearly done: S0–S14 are built; S15 and S16 remain.
+nearly done: S0–S15 are built; S16 (optional) remains.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -27,14 +27,14 @@ nearly done: S0–S14 are built; S15 and S16 remain.
 | S12 | Photos and videos (local disk, no object storage in M1) | Done | `37d8f6c`, `263ee86`, `9c56457` (ADR-0010) |
 | S13 | Reviews on the profile | Done | `eb1853c`, `7724bea`, `d9ed059` |
 | S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | Done | `b1e73c7`, `0dccb9e`, `ce741f7` (ADR-0012) |
-| S15 | Missing artist, renamed slug, generic 404 | **Next** | ADR-0011 |
-| S16 | Index and share (optional, last) | To do | |
+| S15 | Missing artist, renamed slug, generic 404 | Done | `511efcb`, `bf69dd7`, `f87ceb4` (ADR-0011) |
+| S16 | Index and share (optional, last) | **Next** | |
 
 **Checks at the last commit:**
-- Backend: 101 Feature tests pass, with OpenAPI contract assertions.
+- Backend: 112 Feature tests pass, with OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean.
 - Frontend: lint and `format:check` are clean.
-- e2e: 66 Playwright tests pass in Chromium against a freshly seeded e2e database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `TourDates`, `InlineMessage`, `Steps`, `DescriptionList`, `Band` and `BookingStub` are new scenarios.
+- e2e: 73 Playwright tests pass in Chromium against a freshly seeded e2e database.
+- Perf: `--fail-on-regression` against the base build flags no rows. `ErrorPage` is a new scenario (253 ms at the default 200 iterations).
 
 **Open items carried forward:**
 - **L2-009.2:** Back restores the Discover results but not the scroll position yet.
@@ -43,8 +43,8 @@ nearly done: S0–S14 are built; S15 and S16 remain.
 - **M5:** the stub's "Request to book" renders only when the `bookingRequests` flag is on (ADR-0012; off, a user decision). M5 adds the `/artists/:slug/book` route, hands the stub's values to it on submit, and turns the flag on in dev and e2e.
 - **M3:** the Discover band ships without "Apply as an artist"; the action joins with the application page.
 - **Later, with their screens:** `zm-tour-dates` `schedule` variant (M4), `zm-inline-message` `busy` (needs `zm-spinner`), the stepper and timeline (M3, M5), the other description-list variants, and the booking form's `auth` variant (M2). The `zm-form-field` split its CRD asks for is still to do.
-- **S15:** settle `ArtistSlugResolver` (change-profile-address) against `ResolveArtistSlug` (view-artist-profile).
-- **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest already lists four route states.
+- **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest lists six route states.
+- **Later, with their screens:** `zm-error-stage` (the profile error is still page markup), the 500 page sending 500 and the offline page; the browser-side move to a renamed slug has no in-app link to test until M2's saved list.
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
 - **M4:** object storage replaces the local `media` disk (`zamaro.media.disk`); the poster shows the primary photo; `zm-video-card` gains `manage` mode.
 
@@ -243,6 +243,18 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **Components:** `zm-tour-dates` (`public` variant, loading), `zm-inline-message` (no `busy` yet), `zm-steps` (no stepper or timeline), `zm-description-list` (`definition`), `zm-band`, and `zm-booking-form variant="stub"` (`titleId` renamed `headingId`). Also `zm-button` `size="sm"` and `block` and the band's stage skin, `zm-badge variant="booked"`, the `check` icon, and interim `zm-form-field` additions: a textarea, `placeholder`, `optionalMarker`, a live error region and `[slot=message]` named by a `messageId` input (form-field CRD D-14: a content query cost every field about 8 %). Each CRD records what is built.
   - **Perf:** no rows flagged. New scenarios `TourDates`, `InlineMessage`, `Steps`, `DescriptionList`, `Band` and `BookingStub` (150 iterations). `FormField` rose about 9 % (120 to 131 ms) and `BookingForm` about 6–13 % with the textarea, marker and live region, within the overlap rule.
   - **Tests:** `tests/Feature/ArtistProfiles/PickADateTest.php` (12), `tests/Feature/Operations/FeatureFlagsTest.php` (2) and `e2e/specs/artist-profiles/pick-a-date-and-start-booking.spec.ts` (13, including Discover's sections and the flag turned on by intercepting `/api/v1/features` after client-side navigation).
+- **S15 is done** (`511efcb` API, seed and backend tests, `bf69dd7` red e2e tests, `f87ceb4` pages and component, then ADR-0011 and docs).
+  - **ADR-0011 (OK, accepted default, 2026-10-10):** one resolver, `ResolveArtistSlug` (`ArtistSlugResolver` is retired as a name), used by all four `/api/v1/artists/{slug}` routes. It returns the viewable artist or throws `ArtistMoved` (rendered as a bodiless 301 to the same route under the current slug, relative `Location`, query string kept) or `ArtistNotFound` (the `artist-not-found` problem, "This artist isn’t on Zamaro"). `slug_histories` uses the change-profile-address columns `(artist_id, slug unique, retired_at)` and holds every current and retired slug; the migration backfills the current ones. Both designs and their diagrams are updated.
+  - **The design's `<TO SUPPLY>` items (accepted defaults, recorded in ADR-0011):** the primary style is the first of an artist's styles in the chips' order; a slug that never existed matches any style; without a carried location the suggestions are measured from Toronto City Hall, without a radius within 120 km, without a date inside the window on the first bookable day. The hidden artist's base is never used.
+  - **API:** the profile reads the carried search leniently from `date`, `kind`, `lat`, `lng`, `radius` (`ShowArtistProfileRequest`; a stale date is no error) and adds `similarArtists: { date, radiusKm, items }` (lineup tickets, up to 3, nearest first) from `SimilarArtistFinder` (`Services/Discovery`, for M5). Sub-resources return the problem without suggestions. `ProblemDetails` gained `extensions`.
+  - **Seed:** every artist's current slug in `slug_histories`, Abigail's retired `abigail-sings`, and Selah Brooks (ACT-0044), a suspended solo vocalist. No existing search, headliner or count changed.
+  - **SSR statuses:** a root `HttpStatus` sets `RESPONSE_INIT.status` on the server only. A missing artist sets 404; a `**` route renders `pages/not-found/not-found` and sets 404. For a move the API's 301 is followed by the fetch backend; when the profile comes back under another slug, `ArtistProfileStore` sets 301 and navigates with `replaceUrl` and the query kept, and Angular's SSR engine turns that into `301 Location: /artists/{current}?…`. The API returns the redirect itself rather than a target in a body. There is no server-error page yet, so nothing sends 500 (M9/M10 with the 500 and offline screens).
+  - **Hydration:** the HTTP transfer cache keeps successes only, so `HttpArtistProfilesApi` puts a 404's suggestions in the transfer state on the server; the browser shows the server's page without asking again (tested).
+  - **Carried search:** the profile request carries the last lineup's `date`, `kind`, `lat`, `lng` and `radius` when its date matches the profile's `date`, otherwise the date alone, so found profiles are cached per search for their 60 seconds. Opened without a search (any fresh load), the list reads "within 120 km of Toronto" and tickets "{city} · {km} from Toronto"; the mock's "within 120 km of Burlington" and "from you" appear after a Discover search.
+  - **Component:** `zm-error-page` (all inputs and slots) and the `ErrorPage` scenario (the 500 composition). The `h1` is named by `aria-label` when `posterSuffix` is set: Chrome reads a visually hidden span as "No show : page not found" (CRD notes). `zm-error-stage` is not built; the profile error stays page markup until the 500 and offline pages.
+  - **Drift recorded in the design:** the generic 404 has one action ("Your saved artists" waits for M2); suggestion tickets have no Save (M2); with no suggestions the lead keeps its first sentence and "Find who’s free" leads to Discover.
+  - **Tests:** `tests/Feature/ArtistProfiles/ResolveMissingArtistTest.php` (11) and `e2e/specs/artist-profiles/resolve-missing-artist.spec.ts` (7, asserting the 404, 301 and 200 statuses through `NotFoundPage`). The Discover-search case stands in for an artist hidden after the lineup listed them by rewriting the browser's profile request. `ArtistProfilePage`'s intercepts now match the profile URL with any query string.
+  - **Not covered end to end:** the browser-side move (an in-app link to a retired slug); no screen links to one until M2's saved list.
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
@@ -444,7 +456,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - `/no-such-page` shows the generic 404.
 - **Tests first:** `ResolveMissingArtistTest.php` and `e2e/specs/artist-profiles/resolve-missing-artist.spec.ts` (asserts the HTTP status).
 - **Build:** `ResolveArtistSlug`, `ArtistNotFound` problem, `SimilarArtistFinder`, slug_histories, `pages/not-found/`, SSR `RESPONSE_INIT`.
-- **ADR 0009:** slug_histories uses the change-profile-address columns `(slug, retired_at)`.
+- **ADR 0011** (renumbered from 0009): slug_histories uses the change-profile-address columns `(slug, retired_at)`; the resolver is `ResolveArtistSlug`.
 - **Components:** `zm-error-page`.
 
 #### S16 — Index and share (optional, last)

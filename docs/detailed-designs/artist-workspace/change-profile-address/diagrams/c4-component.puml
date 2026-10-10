@@ -3,14 +3,14 @@
 LAYOUT_WITH_LEGEND()
 title Components — Change profile address
 
-Container(web, "Zamaro Web", "Angular", "ProfileAddressSectionComponent, ProfileAddressApi, artistProfileResolver")
+Container(web, "Zamaro Web", "Angular", "ProfileAddressSectionComponent, ProfileAddressApi, ArtistProfileStore")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "ProfileAddressController", "Laravel controller", "GET and PUT /api/v1/artist/profile/address")
   Component(req, "ChangeProfileAddressRequest", "FormRequest", "Validates slug format")
   Component(change, "ChangeArtistSlug", "Action", "Applies the 30-day rule and retires the old slug")
   Component(gen, "GenerateArtistSlug", "Action", "Builds the first slug from the display name at publication")
   Component(registry, "SlugRegistry", "Domain service", "Checks a slug against every slug ever held")
-  Component(resolver, "ArtistSlugResolver", "Domain service", "Maps any current or retired slug to the artist")
+  Component(resolver, "ResolveArtistSlug", "Action (ADR-0011)", "Maps any current or retired slug to the artist; 301 or 404")
   Component(pub, "ArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}, owned by the public profile slice")
   ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists.slug; slug_histories.slug unique across all artists")
 }

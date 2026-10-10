@@ -17,44 +17,43 @@ skinparam package {
 actor "Guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "Angular SSR server" as ssr
-  participant "artistProfileResolver" as resolver
+  participant "ArtistProfileStore" as store
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "ArtistProfileController" as controller
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
-  participant "ArtistSlugResolver" as slugs
+  participant "ResolveArtistSlug" as slugs
 end box
 box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> ssr : GET /artists/abby-mensah-music
-ssr -> resolver : Resolve route data
-resolver -> controller : GET /api/v1/artists/abby-mensah-music
-controller -> slugs : resolve(slug)
+actor -> ssr : GET /artists/abigail-sings
+ssr -> store : Render /artists/:slug
+store -> controller : GET /api/v1/artists/abigail-sings
+controller -> slugs : handle(slug)
 slugs -> db : artists.slug = ?
 alt current slug
   db --> slugs : Artist
 else not current
-  slugs -> db : slug_histories.slug = ? joined to artist
+  slugs -> db : slug_histories.slug = ? with retired_at, joined to artist
   db --> slugs : Artist or none
 end
-alt no artist, or artist suspended or deleted
-  slugs --> controller : null
-  controller --> resolver : 404
-  resolver --> ssr : Not found page (L2-021)
+alt no artist, or artist suspended, deleted or unpublished
+  slugs --> controller : throw ArtistNotFound
+  controller --> store : 404 artist-not-found problem
+  store -> ssr : Status 404 via RESPONSE_INIT; not-found page (L2-021)
   ssr --> actor : 404
-else artist found
-  slugs --> controller : Artist with current slug abigail-mensah
-  controller --> resolver : 200 ArtistProfileResource with slug
-  alt requested slug differs from current slug
-    resolver -> ssr : Set status 301 and Location via RESPONSE_INIT
-    ssr --> actor : 301 Location: /artists/abigail-mensah (L2-055, L2-021)
-    note right of actor : One hop even after several renames
-  else requested slug is current
-    resolver --> ssr : Render profile
-    ssr --> actor : 200 server-rendered profile
-  end
+else retired slug of a viewable artist
+  slugs --> controller : throw ArtistMoved('abigail-mensah')
+  controller --> store : 301, followed to 200 ArtistProfileResource with slug abigail-mensah
+  store -> ssr : Status 301 via RESPONSE_INIT; navigate to /artists/abigail-mensah
+  ssr --> actor : 301 Location: /artists/abigail-mensah (L2-055, L2-021)
+  note right of actor : One hop even after several renames
+else current slug
+  slugs --> controller : Artist
+  controller --> store : 200 ArtistProfileResource
+  ssr --> actor : 200 server-rendered profile
 end
 @enduml

@@ -34,61 +34,80 @@ when the artist it leads to is viewable. Otherwise it also produces the 404.
 Resolution happens once, in the Zamaro API. Zamaro Web then turns the API outcome
 into the matching HTTP status for the server-rendered page.
 
+The names, the slug-history columns and the open questions below were settled in
+[ADR-0011](../../../adr/0011-slug-history-and-artist-slug-resolution.md) when M1 S15 built the
+feature.
+
 **Backend (Zamaro API)**
 
-- **`ResolveArtistSlug`** — action shared by every `/api/v1/artists/{slug}` route. It
-  looks up `artists.slug`. If no row matches, it looks up `slug_histories.old_slug`
-  and follows it to the artist. The action returns one of three outcomes:
-  - `Found(artist)` for a viewable artist on its current slug.
-  - `Moved(newSlug)` for a viewable artist reached through slug history (L2-021,
-    L2-055).
-  - `Missing(context)` for anything else. The context holds the hidden artist's
-    primary style and base coordinates when a row exists, and nothing else.
-- **`ArtistProfileController@show`** — maps the outcomes to HTTP:
-  - `Found` returns 200 with the profile.
-  - `Moved` returns 301 with `Location: /api/v1/artists/{newSlug}` and the query string
-    preserved.
-  - `Missing` throws `ArtistNotFound`.
-  The sub-resources for availability and tour dates apply the same mapping.
-- **`ArtistNotFound`** — exception rendered as RFC 9457 problem details with status
-  404, `type` `https://zamaro.ca/problems/artist-not-found` and the title "This artist
-  isn't on Zamaro". It carries one extension member, `similarArtists`. The body is
-  identical in shape for a mistyped, suspended or deleted slug. It never includes the
-  hidden artist's name, slug, photos or any other profile content (L2-021).
-- **`SimilarArtistFinder`** — shared domain service that is also used by the booking
-  decline and cancellation slices. `forMissingArtist(context, search, 3)` takes the carried search (date, location and
-  radius as a `SearchCriteria`) and selects
-  viewable artists who:
-  - share the context's primary style,
-  - are free on the carried date according to `AvailabilityService::isFree()`,
-  - pass the travel match (L2-003) from the carried search location within the
-    carried radius, measured by `DistanceService`,
+- **`ResolveArtistSlug`** (`Actions/ArtistProfiles`) — action shared by every
+  `/api/v1/artists/{slug}` route: the profile, reviews, availability and tour dates.
+  It looks up `artists.slug`; if no row matches, it looks up a retired
+  `slug_histories.slug` and follows it to the artist. It returns the viewable artist
+  on its current slug, or throws:
+  - `ArtistMoved(currentSlug)` for a viewable artist reached through slug history
+    (L2-021, L2-055). `ProblemDetailsRenderer` answers a bodiless 301 with a relative
+    `Location`: the same route under the current slug, query string preserved.
+  - `ArtistNotFound(primaryStyle)` for anything else: no row, or an artist who is not
+    Approved, has no payout set up or is unpublished, reached directly or through a
+    retired slug. It keeps the hidden artist's primary style (the first of their
+    styles in the chips' order) and nothing else.
+  Throwing keeps each controller to one call and the HTTP mapping in the renderer.
+- **`ArtistProfileController@show`** — returns 200 with the profile. It catches
+  `ArtistNotFound` and adds the similar artists for the carried search, read leniently
+  by `ShowArtistProfileRequest` (`date`, `kind`, `lat`, `lng`, `radius`; a stale date is
+  not an error). The sub-resources return the same problem without suggestions.
+- **`ArtistNotFound`** — rendered as RFC 9457 problem details with status 404, `type`
+  `{base}/artist-not-found` and the title "This artist isn’t on Zamaro". On the profile
+  it carries one extension member, `similarArtists: { date, radiusKm, items }`. The
+  body is identical in shape for a mistyped, suspended or deleted slug. It never
+  includes the hidden artist's name, slug, photos or any other profile content
+  (L2-021).
+- **`SimilarArtistFinder`** (`Services/Discovery`) — shared domain service that is also
+  used by the booking decline and cancellation slices.
+  `forMissingArtist(style, search, 3)` takes the carried search as a `SearchCriteria`
+  and returns `SimilarArtists` (date, radius, cards): viewable artists who
+  - share the primary style; a slug that never existed has none, so any style matches,
+  - are free on the date according to `AvailabilityService::freeArtistIds()` for the
+    carried kind of gathering,
+  - pass the travel rule (L2-003) from the search location within the radius, measured
+    by `DistanceService`,
   - are ordered nearest first by that road distance, as on Discover.
-  The style for a slug that never existed, and the reference point and date used
-  when no search is carried, are `<TO SUPPLY>`.
-- **`SimilarArtistResource`** — serialises each suggestion as a ticket-card summary:
-  slug, display name, act type, styles, base city, distance from the search location,
-  rating, review count and "From" price. The page heads the list with the carried search, for
-  example "Sat 14 Nov · within 120 km of Burlington".
+  Without a carried location the reference point is Toronto City Hall; without a
+  radius, 120 km; without a date inside the booking window, the first bookable day.
+  The hidden artist's own base is never used, so nothing points at where they are.
+- **Suggestions** are serialised by the lineup's `LineupCardResource`: slug, name, act
+  type, styles, base city, distance from the search location, rating, review count and
+  "From" price. The page heads the list with the search, for example "Sat 14 Nov ·
+  within 120 km of Burlington".
 
-**Frontend (Zamaro Web, `features/artist-profile`)**
+**Frontend (Zamaro Web; `pages/artist`, `pages/not-found`, ADR-0007)**
 
-- **`ArtistProfileApi`** (extended) — runs on `HttpClient` with the fetch backend,
-  which follows the 301 automatically. The returned profile's `slug` is the current
-  one. When it differs from the slug in the route, the page treats the response as a
-  move.
-- **`ArtistProfilePage`** (extended) — on a move during server rendering, it sets
-  status 301 and `Location: /artists/{newSlug}` with the original query string on the
-  SSR response through the response-init token. In the browser it calls
-  `router.navigateByUrl()` with `replaceUrl`. On a 404 problem it sets status 404 on the
-  SSR response and renders `ArtistNotFoundComponent` in place of the profile. A crawler
-  therefore receives a real 404 rather than a soft 200 (L2-112).
-- **`ArtistNotFoundComponent`** — error-page pattern with "This artist isn't on
-  Zamaro". It shows up to 3 `TicketCardComponent` suggestions, each linking to
-  `/artists/{slug}` with the carried date kept, and a link back to Discover. With no
-  suggestions, the list is omitted. The supporting sentence beneath the headline reads
-  "They may have left or changed their address. Here are similar artists who are free
-  on {short date}, nearest first."
+- **`HttpArtistProfilesApi`** (extended, `api` library) — sends the carried search with
+  the profile request and runs on `HttpClient` with the fetch backend, which follows
+  the 301 automatically. A 404 with `similarArtists` becomes an `ArtistNotFound` error.
+  The HTTP transfer cache keeps successes only, so on the server the suggestions go
+  into the transfer state and the browser reads them instead of asking again.
+- **`ArtistPage`** (extended) — carries the last lineup's search (date, kind,
+  coordinates, radius) when its date matches the profile's `date`, otherwise the date
+  alone; the town names the list.
+- **`ArtistProfileStore`** (extended) — when the profile comes back under another slug,
+  it sets status 301 through `HttpStatus` (the response-init token, server only) and
+  navigates to `/artists/{currentSlug}` with the query kept and `replaceUrl`; Angular's
+  SSR engine turns that navigation into the 301 with its `Location`, and the browser
+  simply replaces the address. On `ArtistNotFound` it sets status 404 and the page
+  renders `ArtistNotFoundPage` in place of the profile. A crawler therefore receives a
+  real 404 rather than a soft 200 (L2-112).
+- **`ArtistNotFoundPage`** (`pages/not-found/artist-not-found`) — `zm-error-page` with
+  "This artist isn’t on Zamaro" and the lead "They may have left or changed their
+  address. Here are similar artists who are free on {short date}, nearest first." It
+  shows up to 3 `zm-ticket` suggestions, each linking to `/artists/{slug}` with the
+  date kept, and "See the full lineup" back to Discover. Opened without a search, the
+  list reads "within 120 km of Toronto" and each ticket "{city} · {km} from Toronto".
+  With no suggestions, the list is omitted, the lead keeps its first sentence and "Find
+  who’s free" leads back to Discover.
+- **`NotFoundPage`** (`pages/not-found/not-found`, the `**` route) — the generic 404,
+  served with status 404.
 
 **Mocks**
 
@@ -98,12 +117,20 @@ into the matching HTTP status for the server-rendered page.
 - [Not found · default](../../../mocks/pages/not-found/default.html) — the generic 404
   for any other unknown address.
 
+Drift from the mocks, as built in M1: "Your saved artists" waits for the saved list
+(M2), so the generic 404 has one action; tickets carry no Save button until sign-in
+(M2); the generic 404's heading is named by `aria-label` ("No show: page not found")
+rather than a visually hidden span, which Chrome reads with an extra space.
+
 **Data**
 
-- `artists (slug unique, status, published_at, primary style, base_latitude, base_longitude)`
-- `slug_histories (old_slug unique, artist_id, replaced_at)` — written by the slug-change
-  action in `artist-workspace/change-profile-address` (L2-055). The unique index on `old_slug` stops a historic slug from being
-  issued to another artist.
+- `artists (slug unique, status, payout_ready, published_at)` and `artist_styles`
+- `slug_histories (id, artist_id, slug unique, retired_at, timestamps)` — every slug an
+  artist has held, the current one with no `retired_at` (ADR-0011). The slug-change
+  action in `artist-workspace/change-profile-address` (L2-055) retires rows and adds
+  new ones; the single unique index stops a historic slug from being issued to another
+  artist. The seed holds Abigail's retired `abigail-sings` and Selah Brooks, a
+  suspended solo vocalist.
 
 ## Requirements
 
@@ -132,15 +159,16 @@ the slug against the artist and slug-history tables in the database.
 
 ### Components
 
-`ResolveArtistSlug` returns Found, Moved or Missing. The controller maps Missing to
-`ArtistNotFound`, which `SimilarArtistFinder` fills with up to 3 suggestions.
+`ResolveArtistSlug` returns the viewable artist or throws `ArtistMoved` or
+`ArtistNotFound`. The profile controller fills `ArtistNotFound` with up to 3 suggestions
+from `SimilarArtistFinder`; the renderer turns both exceptions into HTTP.
 
 ![C4 component view for resolving a missing artist](diagrams/c4-component.png)
 
 ### Class structure
 
-`SlugResolution` is a closed set of three outcomes. `MissingArtistContext` carries only
-the style and coordinates needed for suggestions, never profile content.
+The resolver's two exceptions stand for the moved and missing outcomes. `ArtistNotFound`
+carries only the primary style needed for suggestions, never profile content.
 
 ![Class diagram for resolving a missing artist](diagrams/class-structure.png)
 

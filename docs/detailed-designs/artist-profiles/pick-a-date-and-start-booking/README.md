@@ -101,8 +101,8 @@ share.
   `BookingDateStore` beside `ArtistProfileStore` (as S13 put reviews in `ProfileReviewsStore`), with
   `tourDates`, `selectedDate` and a computed `status` (`none`, `checking`, `free`, `booked`,
   `refused`). `ArtistAvailabilityApi` sits behind `ARTIST_AVAILABILITY_API` in the `api` library.
-- **Endpoints:** as designed, on public routes, with the slug looked up by `Artist::visible()` until
-  S15 settles `ResolveArtistSlug`. The date check returns `{ date, free, freeCancellationUntil }`:
+- **Endpoints:** as designed, on public routes, with the slug resolved by `ResolveArtistSlug` since
+  S15 (ADR-0011: a retired slug answers 301, a hidden artist the `artist-not-found` problem). The date check returns `{ date, free, freeCancellationUntil }`:
   `freeCancellationUntil` is the `CancellationPolicy` date for a free date and null otherwise, so the
   policy is exercised through the API from M1 (Sat 14 Nov → Sat 31 Oct). Dates outside 3 days to 18
   months are a 422 with the search form's copy ("Pick a date at least 3 days away."); the stub shows

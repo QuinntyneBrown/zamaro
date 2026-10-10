@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-error-page`, `zm-error-stage` |
 | Library path | `frontend/projects/components/src/lib/error-page/` |
-| Status | planned |
+| Status | `zm-error-page` built (M1 S15); `zm-error-stage` planned |
 | Traces to | L2-021, L2-086, L2-093, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-107, L2-110, L2-111, L2-114 |
 | Design system | [`error-page.html`](../../design-system/components/error-page.html) |
 | Source mocks | [`pages/not-found/default`](../../mocks/pages/not-found/default.html), [`pages/not-found/artist`](../../mocks/pages/not-found/artist.html), [`pages/server-error/default`](../../mocks/pages/server-error/default.html), [`pages/offline/default`](../../mocks/pages/offline/default.html), [`pages/artist/error`](../../mocks/pages/artist/error.html), [`pages/profile-preview/error`](../../mocks/pages/profile-preview/error.html) |
@@ -472,7 +472,20 @@ reduced motion because it reports status (button CRD).
 
 ## Implementation notes
 
-Planned. Create `frontend/projects/components/src/lib/error-page/`:
+**Built in M1 S15:** `zm-error-page` in
+`frontend/projects/components/src/lib/error-page/error-page.ts`, with every input and
+slot above, and the `ErrorPage` perf scenario (the 500 composition; the details slot holds
+a definition-style `zm-description-list` until the receipt variant exists). It serves the
+generic 404 (`pages/not-found/not-found`) and the missing-artist 404
+(`pages/not-found/artist-not-found`). One change to the markup: with `posterSuffix`, the
+`h1` is named by `aria-label` (poster words plus suffix) and the suffix is not in the DOM,
+because Chrome puts a separator before an absolutely positioned visually hidden span and
+reads "No show : page not found" (AC-13 is tested end to end). **Not built yet:**
+`zm-error-stage` and its `ErrorStage` scenario. The profile's error page (L2-107) is still
+page markup in `pages/artist`; it moves to `zm-error-stage` with the 500 and offline pages,
+which have no screens yet.
+
+The plan below stays the reference for the rest. Create `frontend/projects/components/src/lib/error-page/`:
 
 - `error-page.ts` — `ErrorPage`, selector `zm-error-page`; renders the
   `.container.error-page` column; one `@if` for the poster-as-heading versus

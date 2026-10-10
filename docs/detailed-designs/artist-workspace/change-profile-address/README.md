@@ -55,11 +55,12 @@ the Zamaro API, and the Zamaro database.
 - **`ProfileAddressApi`** — typed client for `GET /api/v1/artist/profile/address`
   and `PUT /api/v1/artist/profile/address`. Responses are `ProfileAddress` objects:
   `slug`, `url`, `changedAt` and `nextChangeOn`.
-- **`artistProfileResolver`** (`features/artist-profile`) — route resolver for
-  `/artists/:slug`, shared with the public profile slice. When the profile returned by
-  the API carries a slug different from the requested one, it answers with a 301 and
-  a `Location` header through the SSR response initialiser (`RESPONSE_INIT`) on the
-  server. In the browser it replaces the URL through the router.
+- **`ArtistProfileStore`** (`pages/artist`, built by the public profile slice in M1
+  S15, ADR-0011) — when the profile returned by the API carries a slug different from
+  the requested one, it sets status 301 through the SSR response initialiser
+  (`RESPONSE_INIT`) and navigates to the current slug with the query kept; on the
+  server Angular answers that navigation with a 301 and its `Location`, in the browser
+  the router replaces the URL.
 
 **Backend (Zamaro API)**
 
@@ -86,12 +87,14 @@ the Zamaro API, and the Zamaro database.
   `slug_histories.slug`, which holds every current and retired slug. Whether an artist may take back one of
   their own retired slugs is `<TO SUPPLY>`; the rule against reassignment covers
   other artists (L2-055).
-- **`ArtistSlugResolver`** — domain service used by `ArtistProfileController`
-  (`GET /api/v1/artists/{slug}`, public profile slice). It looks the slug up in
-  `artists.slug`, then in `slug_histories.slug`, and returns the owning artist. Every
-  retired slug points to the artist rather than to the next slug, so a chain of
-  renames still redirects in one hop. Suspended and deleted artists resolve to
-  nothing, which yields the L2-021 not-found page.
+- **`ResolveArtistSlug`** — action built by the public profile slice (M1 S15) and
+  shared by every `/api/v1/artists/{slug}` route; ADR-0011 settled this name over the
+  earlier `ArtistSlugResolver`. It looks the slug up in `artists.slug`, then in the
+  retired rows of `slug_histories.slug`, and returns the owning viewable artist, or
+  throws `ArtistMoved` (rendered as a 301 to the current slug) or `ArtistNotFound`.
+  Every retired slug points to the artist rather than to the next slug, so a chain of
+  renames still redirects in one hop. Suspended, deleted and unpublished artists are
+  not found, which yields the L2-021 not-found page.
 - **`ArtistSlugChanged`** — domain event. Queued listeners purge the old and new
   profile URLs from the CDN within 60 seconds (L2-089) and refresh the sitemap and
   canonical URL (L2-112).
@@ -111,7 +114,8 @@ not-found case is [`pages/not-found/artist`](../../../mocks/pages/not-found/arti
   of the artist's current slug for fast lookup.
 - `artists.slug_changed_at` — `timestamptz`, null until the first change.
 - `slug_histories` — `id`, `artist_id`, `slug` (unique), `retired_at` (null for the
-  current slug). Rows are never deleted while the slug rule applies, which keeps a
+  current slug), timestamps; created in M1 S15 (ADR-0011) and backfilled with every
+  current slug. Rows are never deleted while the slug rule applies, which keeps a
   retired slug out of reach of other artists. Retention after an artist deletes their account is `<TO SUPPLY>`.
 
 The single unique index on `slug_histories.slug` enforces the never-reassigned rule
@@ -149,7 +153,7 @@ Worker purges cached profile URLs after a change.
 ### Components
 
 `ChangeArtistSlug` and `GenerateArtistSlug` share `SlugRegistry`, which checks every
-slug ever held. `ArtistSlugResolver` serves the public profile lookup and
+slug ever held. `ResolveArtistSlug` serves the public profile lookup and
 maps any slug an artist has held to that artist.
 
 ![C4 component view for changing the profile address](diagrams/c4-component.png)
@@ -178,7 +182,8 @@ slug history. A successful change retires the old slug in the same transaction.
 
 ### Behaviour — redirect an old address
 
-The SSR profile route asks the API for the requested slug. When the profile comes back
-under a different current slug, the server answers 301 to the current address.
+The SSR profile page asks the API for the requested slug. The API answers 301 for a
+retired slug; when the profile comes back under a different current slug, the server
+answers 301 to the current address.
 
 ![Sequence diagram for redirecting an old profile address](diagrams/sequence-redirect-old-slug.png)
