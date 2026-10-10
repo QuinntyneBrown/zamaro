@@ -125,6 +125,16 @@ row from LG.
   cancelled, with ties going to the higher average rating, then the shorter distance,
   then the lower artist ID. It runs on the first page only, so later pages hold
   tickets alone.
+  - A booking counts when its `booking_transitions` row to Confirmed has `occurred_at` on or
+    after midnight on the season's first day in Toronto, and the booking is not now Cancelled.
+  - With no bookings this season among the results, the tie-breaks alone pick the headliner.
+  - `quoteFor()` takes the newest review where `stars = 5` and `hidden_at` is null. Its text is
+    cut to 160 characters at the last space and ends with "…". It is attributed to the
+    booker's name and the booking's `church_city`, or null when there is no such review.
+  - The response puts it in a top-level `headliner` object, next to `data` (the tickets): the
+    card fields plus `season` and `quote: {text, reviewerName, city} | null`.
+  - The primary photo arrives with media in S12. Until then the headliner shows the yellow
+    halftone artwork tagged "Headliner".
 - **`AvailabilityService`** — domain service shared with profiles and bookings. It
   applies weekly rules, date overrides and Confirmed bookings, and for
   `GatheringKind::YouthEvent` requires a verified VSC whose expiry (issue + 3 years) is
