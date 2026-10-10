@@ -10,10 +10,8 @@ import { Icon } from '../icon/icon';
   selector: 'zm-alert',
   imports: [Icon],
   template: `<div class="alert" [class.alert--danger]="variant() === 'danger'" role="alert">
-    <span class="alert__icon"
-      ><zm-icon [name]="variant() === 'danger' ? 'warning' : 'info'" size="lg"
-    /></span>
-    <div class="alert__body">
+    <zm-icon [name]="variant() === 'danger' ? 'warning' : 'info'" size="lg" />
+    <div class="stack stack--sm">
       <p class="alert__title">{{ heading() }}</p>
       <ng-content />
     </div>
@@ -40,15 +38,8 @@ import { Icon } from '../icon/icon';
       --alert-icon: var(--color-danger-icon);
     }
 
-    .alert__icon {
-      display: inline-flex;
+    .alert > zm-icon {
       color: var(--alert-icon);
-    }
-
-    .alert__body {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
     }
 
     .alert__title {

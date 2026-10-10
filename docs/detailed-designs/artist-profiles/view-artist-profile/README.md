@@ -40,27 +40,33 @@ The slice runs from the profile route in Zamaro Web, rendered on the server for 
 first request, to the profile endpoint in the Zamaro API and the media served
 through the CDN.
 
-**Frontend (Zamaro Web, `features/artist-profile`)**
+**Frontend (Zamaro Web, `pages/artist`; locations per ADR-0007)**
 
-- **`ArtistProfilePage`** — routed page component for `/artists/:slug`. It reads the
+Class names follow the workspace convention: no `Component` suffix and no `Zm` prefix.
+Sections still to come (videos, photos) are named the same way.
+
+- **`ArtistPage`** — routed page component for `/artists/:slug`. It reads the
   slug and the optional carried date, asks `ArtistProfileStore` to load, and lays out
   the sections. The layout follows L2-098. At XS and SM, sections stack in one column
   and the stub follows the reviews. At MD, the setlist uses 2 columns and the videos
   show one large plus a 3-column grid. At LG and XL, the content and the pinned stub
   sit in two columns. While loading for more than 300 ms it shows skeletons with
   `aria-busy="true"` (L2-105).
-- **`ArtistProfileStore`** — signal-based store holding the `ArtistProfile`, the carried
-  date, a status (`loading`, `loaded`, `error`), and the stub's selected date and
-  message draft, which the booking-stub slice shares. Its `askForRecording()` method
-  pre-fills the message "Could you send a recording of a recent set?" and moves to the
-  stub (L2-020).
-- **`ArtistProfileApi`** — typed client for `GET /api/v1/artists/{slug}`. On the server
-  render, Angular `TransferState` carries the response to the browser so the client
-  does not fetch it again.
-- **`ProfileHeaderComponent`** — renders the kicker, name, headline, the
-  `RatingComponent` with rating and review count or "New · No reviews yet", the base city,
-  "Drives up to {km} km", the setlist strip, and the Book, Save and Share actions
-  (L2-012). With a carried date, the back link reads "Discover · {short date}" and
+- **`ArtistProfileStore`** — signal-based store holding the `ArtistProfile`, a status
+  (`loading`, `loaded`, `error`) and the 300 ms skeleton flag, with `load(slug)` and
+  `retry()`. The carried date is read by `ArtistPage` from the query string.
+  - **Still to come (S14):** the stub's selected date and message draft, which the
+    booking-stub slice shares, and `askForRecording()`, which pre-fills the message
+    "Could you send a recording of a recent set?" and moves to the stub (L2-020).
+- **`ArtistProfilesApi`** — contract and token (`ARTIST_PROFILES_API`) in the `api` library,
+  bound to `HttpArtistProfilesApi`, a typed client for `GET /api/v1/artists/{slug}`. On the
+  server render, Angular's HTTP transfer cache carries the response to the browser so the
+  client does not fetch it again.
+- **Header** — the library's `zm-artist-poster`, with `zm-breadcrumb` projected into it, renders
+  the kicker, name, the rating ("★ 4.9", read as "Rated 4.9 out of 5 by 38 churches") and
+  review count or "New · No reviews yet", the base city, "Drives up to {km} km" and the Book
+  action; `zm-marquee` below it is the setlist strip (L2-012). Save and Share join with their
+  slices. With a carried date, the back link reads "Discover · {short date}" and
   returns to the last Discover URL that `SearchStore` remembers. The Book button then
   reads "Book for {short date}". Without one, the back link reads "Discover" and the
   Book button reads "Check dates" and moves focus to the stub's date field. The Save toggle comes from `accounts/save-artist`, and
@@ -68,38 +74,41 @@ through the CDN.
   the act headline, prefixed "Headliner" when the artist headlined the carried search
   (L2-006) or "New to Zamaro" when the artist has no reviews, as in "Headliner · Gospel
   & contemporary vocalist".
-- **`AboutSectionComponent`** — renders the artist's optional About heading (L2-050),
+- **About** — a section of `ArtistPage`'s template. It renders the artist's optional About
+  heading (L2-050),
   or "About {first name}" when none is set, and the bio. The bio is split on blank
   lines into paragraphs. Heading and bio are bound through text interpolation, never
   `innerHTML`, so markup appears as literal text (L2-013, L2-075).
-- **`VideosSectionComponent`** and **`VideoPlayerComponent`** — "Watch {pronoun} lead"
+- **`VideosSection`** and **`VideoPlayer`** (S12) — "Watch {pronoun} lead"
   with the first video large and the rest in a grid. Each tile shows its poster frame,
   title and duration. Activating a tile plays an adaptive stream in place with native
   controls, a `<track kind="captions">` when a WebVTT file exists, and no autoplay
   (L2-014). Safari plays the stream natively. The player library for other browsers
   is `<TO SUPPLY>`. With no videos, the section shows "No videos yet" and "Ask {first
   name} for a recording".
-- **`PhotoGalleryComponent`** and **`PhotoViewerDialogComponent`** — a grid of 2 columns
+- **`PhotoGallery`** and **`PhotoViewerDialog`** (S12) — a grid of 2 columns
   below MD and 4 from MD. Each image uses `srcset` with AVIF and WebP widths of 400,
   800, 1200 and 1600 px, explicit dimensions and the artist's alt text (L2-015,
   L2-088). Activating a photo opens a CDK `Dialog` with the full-size image and
   previous and next controls. Escape closes it, and focus returns to the photo that
   opened it. With no photos, the act-type illustration appears instead.
-- **`SetlistSectionComponent`** — "Songs {first name} leads", a numbered list of title,
-  writer or source, and key such as "Key of B♭", followed by "Ask for any of these,
+- **Setlist** — a section of `ArtistPage`'s template with the library's `zm-setlist`: "Songs
+  {first name} leads", a numbered list of title, writer or source, and key such as "Key of B♭", followed by "Ask for any of these,
   or send your own list." (L2-016).
-- **`ProfileErrorComponent`** — the error-page pattern with "We couldn't reach the
-  artist's page", the reassurance sentence, Try again and a "Back to the lineup" link to
-  the remembered Discover URL (L2-107).
+- **Error state** — part of `ArtistPage`'s template: `zm-artist-poster` without artwork
+  ("Show postponed"), then a `zm-alert` with "We couldn't reach the artist's page", the
+  reassurance sentence, Try again and a "Back to the lineup" link to the remembered Discover
+  URL (L2-107).
 
 **Backend (Zamaro API)**
 
 - **`ArtistProfileController@show`** — handles `GET /api/v1/artists/{slug}` for guests
-  and bookers alike. Slug resolution, including 404 and 301, is delegated to
-  `ResolveArtistSlug` from `artist-profiles/resolve-missing-artist`.
-- **`ShowArtistProfile`** — action that loads the artist with photos in display order,
-  videos with status `Live` only (L2-014), setlist songs in order, styles, and the
-  rating aggregate over visible reviews. It does not read bookings, churches or user
+  and bookers alike. In M1 `ShowArtistProfile` looks up a visible artist by slug and answers
+  404 otherwise. The 301 for a renamed slug, through `ResolveArtistSlug` from
+  `artist-profiles/resolve-missing-artist`, arrives with S15.
+- **`ShowArtistProfile`** — action that loads the visible artist with styles, setlist songs
+  in order and the rating aggregate over visible reviews. Photos in display order and videos
+  with status `Live` only (L2-014) join with S12. It does not read bookings, churches or user
   records.
 - **`ArtistProfileResource`** — API resource that lists public fields explicitly: slug,
   display name, first name, pronoun, act type, headline, About heading (or null), bio,
@@ -112,7 +121,7 @@ through the CDN.
   "Watch her lead" comes from catalogue `select` messages on the serialised value.
 - **`MusicalKey`** — enum for a setlist song's key, serialised as `E`, `B-flat`,
   `F-sharp-minor` or `any`. The page turns it into "Key of B♭" from catalogue templates.
-- **`MediaUrlSigner`** — builds CDN URLs for image renditions, video manifests,
+- **`MediaUrlSigner`** (S12) — builds CDN URLs for image renditions, video manifests,
   poster frames and caption files on the separate media domain (L2-088).
 
 The rule that derives the first name for a solo act is the first word of the display
@@ -123,8 +132,10 @@ name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio
 
 - **Layout:** AGENTS.md's layout applies (ADR-0007).
   - The page is `pages/artist/ArtistPage` with `ArtistProfileStore`.
-  - The header, About and setlist are sections of one template, not separate components.
-  - `zm-breadcrumb` and `zm-setlist` are library components.
+  - About and the setlist are sections of the page's template, not separate components.
+  - The header is the library's `zm-artist-poster`: loaded, error (no artwork) and loading
+    (skeletons, a hidden heading and the status line).
+  - `zm-artist-poster`, `zm-breadcrumb`, `zm-marquee` and `zm-setlist` are library components.
   - `ArtistProfilesApi` sits behind the `ARTIST_PROFILES_API` token in the `api` library.
 - **Transfer cache:** the profile response is sent as `Cache-Control: public, max-age=0,
   s-maxage=60`, so Angular's HTTP transfer cache carries the server render's copy to the
@@ -205,7 +216,8 @@ profile endpoint in the Zamaro API. Media comes from object storage through the 
 
 ### Components
 
-`ArtistProfilePage` composes one component per section from `ArtistProfileStore`.
+`ArtistPage` composes the header (`zm-artist-poster`), the strip and its sections from
+`ArtistProfileStore`.
 On the backend, `ShowArtistProfile` assembles the profile and `ArtistProfileResource`
 limits it to public fields.
 
@@ -221,7 +233,7 @@ videos and setlist songs, and the page derives every piece of section copy from 
 ### Behaviour — load a profile
 
 The first request renders on the server and hands the profile to the browser through
-`TransferState`. Header copy depends on the carried date, and each section renders
+Angular's HTTP transfer cache. Header copy depends on the carried date, and each section renders
 its empty state when its list is empty.
 
 ![Sequence diagram for loading an artist profile](diagrams/sequence-load-profile.png)

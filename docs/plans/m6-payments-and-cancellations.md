@@ -14,7 +14,7 @@
   - `BookingCompleted`, with no listener yet.
   - The booking pages, both inboxes, the thread and the contact card.
   - The `payments` flag (off), which hides "Pay $162.50 deposit". `allowedActions` already lists `cancel` on Confirmed bookings, but nothing renders it.
-  - e2e scenarios, clock travel and the Mailpit mailbox (M5 S0).
+  - e2e stub-API scenarios and clock travel (M5 S0).
 - **From M1:** `CancellationPolicy`, a value object with `freeCancellationUntil()` used by the stub.
 - **From M3:** `RecordAuditEntry`, and the profile-publication rule on approval.
 - **From M4:** the dashboard and `/artist/*` shell. Its Earnings link and the "Fees and payouts are on Earnings" caption are deferred, because `/artist/earnings` does not exist yet.
@@ -113,15 +113,11 @@ The booking-detail states balance-due, held and balance-failed are Completed boo
 
 ## Slices
 
-#### S0 — Fake processor harness and scenarios (test-only, outside ATDD)
-- **e2e allowlist:** `/__e2e/artisan` gains `bookings:expire-unpaid-deposits`, `payments:charge-due-balances`, `payments:send-due-payouts` and `payments:reconcile`.
-- **New route** `POST /__e2e/processor` with three operations:
-  - `deliverPending`: sends the fake ledger's queued webhooks;
-  - `failNext {operation, code}`;
-  - `drift {bookingNumber}`: makes a ledger record disagree.
-- **New scenarios:** `zam-0114-confirmed`, `zam-0114-late` (clock Thu 5 Nov), `zam-0114-completed-balance-due` (clock Sun 15 Nov 8:00 p.m.), `zam-0114-held`, `zam-0114-balance-failed`, `zam-0114-cancelled`, `zam-0114-artist-cancelled`, `zam-0114-competing` (Harvest Point Accepted on Sat 14 Nov), `tobi-payouts-not-set-up`.
-- **Fixture:** `e2e/fixtures/processor.ts`.
-- **Verify:** each scenario loads twice to the same state.
+#### S0 — Payment scenarios (test-only, outside ATDD)
+- **No API harness.** e2e runs no scheduled command and delivers no webhook. What `bookings:expire-unpaid-deposits`, `payments:charge-due-balances`, `payments:send-due-payouts`, `payments:reconcile` or a processor webhook would change is a switch to the next stub-API scenario (M5 S0). The commands, the webhooks and `FakePaymentGateway`'s `deliverPending`, `failNext` and `drift` hooks are proven in backend Feature tests.
+- **New scenarios** (stub-API states in e2e, `zamaro:scenario` seeders in dev): `zam-0114-confirmed`, `zam-0114-late` (clock Thu 5 Nov), `zam-0114-completed-balance-due` (clock Sun 15 Nov 8:00 p.m.), `zam-0114-held`, `zam-0114-balance-failed`, `zam-0114-cancelled`, `zam-0114-artist-cancelled`, `zam-0114-competing` (Harvest Point Accepted on Sat 14 Nov), `tobi-payouts-not-set-up`.
+- **Fixture:** `e2e/fixtures/processor.ts`, which answers the payment endpoints with a decline, a failure or a pending confirmation through `page.route`.
+- **Verify:** each dev scenario loads twice to the same state, and each e2e scenario's responses follow the OpenAPI contract.
 
 #### S1 — Pay the deposit
 - **L2:** 035.1–2, 036.1, 037.1, 044.1, 063.1 (deposit paid and confirmed, both parties), 108.1–2.
@@ -184,7 +180,7 @@ The booking-detail states balance-due, held and balance-failed are Completed boo
   - A timestamp 301 s old gets 400 (D20).
   - An unknown type is recorded and ignored. A dispute event alerts administrators (D19).
   - A handler failing 5 times lands in `failed_jobs`.
-- **Tests first:** `tests/Feature/Payments/PaymentWebhookTest.php` (valid, invalid signature, stale, duplicate, unknown, out-of-order after a browser confirm), and an e2e case "deposit confirmed by webhook".
+- **Tests first:** `tests/Feature/Payments/PaymentWebhookTest.php` (valid, invalid signature, stale, duplicate, unknown, out-of-order after a browser confirm), and an e2e case "deposit confirmed by webhook", where the stub answers the page's next read with the booking Confirmed.
 - **Build:**
   - `POST /api/v1/webhooks/payments` (in `api_public.php`, outside session and CSRF, raw body), `PaymentWebhookController`.
   - `RecordProcessorEvent` (`ON CONFLICT DO NOTHING`), migration `processor_events`, `Jobs/Payments/ProcessProcessorEvent`, `Services/Payments/ProcessorEventRouter`.
@@ -364,10 +360,10 @@ The booking-detail states balance-due, held and balance-failed are Completed boo
 ## Vendor ports and fakes
 - **`PaymentGateway`** (`app/Contracts`) is the only route to the processor. The M10 Stripe adapter implements the same methods.
 - **`FakePaymentGateway`** (`app/Integrations/Payments`) is deterministic:
-  - **Storage and IDs:** it keeps a ledger in Redis (dev and e2e) or in memory (phpunit). IDs are `cus_fake_{userId}`, `pi_fake_{bookingNumber}_{n}`, `re_fake_{refundId}`, `tr_fake_{bookingNumber}` and `acct_fake_{artistSlug}`.
+  - **Storage and IDs:** it keeps a ledger in Redis (dev) or in memory (phpunit). IDs are `cus_fake_{userId}`, `pi_fake_{bookingNumber}_{n}`, `re_fake_{refundId}`, `tr_fake_{bookingNumber}` and `acct_fake_{artistSlug}`.
   - **Outcomes:** the D24 test cards decide each outcome. `failNext()` injects a decline, a timeout or a 500.
   - **Idempotency:** it refuses any mutating call without an `IdempotencyKey`. A repeated key with the same parameters returns the first result; with different parameters it throws.
-  - **Webhooks:** every state change queues a webhook signed with HMAC-SHA256 over `{timestamp}.{body}` (header `Zamaro-Fake-Signature: t=…,v1=…`). Webhooks are delivered on `deliverPending` (e2e) or synchronously when `zamaro.payments.fake_webhooks=sync`.
+  - **Webhooks:** every state change queues a webhook signed with HMAC-SHA256 over `{timestamp}.{body}` (header `Zamaro-Fake-Signature: t=…,v1=…`). Webhooks are delivered on `deliverPending` (Feature tests) or synchronously when `zamaro.payments.fake_webhooks=sync`.
   - **Reconciliation:** `listRecords()` reads the ledger, and `drift()` falsifies one record.
 - **`FakeCardFieldsService`** (frontend) renders look-alike fields inside `zm-card-fields`. Card numbers stay in the browser. It returns `pm_fake_{last4}` and runs the fake 3-D Secure modal. Production builds bind `ProcessorCardFieldsService`, which throws if the fake would be bound.
 - **The fake's hosted onboarding page** is served by the API only when fakes are bound. It returns to `/artist/earnings`.
@@ -392,7 +388,7 @@ The booking-detail states balance-due, held and balance-failed are Completed boo
   - retry times;
   - business days;
   - the reconciliation day.
-- **The frozen clock and jobs in e2e:** three clocks plus scheduled commands are driven through the M5 harness. Visual masks cover relative captions.
+- **The frozen clock and jobs in e2e:** the browser clock and the stub's time move together through the M5 clock fixture, and scheduled commands appear only as scenario switches. Their timing is proven in Feature tests with `travelTo`. Visual masks cover relative captions.
 - **PCI scope:** a regression that posts card fields to the API or logs them breaks L2-035. `CardDataNeverStoredTest` scans logs and tables, and the fake keeps card numbers in the browser.
 - **Webhooks:** the raw body must reach verification untouched (no JSON middleware rewriting it). Events arrive out of order, so every handler checks the current state.
 - **Held bookings** wait for M8 to be resolved, and an early launch would strand money.
@@ -400,18 +396,15 @@ The booking-detail states balance-due, held and balance-failed are Completed boo
 - **Publication gate:** turning it on hides any approved artist without payouts. Check the seeded catalogue before merging S12; the M1 Discover numbers must not move.
 
 ## Verification at the end of M6
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Everything is green, including `Payments/*`, the webhook signature cases, and `Security/BookingRouteOwnershipTest` covering every payment, receipt, cancellation, payout and earnings route.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Everything is green, including `Payments/*`, the webhook signature cases, and `Security/BookingRouteOwnershipTest` covering every payment, receipt, cancellation, payout and earnings route.
 2. Run `php artisan db:seed` twice with no change in counts. Then `php artisan payments:reconcile --day=2026-09-15` reports 0 mismatches. `php artisan schedule:list` shows `bookings:expire-unpaid-deposits`, `payments:charge-due-balances`, `payments:send-due-payouts`, `payments:reconcile` and `processor-events:prune`.
 3. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && NG_BUILD_MANGLE=0 npx ng build perf-test`.
-4. `cd e2e && npx playwright test` passes both projects: specs, `visual/` for every new route state in light and dark, `a11y/`, and the downloads in `issue-receipts.spec.ts`.
+4. `cd e2e && npx playwright test` passes, with no API, database or Docker running: specs, `visual/` for every new route state in light and dark, `a11y/`, and the downloads in `issue-receipts.spec.ts`.
 5. `npm run perf-test -- --baseline <main dist> --fail-on-regression` flags no rows. `PaymentSummary`, `CardFields` and `EarningsList` appear.
 6. **Manual walkthrough** (dev with the `payments` flag on):
    1. **Request and accept:** as Naomi, send ZAM-0114; as Abigail, accept.
    2. **Decline, then pay:** as Naomi, pay with 4000 0000 0000 9995 and see the decline; pay with 4242 and see Confirmed, the contact card and "Download receipt". Check Mailpit for both confirmation emails and the receipt.
-   3. **Cancel:** cancel early and see the refund receipt and the date free on Abigail's calendar. Repeat with the clock at Thu 5 Nov and see "Cancel and lose $162.50".
-   4. **Balance and payout:** reload `zam-0114-confirmed` and move the clock to Mon 16 Nov 7:00 p.m.:
-      - run `payments:charge-due-balances` and see "Balance paid";
-      - on Tue 17 Nov, run `payments:send-due-payouts`;
-      - as Abigail, see `/artist/earnings`.
+   3. **Cancel:** cancel early and see the refund receipt and the date free on Abigail's calendar. The dev stack has no clock override, so the late quote ("Cancel and lose $162.50" on Thu 5 Nov) is checked by `CancelBookingAsBookerTest` with `travelTo` and by the e2e `zam-0114-late` scenario.
+   4. **Balance and payout:** `CollectBalanceTest` and `PayoutsTest` run `payments:charge-due-balances` at Mon 16 Nov 7:00 p.m. and `payments:send-due-payouts` on Tue 17 Nov with `travelTo`. On dev, as Abigail, see `/artist/earnings`.
    5. **Webhook:** post a webhook with a bad signature and see 400 and a `security` log line.
    6. **Layout:** check everything at 320 px and in the dark theme.

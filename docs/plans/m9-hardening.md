@@ -137,8 +137,10 @@ project owner must confirm before the slice that uses them starts.
 Each slice also appends its route states to `e2e/routes.manifest.ts`.
 
 **Test conventions:**
-- The frozen clock is Fri 9 Oct 2026 10:00. Naomi has ZAM-0097, Confirmed for Sun 25 Oct.
-- A deletable booker, **Ruth Okafor** (St. Paul's, Burlington), is added to `CastSeeder`. She has one
+- e2e runs against the stub API with the clock frozen at Fri 9 Oct 2026 10:00. Naomi has ZAM-0097,
+  Confirmed for Sun 25 Oct.
+- A deletable booker, **Ruth Okafor** (St. Paul's, Burlington), is added to `CastSeeder` and to the stub
+  API's cast in `e2e/fixtures/`. She has one
   Requested and one Accepted booking and a review on Abigail, so the deletion paths have data without
   disturbing Naomi.
 
@@ -201,10 +203,10 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
   - Removing `nosniff` from `SetSecurityHeaders` makes `.ci/header-scan.mjs` exit non-zero, and putting
     it back makes it pass.
 - **Verification (infrastructure, outside ATDD, like M1's S0):**
-  - `docker compose --profile e2e --profile edge up -d --wait && node .ci/header-scan.mjs --base https://localhost:8443 --http http://localhost:8080`
+  - `docker compose --profile edge up -d --wait && node .ci/header-scan.mjs --base https://localhost:8443 --http http://localhost:8080`
   - Mutate one header and confirm the exit code is 1.
 - **Build:**
-  - `backend/docker/edge/Caddyfile`: `/api/*`, `/sanctum/*` and `/health/*` go to `api-e2e`, and
+  - `backend/docker/edge/Caddyfile`: `/api/*`, `/sanctum/*` and `/health/*` go to `api`, and
     everything else goes to the SSR server.
   - `.ci/security/expected-headers.json`, `.ci/header-scan.mjs`, `.ci/header-scan.sh`.
   - A `security-headers` job in `.github/workflows/ci.yml`.
@@ -259,9 +261,10 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
   - `tests/Feature/Privacy/PublicExposureTest.php`, which iterates the routes registered from
     `api_public.php` and calls each one; it does not assert the code's shape.
   - `e2e/specs/privacy/minimise-public-exposure.spec.ts`, with `pages/artist-profile.page.ts`
-    extended to read the page's JSON-LD and transfer state.
+    extended to read the page's JSON-LD and transfer state. A stub-API sentinel scenario puts the same
+    sentinels in the signed-in booker's own responses, so the spec proves SSR doesn't carry them.
 - **Build:**
-  - `Database\Seeders\ExposureSentinelSeeder` (test-only).
+  - `Database\Seeders\ExposureSentinelSeeder` (test-only, for `PublicExposureTest`).
   - Any leaks the test finds get fixed.
   - The `ArtistBaseLocation` cast rounds on write, plus a backfill migration (expand-only).
 
@@ -432,7 +435,7 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
   - Any violation found is fixed in this slice, or in a follow-up slice if it is large.
 - **Tests first:**
   - `e2e/a11y/a11y.spec.ts` (manifest × theme) and `e2e/a11y/keyboard.spec.ts`
-  - `fixtures/auth.ts` with storage states per role
+  - `fixtures/auth.ts` with a stub-API session per role
   - `RouteState` gains `as: 'guest' | 'booker' | 'artist' | 'admin'`, `theme` coverage and an optional
     `open` action for dialog states
   - an `admin` Playwright project
@@ -470,7 +473,7 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
 - **Agents never add the `perf-regression-accepted` label.**
 
 ## Verification (end of M9)
-1. `docker compose --profile e2e --profile edge up -d --wait`, then `docker compose exec api php artisan test`:
+1. `docker compose --profile edge up -d --wait`, then `docker compose exec api php artisan test`:
    every Feature test is green, including `PublicExposureTest`.
 2. `docker compose exec api php artisan accounts:erase-due` twice: the second run changes no rows.
    Run `db:seed` twice: the row counts are unchanged.
@@ -483,7 +486,8 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
 7. Manual walkthrough:
    - As Ruth, export your data, open the emailed link in Mailpit and download the JSON. Then delete the
      account and confirm you cannot sign in.
-   - Advance the clock a day and run the erase job. Abigail's profile shows "A church in Burlington".
+   - The erase job runs a day later, which the dev stack can't fast-forward: `EraseAccountPersonalDataTest`
+     covers it with `travelTo`, and the e2e case shows "A church in Burlington" on Abigail's profile.
    - As Naomi, see the blocked dialog.
    - Turn the network off in DevTools: you see the banner, then reload and get the offline page. Turn it
      back on and use "Try again".

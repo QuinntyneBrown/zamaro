@@ -46,24 +46,6 @@ services:
       interval: 5s
       retries: 20
 
-  api-e2e:
-    <<: *api
-    profiles: [e2e]
-    # --no-reload: without it `artisan serve` hands its PHP workers only APP_ENV and a few others,
-    # so the overrides below would be dropped and requests would use the dev database and clock.
-    command: php artisan serve --host=0.0.0.0 --port=8001 --no-reload
-    environment:
-      PHP_CLI_SERVER_WORKERS: "4"
-      APP_ENV: e2e
-      DB_DATABASE: zamaro_e2e
-      # Its own cache keys, so rate-limit counters and cached distances are not shared with dev.
-      CACHE_PREFIX: zamaro-e2e-cache-
-      ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
-      # Every browser in the suite searches from one address; the limit itself is covered by
-      # SearchRateLimitTest and the limited state by intercepting the response.
-      ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
-    ports: ["8001:8001"]
-
   worker:
     <<: *api
     command: php artisan horizon

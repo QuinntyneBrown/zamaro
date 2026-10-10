@@ -18,8 +18,8 @@
   - There are two pages (`discover/`, `artist/`) and the `menu` dialog.
   - The `api` library has no `auth/` folder.
   - Each of the 25 `zm-*` components has a perf scenario. There is no `zm-toast`, because M1's S16 was optional.
-- **e2e.** Read-only. The database is seeded once and the clock is frozen at Fri 9 Oct 2026 10:00. The routes
-  manifest lists 4 states, all signed out.
+- **e2e.** Read-only. A stub API that Playwright starts (`e2e/fixtures/stub-api/`) answers from the cast, and the
+  clock is frozen at Fri 9 Oct 2026 10:00. The routes manifest lists 4 states, all signed out.
 
 **Deferred from M1 to M2:**
 - `auth:sanctum` by default
@@ -74,8 +74,8 @@ field encryption, email and background jobs.
   2. Write a red test.
   3. Build.
   4. Run the regression set. Add the perf test with `--fail-on-regression` whenever a `zm-*` component changes.
-- **e2e now writes.** Visual and read-only specs use the seeded Naomi, Abigail and Tomi. Specs that change data
-  use fresh bookers (D19).
+- **e2e now signs in.** Visual and read-only specs use the cast's Naomi, Abigail and Tomi, served by the stub API.
+  Specs that change data set up the account state they need per test through stub-API fixtures (D19).
 
 ## Decisions to make or confirm
 
@@ -102,7 +102,7 @@ shown and are recorded in the slice's ADR or the design.
 | D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK |
 | D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | |
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | |
-| D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | |
+| D19 | How e2e specs that change data get users | Per-test stub-API fixtures in `e2e/fixtures/accounts.ts` (a fresh booker with or without a church, saved artists or accepted terms), never a database. Registration is still tested through the UI against the stub | |
 | D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | |
 | D21 | Email on two-step changes (mocks say "We emailed…"; the design is silent) | Add `TwoStepSignInChangedNotification` for on, off and new codes; update the design | OK |
 | D22 | M2 actions call `RecordAuditEntry`, which is M3 | Add the append-only `audit_entries` table and the action in S1; the viewer stays in M3 | OK |
@@ -111,7 +111,7 @@ shown and are recorded in the slice's ADR or the design.
 | D25 | Street-address type-ahead source (manage-church-profile) | A plain field until the geocoder vendor (M10) | |
 | D26 | Cross-user suite fails on a route with no fixture (L2-074.3), against "no architecture tests" | Keep it: L2-074.3 and the AGENTS.md tree both name it, and every case asserts behaviour | OK |
 | D27 | Raw-SQL lint tool (authorise-and-validate) | Larastan with a custom PHPStan rule against non-literal `DB::raw`, `select`, `statement` and `*Raw` | |
-| D28 | Cast sign-in password | `ZAMARO_CAST_PASSWORD` for Naomi, Abigail and Tomi, seeded only in `local`, `testing` and `e2e` | |
+| D28 | Cast sign-in password | `ZAMARO_CAST_PASSWORD` for Naomi, Abigail and Tomi, seeded only in `local` and `testing`. e2e's stub API accepts the fixture password for the same cast | |
 
 ## Design conflicts and their resolutions
 
@@ -161,13 +161,15 @@ shown and are recorded in the slice's ADR or the design.
     `lifetime=10080`.
   - **Old tables.** Drop the default `sessions` and `password_reset_tokens`.
   - **Horizon.** Add supervisors for `high`, `notifications` and `default`.
-  - **Mail.** Add a pinned `mailpit` service (SMTP :1025, API :8025). `api`, `api-e2e` and `worker` send mail over
-    `smtp`.
-  - **Redis.** Give `api-e2e` its own Redis prefix.
+  - **Mail.** Add a pinned `mailpit` service (SMTP :1025, API :8025) to the dev stack. `api` and `worker` send mail
+    over `smtp`; the `testing` environment uses the `array` mailer.
   - **Proxy.** Proxy `/sanctum` alongside `/api` in `proxy.conf.json` and in the SSR server.
-  - **e2e fixtures.** Add `mailbox.ts` (Mailpit), `accounts.ts` (API sign-in to a `storageState`, plus unique
-    addresses) and `totp.ts`. `RouteState` gains `signedInAs?`, and global setup clears Mailpit.
-- **Verify:** the M1 suites stay green, and `:8025/api/v1/info` answers.
+  - **e2e fixtures.** The stub API answers `/sanctum/csrf-cookie`, sets `zamaro_session` and `XSRF-TOKEN` the way
+    Sanctum does, and rejects a mutating call without a matching `X-XSRF-TOKEN`. Add `accounts.ts` (signs a cast
+    member or a fresh booker in on the stub, per test) and `totp.ts`. `RouteState` gains `signedInAs?`. e2e reads
+    no mailbox: links from emails are opened with tokens the fixture knows, and the emails themselves are proven
+    in backend Feature tests with `Notification::fake`.
+- **Verify:** the M1 suites stay green, and the dev stack's Mailpit answers on `:8025/api/v1/info`.
 - **ADR: same-origin cookie sessions.** It covers Sanctum SPA mode, Redis sessions, the cookie names, the
   dropped tables, and why there are no bearer tokens.
 
@@ -269,7 +271,8 @@ shown and are recorded in the slice's ADR or the design.
   - new cases in `ApiConventionsTest` and `SearchRateLimitTest`
 - **Build:**
   - Middleware: `EnsureJsonRequest`, `LimitRequestBodySize` and `EnsureUserHasRole`.
-  - The `api` limiter and the per-user search limit; the e2e API raises the limit.
+  - The `api` limiter and the per-user search limit. e2e shows a 429 through a stub-API fixture rather than by
+    exhausting a limit.
   - `config/cors.php`.
   - `Logging/{RedactSensitiveData, ApplyRedaction}`.
   - CI: Larastan with the raw-SQL rule (D27), and an ESLint ban on `bypassSecurityTrust*` and `[innerHTML]`.
@@ -280,7 +283,7 @@ shown and are recorded in the slice's ADR or the design.
   - A guest fills in Full name, Email and Password, then ticks "I accept Zamaro’s terms of use and privacy policy".
     They leave "Email me about new artists near my church" unticked.
   - "Create account" changes to "Creating account…", then the page shows "Check your email to finish signing up".
-  - Mailpit holds the verification email, with HTML and text parts.
+  - The verification email is sent, with HTML and text parts.
   - Three consent rows are written: Terms 2026-10, PrivacyPolicy 2026-10 and MarketingEmail false. Each records
     the time, IP and user agent.
   - Registering `naomi.fraser@riversidecc.ca` again shows the same page and changes nothing. Naomi gets "Someone
@@ -614,7 +617,7 @@ shown and are recorded in the slice's ADR or the design.
 | `Geocoder` (exists) | `FakeGeocoder`, extended | Knows Riverside and an Ottawa address; returns null for unknown addresses | M10 |
 | `IpLocator` | `FakeIpLocator` | Local IPs map to "Burlington, ON" or "Hamilton, ON" | M10 |
 | `OnCallAlerter`, `ErrorReporter` | Fakes | Record each call after redaction | M10 |
-| Mail transport | Laravel `smtp` → Mailpit | e2e reads the Mailpit API | M10 |
+| Mail transport | Laravel `smtp` → Mailpit in the dev stack; `array` in `testing` | Backend Feature tests assert sends with `Notification::fake`; e2e sends no mail | M10 |
 
 In the browser, the `BOT_CHALLENGE` fake resolves `pass`. A fake bound in production throws at boot (ADR-0002).
 
@@ -635,19 +638,23 @@ In the browser, the `BOT_CHALLENGE` fake resolves `pass`. A fake bound in produc
   - Terms 2026-10, from Thu 8 Oct 2026, with the three changes listed in the accept-terms mock.
   - Privacy policy 2026-10.
 - **Roles:** every church person in the cast is a Booker, and every artist user is an Artist.
-- **Test sign-in:** `ZAMARO_CAST_PASSWORD` (D28) for the named cast; `cast:booker` creates fresh bookers (D19).
+- **Test sign-in:** `ZAMARO_CAST_PASSWORD` (D28) for the named cast in dev and backend tests; e2e signs in through
+  stub-API fixtures (D19).
 
 ## Known risks
 
 - **Sanctum behind the SSR proxy.** Sanctum treats requests as stateful by their `Origin` or `Referer`. The dev
-  server, the SSR server and `api-e2e` must look same-origin and be listed in `ZAMARO_WEB_ORIGINS`. Prove this in
-  S1 before building on it.
+  server and the SSR server must look same-origin to the API and be listed in `ZAMARO_WEB_ORIGINS`. Prove this in
+  S1 against the dev stack before building on it. In e2e the SSR server proxies `/api` and `/sanctum` to the stub
+  API (`API_ORIGIN`), so the browser sees one `localhost` origin and the stub's session and `XSRF-TOKEN` cookies
+  come back on it, as Sanctum's would.
 - **`Secure` cookies.** Chromium accepts `Secure` cookies on `localhost`, but on `127.0.0.1` the session is dropped
   without an error. Pin the e2e base URL to `localhost`.
 - **Personal data in SSR.** A private response in the transfer cache leaks between users. S2's filter and client
   rendering must land before any personal endpoint; the "Naomi Fraser" check in server HTML guards this.
-- **Shared Redis and Mailpit.** Sessions, throttles and lockouts from `api` and `api-e2e` collide unless their
-  keys are prefixed. Lockout specs need a unique email per worker, and Mailpit lookups must filter by recipient.
+- **Per-test API state.** In e2e, sessions, throttles and lockouts come from stub-API fixtures set up per test, so
+  parallel specs can't collide. The real Redis-backed sessions, limits and lockouts are proven in backend Feature
+  tests.
 - **Frozen clock.** e2e can't age tokens or sessions, so backend tests prove expiry and lockout end with time
   travel. e2e uses unknown tokens and cleared cookies instead.
 - **Perf flags.** S2 and S15 change `zm-top-bar`, `zm-ticket` and `zm-headliner`, which sit in the hottest
@@ -659,14 +666,14 @@ In the browser, the `BOT_CHALLENGE` fake resolves `pass`. A fake bound in produc
 
 ## Verification at the end of M2
 
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature
    test is green, including the contract assertions and `CrossUserAccessTest`.
 2. `php artisan scramble:export --fail-on-unknown` and `php artisan i18n:check` pass.
 3. Running `php artisan db:seed` twice leaves row counts unchanged.
 4. In `frontend`: `npm run lint`, `npm run format:check`, `npx ng build zamaro`, and
    `NG_BUILD_MANGLE=0 npx ng build perf-test`.
-5. `npx playwright test` passes in Chromium: specs, `visual/` (now with signed-in states), `a11y/` in both
-   themes, and `perf/`.
+5. `npx playwright test` passes in Chromium against the stub API, with no API, database or Docker running: specs,
+   `visual/` (now with signed-in states), `a11y/` in both themes, and `perf/`.
 6. `npm run perf-test -- --baseline <main dist> --fail-on-regression` flags no rows. This milestone's new
    scenarios are AuthCard, ErrorSummary, Avatar, TopBarSignedIn, Toast, ToastRegion, Checkbox, Banner,
    FormSection, SaveBar, SettingsNav, DeviceList, RecoveryCodes, SaveToggle and SavedLineup.

@@ -7,17 +7,9 @@
   box-shadow: var(--shadow-3);
 }
 
+/* The body column may shrink below its content, so long names wrap. */
 .headliner__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
   min-width: 0;
-}
-
-.headliner__kicker {
-  font: var(--text-overline);
-  letter-spacing: var(--letter-spacing-stamp);
-  text-transform: uppercase;
 }
 
 .headliner__name {
@@ -42,17 +34,6 @@
   gap: var(--space-2) var(--space-4);
   font: var(--text-stub);
   text-transform: uppercase;
-}
-
-.headliner__attribution {
-  color: var(--color-fg-muted);
-}
-
-.headliner__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2);
 }
 
 @media (min-width: 48rem) {

@@ -1,12 +1,12 @@
 # Milestone 8 plan: admin support
 
 **Status:** Not started.
-**Depends on:** M3 (admin app, audit log, read-only Artists screens, `admin-mutations` project), M5 (booking lifecycle and messages), M6 (payments, refunds, holds, payouts) and M7 (the Reviews section of the admin shell). M4 supplies profile cache invalidation.
+**Depends on:** M3 (admin app, audit log, read-only Artists screens, `admin` Playwright project), M5 (booking lifecycle and messages), M6 (payments, refunds, holds, payouts) and M7 (the Reviews section of the admin shell). M4 supplies profile cache invalidation.
 
 ## Context
 
 **What exists before M8:**
-- **From M3:** the separate admin app behind the `/admin` 404 gate, with TOTP sign-in, the idle warning and the shell (Applications, Artists, Audit log); `RecordAuditEntry`, `AuditAdminRequests` and the audit viewer; a read-only `/admin/artists` list and `/admin/artists/:id` page (Details, Upcoming bookings, a Standing panel with no action), per M3 decision D18; `tests/Feature/Security/AdminRoutesConcealedTest`; and the serial `admin-mutations` Playwright project, which reseeds on teardown.
+- **From M3:** the separate admin app behind the `/admin` 404 gate, with TOTP sign-in, the idle warning and the shell (Applications, Artists, Audit log); `RecordAuditEntry`, `AuditAdminRequests` and the audit viewer; a read-only `/admin/artists` list and `/admin/artists/:id` page (Details, Upcoming bookings, a Standing panel with no action), per M3 decision D18; `tests/Feature/Security/AdminRoutesConcealedTest`; and the `admin` Playwright project, whose specs set up their stub-API state per test.
 - **From M5:** `BookingStateMachine` (L2-029) and `booking_transitions`; `ZAM-` numbers; the request-declined email with up to 3 similar artists; message threads with `MessageThreadComponent`; and possibly `GET /api/v1/admin/bookings/{number}/messages` (`bookings/exchange-booking-messages`).
 - **From M6:** `payments`, `refunds`, `payouts`, `problem_reports` and `bookings.held_at`; `ChargeBookingBalance` and the payout job; `Contracts/PaymentGateway` with a fake that refunds; `RefundReceiptNotification`; refund webhook reconciliation; and `AuditPaymentEvents` (`payout.sent`, and refunds without `issued_by`).
 - **From M7:** the Reviews section and its count in the admin shell.
@@ -68,11 +68,11 @@ Each decision gives a recommended default. **Needs your OK** marks the ones that
   - API clients in `projects/api/src/lib/services/admin/{bookings,artists}/`, with models in `models/admin/`
 - **`PaymentGateway` in `App\Services\Payments\`:** the port is M6's `App\Contracts\PaymentGateway`.
 - **Controller namespaces:** the design's `Admin\…` controllers live in `Http/Controllers/Api/V1/Administration/`.
-- **Seed versus mocks:** M3 already gave Marcus Bell Trio the mock's email and approval date (2 Mar 2026). M8's seed adds his bookings exactly as the mocks show them. Suspending Marcus changes Discover's Burlington lineup, so those specs run only in `admin-mutations`.
-- **Frozen clock:** the API clock is Fri 9 Oct 10:00, while the mocks say "Suspended Fri 9 Oct, 2:30 p.m.". Specs assert the frozen time, and the visual suite masks it.
+- **Seed versus mocks:** M3 already gave Marcus Bell Trio the mock's email and approval date (2 Mar 2026). M8's seed adds his bookings exactly as the mocks show them. Suspending Marcus changes Discover's Burlington lineup, so those specs apply a stub-API scenario with Marcus suspended rather than changing shared state.
+- **Frozen clock:** the e2e clock and stub API are at Fri 9 Oct 10:00, while the mocks say "Suspended Fri 9 Oct, 2:30 p.m.". Specs assert the frozen time, and the visual suite masks it.
 
 ## Milestone 8 — slices
-Each slice follows the M1 loop. Every new admin route joins `AdminRoutesConcealedTest`, and each mutating spec runs in `admin-mutations`.
+Each slice follows the M1 loop. Every new admin route joins `AdminRoutesConcealedTest`, and each mutating spec sets up its before and after states through stub-API fixtures.
 
 #### S1 — Search bookings
 - **L2:** 068.1, 095.1, 105, 110.
@@ -226,7 +226,7 @@ Each slice follows the M1 loop. Every new admin route joins `AdminRoutesConceale
 ## Vendor ports and fakes (real adapters in M10)
 - **`Contracts/PaymentGateway` (M6 fake):** `refund()` with the hooks `failNextWith(declined|error)` and `refunds()`, and webhook replay for `refund.succeeded`.
 - **`Contracts/CdnPurger` (M4 fake):** records the purged URLs, so S7 and S8 can assert `/artists/marcus-bell-trio`.
-- **Email:** Mailpit, through M2's notification foundation.
+- **Email:** M2's notification foundation; Mailpit in the dev stack, `Notification::fake` in Feature tests.
 
 ## Seed data additions (mock cast, idempotent)
 - **Marcus Bell Trio:**
@@ -244,17 +244,17 @@ Each slice follows the M1 loop. Every new admin route joins `AdminRoutesConceale
 - **ZAM-0090,** with its $75 refund failed and then succeeded on Thu 8 Oct, so the audit rows M3 seeded resolve to a real booking.
 
 ## Known risks
-- **Shared state:** suspending Marcus, refunding ZAM-0097 and resolving ZAM-0104 all mutate data that the Discover and booking specs read. Keep them in `admin-mutations`, which reseeds on teardown, and never in parallel projects.
+- **Stateful specs:** suspending Marcus, refunding ZAM-0097 and resolving ZAM-0104 change what the Discover and booking pages show. In e2e each is a stub-API scenario a spec applies per test, so specs stay parallel; the real effects across bookings, payments and search are proven in backend Feature tests.
 - **Money correctness:** E4 and E5 change what artists are paid. Write the payout arithmetic as table-driven Feature tests ($950: $237.50 deposit; $800: $736 payout; $50 partial: $138) before any UI.
 - **Commit, then call:** a crash between the pending refund's commit and the processor call leaves a `Pending` refund. M6's reconciliation must settle it, and S4 covers it.
 - **Cache purge lag:** "The profile and search listing come back within a minute" depends on M4's cache TTLs. Assert the 404 and the search exclusion right after the action, not through the CDN.
 - **Masking:** the mocks show 2:30 p.m. and dates from late September. The visual suite masks timestamps on admin pages.
 
 ## Verification (end of M8)
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every test passes, including `AdminRoutesConcealedTest` with the new routes and the OpenAPI contract assertions.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every test passes, including `AdminRoutesConcealedTest` with the new routes and the OpenAPI contract assertions.
 2. Run `docker compose exec api php artisan db:seed` twice. Row counts are unchanged.
 3. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && npx ng build admin && NG_BUILD_MANGLE=0 npx ng build perf-test`.
-4. `cd e2e && npx playwright test`, all projects including `admin-mutations`. This covers the specs, `visual/`, `a11y/` (light and dark) and `perf/`.
+4. `cd e2e && npx playwright test`, all projects, with no API, database or Docker running. This covers the specs, `visual/`, `a11y/` (light and dark) and `perf/`.
 5. Run `npm run perf-test -- --baseline <main dist> --fail-on-regression`. No row is flagged.
 6. Manual walkthrough as Priya:
    - Search "Riverside", open ZAM-0097, read the thread, and see `booking.messages.viewed` in the audit log.

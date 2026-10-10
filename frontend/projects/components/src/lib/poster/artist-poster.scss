@@ -1,0 +1,60 @@
+:host {
+  display: block;
+}
+
+.artist-poster__crumbs:empty,
+.artist-poster__actions:empty {
+  display: none;
+}
+
+.artist-poster {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.artist-poster__name {
+  font: var(--text-poster);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.artist-poster__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  font: var(--text-stub);
+  text-transform: uppercase;
+  color: var(--color-fg-on-stage-muted);
+}
+
+.artist-poster__facts strong {
+  color: var(--color-accent-on-stage);
+  font-weight: inherit;
+}
+
+.artist-poster > zm-artwork,
+.artist-poster > zm-skeleton {
+  max-width: 18rem;
+}
+
+.artist-poster > zm-artwork {
+  border-color: var(--color-fg-on-stage);
+}
+
+@media (min-width: 48rem) {
+  .artist-poster {
+    grid-template-columns: 1fr 15rem;
+    align-items: end;
+  }
+
+  .artist-poster > zm-artwork,
+  .artist-poster > zm-skeleton {
+    order: 2;
+  }
+}
+
+@media (min-width: 62rem) {
+  .artist-poster {
+    grid-template-columns: 1fr 20rem;
+  }
+}

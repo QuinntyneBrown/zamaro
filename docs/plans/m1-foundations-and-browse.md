@@ -33,7 +33,7 @@ two-thirds done: S0–S11 are built; S12–S16 remain.
 **Checks at the last commit:**
 - Backend: 70 Feature tests pass, with OpenAPI contract assertions.
 - Frontend: lint and `format:check` are clean.
-- e2e: 39 Playwright tests pass in Chromium against a freshly seeded e2e database.
+- e2e: 39 Playwright tests pass in Chromium against a freshly seeded e2e database. Since 2026-10-09 e2e mocks the backend with a stub API (`e2e/fixtures/stub-api/`) and needs no Docker or database.
 - Perf: `--fail-on-regression` against the base build flags no rows. `Breadcrumb` and `Setlist` are new scenarios.
 
 **Open items carried forward:**
@@ -97,7 +97,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 
 **Test conventions:**
 - Backend tests are Feature tests against `/api/v1`, using an `AssertsOpenApiContract` trait.
-- e2e runs against an SSR build and the `api-e2e` compose service: database seeded once, clock frozen at Fri 9 Oct 2026 10:00 via `ZAMARO_FROZEN_NOW` and `page.clock`.
+- e2e runs against an SSR build and a stub API that Playwright starts (`e2e/fixtures/stub-api/`), which answers from the seeded cast with today frozen at Fri 9 Oct 2026 10:00; the browser clock is frozen with `page.clock`. (Until 2026-10-09 it ran against the `api-e2e` compose service and a seeded database.)
 - The seed data uses the mock cast.
 
 #### S0 — Scaffolding (infra and test-only, outside ATDD)
@@ -464,7 +464,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **Agents never add the `perf-regression-accepted` label.**
 
 ### Verification (end of M1)
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including the OpenAPI contract assertions.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including the OpenAPI contract assertions.
 2. `docker compose exec api php artisan db:seed` twice: row counts are unchanged.
 3. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && NG_BUILD_MANGLE=0 npx ng build perf-test`.
 4. `cd e2e && npx playwright test` passes all of these in Chromium: specs, `visual/`, `a11y/` (axe in light and dark), `perf/`.

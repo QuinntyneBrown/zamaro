@@ -1,0 +1,29 @@
+<section class="poster on-stage" [attr.aria-labelledby]="headingId()">
+  <div class="container stack stack--lg">
+    <div class="artist-poster__crumbs"><ng-content select="[slot=breadcrumb]" /></div>
+    <div class="artist-poster">
+      <zm-artwork
+        [variant]="artVariant()"
+        [yellow]="artYellow()"
+        [label]="artLabel() || undefined"
+      />
+      <div class="stack">
+        <p class="overline poster__kicker">{{ kicker() }}</p>
+        <h1 class="artist-poster__name" [id]="headingId()">{{ name() }}</h1>
+        <p class="artist-poster__facts">
+          @if (rating() === null) {
+            <strong>{{ ratingNew() }}</strong>
+            <span>{{ noReviews() }}</span>
+          } @else {
+            <strong><zm-rating [score]="rating()" [label]="ratingLabel()" /></strong>
+            <span aria-hidden="true">{{ ratingCount() }}</span>
+          }
+          @for (fact of shownFacts(); track $index) {
+            <span>{{ fact }}</span>
+          }
+        </p>
+        <div class="cluster artist-poster__actions"><ng-content select="[slot=actions]" /></div>
+      </div>
+    </div>
+  </div>
+</section>

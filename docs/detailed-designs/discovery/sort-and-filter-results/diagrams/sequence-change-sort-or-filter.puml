@@ -16,13 +16,12 @@ skinparam package {
 }
 actor "Booker or guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "StyleFilterComponent" as chips
-  participant "DiscoverPage" as page
+  participant "Lineup (chips, sort, summary)" as chips
+  participant "Discover" as page
   participant "SearchStore" as store
-  participant "SearchQueryCodec" as codec
+  participant "search-query-codec" as codec
   participant "Router" as router
-  participant "SearchApi" as client
-  participant "SummaryLineComponent" as summary
+  participant "DiscoveryApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "SearchController" as controller
@@ -37,16 +36,18 @@ end box
 
 actor -> chips : Activate "Hymns" chip (or pick a sort order)
 chips -> chips : Set aria-pressed="true" (L2-008)
-chips -> store : toggleFilter('hymns')
+chips -> store : navigate({ styles: [..., 'hymns'] }, { replace: true })
 store -> codec : toParams(state with styles + hymns)
 codec --> store : Params; date, kind, location, radius, sort unchanged (L2-007)
 store -> router : navigate(['/'], { queryParams })
 router --> page : queryParamMap changed
-page -> store : restoreOrSearch(decoded state)
-store -> client : search(criteria)
+page -> codec : fromParams(params)
+codec --> page : SearchState
+page -> store : load(state)
+store -> client : search(query)
 client -> controller : GET /api/v1/search?...&sort=closest&styles=hymns&price=under-800
 controller -> controller : Validate SearchArtistsRequest; unknown values give 422
-controller -> action : handle(SearchCriteria)
+controller -> action : handle(SearchCriteria, cursor key)
 action -> db : Candidates with any selected style AND from_price_cents < 80000 (L2-008)
 db --> action : Filtered candidates
 action -> action : Availability, distance and travel match as in search
@@ -54,10 +55,10 @@ action -> action : Pick headliner among filtered results as in search (L2-006)
 action -> sorter : sort(tickets, Closest)
 sorter --> action : Distance asc, rating desc, artist ID asc;\nheadliner stays No. 01 (L2-007)
 action --> controller : Lineup with filtered total
-controller --> client : 200 LineupResource
-client --> store : Lineup
-store --> page : Render reordered lineup
-store -> summary : "Sat 14 Nov · 3 free · within 120 km" (L2-008)
-summary -> summary : LiveAnnouncer.announce(polite)
-summary --> actor : New count announced to assistive technology
+controller --> client : 200 tickets, headliner and meta echoing sort and filters
+client --> store : SearchResult
+store --> chips : Render reordered lineup
+chips -> chips : Summary "Sat 14 Nov · 3 free · within 120 km" (L2-008)
+chips -> chips : LiveAnnouncer.announce(polite)
+chips --> actor : New count announced to assistive technology
 @enduml

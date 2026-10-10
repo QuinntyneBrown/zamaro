@@ -37,13 +37,13 @@ and server-rendered markup.
 
 **Frontend (Zamaro Web; locations per ADR-0007)**
 
-- **`SkipLinkComponent`** (`zm-skip-link`, components library) — the design-system skip
-  link, first in `AppShellComponent` (`app/shell`). It is visually hidden until focused,
+- **`zm-skip-link`** (`SkipLink`, components library) — the design-system skip
+  link, first in `Shell` (`app/shell`). It is visually hidden until focused,
   reads "Skip to content" and moves focus to `<main id="main" tabindex="-1">` (L2-101).
   It focuses the target itself, because `<base href="/">` would turn `#main` into a
   navigation.
-- **`AppShellComponent` landmarks** — every route renders inside one `header`
-  (`TopBarComponent`), one `nav aria-label="Primary"`, one `main` and one `footer`.
+- **`Shell` landmarks** — every route renders inside one `header`
+  (`zm-top-bar`), one `nav aria-label="Primary"`, one `main` and one `footer` (`zm-footer`).
   Each page component renders exactly one `h1`, marked `data-route-heading` with
   `tabindex="-1"` (L2-102).
 - **`RouteFocusService`** — listens for `NavigationEnd`. After the new view renders
@@ -66,19 +66,20 @@ and server-rendered markup.
   dialog; on close, focus returns to the control that opened it (L2-101).
 - **`AnnouncerService`** — thin wrapper over the CDK `LiveAnnouncer` in polite mode.
   `SearchStore` announces the result summary when a search finishes, and
-  `ToastService` announces each toast's text (L2-102). The design system and the
+  `ToastService` announces each toast's text (L2-102). In M1 there is no wrapper yet: `Lineup`
+  calls the CDK `LiveAnnouncer` directly to announce the summary line. The design system and the
   toast mocks put every toast, errors included, in one polite `role="status"` region.
-- **`FieldErrorDirective` (`zFieldError`)** — applied to each form control inside
-  `FormFieldComponent`. When the control is invalid and touched, or the form was
-  submitted, it sets `aria-invalid="true"` and adds the error element's ID to
-  `aria-describedby`; when valid, it removes both (L2-102). On submit with errors,
+- **Field errors in `zm-form-field`** — there is no separate directive: while the
+  library's `zm-form-field` has an `error`, its control carries `aria-invalid="true"` and the
+  error element's ID in `aria-describedby`; without one, it carries neither (L2-102). The
+  form decides when an error shows (invalid and touched, or submitted). On submit with errors,
   focus moves to the first invalid control.
 - **`ProblemDetailsMapper`** — converts an RFC 9457 `422` body into per-control
   errors by matching each key of `errors` to a form control name, so server-side
-  errors use the same `zFieldError` wiring as client-side ones.
-- **`RatingComponent`** — design-system rating. The visible stars are
+  errors use the same `zm-form-field` error wiring as client-side ones.
+- **`zm-rating`** (`Rating`, components library) — design-system rating. The visible stars are
   `aria-hidden="true"`; the wrapper has `role="img"` and an `aria-label` from the
-  catalogue key `rating.label`, which reads "Rated 4.9 out of 5 by 38 churches"
+  catalogue key `common.rating.label`, which reads "Rated 4.9 out of 5 by 38 churches"
   (L2-102). A rating with no reviews reads "New".
 - **`MotionService`** — exposes `reducedMotion: Signal<boolean>` from
   `matchMedia('(prefers-reduced-motion: reduce)')`. The root component binds
@@ -136,9 +137,9 @@ and server-rendered markup.
 - **Validation messages** — come from the translation catalogue described in
   `user-experience/localise-formats-and-text`, so the screen reader hears the same
   wording as the client-side check.
-- **`ArtistResource` and `LineupResource`** — return `rating` (one decimal) and
-  `reviewCount` as numbers, never as star strings, so `RatingComponent` composes the
-  spoken label.
+- **`ArtistProfileResource` and `LineupCardResource`** — return `rating` (one decimal) and
+  `reviewCount` as numbers, never as star strings, so the frontend composes the spoken
+  label.
 - **Server-side rendering** — Angular SSR on Node.js returns the landmarks, the single
   `h1`, the `lang="en"` attribute and the page title in the first HTML response, so
   assistive technology has the structure before hydration.
@@ -173,9 +174,9 @@ the contrast check against both themes.
 
 ### Components
 
-`AppShellComponent` hosts the skip link and landmarks. `RouteFocusService`,
-`ZamaroTitleStrategy`, `DialogService`, `AnnouncerService`, `FieldErrorDirective` and
-`RatingComponent` each own one accessibility behaviour that pages reuse.
+`Shell` hosts the skip link and landmarks. `RouteFocusService`, `ZamaroTitleStrategy`,
+`DialogService`, `AnnouncerService`, `zm-form-field` and `zm-rating` each own one
+accessibility behaviour that pages reuse.
 
 ![C4 component view for meeting accessibility standards](diagrams/c4-component.png)
 
@@ -183,7 +184,7 @@ the contrast check against both themes.
 
 The shared services sit beside the form and rating building blocks.
 `ProblemDetailsMapper` translates the API's `ProblemDetails` into control errors that
-`FieldErrorDirective` exposes through ARIA attributes.
+`zm-form-field` exposes through ARIA attributes.
 
 ![Class diagram for meeting accessibility standards](diagrams/class-structure.png)
 

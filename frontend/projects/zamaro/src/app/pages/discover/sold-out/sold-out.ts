@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FormatService, type RadiusKm } from 'api';
-import { Button, EmptyState, Icon } from 'components';
+import { Button, DateSwap, EmptyState, Icon } from 'components';
 import { SearchStore } from '../search.store';
 
 /**
@@ -11,9 +11,8 @@ import { SearchStore } from '../search.store';
  */
 @Component({
   selector: 'zm-sold-out',
-  imports: [Button, EmptyState, Icon, TranslocoPipe],
+  imports: [Button, DateSwap, EmptyState, Icon, TranslocoPipe],
   templateUrl: './sold-out.html',
-  styleUrl: './sold-out.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SoldOut {
@@ -67,9 +66,9 @@ export class SoldOut {
 
   protected readonly nearbyDates = computed(() =>
     (this.store.alternatives()?.nearbyDates ?? []).map((nearby) => ({
-      date: nearby.date,
-      label: this.format.shortDate(nearby.date),
-      count: this.t('discover.soldOut.dateCount', { style: this.style(), count: nearby.count }),
+      value: nearby.date,
+      date: this.format.shortDate(nearby.date),
+      detail: this.t('discover.soldOut.dateCount', { style: this.style(), count: nearby.count }),
     })),
   );
 

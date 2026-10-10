@@ -22,7 +22,16 @@ import {
   type RadiusKm,
   torontoToday,
 } from 'api';
-import { BookingForm, Button, Chip, type FieldOption, FormField } from 'components';
+import {
+  BookingForm,
+  Button,
+  Chip,
+  ErrorSummary,
+  type ErrorSummaryItem,
+  type FieldOption,
+  ChipGroup,
+  FormField,
+} from 'components';
 import { firstValueFrom } from 'rxjs';
 import { SearchStore } from '../search.store';
 
@@ -43,6 +52,8 @@ export const QUICK_PICK_CITIES = [
 
 type FieldName = 'date' | 'location';
 
+const FIELD_IDS: Record<FieldName, string> = { date: 'find-date', location: 'find-place' };
+
 /** The precision coordinates keep in the address bar (L2-009.4). */
 function roundTo3(value: number): number {
   return Math.round(value * 1000) / 1000;
@@ -55,7 +66,16 @@ function roundTo3(value: number): number {
  */
 @Component({
   selector: 'zm-search-form',
-  imports: [BookingForm, Button, Chip, FormField, ReactiveFormsModule, TranslocoPipe],
+  imports: [
+    BookingForm,
+    Button,
+    Chip,
+    ErrorSummary,
+    ChipGroup,
+    FormField,
+    ReactiveFormsModule,
+    TranslocoPipe,
+  ],
   templateUrl: './search-form.html',
   styleUrl: './search-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -170,16 +190,16 @@ export class SearchForm {
   }
 
   /** The summary links to a field; focus it rather than follow the fragment. */
-  protected focusField(event: Event, field: FieldName): void {
-    event.preventDefault();
-    this.fieldFor(field).focus();
-  }
-
-  protected summaryItem(field: FieldName): string {
-    const message = this.errors()[field] ?? '';
-    if (field === 'location') return this.t('discover.errors.summaryLocation');
-    return message;
-  }
+  /** One link per invalid field, date first; the location's link has its own wording. */
+  protected readonly summaryItems = computed<ErrorSummaryItem[]>(() => {
+    const errors = this.errors();
+    return (['date', 'location'] as const)
+      .filter((field) => errors[field])
+      .map((field) => ({
+        fieldId: FIELD_IDS[field],
+        message: field === 'location' ? this.t('discover.errors.summaryLocation') : errors[field]!,
+      }));
+  });
 
   private dateError(date: string): string | null {
     if (!date) return this.t('discover.errors.dateRequired');

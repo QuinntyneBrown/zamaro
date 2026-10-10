@@ -31,9 +31,9 @@ Terms used in this design:
 
 The slice lives almost entirely in Zamaro Web. It touches the Zamaro API only through
 the current-user endpoint that feeds the header's Saved count and account initials,
-and through the seeded API that the visual test suite runs against.
+and through the mocked API that the e2e visual suite runs against (AGENTS.md).
 
-**Frontend (Zamaro Web, `core/layout`)**
+**Frontend (Zamaro Web, `app/shell`; locations per ADR-0007)**
 
 - **`breakpoints.scss`** — the single SCSS map of the L2 breakpoints and the
   `respond-to(xs|sm|md|lg|xl)` mixin. Layout itself is CSS: mobile-first media
@@ -45,21 +45,21 @@ and through the seeded API that the visual test suite runs against.
   queries. It exposes `viewportClass: Signal<ViewportClass>` and
   `isCompact: Signal<boolean>` (true below LG). Components read it only where
   behaviour changes, not to lay out content. During server-side rendering it reports
-  `xs`, so the first paint of a phone needs no client correction.
-- **`AppShellComponent`** (`app/shell`, ADR-0007) — root layout holding the skip link,
-  `TopBarComponent`, the routed `<main>` and `FooterComponent` (`zm-top-bar` and
-  `zm-footer` in the components library).
-- **`TopBarComponent`** — the design-system top bar. From LG it shows Discover,
+  `xs`, so the first paint of a phone needs no client correction. Not built in M1: the shell
+  switches with CSS alone, so nothing needs it yet.
+- **`Shell`** (`app/shell`, ADR-0007) — root layout holding `zm-skip-link`, `zm-top-bar`,
+  the routed `<main>` and `zm-footer`, all from the components library.
+- **`zm-top-bar`** (`TopBar`) — the design-system top bar. From LG it shows Discover,
   How booking works and For artists inline, with the theme toggle from
   `user-experience/switch-theme`. Below LG it uses the compact header: the three
-  links and the theme toggle move into `NavDrawerComponent` behind a menu button
+  links and the theme toggle move into `MenuDialog` behind a menu button
   with `aria-expanded` and `aria-controls`, while the Saved count and the account
   initials stay visible (L2-099). L2-099 requires this at XS and SM; MD keeps it too
   because the links, Saved, the toggle and the account button do not fit in 768 px.
   The workspace bar (`topbar--workspace`: the artist area and the admin app) has five
   primary links and stays compact until XL. The Saved
   button keeps its word in the accessible name when only the heart and count show.
-- **`NavDrawerComponent`** (`app/dialogs/menu`, `MenuDialog`) — a CDK `Dialog` with the
+- **`MenuDialog`** (`app/dialogs/menu`) — the navigation drawer, a CDK `Dialog` with the
   `zm-dialog` drawer frame holding the primary links (`zm-menu`) and the theme toggle. The
   menu button carries `aria-controls="nav-drawer"`, the dialog's id. Initial focus goes to
   the close button, which comes first (as in `docs/mocks/dialogs/menu`). The drawer traps focus,
@@ -158,15 +158,16 @@ serves the web assets; no other external system takes part in layout.
 
 Zamaro Web renders the shell on the server and adapts it in the browser. It calls the
 Zamaro API only for the current user's header data. CI runs the visual suite against
-Zamaro Web backed by a seeded API.
+Zamaro Web backed by the e2e suite's mocked API (AGENTS.md).
 
 ![C4 container view for adapting layout to screens](diagrams/c4-container.png)
 
 ### Components
 
-Inside Zamaro Web, `AppShellComponent` composes the top bar, drawer and dialogs.
-`BreakpointService` tells them when to switch to their compact variants, and
-`CurrentUserStore` supplies the initials and Saved count.
+Inside Zamaro Web, `Shell` composes the top bar, the footer and the drawer (`MenuDialog`).
+In M1 CSS switches them to their compact variants; `BreakpointService` and
+`CurrentUserStore`, which supplies the initials and Saved count, arrive when behaviour or
+accounts need them.
 
 ![C4 component view for adapting layout to screens](diagrams/c4-component.png)
 

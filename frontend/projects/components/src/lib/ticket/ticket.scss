@@ -19,6 +19,13 @@
   box-shadow: var(--shadow-2);
 }
 
+/* The loading ticket keeps the shape and switches off the lift. */
+:host(.ticket--loading:hover),
+:host(.ticket--loading:focus-within) {
+  transform: none;
+  box-shadow: none;
+}
+
 .ticket__art {
   grid-area: art;
   border: 0;

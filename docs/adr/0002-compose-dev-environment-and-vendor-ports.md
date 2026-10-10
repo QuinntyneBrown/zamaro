@@ -14,8 +14,9 @@ video transcoding, bot challenge, CDN purge, error tracking) and every vendor is
 ## Decision
 
 1. Local development and tests run in Docker Compose: Postgres 16, Redis 7, and the `zamaro-api` image
-   running as API, e2e API (`api-e2e`, profile `e2e`), Horizon worker and scheduler. Composer and artisan
-   run inside the container. Compose files live at the repository root; Docker assets for the backend live
+   running as API, Horizon worker and scheduler. Composer and artisan run inside the container.
+   (Amended 2026-10-09: the e2e API service `api-e2e` was removed; Playwright mocks the backend with a
+   stub API, as AGENTS.md requires.) Compose files live at the repository root; Docker assets for the backend live
    in `backend/docker/`.
 2. Each outside vendor is a port in `backend/app/Contracts` with a deterministic fake in
    `backend/app/Integrations/{Area}/Fake*`. Tests and local development bind the fakes. A fake bound in

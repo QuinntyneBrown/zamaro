@@ -48,13 +48,16 @@ second charge.
   status line names what is loading, for example "Finding who's free on Saturday 14
   November 2026…"; after 8 s it changes to "Still checking — thanks for waiting.",
   following the design system's feedback pattern. It is visible, as in the loading mock.
-  Discover, the first busy region (S7), binds `aria-busy` from `SearchStore.showSkeletons`
-  (the 300 ms delayed flag). The directive is extracted when the profile becomes the second
-  busy region. The skeletons there are `zm-skeleton` blocks laid out in the cards' own grid
-  tracks.
-- **Skeleton components** — `TicketCardSkeletonComponent`,
-  `HeadlinerSkeletonComponent`, `ProfileHeaderSkeletonComponent` and
-  `ProfileSectionSkeletonComponent`, built from the design-system skeleton modifiers.
+  - **As built in M1:** there is no directive yet. Discover's lineup (S7) binds `aria-busy`
+    from `SearchStore.showSkeletons` and the profile (S11) binds it on `ArtistPage`'s host
+    from `ArtistProfileStore.showSkeletons`; each store owns its own 300 ms delayed flag.
+  - The lineup's skeletons are the `components` library's `zm-headliner-skeleton` and
+    `zm-ticket-skeleton`, which reuse the headliner's and ticket's own styles.
+- **Skeleton components** — `zm-ticket-skeleton` (`.ticket--loading`),
+  `zm-headliner-skeleton`, `zm-artist-poster` with `loading` for the profile header, and
+  `zm-skeleton` with `shape="strip"` for the song strip, all in the `components` library and
+  built from the design-system skeleton modifiers. The profile's section placeholders are
+  `zm-skeleton` stacks in the profile layout, as in the loading mock.
   Each reuses the final component's grid track, `aspect-ratio` and minimum block
   size, so content replaces it in place. Images carry `width` and `height`
   attributes. The skeleton sweep stops under reduced motion (L2-103).
@@ -65,8 +68,8 @@ second charge.
 
 **Frontend — safe submission**
 
-- **`SubmitButtonComponent`** — design-system primary button with `busy` and
-  `busyLabel` inputs. While busy it sets `aria-busy="true"` and `aria-disabled="true"`
+- **Busy submit button** — the library's `zm-button` with its `busy` input (built), plus a
+  `busyLabel` (to come with the first form that sends data). While busy it sets `aria-busy="true"` and `aria-disabled="true"`
   (not native `disabled`, which would drop focus), ignores further presses, replaces
   the label with the busy label (for example "Sending request…") and shows a spinner
   after it (L2-108).
@@ -90,7 +93,7 @@ second charge.
   danger toast has no timer and stays until dismissed (L2-109). Each toast's text goes
   to `AnnouncerService` (L2-102). Info and warning toasts, and toasts with an action
   such as Undo, use the same 5-second timer as success toasts (L2-109).
-- **`ToastRegionComponent`** — fixed region in `AppShellComponent` at
+- **`ToastRegionComponent`** — fixed region in `Shell` at
   `--z-toast`. It shows at most 3 toasts, newest at the top (L2-109). A fourth toast
   moves the oldest visible one to a queue; a queued toast's timer is paused and it
   returns when a slot frees, so an error toast is never lost.
@@ -196,8 +199,8 @@ idempotency records in the Zamaro database and holds per-key locks in Redis.
 
 ### Components
 
-`BusyRegionDirective`, `FormSubmitter`, `IdempotencyKeyStore` and `ToastService` are the
-shared frontend parts. `EnsureIdempotency` and `IdempotencyRecord` guard the booking
+`BusyRegionDirective` (to be extracted from the two stores' `showSkeletons` flags),
+`FormSubmitter`, `IdempotencyKeyStore` and `ToastService` are the shared frontend parts. `EnsureIdempotency` and `IdempotencyRecord` guard the booking
 and payment endpoints.
 
 ![C4 component view for showing loading and feedback](diagrams/c4-component.png)

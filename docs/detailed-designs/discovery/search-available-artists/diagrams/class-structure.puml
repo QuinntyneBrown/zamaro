@@ -14,89 +14,92 @@ skinparam class {
 title Class structure — Search available artists
 
 package "Zamaro Web (Angular)" {
-  class DiscoverPage {
+  class Discover <<page>> {
     +store: SearchStore
-    +onSubmit(form: SearchForm): void
-    +onShowMore(): void
+  }
+  class SearchForm {
+    +submit(): Promise<void>
+  }
+  class Lineup {
+    +showMore(): Promise<void>
   }
   class SearchStore {
-    +criteria: Signal<SearchCriteria>
-    +lineup: Signal<Lineup | null>
-    +status: Signal<'idle'|'loading'|'loaded'|'error'>
-    +search(criteria: SearchCriteria): void
-    +loadNextPage(): void
+    +state: Signal<SearchState>
+    +query: Signal<SearchQuery | null>
+    +result: Signal<SearchResult | null>
+    +status: Signal<'idle'|'loading'|'loaded'|'error'|'limited'>
+    +load(state: SearchState, search: boolean): void
+    +navigate(change: Partial<SearchState>, options): void
+    +retry(): void
+    +loadMore(): Promise<number>
   }
-  class SearchApi {
-    +search(criteria: SearchCriteria, cursor?: string): Observable<Lineup>
+  interface DiscoveryApi {
+    +search(query: SearchQuery): Observable<SearchResult>
+    +lookUpPlace(text: string): Observable<Place | null>
   }
+  class HttpDiscoveryApi
 }
 
 package "Zamaro API (Laravel)" {
   class SearchController {
-    +__invoke(request: SearchArtistsRequest): LineupResource
+    +__invoke(request: SearchArtistsRequest, search: SearchAvailableArtists): LineupCardResource[]
   }
   class SearchArtistsRequest {
     +rules(): array
-    +toCriteria(): SearchCriteria
+    +criteria(): SearchCriteria
+    +cursorKey(): ?array
   }
   class SearchCriteria <<value object>> {
     +CarbonImmutable eventDate
+    +Coordinates location
     +GatheringKind kind
-    +float latitude
-    +float longitude
     +int radiusKm
-    +?string cursor
   }
   class SearchAvailableArtists <<action>> {
-    +handle(criteria: SearchCriteria): Lineup
+    +handle(criteria: SearchCriteria, after: ?array): Lineup
   }
   class HeadlinerPicker {
     +pick(cards: LineupCard[], today: CarbonImmutable): ?LineupCard
+    +quoteFor(headliner: LineupCard): ?HeadlinerQuote
   }
   class AvailabilityService {
-    +isFree(artist: Artist, date: CarbonImmutable): bool
-    +freeArtistIds(ids: array, date: CarbonImmutable): array
-    +hasCurrentVsc(artist: Artist, date: CarbonImmutable): bool
+    +freeArtistIds(artistIds: array, date: CarbonImmutable, kind: GatheringKind): array
   }
   class DistanceService {
-    +between(from: Coordinates, to: Coordinates): Distance
+    +fromOrigin(origin: Coordinates, destinations: array): Distance[]
   }
   interface RoutingProvider {
-    +drivingDistance(from: Coordinates, to: Coordinates): Distance
+    +matrix(origin: Coordinates, destinations: array): array
   }
   class Distance <<value object>> {
     +int km
     +int driveMinutes
     +bool approximate
-    +label(): string
   }
   class Lineup <<value object>> {
     +?LineupCard headliner
-    +LineupCard[] cards
+    +?HeadlinerQuote quote
+    +LineupCard[] tickets
     +int total
+    +Season season
     +?string nextCursor
   }
   class LineupCard <<value object>> {
-    +int position
     +Artist artist
-    +string[] styles
     +Distance distance
-    +?float rating
-    +int reviewCount
-    +int fromPriceCents
-    +int bookingsThisSeason
-    +?Review headlinerQuote
   }
+  class LineupCardResource <<API resource>>
+  class HeadlinerResource <<API resource>>
   class Artist <<Eloquent>> {
     +int id
     +string slug
-    +string displayName
-    +string actType
-    +string baseCity
-    +float baseLatitude
-    +float baseLongitude
-    +int maxDriveKm
-    +int fromPriceCents
+    +string display_name
+    +string act_type
+    +string base_city
+    +float base_latitude
+    +float base_longitude
+    +int max_drive_km
+    +int from_price_cents
     +ArtistStatus status
   }
   enum GatheringKind {
@@ -109,12 +112,18 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-DiscoverPage --> SearchStore
-SearchStore --> SearchApi
-SearchApi ..> SearchController : GET /api/v1/search
+Discover --> SearchForm
+Discover --> Lineup
+SearchForm --> SearchStore
+Lineup --> SearchStore
+SearchStore --> DiscoveryApi
+HttpDiscoveryApi ..|> DiscoveryApi
+HttpDiscoveryApi ..> SearchController : GET /api/v1/search
 SearchController ..> SearchArtistsRequest : validates
 SearchArtistsRequest ..> SearchCriteria : creates
 SearchController --> SearchAvailableArtists
+SearchController ..> LineupCardResource : tickets
+SearchController ..> HeadlinerResource : headliner
 SearchAvailableArtists --> AvailabilityService
 SearchAvailableArtists --> DistanceService
 SearchAvailableArtists --> HeadlinerPicker

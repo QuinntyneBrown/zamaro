@@ -10,7 +10,10 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
     @if (score() === null) {
       {{ newText() }}
     } @else {
-      ★ {{ scoreText() }} · {{ countText() }}
+      ★ {{ scoreText() }}
+      @if (countText()) {
+        · {{ countText() }}
+      }
     }
   </span>`,
   styles: `

@@ -21,13 +21,13 @@
 - M2 is merged, with the items above. If M2 did not ship `TotpVerifier` or MFA sign-in, S2 builds them from `accounts/sign-in-and-recover-access` and records the TOTP library ADR.
 - Decisions D1–D6 are answered before S3 starts. D1 and D2 are needed before S6.
 - Branch `feat/m3-artist-onboarding-and-admin` off `main`, with one commit per slice or smaller, and the M1 slice loop (criteria → red test → build → regression set → commit).
-- The regression set adds `npx ng build admin` and the `admin` and `admin-mutations` Playwright projects.
+- The regression set adds `npx ng build admin` and the `admin` Playwright project.
 
 ## Decisions to make or confirm
 Each decision gives a recommended default. **Needs your OK** marks the ones that wait for you.
 
 1. **D1 Storage for M3 uploads.** M1 serves media from local disk, and object storage arrives in M4.
-   - **Recommended:** keep local disk behind Laravel's filesystem disks, which already act as the storage port: `quarantine`, `documents` and `originals` on the `local` driver in dev and e2e, `Storage::fake()` in tests, and every file read and written through `Storage::disk(...)` only. Private documents are streamed by the API (S7), not through pre-signed bucket URLs, so moving to S3 in M4 is a config change.
+   - **Recommended:** keep local disk behind Laravel's filesystem disks, which already act as the storage port: `quarantine`, `documents` and `originals` on the `local` driver in dev, `Storage::fake()` in tests, and every file read and written through `Storage::disk(...)` only. Private documents are streamed by the API (S7), not through pre-signed bucket URLs, so moving to S3 in M4 is a config change.
    - **Rejected:** bringing object storage forward. ADR-0002 notes MinIO is no longer pullable, and the replacement choice belongs with M4's ADR.
    - **ADR:** upload storage on local disks until object storage. **Needs your OK.**
 2. **D2 Where artists upload a check.** The VSC section and `dialogs/upload-check` live on `/artist/profile` (`pages/edit-profile`), which is M4.
@@ -53,9 +53,9 @@ Each decision gives a recommended default. **Needs your OK** marks the ones that
    - **Recommended protocol,** a small tus-style one: `POST …/videos` with `Upload-Length`, file name and title returns 201, `Location` and an upload token; `PATCH …/videos/{upload}` takes `Upload-Offset` and 8 MB `application/offset+octet-stream` chunks; `HEAD` returns the current offset, for resuming after a drop.
    - **Recommended retention:** unattached videos are deleted after 24 hours by a daily `uploads:prune-unattached`.
    - **ADR:** resumable upload protocol.
-8. **D8 TOTP library** (`<TO SUPPLY>`). Use `pragmarx/google2fa` behind `Contracts/TotpVerifier`, with a window of 1 step. It is a local library rather than a vendor, so it needs no fake; e2e computes codes from the seeded secret at the frozen clock. An ADR is needed only if M2 has not chosen one.
+8. **D8 TOTP library** (`<TO SUPPLY>`). Use `pragmarx/google2fa` behind `Contracts/TotpVerifier`, with a window of 1 step. It is a local library rather than a vendor, so it needs no fake in the backend; e2e computes codes from the fixture secret that the stub API checks, at the frozen clock. An ADR is needed only if M2 has not chosen one.
 9. **D9 Polling endpoints exempt from idle stamping** (`<TO SUPPLY>`). M3 admin pages do not poll, so the list is empty. Counts refresh on navigation.
-10. **D10 Media domain host** (`<TO SUPPLY>`). Use `media.localhost` on the API's port in dev and e2e (Chromium resolves `*.localhost`; Zamaro cookies are host-only, so none are sent). The production host name and the CDN `/documents/*` rule (`<TO SUPPLY>`) move to M10.
+10. **D10 Media domain host** (`<TO SUPPLY>`). Use `media.localhost` on the API's port in dev, and the same host in the stub API's responses in e2e (Chromium resolves `*.localhost`; Zamaro cookies are host-only, so none are sent). The production host name and the CDN `/documents/*` rule (`<TO SUPPLY>`) move to M10.
 11. **D11 Copy the designs leave open:**
     - Refusing a check issued more than 3 years ago (`<TO SUPPLY>`): "This check was issued more than 3 years ago. Ask the artist for a newer one."
     - Wrong file type: "This file isn't a PDF, JPEG or PNG. Choose a scan of the whole check."
@@ -96,7 +96,7 @@ Each decision gives a recommended default. **Needs your OK** marks the ones that
   - Cast accounts are `{slug}@cast.zamaro.test`, but the admin pages show `marcus@marcusbelltrio.ca` and `tobi@tobiadeyemi.ca`.
   - Marcus Bell Trio is published 2024-09-02, but the mock says "approved Mon 2 Mar 2026".
   - S8's seed moves the eight mock artists to their mock emails and adds `artists.approved_at` (not in any design; record it in review-artist-application).
-- **Frozen clock:** the e2e API runs at Fri 9 Oct 10:00, while the admin mocks show 10:42 a.m., 11:41 a.m., 1:50 p.m. and 2:10 p.m. Specs assert the clock's times, and the visual suite masks timestamps on admin pages.
+- **Frozen clock:** the e2e stub API answers as of Fri 9 Oct 10:00, while the admin mocks show 10:42 a.m., 11:41 a.m., 1:50 p.m. and 2:10 p.m. Specs assert the clock's times, and the visual suite masks timestamps on admin pages.
 
 ## Milestone 3 — slices
 Every slice follows the M1 loop and adds its route states. To carry a signed-in state, `RouteState` gains `as?: 'guest' | 'naomi' | 'priya'`.
@@ -150,10 +150,8 @@ Every slice follows the M1 loop and adds its route states. To carry a signed-in 
 - **Tests first:**
   - `e2e/specs/administration/secure-admin-access.spec.ts`
   - page objects `e2e/pages/admin/{admin-shell.ts,admin-menu.dialog.ts}`, extending M2's `e2e/pages/{sign-in.page.ts,mfa-challenge.page.ts}`
-  - `e2e/fixtures/admin-session.ts`, which signs Priya in through the API with a code from her seeded secret (npm `otpauth`)
-  - Playwright projects:
-    - `admin`: base URL `/admin/`, fully parallel, read-only specs
-    - `admin-mutations`: serial, runs after the read-only projects, and its teardown re-runs `migrate:fresh --seed`
+  - `e2e/fixtures/admin-session.ts`, which signs Priya in on the stub API with a code from her fixture secret (npm `otpauth`)
+  - Playwright project `admin`: base URL `/admin/`, fully parallel. Specs that approve, verify or tick set up the stub state they need per test, so they run alongside the read-only specs
 - **Build:**
   - The D5 gate in `projects/zamaro/src/server.ts`.
   - Admin app:
@@ -261,7 +259,7 @@ Every slice follows the M1 loop and adds its route states. To carry a signed-in 
   - Empty state "Nothing waiting" with "Open artists"; loading and error ("We couldn't load the checks", "Try again").
 - **Tests first:**
   - `tests/Feature/ArtistOnboarding/VerifyVulnerableSectorCheckTest.php` and `tests/Feature/Administration/ListAdminArtistsTest.php`
-  - `e2e/specs/artist-onboarding/verify-vulnerable-sector-check.spec.ts`, with Verify running in `admin-mutations`
+  - `e2e/specs/artist-onboarding/verify-vulnerable-sector-check.spec.ts`, with Verify's before and after states set up through stub-API fixtures
   - page objects `e2e/pages/admin/{checks.page.ts,artists.page.ts,artist.page.ts}`
 - **Build:**
   - `Api/V1/Administration/AdminVulnerableSectorChecksController` and `Actions/ArtistOnboarding/VerifyVulnerableSectorCheck`.
@@ -303,12 +301,12 @@ Every slice follows the M1 loop and adds its route states. To carry a signed-in 
   4. **"References and review":** Pastor Samuel Osei and Ruth Kim, then the summary with Edit links.
   - Completed steps are links back.
   - "Send application" turns busy ("Sending…"), and the page becomes "Application received" and "Thanks, Tobi", with Application A-0219, Status Submitted, Sent Fri 9 Oct, 10:00 a.m. (frozen clock), Reply by Thu 15 Oct, and "Browse the lineup". All four steps are marked done without links, and focus moves to the heading.
-  - Mailpit shows the confirmation within the job run.
+  - The confirmation email is sent within the job run.
   - `/artists/apply` never resolves as an artist slug, and Discover's bundle does not load the apply code.
 - **Tests first:**
   - `tests/Feature/ArtistOnboarding/SubmitArtistApplicationTest.php` (happy path, the reply-by date over Thanksgiving, a resource with no reference contacts)
   - `e2e/specs/artist-onboarding/apply-as-artist.spec.ts` and `e2e/pages/apply.page.ts`
-  - The e2e applicant uses a fresh email, because the seed already holds Tobi's A-0219 for the admin specs. The visual suite masks the number and time.
+  - The e2e spec's stub fixture answers Tobi's submission with A-0219 and the duplicate case with its own state. The visual suite masks the number and time.
 - **Build:**
   - Migrations `create_artist_applications_table` (with the partial unique index on `lower(email)` where Submitted) and `create_application_references_table` (contacts encrypted).
   - `Enums/ApplicationStatus`, `Models/{ArtistApplication,ApplicationReference}`, `Services/ArtistOnboarding/BusinessDayCalendar` and `Actions/ArtistOnboarding/SubmitArtistApplication`.
@@ -367,7 +365,7 @@ Every slice follows the M1 loop and adds its route states. To carry a signed-in 
     - Focus returns to "Reject…" when the dialog closes. The busy and failed states keep the values.
 - **Tests first:**
   - `tests/Feature/ArtistOnboarding/{ApproveArtistApplicationTest,RejectArtistApplicationTest}.php`
-  - new cases in `review-artist-application.spec.ts`, run in `admin-mutations`
+  - new cases in `review-artist-application.spec.ts`, each setting up its stub state per test
   - `e2e/pages/admin/reject-application.dialog.ts`
 - **Build:**
   - `Actions/ArtistOnboarding/{ApproveArtistApplication,RejectArtistApplication}`.
@@ -405,7 +403,7 @@ Every slice follows the M1 loop and adds its route states. To carry a signed-in 
 - **Row counts** must be unchanged after a second `db:seed`.
 
 ## Known risks
-- **Shared e2e state:** approvals, verification and reference ticks change data that read-only specs see. Mutating specs run only in the serial `admin-mutations` project, and its teardown reseeds.
+- **Stateful admin specs:** approvals, verification and reference ticks change what later requests return. Each e2e spec sets up the before and after stub states it needs through fixtures, so no spec sees another's changes; the real state changes are proven in backend Feature tests.
 - **The `/admin` gate:** it adds an API round trip to every admin page load. Cache nothing. A gate bug that serves `index.html` to a non-admin leaks only the bundle, never data, because the API stays authoritative (L2-066).
 - **Database roles:** the trigger is not a real control while the app connects as the table owner. Record this in the ADR; M10 splits the roles.
 - **Clock and mocks:** the frozen 10:00 clock differs from the admin mocks' times, so mask timestamps in the visual suite. Mock-only rows, such as the Bookings and Reviews nav counts, are masked until M7 and M8.
@@ -413,12 +411,12 @@ Every slice follows the M1 loop and adds its route states. To carry a signed-in 
 - **Approved artists stay invisible until M6:** demos need a seeded published artist, and nothing else in M3 publishes one.
 
 ## Verification (end of M3)
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test passes, including `tests/Feature/Security/*` and the OpenAPI contract assertions.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test passes, including `tests/Feature/Security/*` and the OpenAPI contract assertions.
 2. Run `docker compose exec api php artisan db:seed` twice. Row counts are unchanged.
 3. Run `audit:prune`, `vsc:send-renewal-reminders` and `uploads:prune-unattached` twice each through `docker compose exec api php artisan`. The second runs change nothing.
 4. In `psql` as the app role, `UPDATE audit_entries SET outcome = 'Failed'` and `DELETE FROM audit_entries` both fail.
 5. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && npx ng build admin && NG_BUILD_MANGLE=0 npx ng build perf-test`. The zamaro stats contain no admin chunk, and its initial bundle stays within budget.
-6. Run `cd e2e && npx playwright test --project=zamaro --project=admin --project=admin-mutations`. This covers the specs, `visual/`, `a11y/` (light and dark) and `perf/`.
+6. Run `cd e2e && npx playwright test --project=zamaro --project=admin`, with no API, database or Docker running. This covers the specs, `visual/`, `a11y/` (light and dark) and `perf/`.
 7. Run `npm run perf-test -- --baseline <main dist> --fail-on-regression`. No row is flagged, and every new scenario renders.
 8. Manual walkthrough:
    - As a guest, apply as a new artist through all four steps and see the confirmation and the Mailpit email.

@@ -10,7 +10,7 @@
   - `booking_transitions` has `from_status`, `to_status`, `actor_kind`, `actor_id`, `reason` and `occurred_at`. The headliner counts the transitions to `confirmed`.
   - From S4, S14 and S15: `AvailabilityService::isFree()`, `ListTourDates`, the `CancellationPolicy` value object and `SimilarArtistFinder`.
   - The profile stub (S14) validates the date, but its submit sits behind the `bookingRequests` flag, which is off (a user decision). There is no `/artists/:slug/book` route.
-  - Test setup: `FakeRoutingProvider` (km only); the e2e API frozen at Fri 9 Oct 2026 10:00 through `ZAMARO_FROZEN_NOW`; a `routes.manifest.ts` whose `RouteState` has only `path`, `app` and `mock`.
+  - Test setup: `FakeRoutingProvider` (km only); the e2e stub API answering as of Fri 9 Oct 2026 10:00, with `page.clock` frozen to match; a `routes.manifest.ts` whose `RouteState` has only `path`, `app` and `mock`.
 - **From M2:**
   - Sign-in, sessions, CSRF and `auth:sanctum` on `routes/api.php`.
   - The Booker role, and `EnsureEmailIsVerified` (403 `email-not-verified`).
@@ -35,8 +35,8 @@ The submit flag turns **on**, and no money moves in M5. The Pay deposit button s
 - **M2:**
   - `POST /api/v1/auth/*`, `GET /api/v1/me`, and the church endpoints with the add-church dialog.
   - The `email-not-verified` problem and its Resend action.
-  - e2e storage states for Naomi Fraser, Abigail Mensah, Miriam Haile, Grace Ampofo (a second booker) and Priya Nair.
-  - Mailpit running in compose, with an HTTP API on :8025.
+  - e2e sign-in fixtures (stub-API sessions) for Naomi Fraser, Abigail Mensah, Miriam Haile, Grace Ampofo (a second booker) and Priya Nair.
+  - Mailpit running in the dev compose stack, with an HTTP API on :8025, for manual checks.
 - **M3:** administrator accounts exist, so `AlertAdministrators` has recipients.
 - **M4:**
   - `artists.contact_phone` (encrypted) and `EnsureArtistRole`.
@@ -57,7 +57,7 @@ The submit flag turns **on**, and no money moves in M5. The Pay deposit button s
 | D6 | Price figures on the request page before a booking exists | New public `GET /api/v1/artists/{slug}/price-breakdown` returning `PriceBreakdownResource` (quoted, hst, deposit, balance). This keeps rounding on the server only. It fills a gap in `send-booking-request`, so update that design. | No |
 | D7 | Response-deadline boundary | `respond_by` = created + 24 h when `event_starts_at − now < 7 × 24 h`, otherwise + 72 h. Both are computed in `America/Toronto` wall-clock time, so a request on Fri 30 Oct 10:15 a.m. is due Mon 2 Nov 10:15 a.m. across the DST change. | No |
 | D8 | Deposit deadline stored on accept | `deposit_due_by` = the earlier of `accepted_at + 48 h` and `event_starts_at − 12 h` (`pay-deposit`), stored in S11 | No |
-| D9 | Booking number sequence | A Postgres sequence `booking_number_seq` with `ZAM-` and at least 4 digits. The generator skips numbers already taken. `CastSeeder` restarts the sequence at 114, so the first request in a fresh e2e database is ZAM-0114. | No |
+| D9 | Booking number sequence | A Postgres sequence `booking_number_seq` with `ZAM-` and at least 4 digits. The generator skips numbers already taken. `CastSeeder` restarts the sequence at 114, so the first request after a fresh seed is ZAM-0114; a Feature test proves it. In e2e the stub fixture answers a sent request with ZAM-0114. | No |
 | D10 | Daily request limit counting (L2-077.3) | Count bookings the booker *created* in a rolling 24 h (from `bookings.created_at`), so 409s and 422s don't use up the allowance. The 11th is refused with 429 `booking-request-limit`. One administrator alert per booker per Toronto day. | **Yes** |
 | D11 | List page size and tab counts | 20 per page for `/bookings` and `/artist/requests`. Each list returns `meta.counts` per tab, because the mocks show "Upcoming 3", "Past 3" and "New 3" (a gap against "no totals unless asked"). | No |
 | D12 | Time-left wording | Round up to the hour. "{d} days {h} hr left" or "{d} day left" when the hours are 0; "{h} hr {m} min left" under a day; "{m} min left" under an hour. Refresh every minute. This reproduces the mocks at Fri 9 Oct 3:15 p.m. | No |
@@ -75,7 +75,7 @@ The submit flag turns **on**, and no money moves in M5. The Pay deposit button s
 | D24 | Retention (`<TO SUPPLY>`) | `booking_transitions` kept for the life of the booking plus 7 years (the CRA records period); `email_messages` kept 13 months | **Yes** |
 | D25 | 2-minute email alert threshold (`<TO SUPPLY>`) | Record the queued-to-sent gap now. The M10 alert fires when p95 is over 90 s for 10 minutes. | No |
 | D26 | Drive time on the artist booking page ("about 35 min from Brampton") | `RoutingProvider` returns minutes as well as km. The fake uses the `CastRoutes` minutes, or `round(km × 0.8)` for unknown pairs. | No |
-| D27 | e2e scenarios and clock travel | e2e-only routes `POST /__e2e/scenario`, `POST /__e2e/clock` and `POST /__e2e/artisan` (an allowlist of commands). They are registered only when `APP_ENV=e2e`, and boot fails if they are enabled in production. | **Yes** |
+| D27 | e2e scenarios and clock travel | Named stub-API states in `e2e/fixtures/`, applied per test, and a clock fixture that moves `page.clock` and the stub's time together. The API gains no e2e-only routes, and nothing in e2e runs an artisan command. | No |
 
 ## Design conflicts
 
@@ -90,8 +90,8 @@ The submit flag turns **on**, and no money moves in M5. The Pay deposit button s
 | C7 | The booker's declined page shows a "Free on Sat 14 Nov" list of 3 similar artists, but `BookingResource` has no member for it (it was email-only). | Add `similarArtists` to `BookingResource` for Declined, computed by `SimilarArtistFinder` on read. M6 reuses it for artist cancellations. |
 | C8 | `/bookings` shows amount paid from `payments` and `refunds`, but those tables belong to M6's designs. The mocks show ZAM-0097 "Paid $237.50" and ZAM-0061 "Paid $650". | S5 creates both tables with the `pay-deposit` schema and no writers, and seeds the cast's succeeded payments. |
 | C9 | `AlertAdministrators` is designed in `collect-balance` (M6), but L2-077.3 needs it in M5. | Build it in S3 (`Actions/Admin/AlertAdministrators`, `admin_alerts`, `AdministratorAlertNotification`, kind `BookingRequestLimit`). M6 adds kinds. |
-| C10 | The frozen e2e clock is Fri 9 Oct 10:00. The mocks have Naomi request at 10:15 a.m. and show time left as of about 3:15 p.m. | Scenarios set the API and browser clock per test: 10:15 for sending, 15:15 for the inbox states (D12). |
-| C11 | Base seed versus mock numbers: every booking-detail mock reuses ZAM-0114, but the send flow must create it. ZAM-0121 is seeded in the cast but must not appear in the default inbox ("3 new"). | The base seed leaves both out. Named scenarios create ZAM-0114 in each state and ZAM-0121 for the conflict, and the D9 sequence makes a sent request ZAM-0114. |
+| C10 | The frozen e2e clock is Fri 9 Oct 10:00. The mocks have Naomi request at 10:15 a.m. and show time left as of about 3:15 p.m. | Each spec sets the browser clock and the stub API's time per test: 10:15 for sending, 15:15 for the inbox states (D12). |
+| C11 | Base seed versus mock numbers: every booking-detail mock reuses ZAM-0114, but the send flow must create it. ZAM-0121 is seeded in the cast but must not appear in the default inbox ("3 new"). | The base seed leaves both out. Named scenarios supply ZAM-0114 in each state and ZAM-0121 for the conflict: stub-API states in e2e, and `zamaro:scenario` seeders in dev, where the D9 sequence makes a sent request ZAM-0114. |
 | C12 | The composer help copy differs: the design says "{first name} gets an email at most every 15 minutes." The artist mock says "Plain text, 1 to 2,000 characters. Phone numbers and emails stay hidden until the booking is Confirmed." | Use the mock copy per page: the booker page keeps the 15-minute line, and the artist page shows the redaction line. |
 | C13 | `SubmitButtonComponent` is designed as its own component; M1 has `zm-button`. | Add `busy` and `busyLabel` inputs to `zm-button` (`aria-busy`, `aria-disabled`, spinner). Re-run its perf scenario. |
 
@@ -114,21 +114,17 @@ Terminal statuses: Completed, Declined, Withdrawn, Expired and Cancelled.
 
 ## Slices
 
-#### S0 — e2e scenarios, clock travel and mailbox (test-only, outside ATDD)
-- **API (`api-e2e` only):**
-  - `routes/e2e.php` (D27) adds:
-    - `POST /__e2e/scenario {name}`: truncates bookings, messages, idempotency, alerts and email rows, reseeds the base cast, then loads a named scenario class from `database/seeders/Scenarios/`;
-    - `POST /__e2e/clock {now}`;
-    - `POST /__e2e/artisan {command}`, allowlisted to `bookings:expire-requests` and `bookings:complete`.
-  - The clock reads a Redis override before `ZAMARO_FROZEN_NOW`.
-  - `api-e2e` runs `QUEUE_CONNECTION=sync` with mail going to Mailpit.
-- **Scenarios** (also `php artisan zamaro:scenario {name}` for dev): `base`, `zam-0114-requested`, `zam-0114-accepted`, `zam-0114-declined`, `zam-0114-withdrawn`, `zam-0114-expired`, `zam-0121-already-booked`, `abigail-no-contact-phone`, `naomi-unverified`, `naomi-no-church`, `naomi-ten-requests-today`, `naomi-no-bookings`.
+#### S0 — e2e scenarios and clock travel (test-only, outside ATDD)
+- **Stub API (`e2e/fixtures/`, D27):**
+  - A named scenario is a stub-API state that a test applies before it runs. The stub's answers to the SSR server and the browser's `page.route` answers come from the same scenario, so server and client renders agree.
+  - A clock fixture sets `page.clock` and the time the stub answers as of, together.
+  - What a job or a scheduled command would do (expire, complete, send an email) is a switch to the next scenario, for example `zam-0114-requested` to `zam-0114-expired`. The commands, the queue and the emails are proven in backend Feature tests with `travelTo`.
+- **Scenarios** (in dev, `php artisan zamaro:scenario {name}` loads the matching seeder from `database/seeders/Scenarios/`): `base`, `zam-0114-requested`, `zam-0114-accepted`, `zam-0114-declined`, `zam-0114-withdrawn`, `zam-0114-expired`, `zam-0121-already-booked`, `abigail-no-contact-phone`, `naomi-unverified`, `naomi-no-church`, `naomi-ten-requests-today`, `naomi-no-bookings`.
 - **e2e:**
-  - `fixtures/{scenario,mailbox,auth}.ts`, where the mailbox reads Mailpit's API.
-  - A second Playwright project, `zamaro-bookings` (`specs/bookings/**`, `workers: 1`).
+  - `fixtures/{scenario,clock,auth}.ts`.
   - `RouteState` gains `as?: CastMember`, `scenario?: string` and `now?: string`.
-- **ADR:** e2e scenarios, clock travel and mailbox.
-- **Verify:** `npx playwright test --list` shows both projects. A scenario reset twice leaves the same row counts.
+- **ADR:** e2e scenarios and clock travel on the stub API.
+- **Verify:** `npx playwright test --list` lists the booking specs in the `zamaro` project. `zamaro:scenario base` run twice in dev leaves the same row counts.
 
 #### S1 — Send a request (API)
 - **L2:** 028.1, 028.5, 029.3, 030 (response deadline), 063.1 (request created → artist), 063.2, 074.2, 075.
@@ -383,7 +379,7 @@ Terminal statuses: Completed, Declined, Withdrawn, Expired and Cancelled.
   - After a jump to Tue 13 Oct, one run expires ZAM-0114, St. Brendan’s and Harvest Point together (catch-up).
   - Naomi's page reads "Abigail didn’t reply by Mon 12 Oct, 10:15 a.m. You were both told.", with "Ask Abigail again" (to `/artists/abigail-mensah/book?date=2026-11-14`) and "Find who’s free Sat 14 Nov".
   - Abigail's page reads "Request expired" and "There was no reply by Mon 12 Oct, 10:15 a.m. You and Riverside were both told. Nothing was charged.".
-- **Tests first:** `tests/Feature/Bookings/ExpireOverdueRequestsTest.php` (artisan run, then API reads), and `e2e/specs/bookings/run-booking-lifecycle.spec.ts` (scenario, clock and artisan fixtures).
+- **Tests first:** `tests/Feature/Bookings/ExpireOverdueRequestsTest.php` (artisan run, then API reads), and `e2e/specs/bookings/run-booking-lifecycle.spec.ts` (scenario and clock fixtures; the expiry run is a switch from `zam-0114-requested` to `zam-0114-expired`).
 - **Build:** `Console/Commands/ExpireOverdueRequests` (`bookings:expire-requests`, every minute, `withoutOverlapping()->onOneServer()`), `Jobs/Bookings/ExpireBookingRequest` (`ShouldBeUnique`, lock and guard), and `RequestExpired` with `RequestExpiredNotification`.
 - **Route states:** `booking-detail/expired.html` and `request-detail/expired.html` (`zam-0114-expired`).
 
@@ -408,7 +404,7 @@ Terminal statuses: Completed, Declined, Withdrawn, Expired and Cancelled.
 ## Vendor ports and fakes
 - **No new vendor port.** Email goes through Laravel mail to Mailpit (M2). The provider adapter and bounce webhook stay M10 and M2 work.
 - **`FakeRoutingProvider`** gains minutes per `CastRoutes` pair (Brampton ↔ Burlington 44 km / 35 min), plus `round(km × 0.8)` for other pairs. Test hooks are unchanged.
-- **e2e harness (S0)** is test-only and not a vendor fake. It is registered only under `APP_ENV=e2e`.
+- **e2e harness (S0)** is test-only and not a vendor fake. It lives in `e2e/fixtures/` and adds nothing to the API.
 
 ## Seed data additions (idempotent, keyed on `bookings.number` and user email)
 - **Bookers and churches** with snapshots: Naomi Fraser / Riverside (2150 Lakeshore Road, Burlington, 905-555-0123); Rev. Janet Clarke / St. Brendan's, Oshawa; Tomi Oduya / Harvest Point, Milton; Pastor Femi Adebayo / Living Waters, Brampton; Pastor Dave Mwangi / Lakeshore Alliance, Oakville; Grace Ampofo / Kingdom Life Centre, Mississauga; a contact for Trinity Lutheran, Kitchener.
@@ -430,19 +426,19 @@ Terminal statuses: Completed, Declined, Withdrawn, Expired and Cancelled.
 ## Known risks
 - **Double booking and double submit:** the middleware, the unique index and `bookings_one_open_request` must all hold under concurrency. S4 and S11 include parallel-request tests, not only sequential ones.
 - **Time zones and DST:** `respond_by`, `deposit_due_by` and `event_starts_at` are stored in UTC but computed in Toronto wall-clock time. 1 Nov 2026 ends DST between ZAM-0114's request and its event. Both D7 cases are tested.
-- **The clock in e2e:** three clocks must agree: the browser (`page.clock`), the API (Redis override) and the sync queue. Visual masks cover time-left captions that drift by a minute.
-- **e2e isolation:** the booking specs mutate shared data and run in the serial `zamaro-bookings` project. A slow reset endpoint lengthens the suite, so keep scenarios small and measure.
+- **The clock in e2e:** two clocks must agree: the browser (`page.clock`) and the stub API's time, which the clock fixture sets together. Visual masks cover time-left captions that drift by a minute.
+- **Scenario drift:** e2e scenarios are stub-API states, so they can drift from what the API really returns. Build them from the OpenAPI contract and the same cast as the dev seeders, and keep each scenario small.
 - **Redaction:** false negatives leak phone numbers; false positives hide prices and times. The D19 corpus is the guard, and the redaction is fixed at send time and never re-run.
-- **Emails within 2 minutes:** `api-e2e` sends synchronously, which hides queue latency. Measure the queued-to-sent gap on the dev worker.
+- **Emails within 2 minutes:** e2e sends no email, and backend Feature tests fake the queue, so neither shows queue latency. Measure the queued-to-sent gap on the dev worker.
 - **Personal data and caching:** booking, message and request responses carry `Cache-Control: private, no-store`, and no booking response may enter the SSR transfer cache across users (an M1 risk).
 - **Existing numbers moving:** Requested and Accepted seeds must not change search or headliner results. Re-run the M1 Discover specs in S1 and S5.
 - **The flag:** a production deploy with `bookingRequests` on would accept requests that can never be paid (D1).
 
 ## Verification at the end of M5
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including `Security/BookingRouteOwnershipTest` covering every new authenticated route.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including `Security/BookingRouteOwnershipTest` covering every new authenticated route.
 2. Run `docker compose exec api php artisan db:seed` twice: row counts are unchanged. `php artisan schedule:list` shows `bookings:expire-requests`, `bookings:complete` and `idempotency:prune`.
 3. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && NG_BUILD_MANGLE=0 npx ng build perf-test`.
-4. `cd e2e && npx playwright test` passes both projects: specs, `visual/` for every new route state in light and dark, `a11y/` and `perf/cls.spec.ts`.
+4. `cd e2e && npx playwright test` passes, with no API, database or Docker running: specs, `visual/` for every new route state in light and dark, `a11y/` and `perf/cls.spec.ts`.
 5. `npm run perf-test -- --baseline <main dist> --fail-on-regression` flags no rows. The new scenarios are listed, including `RequestsInboxRow`, `BookingsList` and `MessageThread`.
 6. **Manual walkthrough** (dev seed plus `zamaro:scenario base`):
    1. As Naomi, search Burlington / Sat 14 Nov and open Abigail.
@@ -452,5 +448,5 @@ Terminal statuses: Completed, Declined, Withdrawn, Expired and Cancelled.
    5. As Naomi, see Accepted with the deposit deadline and no Pay button.
    6. Message each other and watch the digest.
    7. Withdraw ZAM-0088.
-   8. `zamaro:scenario zam-0114-requested`, set the clock to Mon 12 Oct 10:16, run `bookings:expire-requests`, and see Expired on both sides.
+   8. `zamaro:scenario zam-0114-expired`, and see Expired on both sides. The dev stack has no clock override; `ExpireOverdueRequestsTest` runs `bookings:expire-requests` at Mon 12 Oct 10:16 with `travelTo`.
    9. Repeat at 320 px and in the dark theme.

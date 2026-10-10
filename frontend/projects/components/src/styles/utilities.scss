@@ -13,11 +13,23 @@
   gap: var(--space-4);
 }
 
+.stack--sm {
+  gap: var(--space-2);
+}
+
+.stack--lg {
+  gap: var(--space-10);
+}
+
 .cluster {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+}
+
+.span-full {
+  grid-column: 1 / -1;
 }
 
 .section {
@@ -28,6 +40,43 @@
   .section {
     padding-block: var(--space-20);
   }
+}
+
+.section + .section {
+  border-top: var(--border-width-hairline) solid var(--color-border-default);
+}
+
+.section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.section__kicker {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+}
+
+.section__body {
+  margin-top: var(--space-4);
+}
+
+// Type helpers from the design system's "Base" layer.
+.overline {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+}
+
+.lead {
+  font: var(--text-body-lg);
+}
+
+.text-muted {
+  color: var(--color-fg-muted);
 }
 
 // The charcoal stage: links inherit the paper colour and turn yellow on hover; focus rings go yellow.

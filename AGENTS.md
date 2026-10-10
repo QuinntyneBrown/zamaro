@@ -50,7 +50,7 @@ zamaro/
 │   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
 │       └── components/            # CRDs: <component>.md + <component>.html, trace to L2
-├── docker-compose.yml             # local dev: postgres, redis, api, api-e2e, worker, scheduler (ADR-0002)
+├── docker-compose.yml             # local dev: postgres, redis, api, worker, scheduler (ADR-0002)
 ├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
 │   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
@@ -135,12 +135,12 @@ zamaro/
 │   │           ├── renderer.ts    # reads ?scenario=&iterations=&renderType=, measures the render
 │   │           └── main.ts
 │   └── Dockerfile                 # zamaro-web image: serves zamaro (SSR) and admin under /admin
-└── e2e/                           # Playwright, Chromium only; one Playwright project per application
+└── e2e/                           # Playwright, Chromium only, backend mocked; one project per application
     ├── playwright.config.ts
     ├── routes.manifest.ts         # every route in every state, shared by visual, a11y, and perf
     ├── pages/                     # page objects, one per screen; they own every selector
     │   └── admin/                 # page objects for the admin application
-    ├── fixtures/                  # seeded data and test helpers
+    ├── fixtures/                  # API mocks, the stub API server for SSR, and test helpers
     ├── specs/{subsystem}/         # acceptance tests for the L2 criteria; no selectors
     ├── visual/                    # visual parity with docs/mocks at every breakpoint, light and dark
     ├── a11y/                      # axe WCAG 2.2 AA checks per route and theme
@@ -182,6 +182,14 @@ Back end tests are integration tests against the API. Follow the existing test p
 
 - Run the relevant Playwright tests for UI changes; update visual baselines only for intentional design changes.
 - Run frontend tests in Chromium only. Do not configure or run Firefox, WebKit, or any other browser for frontend testing.
+- **The backend is mocked in e2e.** Playwright tests MUST NOT require the API, the worker, the
+  database, or Docker to be running. Every `/api/v1` response comes from a mock the test suite
+  owns: `page.route` for requests the browser makes, and a stub HTTP server that Playwright
+  starts (set as the SSR server's `API_ORIGIN`) for requests the server makes while rendering.
+  Mock responses follow the OpenAPI contract and use the cast and copy from `docs/mocks/README.md`;
+  shared fixtures live in `e2e/fixtures/`. A test sets up the API state it needs (results, empty,
+  error, rate limit, slow response) through those fixtures, never by seeding a database. The
+  backend's own behaviour is proven by its integration tests in `backend/tests/Feature/`.
 
 ## Incremental Implementation and ATDD - mandatory
 

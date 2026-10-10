@@ -5,12 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { type CalendarDate, FormatService, type MusicalKey } from 'api';
 import {
-  Alert,
-  Artwork,
+  ArtistPoster,
+  ArtistPosterSkeleton,
   Breadcrumb,
   Button,
   ButtonLink,
   type Crumb,
+  ErrorStage,
   Icon,
   Marquee,
   Setlist,
@@ -31,11 +32,12 @@ const STRIP_SONGS = 5;
 @Component({
   selector: 'zm-artist-page',
   imports: [
-    Alert,
-    Artwork,
+    ArtistPoster,
+    ArtistPosterSkeleton,
     Breadcrumb,
     Button,
     ButtonLink,
+    ErrorStage,
     Icon,
     Marquee,
     Setlist,
@@ -128,6 +130,15 @@ export class ArtistPage {
       rating: profile.rating?.toFixed(1),
       count: profile.reviewCount,
     });
+  });
+
+  /** The base city and the driving range, after the rating on the header's facts line. */
+  protected readonly facts = computed(() => {
+    const profile = this.store.profile()!;
+    return [
+      this.t('artist.facts.city', { city: profile.baseCity }),
+      this.t('artist.facts.drives', { km: profile.maxDriveKm }),
+    ];
   });
 
   protected readonly bookLabel = computed(() => {

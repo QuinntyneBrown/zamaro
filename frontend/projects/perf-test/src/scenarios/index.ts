@@ -5,6 +5,8 @@ export type Scenario = () => Promise<{ default: Type<unknown> }>;
 // One entry per scenario file in this folder, keyed by the file name.
 export const scenarios: Record<string, Scenario> = {
   Alert: () => import('./Alert'),
+  ArtistPoster: () => import('./ArtistPoster'),
+  ArtistPosterSkeleton: () => import('./ArtistPosterSkeleton'),
   Artwork: () => import('./Artwork'),
   Badge: () => import('./Badge'),
   BookingForm: () => import('./BookingForm'),
@@ -13,12 +15,17 @@ export const scenarios: Record<string, Scenario> = {
   ButtonAnchor: () => import('./ButtonAnchor'),
   ButtonLink: () => import('./ButtonLink'),
   Chip: () => import('./Chip'),
+  ChipGroup: () => import('./ChipGroup'),
   DarkTheme: () => import('./DarkTheme'),
+  DateSwap: () => import('./DateSwap'),
   Dialog: () => import('./Dialog'),
   EmptyState: () => import('./EmptyState'),
+  ErrorStage: () => import('./ErrorStage'),
+  ErrorSummary: () => import('./ErrorSummary'),
   Footer: () => import('./Footer'),
   FormField: () => import('./FormField'),
   Headliner: () => import('./Headliner'),
+  HeadlinerSkeleton: () => import('./HeadlinerSkeleton'),
   Icon: () => import('./Icon'),
   Lineup: () => import('./Lineup'),
   Marquee: () => import('./Marquee'),
@@ -29,5 +36,6 @@ export const scenarios: Record<string, Scenario> = {
   Skeleton: () => import('./Skeleton'),
   SkipLink: () => import('./SkipLink'),
   Ticket: () => import('./Ticket'),
+  TicketSkeleton: () => import('./TicketSkeleton'),
   TopBar: () => import('./TopBar'),
 };

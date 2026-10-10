@@ -487,10 +487,10 @@ Fake names follow whatever M2–M8 committed; the table lists the expected ones.
 - **Agents never add the `perf-regression-accepted` label.**
 
 ## Verification (end of M10)
-1. Locally: `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`.
+1. Locally: `docker compose up -d --wait`, then `docker compose exec api php artisan test`.
    Every Feature test is green, including `tests/Feature/Integrations/**` against the recorded fixtures.
 2. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && npx ng build admin && node ../.ci/check-bundle-budgets.mjs`.
-3. `cd e2e && npx playwright test`: specs, visual, a11y, perf (including `bundle-isolation`) and
+3. `cd e2e && npx playwright test`, against the stub API with no API, database or Docker running: specs, visual, a11y, perf (including `bundle-isolation`) and
    `npm run perf-test -- --baseline <main dist> --fail-on-regression`.
 4. On staging:
    - `bash .ci/residency-check.sh staging`

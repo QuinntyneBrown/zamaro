@@ -16,10 +16,10 @@ skinparam package {
 }
 actor "Booker on a phone (XS)" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "AppShellComponent" as shell
+  participant "Shell" as shell
   participant "BreakpointService" as bp
-  participant "TopBarComponent" as topbar
-  participant "NavDrawerComponent" as drawer
+  participant "zm-top-bar" as topbar
+  participant "MenuDialog" as drawer
   participant "DialogService" as dialogs
   participant "CurrentUserStore" as users
 end box
@@ -31,10 +31,9 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
 end box
 
 actor -> shell : Open any page at 360 px
-shell -> bp : viewportClass()
-bp --> shell : xs (SSR default, confirmed by matchMedia)
-shell -> topbar : Render compact header (L2-099)
-topbar -> users : load()
+shell -> topbar : Render the header; CSS shows the compact form below LG (L2-099)
+note over bp : Later: BreakpointService, for behaviour CSS cannot express
+topbar -> users : load() (M2, signed-in bookers)
 users -> me : GET /api/v1/me
 me -> db : User and Saved count
 db --> me : Row and count
@@ -43,7 +42,8 @@ users --> topbar : initials, savedCount
 topbar --> actor : Brand, menu button, Saved count and initials visible (L2-099)
 shell --> actor : One-column reflow, no horizontal scroll, 44 px targets (L2-096)
 actor -> topbar : Activate menu button
-topbar -> drawer : Open, aria-expanded = true
+topbar -> shell : menuOpened
+shell -> drawer : openMenuDialog(), aria-expanded = true
 drawer --> actor : Discover, How booking works, For artists, Dark theme toggle
 actor -> drawer : Choose a link
 drawer -> drawer : Close on NavigationEnd, return focus to menu button

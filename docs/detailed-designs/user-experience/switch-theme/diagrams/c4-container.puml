@@ -6,7 +6,7 @@ title Containers — Switch theme
 Person(person, "Guest or signed-in user", "Chooses light or dark")
 System_Ext(browser, "Browser", "prefers-color-scheme, localStorage")
 System_Boundary(zamaro, "Zamaro") {
-  Container(web, "Zamaro Web", "Angular with SSR", "Theme boot script, ThemeService, ThemeToggleComponent")
+  Container(web, "Zamaro Web", "Angular with SSR", "Theme boot script, ThemeService, theme toggle (zm-top-bar, zm-menu)")
   Container(api, "Zamaro API", "PHP 8.3 / Laravel 11", "GET /api/v1/me, PATCH /api/v1/me/preferences")
   ContainerDb(db, "Zamaro database", "PostgreSQL 16", "users.theme_preference")
 }

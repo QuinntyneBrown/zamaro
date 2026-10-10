@@ -51,7 +51,7 @@
 - **M1 S13 is merged.** That means `ListArtistReviews`, `RecalculateArtistRating`, `zm-review` and the review replies.
 - **M1's open S13 item is done:** Abigail has 38 seeded distinct-church reviews whose mean rounds to 4.9 (see "Seed data additions").
 - **M2:**
-  - The `auth:sanctum` default, the write limiter, Mailpit in compose, and an e2e Mailpit helper.
+  - The `auth:sanctum` default, the write limiter, Mailpit in the dev compose stack, and the e2e stub-API sign-in fixtures.
   - `TransactionalNotification`, with `category()` defaulting to `Transactional`, and `email_messages` with a `Suppressed` status.
   - The `/account` save bar, with the `submitting`, `success` and `failed` states.
 - **M3:**
@@ -66,7 +66,7 @@
 - **M5 and M6:**
   - `BookingResource`, the `booking-detail.page.ts` page object, and the Completed and Cancelled statuses.
   - The Completed row in `booking_transitions`.
-  - **A way for e2e to show ZAM-0114 after its event.** The `completed` and `balance-due` mocks need a clock after Sun 15 Nov 2026. If M5 or M6 has not added one, S0 adds it (see Risks).
+  - **A way for e2e to show ZAM-0114 after its event.** The `completed` and `balance-due` mocks need a stub-API scenario with ZAM-0114 Completed and the M5 clock fixture set after Sun 15 Nov 2026. If M5 or M6 has not added the scenario, S0 adds it (see Risks).
 - **Admin and booking support (M8)** is not needed.
 
 ## Decisions to make or confirm
@@ -137,9 +137,9 @@ Every slice follows M1's loop and regression set. It also adds new authenticated
   - `CastSeeder` stops writing `artist_ratings` directly. Instead it runs `RecalculateArtistRating` synchronously for every artist after seeding.
   - M1's existing Discover and profile tests then prove there is no drift: "4.9 · 38 churches", "Rated 4.6 out of 5 by 17 churches", and the "Highest rated" order.
 - **e2e harness:**
-  - Confirm, or add, the post-event clock for ZAM-0114.
-  - Make the e2e queue deterministic: `QUEUE_CONNECTION=sync` on `api-e2e`, or a `worker-e2e` with the same `ZAMARO_FROZEN_NOW`.
-  - **ADR:** e2e clock travel and queue execution, only if M5 or M6 did not already decide it.
+  - Confirm, or add, the post-event stub-API scenario for ZAM-0114 (Completed, with the mock's timestamps) and its clock.
+  - e2e has no queue or scheduler. What `RecalculateArtistRating`, the review prompts and the reminders change is a switch to the next scenario; the jobs themselves are proven in Feature tests with `travelTo`.
+  - **ADR:** e2e clock travel and job outcomes on the stub API, only if M5 or M6 did not already decide it.
 - **Docs:**
   - Add the D16 mocks and the D15 toast copy.
   - Update the designs for conflicts 1, 2 and 3.
@@ -493,27 +493,26 @@ All seeders upsert on natural keys and stay idempotent.
   - S0 makes every seeded rating derived from reviews, and lets M1's Discover and profile tests prove parity.
   - Also check each artist's 38/21/9 counts against `church_id` (conflict 6).
 - **The frozen clock.**
-  - `api-e2e` is pinned at Fri 9 Oct 10:00, and ZAM-0114 is seeded as Requested. Moving the clock does not move the database: ZAM-0114 would simply expire on Mon 12 Oct.
-  - So the post-event review specs need ZAM-0114 seeded as Completed with the mock's timestamps, in a separate e2e database or project, so that M5's specs, which use it as Requested, are untouched.
-  - S2 and S3 are blocked until this exists.
+  - e2e answers from stub-API scenarios, so each spec applies its own state and clock. M5's specs keep ZAM-0114 Requested at Fri 9 Oct, while the post-event review specs apply a scenario with ZAM-0114 Completed and the mock's timestamps, at Tue 17 Nov.
+  - S2 and S3 are blocked until this scenario exists.
   - Reply, report and moderation specs run at Fri 9 Oct, which matches their mocks: Tomi's reply is editable until Thu 15 Oct, and the reports date from Tue 6 Oct to Thu 8 Oct.
 - **Scheduler time zones.**
   - The scheduler cadence doesn't depend on the time zone, but the due times must use `America/Toronto` wall-clock `subDays()` and `addDays()`. Subtracting hours in UTC would be wrong.
   - Daylight saving ends on Sun 1 Nov 2026, between Abigail's Sun 25 Oct and Sun 1 Nov bookings.
   - The edit windows (D2) and the end of the review window (D1) also use wall-clock time.
-- **Worker clock and queue in e2e.** A Horizon worker without `ZAMARO_FROZEN_NOW` would judge `shouldSend()` and `ReviewEligibility` on real time. The 60 s rating assertion also needs the queue to run. Use sync, or a frozen `worker-e2e` (S0).
+- **Job clock and queue.** `shouldSend()` and `ReviewEligibility` read the clock, so their Feature tests set it with `travelTo`. e2e runs no queue: the "within 60 s" rating change is a scenario switch there, and the real queue lag is measured on the dev worker (D10 alerts on it in production).
 - **The `#review` fragment through sign-in.** The server never sees fragments, so a signed-out link loses `#review` unless M2's client-side `returnUrl` keeps it. Add a test in S4.
 - **Caching.** The public profile is cached at `s-maxage=60`. Hidden reviews and new replies rely on M4's cache invalidation. The Report visibility must stay client-side (D9) so personal state is never transfer-cached.
-- **Shared Mailpit in e2e.** Filter messages by recipient and subject, and clear the inbox per spec, so specs running in parallel don't read each other's email.
+- **Emails.** e2e reads no email. The prompts, reminders and the hidden-review email are asserted in Feature tests with `Notification::fake`, and checked by hand in the dev stack's Mailpit.
 - **Perf.** The new slot and reply line in `zm-review` touch the `Lineup` and profile paths. Run `--fail-on-regression` before pushing S5 and S7.
 
 ## Verification at the end of M7
 
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. All Feature tests are green, including the contract assertions and the `Security/` cross-user suite with the new routes.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. All Feature tests are green, including the contract assertions and the `Security/` cross-user suite with the new routes.
 2. `docker compose exec api php artisan db:seed` twice: the row counts are unchanged, and the ratings are unchanged (4.9/38, 4.8/21, 4.7/9, 4.6/17).
 3. `docker compose exec api php artisan schedule:list` lists `reviews:send-prompts` (hourly) and `notifications:send-event-reminders` (every 15 minutes).
 4. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && npx ng build admin && NG_BUILD_MANGLE=0 npx ng build perf-test`.
-5. `cd e2e && npx playwright test`. The zamaro and admin projects pass, along with `visual/`, `a11y/` (light and dark) and `perf/` over the new manifest states.
+5. `cd e2e && npx playwright test`, with no API, database or Docker running. The zamaro and admin projects pass, along with `visual/`, `a11y/` (light and dark) and `perf/` over the new manifest states.
 6. `npm run perf-test -- --baseline <main dist> --fail-on-regression` flags no rows. `ArtistReviewsList`, `ModerationQueue` and `RadioGroupStub` are new and have no baseline.
 7. **Manual walkthrough** (Mailpit at :8025):
    1. As Naomi:
@@ -529,8 +528,5 @@ All seeders upsert on natural keys and stay idempotent.
       - Hide Grace's review with a reason. Elijah shows "5.0 · 8 churches", and Grace's email arrives.
       - Dismiss Hosanna's reports and see "No reported reviews".
       - Check both audit entries.
-   4. With the API clock set to Sat 7 Nov 7:00 p.m.:
-      - Run `notifications:send-event-reminders` and see two reminders for a Confirmed booking.
-      - Follow `/artist/bookings/{number}#messages`.
-      - `POST` the `List-Unsubscribe` URL from one email and confirm the preference is now off.
+   4. The dev stack has no clock override, so `SendEventRemindersTest` runs `notifications:send-event-reminders` at Sat 7 Nov 7:00 p.m. with `travelTo` and checks the two reminders, the `/artist/bookings/{number}#messages` link and the `List-Unsubscribe` `POST`.
    5. Repeat steps 1–3 at 320 px and in the dark theme.
