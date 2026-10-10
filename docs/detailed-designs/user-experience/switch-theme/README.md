@@ -70,7 +70,7 @@ design system keep their own surfaces in either theme.
   state rather than a changing label. Both meet the 44 px target size.
 - **`PreferencesApi`** — typed client for `PATCH /api/v1/me/preferences` with body
   `{ "themePreference": "light" | "dark" | null }`.
-- **Sign-in reconciliation** — when `CurrentUserStore` loads `GET /api/v1/me` after
+- **Sign-in reconciliation** — when `AuthService` loads `GET /api/v1/me` after
   sign-in or on start-up, a non-null `themePreference` on the account replaces the
   device preference and is written back to the device. When the account value is null
   and the device holds a preference, `ThemeService` saves the device value to the
@@ -108,7 +108,7 @@ design system keep their own surfaces in either theme.
   returns 422 problem details.
 - **`UpdateUserPreferences`** — action that writes the column inside a transaction and
   returns the user.
-- **`MeResource`** — includes `themePreference` so every device learns the account
+- **`CurrentUserResource`** (ADR-0016) — includes `themePreference` so every device learns the account
   value through `GET /api/v1/me`. Responses carry `Cache-Control: private, no-store`
   because they hold personal data (L2-089).
 

@@ -6,9 +6,38 @@
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
-| S0 | Groundwork: Sanctum, Redis sessions, Horizon queues, Mailpit, e2e account fixtures | Done | (ADR-0015) |
-| S1 | Sign in | Not started | |
+| S0 | Groundwork: Sanctum, Redis sessions, Horizon queues, Mailpit, e2e account fixtures | Done | `dd82204`, `c57df76` (ADR-0015) |
+| S1 | Sign in | Done | `193c96c` red tests, `e2a97ff` (ADR-0016) |
 | S2–S18 | | Not started | |
+
+**Checks at the last commit (S1, 2026-10-10):** 135 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown` and Pint are clean; `db:seed` twice on the dev database
+leaves every count unchanged (81 users, 81 role rows); frontend lint, format and `ng build zamaro` are
+clean; `npx playwright test` passes 183 tests on win32, and `npm run test:docker -- visual a11y` passes
+84 in the Linux image. The perf test against the S0 build flags no row; AuthCard (248 ms) and
+ErrorSummary (206 ms) are new at 200 iterations.
+
+**S1 acceptance criteria (as tested):**
+- Given Naomi's email and password from a web origin, when she signs in, then she gets 200 with her
+  name, `initials` "NF", `roles` ["booker"] and `emailVerified` true, `Cache-Control: private,
+  no-store`, a new `zamaro_session` (HttpOnly, Secure, SameSite=Lax) whose ID differs from the one
+  sent, and an `auth.sign_in` audit entry. The address matches in any case.
+- Given a wrong password, or an email with no account, then both get the same 422 with
+  `errors.credentials` "Email or password is incorrect.", and the unknown email is checked against a
+  dummy hash (one `Hash::check`).
+- Given Naomi signed in, when the app asks `GET /api/v1/me`, then it gets her account with
+  `themePreference` null and `termsAcceptanceRequired` false, privately; a guest gets the 401
+  `unauthenticated` problem, with or without `Accept: application/json`.
+- Given `/sign-in?returnUrl=/artists/abigail-mensah?date=2026-11-14`, when Naomi signs in, then she
+  lands on Abigail's profile; a return address on another site sends her to Discover. Focus starts
+  in Email.
+- Given a wrong password (a fresh booker) or an unknown email, when the card answers, then it shows
+  "Couldn’t sign you in" with the link "Email or password is incorrect.", focused, keeps the email,
+  clears the password, and both fields are `aria-invalid` and described by the message.
+- Given the request is pending, then the button reads "Signing in…" with `aria-busy` and
+  `aria-disabled`, and both fields are read-only. Given a 500, then "We couldn’t sign you in" shows
+  and the email and password are kept.
+- Passwords are stored as Argon2id; `cast:booker` makes a verified booker and refuses production.
 
 ## Changes made while implementing
 
@@ -22,6 +51,37 @@
   backend tests (S3), with time travel. Recorded in ADR-0015.
 - **S0 — Horizon.** One supervisor per queue (`high`, `notifications`, `default`), one process each
   locally and in every environment without its own entry (D18).
+- **S1 — The auth card is `zm-booking-form variant="auth"`.** The booking-form CRD already specifies
+  the "Admit one" card as that variant (AC-6, AC-13, AC-14), so no `zm-auth-card` component exists;
+  `AuthCard` is its perf scenario, as CRD AC-30 names it.
+- **S1 — Interim field inputs.** The CRDs split the field into `zm-form-field` and `zm-text-field`,
+  which M1 deferred. Sign-in needed email and password inputs, the "(required)" marker, read-only
+  while busy and a shared form-level message, so the monolithic field gained `type` email and
+  password, `requiredMarker`, `readonly`, `invalid` and `describedBy` (recorded in the form-field
+  CRD). `zm-alert` gained `compact`.
+- **S1 — `zm-error-summary` has `role="group"`.** Its `aria-labelledby` needs a role to name; the CRD
+  forbids `role="alert"`. Recorded in the form-layout CRD. Discover keeps its hand-written summary
+  for now.
+- **S1 — Entry points.** The card's "Forgot your password?" and "Create an account" links, the
+  header's "Sign up" and the footer's "Your account" column join when their pages exist (S8, S5) and
+  with the signed-in shell (S2), as M1 did for links to later screens. The `/sign-in` baselines show
+  the card without them; the rest matches the mock.
+- **S1 — The error state keeps the password.** The mock shows it empty, but L2-108.3 keeps every
+  value entered; focus moves to the password. Recorded in the sign-in design.
+- **S1 — Empty fields.** No mock or copy covers an empty submit, so the API's 422 on `email` or
+  `password` shows the same one message as wrong credentials.
+- **S1 — Return address.** `returnUrl` must be a path on the site; anything else lands on Discover.
+- **S1 — Placeholder fields in `/me`.** `CurrentUserResource` returns `themePreference: null` until S18
+  and `termsAcceptanceRequired: false` until S14, as the slice's behaviour lists them.
+- **S1 — Audit timestamps** come from the database clock (the design's rule), so e2e entries carry the
+  real time, not the frozen one.
+- **S1 — Cast addresses.** Tomi signs in as `tomi.oduya@harvestpointchurch.ca` (no mock names one).
+  The seeder moves Naomi, Abigail and Tomi off their `@cast.zamaro.test` addresses on a database
+  seeded before M2.
+- **S1 — One visual flake seen.** In one full run `discover-results` (XS, dark) was captured while the
+  lineup was still growing (3,987 px, then 7,141 px tall); it passed alone three times and in the next
+  full run. Watch it; if it recurs, the route state should wait for the lineup rather than for
+  network idle.
 
 ## Context
 
@@ -105,7 +165,7 @@ shown and are recorded in the slice's ADR or the design.
 
 | # | Question (source) | Recommended default | OK |
 |---|---|---|---|
-| D1 | Argon2id memory and iterations (register-booker) | Laravel defaults (65,536 KiB, 4 passes, 1 thread); minimum cost in `testing` | |
+| D1 | Argon2id memory and iterations (register-booker) | Laravel defaults (65,536 KiB, 4 passes, 1 thread); minimum cost in `testing` | OK (accepted default, 2026-10-10) |
 | D2 | Bot challenge vendor (register-booker, limit-request-rates) | `Contracts/BotChallenge` with a fake until M10 | |
 | D3 | Bot provider unreachable (limit-request-rates) | Fail closed, with the usual challenge message | OK |
 | D4 | Breached-password vendor (sign-in-and-recover-access) | `Contracts/BreachedPasswordChecker`; the fake rejects a configured list; the HIBP range adapter in M10 | |
@@ -114,7 +174,7 @@ shown and are recorded in the slice's ADR or the design.
 | D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | |
 | D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK |
 | D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK |
-| D10 | Problem types for 401, 419 and the new cases | `unauthenticated`, `csrf-token-mismatch`, `link-expired` (410), `payload-too-large`, `unsupported-media-type`, `saved-artist-limit`, `terms-acceptance-required`, `sign-in-paused` (429). Bad credentials: 422 with `errors.credentials` | |
+| D10 | Problem types for 401, 419 and the new cases | `unauthenticated`, `csrf-token-mismatch`, `link-expired` (410), `payload-too-large`, `unsupported-media-type`, `saved-artist-limit`, `terms-acceptance-required`, `sign-in-paused` (429). Bad credentials: 422 with `errors.credentials` | OK (accepted default, 2026-10-10); `unauthenticated` and `errors.credentials` built in S1 |
 | D11 | Email-change link lifetime (manage-account-settings) | 24 hours, like the verification link | OK |
 | D12 | `TrackSessionActivity` interval (manage-account-settings) | 5 minutes | |
 | D13 | Source of the approximate city (manage-account-settings) | `Contracts/IpLocator` with a fake table; unknown IPs show no city | |
@@ -123,16 +183,16 @@ shown and are recorded in the slice's ADR or the design.
 | D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK |
 | D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | |
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
-| D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | |
+| D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | OK (accepted default, 2026-10-10); `{email}` built in S1, the options join with their slices |
 | D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | |
 | D21 | Email on two-step changes (mocks say "We emailed…"; the design is silent) | Add `TwoStepSignInChangedNotification` for on, off and new codes; update the design | OK |
-| D22 | M2 actions call `RecordAuditEntry`, which is M3 | Add the append-only `audit_entries` table and the action in S1; the viewer stays in M3 | OK |
+| D22 | M2 actions call `RecordAuditEntry`, which is M3 | Add the append-only `audit_entries` table and the action in S1; the viewer stays in M3 | OK (accepted default, 2026-10-10) |
 | D23 | Mock parts that belong to later screens | Hide `#data` and `#delete` (M9), the reminder and review boxes (M7), "Your bookings" (M5), and the artist's Dashboard item and request count (M4/M5). Visual tests mask them | OK |
 | D24 | The saved card's "Request" link (`/book` is M5) | Until M5 it links to `/artists/{slug}?date=…` | OK |
 | D25 | Street-address type-ahead source (manage-church-profile) | A plain field until the geocoder vendor (M10) | |
 | D26 | Cross-user suite fails on a route with no fixture (L2-074.3), against "no architecture tests" | Keep it: L2-074.3 and the AGENTS.md tree both name it, and every case asserts behaviour | OK |
 | D27 | Raw-SQL lint tool (authorise-and-validate) | Larastan with a custom PHPStan rule against non-literal `DB::raw`, `select`, `statement` and `*Raw` | |
-| D28 | Cast sign-in password | `ZAMARO_CAST_PASSWORD` for Naomi, Abigail and Tomi, seeded only in `local`, `testing` and `e2e` | |
+| D28 | Cast sign-in password | `ZAMARO_CAST_PASSWORD` for Naomi, Abigail and Tomi, seeded only in `local`, `testing` and `e2e` | OK (accepted default, 2026-10-10) |
 
 ## Design conflicts and their resolutions
 

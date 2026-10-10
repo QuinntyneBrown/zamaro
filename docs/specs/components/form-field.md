@@ -549,6 +549,12 @@ Nothing animates. Errors, help and success appear without a transition; under
 
 ## Implementation notes
 
+**Interim additions in M2 (S1), before the split:** for the sign-in card the monolithic field gained
+`type="email"` and `type="password"`, `requiredMarker` (renders `.field__required` and sets `required`),
+`readonly` (the dashed sunken look of the design system), `invalid` (ORs `aria-invalid` with `error`,
+text-field CRD D-6) and `describedBy` (IDs appended to `aria-describedby`, "credentials-error"). They
+are the text field's inputs, carried by the field until the split. `.field__optional` keeps its M1 look.
+
 **Interim additions in M1 (S14), before the split:** for the booking stub the monolithic field
 gained `type="textarea"`, `placeholder`, `optionalMarker`, `live` (a visually hidden
 `role="status"` region repeating the error) and `[slot=message]` with a `messageId` input (D-14,

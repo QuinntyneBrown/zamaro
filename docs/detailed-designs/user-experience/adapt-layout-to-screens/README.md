@@ -85,7 +85,7 @@ and through the seeded API that the visual test suite runs against.
   the visible shape is smaller (L2-096). The design system's `components.css` carries
   this `(pointer: coarse)` rule. Links inside running text are exempt, following the
   WCAG 2.5.8 inline exception and the design system's responsive foundation.
-- **`CurrentUserStore`** — signal store fed by `AuthService`. It holds the initials
+- **`AuthService`** (ADR-0016) — holds the signed-in person as a signal: the initials
   and the Saved count that the compact header keeps visible.
 
 **Mocks and design system**
@@ -150,7 +150,7 @@ and through the seeded API that the visual test suite runs against.
 
 **Backend (Zamaro API)**
 
-- **`MeController`** — `GET /api/v1/me` returns `MeResource` with the user's name,
+- **`MeController`** — `GET /api/v1/me` returns `CurrentUserResource` (ADR-0016) with the user's name,
   initials, roles, Saved count and theme preference. The header reads the initials and
   Saved count from it; a guest receives 401 and sees the signed-out header.
 - **`VisualFixtureSeeder`** — database seeder used only in CI. It loads the fixed
@@ -189,14 +189,14 @@ Zamaro Web backed by a seeded API.
 
 Inside Zamaro Web, `AppShellComponent` composes the top bar, drawer and dialogs.
 `BreakpointService` tells them when to switch to their compact variants, and
-`CurrentUserStore` supplies the initials and Saved count.
+`AuthService` supplies the initials and Saved count.
 
 ![C4 component view for adapting layout to screens](diagrams/c4-component.png)
 
 ### Class structure
 
 The shell, header and dialog wrapper depend on `BreakpointService`. The header reads
-`CurrentUserStore`, which mirrors the `MeResource` returned by `MeController`.
+`AuthService.currentUser`, which mirrors the `CurrentUserResource` returned by `MeController`.
 
 ![Class diagram for adapting layout to screens](diagrams/class-structure.png)
 

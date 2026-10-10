@@ -519,6 +519,9 @@ lift, which reduced motion removes.
 
 ## Implementation notes
 
+**As built in M2 (S1):** `compact` (`.alert--compact`: `--space-4` padding, `--text-h4` title and a
+20 px icon), for the sign-in card's "We couldn’t sign you in".
+
 `zm-alert` exists in `frontend/projects/components/src/lib/alert/alert.ts` with
 `heading` and `variant: 'info' | 'danger'`, a hard-coded `role="alert"`, and the
 Discover lineup uses it. To meet this CRD:

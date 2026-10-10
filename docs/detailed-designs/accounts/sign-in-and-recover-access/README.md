@@ -181,6 +181,33 @@ TOTP codes from one 30-second step either side are accepted for clock drift, and
 is mandatory for administrators (`administration/secure-admin-access`). The TOTP
 library is `<TO SUPPLY>`. The breached-password service vendor is `<TO SUPPLY>`.
 
+
+**As built in M2 (S1, sign in)**
+
+- **Layout (ADR-0007, ADR-0016):** the page is `pages/sign-in/SignIn` in the zamaro application. The
+  card is the library's `zm-booking-form variant="auth"` (booking-form CRD; the plan's "`zm-auth-card`"
+  is its `AuthCard` perf scenario), with `zm-form-field`s, `zm-error-summary` and a compact `zm-alert`.
+  `AuthService` (the `currentUser` signal), the `AuthApi` contract behind `AUTH_API`, `withApiXsrf()`
+  and `safeReturnUrl()` live in `api/lib/auth/`. A `returnUrl` that is not a path on the site (another
+  host, `//host`) is ignored and the person lands on Discover.
+- **Endpoint:** `POST /api/v1/session` (`SessionController@store`, `SignInRequest`, `AttemptSignIn`,
+  `StartSession`) answers 200 with `CurrentUserResource` and `Cache-Control: private, no-store`
+  (`SetCachePolicy`, L2-089.3). Wrong credentials are 422 with `errors.credentials`: ["Email or password
+  is incorrect."] (M2 D10); an empty field is an ordinary 422 on `email` or `password`, which the page
+  shows with the same one message. Emails match whatever their case or surrounding spaces. An unknown
+  email is checked against a dummy hash made with the current cost and cached.
+- **Hashing (M2 D1):** `config/hashing.php` sets Argon2id with Laravel's defaults (65,536 KiB, 4
+  passes, 1 thread); the test suite lowers it to 1,024 KiB and 1 pass.
+- **Audit (M2 D22):** `RecordAuditEntry` writes `auth.sign_in` (succeeded) and `auth.sign_in_failed`
+  (failed; no actor for an unknown email, the attempted email in `context`) to the append-only
+  `audit_entries` table, whose trigger refuses `UPDATE` and `DELETE`.
+- **Page states:** default, invalid (summary "Couldn’t sign you in", both fields invalid and described
+  by `#credentials-error`, password cleared, focus on the summary), submitting ("Signing in…", fields
+  read-only and faded) and error ("We couldn’t sign you in"). The error state keeps the password as
+  well as the email, as L2-108.3 requires, although the mock shows it empty; focus moves to the
+  password. Focus starts in Email.
+- **Not yet:** the card's "Forgot your password?" and "Create an account" links join when those pages
+  exist (S8, S5); the lockout is S8 and two-step sign-in S12.
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

@@ -529,6 +529,13 @@ change in `--duration-fast`, which drops to near zero under
 
 ## Implementation notes
 
+**As built in M2 (S1):** the `auth` variant (`.stub.auth-card`, stamp over an `h1` or `h2` per
+`headingLevel`, with `tabindex="-1"`), `busy` (host `aria-busy`, projected `.field`s at 60 % with no
+pointer input, styled through `:host ::ng-deep .field` because projected content carries the page's
+style scope), `landmark` and the `[slot=links]` wrapper (hidden when empty and outside `auth`) are
+built, with the `AuthCard` scenario (200 iterations, about 250 ms). The sign-in page uses it. Still to
+do: `.field--full` spanning, the skeleton and the `BookingFormSkeleton` scenario.
+
 **As built in M1 (S14):** `titleId` is now `headingId`; `variant` (`bar`, `stub`), optional `stamp`, `price`, `priceNote` and the `[slot=fine]` wrapper (hidden when empty) are built, with the stub title's `tabindex="-1"` and the `BookingStub` scenario (150 iterations). `auth`, `busy`, `landmark`, `headingLevel`, `.field--full` spanning, the `[slot=links]` wrapper, the skeleton and the `AuthCard` and `BookingFormSkeleton` scenarios are still to do.
 
 The library has `zm-booking-form`, the bar only, with `heading`, `stamp` and

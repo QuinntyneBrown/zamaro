@@ -552,6 +552,13 @@ submit's spinner is the button's (button CRD).
 
 ## Implementation notes
 
+**As built in M2 (S1):** `zm-error-summary` is built in `lib/error-summary/` (one folder per component,
+as the AGENTS.md tree has it) with every input, output and method above and the `ErrorSummary`
+scenario (200 iterations, about 205 ms). The host also has `role="group"`: a custom element has no
+role, so without one its `aria-labelledby` would name nothing (and axe forbids naming a generic
+element). The sign-in page uses it. Still to do: the other three components, the layout classes, and
+replacing Discover's hand-written summary.
+
 Planned. Build it in `frontend/projects/components/src/lib/form-layout/`:
 
 - `form-section.ts` (`FormSection`, `zm-form-section`), host classes
