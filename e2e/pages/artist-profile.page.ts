@@ -93,6 +93,55 @@ export class ArtistProfilePage {
     return this.page.getByRole('button', { name: /^(Book for|Check dates)/ });
   }
 
+  // Share (L2-113)
+
+  shareButton(): Locator {
+    return this.page.locator('.artist-poster').getByRole('button', { name: 'Share' });
+  }
+
+  async share(): Promise<void> {
+    await this.shareButton().click();
+  }
+
+  /**
+   * Behaves like a device with a share sheet and records what it was asked to share. With
+   * `dismissed`, the visitor closes the sheet without sharing.
+   */
+  async withShareSheet(outcome: 'shared' | 'dismissed' = 'shared'): Promise<void> {
+    await this.page.addInitScript((dismissed) => {
+      const requests: ShareData[] = [];
+      Object.assign(window, { __shareRequests: requests });
+      Object.defineProperty(Navigator.prototype, 'share', {
+        configurable: true,
+        value: (data: ShareData) => {
+          requests.push(data);
+          return dismissed
+            ? Promise.reject(new DOMException('Share canceled', 'AbortError'))
+            : Promise.resolve();
+        },
+      });
+    }, outcome === 'dismissed');
+  }
+
+  /** Behaves like a device without a share sheet, and lets the test read the clipboard. */
+  async withoutShareSheet(): Promise<void> {
+    await this.page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await this.page.addInitScript(() => {
+      delete (Navigator.prototype as Partial<Navigator>).share;
+    });
+  }
+
+  /** What the share sheet was asked to share, in order. */
+  async shareRequests(): Promise<ShareData[]> {
+    return this.page.evaluate(
+      () => (window as unknown as { __shareRequests?: ShareData[] }).__shareRequests ?? [],
+    );
+  }
+
+  async clipboardText(): Promise<string> {
+    return this.page.evaluate(() => navigator.clipboard.readText());
+  }
+
   aboutHeading(): Locator {
     return this.page.locator('#about-title');
   }

@@ -1,5 +1,6 @@
 import type { Locator, Page } from '@playwright/test';
 import { MenuDialog } from './menu.dialog';
+import { readHead, type PageHead } from './page-head';
 
 export type Theme = 'light' | 'dark';
 
@@ -83,5 +84,61 @@ export class Shell {
     return this.page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
+  }
+
+  /** The live document's head, as it stands after the browser took over. */
+  async head(): Promise<PageHead> {
+    return readHead(this.page);
+  }
+
+  // Toasts (docs/specs/components/toast.md)
+
+  /** The one polite status region every page ends with. */
+  toastRegion(): Locator {
+    return this.page.locator('.toast-region');
+  }
+
+  toasts(): Locator {
+    return this.toastRegion().locator('.toast');
+  }
+
+  /** A toast found by its title, such as "Link copied". */
+  toast(title: string): Toast {
+    return new Toast(
+      this.toasts().filter({ has: this.page.locator('.toast__title', { hasText: title }) }),
+    );
+  }
+
+  async pressEscape(): Promise<void> {
+    await this.page.keyboard.press('Escape');
+  }
+}
+
+/** One toast slip: kind, title, text and its dismiss button. */
+export class Toast {
+  constructor(readonly root: Locator) {}
+
+  kind(): Locator {
+    return this.root.locator('.toast__kind');
+  }
+
+  title(): Locator {
+    return this.root.locator('.toast__title');
+  }
+
+  text(): Locator {
+    return this.root.locator('.toast__text');
+  }
+
+  dismissButton(): Locator {
+    return this.root.getByRole('button', { name: /^Dismiss/ });
+  }
+
+  async dismiss(): Promise<void> {
+    await this.dismissButton().click();
+  }
+
+  async hover(): Promise<void> {
+    await this.root.hover();
   }
 }
