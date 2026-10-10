@@ -206,6 +206,7 @@ test.describe('The account menu', () => {
 
   test('Tab moves through the items and Escape returns focus to the avatar', async () => {
     const menu = await discover.shell.openAccountMenu();
+    await expect(menu.items().first()).toBeFocused();
 
     await menu.pressTab();
     await expect(menu.signOutButton()).toBeFocused();

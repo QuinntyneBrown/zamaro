@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Accounts\MeController;
+use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Middleware\SetCachePolicy;
 use Illuminate\Support\Facades\Route;
 
@@ -9,4 +10,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', SetCachePolicy::class])->group(function () {
     Route::get('me', [MeController::class, 'show'])->name('me.show');
+    Route::delete('session', [SessionController::class, 'destroy'])->name('session.destroy');
 });

@@ -3,53 +3,115 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Icon, type IconName } from '../icon/icon';
 
 export type MenuItem =
-  | { kind: 'link'; label: string; icon: IconName; link: string; fragment?: string }
-  | { kind: 'toggle'; id: string; label: string; icon: IconName; pressed: boolean }
+  | { kind: 'link'; label: string; icon?: IconName; link: string; fragment?: string }
+  | { kind: 'action'; id: string; label: string; icon?: IconName }
+  | { kind: 'toggle'; id: string; label: string; icon?: IconName; pressed: boolean }
   | { kind: 'separator' };
 
+/** Who is signed in, above the account menu's list. */
+export interface MenuWho {
+  name: string;
+  /** Their church; absent until a booker adds one (menu D-9). */
+  detail?: string;
+  /** Muted: the email. */
+  note?: string;
+}
+
 /**
- * A plain list of menu items in Tab order (docs/design-system/components/menu): links, pressed
- * toggles and separators. The current page's link carries `aria-current="page"`.
+ * A plain list of menu items in Tab order (docs/design-system/components/menu): links, actions,
+ * pressed toggles and separators, optionally under who is signed in. The current page's link
+ * carries `aria-current="page"`.
  */
 @Component({
   selector: 'zm-menu',
   imports: [Icon, RouterLink, RouterLinkActive],
-  template: `<ul class="menu-list" role="list">
-    @for (item of items(); track $index) {
-      @switch (item.kind) {
-        @case ('link') {
-          <li>
-            <a
-              class="menu__item"
-              [routerLink]="item.link"
-              [fragment]="item.fragment"
-              routerLinkActive
-              ariaCurrentWhenActive="page"
-              [routerLinkActiveOptions]="exactMatch"
-              (click)="chosen.emit()"
-              ><zm-icon [name]="item.icon" />{{ item.label }}</a
-            >
-          </li>
+  template: `@if (who(); as who) {
+      <div class="menu__who" [id]="whoId()">
+        <strong>{{ who.name }}</strong>
+        @if (who.detail) {
+          <span>{{ who.detail }}</span>
         }
-        @case ('toggle') {
-          <li>
-            <button
-              class="menu__item"
-              type="button"
-              [attr.aria-pressed]="item.pressed"
-              (click)="toggled.emit(item.id)"
-            >
-              <zm-icon [name]="item.icon" />{{ item.label }}
-            </button>
-          </li>
+        @if (who.note) {
+          <span class="text-muted">{{ who.note }}</span>
         }
-        @case ('separator') {
-          <li class="menu__sep" aria-hidden="true"></li>
+      </div>
+    }
+    <ul class="menu-list" role="list">
+      @for (item of items(); track $index) {
+        @switch (item.kind) {
+          @case ('link') {
+            <li>
+              <a
+                class="menu__item"
+                [routerLink]="item.link"
+                [fragment]="item.fragment"
+                routerLinkActive
+                ariaCurrentWhenActive="page"
+                [routerLinkActiveOptions]="exactMatch"
+                (click)="chosen.emit()"
+              >
+                @if (item.icon) {
+                  <zm-icon [name]="item.icon" />
+                }
+                {{ item.label }}</a
+              >
+            </li>
+          }
+          @case ('action') {
+            <li>
+              <button class="menu__item" type="button" (click)="activated.emit(item.id)">
+                @if (item.icon) {
+                  <zm-icon [name]="item.icon" />
+                }
+                {{ item.label }}
+              </button>
+            </li>
+          }
+          @case ('toggle') {
+            <li>
+              <button
+                class="menu__item"
+                type="button"
+                [attr.aria-pressed]="item.pressed"
+                (click)="activated.emit(item.id)"
+              >
+                @if (item.icon) {
+                  <zm-icon [name]="item.icon" />
+                }
+                {{ item.label }}
+              </button>
+            </li>
+          }
+          @case ('separator') {
+            <li class="menu__sep" aria-hidden="true"></li>
+          }
         }
       }
-    }
-  </ul>`,
+    </ul>`,
   styles: `
+    :host {
+      display: block;
+    }
+
+    .menu__who {
+      display: grid;
+      gap: var(--space-0-5);
+      padding: var(--space-3);
+      margin-bottom: var(--space-2);
+      border-bottom: var(--border-width-thick) dashed var(--color-border-strong);
+      font: var(--text-body-sm);
+      overflow-wrap: anywhere;
+    }
+
+    .menu__who strong {
+      font: var(--text-h4);
+      text-transform: uppercase;
+    }
+
+    .menu__who .text-muted {
+      color: var(--color-fg-muted);
+    }
+
     .menu-list {
       list-style: none;
       margin: 0;
@@ -104,11 +166,14 @@ export type MenuItem =
 })
 export class Menu {
   readonly items = input.required<readonly MenuItem[]>();
+  readonly who = input<MenuWho | null>(null);
+  /** The id of `.menu__who`, which the account menu passes as the dialog's description. */
+  readonly whoId = input('');
 
   /** A link was followed; the opener usually closes the menu. */
   readonly chosen = output<void>();
-  /** A toggle item was pressed; carries its `id`. */
-  readonly toggled = output<string>();
+  /** An action or toggle item was pressed; carries its `id`. */
+  readonly activated = output<string>();
 
   protected readonly exactMatch = {
     paths: 'exact',

@@ -38,6 +38,12 @@ export class InMemoryAuthApi implements AuthApi {
     return of(this.account);
   }
 
+  signOut(): Observable<void> {
+    if (!this.signedIn) return throwError(() => new HttpErrorResponse({ status: 401 }));
+    this.signedIn = null;
+    return of(undefined);
+  }
+
   me(): Observable<CurrentUser> {
     return this.signedIn
       ? of(this.signedIn)

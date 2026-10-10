@@ -10,4 +10,5 @@ export const scenarioIterations = {
   Lineup: 25,
   Menu: 90,
   TopBar: 120,
+  TopBarSignedIn: 110,
 };

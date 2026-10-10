@@ -8,7 +8,12 @@
   [menuControls]="menuId"
   [themeLabel]="'common.theme.dark' | transloco"
   [themePressed]="theme.isDark()"
+  [account]="account()"
+  [accountExpanded]="accountMenuOpen()"
+  [accountControls]="accountMenuId"
+  [auth]="authLink()"
   (menuOpened)="openMenu()"
+  (accountOpened)="openAccountMenu()"
   (themeToggled)="theme.toggle()"
 />
 <main id="main" tabindex="-1">

@@ -4,7 +4,9 @@ import { Icon } from '../icon/icon';
 /**
  * The dialog frame (docs/design-system/components/dialog): header with an optional kicker, the
  * title and close button, then the body and the `[slot=footer]` actions. Open it with the CDK Dialog, which supplies the `role="dialog"` container, focus trap,
- * Escape and focus return; pass `titleId` as the dialog's `ariaLabelledBy`.
+ * Escape and focus return; pass `titleId` as the dialog's `ariaLabelledBy`. The `menu` variant is
+ * the account menu under the avatar: the title is visually hidden and there is no close button or
+ * footer. It changes only styles, so the frame renders the same nodes in every variant.
  */
 @Component({
   selector: 'zm-dialog',
@@ -12,6 +14,7 @@ import { Icon } from '../icon/icon';
   host: {
     class: 'dialog',
     '[class.dialog--drawer]': "variant() === 'drawer'",
+    '[class.dialog--menu]': "variant() === 'menu'",
   },
   template: `<div class="dialog__header">
       <div>
@@ -48,6 +51,41 @@ import { Icon } from '../icon/icon';
       border-right: var(--border-width-thick) solid var(--color-border-strong);
       box-shadow: none;
       animation-name: slide-in-left;
+    }
+
+    /* Hangs under the top bar's right edge with no dim, at every width (dialog CRD, menu variant). */
+    :host(.dialog--menu) {
+      width: var(--layout-menu-width);
+      height: auto;
+      max-width: calc(100vw - var(--layout-margin) * 2);
+      max-height: calc(100dvh - var(--layout-topbar-height) - var(--space-4));
+      overflow-y: auto;
+      padding: var(--space-2);
+      border: var(--border-width-thick) solid var(--color-border-strong);
+      box-shadow: var(--shadow-2);
+      animation-name: scale-in;
+      transform-origin: top right;
+    }
+
+    /* The header and body add no box of their own; the title names the dialog, unseen. */
+    :host(.dialog--menu) .dialog__header,
+    :host(.dialog--menu) .dialog__header > div,
+    :host(.dialog--menu) .dialog__body {
+      display: contents;
+    }
+
+    :host(.dialog--menu) .dialog__title {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    :host(.dialog--menu) .close,
+    :host(.dialog--menu) .dialog__footer {
+      display: none;
     }
 
     .dialog__header {
@@ -153,6 +191,13 @@ import { Icon } from '../icon/icon';
       }
     }
 
+    @keyframes scale-in {
+      from {
+        opacity: 0;
+        scale: 0.96;
+      }
+    }
+
     @keyframes slide-in-left {
       from {
         translate: -100% 0;
@@ -164,10 +209,11 @@ import { Icon } from '../icon/icon';
 export class Dialog {
   readonly heading = input.required<string>();
   readonly titleId = input.required<string>();
-  readonly closeLabel = input.required<string>();
+  /** The close button's name; the menu variant has no close button. */
+  readonly closeLabel = input('');
   /** The context above the title: "Abigail Mensah · Photos". */
   readonly kicker = input('');
-  readonly variant = input<'default' | 'drawer'>('default');
+  readonly variant = input<'default' | 'drawer' | 'menu'>('default');
 
   readonly closed = output<void>();
 }

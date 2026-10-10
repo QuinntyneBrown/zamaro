@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { type Params, RouterLink, RouterLinkActive } from '@angular/router';
+import { AvatarButton } from '../avatar/avatar-button';
+import type { AvatarKind } from '../avatar/avatar-initials';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 
@@ -9,13 +11,33 @@ export interface TopBarLink {
   fragment?: string;
 }
 
+/** The signed-in person behind the avatar button. */
+export interface TopBarAccount {
+  /** "Naomi Fraser": the avatar's initials come from it. */
+  name: string;
+  /** "Account menu for Naomi Fraser". */
+  label: string;
+  kind?: AvatarKind;
+}
+
+/** The link for someone signed out: "Sign in", or "Create account" shortened to "Sign up". */
+export interface TopBarAuth {
+  label: string;
+  /** Shown below 480 px instead of `label`. */
+  shortLabel?: string;
+  link: string | readonly unknown[];
+  /** `{ returnUrl }`, so signing in returns to the page the person was on (top-bar D-14). */
+  queryParams?: Params;
+}
+
 /**
  * The sticky header on the charcoal stage (docs/design-system/components/top-bar). From LG it shows
  * the primary links and the theme toggle; below LG a menu button opens the navigation drawer instead.
+ * At the right end it shows the signed-in person's avatar, or the signed-out link.
  */
 @Component({
   selector: 'zm-top-bar',
-  imports: [Button, Icon, RouterLink, RouterLinkActive],
+  imports: [AvatarButton, Button, Icon, RouterLink, RouterLinkActive],
   template: `<header class="topbar">
     <zm-button
       class="topbar__menu"
@@ -53,6 +75,30 @@ export interface TopBarLink {
       (click)="themeToggled.emit()"
       ><zm-icon name="moon" /><span class="visually-hidden">{{ themeLabel() }}</span></zm-button
     >
+    @if (account(); as account) {
+      <zm-avatar-button
+        [name]="account.name"
+        [kind]="account.kind ?? 'person'"
+        [label]="account.label"
+        [expanded]="accountExpanded()"
+        [controls]="accountControls()"
+        (click)="accountOpened.emit()"
+      />
+    } @else if (auth(); as auth) {
+      <a
+        class="nav-link"
+        [class.topbar__auth]="!!auth.shortLabel"
+        [routerLink]="auth.link"
+        [queryParams]="auth.queryParams"
+      >
+        @if (auth.shortLabel) {
+          <span class="topbar__auth-short">{{ auth.shortLabel }}</span
+          ><span class="topbar__auth-long">{{ auth.label }}</span>
+        } @else {
+          {{ auth.label }}
+        }
+      </a>
+    }
   </header>`,
   styles: `
     .topbar {
@@ -136,6 +182,25 @@ export interface TopBarLink {
       color: var(--color-accent-on-stage);
     }
 
+    /* The links after the spacer never wrap (top-bar D-10). */
+    .topbar__spacer ~ .nav-link {
+      white-space: nowrap;
+    }
+
+    .topbar__auth-long {
+      display: none;
+    }
+
+    @media (min-width: 30rem) {
+      .topbar__auth-short {
+        display: none;
+      }
+
+      .topbar__auth-long {
+        display: inline;
+      }
+    }
+
     .nav-link[aria-current='page'] {
       box-shadow: inset 0 calc(var(--border-width-thick) * -1 - 1px) 0 var(--color-accent-on-stage);
     }
@@ -184,8 +249,17 @@ export class TopBar {
   /** The toggle's constant accessible name ("Dark theme"); its state is `themePressed`. */
   readonly themeLabel = input.required<string>();
   readonly themePressed = input(false);
+  /** Signed in: the avatar button. Null shows `auth` instead. */
+  readonly account = input<TopBarAccount | null>(null);
+  /** The avatar's `aria-expanded`: true while the account menu is open. */
+  readonly accountExpanded = input(false);
+  /** Id of the account menu the avatar opens. */
+  readonly accountControls = input<string>();
+  /** Signed out: "Sign in". Ignored while `account` is set. */
+  readonly auth = input<TopBarAuth | null>(null);
 
   readonly menuOpened = output<void>();
+  readonly accountOpened = output<void>();
   readonly themeToggled = output<void>();
 
   protected readonly exactMatch = {

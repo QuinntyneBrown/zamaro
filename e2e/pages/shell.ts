@@ -42,7 +42,10 @@ export class Shell {
 
   /** The avatar that opens the account menu: "Account menu for Naomi Fraser". */
   accountButton(): Locator {
-    return this.page.getByRole('banner').getByRole('button', { name: /^Account menu for/ });
+    // Found while the account menu hides the rest of the page from assistive technology, too.
+    return this.page
+      .getByRole('banner', { includeHidden: true })
+      .getByRole('button', { name: /^Account menu for/, includeHidden: true });
   }
 
   /** The header's link for someone signed out. */

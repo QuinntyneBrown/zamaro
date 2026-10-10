@@ -18,6 +18,7 @@ import {
   HttpDiscoveryApi,
   HttpFeaturesApi,
   HttpReviewsApi,
+  isTransferCacheable,
   provideI18n,
   REVIEWS_API,
   withApiXsrf,
@@ -34,8 +35,12 @@ export const appConfig: ApplicationConfig = {
     ),
     // State-changing calls repeat the API's CSRF cookie in a header (ADR-0015).
     provideHttpClient(withFetch(), withApiXsrf()),
-    // GET responses made while rendering on the server are replayed in the browser, not re-fetched.
-    provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
+    // GET responses made while rendering on the server are replayed in the browser, not re-fetched,
+    // except personal ones (ADR-0017).
+    provideClientHydration(
+      withEventReplay(),
+      withHttpTransferCacheOptions({ filter: isTransferCacheable }),
+    ),
     provideI18n(),
     { provide: DISCOVERY_API, useClass: HttpDiscoveryApi },
     { provide: ARTIST_PROFILES_API, useClass: HttpArtistProfilesApi },

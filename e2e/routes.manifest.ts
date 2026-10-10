@@ -26,6 +26,11 @@ export interface RouteState {
   from?: string;
   /** The cast member whose session the browser holds; signed out when absent. */
   signedInAs?: CastMember;
+  /**
+   * What the page must show before it is captured, when the browser may still be fetching it after
+   * the network went quiet: the lineup's cards, or the sold-out panel.
+   */
+  shows?: 'lineup' | 'sold-out';
 }
 
 /** Naomi's search: Burlington, Sat 14 Nov, a worship night, within 120 km (docs/mocks/README.md). */
@@ -39,7 +44,13 @@ export const routes: RouteState[] = [
   // without its field errors.
   { name: 'discover-start', path: '/', app: 'zamaro', mock: 'discover/invalid.html' },
   // Naomi's search: the headliner and six tickets, Closest first.
-  { name: 'discover-results', path: BURLINGTON, app: 'zamaro', mock: 'discover/default.html' },
+  {
+    name: 'discover-results',
+    path: BURLINGTON,
+    app: 'zamaro',
+    mock: 'discover/default.html',
+    shows: 'lineup',
+  },
   // The same search while it takes longer than 300 ms: skeletons in a busy region.
   {
     name: 'discover-loading',
@@ -70,6 +81,7 @@ export const routes: RouteState[] = [
     path: '/?date=2026-12-24&kind=worship-night&lat=43.325&lng=-79.799&place=Burlington&radius=40&styles=gospel-choir',
     app: 'zamaro',
     mock: 'discover/empty.html',
+    shows: 'sold-out',
   },
   // Abigail’s profile opened from that search: videos, photos, her dates from Sat 14 Nov, reviews and
   // the booking stub. The booked-date mock needs a typed date, so it has no route state of its own.
@@ -121,4 +133,22 @@ export const routes: RouteState[] = [
   // Sign in: the "Admit one · Your account" card on the stage. Its links to "Forgot your password?"
   // and "Create an account" join when those pages exist (M2 S8, S5).
   { name: 'sign-in', path: '/sign-in', app: 'zamaro', mock: 'sign-in/default.html' },
+  // Naomi signed in, before a search: "NF" in the header and her name over the footer's last column.
+  // Saved and the hearts join with M2 S15, her church with S9.
+  {
+    name: 'discover-start-naomi',
+    path: '/',
+    app: 'zamaro',
+    mock: 'discover/invalid.html',
+    signedInAs: 'naomi',
+  },
+  // Naomi's search, signed in.
+  {
+    name: 'discover-results-naomi',
+    path: BURLINGTON,
+    app: 'zamaro',
+    mock: 'discover/default.html',
+    signedInAs: 'naomi',
+    shows: 'lineup',
+  },
 ];

@@ -4,6 +4,8 @@
 
 export * from './lib/alert/alert';
 export * from './lib/artwork/artwork';
+export * from './lib/avatar/avatar-button';
+export * from './lib/avatar/avatar-initials';
 export * from './lib/badge/badge';
 export * from './lib/band/band';
 export * from './lib/booking-form/booking-form';

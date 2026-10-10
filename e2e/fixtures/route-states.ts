@@ -52,6 +52,14 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();
   }
+  // The browser asks who is signed in once it has taken over; the header changes when it answers.
+  if (state.signedInAs) await expect(discover.shell.accountButton()).toBeVisible();
+  // A slow start can begin the search after the network went quiet, so wait for its answer.
+  if (state.shows === 'lineup') {
+    await expect(discover.lineup.headliner().name()).toBeVisible();
+    await expect(discover.lineup.tickets()).not.toHaveCount(0);
+  }
+  if (state.shows === 'sold-out') await expect(discover.lineup.soldOut().root()).toBeVisible();
   await discover.shell.settle();
   return [];
 }

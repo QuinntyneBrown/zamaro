@@ -9,6 +9,8 @@ import type { CurrentUser, SignInCredentials } from '../models/accounts';
  */
 export interface AuthApi {
   signIn(credentials: SignInCredentials): Observable<CurrentUser>;
+  /** Ends the session on the server; a session that already ended answers 401. */
+  signOut(): Observable<void>;
   me(): Observable<CurrentUser>;
 }
 
@@ -27,6 +29,10 @@ export class HttpAuthApi implements AuthApi {
       switchMap(() => this.http.post<{ data: CurrentUser }>('/api/v1/session', credentials)),
       map((response) => response.data),
     );
+  }
+
+  signOut(): Observable<void> {
+    return this.http.delete<void>('/api/v1/session');
   }
 
   me(): Observable<CurrentUser> {
