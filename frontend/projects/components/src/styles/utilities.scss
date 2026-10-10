@@ -30,6 +30,13 @@
   }
 }
 
+// One auth card centred on the stage under the top bar (sign-in and the other account pages).
+.auth-layout {
+  display: grid;
+  place-items: center;
+  min-height: calc(100dvh - var(--layout-topbar-height));
+}
+
 // The charcoal stage: links inherit the paper colour and turn yellow on hover; focus rings go yellow.
 .on-stage {
   background: var(--color-bg-stage);

@@ -36,7 +36,7 @@ export interface FieldOption {
 export class FormField implements ControlValueAccessor {
   readonly label = input.required<string>();
   readonly fieldId = input.required<string>();
-  readonly type = input<'text' | 'date' | 'select' | 'textarea'>('text');
+  readonly type = input<'text' | 'email' | 'password' | 'date' | 'select' | 'textarea'>('text');
   readonly options = input<readonly FieldOption[]>([]);
   readonly error = input<string | null>(null);
   readonly min = input<string>();
@@ -45,6 +45,17 @@ export class FormField implements ControlValueAccessor {
   readonly placeholder = input<string>();
   /** "(optional)", after the label. */
   readonly optionalMarker = input<string>();
+  /** "(required)", after the label; makes the control `required`. Wins over `optionalMarker`. */
+  readonly requiredMarker = input<string>();
+  /** While a submit is pending: the value stays and cannot change (form-layout CRD D-11). */
+  readonly readonly = input(false, { transform: booleanAttribute });
+  /**
+   * Marks the control invalid without a message of its own, for a form-level message such as
+   * sign-in's "Email or password is incorrect." (text-field CRD D-6). ORed with `error`.
+   */
+  readonly invalid = input(false, { transform: booleanAttribute });
+  /** Further IDs that describe the control, after its own ("credentials-error"). */
+  readonly describedBy = input<string>();
   /** Announces each change of `error` politely, for a check that runs after the value changes. */
   readonly live = input(false, { transform: booleanAttribute });
 
@@ -58,11 +69,14 @@ export class FormField implements ControlValueAccessor {
    */
   readonly messageId = input<string | null>(null);
 
-  /** The slotted message, then the error: only the parts that render. */
-  protected readonly describedBy = computed(
+  /** The slotted message, then the error, then any form-level message: only the parts that render. */
+  protected readonly descriptions = computed(
     () =>
-      [this.messageId(), this.error() ? this.errorId() : null].filter(Boolean).join(' ') || null,
+      [this.messageId(), this.error() ? this.errorId() : null, this.describedBy()]
+        .filter(Boolean)
+        .join(' ') || null,
   );
+  protected readonly isInvalid = computed(() => this.invalid() || !!this.error());
 
   private readonly control =
     viewChild<ElementRef<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>>('control');

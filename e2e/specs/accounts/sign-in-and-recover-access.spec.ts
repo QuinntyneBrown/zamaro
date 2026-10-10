@@ -14,11 +14,12 @@ test.describe('Signing in', () => {
   test('Naomi signs in from Abigail’s profile and returns to it', async ({ page }) => {
     await signIn.open('/artists/abigail-mensah?date=2026-11-14');
     await expect(signIn.heading()).toHaveText('Sign in');
+    await expect(signIn.email()).toBeFocused();
 
     await signIn.signIn(accounts.naomi.email, CAST_PASSWORD);
 
-    await expect.poll(() => signIn.address()).toBe('/artists/abigail-mensah?date=2026-11-14');
     await expect(new ArtistProfilePage(page).name()).toHaveText('Abigail Mensah');
+    expect(signIn.address()).toBe('/artists/abigail-mensah?date=2026-11-14');
   });
 
   test('the session cookie is HttpOnly, Secure and SameSite=Lax', async () => {

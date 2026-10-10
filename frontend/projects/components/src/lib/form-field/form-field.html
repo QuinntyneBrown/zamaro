@@ -1,7 +1,9 @@
 <div class="field">
   <label class="field__label" [for]="fieldId()"
     >{{ label() }}
-    @if (optionalMarker()) {
+    @if (requiredMarker()) {
+      <span class="field__required">{{ requiredMarker() }}</span>
+    } @else if (optionalMarker()) {
       <span class="field__optional">{{ optionalMarker() }}</span>
     }
   </label>
@@ -12,8 +14,8 @@
         class="select"
         [id]="fieldId()"
         [disabled]="disabled()"
-        [attr.aria-invalid]="error() ? 'true' : null"
-        [attr.aria-describedby]="describedBy()"
+        [attr.aria-invalid]="isInvalid() ? 'true' : null"
+        [attr.aria-describedby]="descriptions()"
         (change)="changed($any($event.target).value)"
         (blur)="onTouched()"
       >
@@ -32,8 +34,8 @@
         [value]="value()"
         [disabled]="disabled()"
         [attr.placeholder]="placeholder()"
-        [attr.aria-invalid]="error() ? 'true' : null"
-        [attr.aria-describedby]="describedBy()"
+        [attr.aria-invalid]="isInvalid() ? 'true' : null"
+        [attr.aria-describedby]="descriptions()"
         (input)="changed($any($event.target).value)"
         (blur)="onTouched()"
       ></textarea>
@@ -46,12 +48,14 @@
         [id]="fieldId()"
         [value]="value()"
         [disabled]="disabled()"
+        [readOnly]="readonly()"
+        [required]="!!requiredMarker()"
         [attr.min]="min()"
         [attr.max]="max()"
         [attr.autocomplete]="autocomplete()"
         [attr.placeholder]="placeholder()"
-        [attr.aria-invalid]="error() ? 'true' : null"
-        [attr.aria-describedby]="describedBy()"
+        [attr.aria-invalid]="isInvalid() ? 'true' : null"
+        [attr.aria-describedby]="descriptions()"
         (input)="changed($any($event.target).value)"
         (blur)="onTouched()"
       />

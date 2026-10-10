@@ -118,4 +118,7 @@ export const routes: RouteState[] = [
   },
   // Any address that is no page: "No show", served with a 404.
   { name: 'not-found', path: '/no-such-page', app: 'zamaro', mock: 'not-found/default.html' },
+  // Sign in: the "Admit one · Your account" card on the stage. Its links to "Forgot your password?"
+  // and "Create an account" join when those pages exist (M2 S8, S5).
+  { name: 'sign-in', path: '/sign-in', app: 'zamaro', mock: 'sign-in/default.html' },
 ];

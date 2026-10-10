@@ -9,6 +9,7 @@ use App\Enums\GatheringKind;
 use App\Enums\MusicalKey;
 use App\Enums\OverrideState;
 use App\Enums\Pronoun;
+use App\Enums\Role;
 use App\Enums\Style;
 use App\Enums\VideoStatus;
 use App\Enums\VscStatus;
@@ -84,6 +85,16 @@ class CastSeeder extends Seeder
         'ZAM-0078' => ['Tomi Oduya', 'tomi-oduya', 5, '2026-08-18 20:00', 'She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.'],
         'ZAM-0061' => ['Naomi Fraser', 'naomi-fraser', 5, '2026-06-16 18:00', 'Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.'],
         'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.'],
+    ];
+
+    /**
+     * The cast who can sign in (docs/mocks/README.md, M2 plan D28): account => their own address.
+     * Everyone else keeps a `{account}@cast.zamaro.test` address and a random password.
+     */
+    private const SIGN_IN = [
+        'naomi-fraser' => 'naomi.fraser@riversidecc.ca',
+        'abigail-mensah' => 'abigail@abigailmensah.ca',
+        'tomi-oduya' => 'tomi.oduya@harvestpointchurch.ca',
     ];
 
     /** booking number => [replied at, text]: Abigail's replies (docs/mocks/pages/artist-reviews). */
@@ -253,7 +264,46 @@ class CastSeeder extends Seeder
             $this->retiredSlugs();
             $this->profiles();
             $this->media();
+            $this->accounts();
         });
+    }
+
+    /**
+     * Who may do what: every church person is a Booker and every artist an Artist. Naomi, Abigail
+     * and Tomi have verified addresses and, outside production, sign in with ZAMARO_CAST_PASSWORD.
+     */
+    private function accounts(): void
+    {
+        $roleIds = DB::table('roles')->pluck('id', 'name');
+        $artistUserIds = Artist::pluck('user_id');
+        DB::table('role_user')->insertOrIgnore(User::pluck('id')->map(fn (int $id) => [
+            'user_id' => $id,
+            'role_id' => $roleIds[$artistUserIds->contains($id) ? Role::Artist->value : Role::Booker->value],
+        ])->all());
+
+        $password = config('zamaro.cast_password');
+        $canSignIn = filled($password) && app()->environment(['local', 'testing', 'e2e']);
+        foreach (self::SIGN_IN as $email) {
+            User::where('email', $email)->update([
+                'email_verified_at' => '2026-09-01 12:00:00',
+                'password' => Hash::make($canSignIn ? $password : Str::random(40)),
+            ]);
+        }
+    }
+
+    /**
+     * A cast member's account, found by their own address or the cast one and moved to their own,
+     * so the seeder can run again on a database seeded before they could sign in.
+     */
+    private function castUser(string $account, string $name): User
+    {
+        $cast = "{$account}@cast.zamaro.test";
+        $email = self::SIGN_IN[$account] ?? $cast;
+        $user = User::whereIn('email', array_unique([$email, $cast]))->orderByRaw('email = ? desc', [$email])->first()
+            ?? User::create(['email' => $email, 'name' => $name, 'password' => Str::random(40)]);
+        $user->update(['email' => $email, 'name' => $name]);
+
+        return $user;
     }
 
     /**
@@ -404,7 +454,7 @@ class CastSeeder extends Seeder
     private function reviews(): void
     {
         foreach (self::REVIEWS as $number => [$reviewer, $account, $stars, $writtenAt, $text]) {
-            $booker = User::firstOrCreate(['email' => "{$account}@cast.zamaro.test"], ['name' => $reviewer, 'password' => Str::random(40)]);
+            $booker = $this->castUser($account, $reviewer);
             $booking = Booking::where('number', $number)->firstOrFail();
             Review::updateOrCreate(['booking_id' => $booking->id], [
                 'artist_id' => $booking->artist_id,
@@ -487,9 +537,7 @@ class CastSeeder extends Seeder
         int $maxDriveKm, int $fromDollars, ?float $rating, int $reviews, string $published,
         ?Coordinates $at = null,
     ): void {
-        // Cast accounts cannot sign in: the password is random and never shown.
-        $user = User::firstOrCreate(['email' => "{$slug}@cast.zamaro.test"], ['name' => $name, 'password' => Str::random(40)]);
-        $user->update(['name' => $name]);
+        $user = $this->castUser($slug, $name);
         $baseCoordinates = $at ?? CastRoutes::anchor($base);
 
         $artist = Artist::updateOrCreate(['slug' => $slug], [

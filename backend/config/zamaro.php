@@ -9,6 +9,10 @@ return [
     // reaches it, because it refuses to boot with fake adapters.
     'frozen_now' => env('ZAMARO_FROZEN_NOW'),
 
+    // The password Naomi, Abigail and Tomi sign in with (M2 D28). The cast seeder uses it only in
+    // local, testing and e2e; anywhere else, and when it is empty, their passwords stay random.
+    'cast_password' => env('ZAMARO_CAST_PASSWORD'),
+
     'problems' => [
         // Base of the RFC 9457 problem `type` URIs, e.g. {base}/not-found (ADR-0005).
         'base_uri' => env('ZAMARO_PROBLEM_BASE_URI', rtrim(env('APP_URL', 'http://localhost'), '/').'/problems'),

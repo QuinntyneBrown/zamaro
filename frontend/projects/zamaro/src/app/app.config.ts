@@ -9,15 +9,18 @@ import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
   ARTIST_AVAILABILITY_API,
   ARTIST_PROFILES_API,
+  AUTH_API,
   DISCOVERY_API,
   FEATURES_API,
   HttpArtistAvailabilityApi,
   HttpArtistProfilesApi,
+  HttpAuthApi,
   HttpDiscoveryApi,
   HttpFeaturesApi,
   HttpReviewsApi,
   provideI18n,
   REVIEWS_API,
+  withApiXsrf,
 } from 'api';
 import { routes } from './app.routes';
 
@@ -29,7 +32,8 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
     ),
-    provideHttpClient(withFetch()),
+    // State-changing calls repeat the API's CSRF cookie in a header (ADR-0015).
+    provideHttpClient(withFetch(), withApiXsrf()),
     // GET responses made while rendering on the server are replayed in the browser, not re-fetched.
     provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
     provideI18n(),
@@ -38,5 +42,6 @@ export const appConfig: ApplicationConfig = {
     { provide: ARTIST_AVAILABILITY_API, useClass: HttpArtistAvailabilityApi },
     { provide: REVIEWS_API, useClass: HttpReviewsApi },
     { provide: FEATURES_API, useClass: HttpFeaturesApi },
+    { provide: AUTH_API, useClass: HttpAuthApi },
   ],
 };

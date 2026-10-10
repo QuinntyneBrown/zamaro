@@ -7,6 +7,7 @@ namespace App\Support\Problems;
  */
 enum ProblemType: string
 {
+    case Unauthenticated = 'unauthenticated';
     case NotFound = 'not-found';
     case ArtistNotFound = 'artist-not-found';
     case ValidationFailed = 'validation-failed';
@@ -21,6 +22,7 @@ enum ProblemType: string
     public function status(): int
     {
         return match ($this) {
+            self::Unauthenticated => 401,
             self::NotFound, self::ArtistNotFound => 404,
             self::ValidationFailed => 422,
             self::TooManyRequests => 429,
@@ -31,6 +33,7 @@ enum ProblemType: string
     public function title(): string
     {
         return match ($this) {
+            self::Unauthenticated => 'Sign in to continue',
             self::NotFound => 'Not found',
             self::ArtistNotFound => 'This artist isn’t on Zamaro',
             self::ValidationFailed => 'Check the highlighted fields',

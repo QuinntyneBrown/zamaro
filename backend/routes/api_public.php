@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\SitemapController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Api\V1\Discovery\SearchController;
 use App\Http\Controllers\Api\V1\Operations\FeatureFlagsController;
 use App\Http\Controllers\Api\V1\Reviews\ArtistReviewsController;
 use App\Http\Controllers\Api\V1\UserExperience\TranslationCatalogueController;
+use App\Http\Middleware\SetCachePolicy;
 use Illuminate\Support\Facades\Route;
 
 // /api/v1 routes that are intentionally anonymous. Everything else belongs in api.php.
@@ -24,3 +26,5 @@ Route::get('artists/{slug}/reviews', ArtistReviewsController::class)->name('arti
 Route::get('artists/{slug}/availability', [ArtistAvailabilityController::class, 'check'])->middleware('cache.headers:etag')->name('artists.availability');
 Route::get('artists/{slug}/tour-dates', [ArtistAvailabilityController::class, 'tourDates'])->middleware('cache.headers:etag')->name('artists.tour-dates');
 Route::get('sitemap', SitemapController::class)->name('sitemap');
+// Signing in answers with the account, so it is never cached (L2-089.3).
+Route::post('session', [SessionController::class, 'store'])->middleware(SetCachePolicy::class)->name('session.store');

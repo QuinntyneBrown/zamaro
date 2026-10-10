@@ -26,6 +26,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Same-origin cookie sessions (ADR-0015): requests from ZAMARO_WEB_ORIGINS get the session,
         // cookie encryption and CSRF middleware on the api group; other callers stay stateless.
         $middleware->statefulApi();
+        // An API with no sign-in page to redirect to: a guest always gets the 401 problem.
+        $middleware->redirectGuestsTo(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // The app is API-only: every error is RFC 9457 problem details (L2-095.2).

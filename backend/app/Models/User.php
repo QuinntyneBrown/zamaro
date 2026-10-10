@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role as RoleName;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -45,5 +47,34 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /** @return BelongsToMany<Role, $this> */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    /** @return list<RoleName> */
+    public function roleNames(): array
+    {
+        return $this->roles->pluck('name')->sortBy(fn (RoleName $role) => $role->value)->values()->all();
+    }
+
+    /** @param  list<RoleName>  $roles */
+    public function grantRoles(array $roles): void
+    {
+        $ids = Role::whereIn('name', array_map(fn (RoleName $role) => $role->value, $roles))->pluck('id');
+        $this->roles()->syncWithoutDetaching($ids);
+    }
+
+    /** The first letters of a person's first and last names: Naomi Fraser → "NF" (avatar CRD). */
+    public function initials(): string
+    {
+        $words = preg_split('/\s+/', trim($this->name), -1, PREG_SPLIT_NO_EMPTY) ?: [''];
+        $first = Str::substr($words[0], 0, 1);
+        $last = count($words) > 1 ? Str::substr($words[count($words) - 1], 0, 1) : '';
+
+        return Str::upper($first.$last);
     }
 }

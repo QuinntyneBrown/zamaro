@@ -21,6 +21,10 @@
         <server name="APP_ENV" value="testing" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file" force="true"/>
         <server name="APP_MAINTENANCE_DRIVER" value="file" force="true"/>
+        <env name="ARGON_MEMORY" value="1024" force="true"/>
+        <server name="ARGON_MEMORY" value="1024" force="true"/>
+        <env name="ARGON_TIME" value="1" force="true"/>
+        <server name="ARGON_TIME" value="1" force="true"/>
         <env name="BCRYPT_ROUNDS" value="4" force="true"/>
         <server name="BCRYPT_ROUNDS" value="4" force="true"/>
         <env name="CACHE_STORE" value="array" force="true"/>
@@ -41,5 +45,7 @@
         <server name="SESSION_DRIVER" value="array" force="true"/>
         <env name="TELESCOPE_ENABLED" value="false" force="true"/>
         <server name="TELESCOPE_ENABLED" value="false" force="true"/>
+        <env name="ZAMARO_CAST_PASSWORD" value="hosanna-in-the-highest" force="true"/>
+        <server name="ZAMARO_CAST_PASSWORD" value="hosanna-in-the-highest" force="true"/>
     </php>
 </phpunit>

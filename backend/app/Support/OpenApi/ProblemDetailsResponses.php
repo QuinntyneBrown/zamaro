@@ -10,6 +10,7 @@ use Dedoc\Scramble\Support\Generator\Schema;
 use Dedoc\Scramble\Support\Generator\Types as OpenApiTypes;
 use Dedoc\Scramble\Support\Type\ObjectType;
 use Dedoc\Scramble\Support\Type\Type;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -26,6 +27,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
     {
         return $type instanceof ObjectType
             && ($type->isInstanceOf(HttpException::class)
+                || $type->isInstanceOf(AuthenticationException::class)
                 || $type->isInstanceOf(RecordsNotFoundException::class)
                 || $type->isInstanceOf(ValidationException::class));
     }
@@ -42,6 +44,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
         $validation = $type->isInstanceOf(ValidationException::class);
         $status = match (true) {
             $validation => 422,
+            $type->isInstanceOf(AuthenticationException::class) => 401,
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
             $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,
             default => parent::toResponse($type)?->code,

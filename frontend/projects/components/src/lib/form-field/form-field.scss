@@ -28,6 +28,13 @@
   color: var(--color-fg-muted);
 }
 
+.field__required {
+  font: var(--text-caption);
+  letter-spacing: var(--letter-spacing-normal);
+  text-transform: none;
+  color: var(--color-fg-muted);
+}
+
 .input,
 .select,
 .textarea {
@@ -81,6 +88,12 @@
   --field-fg: var(--color-fg-disabled);
   --field-border: var(--color-fg-disabled);
   cursor: not-allowed;
+}
+
+.input[readonly],
+.textarea[readonly] {
+  --field-bg: var(--color-bg-surface-sunken);
+  border-style: dashed;
 }
 
 .input[type='date'] {

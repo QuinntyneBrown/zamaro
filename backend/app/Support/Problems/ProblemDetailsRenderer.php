@@ -5,6 +5,7 @@ namespace App\Support\Problems;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Http\Resources\Discovery\LineupCardResource;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
@@ -39,6 +40,11 @@ class ProblemDetailsRenderer
                     'items' => LineupCardResource::collection($similar->cards)->resolve($request),
                 ],
             ])->toResponse();
+        }
+
+        if ($e instanceof AuthenticationException) {
+            return ProblemDetails::of(ProblemType::Unauthenticated, 'This needs a signed-in account.', $requestId)
+                ->toResponse();
         }
 
         if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {

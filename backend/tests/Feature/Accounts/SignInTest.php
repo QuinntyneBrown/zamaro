@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Mockery;
 use Tests\Concerns\AssertsOpenApiContract;
 use Tests\Concerns\UsesTheWebApp;
 use Tests\TestCase;
@@ -97,7 +98,10 @@ class SignInTest extends TestCase
 
     public function test_an_unknown_email_is_checked_against_a_dummy_hash_so_it_takes_as_long(): void
     {
-        Hash::partialMock()->shouldReceive('check')->once()->passthru();
+        // A proxy of the real hasher: every call reaches it, and the checks are counted.
+        $hasher = Mockery::mock(Hash::getFacadeRoot());
+        $hasher->shouldReceive('check')->once()->passthru();
+        Hash::swap($hasher);
 
         $this->signIn('nobody@riversidecc.ca', 'not-her-password-at-all')->assertStatus(422);
     }

@@ -1,0 +1,17 @@
+{
+  "required": "(required)",
+  "signIn.email": "Email",
+  "signIn.emailPlaceholder": "name@church.ca",
+  "signIn.errorText": "Zamaro didn’t answer. Your email is still here; try again in a minute.",
+  "signIn.errorTitle": "We couldn’t sign you in",
+  "signIn.fine": "Artists sign in here too.",
+  "signIn.incorrect": "Email or password is incorrect.",
+  "signIn.invalidTitle": "Couldn’t sign you in",
+  "signIn.lead": "Welcome back. Your saved artists and requests are waiting.",
+  "signIn.pageTitle": "Sign in",
+  "signIn.password": "Password",
+  "signIn.stamp": "Admit one · Your account",
+  "signIn.submit": "Sign in",
+  "signIn.submitting": "Signing in…",
+  "signIn.title": "Sign in"
+}
