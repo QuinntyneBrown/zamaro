@@ -74,7 +74,16 @@ row from LG.
   search rate limiter (L2-077).
 - **`SearchArtistsRequest`** — FormRequest that validates the date window, the
   `GatheringKind`, coordinates inside the service area, the radius from the allowed
-  set, and the cursor. It produces a `SearchCriteria` value object.
+  set, and the cursor. It produces a `SearchCriteria` value object. Query:
+  `date=YYYY-MM-DD&kind={slug}&lat&lng&radius={40|80|120|200}`. A failure is a 422
+  problem whose `errors` use the form's field names. `lat` and `lng` errors and the
+  service-area check report under `location`. The copy matches the form:
+  - "Pick your event date."
+  - "Pick a date at least 3 days away."
+  - "We take bookings up to 18 months ahead."
+  - "Enter your church’s address or town, or pick a city below."
+  - "Zamaro serves churches within 200 km of Toronto." This is checked by road from
+    City Hall through `ServiceArea` and `DistanceService`.
 - **`SearchAvailableArtists`** — action that runs the search. It pre-filters approved,
   published, payout-ready artists whose base lies within a bounding box of the radius,
   asks `AvailabilityService` which are free, measures each with `DistanceService`,
@@ -90,17 +99,25 @@ row from LG.
   tickets alone.
 - **`AvailabilityService`** — domain service shared with profiles and bookings. It
   applies weekly rules, date overrides and Confirmed bookings, and for
-  `GatheringKind::YouthEvent` requires a verified VSC issued within the last 3 years.
+  `GatheringKind::YouthEvent` requires a verified VSC whose expiry (issue + 3 years) is
+  on or after the event date. A Free date override beats the weekly rule.
 - **`DistanceService`** — returns a `Distance` (whole km, drive time rounded to
   5 minutes, `approximate` flag). It reads the Redis cache keyed on the coordinate
   pair rounded to 4 decimal places, calls `RoutingProvider` with a 2-second timeout on
-  a miss, and stores the result for 30 days. On provider failure it returns straight-line
-  distance × 1.3 flagged approximate and records a warning metric. Distances below
-  1 km render as "Under 1 km".
+  a miss, and stores the result for 30 days. The cache key is `distance:{a}|{b}`, with
+  the two `lat,lng` keys sorted so the pair matches whichever way round it is asked.
+  Every miss in a search goes into one `RoutingProvider::matrix()` call. On provider
+  failure it returns straight-line distance × 1.3, flagged approximate, with an
+  estimated drive time at 80 km/h, logs a `routing.unavailable` warning, and caches
+  nothing. Distances below 1 km render as "Under 1 km".
 - **`RoutingProvider`** — interface with one adapter for the routing provider
-  (vendor `<TO SUPPLY>`).
+  (vendor `<TO SUPPLY>`). Until then `FakeRoutingProvider` reproduces the mocks' road
+  distances from `CastRoutes` (ADR-0002).
 - **`LineupResource`** — API resource that serialises the cards, the total and the
-  next cursor.
+  next cursor: `{"data":[card…],"meta":{"total":7}}`. Each card is
+  `{slug, name, actType, styles[], city, distance:{km, driveMinutes, approximate},
+  rating|null, reviewCount, fromPrice:{cents, currency:"CAD"}}`. The headliner fields
+  (S6) and the cursor (S9) are added by their slices.
 
 **Mocks**
 
@@ -124,9 +141,10 @@ row from LG.
 
 The query reads `artists`, `artist_styles`, `availability_rules`,
 `availability_overrides`, `bookings` (status `Confirmed` only),
-`vulnerable_sector_checks` and an aggregate of visible `reviews`. A GiST or
-latitude/longitude B-tree index on artist base location supports the bounding-box
-pre-filter; the exact index choice is `<TO SUPPLY>`.
+`vulnerable_sector_checks` and `artist_ratings` (the aggregate of visible `reviews`). A
+B-tree index on `artists (status, base_latitude, base_longitude)` supports the
+bounding-box pre-filter; PostGIS is not needed at this scale. `bookings` carries
+`church_name` and `church_city` snapshots, which tour dates show (S14).
 
 ## Requirements
 

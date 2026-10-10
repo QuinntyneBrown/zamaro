@@ -118,8 +118,8 @@ email delivery service.
   `<TO SUPPLY>`.
 - **`VulnerableSectorCheck::isCurrentOn(date)`** — true when the status is `Verified`
   and the date is on or before `expires_on`. `AvailabilityService::hasCurrentVsc()`
-  calls it for Youth event searches (L2-005). Whether the event date or the search date
-  is compared with the expiry is `<TO SUPPLY>`.
+  calls it for Youth event searches (L2-005). The **event date** is compared with the
+  expiry, so a check must still be valid on the day the artist serves.
 - **`SendVscRenewalReminders`** — scheduled command in `routes/console.php` that runs
   daily (time of day `<TO SUPPLY>`). It selects verified checks whose expiry falls
   within 60 days, with no reminder sent and no newer verified check. It sets
