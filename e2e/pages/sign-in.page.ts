@@ -102,6 +102,21 @@ export class SignInPage {
     return this.card().getByRole('link', { name: 'Create an account' });
   }
 
+  /** The card's "Forgot your password?" link. */
+  forgotPasswordLink(): Locator {
+    return this.card().getByRole('link', { name: 'Forgot your password?' });
+  }
+
+  /** "Reset your password", in place of "Forgot your password?" while sign-in is paused. */
+  resetPasswordLink(): Locator {
+    return this.card().getByRole('link', { name: 'Reset your password' });
+  }
+
+  /** The card's fine print: "Artists sign in here too.", or who was emailed while paused. */
+  finePrint(): Locator {
+    return this.card().locator('.stub__fine');
+  }
+
   /** "Couldn’t sign you in" with one link per problem. */
   errorSummary(): Locator {
     return this.card().locator('.error-summary');
@@ -136,6 +151,10 @@ export class SignInPage {
 
   alertTitle(): Locator {
     return this.alert().locator('.alert__title');
+  }
+
+  alertText(): Locator {
+    return this.alert().locator('p').nth(1);
   }
 
   /** The browser's session cookie for the site. */

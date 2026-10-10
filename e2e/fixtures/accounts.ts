@@ -57,6 +57,29 @@ export async function signIn(
   }
 }
 
+/**
+ * Tries to sign in with a wrong password `times` times through the API, as a person mistyping it
+ * would, so the next try meets the lockout (L2-072.4).
+ */
+export async function failSignIns(
+  request: APIRequestContext,
+  email: string,
+  times: number,
+): Promise<void> {
+  const fromSite = { Referer: `${SITE}/` };
+  await request.get('/sanctum/csrf-cookie', { headers: fromSite });
+  const token = await xsrfToken(request);
+  for (let i = 0; i < times; i++) {
+    const response = await request.post('/api/v1/session', {
+      headers: { ...fromSite, Accept: 'application/json', 'X-XSRF-TOKEN': token },
+      data: { email, password: 'not-the-right-password' },
+    });
+    if (response.status() !== 422) {
+      throw new Error(`A wrong password for ${email} got ${response.status()}, not 422.`);
+    }
+  }
+}
+
 /** Signs a cast member into a browser context, so every page opened in it is signed in. */
 export async function signInAs(context: BrowserContext, member: CastMember): Promise<void> {
   await signIn(context.request, accounts[member].email);

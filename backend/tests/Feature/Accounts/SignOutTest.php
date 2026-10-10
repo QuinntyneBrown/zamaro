@@ -5,6 +5,7 @@ namespace Tests\Feature\Accounts;
 use Database\Seeders\CastSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Tests\Concerns\AssertsOpenApiContract;
 use Tests\Concerns\UsesTheWebApp;
 use Tests\TestCase;
@@ -46,6 +47,16 @@ class SignOutTest extends TestCase
         $this->asANewRequest()->fromTheWebApp()->withCookie('zamaro_session', $session)->deleteJson('/api/v1/session')->assertNoContent();
 
         $this->asANewRequest()->fromTheWebApp()->withCookie('zamaro_session', $session)->getJson('/api/v1/me')->assertUnauthorized();
+    }
+
+    public function test_signing_out_takes_the_session_off_the_registry(): void
+    {
+        $session = $this->signIn('naomi.fraser@riversidecc.ca')->getCookie('zamaro_session')->getValue();
+        $this->assertSame(1, DB::table('user_sessions')->count());
+
+        $this->fromTheWebApp()->withCookie('zamaro_session', $session)->deleteJson('/api/v1/session')->assertNoContent();
+
+        $this->assertSame(0, DB::table('user_sessions')->count());
     }
 
     public function test_signing_out_gives_the_browser_a_new_session_and_csrf_token(): void

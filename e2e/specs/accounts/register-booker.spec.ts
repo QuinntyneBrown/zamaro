@@ -118,7 +118,11 @@ test.describe('Registering as a booker', () => {
     await expect(signUp.checkEmailLead()).toHaveText(
       `We sent a link to ${accounts.naomi.email}. It works for 24 hours.`,
     );
-    await waitForEmail(accounts.naomi.email, 'Someone tried to sign up with your email');
+    const notice = await waitForEmail(
+      accounts.naomi.email,
+      'Someone tried to sign up with your email',
+    );
+    expect(linkIn(notice, '/forgot-password')).toBe('http://localhost:4000/forgot-password');
   });
 
   test('a short password and unticked terms are named in the summary and at each field', async () => {

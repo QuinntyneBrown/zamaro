@@ -166,6 +166,13 @@ export const routes: RouteState[] = [
     signedInAs: 'naomi',
     shows: 'lineup',
   },
+  // Forgot your password: the "Admit one · Password help" card with the email field.
+  {
+    name: 'forgot-password',
+    path: '/forgot-password',
+    app: 'zamaro',
+    mock: 'forgot-password/default.html',
+  },
   // An emailed verification link that was used, ran out or never existed: "This link has expired"
   // with the Expired stamp and "Send a new link".
   {

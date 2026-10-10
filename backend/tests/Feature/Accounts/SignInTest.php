@@ -50,6 +50,20 @@ class SignInTest extends TestCase
         $this->assertMatchesContract($response);
     }
 
+    public function test_each_session_is_registered_for_the_account_by_a_hash_of_its_id(): void
+    {
+        $this->signIn(self::NAOMI)->assertOk();
+        $this->asANewRequest()->withoutCookies()->signIn(self::NAOMI)->assertOk();
+
+        $sessions = DB::table('user_sessions')->where('user_id', User::where('email', self::NAOMI)->value('id'))->get();
+        $this->assertCount(2, $sessions);
+        foreach ($sessions as $session) {
+            $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $session->id);
+            $this->assertSame('127.0.0.1', $session->ip_address);
+            $this->assertTrue(Carbon::parse($session->last_active_at)->equalTo(now()));
+        }
+    }
+
     public function test_the_address_is_matched_whatever_its_case_and_surrounding_spaces(): void
     {
         $this->signIn('  Naomi.Fraser@RiversideCC.ca ')->assertOk();
