@@ -67,8 +67,28 @@ export class SearchStore {
   }
 
   /**
+   * Back to the last lineup (L2-009.2): when the state is the remembered search, shows its cards and
+   * loaded pages at once, without searching, so the router can restore the scroll position.
+   * Returns false when there is nothing to restore.
+   */
+  restore(state: SearchState): boolean {
+    const remembered = this.lastSearch.search();
+    const query = toQuery(state);
+    if (!remembered || !query) return false;
+    if (JSON.stringify(remembered.params) !== JSON.stringify(toParams(state))) return false;
+    this.request?.unsubscribe();
+    this.state.set(state);
+    this.query.set(query);
+    this.settle('loaded');
+    this.result.set(remembered.result);
+    this.alternatives.set(remembered.alternatives);
+    return true;
+  }
+
+  /**
    * Moves to a new state through the address bar. "Show the lineup" adds a history entry; a sort
-   * or chip change replaces it, so Back does not step through every chip.
+   * or chip change replaces it, so Back does not step through every chip. The page stays where it
+   * is scrolled: only Back restores a position.
    */
   navigate(change: Partial<SearchState>, options: { replace: boolean }): void {
     const next = { ...this.state(), ...change };
@@ -78,7 +98,11 @@ export class SearchStore {
       this.retry();
       return;
     }
-    void this.router.navigate(['/'], { queryParams: params, replaceUrl: options.replace });
+    void this.router.navigate(['/'], {
+      queryParams: params,
+      replaceUrl: options.replace,
+      scroll: 'manual',
+    });
   }
 
   /** Try again: the same search. */
@@ -100,6 +124,7 @@ export class SearchStore {
             cards: [...result.cards, ...page.cards],
             nextCursor: page.nextCursor,
           });
+          this.lastSearch.update({ result: this.result()! });
           this.loadingMore.set(false);
           resolve(page.cards.length);
         },
@@ -130,10 +155,15 @@ export class SearchStore {
           params: toParams(this.state()),
           date: query.date,
           headlinerSlug: result.headliner?.slug ?? null,
+          result,
+          alternatives: null,
         });
         // A separate call, so the search itself never pays for it.
         if (result.total === 0) {
-          this.api.alternatives(query).subscribe((ways) => this.alternatives.set(ways));
+          this.api.alternatives(query).subscribe((ways) => {
+            this.alternatives.set(ways);
+            this.lastSearch.update({ alternatives: ways });
+          });
         }
       },
       error: (error: unknown) => {

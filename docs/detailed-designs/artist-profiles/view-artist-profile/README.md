@@ -141,9 +141,10 @@ name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio
   `index-and-share-profile` (S16).
 - **Base city:** the API returns the city alone ("Brampton"); the page adds the province from
   the catalogue ("Brampton, ON").
-- **Not yet built:** returning to the same scroll position on Back (L2-009.2). The results
-  come back, but scroll restoration waits for Discover to restore its position after the
-  lineup reloads.
+- **Back (L2-009.2, built at the close of M1):** `LastSearch` keeps the lineup as last shown,
+  with every loaded page and the sold-out ways forward. Back to Discover shows it again at once
+  without a request, and the router (`scrollPositionRestoration: 'enabled'`) restores the scroll
+  position. A profile opens at the top.
 
 **As built in M1 (S12)**
 

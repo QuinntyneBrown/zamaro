@@ -82,6 +82,11 @@ state and the query string, and sort and filter handling in the search endpoint.
   renders the cached lineup at once. The router, configured with
   `withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })`, then restores the
   scroll position (L2-009).
+  - *As built (M1):* the cached lineup (`LastSearch`, with every loaded page) is used only on a
+    Back or Forward (a `popstate` navigation). Any other way to the same address, such as
+    "Discover · Sat 14 Nov" on a profile, searches afresh, so the cache never shows stale
+    results. Search, sort, chip and sold-out navigations pass `scroll: 'manual'`, so the page
+    stays where it is scrolled; every other forward navigation starts at the top.
 
 **Backend (Zamaro API)**
 

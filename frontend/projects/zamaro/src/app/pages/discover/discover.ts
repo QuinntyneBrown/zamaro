@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FormatService } from 'api';
 import { Band, Marquee, Poster } from 'components';
@@ -57,6 +57,8 @@ export class Discover {
   /**
    * The address bar drives the search (L2-009). The server fills the form from it; the browser
    * also runs the search, so a shared link counts once against the rate limit and is never cached.
+   * Back to the last lineup shows it again without searching (L2-009.2); any other way here
+   * searches afresh.
    */
   constructor() {
     inject(PageMeta).set({
@@ -65,9 +67,14 @@ export class Discover {
       path: '/',
     });
     const browser = isPlatformBrowser(inject(PLATFORM_ID));
+    const router = inject(Router);
     inject(ActivatedRoute)
       .queryParamMap.pipe(takeUntilDestroyed())
-      .subscribe((params) => this.store.load(fromParams(params), browser));
+      .subscribe((params) => {
+        const state = fromParams(params);
+        const back = router.currentNavigation()?.trigger === 'popstate';
+        if (!(browser && back && this.store.restore(state))) this.store.load(state, browser);
+      });
   }
 
   protected readonly posterDate = computed(() => {

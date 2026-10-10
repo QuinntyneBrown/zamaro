@@ -24,7 +24,11 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withInMemoryScrolling({ anchorScrolling: 'enabled' })),
+    // A new page starts at the top; Back returns to where the page was (L2-009.2).
+    provideRouter(
+      routes,
+      withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
+    ),
     provideHttpClient(withFetch()),
     // GET responses made while rendering on the server are replayed in the browser, not re-fetched.
     provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
