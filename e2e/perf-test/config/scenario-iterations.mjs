@@ -8,6 +8,7 @@ export const scenarioIterations = {
   DateSwap: 400,
   ErrorSummary: 450,
   Footer: 100,
+  FormField: 300,
   HeadlinerSkeleton: 500,
   Lineup: 25,
   Menu: 90,
