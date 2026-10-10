@@ -1,44 +1,47 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, isDevMode } from '@angular/core';
 import { Artwork } from '../artwork/artwork';
-import { Skeleton } from '../skeleton/skeleton';
-
-/** One fact on the header line: "Brampton, ON". `hidden` keeps a visual repeat from being read twice. */
-export interface PosterFact {
-  readonly text: string;
-  readonly hidden?: boolean;
-}
-
-/** The yellow figure first on the facts line: "★ 4.9", read as `label` when it has one. */
-export interface PosterScore {
-  readonly text: string;
-  readonly label?: string;
-}
+import { Rating } from '../rating/rating';
 
 /**
- * The artist's header on the charcoal stage (docs/design-system/components/poster, `.artist-poster`):
- * the breadcrumb, yellow artwork beside the kicker, the name set poster-size, the facts line and the
- * actions. Without `art` it is the error header (kicker and title only); `loading` holds skeletons
- * and keeps a hidden heading and status line. Project the breadcrumb into `[slot=breadcrumb]` and
- * buttons into `[slot=actions]`.
+ * The artist's header on the charcoal stage (docs/specs/components/poster.md, `.artist-poster`):
+ * the breadcrumb, the halftone portrait beside the kicker, the name set poster-size, the facts line
+ * (rating first) and the actions. Project the breadcrumb into `[slot=breadcrumb]` and the buttons
+ * into `[slot=actions]`.
  */
 @Component({
   selector: 'zm-artist-poster',
-  imports: [Artwork, Skeleton],
+  imports: [Artwork, Rating],
   templateUrl: './artist-poster.html',
   styleUrls: ['./poster-frame.scss', './artist-poster.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistPoster {
-  readonly headingId = input('artist-name');
-  /** "Headliner · Gospel & contemporary vocalist"; "Show postponed" on the error header. */
-  readonly kicker = input('');
-  /** The artist's name; the error's title; the hidden heading while loading. */
+  /** "Headliner · Gospel & contemporary vocalist". */
+  readonly kicker = input.required<string>();
   readonly name = input.required<string>();
-  /** The artwork's figure; null shows the error header. */
-  readonly art = input<'solo' | 'group' | null>(null);
-  readonly score = input<PosterScore | null>(null);
-  readonly facts = input<readonly PosterFact[]>([]);
-  readonly loading = input(false);
-  /** The status line announced while loading: "Loading the artist’s profile…". */
-  readonly status = input('');
+  readonly headingId = input('artist-name');
+  /** Out of 5; null before the first review. */
+  readonly rating = input.required<number | null>();
+  /** "Rated 4.9 out of 5 by 38 churches". */
+  readonly ratingLabel = input('');
+  /** "38 churches"; hidden from assistive technology, since the rating's label says it. */
+  readonly ratingCount = input('');
+  /** "New". */
+  readonly ratingNew = input('');
+  /** "No reviews yet". */
+  readonly noReviews = input('');
+  /** Up to two more facts: "Brampton, ON", "Drives up to 120 km". */
+  readonly facts = input<readonly string[]>([]);
+  /** The portrait's description; empty keeps the artwork decorative. */
+  readonly artLabel = input('');
+  readonly artYellow = input(false);
+  readonly artVariant = input<'solo' | 'group'>('solo');
+
+  protected shownFacts(): readonly string[] {
+    const facts = this.facts();
+    if (facts.length > 2 && isDevMode()) {
+      console.error(`zm-artist-poster: at most two facts, got ${facts.length}`);
+    }
+    return facts.slice(0, 2);
+  }
 }

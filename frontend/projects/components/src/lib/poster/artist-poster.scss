@@ -2,6 +2,11 @@
   display: block;
 }
 
+.artist-poster__crumbs:empty,
+.artist-poster__actions:empty {
+  display: none;
+}
+
 .artist-poster {
   display: grid;
   gap: var(--space-8);

@@ -20,10 +20,6 @@
   padding-top: 0;
 }
 
-.page-error {
-  padding-block: var(--space-10);
-}
-
 @media (min-width: 62rem) {
   .profile-layout {
     grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-width);

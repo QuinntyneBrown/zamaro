@@ -19,7 +19,7 @@
         [formControl]="sortControl"
       />
     </div>
-    <zm-filter-group [legend]="'discover.filters.legend' | transloco">
+    <zm-chip-group [legend]="'discover.filters.legend' | transloco">
       @for (style of styles; track style) {
         <zm-chip
           [pressed]="isPressed(style)"
@@ -34,7 +34,7 @@
         (click)="toggleUnder800()"
         >{{ 'discover.filters.under800' | transloco }}</zm-chip
       >
-    </zm-filter-group>
+    </zm-chip-group>
 
     @if (store.showSkeletons()) {
       <p class="lead">

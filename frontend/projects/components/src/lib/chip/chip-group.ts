@@ -1,14 +1,20 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
- * A labelled group of filter chips (docs/design-system/components/chip, `.filters`): a fieldset
- * whose legend names the choice, with the chips projected and wrapping onto as many rows as they
- * need (L2-097.4).
+ * A labelled group of chips (docs/specs/components/chip.md, `.filters`): a fieldset whose legend
+ * names the choice, with the chips projected and wrapping onto as many rows as they need
+ * (L2-097.4).
  */
 @Component({
-  selector: 'zm-filter-group',
+  selector: 'zm-chip-group',
   template: `<fieldset class="filters">
-    <legend>{{ legend() }}</legend>
+    <legend
+      [class.visually-hidden]="legendHidden()"
+      [attr.id]="legendId() ?? null"
+      [attr.tabindex]="legendId() ? -1 : null"
+    >
+      {{ legend() }}
+    </legend>
     <ng-content />
   </fieldset>`,
   styles: `
@@ -37,7 +43,11 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FilterGroup {
-  /** "Filter by style". */
+export class ChipGroup {
+  /** "Filter by style", "Or pick a city". */
   readonly legend = input.required<string>();
+  /** Hides the legend visually; the group keeps its name ("Filters in use"). */
+  readonly legendHidden = input(false, { transform: booleanAttribute });
+  /** The legend's id, so focus can be sent to it. */
+  readonly legendId = input<string>();
 }

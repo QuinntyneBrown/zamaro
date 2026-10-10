@@ -2,8 +2,13 @@
   <zm-artist-poster
     [kicker]="kicker()"
     [name]="profile.displayName"
-    [art]="profile.actType === 'solo' ? 'solo' : 'group'"
-    [score]="score()"
+    [artVariant]="profile.actType === 'solo' ? 'solo' : 'group'"
+    [artYellow]="true"
+    [rating]="profile.rating"
+    [ratingLabel]="ratingLabel()"
+    [ratingCount]="t('common.rating.churches', { count: profile.reviewCount })"
+    [ratingNew]="'common.rating.new' | transloco"
+    [noReviews]="'artist.facts.noReviews' | transloco"
     [facts]="facts()"
   >
     <zm-breadcrumb
@@ -38,32 +43,27 @@
     </div>
   </div>
 } @else if (store.status() === 'error') {
-  <zm-artist-poster
-    headingId="error-title"
+  <zm-error-stage
     [kicker]="'artist.error.kicker' | transloco"
-    [name]="'artist.error.title' | transloco"
+    [heading]="'artist.error.title' | transloco"
+    [alertHeading]="'artist.error.unreachable' | transloco"
   >
     <zm-breadcrumb
       slot="breadcrumb"
       [crumbs]="crumbs()"
       [label]="'artist.breadcrumb.label' | transloco"
     />
-  </zm-artist-poster>
-  <div class="container page-error">
-    <zm-alert variant="danger" [heading]="'artist.error.unreachable' | transloco">
-      <p>{{ 'artist.error.body' | transloco }}</p>
-      <zm-button slot="actions" variant="primary" (click)="store.retry()"
-        ><zm-icon name="refresh" />{{ 'artist.error.retry' | transloco }}</zm-button
-      >
-      <zm-button-link slot="actions" link="/" [queryParams]="lineupParams()">{{
-        'artist.error.back' | transloco
-      }}</zm-button-link>
-    </zm-alert>
-  </div>
+    <p>{{ 'artist.error.body' | transloco }}</p>
+    <zm-button slot="actions" variant="primary" (click)="store.retry()"
+      ><zm-icon name="refresh" />{{ 'artist.error.retry' | transloco }}</zm-button
+    >
+    <zm-button-link slot="actions" link="/" [queryParams]="lineupParams()">{{
+      'artist.error.back' | transloco
+    }}</zm-button-link>
+  </zm-error-stage>
 } @else if (store.showSkeletons()) {
-  <zm-artist-poster
-    [loading]="true"
-    [name]="'artist.loading.title' | transloco"
+  <zm-artist-poster-skeleton
+    [heading]="'artist.loading.title' | transloco"
     [status]="'artist.loading.status' | transloco"
   >
     <zm-breadcrumb
@@ -71,7 +71,7 @@
       [crumbs]="crumbs()"
       [label]="'artist.breadcrumb.label' | transloco"
     />
-  </zm-artist-poster>
+  </zm-artist-poster-skeleton>
   <zm-skeleton shape="strip" aria-hidden="true" />
   <div class="container profile-layout" aria-hidden="true">
     <div class="stack stack--lg">

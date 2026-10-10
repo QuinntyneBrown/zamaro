@@ -29,7 +29,7 @@ import {
   ErrorSummary,
   type ErrorSummaryItem,
   type FieldOption,
-  FilterGroup,
+  ChipGroup,
   FormField,
 } from 'components';
 import { firstValueFrom } from 'rxjs';
@@ -71,7 +71,7 @@ function roundTo3(value: number): number {
     Button,
     Chip,
     ErrorSummary,
-    FilterGroup,
+    ChipGroup,
     FormField,
     ReactiveFormsModule,
     TranslocoPipe,
@@ -197,13 +197,9 @@ export class SearchForm {
       .filter((field) => errors[field])
       .map((field) => ({
         fieldId: FIELD_IDS[field],
-        text: field === 'location' ? this.t('discover.errors.summaryLocation') : errors[field]!,
+        message: field === 'location' ? this.t('discover.errors.summaryLocation') : errors[field]!,
       }));
   });
-
-  protected focusField(fieldId: string): void {
-    this.fieldFor(fieldId === FIELD_IDS.date ? 'date' : 'location').focus();
-  }
 
   private dateError(date: string): string | null {
     if (!date) return this.t('discover.errors.dateRequired');

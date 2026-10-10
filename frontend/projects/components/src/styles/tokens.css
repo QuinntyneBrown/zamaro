@@ -181,10 +181,11 @@
   /* Motion */
   --duration-instant: 0ms;
   --duration-fast: 90ms;        /* hover, press, colour */
-  --duration-base: 160ms;       /* ticket lift, menus */
+  --duration-base: 160ms;       /* ticket lift, menus, tooltips */
   --duration-slow: 260ms;       /* dialogs, toasts */
   --duration-deliberate: 900ms; /* skeleton sweep */
   --duration-loop: 900ms;       /* one spinner turn; components.css stops the spinner under reduced motion */
+  --duration-tooltip-delay: 300ms; /* hover intent before a tooltip shows */
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ease-enter: cubic-bezier(0, 0, 0, 1);
   --ease-exit: cubic-bezier(0.3, 0, 1, 1);

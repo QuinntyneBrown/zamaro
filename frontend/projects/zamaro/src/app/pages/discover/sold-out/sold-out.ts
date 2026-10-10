@@ -66,9 +66,9 @@ export class SoldOut {
 
   protected readonly nearbyDates = computed(() =>
     (this.store.alternatives()?.nearbyDates ?? []).map((nearby) => ({
-      date: nearby.date,
-      label: this.format.shortDate(nearby.date),
-      count: this.t('discover.soldOut.dateCount', { style: this.style(), count: nearby.count }),
+      value: nearby.date,
+      date: this.format.shortDate(nearby.date),
+      detail: this.t('discover.soldOut.dateCount', { style: this.style(), count: nearby.count }),
     })),
   );
 

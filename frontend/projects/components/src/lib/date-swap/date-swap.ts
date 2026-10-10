@@ -1,26 +1,46 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 export interface DateSwapOption {
-  /** The ISO date the button picks. */
+  /** The ISO date the button picks: "2026-12-23". */
+  readonly value: string;
+  /** The short date: "Wed 23 Dec". */
   readonly date: string;
-  /** "Sun 27 Dec". */
-  readonly label: string;
-  /** "3 choirs free". */
-  readonly count: string;
+  /** The count or note: "1 choir free". */
+  readonly detail: string;
 }
 
+let nextId = 0;
+
 /**
- * The nearby dates an empty state offers instead (docs/design-system/components/empty-state,
- * `.date-swap`): a heading and a grid of date buttons that lift and fill yellow on hover.
+ * Nearby dates offered instead (docs/specs/components/empty-state.md, `.date-swap`): an optional
+ * heading over a grid of date buttons that lift and fill yellow on hover. With no heading, `label`
+ * names the list.
  */
 @Component({
   selector: 'zm-date-swap',
-  template: `<h4>{{ heading() }}</h4>
-    <ul class="date-swap" role="list">
-      @for (option of options(); track option.date) {
+  template: `@if (heading()) {
+      @switch (headingLevel()) {
+        @case (3) {
+          <h3 [id]="headingId">{{ heading() }}</h3>
+        }
+        @case (5) {
+          <h5 [id]="headingId">{{ heading() }}</h5>
+        }
+        @default {
+          <h4 [id]="headingId">{{ heading() }}</h4>
+        }
+      }
+    }
+    <ul
+      class="date-swap"
+      role="list"
+      [attr.aria-labelledby]="heading() ? headingId : null"
+      [attr.aria-label]="heading() ? null : (label() ?? null)"
+    >
+      @for (option of dates(); track option.value) {
         <li>
-          <button type="button" (click)="pick.emit(option.date)">
-            <strong>{{ option.label }}</strong> {{ option.count }}
+          <button type="button" (click)="datePicked.emit(option.value)">
+            <strong>{{ option.date }}</strong> {{ option.detail }}
           </button>
         </li>
       }
@@ -73,9 +93,14 @@ export interface DateSwapOption {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DateSwap {
+  readonly dates = input.required<readonly DateSwapOption[]>();
   /** "Nearby dates with choirs free". */
-  readonly heading = input.required<string>();
-  readonly options = input.required<readonly DateSwapOption[]>();
-  /** Emits the ISO date of the button pressed. */
-  readonly pick = output<string>();
+  readonly heading = input<string>();
+  readonly headingLevel = input<3 | 4 | 5>(4);
+  /** Names the list when there is no visible heading. */
+  readonly label = input<string>();
+  /** Emits the ISO `value` of the date picked. */
+  readonly datePicked = output<string>();
+
+  protected readonly headingId = `zm-date-swap-heading-${nextId++}`;
 }

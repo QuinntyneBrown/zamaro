@@ -5,13 +5,13 @@ import { DateSwap } from 'components';
 @Component({
   selector: 'zm-date-swap-scenario',
   imports: [DateSwap],
-  template: `<zm-date-swap heading="Nearby dates with choirs free" [options]="options" />`,
+  template: `<zm-date-swap heading="Nearby dates with choirs free" [dates]="dates" />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DateSwapScenario {
-  protected readonly options = [
-    { date: '2026-12-23', label: 'Wed 23 Dec', count: '1 choir free' },
-    { date: '2026-12-27', label: 'Sun 27 Dec', count: '3 choirs free' },
-    { date: '2026-12-20', label: 'Sun 20 Dec', count: '2 choirs free' },
+  protected readonly dates = [
+    { value: '2026-12-23', date: 'Wed 23 Dec', detail: '1 choir free' },
+    { value: '2026-12-27', date: 'Sun 27 Dec', detail: '3 choirs free' },
+    { value: '2026-12-20', date: 'Sun 20 Dec', detail: '2 choirs free' },
   ];
 }

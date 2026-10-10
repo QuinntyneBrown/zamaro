@@ -12,7 +12,7 @@ import { Skeleton } from '../skeleton/skeleton';
   host: { 'aria-hidden': 'true' },
   template: `<div class="headliner">
     <zm-skeleton shape="portrait" />
-    <div class="headliner__body">
+    <div class="stack headliner__body">
       <zm-skeleton width="short" />
       <zm-skeleton shape="poster" />
       <zm-skeleton />

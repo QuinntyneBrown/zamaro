@@ -1,7 +1,11 @@
 <zm-empty-state [stamp]="'discover.soldOut.stamp' | transloco" [heading]="title()">
   <p class="sold-out__why">{{ explanation() }}</p>
   @if (nearbyDates().length) {
-    <zm-date-swap [heading]="datesHeading()" [options]="nearbyDates()" (pick)="pickDate($event)" />
+    <zm-date-swap
+      [heading]="datesHeading()"
+      [dates]="nearbyDates()"
+      (datePicked)="pickDate($event)"
+    />
   }
   @if (wider(); as wider) {
     <zm-button slot="actions" variant="primary" (click)="widen(wider.km)"
