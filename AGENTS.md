@@ -45,6 +45,7 @@ zamaro/
 │   ├── design-system/             # tokens/, foundations/, components/, patterns/, assets/
 │   ├── detailed-designs/          # {subsystem}/{feature}/README.md + diagrams/
 │   ├── mocks/                     # pages/, dialogs/, notifications/, assets/
+│   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
 ├── docker-compose.yml             # local dev: postgres, redis, api, api-e2e, worker, scheduler (ADR-0002)
 ├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
