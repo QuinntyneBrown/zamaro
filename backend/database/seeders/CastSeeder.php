@@ -98,7 +98,35 @@ class CastSeeder extends Seeder
             $this->bookings();
             $this->reviews();
             $this->supportingCast();
+            $this->christmasChoirs();
         });
+    }
+
+    /**
+     * Gospel choirs for the sold-out state (L2-011, docs/mocks/pages/discover/empty.html). Each is
+     * unavailable every weekday and free only on the dates below, so no other search changes:
+     * within 40 km of Burlington none is free on Christmas Eve, one is on Wed 23 Dec, three on
+     * Sun 27 Dec and two on Sun 20 Dec; Durham (Ajax, 97 km) and Grace Tabernacle (81 km) make
+     * two free within 120 km on Christmas Eve.
+     */
+    private function christmasChoirs(): void
+    {
+        $choirs = [
+            'lakeshore-gospel-voices' => ['Lakeshore Gospel Voices', 'ACT-0061', new Coordinates(43.4675, -79.6877), 1500, 4.7, 12, ['2026-12-20', '2026-12-23', '2026-12-27']],
+            'hamilton-mountain-mass-choir' => ['Hamilton Mountain Mass Choir', 'ACT-0062', new Coordinates(43.21, -79.86), 1700, 4.8, 15, ['2026-12-20', '2026-12-27']],
+            'halton-praise-choir' => ['Halton Praise Choir', 'ACT-0063', new Coordinates(43.5183, -79.8774), 1200, 4.5, 8, ['2026-12-27']],
+            'durham-gospel-choir' => ['Durham Gospel Choir', 'ACT-0064', CastRoutes::anchor('Ajax'), 1900, 4.6, 10, ['2026-12-24']],
+        ];
+        foreach ($choirs as $slug => [$name, $ticket, $at, $fromDollars, $rating, $reviews, $freeDates]) {
+            $this->artist($slug, $name, $ticket, ActType::Choir, [Style::GospelChoir], 'Burlington', 120, $fromDollars, $rating, $reviews, '2025-11-01', $at);
+            $choir = Artist::where('slug', $slug)->firstOrFail();
+            foreach (range(1, 7) as $weekday) {
+                AvailabilityRule::updateOrCreate(['artist_id' => $choir->id, 'weekday' => $weekday], ['unavailable' => true]);
+            }
+            foreach ($freeDates as $date) {
+                AvailabilityOverride::updateOrCreate(['artist_id' => $choir->id, 'date' => $date], ['state' => OverrideState::Free]);
+            }
+        }
     }
 
     /**
