@@ -1,3 +1,5 @@
+<img src="docs/assets/zamaro-mark.svg" alt="Zamaro logo" width="96" height="96">
+
 # Zamaro
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
