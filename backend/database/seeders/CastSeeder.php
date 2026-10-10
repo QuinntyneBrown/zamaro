@@ -6,7 +6,9 @@ use App\Enums\ActType;
 use App\Enums\ArtistStatus;
 use App\Enums\BookingStatus;
 use App\Enums\GatheringKind;
+use App\Enums\MusicalKey;
 use App\Enums\OverrideState;
+use App\Enums\Pronoun;
 use App\Enums\Style;
 use App\Enums\VscStatus;
 use App\Integrations\Routing\CastRoutes;
@@ -16,6 +18,7 @@ use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
 use App\Models\Review;
+use App\Models\SetlistSong;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
 use App\Services\Discovery\Coordinates;
@@ -75,6 +78,51 @@ class CastSeeder extends Seeder
         'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart.'],
     ];
 
+    /**
+     * slug => [pronoun, headline, About heading, bio, languages, setlist [title, writer, key]]
+     * (docs/mocks/pages/artist, docs/mocks/pages/edit-profile).
+     */
+    private const PROFILES = [
+        'abigail-mensah' => [Pronoun::She, 'Gospel & contemporary vocalist', 'Raised in the choir loft',
+            "I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone. I’ve led worship at New Covenant Chapel for nine years.\n\nI lead in English and Twi, bring my own tracks if you don’t have a band, and I’m happy to rehearse with your volunteers. My aim is a congregation that sings.",
+            ['en', 'tw'], [
+                ['Way Maker', 'Sinach', MusicalKey::E],
+                ['Goodness of God', 'Bethel Music', MusicalKey::A],
+                ['Great Is Thy Faithfulness', 'Thomas Chisholm, 1923', MusicalKey::D],
+                ['Jireh', 'Elevation & Maverick City', MusicalKey::BFlat],
+                ['Blessed Assurance', 'Fanny Crosby', MusicalKey::D],
+                ['Build My Life', 'Pat Barrett', MusicalKey::G],
+                ['Oceans (Where Feet May Fail)', 'Hillsong United', MusicalKey::D],
+                ['Twi praise medley', 'Traditional Ghanaian', MusicalKey::F],
+            ]],
+        'miriam-haile' => [Pronoun::She, 'Solo vocalist & pianist', 'Piano first, then the song',
+            "I learned piano before I ever sang in public, and I still lead from the keys.\n\nI’m new to Zamaro and glad to help small congregations find their voice.",
+            ['en', 'am'], [
+                ['Goodness of God', 'Bethel Music', MusicalKey::A],
+                ['It Is Well With My Soul', 'Horatio Spafford, 1873', MusicalKey::C],
+                ['Abide With Me', 'Henry F. Lyte, 1847', MusicalKey::EFlat],
+                ['Firm Foundation', 'Cody Carnes', MusicalKey::B],
+            ]],
+        'marcus-bell-trio' => [Pronoun::They, 'Piano, upright bass and drums', null,
+            'Three friends from Hamilton who play hymns the way a jazz trio would, and still leave room for the congregation.',
+            ['en'], [['Great Is Thy Faithfulness', 'Thomas Chisholm, 1923', MusicalKey::D], ['Goodness of God', 'Bethel Music', MusicalKey::A]]],
+        'hosanna-collective' => [Pronoun::They, 'Contemporary worship band', null,
+            'A seven-piece band from Mississauga that brings its own sound and lights.',
+            ['en'], [['Build My Life', 'Pat Barrett', MusicalKey::G], ['Way Maker', 'Sinach', MusicalKey::E]]],
+        'luz-viva' => [Pronoun::They, 'Bilingual worship band', null,
+            'We lead in Spanish and English, for congregations that pray in both.',
+            ['en', 'es'], [['Cuán Grande es Él', 'Carl Boberg', MusicalKey::BFlat], ['Way Maker', 'Sinach', MusicalKey::E]]],
+        'elijah-park' => [Pronoun::He, 'Acoustic worship leader', null,
+            'One voice and one guitar, for gatherings that want to hear every word.',
+            ['en', 'ko'], [['Firm Foundation', 'Cody Carnes', MusicalKey::B], ['It Is Well With My Soul', 'Horatio Spafford, 1873', MusicalKey::C]]],
+        'grace-tabernacle-mass-choir' => [Pronoun::They, 'Gospel mass choir', null,
+            'Forty voices from Scarborough for the nights a congregation wants to be carried.',
+            ['en'], [['Total Praise', 'Richard Smallwood', MusicalKey::AFlat], ['Oh Happy Day', 'Edwin Hawkins', MusicalKey::G]]],
+        'daniel-and-ruth-okonkwo' => [Pronoun::They, 'Husband-and-wife worship duo', null,
+            'Two voices in harmony, with guitar and keys, from Ajax.',
+            ['en'], [['Blessed Assurance', 'Fanny Crosby', MusicalKey::D], ['Goodness of God', 'Bethel Music', MusicalKey::A]]],
+    ];
+
     private const SUPPORTING_CAST = [
         'Kempenfelt Worship Collective', 'Allandale Gospel Singers', 'Simcoe Street Praise Band',
         'Minets Point Trio', 'Painswick Hymn Choir', 'Georgian Voices', 'Shanty Bay Strings',
@@ -99,7 +147,28 @@ class CastSeeder extends Seeder
             $this->reviews();
             $this->supportingCast();
             $this->christmasChoirs();
+            $this->profiles();
         });
+    }
+
+    private function profiles(): void
+    {
+        foreach (self::PROFILES as $slug => [$pronoun, $headline, $aboutHeading, $bio, $languages, $songs]) {
+            $artist = Artist::where('slug', $slug)->firstOrFail();
+            $artist->update([
+                'pronoun' => $pronoun,
+                'headline' => $headline,
+                'about_heading' => $aboutHeading,
+                'bio' => $bio,
+                'languages' => $languages,
+            ]);
+            foreach ($songs as $index => [$title, $writer, $key]) {
+                SetlistSong::updateOrCreate(
+                    ['artist_id' => $artist->id, 'position' => $index + 1],
+                    ['title' => $title, 'writer' => $writer, 'key' => $key],
+                );
+            }
+        }
     }
 
     /**

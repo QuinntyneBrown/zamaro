@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
 use App\Http\Controllers\Api\V1\Discovery\PlaceController;
 use App\Http\Controllers\Api\V1\Discovery\SearchAlternativesController;
 use App\Http\Controllers\Api\V1\Discovery\SearchController;
@@ -12,3 +13,4 @@ Route::get('i18n/{locale}', [TranslationCatalogueController::class, 'show'])->na
 Route::get('search', SearchController::class)->middleware('throttle:search')->name('search');
 Route::get('search/alternatives', SearchAlternativesController::class)->middleware('throttle:search')->name('search.alternatives');
 Route::get('places', PlaceController::class)->name('places');
+Route::get('artists/{slug}', [ArtistProfileController::class, 'show'])->name('artists.show');

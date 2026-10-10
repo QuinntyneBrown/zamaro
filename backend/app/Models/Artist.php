@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\ActType;
 use App\Enums\ArtistStatus;
+use App\Enums\Pronoun;
+use App\Enums\Style;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,7 +25,20 @@ class Artist extends Model
             'base_longitude' => 'float',
             'payout_ready' => 'boolean',
             'published_at' => 'immutable_datetime',
+            'pronoun' => Pronoun::class,
+            'languages' => 'array',
         ];
+    }
+
+    /** What profile copy calls the artist: a solo act's first name, a group's whole name. */
+    public function firstName(): string
+    {
+        return $this->act_type === ActType::Solo ? strtok($this->display_name, ' ') : $this->display_name;
+    }
+
+    public function setlist(): HasMany
+    {
+        return $this->hasMany(SetlistSong::class)->orderBy('position');
     }
 
     /** Shown to the public: approved, payout set up and published (L2-005.4, L2-048.3). */
@@ -39,9 +54,12 @@ class Artist extends Model
         return $this->belongsTo(User::class);
     }
 
+    /** In the chips' order (the Style enum), so every card and profile lists them alike. */
     public function styles(): HasMany
     {
-        return $this->hasMany(ArtistStyle::class);
+        $order = implode(',', array_map(fn (Style $style) => "'{$style->value}'", Style::cases()));
+
+        return $this->hasMany(ArtistStyle::class)->orderByRaw("array_position(ARRAY[{$order}]::text[], style)");
     }
 
     public function rating(): HasOne
