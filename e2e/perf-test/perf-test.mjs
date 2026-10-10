@@ -64,25 +64,34 @@ if (args['fail-on-regression'] && flagged.length > 0) {
   process.exit(1);
 }
 
+// Both builds are timed the same way, without the profiler: its overhead would make the profiled
+// side look slower. The .cpuprofile comes from one extra, untimed run.
 async function measure(browser, url, scenario, iterations, renderType, profile) {
+  if (profile) {
+    const result = await render(browser, url, scenario, iterations, renderType, true);
+    if (result.error) return { error: result.error, medians: [] };
+  }
   const medians = [];
   for (let run = 0; run < runs; run++) {
-    const page = await browser.newPage();
-    const client = await page.context().newCDPSession(page);
-    if (profile) await client.send('Profiler.enable'), await client.send('Profiler.start');
-    await page.goto(`${url}/?scenario=${scenario}&iterations=${iterations}&renderType=${renderType}`);
-    const result = await page.waitForFunction(() => window.__perfResult, null, { timeout: 120000 }).then((h) => h.jsonValue());
-    if (profile) {
-      const { profile: cpu } = await client.send('Profiler.stop');
-      if (run === 0) {
-        writeFileSync(join(logDir, `${scenario}.${renderType}.cpuprofile`), JSON.stringify(cpu));
-      }
-    }
-    await page.close();
+    const result = await render(browser, url, scenario, iterations, renderType, false);
     if (result.error) return { error: result.error, medians: [] };
     medians.push(result.totalMs);
   }
   return { medians };
+}
+
+async function render(browser, url, scenario, iterations, renderType, profile) {
+  const page = await browser.newPage();
+  const client = await page.context().newCDPSession(page);
+  if (profile) await client.send('Profiler.enable'), await client.send('Profiler.start');
+  await page.goto(`${url}/?scenario=${scenario}&iterations=${iterations}&renderType=${renderType}`);
+  const result = await page.waitForFunction(() => window.__perfResult, null, { timeout: 120000 }).then((h) => h.jsonValue());
+  if (profile) {
+    const { profile: cpu } = await client.send('Profiler.stop');
+    writeFileSync(join(logDir, `${scenario}.${renderType}.cpuprofile`), JSON.stringify(cpu));
+  }
+  await page.close();
+  return result;
 }
 
 function compare(scenario, renderType, pr, base) {
