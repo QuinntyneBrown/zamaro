@@ -17,58 +17,48 @@ package "Zamaro Web (Angular)" {
   class SearchState <<interface>> {
     +date: string
     +kind: GatheringKind
-    +lat: number
-    +lng: number
+    +lat: number | null
+    +lng: number | null
     +place: string
-    +radiusKm: 40|80|120|200
+    +radius: 40|80|120|200
     +sort: 'closest'|'rating'|'price'
     +styles: Style[]
-    +underPrice: boolean
+    +under800: boolean
   }
-  class SearchQueryCodec {
+  class "search-query-codec" as SearchQueryCodec <<module>> {
     +toParams(state: SearchState): Params
     +fromParams(params: ParamMap): SearchState
-    +key(state: SearchState): string
-    -roundCoordinate(value: number): number
+    +toQuery(state: SearchState): SearchQuery | null
   }
   class SearchStore {
-    +sort: Signal<SearchSort>
-    +filters: Signal<LineupFilter>
-    +lineup: Signal<Lineup | null>
-    +summary: Signal<string>
-    -cache: Map<string, Lineup>
-    +applySort(sort: SearchSort): void
-    +toggleFilter(chip: Style | 'under-800'): void
-    +restoreOrSearch(state: SearchState): void
+    +state: Signal<SearchState>
+    +result: Signal<SearchResult | null>
+    +load(state: SearchState, search: boolean): void
+    +navigate(change: Partial<SearchState>, options): void
   }
-  class SortControlComponent {
-    +value: InputSignal<SearchSort>
-    +changed: OutputEmitterRef<SearchSort>
-  }
-  class StyleFilterComponent {
-    +selected: InputSignal<LineupFilter>
-    +toggled: OutputEmitterRef<string>
-  }
-  class SummaryLineComponent {
-    +text: InputSignal<string>
+  class Lineup {
+    +sortControl: FormControl<SearchSort>
+    +kicker: Signal<string>
+    +toggleStyle(style: Style): void
+    +toggleUnder800(): void
     -announcer: LiveAnnouncer
   }
+  class Discover <<page>>
 }
 
 package "Zamaro API (Laravel)" {
   class SearchArtistsRequest {
     +rules(): array
-    +toCriteria(): SearchCriteria
+    +criteria(): SearchCriteria
+    +cursorKey(): ?array
   }
   class SearchCriteria <<value object>> {
     +CarbonImmutable eventDate
+    +Coordinates location
     +GatheringKind kind
-    +float latitude
-    +float longitude
     +int radiusKm
-    +SearchSort sort
     +LineupFilter filter
-    +?string cursor
+    +SearchSort sort
   }
   enum SearchSort {
     Closest
@@ -77,9 +67,8 @@ package "Zamaro API (Laravel)" {
   }
   class LineupFilter <<value object>> {
     +Style[] styles
-    +?int maxPriceCentsExclusive
-    +isEmpty(): bool
-    +applyTo(query: Builder): Builder
+    +bool under800
+    +applyTo(artists: Builder): void
   }
   enum Style {
     Band
@@ -90,27 +79,23 @@ package "Zamaro API (Laravel)" {
     Spanish
   }
   class SearchAvailableArtists <<action>> {
-    +handle(criteria: SearchCriteria): Lineup
+    +handle(criteria: SearchCriteria, after: ?array): Lineup
   }
   class LineupSorter {
     +sort(cards: LineupCard[], sort: SearchSort): LineupCard[]
-    -closest(a: LineupCard, b: LineupCard): int
-    -highestRated(a: LineupCard, b: LineupCard): int
-    -priceLowToHigh(a: LineupCard, b: LineupCard): int
+    +key(card: LineupCard, sort: SearchSort): array
   }
-  class Lineup <<value object>> {
+  class "Lineup" as ApiLineup <<value object>> {
     +?LineupCard headliner
-    +LineupCard[] cards
+    +LineupCard[] tickets
     +int total
-    +SearchSort sort
-    +LineupFilter filter
     +?string nextCursor
   }
 }
 
-StyleFilterComponent ..> SearchStore : toggleFilter()
-SortControlComponent ..> SearchStore : applySort()
-SummaryLineComponent ..> SearchStore : reads summary
+Lineup ..> SearchStore : navigate()
+Discover ..> SearchStore : load()
+Discover ..> SearchQueryCodec : fromParams()
 SearchStore --> SearchQueryCodec
 SearchQueryCodec ..> SearchState : encodes / decodes
 SearchStore ..> SearchArtistsRequest : GET /api/v1/search
@@ -120,5 +105,5 @@ SearchCriteria *-- LineupFilter
 LineupFilter --> "0..6" Style
 SearchAvailableArtists ..> SearchCriteria : handles
 SearchAvailableArtists --> LineupSorter
-SearchAvailableArtists ..> Lineup : builds
+SearchAvailableArtists ..> ApiLineup : builds
 @enduml

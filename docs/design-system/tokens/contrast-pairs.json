@@ -95,7 +95,7 @@
       "fg": "--color-fg-inverse",
       "bg": "--color-bg-inverse",
       "min": 4.5,
-      "note": "ink button, pressed chip, tooltip, art tag"
+      "note": "ink button, pressed chip, art tag"
     },
     {
       "fg": "--color-fg-link",
@@ -197,7 +197,7 @@
       "fg": "--color-border-selected",
       "bg": "--color-bg-surface",
       "min": 3,
-      "note": "outline of a selected choice card, card or nav item"
+      "note": "outline of a selected card or nav item"
     },
     {
       "fg": "--color-border-selected",

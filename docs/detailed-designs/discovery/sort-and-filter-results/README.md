@@ -37,20 +37,23 @@ coordinates plus a location label, never as a street address (L2-009).
 The slice adds sort and filter controls to Discover, a codec between the search
 state and the query string, and sort and filter handling in the search endpoint.
 
-**Frontend (Zamaro Web, `features/discover`)**
+**Frontend (Zamaro Web, `pages/discover`; locations per ADR-0007)**
 
-- **`SortControlComponent`** — select labelled "Sort" in the lineup heading, with the
-  options Closest first, Highest rated and Price, low to high. It emits a `SearchSort`
-  value and never touches the other inputs.
-- **`StyleFilterComponent`** — row of `ChipComponent` toggles from the design system
+The sort select, the style chips and the summary line are part of `Lineup`
+(`pages/discover/lineup`), not separate components.
+
+- **Sort** — a `zm-form-field` select labelled "Sort" in the lineup heading, with the
+  options Closest first, Highest rated and Price, low to high. A change sets only the
+  `SearchSort` and never touches the other inputs.
+- **Style filters** — a `zm-filter-group` of `zm-chip` toggles from the `components` library
   for Band, Solo vocalist, Gospel choir, Acoustic, Hymns, Spanish and Under $800. Each
   chip exposes its pressed state through `aria-pressed`. The row wraps onto as many
   lines as it needs, so at XS every chip stays visible without page-level horizontal
   scroll (L2-097).
-- **`SummaryLineComponent`** — renders the summary line from the store, using
-  `FormatService` for the short date. After each search it sends the line to the CDK
-  `LiveAnnouncer` in polite mode, so the changed count is announced (L2-008, L2-102).
-- **`SearchQueryCodec`** — pure service that converts between `SearchState` and the
+- **Summary line** — the lineup's kicker, built from the store with `FormatService` for the
+  short date. After each search `Lineup` sends it to the CDK `LiveAnnouncer` in polite mode,
+  so the changed count is announced (L2-008, L2-102).
+- **Search query codec** (`pages/discover/search-query-codec.ts`) — pure functions that convert between `SearchState` and the
   query parameters `date`, `kind`, `lat`, `lng`, `place`, `radius`, `sort`, `styles`
   and `price`. `toParams()` rounds coordinates to 3 decimal places and writes the
   location label to `place`. It never writes a street address. `fromParams()`
@@ -59,16 +62,17 @@ state and the query string, and sort and filter handling in the search endpoint.
   spellings, such as `sort=rating` and `styles=band,gospel-choir`, are listed in the
   class diagram.
   - Defaults are left out of the URL.
-  - The code is in `pages/discover/search-query-codec.ts` (`fromParams`, `toParams`, `toQuery`).
+  - `fromParams()` and `toParams()` convert, and `toQuery()` turns a complete state into the
+    API's `SearchQuery`.
   - When the URL names the place the form has already resolved, the location field keeps its
     label as entered ("Burlington, ON").
   - A link opened from scratch shows the town label ("Burlington").
-- **`SearchStore`** (extended) — gains `sort` and `filters` signals. Its
-  `applySort()` and `toggleFilter()` methods navigate to the same route with the new
-  query parameters. The store reacts to every query-parameter change by decoding the
-  state and running the search. It also keeps the last `Lineup`, with every page
-  loaded so far, keyed by the canonical query string.
-  - In M1 its `navigate()` replaces the history entry for sort and chip changes, as the
+- **`SearchStore`** (extended) — its `state` signal holds the sort, the styles and the
+  under-$800 flag beside the other criteria. `Lineup`'s sort select and chips call
+  `navigate()` with the one part that changed, which writes the new query parameters to the
+  same route. The store reacts to every query-parameter change by decoding the state and
+  running the search.
+  - `navigate()` replaces the history entry for sort and chip changes, as the
     design system's navigation pattern says, so Back does not step through every chip. "Show
     the lineup" adds an entry.
   - Re-submitting an unchanged search runs it again.
@@ -77,11 +81,13 @@ state and the query string, and sort and filter handling in the search endpoint.
   - After each search, the summary line is announced through the CDK `LiveAnnouncer` (polite).
   - The sort select and the chips sit in the lineup section. The chips are disabled while a
     search loads.
-- **`DiscoverPage`** (extended) — subscribes to `ActivatedRoute.queryParamMap`. When
-  the decoded state matches the cached key, as it does after Back from a profile, it
-  renders the cached lineup at once. The router, configured with
-  `withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })`, then restores the
-  scroll position (L2-009).
+- **`Discover`** (extended) — subscribes to `ActivatedRoute.queryParamMap` and hands each
+  decoded state to `SearchStore.load()`. After Back from a profile the URL re-runs the search,
+  so the lineup returns.
+  - **Not built yet (open item, L2-009.2):** keeping the last lineup, with every page loaded
+    so far, keyed by the canonical query string so Back renders it at once, and restoring the
+    scroll position with `withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })`.
+    The router today enables only anchor scrolling.
 
 **Backend (Zamaro API)**
 
@@ -92,8 +98,8 @@ state and the query string, and sort and filter handling in the search endpoint.
   only the frontend codec substitutes defaults. `meta` echoes `sort`, `styles` and `price`
   beside the filtered `total`.
 - **`SearchSort`** — enum with `Closest`, `HighestRated` and `PriceLowToHigh`.
-- **`LineupFilter`** — value object holding the selected `Style` values and an optional
-  `maxPriceCentsExclusive` of 80,000. `SearchAvailableArtists` applies it in the SQL
+- **`LineupFilter`** — value object holding the selected `Style` values and an `under800`
+  flag (`UNDER_PRICE_CENTS` = 80,000). `SearchAvailableArtists` applies it in the SQL
   pre-filter, through an `EXISTS` on `artist_styles` for any selected style and
   `artists.from_price_cents < 80000` for the price chip. Filtering before distance
   measurement keeps routing calls to the artists that can appear.
@@ -109,8 +115,8 @@ state and the query string, and sort and filter handling in the search endpoint.
   travel-matches as before, sorts with `LineupSorter` and counts the filtered total for
   the summary line. The paging cursor encodes the sort order and the sort key of the
   last card returned, so the next page continues the same order.
-- **`LineupResource`** (extended) — echoes the applied sort order and filter set beside
-  the filtered `total`.
+- **`SearchController`** (extended) — `meta` echoes the applied sort order and filter set
+  beside the filtered `total`.
 
 **Mocks**
 
@@ -159,7 +165,7 @@ memory after measuring distances.
 
 ### Components
 
-On the frontend, `SearchQueryCodec` sits between the router and `SearchStore`. On
+On the frontend, the search query codec sits between the router and `SearchStore`. On
 the backend, `SearchAvailableArtists` uses `LineupFilter` before measurement and
 `LineupSorter` after it.
 

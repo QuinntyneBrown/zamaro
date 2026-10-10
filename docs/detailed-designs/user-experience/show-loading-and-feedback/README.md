@@ -50,11 +50,13 @@ second charge.
   following the design system's feedback pattern. It is visible, as in the loading mock.
   Discover, the first busy region (S7), binds `aria-busy` from `SearchStore.showSkeletons`
   (the 300 ms delayed flag). The directive is extracted when the profile becomes the second
-  busy region. The skeletons there are `zm-skeleton` blocks laid out in the cards' own grid
-  tracks.
-- **Skeleton components** — `TicketCardSkeletonComponent`,
-  `HeadlinerSkeletonComponent`, `ProfileHeaderSkeletonComponent` and
-  `ProfileSectionSkeletonComponent`, built from the design-system skeleton modifiers.
+  busy region. The skeletons there are the `components` library's `zm-headliner-skeleton` and
+  `zm-ticket-skeleton`, which reuse the headliner's and ticket's own styles.
+- **Skeleton components** — `zm-ticket-skeleton` (`.ticket--loading`),
+  `zm-headliner-skeleton`, `zm-artist-poster` with `loading` for the profile header, and
+  `zm-skeleton` with `shape="strip"` for the song strip, all in the `components` library and
+  built from the design-system skeleton modifiers. The profile's section placeholders are
+  `zm-skeleton` stacks in the profile layout, as in the loading mock.
   Each reuses the final component's grid track, `aspect-ratio` and minimum block
   size, so content replaces it in place. Images carry `width` and `height`
   attributes. The skeleton sweep stops under reduced motion (L2-103).
