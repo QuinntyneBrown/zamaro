@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-rating` |
 | Library path | `frontend/projects/components/src/lib/rating/` |
-| Status | built |
+| Status | built (`inline` and `summary`); planned (`full`, `compact`, `stars`, `loading`) |
 | Traces to | L2-006, L2-012, L2-018, L2-020, L2-060, L2-067, L2-086, L2-096, L2-100, L2-102, L2-103, L2-104, L2-105, L2-111 |
 | Design system | [`rating.html`](../../design-system/components/rating.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/artist/empty`](../../mocks/pages/artist/empty.html), [`pages/dashboard/default`](../../mocks/pages/dashboard/default.html), [`pages/artist-reviews/default`](../../mocks/pages/artist-reviews/default.html), [`pages/book/default`](../../mocks/pages/book/default.html), [`pages/booking-detail/declined`](../../mocks/pages/booking-detail/declined.html), [`pages/admin-artists/default`](../../mocks/pages/admin-artists/default.html), [`pages/admin-artist/default`](../../mocks/pages/admin-artist/default.html), [`pages/admin-reviews/default`](../../mocks/pages/admin-reviews/default.html), [`dialogs/suspend-artist/default`](../../mocks/dialogs/suspend-artist/default.html), [`dialogs/hide-review/default`](../../mocks/dialogs/hide-review/default.html) |

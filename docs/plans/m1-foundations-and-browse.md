@@ -7,7 +7,7 @@ milestones get their own plan in this folder when they start.
 ## Current status (2026-10-10)
 
 **Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is about
-three-quarters done: S0–S12 are built; S13–S16 remain.
+four-fifths done: S0–S13 are built; S14–S16 remain.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -25,22 +25,23 @@ three-quarters done: S0–S12 are built; S13–S16 remain.
 | S11 | Artist profile: header, About, setlist, loading and error | Done | `31dcbf4`, `9e7f58f`, `f48451c`, `a10df34` (ADR-0008) |
 | — | e2e API gets its own database, clock, limits and cache keys | Done | `331a03f` |
 | S12 | Photos and videos (local disk, no object storage in M1) | Done | `37d8f6c`, `263ee86`, `9c56457` (ADR-0010) |
-| S13 | Reviews on the profile | **Next** | |
-| S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | To do | |
+| S13 | Reviews on the profile | Done | `eb1853c`, `7724bea`, `d9ed059` |
+| S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | **Next** | |
 | S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0011 |
 | S16 | Index and share (optional, last) | To do | |
 
 **Checks at the last commit:**
-- Backend: 75 Feature tests pass, with OpenAPI contract assertions.
+- Backend: 87 Feature tests pass, with OpenAPI contract assertions.
 - Frontend: lint and `format:check` are clean.
-- e2e: 49 Playwright tests pass in Chromium against a freshly seeded e2e database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `ArtworkPhoto`, `MediaGrid` and `VideoCard` are new scenarios.
+- e2e: 53 Playwright tests pass in Chromium against a freshly seeded e2e database.
+- Perf: `--fail-on-regression` against the base build flags no rows. `Review`, `ReviewList` and `RatingSummary` are new scenarios.
 
 **Open items carried forward:**
 - **L2-009.2:** Back restores the Discover results but not the scroll position yet.
 - **S12:** serve the seeded photos and videos from the API's local disk; object storage waits for M4 (user decision).
-- **S13:** seed 38 distinct-church reviews for Abigail, or the rating recalculation will change her 4.9/38.
+- **M7:** only Abigail's rating has reviews behind it; the rest of the cast keeps seeded summaries, so their profiles show "No church reviews yet" under a rating. `QueueRatingRecalculation` and the review events arrive with leaving and moderating reviews.
 - **S14:**
+  - "Be her first booking" (no reviews) focuses `#book-date`, like the header's Book button.
   - Miriam's seeded ticket number is ACT-0041; the mocks say ACT-0154.
   - The book submit stays behind the off `bookingRequests` flag (user decision).
 - **S15:** settle `ArtistSlugResolver` (change-profile-address) against `ResolveArtistSlug` (view-artist-profile).
@@ -228,6 +229,12 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **Library changes:** `zm-artwork` gained `ratio`, `photo` (with fallback to the placeholder on error) and `priority`; `zm-dialog` gained `kicker` and the `[slot=footer]`; `zm-icon` gained `arrow-left`. Not flagged by the perf test; `Artwork`'s median moved within the runner's noise (it swung 98–188 ms on the base build alone).
   - **ADR-0010 (OK, accepted default, 2026-10-10):** hls.js behind `ZM_HLS_LOADER`, lazy; native HLS first. Playwright's Chromium plays HLS natively, so a spec hides native HLS to cover the hls.js path.
   - **Drift recorded in the design:** grid photos are buttons, not the mock's links (they open a dialog and there is no photo route); the video thumbnail's label is the title, as the API has no poster description; "No videos yet" ships without "Ask {first name} for a recording", which needs the S14 stub. With no photos, the label reads "{Solo vocalist|Duo|Band|Choir} illustration: {name} hasn't added photos yet".
+- **S13 is done** (eb1853c API, seed and backend tests, 7724bea red e2e tests, d9ed059 page and components, then docs).
+  - **API:** the profile carries `reviews: { total, items (4), nextCursor }`; `GET /api/v1/artists/{slug}/reviews?cursor=` pages 10 at a time with Laravel's cursor over `created_at` and `id` (an undecodable cursor is a 422). Reviews carry `attribution { reviewerName, churchName, city, month }` and `reply { text, artistName, month }`; `month` is `YYYY-MM` and the page formats it (`FormatService.monthYear`). `review_replies` landed here.
+  - **Rating:** `RecalculateArtistRating` is unique per artist on a new `high` queue (Horizon works it first). A church is the booking's name and city until churches have records (M2). No server cache to forget yet.
+  - **Seed (the S6 open item):** Abigail now has 38 reviews from 38 churches, her four mock reviews the newest (Naomi's and Femi's texts are now the mocks' full text), plus Tomi's and Naomi's replies; 185 stars, shown as 4.9. The seeder runs the job for her, bulk-upserting the 34 older reviews so test setup stays quick. Every other artist keeps its seeded summary with no reviews behind it, so search sorting and the headliner tests are unchanged (backing them would give Marcus a headliner quote).
+  - **Components:** `zm-review` (no `zm-review-skeleton` yet: its consumer is the artist's Reviews page, M7) and `zm-rating variant="summary"`. Per-review stars are drawn by `zm-review` (review CRD D-5), not a `stars` rating variant.
+  - **Drift recorded in the design:** after the first page the button reads "Show 10 more" ("Show 4 more" last), taken from the artist's Reviews page mock; "Be her first booking" is a button that focuses the booking date instead of the mock's `#book-title` link; a failed page is silent, as on Discover; Report waits for sign-in.
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.

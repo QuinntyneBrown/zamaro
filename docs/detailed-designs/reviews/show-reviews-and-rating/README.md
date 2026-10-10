@@ -105,6 +105,45 @@ Zamaro database and the Redis cache.
   no reviews), `review_count`, `recalculated_at`. Search and profile both read it,
   and "New" shows when `review_count` is 0 (L2-006).
 
+**As built in M1 (S13)**
+
+- **Layout:** AGENTS.md's layout applies (ADR-0007). The section is part of the
+  `pages/artist/ArtistPage` template, not a `ReviewsSectionComponent`; the library's
+  `zm-review` is the card and `zm-rating variant="summary"` the heading's rating.
+  `ProfileReviewsStore` (in `pages/artist`) holds the list and the cursor as linked signals,
+  so a new profile starts the list again; it has no `status`. `ArtistReviewsApi` is
+  `ReviewsApi` behind the `REVIEWS_API` token in the `api` library.
+- **API fields:** the profile carries `reviews: { total, items, nextCursor }`, with up to 4
+  items and the cursor to continue from (Laravel's cursor over `created_at` and `id`).
+  `GET /api/v1/artists/{slug}/reviews?cursor=` returns `{ data, meta: { perPage, nextCursor } }`;
+  a cursor that does not decode is a 422 ("These reviews have changed. Reload the page.").
+  Each review is `id`, `stars`, `text`, `attribution { reviewerName, churchName, city, month }`
+  and `reply { text, artistName, month }` or null. `month` is `YYYY-MM` (Toronto time); the page
+  formats it with `FormatService.monthYear` ("September 2026"), so the API sends no display
+  strings. There is no `ReviewAttribution` value object or `ReviewReplyResource` yet.
+- **Church count:** bookings have no `church_id` until churches have records (M2), so a church is
+  the booking's `church_name` and `church_city`.
+- **Recalculation:** `App\Jobs\Reviews\RecalculateArtistRating` is unique per artist and runs on
+  the `high` queue, which Horizon now works before `default`. `QueueRatingRecalculation` and the
+  review events arrive with leaving and moderating reviews (M7). Nothing caches the profile or
+  search results on the server yet, so the job forgets no cache entries.
+- **Paging:** the button reads "Show all 38 reviews" while only the profile's 4 are shown, then
+  "Show 10 more" (or "Show 4 more" for the last page), as the artist's Reviews page mock does.
+  Focus moves to the first new review's list item. A failed page leaves the list and the button
+  as they were, as Discover's "Show more artists" does.
+- **No reviews:** "No church reviews yet", "Book Miriam and your church can be the first to say
+  how it went." and a primary "Be her first booking" button. It moves focus to the booking
+  date, as the header's Book button does, rather than linking to `#book-title`, which arrives with
+  the stub (S14). The empty state follows the visible reviews; the summary rating shows only
+  beside reviews.
+- **Not yet built:** Report on each review (sign-in, M2, and reporting, M7); "A church in {city}"
+  for a deleted booker (L2-082, M9).
+- **Seed:** Abigail has 38 reviews from 38 churches (her four mock reviews are the newest, then
+  34 older ones a week apart, four of them 4-star): 185 stars, 4.87, shown as 4.9. Tomi's and
+  Naomi's reviews have her replies. The seeder runs the job for her. The rest of the cast keeps
+  its seeded summaries, which have no reviews behind them yet, so their profiles show the empty
+  state under a rating; M7 seeds their reviews.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements. Each refines the
