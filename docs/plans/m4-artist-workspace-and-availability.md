@@ -63,7 +63,7 @@ Each decision has a recommended default. Those marked **Needs your OK** wait for
 **Cross-cutting**
 - **D1 — e2e clock.** **Needs your OK.**
   - **The problem:** the artist-side mocks are drawn at about Fri 9 Oct, 3:15 p.m.: "Good afternoon, Abigail", "1 day left · reply by Sat 10 Oct, 3:15 p.m." and "2 days 19 hr left". Riverside's request was sent at 10:15 a.m. The e2e clock is frozen at 10:00.
-  - **Default:** move `ZAMARO_FROZEN_NOW` and `page.clock` to Fri 9 Oct 2026 15:15 America/Toronto for the whole suite. M1's specs depend only on the date; re-run them once.
+  - **Default:** move `page.clock`, and the time the stub API answers as of, to Fri 9 Oct 2026 15:15 America/Toronto for the whole suite. M1's specs depend only on the date; re-run them once. Backend Feature tests set their own time with `travelTo`.
 - **D2 — Links to screens of later milestones.** **Needs your OK.**
   - **Behind flags (default):** M1's footer rule, "link only to screens that exist", applies here. Three off flags hide the links:
     - `artistRequests` (M5): the Requests nav link and badge, "Answer requests", "All requests", "Open requests", the "Open request" toast action, and the church links on dashboard and calendar rows. The rows show the church name as text.
@@ -83,7 +83,7 @@ Each decision has a recommended default. Those marked **Needs your OK** wait for
   - **Default:** S6 builds `BookingStateMachine` with only Requested → Declined and Accepted → Declined, plus the `RequestDeclined` email to the booker with the reason and 3 similar artists (L2-030, L2-063).
   - M5 adds every other transition and owns the email's final template.
 - **D5 — Rendering of `/artist/**`.** Default: `RenderMode.Client`, unless M2 has already set a rule for signed-in pages. This keeps personal HTML and private API responses out of SSR and the transfer cache. The greeting comes from the session.
-- **D6 — Background jobs in e2e.** Default: a `worker-e2e` compose service on the e2e database and Redis prefix, so the Processing states can actually be seen.
+- **D6 — Background jobs in e2e.** Default: none run. A spec sees Processing, then Ready, Live or Failed, because its stub-API fixture answers the next poll with the job's outcome. The jobs themselves are proven in backend Feature tests, and end to end on the dev stack's worker.
 
 **Object storage**
 - **D7 — Local S3 server.** **Needs your OK.**
@@ -346,10 +346,10 @@ Branch: `feat/m4-artist-workspace-and-availability`.
     - "Keep Sun 22 Nov open" (focused first) and "Mark unavailable and decline".
   - **On confirm:**
     - St. Brendan's request becomes Declined, and a `booking_transitions` row records the artist as actor and the reason "I'm not free that day".
-    - Rev. Janet Clarke receives an email in Mailpit within 2 minutes, with the reason and 3 similar artists free on Sun 22 Nov. "Family visiting" never appears in it.
+    - Rev. Janet Clarke receives an email within 2 minutes, with the reason and 3 similar artists free on Sun 22 Nov. "Family visiting" never appears in it.
     - The success toast has no Undo (D23).
   - **The bulk bar** shows the same warning when the selection holds Requested days.
-- **Tests first:** `tests/Feature/ArtistAvailability/DeclineRequestsByAvailabilityTest.php` (409 without `confirm`; Accepted also declined; a Confirmed date skipped; the re-read under a lock), and an e2e case that reads the email through the M2 Mailpit helper.
+- **Tests first:** `tests/Feature/ArtistAvailability/DeclineRequestsByAvailabilityTest.php` (409 without `confirm`; Accepted also declined; a Confirmed date skipped; the re-read under a lock; the email's content asserted with `Notification::fake`), and an e2e case for the warning and confirm flow against stub fixtures. The 2-minute delivery is checked on the dev stack (manual walkthrough step 7.2).
 - **Build:**
   - `Services/Bookings/BookingStateMachine` (decline only, D4).
   - `Events/RequestDeclined`, `Notifications/RequestDeclinedNotification`.
@@ -368,7 +368,7 @@ Branch: `feat/m4-artist-workspace-and-availability`.
 - **Tests first:**
   - `tests/Feature/ArtistAvailability/CalendarFeedTest.php` (enable is idempotent; regenerate; 404 before enabling).
   - `ServeCalendarFeedTest.php` (unknown token 404, events, Cancelled dropped, Completed kept per D24, the hash-only lookup, redaction).
-  - `e2e/specs/artist-availability/publish-calendar-feed.spec.ts` with `e2e/pages/calendar-feed.dialog.ts`. It fetches the feed through Playwright's request context.
+  - `e2e/specs/artist-availability/publish-calendar-feed.spec.ts` with `e2e/pages/calendar-feed.dialog.ts`, covering the dialog's states against stub fixtures. The `.ics` body is proven in `ServeCalendarFeedTest`.
 - **Build:**
   - `calendar_feeds` migration.
   - `bookings.church_address` (D3).
@@ -490,7 +490,7 @@ Branch: `feat/m4-artist-workspace-and-availability`.
     - "Live": "Write a title of 5 to 100 characters. “Live” has 4."
     - The 9th video: "You can have up to 8 videos."
   - **Failed videos do not count:** the seeded failed video gives "5 of 8".
-- **Tests first:** `tests/Feature/ArtistWorkspace/UploadVideosTest.php` (the limit under a lock, the session, signed parts, ListParts, the size checked on complete) and `e2e/specs/artist-workspace/upload-videos.spec.ts` with `e2e/pages/add-video.dialog.ts`. The e2e case uses a 20 MB fixture with 5 MB parts and Playwright's `setOffline`.
+- **Tests first:** `tests/Feature/ArtistWorkspace/UploadVideosTest.php` (the limit under a lock, the session, signed parts, ListParts, the size checked on complete) and `e2e/specs/artist-workspace/upload-videos.spec.ts` with `e2e/pages/add-video.dialog.ts`. The e2e case uses a 20 MB fixture with 5 MB parts and Playwright's `setOffline`; the stub API hands out part URLs that `page.route` answers with an `ETag`.
 - **Build:**
   - `artist_videos` expand: `status`, `failure_reason`, `size_bytes`, `source_key`, `upload_id`, unique `processor_job_id`, `manifest_key`, `poster_key`, `captions_key`, `duration_seconds`, `max_height`, `deleted_at`.
   - `ArtistVideoUploadController`, `InitiateVideoUploadRequest`, `InitiateVideoUpload`, `CompleteVideoUpload`, `ArtistVideoPolicy`.
@@ -572,7 +572,7 @@ The real adapters arrive in M10, one ADR per vendor, and binding a fake in produ
 | `VideoProbe` | `FfprobeVideoProbe` (real), `FakeVideoProbe` | The fake returns set durations and heights, so no 16-minute fixture is needed. |
 | `ImageProcessor` | `ImagickImageProcessor` | Real in tests. |
 
-- **`FakeVideoTranscoder` in dev and e2e:** `CompleteFakeTranscode` runs after `FAKE_TRANSCODER_DELAY` (3 s). It copies M1's sample HLS ladder and poster into `zamaro-media` under random keys, then posts a correctly signed webhook.
+- **`FakeVideoTranscoder` in dev:** `CompleteFakeTranscode` runs after `FAKE_TRANSCODER_DELAY` (3 s). It copies M1's sample HLS ladder and poster into `zamaro-media` under random keys, then posts a correctly signed webhook.
 
 **Reused:**
 - `MediaScanner` (M3): `FakeMediaScanner` flags any file that contains the EICAR string. It also has `unavailableNext()`.
@@ -592,7 +592,7 @@ All seeds stay idempotent, upserting on natural keys.
     - "Goodness of God — women's retreat, Muskoka" (5:30)
   - **Profile:** `slug_changed_at` Mon 3 Aug 2026 and `profile_updated_at` Tue 6 Oct 2026.
   - **Calendar:** weekly rule Monday. Overrides: 26–27 Nov "Studio", 24–26 Dec "Family", and 31 Dec.
-  - **Feed:** on, with the mock's token, in dev and e2e only.
+  - **Feed:** on, with the mock's token, in dev only. e2e's stub fixture uses the same token.
   - **Bookings:**
     - Confirmed: 18 Oct Living Waters, 1 Nov Harvest Point, 15 Nov Lakeshore Alliance, 21 Nov Kingdom Life (Conference or retreat, $900), 13 Dec Living Waters, 20 Dec Lakeshore Alliance. Each has a start time and a church address.
     - Requested, at $650:
@@ -603,14 +603,14 @@ All seeds stay idempotent, upserting on natural keys.
       Each carries the mock's distance and message.
 - **Miriam Haile:** 4 songs, 2 photos, no videos and no check. No `slug_changed_at` and no rules.
 - **Elijah Park:** a song, a photo and a video, as the other artist in the cross-user tests.
-- **e2e fixtures:** `address-locked` (Abigail changed her slug Mon 28 Sep) and `video-processing` (Jireh Processing; "O Holy Night — carol service 2025", 16:20, Failed). They are applied by `php artisan e2e:apply-fixture {name}`. `e2e:restore-cast {slug}` resets an artist before each mutating spec.
+- **e2e fixtures:** `address-locked` (Abigail changed her slug Mon 28 Sep) and `video-processing` (Jireh Processing; "O Holy Night — carol service 2025", 16:20, Failed) are stub-API states in `e2e/fixtures/`, which a spec applies per test. They are not seeded.
 
 ## Known risks
 
 - **Biggest: the resumable video path.**
-  - **Parity:** browser `PUT` to presigned parts needs the local S3 server to match S3 on CORS, the exposed `ETag`, ListParts and expiry. If it diverges, the dev and e2e results stop predicting production. S1 proves this first with a scripted check.
+  - **Parity:** browser `PUT` to presigned parts needs the local S3 server to match S3 on CORS, the exposed `ETag`, ListParts and expiry. If it diverges, the dev results stop predicting production; e2e answers the parts with `page.route` and cannot catch it. S1 proves this first with a scripted check.
   - **Collision with M3:** if M3 shipped its own chunk protocol, S14 must migrate it.
-- **e2e isolation:** M4 is the first milestone whose specs mutate shared seeded data (saves, slugs, uploads, declines). Every mutating spec restores the cast first, and these specs run serially in one Playwright project.
+- **e2e state:** M4 is the first milestone whose specs change data (saves, slugs, uploads, declines). Each spec sets up its before and after states through stub-API fixtures, so specs stay parallel and never share state. The fixtures must follow the OpenAPI contract, or e2e passes against a shape the API doesn't send.
 - **Clock and copy parity:** without D1, the greeting and time-left copy differ from the mocks in visual tests.
 - **Pulling M5 work forward (D3, D4):** M5 must extend `ListArtistRequests`, `BookingStateMachine` and the booking columns, not rewrite them. Record this in the M5 plan.
 - **Image toolchain:** HEIC needs libheif and AVIF needs libavif in Imagick, which can break the PHP image build. Pin them in S12.
@@ -623,11 +623,11 @@ All seeds stay idempotent, upserting on natural keys.
 
 ## Verification at the end of the milestone
 
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test passes, including the contract assertions and the cross-user suite with the new routes.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test passes, including the contract assertions and the cross-user suite with the new routes.
 2. `docker compose exec api php artisan db:seed` twice: row counts are unchanged. `php artisan media:move-to-object-storage` twice: the second run copies nothing.
 3. `docker compose exec api php artisan schedule:list` shows `PruneAbandonedVideoUploads` and `ReconcileProcessingVideos`.
 4. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && NG_BUILD_MANGLE=0 npx ng build perf-test`.
-5. `cd e2e && npx playwright test` in Chromium: the specs, `visual/` (new route states, light and dark), `a11y/` and `perf/`.
+5. `cd e2e && npx playwright test` in Chromium, with no API, database or Docker running: the specs, `visual/` (new route states, light and dark), `a11y/` and `perf/`.
 6. `npm run perf-test -- --baseline <main dist> --fail-on-regression`: no flagged rows. The new scenarios are listed.
 7. **Manual walkthrough** at Fri 9 Oct, 3:15 p.m.:
    1. **Dashboard:** sign in as Abigail. Check 3 / 4 / 2 / 100% and the three rows.

@@ -464,7 +464,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **Agents never add the `perf-regression-accepted` label.**
 
 ### Verification (end of M1)
-1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including the OpenAPI contract assertions.
+1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including the OpenAPI contract assertions.
 2. `docker compose exec api php artisan db:seed` twice: row counts are unchanged.
 3. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && NG_BUILD_MANGLE=0 npx ng build perf-test`.
 4. `cd e2e && npx playwright test` passes all of these in Chromium: specs, `visual/`, `a11y/` (axe in light and dark), `perf/`.
