@@ -33,8 +33,12 @@ test.describe('An artist’s profile', () => {
     await expect(profile.name()).toHaveText('Abigail Mensah');
     await expect(profile.kicker()).toHaveText('Gospel & contemporary vocalist');
     await expect(profile.rating()).toHaveAccessibleName('Rated 4.9 out of 5 by 38 churches');
-    await expect(profile.facts()).toContainText('Brampton, ON');
-    await expect(profile.facts()).toContainText('Drives up to 120 km');
+    await expect(profile.facts()).toHaveText([
+      '★ 4.9',
+      '38 churches',
+      'Brampton, ON',
+      'Drives up to 120 km',
+    ]);
     await expect(profile.bookButton()).toHaveText('Book for Sat 14 Nov');
     await expect(profile.aboutHeading()).toHaveText('Raised in the choir loft');
     await expect(profile.aboutParagraphs()).toHaveCount(2);
@@ -52,7 +56,12 @@ test.describe('An artist’s profile', () => {
     await expect(profile.breadcrumbBack()).toHaveText('Discover');
     await expect(profile.bookButton()).toHaveText('Check dates');
     await expect(profile.kicker()).toHaveText('New to Zamaro · Solo vocalist & pianist');
-    await expect(profile.facts()).toContainText('New · No reviews yet');
+    await expect(profile.facts()).toHaveText([
+      'New',
+      'No reviews yet',
+      'Etobicoke, ON',
+      'Drives up to 40 km',
+    ]);
   });
 
   test('an artist without an About heading is introduced by name', async () => {

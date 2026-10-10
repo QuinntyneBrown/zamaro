@@ -20,13 +20,20 @@ export class ArtistProfilePage {
     await this.page.route(`**/api/v1/artists/${slug}`, async (route) => {
       const response = await route.fetch();
       const body = await response.json();
-      await route.fulfill({ response, json: { data: { ...body.data, ...change } } });
+      await route.fulfill({
+        response,
+        json: { data: { ...body.data, ...change } },
+      });
     });
   }
 
   async failProfile(slug: string): Promise<void> {
     await this.page.route(`**/api/v1/artists/${slug}`, (route) =>
-      route.fulfill({ status: 500, contentType: 'application/problem+json', body: '{}' }),
+      route.fulfill({
+        status: 500,
+        contentType: 'application/problem+json',
+        body: '{}',
+      }),
     );
   }
 
@@ -54,16 +61,16 @@ export class ArtistProfilePage {
   }
 
   kicker(): Locator {
-    return this.page.locator('.artist-header__kicker');
+    return this.page.locator('.artist-poster .poster__kicker');
   }
 
-  /** Rating, base city and drive limit. */
+  /** Each fact in the header, in order: rating, review count, base city, drive limit. */
   facts(): Locator {
-    return this.page.locator('.artist-header__facts');
+    return this.page.locator('.artist-poster__facts > *');
   }
 
   rating(): Locator {
-    return this.facts().getByRole('img');
+    return this.page.locator('.artist-poster__facts').getByRole('img');
   }
 
   bookButton(): Locator {
@@ -71,11 +78,11 @@ export class ArtistProfilePage {
   }
 
   aboutHeading(): Locator {
-    return this.page.getByRole('region', { name: /./ }).filter({ has: this.page.locator('#about-title') }).getByRole('heading', { level: 2 });
+    return this.page.locator('#about-title');
   }
 
   aboutParagraphs(): Locator {
-    return this.page.locator('[aria-labelledby="about-title"] .about__body p');
+    return this.page.locator('[aria-labelledby="about-title"] .section__body p');
   }
 
   setlistHeading(): Locator {
@@ -83,7 +90,7 @@ export class ArtistProfilePage {
   }
 
   setlistNote(): Locator {
-    return this.page.locator('[aria-labelledby="songs-title"] .setlist-note');
+    return this.page.locator('[aria-labelledby="songs-title"] .section__head > p');
   }
 
   songs(): Locator {

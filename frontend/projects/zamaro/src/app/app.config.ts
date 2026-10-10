@@ -6,7 +6,13 @@ import {
   withHttpTransferCacheOptions,
 } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { DISCOVERY_API, HttpDiscoveryApi, provideI18n } from 'api';
+import {
+  ARTIST_PROFILES_API,
+  DISCOVERY_API,
+  HttpArtistProfilesApi,
+  HttpDiscoveryApi,
+  provideI18n,
+} from 'api';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -18,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
     provideI18n(),
     { provide: DISCOVERY_API, useClass: HttpDiscoveryApi },
+    { provide: ARTIST_PROFILES_API, useClass: HttpArtistProfilesApi },
   ],
 };

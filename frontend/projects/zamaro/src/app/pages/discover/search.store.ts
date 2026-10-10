@@ -3,6 +3,7 @@ import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { DISCOVERY_API, type SearchAlternatives, type SearchQuery, type SearchResult } from 'api';
 import type { Subscription } from 'rxjs';
+import { LastSearch } from '../../shared/last-search';
 import { DEFAULT_STATE, type SearchState, toParams, toQuery } from './search-query-codec';
 
 export type SearchStatus = 'idle' | 'loading' | 'loaded' | 'error' | 'limited';
@@ -23,6 +24,7 @@ const DEFAULT_RETRY_SECONDS = 60;
 export class SearchStore {
   private readonly api = inject(DISCOVERY_API);
   private readonly router = inject(Router);
+  private readonly lastSearch = inject(LastSearch);
 
   /** The criteria in the address bar, complete or not. */
   readonly state = signal<SearchState>(DEFAULT_STATE);
@@ -124,6 +126,11 @@ export class SearchStore {
         this.result.set(result);
         this.consecutiveFailures.set(0);
         this.alternatives.set(null);
+        this.lastSearch.remember({
+          params: toParams(this.state()),
+          date: query.date,
+          headlinerSlug: result.headliner?.slug ?? null,
+        });
         // A separate call, so the search itself never pays for it.
         if (result.total === 0) {
           this.api.alternatives(query).subscribe((ways) => this.alternatives.set(ways));
