@@ -188,6 +188,49 @@ export class Shell {
   async pressEscape(): Promise<void> {
     await this.page.keyboard.press('Escape');
   }
+
+  // Banners under the top bar (docs/specs/components/alert.md)
+
+  banners(): Locator {
+    return this.page.locator('.banner');
+  }
+
+  /** A banner found by its label, such as "Verify your email". */
+  banner(label: string): Banner {
+    return new Banner(
+      this.banners().filter({ has: this.page.locator('.banner__text strong', { hasText: label }) }),
+    );
+  }
+}
+
+/** One banner: its label, the sentence after it, the inline action and the close button. */
+export class Banner {
+  constructor(readonly root: Locator) {}
+
+  label(): Locator {
+    return this.root.locator('.banner__text strong');
+  }
+
+  /** The label, the sentence and the action's name, as one line. */
+  text(): Locator {
+    return this.root.locator('.banner__text');
+  }
+
+  action(): Locator {
+    return this.root.locator('.banner__action');
+  }
+
+  closeButton(): Locator {
+    return this.root.getByRole('button', { name: /^Dismiss/ });
+  }
+
+  async pressAction(): Promise<void> {
+    await this.action().click();
+  }
+
+  async dismiss(): Promise<void> {
+    await this.closeButton().click();
+  }
 }
 
 /** One toast slip: kind, title, text and its dismiss button. */

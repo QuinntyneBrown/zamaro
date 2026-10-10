@@ -185,4 +185,23 @@ export class SignUpPage {
   startAgainLink(): Locator {
     return this.checkEmail().getByRole('link', { name: 'Wrong address? Start again' });
   }
+
+  /** "Resend the email", then "Sent" for a minute. */
+  resendButton(): Locator {
+    return this.checkEmail().getByRole('button', { name: /^(Resend the email|Sent)$/ });
+  }
+
+  async resend(): Promise<void> {
+    await this.resendButton().click();
+  }
+
+  /** "A new link is on its way…", once resent. */
+  resentStatus(): Locator {
+    return this.checkEmail().getByRole('status');
+  }
+
+  /** "Nothing after 5 minutes? Check spam or junk, then resend." */
+  checkEmailFinePrint(): Locator {
+    return this.checkEmail().locator('.stub__fine');
+  }
 }

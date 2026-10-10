@@ -28,9 +28,10 @@ export interface RouteState {
   signedInAs?: CastMember;
   /**
    * What the page must show before it is captured, when the browser may still be fetching it after
-   * the network went quiet: the lineup's cards, or the sold-out panel.
+   * the network went quiet: the lineup's cards, the sold-out panel, or an emailed link's "This link
+   * has expired" card.
    */
-  shows?: 'lineup' | 'sold-out';
+  shows?: 'lineup' | 'sold-out' | 'link-expired';
   /** Copy that will change with a later slice, masked in captures: the session-ended line (M5 drafts). */
   masks?: 'session-ended-line';
 }
@@ -164,5 +165,14 @@ export const routes: RouteState[] = [
     mock: 'discover/default.html',
     signedInAs: 'naomi',
     shows: 'lineup',
+  },
+  // An emailed verification link that was used, ran out or never existed: "This link has expired"
+  // with the Expired stamp and "Send a new link".
+  {
+    name: 'verify-email-expired',
+    path: '/verify-email?token=e2e-unknown',
+    app: 'zamaro',
+    mock: 'verify-email/expired.html',
+    shows: 'link-expired',
   },
 ];
