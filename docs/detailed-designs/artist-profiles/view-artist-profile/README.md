@@ -76,8 +76,8 @@ through the CDN.
   with the first video large and the rest in a grid. Each tile shows its poster frame,
   title and duration. Activating a tile plays an adaptive stream in place with native
   controls, a `<track kind="captions">` when a WebVTT file exists, and no autoplay
-  (L2-014). Safari plays the stream natively. The player library for other browsers
-  is `<TO SUPPLY>`. With no videos, the section shows "No videos yet" and "Ask {first
+  (L2-014). Browsers with native HLS (Safari, current Chrome) play the stream natively;
+  the others load hls.js on the first press (ADR-0010). With no videos, the section shows "No videos yet" and "Ask {first
   name} for a recording".
 - **`PhotoGalleryComponent`** and **`PhotoViewerDialogComponent`** — a grid of 2 columns
   below MD and 4 from MD. Each image uses `srcset` with AVIF and WebP widths of 400,
@@ -144,6 +144,36 @@ name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio
 - **Not yet built:** returning to the same scroll position on Back (L2-009.2). The results
   come back, but scroll restoration waits for Discover to restore its position after the
   lineup reloads.
+
+**As built in M1 (S12)**
+
+- **Videos:** the library's `zm-video-card` is both the tile and the player (its CRD, D-2 to D-4), so
+  there is no separate `VideoPlayerComponent`. The page passes formatted strings: the stamp "Play ·
+  6:12", the label "Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds" (the
+  title's em dash becomes a comma), and the title as the thumbnail's label, since the API has no
+  poster description. Captions are labelled from the catalogue by language ("English").
+- **No videos:** the section keeps "Watch {pronoun} lead" with a quiet "No videos yet" empty state.
+  "Ask {first name} for a recording" needs the booking stub and arrives with
+  `pick-a-date-and-start-booking` (S14).
+- **Photos:** each grid photo is a `<button>` named "Open photo 1 of 4: {alt text}" rather than the
+  mock's link, because it opens a dialog and there is no photo route. The viewer is
+  `dialogs/photo-viewer/PhotoViewerDialog`, loaded on first use, with the kicker "{name} · Photos",
+  "Photo 2 of 4", previous and next buttons and the arrow keys. At either end the disabled button
+  hands focus to the other one, so focus stays in the dialog.
+- **No photos:** one square of act-type illustration labelled, for example, "Band illustration:
+  Marcus Bell Trio hasn't added photos yet". The poster keeps its placeholder in M1; the primary
+  photo arrives with uploads (M4).
+- **Media URLs:** `App\Support\Media::url()` builds them from the disk named by `zamaro.media.disk`,
+  not a `MediaUrlSigner`: nothing is signed yet. In M1 that is the API's local `media` disk, which
+  Laravel serves under `/media` and which the SSR server and dev proxy forward like `/api`. M4 points
+  the setting at object storage behind the CDN.
+- **API fields:** `photos` carries `id`, `alt`, `src` (the 800 px WebP), `width`, `height`, `srcset`
+  and `avifSrcset`; `videos` carries `id`, `title`, `durationSeconds`, `poster` (`src`, `width`,
+  `height`) or null, `stream` and `captions` (`src`, `lang`) or null. Only `Live` videos are loaded.
+- **Seed:** `CastSeeder` writes the photo and video rows (Abigail's four photos and four live videos
+  plus a processing "Jireh"; Miriam's two photos); `MediaSeeder` writes a stand-in file for each key:
+  GD-drawn photo renditions and posters, and one committed sample HLS stream with WebVTT captions
+  that every live video plays.
 
 **Mocks**
 

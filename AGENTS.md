@@ -77,6 +77,7 @@ zamaro/
 │   │   ├── factories/
 │   │   ├── migrations/            # expand–contract only; never run on startup
 │   │   └── seeders/               # idempotent, safe to re-run
+│   │       └── media/             # sample files MediaSeeder copies to the media disk (M1 has no uploads)
 │   ├── resources/
 │   │   ├── i18n/{locale}/         # translation catalogues served at /api/v1/i18n/{locale}
 │   │   └── views/emails/

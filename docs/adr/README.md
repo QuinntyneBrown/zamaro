@@ -18,3 +18,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0007](0007-frontend-layout-pages-shell-and-libraries.md) | Frontend layout: AGENTS.md pages, shell and libraries replace the designs' core, features and shared | Accepted |
 | [0008](0008-artist-profile-names-public-and-editor.md) | Artist profile names: one public profile, a separate editor, and the designs' shared enums | Accepted |
 | [0009](0009-upgrade-to-laravel-13.md) | Upgrade to Laravel 13 and drop the ignored advisories | Accepted |
+| [0010](0010-hls-js-for-adaptive-video.md) | hls.js plays adaptive video where the browser cannot, loaded on demand | Accepted |

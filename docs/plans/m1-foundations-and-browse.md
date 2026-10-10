@@ -4,10 +4,10 @@ This is the working plan for building Zamaro, with Milestone 1 in detail. The cu
 first; the full plan follows, including the notes on what changed while implementing. Later
 milestones get their own plan in this folder when they start.
 
-## Current status (2026-10-09)
+## Current status (2026-10-10)
 
 **Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is about
-two-thirds done: S0–S11 are built; S12–S16 remain.
+three-quarters done: S0–S12 are built; S13–S16 remain.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -24,17 +24,17 @@ two-thirds done: S0–S11 are built; S12–S16 remain.
 | S10 | Sold-out alternatives | Done | `929af7f`, `c6adc9a`, `b8a3ad1` |
 | S11 | Artist profile: header, About, setlist, loading and error | Done | `31dcbf4`, `9e7f58f`, `f48451c`, `a10df34` (ADR-0008) |
 | — | e2e API gets its own database, clock, limits and cache keys | Done | `331a03f` |
-| S12 | Photos and videos (local disk, no object storage in M1) | **Next** | ADR-0010 (hls.js) |
-| S13 | Reviews on the profile | To do | |
+| S12 | Photos and videos (local disk, no object storage in M1) | Done | `37d8f6c`, `263ee86`, `9c56457` (ADR-0010) |
+| S13 | Reviews on the profile | **Next** | |
 | S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | To do | |
 | S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0011 |
 | S16 | Index and share (optional, last) | To do | |
 
 **Checks at the last commit:**
-- Backend: 70 Feature tests pass, with OpenAPI contract assertions.
+- Backend: 75 Feature tests pass, with OpenAPI contract assertions.
 - Frontend: lint and `format:check` are clean.
-- e2e: 39 Playwright tests pass in Chromium against a freshly seeded e2e database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `Breadcrumb` and `Setlist` are new scenarios.
+- e2e: 49 Playwright tests pass in Chromium against a freshly seeded e2e database.
+- Perf: `--fail-on-regression` against the base build flags no rows. `ArtworkPhoto`, `MediaGrid` and `VideoCard` are new scenarios.
 
 **Open items carried forward:**
 - **L2-009.2:** Back restores the Discover results but not the scroll position yet.
@@ -46,6 +46,7 @@ two-thirds done: S0–S11 are built; S12–S16 remain.
 - **S15:** settle `ArtistSlugResolver` (change-profile-address) against `ResolveArtistSlug` (view-artist-profile).
 - **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest already lists four route states.
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
+- **M4:** object storage replaces the local `media` disk (`zamaro.media.disk`); the poster shows the primary photo; `zm-video-card` gains `manage` mode.
 
 ---
 
@@ -220,6 +221,13 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **No object storage in M1.** S12 serves the seeded photos and videos from the API's local disk in dev and e2e. Object storage arrives with uploads in M4, with its own ADR.
   - **The S14 book button stays hidden until M5.** The stub and date picking ship; the submit sits behind a `bookingRequests` flag that is off. There is no placeholder route.
 - **ADR renumbering (current):** 0008 went to S11, as S5 needed no ADR. S12 takes 0010 and S15 takes 0011 (0009 went to the Laravel 13 upgrade).
+- **S12 is done** (37d8f6c API and seed, 263ee86 red tests, 9c56457 page and components, then ADR-0010 and docs).
+  - **No object storage (user decision):** media keys live on a local `media` disk that Laravel serves under `/media` (`serve => true`); `App\Support\Media::url()` reads the disk from `zamaro.media.disk`, so M4 switches to object storage by config. The SSR server and the dev proxy forward `/media` like `/api`. Served files carry Laravel's `no-store` header, which is acceptable for dev and e2e only.
+  - **Seed:** `CastSeeder` writes `artist_photos` and `artist_videos` rows (Abigail's four photos, four live videos and a processing "Jireh"; Miriam's two photos). `MediaSeeder` (new, run by `DatabaseSeeder`) writes GD-drawn WebP and AVIF renditions and posters and copies one committed 6-second sample HLS stream with WebVTT captions (`database/seeders/media/sample-video`, about 300 kB) that every live video plays. Existing files are skipped, so reseeding is fast and idempotent. Ratings and distances are unchanged.
+  - **No `zm-video-player`:** the video card CRD makes the player part of `zm-video-card` (D-2 to D-4), so the plan's second component was not built. Only `play` mode is built; `manage` mode waits for M4.
+  - **Library changes:** `zm-artwork` gained `ratio`, `photo` (with fallback to the placeholder on error) and `priority`; `zm-dialog` gained `kicker` and the `[slot=footer]`; `zm-icon` gained `arrow-left`. Not flagged by the perf test; `Artwork`'s median moved within the runner's noise (it swung 98–188 ms on the base build alone).
+  - **ADR-0010 (OK, accepted default, 2026-10-10):** hls.js behind `ZM_HLS_LOADER`, lazy; native HLS first. Playwright's Chromium plays HLS natively, so a spec hides native HLS to cover the hls.js path.
+  - **Drift recorded in the design:** grid photos are buttons, not the mock's links (they open a dialog and there is no photo route); the video thumbnail's label is the title, as the API has no poster description; "No videos yet" ships without "Ask {first name} for a recording", which needs the S14 stub. With no photos, the label reads "{Solo vocalist|Duo|Band|Choir} illustration: {name} hasn't added photos yet".
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
@@ -384,9 +392,9 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - Processing videos are hidden.
   - An artist with no photos gets the act-type illustration.
 - **Tests first:** `ProfileMediaTest.php`, e2e cases, `pages/photo-viewer.dialog.ts`.
-- **Build:** artist_videos migration; the seeder adds a sample HLS stream with VTT captions.
-- **ADR 0008:** hls.js as the player.
-- **Components:** `zm-video-card`, `zm-video-player`.
+- **Build:** artist_photos and artist_videos migrations; the seeder adds sample photos and a sample HLS stream with VTT captions on the local media disk.
+- **ADR 0010:** hls.js as the player.
+- **Components:** `zm-video-card` (its CRD includes the player, so there is no `zm-video-player`).
 
 #### S13 — Reviews on the profile
 - **L2:** 018, 020.2, 060.1–2, 083.2.
