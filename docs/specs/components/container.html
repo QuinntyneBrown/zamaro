@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Container and stack — Component requirements rendering</title>
+<meta name="description" content="The layout classes, zm-page-head and zm-section in every configuration, in light and dark, at phone, tablet and desktop widths, keyed to the acceptance criteria in container.md.">
+<meta name="crd:component" content="container">
+<link rel="stylesheet" href="../../design-system/tokens/tokens.css">
+<link rel="stylesheet" href="../../design-system/assets/components.css">
+<link rel="stylesheet" href="../../design-system/assets/ds.css">
+<style>
+/* CRD page chrome only. Never restyle the component here. */
+.crd-shell { max-width: 80rem; margin: 0 auto; padding: var(--space-6) var(--space-4); }
+.crd-bar { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; }
+.crd-ac { font: var(--text-overline); color: var(--color-fg-muted); display: block; margin-top: var(--space-2); }
+.crd-frames { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
+.crd-frame { margin: 0; border: var(--border-width-hairline) dashed var(--color-border-default); padding: var(--space-3); max-width: 100%; overflow: auto; }
+.crd-frame iframe { display: block; border: 0; max-width: 100%; }
+/* Docs only, as on the design-system page: visible boxes for layout specimens. */
+.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); }
+/* ds.css styles every h2, h3 and li in a section; give the specimens their product styles back. */
+.ds-section .page-head__title { font: var(--text-h1); margin: 0; }
+.ds-section .section h2 { font: var(--text-h2); margin: 0; }
+.ds-section .panel__title { font: var(--text-h4); }
+.ds-section .breadcrumb li + li { margin-top: 0; }
+</style>
+<style>
+/* Requirements this CRD adds that components.css does not have yet (Design, D-3, D-7, D-8, D-9, D-13). */
+.section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading > div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body > .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first > aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first > aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first > :not(aside) { grid-column: 1; grid-row: 1; } }
+</style>
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<main id="main" class="crd-shell">
+  <header class="ds-header">
+    <div class="crd-bar">
+      <p class="ds-kicker">Component requirements · rendering</p>
+      <button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button>
+    </div>
+    <h1>Container and stack</h1>
+    <p class="ds-lead">The layout classes, the page head and the section band. Requirements: <a href="container.md">container.md</a>. Design system: <a href="../../design-system/components/container.html">container &amp; stack</a>. The specimens' <code>h1</code> elements are part of the rendering; each product page has one.</p>
+    <div class="ds-meta"><span class="ds-pill">Selectors <code>zm-page-head</code> <code>section[zm-section]</code></span><span class="ds-pill">Status: planned</span><span class="ds-pill">Traces to L2-019, L2-086, L2-096–L2-098, L2-100–L2-105, L2-111</span></div>
+    <ul class="ds-toc">
+      <li><a href="#variants">Layout classes</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">Page head</a></li><li><a href="#sections">Sections</a></li><li><a href="#themes">Both themes</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#contrast">Contrast</a></li><li><a href="#tokens">Tokens</a></li>
+    </ul>
+  </header>
+
+  <section class="ds-section" id="variants"><h2>Layout classes</h2>
+    <h3>Container and grid</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--flush"><div class="ds-frame"><div class="container" style="padding-block: var(--space-4);"><div class="grid"><span class="ds-cell">1</span><span class="ds-cell">2</span><span class="ds-cell">3</span><span class="ds-cell">4</span><span class="ds-cell">5</span><span class="ds-cell">6</span><span class="ds-cell">7</span><span class="ds-cell">8</span><span class="ds-cell">9</span><span class="ds-cell">10</span><span class="ds-cell">11</span><span class="ds-cell">12</span><span class="ds-cell span-full">.span-full</span></div></div></div></div>
+    <div class="ds-example__caption"><span>The dashed outline is the container; the grid has as many columns as the viewport allows. <span class="crd-ac">AC-1, AC-2</span></span></div></div>
+    <h3>Card grid</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><ul class="grid grid--cards" role="list" style="list-style: none; padding: 0;"><li class="ds-cell ds-cell--tall">Grace Tabernacle Mass Choir</li><li class="ds-cell ds-cell--tall">Luz Viva</li><li class="ds-cell ds-cell--tall">Daniel &amp; Ruth Okonkwo</li><li class="ds-cell ds-cell--tall">Marcus Bell Trio</li></ul></div>
+    <div class="ds-example__caption"><span><code>.grid--cards</code>: 18 rem minimum, never wider than a phone. <span class="crd-ac">AC-2</span></span></div></div>
+    <h3>Cluster</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="cluster"><a class="btn btn--primary" href="#top">Mark dates unavailable</a><a class="btn" href="#top">Subscribe in your calendar</a></div>
+      <div class="cluster cluster--between" style="border: var(--border-width-hairline) dashed var(--color-border-strong); padding: var(--space-2);"><span class="ticket__price">$650</span><button class="btn btn--sm" type="button">Pick</button></div>
+      <div class="cluster cluster--lg"><a class="btn btn--primary" href="#top">Book for Sat 14 Nov</a><button class="btn" type="button">Share</button></div>
+    </div><div class="ds-example__caption"><span><code>.cluster</code> wraps without shrinking buttons; <code>--between</code>; <code>--lg</code>. <span class="crd-ac">AC-3</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sizes"><h2>Sizes</h2>
+    <div class="ds-example"><div class="ds-example__canvas" style="align-items: flex-start;">
+      <div class="stack stack--sm" style="flex: 1 1 8rem;"><span class="ds-cell">sm</span><span class="ds-cell">8 px</span></div>
+      <div class="stack" style="flex: 1 1 8rem;"><span class="ds-cell">default</span><span class="ds-cell">16 px</span></div>
+      <div class="stack stack--lg" style="flex: 1 1 8rem;"><span class="ds-cell">lg</span><span class="ds-cell">40 px</span></div>
+    </div><div class="ds-example__caption"><span><code>.stack--sm</code> · <code>.stack</code> · <code>.stack--lg</code>. <span class="crd-ac">AC-4</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="states"><h2>Page head</h2>
+    <p>Rendered by <code>zm-page-head</code> inside the page's <code>.container</code>.</p>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="container" style="padding-inline: 0;"><header class="page-head">
+  <div><p class="overline">Riverside Community Church</p><h1 class="page-head__title" tabindex="-1">Your bookings</h1><p class="page-head__sub">3 upcoming · Luz Viva deposit due Sat 10 Oct, 4:00 p.m.</p></div>
+  <a class="btn" href="#top"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>Find who’s free</a>
+</header><div class="page-body"><p class="text-muted">Page body: blocks 32 px apart.</p></div></div></div>
+    <div class="ds-example__caption"><span>Kicker, the one <code>h1</code> (<code>tabindex="-1"</code>), sub and an action. <span class="crd-ac">AC-13, AC-14, AC-15</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="container" style="padding-inline: 0;"><nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#top">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav><header class="page-head page-head--after-breadcrumb">
+  <div><p class="overline">Booking ZAM-0114</p><h1 class="page-head__title" tabindex="-1">Worship night with Abigail Mensah</h1><p class="page-head__sub">Sat 14 Nov 2026 · 7:00 p.m. · Burlington</p></div>
+  <span class="stamp stamp--lg stamp--requested">Requested</span>
+</header></div></div>
+    <div class="ds-example__caption"><span>After a breadcrumb: <code>--after-breadcrumb</code>, status stamp in the aside. <span class="crd-ac">AC-16, AC-17</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="container" style="padding-inline: 0;"><header class="page-head">
+  <div>
+    <div class="page-head__before"><p class="text-sm"><a href="#top">Back to requests</a></p></div>
+    <h1 class="page-head__title" tabindex="-1">Riverside Community Church</h1>
+    <p class="page-head__sub">Worship night · Sat 14 Nov · 7:00 p.m. · requested today, 10:15 a.m.</p>
+  </div>
+  <span class="stamp stamp--lg stamp--requested">Requested</span>
+</header></div></div>
+    <div class="ds-example__caption"><span><code>before</code> slot: "Back to requests" <code>--space-3</code> above the title. <span class="crd-ac">AC-19</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="container" style="padding-inline: 0;"><header class="page-head">
+  <div>
+    <p class="overline">Admin · Artist management</p>
+    <h1 class="page-head__title" tabindex="-1">Artists</h1>
+    <p class="page-head__sub">8 artists · 8 approved · 0 suspended</p>
+    <div class="page-head__after"><p><a class="link link--standalone" href="#top">Vulnerable Sector Checks · 2 waiting<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p></div>
+  </div>
+  <form class="field page-head__search" role="search" action="#top">
+    <label class="field__label" for="artist-search">Search artists</label>
+    <input class="input" type="search" id="artist-search" name="q" autocomplete="off" aria-describedby="artist-search-help">
+    <span class="field__help" id="artist-search-help">Name, city or email</span>
+  </form>
+</header><header class="page-head">
+  <div><h1 class="page-head__title" tabindex="-1">Edit profile</h1><p class="page-head__sub">Abigail Mensah · zamaro.ca/artists/abigail-mensah</p></div>
+  <div class="stack stack--sm page-head__aside">
+    <p class="field__label" id="complete-label">Profile 100% complete</p>
+    <div class="meter" role="progressbar" aria-labelledby="complete-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" style="--value: 100%;"><div class="meter__bar"></div></div>
+    <p class="text-caption">Everything a church needs to book you is here.</p>
+  </div>
+</header></div></div>
+    <div class="ds-example__caption"><span><code>after</code> slot with a standalone link; <code>.page-head__search</code> (18 rem minimum) and <code>.page-head__aside</code> (16 rem minimum). <span class="crd-ac">AC-18</span></span></div></div>
+    <h3>Loading</h3>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="container" style="padding-inline: 0;"><header class="page-head page-head--loading">
+  <div>
+    <h1 class="page-head__title" tabindex="-1">Requests</h1>
+    <p class="page-head__sub" role="status"><span class="visually-hidden">Loading your requests</span><span class="skeleton skeleton--text skeleton--medium" style="display: inline-block;" aria-hidden="true"></span></p>
+  </div>
+  <span class="skeleton skeleton--medium" style="height: var(--space-16);" aria-hidden="true"></span>
+</header></div></div>
+    <div class="ds-example__caption"><span>Title known: the <code>h1</code> stays; the sub is a status line with a skeleton. <span class="crd-ac">AC-20</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="container" style="padding-inline: 0;"><nav class="page-crumbs" aria-label="Breadcrumb"><ol class="breadcrumb"><li><a href="#top">Your bookings</a></li><li aria-current="page">ZAM-0114</li></ol></nav><header class="page-head page-head--after-breadcrumb page-head--loading">
+  <div class="stack stack--sm">
+    <span class="skeleton skeleton--text skeleton--medium" aria-hidden="true"></span>
+    <h1 class="page-head__title visually-hidden" tabindex="-1"><span role="status">Loading booking ZAM-0114</span></h1>
+    <span class="skeleton skeleton--poster" aria-hidden="true"></span>
+    <span class="skeleton skeleton--text skeleton--medium" aria-hidden="true"></span>
+  </div>
+  <span class="skeleton skeleton--stamp" aria-hidden="true"></span>
+</header></div></div>
+    <div class="ds-example__caption"><span>Title unknown: the visually hidden <code>h1</code> keeps its heading role and holds a status span "Loading booking ZAM-0114"; the head keeps its loaded height. <span class="crd-ac">AC-21, AC-22</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="sections"><h2>Sections</h2>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas"><section id="lineup-x" class="section" aria-labelledby="lineup-title-a">
+  <div class="container stack stack--lg">
+    <div class="section__head">
+      <div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><h2 id="lineup-title-a">The lineup</h2></div>
+      <label class="field field--inline"><span class="field__label">Sort</span><select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
+    </div>
+    <p class="text-muted">Filters, the headliner and the lineup follow.</p>
+  </div>
+</section>
+<section class="section" aria-labelledby="how-title-a">
+  <div class="container stack stack--lg">
+    <div class="section__head">
+      <div><p class="overline section__kicker">Three songs and you’re done</p><h2 id="how-title-a">How booking works</h2></div>
+      <p class="text-muted">Cancel free up to 14 days before your event.</p>
+    </div>
+    <p class="lead">Pick your date, send a request, lock it in with a 25% deposit.</p>
+  </div>
+</section></div>
+    <div class="ds-example__caption"><span>Contained bands with kicker, heading and aside, a hairline between them. Each is a region named by its heading. <span class="crd-ac">AC-5, AC-23</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--block ds-example__canvas--canvas"><div class="profile-layout" style="padding-block: 0;"><div><section class="section" aria-labelledby="about-title-b">
+  <p class="overline section__kicker">About</p>
+  <h2 id="about-title-b">Raised in the choir loft</h2>
+  <div class="stack section__body"><p class="lead">I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone.</p><p>I lead in English and Twi, and I’m happy to rehearse with your volunteers.</p></div>
+</section>
+<section class="section" aria-labelledby="songs-title-b">
+  <div class="section__head"><div><p class="overline section__kicker">The setlist</p><h2 id="songs-title-b">Songs Abigail leads</h2></div><p class="text-muted">Ask for any of these, or send your own list.</p></div>
+  <p class="ds-cell">Setlist</p>
+</section></div></div></div>
+    <div class="ds-example__caption"><span>Inside the profile layout: <code>prose</code> About (body 16 px under the heading), then a head row with an aside. <span class="crd-ac">AC-24</span></span></div></div>
+    <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--flush ds-example__canvas--canvas"><section class="section section--tight" aria-labelledby="join-title-a"><div class="container"><div class="band"><div class="stack"><p class="overline">For artists</p><h2 id="join-title-a">Lead worship? Get on the bill.</h2><p>Your dates, your radius, your rate.</p></div><a class="btn btn--lg" href="#top">Apply as an artist</a></div></div></section></div>
+    <div class="ds-example__caption"><span>Headless: the band's heading names the region (shown <code>--tight</code>). <span class="crd-ac">AC-25</span></span></div></div>
+  </section>
+
+  <section class="ds-section" id="themes"><h2>Both themes</h2>
+    <div class="ds-themes">
+      <div data-theme="light"><div class="container" style="padding-inline: 0;"><header class="page-head">
+  <div><p class="overline">Riverside Community Church</p><h1 class="page-head__title" tabindex="-1">Your bookings</h1><p class="page-head__sub">3 upcoming · Luz Viva deposit due Sat 10 Oct, 4:00 p.m.</p></div>
+  <a class="btn" href="#top"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>Find who’s free</a>
+</header></div><section id="lineup-x" class="section" aria-labelledby="lineup-title-l">
+  <div class="stack stack--lg">
+    <div class="section__head">
+      <div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><h2 id="lineup-title-l">The lineup</h2></div>
+      <label class="field field--inline"><span class="field__label">Sort</span><select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
+    </div>
+    <p class="text-muted">Filters, the headliner and the lineup follow.</p>
+  </div>
+</section>
+<section class="section" aria-labelledby="how-title-l">
+  <div class="stack stack--lg">
+    <div class="section__head">
+      <div><p class="overline section__kicker">Three songs and you’re done</p><h2 id="how-title-l">How booking works</h2></div>
+      <p class="text-muted">Cancel free up to 14 days before your event.</p>
+    </div>
+    <p class="lead">Pick your date, send a request, lock it in with a 25% deposit.</p>
+  </div>
+</section></div>
+      <div data-theme="dark"><div class="container" style="padding-inline: 0;"><header class="page-head">
+  <div><p class="overline">Riverside Community Church</p><h1 class="page-head__title" tabindex="-1">Your bookings</h1><p class="page-head__sub">3 upcoming · Luz Viva deposit due Sat 10 Oct, 4:00 p.m.</p></div>
+  <a class="btn" href="#top"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg>Find who’s free</a>
+</header></div><section id="lineup-x" class="section" aria-labelledby="lineup-title-d">
+  <div class="stack stack--lg">
+    <div class="section__head">
+      <div><p class="overline section__kicker">Sat 14 Nov · 7 free · within 120 km</p><h2 id="lineup-title-d">The lineup</h2></div>
+      <label class="field field--inline"><span class="field__label">Sort</span><select class="select"><option selected>Closest first</option><option>Highest rated</option><option>Price, low to high</option></select></label>
+    </div>
+    <p class="text-muted">Filters, the headliner and the lineup follow.</p>
+  </div>
+</section>
+<section class="section" aria-labelledby="how-title-d">
+  <div class="stack stack--lg">
+    <div class="section__head">
+      <div><p class="overline section__kicker">Three songs and you’re done</p><h2 id="how-title-d">How booking works</h2></div>
+      <p class="text-muted">Cancel free up to 14 days before your event.</p>
+    </div>
+    <p class="lead">Pick your date, send a request, lock it in with a 25% deposit.</p>
+  </div>
+</section></div>
+    </div>
+    <span class="crd-ac">AC-26, AC-27</span>
+  </section>
+
+  <section class="ds-section" id="responsive"><h2>Responsive</h2>
+    <p>Real viewports: each frame is an iframe at that width, so the tokens' breakpoints at 768 and 992 px apply.</p>
+    <h3>Detail layout, aside first (booking ZAM-0114)</h3>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:390px"><span class="crd-ac">360 px · aside first by DOM order · AC-8, AC-17</span><iframe title="360 pixel wide frame, light theme" width="360" height="900" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container&quot;&gt;&lt;nav class=&quot;page-crumbs&quot; aria-label=&quot;Breadcrumb&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Your bookings&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;ZAM-0114&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;&lt;header class=&quot;page-head page-head--after-breadcrumb&quot;&gt;
+  &lt;div&gt;&lt;p class=&quot;overline&quot;&gt;Booking ZAM-0114&lt;/p&gt;&lt;h1 class=&quot;page-head__title&quot; tabindex=&quot;-1&quot;&gt;Worship night with Abigail Mensah&lt;/h1&gt;&lt;p class=&quot;page-head__sub&quot;&gt;Sat 14 Nov 2026 · 7:00 p.m. · Burlington&lt;/p&gt;&lt;/div&gt;
+  &lt;span class=&quot;stamp stamp--lg stamp--requested&quot;&gt;Requested&lt;/span&gt;
+&lt;/header&gt;
+  &lt;div class=&quot;detail-layout detail-layout--aside-first detail-layout--flush&quot;&gt;
+    &lt;aside aria-labelledby=&quot;money-title-s&quot;&gt;&lt;section class=&quot;panel panel--raised&quot;&gt;&lt;div class=&quot;panel__head&quot;&gt;&lt;h2 id=&quot;money-title-s&quot; class=&quot;panel__title&quot;&gt;Payment&lt;/h2&gt;&lt;span class=&quot;stub__code&quot;&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;Nothing is charged until Abigail accepts.&lt;/p&gt;&lt;a class=&quot;btn btn--primary&quot; href=&quot;#top&quot;&gt;Pay $162.50 deposit&lt;/a&gt;&lt;/section&gt;&lt;/aside&gt;
+    &lt;div class=&quot;stack stack--lg&quot;&gt;&lt;section class=&quot;panel&quot; aria-labelledby=&quot;where-title-s&quot;&gt;&lt;div class=&quot;panel__head&quot;&gt;&lt;h2 id=&quot;where-title-s&quot; class=&quot;panel__title&quot;&gt;Where it stands&lt;/h2&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;Requested Fri 9 Oct, 10:15 a.m. Abigail has until Mon 12 Oct, 10:15 a.m. to reply.&lt;/p&gt;&lt;a href=&quot;#top&quot;&gt;Message Abigail&lt;/a&gt;&lt;/section&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:1054px"><span class="crd-ac">1024 px · two columns · AC-9</span><iframe title="1024 pixel wide frame, light theme" width="1024" height="520" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container&quot;&gt;&lt;nav class=&quot;page-crumbs&quot; aria-label=&quot;Breadcrumb&quot;&gt;&lt;ol class=&quot;breadcrumb&quot;&gt;&lt;li&gt;&lt;a href=&quot;#top&quot;&gt;Your bookings&lt;/a&gt;&lt;/li&gt;&lt;li aria-current=&quot;page&quot;&gt;ZAM-0114&lt;/li&gt;&lt;/ol&gt;&lt;/nav&gt;&lt;header class=&quot;page-head page-head--after-breadcrumb&quot;&gt;
+  &lt;div&gt;&lt;p class=&quot;overline&quot;&gt;Booking ZAM-0114&lt;/p&gt;&lt;h1 class=&quot;page-head__title&quot; tabindex=&quot;-1&quot;&gt;Worship night with Abigail Mensah&lt;/h1&gt;&lt;p class=&quot;page-head__sub&quot;&gt;Sat 14 Nov 2026 · 7:00 p.m. · Burlington&lt;/p&gt;&lt;/div&gt;
+  &lt;span class=&quot;stamp stamp--lg stamp--requested&quot;&gt;Requested&lt;/span&gt;
+&lt;/header&gt;
+  &lt;div class=&quot;detail-layout detail-layout--aside-first detail-layout--flush&quot;&gt;
+    &lt;aside aria-labelledby=&quot;money-title-w&quot;&gt;&lt;section class=&quot;panel panel--raised&quot;&gt;&lt;div class=&quot;panel__head&quot;&gt;&lt;h2 id=&quot;money-title-w&quot; class=&quot;panel__title&quot;&gt;Payment&lt;/h2&gt;&lt;span class=&quot;stub__code&quot;&gt;No. ZAM-0114&lt;/span&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;Nothing is charged until Abigail accepts.&lt;/p&gt;&lt;a class=&quot;btn btn--primary&quot; href=&quot;#top&quot;&gt;Pay $162.50 deposit&lt;/a&gt;&lt;/section&gt;&lt;/aside&gt;
+    &lt;div class=&quot;stack stack--lg&quot;&gt;&lt;section class=&quot;panel&quot; aria-labelledby=&quot;where-title-w&quot;&gt;&lt;div class=&quot;panel__head&quot;&gt;&lt;h2 id=&quot;where-title-w&quot; class=&quot;panel__title&quot;&gt;Where it stands&lt;/h2&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;Requested Fri 9 Oct, 10:15 a.m. Abigail has until Mon 12 Oct, 10:15 a.m. to reply.&lt;/p&gt;&lt;a href=&quot;#top&quot;&gt;Message Abigail&lt;/a&gt;&lt;/section&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <h3>Profile layout</h3>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:390px"><span class="crd-ac">360 px · stub after the sections · AC-6</span><iframe title="360 pixel wide frame, light theme" width="360" height="1100" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container profile-layout&quot;&gt;
+  &lt;div&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;about-title-s&quot;&gt;
+  &lt;p class=&quot;overline section__kicker&quot;&gt;About&lt;/p&gt;
+  &lt;h2 id=&quot;about-title-s&quot;&gt;Raised in the choir loft&lt;/h2&gt;
+  &lt;div class=&quot;stack section__body&quot;&gt;&lt;p class=&quot;lead&quot;&gt;I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone.&lt;/p&gt;&lt;p&gt;I lead in English and Twi, and I’m happy to rehearse with your volunteers.&lt;/p&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;section&quot; aria-labelledby=&quot;songs-title-s&quot;&gt;
+  &lt;div class=&quot;section__head&quot;&gt;&lt;div&gt;&lt;p class=&quot;overline section__kicker&quot;&gt;The setlist&lt;/p&gt;&lt;h2 id=&quot;songs-title-s&quot;&gt;Songs Abigail leads&lt;/h2&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;Ask for any of these, or send your own list.&lt;/p&gt;&lt;/div&gt;
+  &lt;p class=&quot;ds-cell&quot;&gt;Setlist&lt;/p&gt;
+&lt;/section&gt;&lt;/div&gt;
+  &lt;aside aria-labelledby=&quot;book-title-s&quot;&gt;&lt;div class=&quot;stub&quot;&gt;&lt;div class=&quot;stub__head&quot;&gt;&lt;span class=&quot;stub__code&quot;&gt;No. ACT-0027&lt;/span&gt;&lt;p class=&quot;stub__title&quot; id=&quot;book-title-s&quot;&gt;Book Abigail&lt;/p&gt;&lt;/div&gt;&lt;p class=&quot;ds-cell ds-cell--tall&quot;&gt;Booking stub (sticky from LG)&lt;/p&gt;&lt;/div&gt;&lt;/aside&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:1054px"><span class="crd-ac">1024 px · dark · sticky stub column · AC-7</span><iframe title="1024 pixel wide frame, dark theme" width="1024" height="640" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container profile-layout&quot;&gt;
+  &lt;div&gt;&lt;section class=&quot;section&quot; aria-labelledby=&quot;about-title-w&quot;&gt;
+  &lt;p class=&quot;overline section__kicker&quot;&gt;About&lt;/p&gt;
+  &lt;h2 id=&quot;about-title-w&quot;&gt;Raised in the choir loft&lt;/h2&gt;
+  &lt;div class=&quot;stack section__body&quot;&gt;&lt;p class=&quot;lead&quot;&gt;I grew up in my mother’s church in Brampton, learning harmonies from aunties who never needed a microphone.&lt;/p&gt;&lt;p&gt;I lead in English and Twi, and I’m happy to rehearse with your volunteers.&lt;/p&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;section&quot; aria-labelledby=&quot;songs-title-w&quot;&gt;
+  &lt;div class=&quot;section__head&quot;&gt;&lt;div&gt;&lt;p class=&quot;overline section__kicker&quot;&gt;The setlist&lt;/p&gt;&lt;h2 id=&quot;songs-title-w&quot;&gt;Songs Abigail leads&lt;/h2&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;Ask for any of these, or send your own list.&lt;/p&gt;&lt;/div&gt;
+  &lt;p class=&quot;ds-cell&quot;&gt;Setlist&lt;/p&gt;
+&lt;/section&gt;&lt;/div&gt;
+  &lt;aside aria-labelledby=&quot;book-title-w&quot;&gt;&lt;div class=&quot;stub&quot;&gt;&lt;div class=&quot;stub__head&quot;&gt;&lt;span class=&quot;stub__code&quot;&gt;No. ACT-0027&lt;/span&gt;&lt;p class=&quot;stub__title&quot; id=&quot;book-title-w&quot;&gt;Book Abigail&lt;/p&gt;&lt;/div&gt;&lt;p class=&quot;ds-cell ds-cell--tall&quot;&gt;Booking stub (sticky from LG)&lt;/p&gt;&lt;/div&gt;&lt;/aside&gt;
+&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+    <h3>Page heads and the auth card at phone width</h3>
+    <div class="crd-frames">
+      <figure class="crd-frame" style="max-width:350px"><span class="crd-ac">320 px · search takes the full width · AC-18, AC-29</span><iframe title="320 pixel wide frame, light theme" width="320" height="760" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container&quot;&gt;&lt;header class=&quot;page-head&quot;&gt;
+  &lt;div&gt;
+    &lt;p class=&quot;overline&quot;&gt;Admin · Artist management&lt;/p&gt;
+    &lt;h1 class=&quot;page-head__title&quot; tabindex=&quot;-1&quot;&gt;Artists&lt;/h1&gt;
+    &lt;p class=&quot;page-head__sub&quot;&gt;8 artists · 8 approved · 0 suspended&lt;/p&gt;
+    &lt;div class=&quot;page-head__after&quot;&gt;&lt;p&gt;&lt;a class=&quot;link link--standalone&quot; href=&quot;#top&quot;&gt;Vulnerable Sector Checks · 2 waiting&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M4 12h15M13 6l6 6-6 6&quot;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/p&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;form class=&quot;field page-head__search&quot; role=&quot;search&quot; action=&quot;#top&quot;&gt;
+    &lt;label class=&quot;field__label&quot; for=&quot;artist-search&quot;&gt;Search artists&lt;/label&gt;
+    &lt;input class=&quot;input&quot; type=&quot;search&quot; id=&quot;artist-search&quot; name=&quot;q&quot; autocomplete=&quot;off&quot; aria-describedby=&quot;artist-search-help&quot;&gt;
+    &lt;span class=&quot;field__help&quot; id=&quot;artist-search-help&quot;&gt;Name, city or email&lt;/span&gt;
+  &lt;/form&gt;
+&lt;/header&gt;&lt;header class=&quot;page-head&quot;&gt;
+  &lt;div&gt;&lt;h1 class=&quot;page-head__title&quot; tabindex=&quot;-1&quot;&gt;Edit profile&lt;/h1&gt;&lt;p class=&quot;page-head__sub&quot;&gt;Abigail Mensah · zamaro.ca/artists/abigail-mensah&lt;/p&gt;&lt;/div&gt;
+  &lt;div class=&quot;stack stack--sm page-head__aside&quot;&gt;
+    &lt;p class=&quot;field__label&quot; id=&quot;complete-label&quot;&gt;Profile 100% complete&lt;/p&gt;
+    &lt;div class=&quot;meter&quot; role=&quot;progressbar&quot; aria-labelledby=&quot;complete-label&quot; aria-valuemin=&quot;0&quot; aria-valuemax=&quot;100&quot; aria-valuenow=&quot;100&quot; style=&quot;--value: 100%;&quot;&gt;&lt;div class=&quot;meter__bar&quot;&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;p class=&quot;text-caption&quot;&gt;Everything a church needs to book you is here.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/header&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:390px"><span class="crd-ac">360 px · AC-3</span><iframe title="360 pixel wide frame, light theme" width="360" height="420" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container&quot;&gt;&lt;header class=&quot;page-head&quot;&gt;
+  &lt;div&gt;&lt;p class=&quot;overline&quot;&gt;Riverside Community Church&lt;/p&gt;&lt;h1 class=&quot;page-head__title&quot; tabindex=&quot;-1&quot;&gt;Your bookings&lt;/h1&gt;&lt;p class=&quot;page-head__sub&quot;&gt;3 upcoming · Luz Viva deposit due Sat 10 Oct, 4:00 p.m.&lt;/p&gt;&lt;/div&gt;
+  &lt;a class=&quot;btn&quot; href=&quot;#top&quot;&gt;&lt;svg class=&quot;icon&quot; aria-hidden=&quot;true&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4&quot;/&gt;&lt;/svg&gt;Find who’s free&lt;/a&gt;
+&lt;/header&gt;&lt;div class=&quot;cluster&quot;&gt;&lt;a class=&quot;btn btn--primary&quot; href=&quot;#top&quot;&gt;Mark dates unavailable&lt;/a&gt;&lt;a class=&quot;btn&quot; href=&quot;#top&quot;&gt;Subscribe in your calendar&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:390px"><span class="crd-ac">360 px · dark · auth layout · AC-11</span><iframe title="360 pixel wide frame, dark theme" width="360" height="360" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;main class=&quot;poster&quot;&gt;&lt;div class=&quot;container auth-layout&quot; style=&quot;min-height: 0; padding-block: var(--space-8);&quot;&gt;&lt;div class=&quot;stub auth-card&quot;&gt;&lt;div class=&quot;stub__head&quot;&gt;&lt;span class=&quot;stub__code&quot;&gt;Admit one · Your account&lt;/span&gt;&lt;p class=&quot;auth-card__title&quot;&gt;Sign in&lt;/p&gt;&lt;/div&gt;&lt;p class=&quot;text-muted&quot;&gt;naomi.fraser@riversidecc.ca&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/main&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+      <figure class="crd-frame" style="max-width:798px"><span class="crd-ac">768 px · page body · AC-1, AC-10, AC-12</span><iframe title="768 pixel wide frame, light theme" width="768" height="420" srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;en&quot; data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/tokens/tokens.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../../design-system/assets/components.css&quot;&gt;&lt;style&gt;.ds-cell { display: grid; place-items: center; min-height: var(--space-12); padding: var(--space-2); background: var(--color-accent-subtle); border: var(--border-width-hairline) dashed var(--color-border-strong); font: var(--text-overline); color: var(--color-fg-default); text-align: center; } .ds-cell--tall { min-height: var(--space-24); } .ds-cell--quiet { background: var(--color-bg-subtle); } .ds-frame { background: var(--color-bg-canvas); border: var(--border-width-hairline) solid var(--color-border-default); } .ds-frame .container { outline: var(--border-width-hairline) dashed var(--color-fg-muted); outline-offset: calc(var(--border-width-hairline) * -1); } .section--flush { padding-top: 0; } .page-head__before { margin-bottom: var(--space-3); } .page-head__after { margin-top: var(--space-3); } .page-head__before:empty, .page-head__after:empty { display: none; } .page-head--loading &gt; div { flex: 1; } .page-head__title { overflow-wrap: anywhere; } .page-body &gt; .detail-layout { padding-block: 0; } @media (max-width: 61.99rem) { .detail-layout--aside-first &gt; aside { order: 0; } } @media (min-width: 62rem) { .detail-layout--aside-first &gt; aside { grid-column: 2; grid-row: 1; } .detail-layout--aside-first &gt; :not(aside) { grid-column: 1; grid-row: 1; } } body{margin:0;background:var(--color-bg-canvas)}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;container&quot;&gt;&lt;header class=&quot;page-head page-head--after-breadcrumb&quot;&gt;
+  &lt;div&gt;&lt;p class=&quot;overline&quot;&gt;Booking ZAM-0114&lt;/p&gt;&lt;h1 class=&quot;page-head__title&quot; tabindex=&quot;-1&quot;&gt;Worship night with Abigail Mensah&lt;/h1&gt;&lt;p class=&quot;page-head__sub&quot;&gt;Sat 14 Nov 2026 · 7:00 p.m. · Burlington&lt;/p&gt;&lt;/div&gt;
+  &lt;span class=&quot;stamp stamp--lg stamp--requested&quot;&gt;Requested&lt;/span&gt;
+&lt;/header&gt;&lt;div class=&quot;page-body&quot;&gt;&lt;div class=&quot;detail-layout&quot;&gt;&lt;div class=&quot;ds-cell&quot;&gt;Stat grid&lt;/div&gt;&lt;aside class=&quot;ds-cell&quot;&gt;Aside&lt;/aside&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></figure>
+    </div>
+  </section>
+
+  <section class="ds-section" id="contrast"><h2>Contrast</h2>
+    <div class="ds-example__canvas ds-example__canvas--stack">
+      <div class="ds-pair"><span>Titles and section text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Page head sub, kickers, section asides</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+      <div class="ds-pair"><span>Hairline between sections (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-border-default|--color-bg-canvas" data-min="1"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: titles and section text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+      <div class="ds-pair" data-theme="dark"><span>Dark: page head sub, kickers, section asides</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+    </div>
+    <span class="crd-ac">AC-28</span>
+  </section>
+
+  <section class="ds-section" id="tokens"><h2>Tokens</h2>
+    <div class="ds-table-wrap"><table class="ds-table">
+      <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+      <tbody>
+        <tr><td>Container max width</td><td><code>--layout-container-max</code></td><td colspan="2"><span data-token="--layout-container-max"></span></td></tr>
+        <tr><td>Page margin (now)</td><td><code>--layout-margin</code></td><td colspan="2"><span data-token="--layout-margin"></span> at this width (20 / 40 / 64 px)</td></tr>
+        <tr><td>Columns / gutter (now)</td><td><code>--layout-columns</code> / <code>--layout-gutter</code></td><td colspan="2"><span data-token="--layout-columns"></span> / <span data-token="--layout-gutter"></span></td></tr>
+        <tr><td>Stack sm / default / lg</td><td><code>--space-2</code> / <code>--space-4</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-2"></span> / <span data-token="--space-4"></span> / <span data-token="--space-10"></span></td></tr>
+        <tr><td>Section padding / LG / tight</td><td><code>--space-16</code> / <code>--space-20</code> / <code>--space-10</code></td><td colspan="2"><span data-token="--space-16"></span> / <span data-token="--space-20"></span> / <span data-token="--space-10"></span></td></tr>
+        <tr><td>Aside column</td><td><code>--layout-sidebar-width</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span></td></tr>
+        <tr><td>Auth card</td><td><code>--layout-auth-width</code></td><td colspan="2"><span data-token="--layout-auth-width"></span></td></tr>
+        <tr><td>Sticky offset</td><td><code>--layout-topbar-height</code> + <code>--space-6</code></td><td colspan="2"><span data-token="--layout-topbar-height"></span> + <span data-token="--space-6"></span></td></tr>
+        <tr><td>Page head title</td><td><code>--text-h1</code></td><td colspan="2"><span data-token="--text-h1"></span></td></tr>
+        <tr><td>Section hairline</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+        <tr><td>Sub, kicker, aside text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+      </tbody>
+    </table></div>
+    <p>Not renderable here: 200 % zoom across whole routes (AC-29), the French catalogue (AC-30) and the perf test (AC-31).</p>
+  </section>
+
+  <footer class="ds-footer"><span>Zamaro component requirements · <a href="README.md">index</a></span><a href="#top">Back to top</a></footer>
+</main>
+<script src="../../design-system/assets/ds.js"></script>
+</body>
+</html>

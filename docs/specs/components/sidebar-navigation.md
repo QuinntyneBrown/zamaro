@@ -522,7 +522,7 @@ Planned. To build it:
   view; do not call `scrollIntoView` on the link, which can scroll the page.
 - Panel: `[open]` on each `<details>` bound to `group.open ?? true` or "holds
   current"; counts through `zm-badge`'s count form (badge CRD); icons through
-  `zm-icon` (icon CRD — `inbox`, `calendar`, `money`, `user`, `list` must
+  `zm-icon` (icon CRD — `inbox`, `calendar`, `wallet`, `user`, `list` must
   exist there); rail tooltips through `zm-tooltip` with `aria-hidden` on the
   bubble (tooltip CRD).
 - Styles: copy `.settings-nav` and `.sidenav*` from the design system into the

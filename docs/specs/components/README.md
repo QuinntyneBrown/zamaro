@@ -46,7 +46,7 @@ the code.
 
 ## Index
 
-55 components, 1432 acceptance criteria.
+56 components, 1463 acceptance criteria.
 
 | Component | Selector | Status | Criteria | Traces to | Requirements | Rendering | Design system |
 |---|---|---|---|---|---|---|---|
@@ -63,6 +63,7 @@ the code.
 | Card | `zm-card`, `zm-panel`, `zm-message`, `zm-stat`, `zm-stat-skeleton` | planned | 32 | L2-018, L2-034, L2-045, L2-046, L2-047, L2-061, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 | [card.md](card.md) | [card.html](card.html) | [`card.html`](../../design-system/components/card.html) |
 | Checkbox | `zm-checkbox`, `zm-checkbox-group` | planned | 29 | L2-022, L2-037, L2-048, L2-050, L2-056, L2-065, L2-068, L2-080, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 | [checkbox.md](checkbox.md) | [checkbox.html](checkbox.html) | [`checkbox.html`](../../design-system/components/checkbox.html) |
 | Chip | `zm-chip`, `zm-chip-group` | built | 29 | L2-004, L2-008, L2-086, L2-096, L2-097, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 | [chip.md](chip.md) | [chip.html](chip.html) | [`chip.html`](../../design-system/components/chip.html) |
+| Container and stack | `zm-page-head`, `section[zm-section]`; layout classes `.container`, `.stack`, `.cluster`, `.grid`, `.section`, `.page-body`, `.page-crumbs`, `.detail-layout`, `.profile-layout`, `.auth-layout`, `.page-error` | planned | 31 | L2-019, L2-086, L2-096, L2-097, L2-098, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-111 | [container.md](container.md) | [container.html](container.html) | [`container.html`](../../design-system/components/container.html) |
 | Date picker | `zm-date-picker` | planned | 25 | L2-004, L2-019, L2-028, L2-049, L2-056, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-110, L2-111 | [date-picker.md](date-picker.md) | [date-picker.html](date-picker.html) | [`date-picker.html`](../../design-system/components/date-picker.html) |
 | Description list | `zm-description-list` | planned | 22 | L2-034, L2-037, L2-039, L2-044, L2-046, L2-047, L2-067, L2-068, L2-086, L2-096, L2-100, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 | [description-list.md](description-list.md) | [description-list.html](description-list.html) | [`description-list.html`](../../design-system/components/description-list.html) |
 | Dialog | `zm-dialog` (plus the `openDialog()` helper in the same folder) | built | 30 | L2-086, L2-096, L2-099, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 | [dialog.md](dialog.md) | [dialog.html](dialog.html) | [`dialog.html`](../../design-system/components/dialog.html), with [Dialogs & overlays](../../design-system/patterns/dialogs-and-overlays.html) |

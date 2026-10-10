@@ -80,7 +80,7 @@ the consumer marks `cdkFocusInitial`.
 | `delete-account`, `two-step-code` | md, `danger`, `icon="trash"` / `"lock"`, `iconTone="danger"` | password or code field; footer "Keep my account" / "Keep it on" + danger "Delete my account" / "Turn off" | default, invalid, busy "Deleting…", "Turning off…", failed (focus the way back) | dialog |
 | `delete-account/blocked`, `two-step-code/codes`, `two-step-code/new-codes` | md, `icon="calendar"` / `"key"`, info | receipt or recovery codes; footer "Close" + primary "Go to your bookings"; or one primary "I've saved them"; or "Cancel" + "Get new codes" | default | dialog |
 | Admin app: `reject-application`, `suspend-artist`, `hide-review` | md, `danger`, `icon="warning"` / `"eye-off"`, `iconTone="danger"`, kicker "A-0219 · Submitted · Fri 9 Oct" | select or textarea reason; footer "Cancel" + danger "Reject application" / "Suspend artist" / "Hide review" | default, invalid, busy "Rejecting…", "Suspending…", "Hiding…", failed (focus "Cancel") | dialog |
-| Admin app: `reinstate-artist`, `resolve-hold`, `issue-refund` | md; `icon="undo"`, `"shield"`, `"banknote"`; `issue-refund/confirm` switches to `danger` + `icon="warning" iconTone="danger"` "Refund $237.50 to Naomi Fraser?" | definition list, radios, amount field; footer "Cancel" + primary "Reinstate artist", "Resolve hold", "Continue"; confirm "Go back" + danger "Refund $237.50" | default, confirm, invalid, busy "Reinstating…", "Resolving…", "Refunding…", failed | dialog |
+| Admin app: `reinstate-artist`, `resolve-hold`, `issue-refund` | md; `icon="undo"`, `"shield"`, `"wallet"`; `issue-refund/confirm` switches to `danger` + `icon="warning" iconTone="danger"` "Refund $237.50 to Naomi Fraser?" | definition list, radios, amount field; footer "Cancel" + primary "Reinstate artist", "Resolve hold", "Continue"; confirm "Go back" + danger "Refund $237.50" | default, confirm, invalid, busy "Reinstating…", "Resolving…", "Refunding…", failed | dialog |
 | `photo-viewer` | md, no icon, kicker "Abigail Mensah · Photos", title "Photo 1 of 4", `closeLabel` "Close photo viewer" | artwork or photo + caption; footer "Previous photo" (disabled on the first) + primary "Next photo" with arrows; focus close | default | dialog |
 | `menu/default`, `menu/artist`, `menu/admin` | `variant="drawer"`, title "Menu", description "Saved artists and your account stay in the top bar.", `closeLabel` "Close menu" | body: `<nav aria-label="Main menu">` + [menu](menu.md) list ending in "Dark theme"; no footer; focus close | open | dialog (drawer from the left) |
 | `account-menu/default`, `account-menu/artist` | `variant="menu"`, visually hidden title "Account menu for Naomi Fraser", no close, no footer | `.menu__who` (name, church, email) as the description + [menu](menu.md) list; focus first item "Your bookings" | open | dialog (anchored, transparent backdrop) |
@@ -676,7 +676,7 @@ its own CDK config in `dialogs/menu/menu.ts`. To meet this CRD:
 - Add the `DialogConfirm` and `DialogDanger` perf-test scenarios.
 - The header icons this CRD names (`info`, `warning`, `check`, `phone`,
   `church`, `image`, `music`, `film`, `block`, `feed`, `x-circle`, `calendar`,
-  `trash`, `eye-off`, `banknote`, `card`, `undo`, `reply`, `flag`, `shield`,
+  `trash`, `eye-off`, `wallet`, `card`, `undo`, `reply`, `flag`, `shield`,
   `lock`, `key`, `shield-check`, `repeat`, `star`) and the footer icons
   (`arrow-left`, `arrow-right`, `refresh`) come from the [icon](icon.md) set.
 

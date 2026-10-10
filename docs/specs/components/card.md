@@ -326,7 +326,7 @@ No heading, labelled by the page's h1 (`pages/book/success`); and loading:
 
 <zm-panel class="panel">
   <div class="panel__head"></div>   <!-- hidden: :empty -->
-  <zm-skeleton variant="title" width="short" />…
+  <zm-skeleton shape="title" width="short" />…
 </zm-panel>
 ```
 

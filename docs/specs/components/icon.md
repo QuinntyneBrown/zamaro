@@ -43,27 +43,28 @@ Out of scope:
 ## Usage
 
 The mocks draw 74 distinct SVGs across all 364 screens (about 3,700 icons).
-They reduce to 64 glyphs: 10 of the 74 repeat a glyph with slightly different
+They reduce to 63 glyphs: 11 are the same glyph drawn with slightly different
 path data (two checks, two stars, three locks, two calendars, two searches, two
-infos, two copies, two downloads, two tickets). The design system adds four
-that complete the core components (`chevron-down`, `external`, `pin`, `play`).
+infos, two copies, two downloads, two tickets, a circle-and-path eye). The
+design system's icon sheet adds five that complete the core components
+(`chevron-down`, `external`, `pin`, `play`, plus `search` in its path form).
 The set below is the union: 68 names. Every SVG in every mock maps to one of
 them; nothing else is drawn.
 
 | Where | Configuration | Icons | States seen | Surface |
 |---|---|---|---|---|
 | Top bar on every screen | md in ghost buttons; sm in the brand mark | `menu`, `moon`, `heart`, `mic` | pressed (theme toggle turns `--color-accent-on-stage`), expanded | stage |
-| Buttons and links with a leading or trailing icon (every page) | md, before or after the label | `arrow-right`, `arrow-left`, `refresh`, `search`, `plus`, `upload`, `download`, `share`, `check`, `block`, `feed`, `repeat`, `reply`, `undo`, `pause`, `eye-off`, `banknote`, `card`, `shield`, `shield-check`, `lock`, `lock-open`, `star`, `send`, `mail`, `copy`, `key`, `calendar`, `eye` | default, hover, disabled, busy | surface, canvas, stage, band, toast |
+| Buttons and links with a leading or trailing icon (every page) | md, before or after the label | `arrow-right`, `arrow-left`, `refresh`, `search`, `plus`, `upload`, `download`, `share`, `check`, `block`, `feed`, `repeat`, `reply`, `undo`, `pause`, `eye-off`, `wallet`, `card`, `shield`, `shield-check`, `lock`, `lock-open`, `star`, `send`, `mail`, `copy`, `key`, `calendar`, `eye` | default, hover, disabled, busy | surface, canvas, stage, band, toast |
 | Save toggle and profile "Save" button | md | `heart`, filled when pressed | pressed true/false, busy (pulses) | surface, stage |
 | Icon-only editor tools (`pages/edit-profile`, `dialogs/add-photo`, `add-song`, `add-video`, `upload-check`) | md and sm in ghost icon-only buttons | `arrow-up`, `arrow-down`, `arrow-left`, `arrow-right`, `trash`, `star` | default, disabled at list ends | surface |
 | Calendar month and pagination (`pages/availability`, `dialogs/block-dates`, admin lists) | md in secondary icon-only buttons | `chevron-left`, `chevron-right` | default, disabled | surface |
 | Close buttons (every dialog, toast, chip) | sm | `close` | default, hover, focus | dialog, toast, chip |
 | Alerts and banners (`*/failed`, `*/error`, `pages/offline`, `notifications/system-banner`) | lg leading | `warning`, `info`, `pause`, `wifi-off` | — | alert tones |
 | Inline messages and field help (`pages/book`, `pages/edit-profile`, `pages/account`) | sm leading | `check`, `info`, `warning`, `lock`, `shield` | — | surface |
-| Dialog headers (`docs/mocks/dialogs/*`) | md inside the 40 px icon block | `info`, `warning`, `check`, `phone`, `church`, `image`, `music`, `film`, `block`, `feed`, `x-circle`, `calendar`, `trash`, `eye-off`, `banknote`, `card`, `undo`, `reply`, `flag`, `shield`, `lock`, `key`, `shield-check`, `repeat`, `star` | info and danger tones | dialog |
+| Dialog headers (`docs/mocks/dialogs/*`) | md inside the 40 px icon block | `info`, `warning`, `check`, `phone`, `church`, `image`, `music`, `film`, `block`, `feed`, `x-circle`, `calendar`, `trash`, `eye-off`, `wallet`, `card`, `undo`, `reply`, `flag`, `shield`, `lock`, `key`, `shield-check`, `repeat`, `star` | info and danger tones | dialog |
 | Toasts (`notifications/*`) | md leading in the toast's accent colour | `check-circle`, `x-circle`, `info`, `clock`, `bell`, `heart`, `warning` | — | inverse slip, danger slip |
-| Main menu, artist menu, admin menu, account menu, sidebar (`dialogs/menu/*`, `dialogs/account-menu/*`) | md leading in each item | `compass`, `help`, `mic`, `moon`, `grid`, `inbox`, `calendar`, `user`, `banknote`, `ticket`, `heart`, `people`, `list`, `document`, `sliders`, `sign-out`, `eye`, `flag` | current, pressed (theme toggle fills) | drawer, menu panel |
-| Checkbox (`pages/admin-application`, `dialogs/reject-application`, account forms) | 16 px, stroke width 3, stacked in the box | `check`, `minus` | checked, indeterminate, unchecked (hidden) | control |
+| Main menu, artist menu, admin menu, account menu, sidebar (`dialogs/menu/*`, `dialogs/account-menu/*`) | md leading in each item | `compass`, `help`, `mic`, `moon`, `grid`, `inbox`, `calendar`, `user`, `wallet`, `ticket`, `heart`, `people`, `list`, `document`, `sliders`, `sign-out`, `eye`, `flag` | current, pressed (theme toggle fills) | drawer, menu panel |
+| Checkbox (`pages/admin-application`, `dialogs/reject-application`, account forms) | 16 px, stroke width 3, stacked in the box | `check`, `dash` | checked, indeterminate, unchecked (hidden) | control |
 | Review actions (`pages/artist-reviews`, `dialogs/reply-review`) | sm in small buttons and the "Reply locked" caption | `reply`, `flag`, `lock` | default | surface |
 | Empty states (`pages/dashboard/empty`, `pages/bookings/no-results`, admin empties) | md in the action | `calendar`, `search`, `arrow-right`, `people`, `list` | — | canvas |
 | Links (design system) | trailing, 0.85 em | `arrow-right` (nudges on hover), `external` | hover | any |
@@ -90,7 +91,7 @@ as path commands with the same geometry, so every icon is one `<path>`. The
 | `menu` | Actions | Open the menu | top bar | `M4 7h16M4 12h16M4 17h16` |
 | `close` | Actions | Close, dismiss, remove | dialogs, toasts, chips | `M6 6l12 12M18 6 6 18` |
 | `plus` | Actions | Add | "Add a song", "Add a video" | `M12 5v14M5 12h14` |
-| `minus` | Actions | Partly selected | checkbox (indeterminate) | `M6 12h12` |
+| `dash` | Actions | Partly selected | checkbox (indeterminate) | `M6 12h12` |
 | `check` | Actions | Done, verified, free, accept | checkbox tick, field success, "Accept request", "Approve Tobi" | `M5 12l5 5L20 7` |
 | `trash` | Actions | Delete, remove | setlist and photo editors, delete account | `M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13` |
 | `refresh` | Actions | Try again; new codes | error states, failed dialogs, recovery codes | `M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5` |
@@ -126,7 +127,7 @@ as path commands with the same geometry, so every icon is one `<path>`. The
 | `calendar` | Objects | Dates and availability | "See your calendar", menus | `M4 6h16v14H4zM4 10h16M8 3v4M16 3v4` |
 | `feed` | Objects | Calendar feed | "Subscribe in your calendar" | `M5 5a14 14 0 0 1 14 14M5 11a8 8 0 0 1 8 8M6 18.5v.5` |
 | `card` | Objects | Card payment | pay deposit, pay balance | `M3 6h18v12H3zM3 10h18M7 15h4` |
-| `banknote` | Objects | Money, earnings, refunds | "Issue refund…", Earnings | `M3 7h18v10H3zM7 12h.5M16.5 12h.5M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z` |
+| `wallet` | Objects | Money, earnings, refunds | "Issue refund…", Earnings | `M3 7h18v10H3zM7 12h.5M16.5 12h.5M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z` |
 | `ticket` | Objects | Bookings | menus "Your bookings", admin Bookings | `M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4zM14 7v10` |
 | `inbox` | Objects | Requests | artist menu, sidebar | `M4 13l3-8h10l3 8v6H4zM4 13h5l1 2h4l1-2h5` |
 | `grid` | Objects | Dashboard | artist menu | `M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z` |
@@ -410,7 +411,7 @@ rotation) stop or skip the animation under `prefers-reduced-motion: reduce`.
 - **AC-1** Given `<zm-icon name="refresh" />` in the "Try again" button, when it renders, then the host contains exactly one `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">` with one `<path>` whose `d` is the icon set's `refresh` path, stroked in `currentColor` at width 2.25 with square caps and mitred joins, and no fill. (L2-100)
 - **AC-2** Given `size` sm, md and lg, when each renders, then the host and its SVG measure 16, 20 and 28 CSS px square, and the SVG carries `.icon--sm`, no size modifier, and `.icon--lg` respectively. (L2-096)
 - **AC-3** Given the icon sheet rendering every name in `ICON_NAMES`, when the visual test runs in both themes, then each of the 68 icons matches its design-system or mock drawing and no two names share a path. (L2-096)
-- **AC-4** Given a menu item whose run-time `icon` value is "wallet", which is not in the registry, when it renders in dev mode, then the item shows an empty 20 px box, the label is unaffected, nothing throws, and the console names "wallet". (L2-086)
+- **AC-4** Given a menu item whose run-time `icon` value is "money", which is not in the registry, when it renders in dev mode, then the item shows an empty 20 px box, the label is unaffected, nothing throws, and the console names "money". (L2-086)
 - **AC-5** Given a consumer class on the host (`class="link__external"`) that sets `--zm-icon-size: 0.85em` and a left margin, when it renders, then the host takes that size and margin and the SVG fills it. (L2-096)
 - **AC-6** Given the checkbox setting `--zm-icon-stroke-width: 3` on its `check` icon, when Tobi's "Reference verified" box is ticked, then the tick is drawn at stroke width 3 in a 16 px box. (L2-096)
 
@@ -485,7 +486,7 @@ contents }` and the `--zm-icon-fill` knob. To meet this CRD:
 - **D-2** *Should the host stay `display: contents`?* No; it becomes an `inline-flex` box. Eight consumers in the design system size, position, rotate, fade or animate the icon (chip remove, table sort, avatar, input adornment, checkbox, save pulse, link nudge, link external). With encapsulated styles they cannot reach the inner SVG, and a `display: contents` host has no box to style. A real host lets each consumer style `zm-icon` with an ordinary class; the layout is the same, since the host is the same size as the SVG it replaces as the flex item.
 - **D-3** *Does filling keep the stroke?* Yes. The design-system sheet's `.icon--fill` removes the stroke, but every pressed control in the mocks (`.btn[aria-pressed="true"] .icon`, `.save[aria-pressed="true"] .icon`, the pressed menu item) fills and keeps it. Removing the stroke would shrink the filled heart by the stroke width, so "on" would look smaller than "off". One "on" look for both routes.
 - **D-4** *Can an icon carry its own accessible name?* No. Every icon in the mocks is hidden, and the design system names the control, never the SVG, even for status icons. The component has no `label` input, so a named icon cannot be built.
-- **D-5** *Names for glyphs the sheet does not name?* By what the glyph shows, matching the built names and the sibling CRDs: `banknote` (not `money` or `wallet`), `lock-open`, `check-circle`, `x-circle`, `eye-off`, `wifi-off`, `sign-out`, `sliders`, `people`. The sheet's `retry` stays `refresh`, the built name every consumer already uses.
+- **D-5** *Names for glyphs the sheet does not name?* By the name a built component or sibling CRD already uses, otherwise by what the glyph shows: `wallet` (the menu CRD's name for this banknote glyph; the sidebar CRD's `money` is the same icon and should read `wallet`), `lock-open`, `check-circle`, `x-circle`, `eye-off`, `wifi-off`, `sign-out`, `sliders`, `people`. The sheet's `retry` stays `refresh`, the built name every consumer already uses.
 - **D-6** *The sheet has a `sort` glyph; the table page draws `arrow-up` and rotates it. Which?* `arrow-up`, as the table page renders it. The sheet's `sort` is a heavier down-arrow that nothing uses, and keeping both would put two near-identical arrows in the set. `sort` is not in the registry.
 - **D-7** *Keep `chevron-down`, `external`, `pin` and `play`, which no mock draws?* Yes. The design system adds them for the select, the external link, the location field and the video player, whose CRDs use them; adding them later would widen `IconName` under every consumer.
 - **D-8** *A sprite sheet or an icon font instead of inline paths?* No. Inline SVG is server-rendered with the page, needs no request, follows `currentColor`, and the whole set is under 3 KB gzipped. A sprite would need an extra request or a shared `<symbol>` document that SSR must inline anyway.
