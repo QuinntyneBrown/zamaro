@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\Geocoder;
 use App\Contracts\RoutingProvider;
+use App\Integrations\Geocoding\FakeGeocoder;
 use App\Integrations\Routing\FakeRoutingProvider;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     private const FAKES = [
+        Geocoder::class => FakeGeocoder::class,
         RoutingProvider::class => FakeRoutingProvider::class,
     ];
 
