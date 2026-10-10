@@ -6,6 +6,7 @@ export type Scenario = () => Promise<{ default: Type<unknown> }>;
 export const scenarios: Record<string, Scenario> = {
   Alert: () => import('./Alert'),
   Artwork: () => import('./Artwork'),
+  ArtworkPhoto: () => import('./ArtworkPhoto'),
   Badge: () => import('./Badge'),
   BookingForm: () => import('./BookingForm'),
   Breadcrumb: () => import('./Breadcrumb'),
@@ -22,6 +23,7 @@ export const scenarios: Record<string, Scenario> = {
   Icon: () => import('./Icon'),
   Lineup: () => import('./Lineup'),
   Marquee: () => import('./Marquee'),
+  MediaGrid: () => import('./MediaGrid'),
   Menu: () => import('./Menu'),
   Poster: () => import('./Poster'),
   Rating: () => import('./Rating'),
@@ -30,4 +32,5 @@ export const scenarios: Record<string, Scenario> = {
   SkipLink: () => import('./SkipLink'),
   Ticket: () => import('./Ticket'),
   TopBar: () => import('./TopBar'),
+  VideoCard: () => import('./VideoCard'),
 };

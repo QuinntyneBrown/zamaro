@@ -1,5 +1,5 @@
 // The profile's layout from docs/design-system/assets/components.css (poster, artist-poster,
-// profile-layout, section heads). The setlist and breadcrumb style themselves.
+// profile-layout, section heads, media and photo grids). The components style themselves.
 
 :host {
   display: block;
@@ -113,6 +113,33 @@
   color: var(--color-fg-muted);
 }
 
+// Videos: one per row below MD; from MD the first spans the row over three across (L2-098.2).
+.media-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  list-style: none;
+  padding: 0;
+}
+
+// Photos: two per row below MD, four from MD (L2-015.1).
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  list-style: none;
+  padding: 0;
+}
+
+.photo-grid__open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
 .page-error {
   padding-block: var(--space-10);
 }
@@ -126,6 +153,18 @@
   .artist-poster > zm-artwork,
   .artist-poster > zm-skeleton {
     order: 2;
+  }
+
+  .media-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .media-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+
+  .photo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

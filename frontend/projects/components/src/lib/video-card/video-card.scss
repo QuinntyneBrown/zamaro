@@ -1,0 +1,111 @@
+// The video card from docs/design-system/assets/components.css (.video, .video__play,
+// .video__caption), plus the player and failure message from the CRD (D-4, D-11).
+
+:host {
+  display: block;
+}
+
+.video {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.video__play {
+  position: absolute;
+  left: var(--space-4);
+  bottom: var(--space-4);
+  z-index: var(--z-raised);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-accent);
+  color: var(--color-fg-on-accent);
+  border: var(--border-width-thick) solid var(--color-border-on-accent);
+  font: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.video:hover .video__play {
+  box-shadow: var(--shadow-1);
+  transform: var(--transform-lift);
+}
+
+.video:active .video__play {
+  box-shadow: none;
+  transform: none;
+}
+
+.video[aria-busy='true'] .video__play::after {
+  content: '';
+  width: 1em;
+  height: 1em;
+  border: var(--border-width-thick) solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--radius-full);
+  animation: spin var(--duration-loop) linear infinite;
+}
+
+// The player takes exactly the thumbnail's box, so playing never moves the grid (L2-105).
+.video__player {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: var(--color-bg-stage);
+  border: var(--border-width-thick) solid var(--color-border-strong);
+}
+
+.video__player[hidden] {
+  display: none;
+}
+
+.video__caption {
+  display: block;
+  margin-top: var(--space-2);
+  font: var(--text-body-sm);
+  color: var(--color-fg-muted);
+}
+
+// Always present so its arrival is announced; it takes no space while empty.
+.inline-msg {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  font: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger-fg);
+}
+
+.inline-msg:empty {
+  margin-top: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video__play {
+    transition: none;
+  }
+
+  .video[aria-busy='true'] .video__play::after {
+    animation: none;
+  }
+}

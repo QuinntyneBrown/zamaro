@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { Icon } from '../icon/icon';
 
 /**
- * The dialog frame (docs/design-system/components/dialog): header with title and close button, then
- * the body. Open it with the CDK Dialog, which supplies the `role="dialog"` container, focus trap,
+ * The dialog frame (docs/design-system/components/dialog): header with an optional kicker, the
+ * title and close button, then the body and the `[slot=footer]` actions. Open it with the CDK Dialog, which supplies the `role="dialog"` container, focus trap,
  * Escape and focus return; pass `titleId` as the dialog's `ariaLabelledBy`.
  */
 @Component({
@@ -14,12 +14,18 @@ import { Icon } from '../icon/icon';
     '[class.dialog--drawer]': "variant() === 'drawer'",
   },
   template: `<div class="dialog__header">
-      <h2 class="dialog__title" [id]="titleId()">{{ heading() }}</h2>
+      <div>
+        @if (kicker()) {
+          <span class="dialog__kicker">{{ kicker() }}</span>
+        }
+        <h2 class="dialog__title" [id]="titleId()">{{ heading() }}</h2>
+      </div>
       <button class="close" type="button" [attr.aria-label]="closeLabel()" (click)="closed.emit()">
         <zm-icon name="close" size="sm" />
       </button>
     </div>
-    <div class="dialog__body"><ng-content /></div>`,
+    <div class="dialog__body"><ng-content /></div>
+    <div class="dialog__footer"><ng-content select="[slot=footer]" /></div>`,
   styles: `
     :host {
       display: flex;
@@ -53,9 +59,34 @@ import { Icon } from '../icon/icon';
       border-bottom: var(--border-width-thick) dashed var(--color-border-strong);
     }
 
+    .dialog__header > div {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dialog__kicker {
+      display: block;
+      margin-bottom: var(--space-1);
+      font: var(--text-overline);
+      letter-spacing: var(--letter-spacing-stamp);
+      text-transform: uppercase;
+    }
+
     .dialog__title {
       font: var(--text-h3);
       text-transform: uppercase;
+    }
+
+    .dialog__footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--space-6) var(--space-6);
+    }
+
+    .dialog__footer:empty {
+      display: none;
     }
 
     .dialog__body {
@@ -106,6 +137,13 @@ import { Icon } from '../icon/icon';
       .dialog__body {
         flex: 1 1 auto;
       }
+
+      .dialog__footer {
+        position: sticky;
+        bottom: 0;
+        background: var(--color-bg-surface-raised);
+        padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+      }
     }
 
     @keyframes dialog-in {
@@ -127,6 +165,8 @@ export class Dialog {
   readonly heading = input.required<string>();
   readonly titleId = input.required<string>();
   readonly closeLabel = input.required<string>();
+  /** The context above the title: "Abigail Mensah · Photos". */
+  readonly kicker = input('');
   readonly variant = input<'default' | 'drawer'>('default');
 
   readonly closed = output<void>();

@@ -1,22 +1,74 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  signal,
+} from '@angular/core';
+
+/** A photo the artwork prints in its frame (docs/specs/components/artwork.md). */
+export interface ArtworkPhoto {
+  /** Fallback rendition (WebP). */
+  src: string;
+  /** Intrinsic size of `src`, written to the img so the frame never shifts. */
+  width: number;
+  height: number;
+  /** WebP renditions with width descriptors. */
+  srcset?: string;
+  /** AVIF renditions; when set, a <picture> with an AVIF <source> wraps the img. */
+  avifSrcset?: string;
+  /** The rendered width per breakpoint. Required whenever a srcset is set. */
+  sizes?: string;
+}
 
 /**
  * The halftone artwork placeholder (docs/design-system/components/artwork): a singer's silhouette,
- * or a group's, cut out of the dots. Decorative unless it has a `label`.
+ * or a group's, cut out of the dots. With a `photo`, the photo is printed over it in greyscale; a
+ * photo that fails to load falls back to the placeholder. Decorative unless it has a `label`.
  */
 @Component({
   selector: 'zm-artwork',
   host: {
+    class: 'art',
     '[class.art--group]': "variant() === 'group'",
+    '[class.art--square]': "ratio() === 'square'",
+    '[class.art--wide]': "ratio() === 'wide'",
     '[class.art--tilt]': 'tilt()',
     '[class.art--yellow]': 'yellow()',
-    '[attr.role]': "label() ? 'img' : null",
-    '[attr.aria-label]': 'label() ?? null',
+    '[attr.role]': "hostLabel() ? 'img' : null",
+    '[attr.aria-label]': 'hostLabel() || null',
     '[attr.aria-hidden]': "label() ? null : 'true'",
   },
-  template: `@if (tag()) {
-    <span class="art__tag">{{ tag() }}</span>
-  }`,
+  template: `@if (showPhoto()) {
+      @let image = photo()!;
+      @if (image.avifSrcset) {
+        <picture>
+          <source type="image/avif" [attr.srcset]="image.avifSrcset" [attr.sizes]="image.sizes" />
+          <ng-container *ngTemplateOutlet="img" />
+        </picture>
+      } @else {
+        <ng-container *ngTemplateOutlet="img" />
+      }
+      <ng-template #img>
+        <img
+          [src]="image.src"
+          [attr.srcset]="image.srcset"
+          [attr.sizes]="image.sizes"
+          [width]="image.width"
+          [height]="image.height"
+          [alt]="label()"
+          [attr.loading]="priority() ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="priority() ? 'high' : null"
+          decoding="async"
+          (error)="failedSrc.set(image.src)"
+        />
+      </ng-template>
+    }
+    @if (tag()) {
+      <span class="art__tag">{{ tag() }}</span>
+    }`,
   styles: `
     :host {
       position: relative;
@@ -30,6 +82,14 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         var(--color-halftone-paper);
       color: var(--color-fg-default);
       border: var(--border-width-thick) solid var(--color-border-strong);
+    }
+
+    :host(.art--square) {
+      aspect-ratio: 1;
+    }
+
+    :host(.art--wide) {
+      aspect-ratio: 16 / 9;
     }
 
     /* The silhouette: a singer at a mic. */
@@ -81,6 +141,14 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       );
     }
 
+    :host(.art--wide)::before {
+      width: 34%;
+    }
+
+    :host(.art--wide.art--group)::before {
+      width: 60%;
+    }
+
     :host(.art--tilt) {
       background-size:
         0.85rem 0.85rem,
@@ -98,6 +166,17 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       background: var(--color-accent);
     }
 
+    /* The photo is printed onto the paper: greyscale, multiplied. Nothing fades in. */
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.1);
+      mix-blend-mode: multiply;
+    }
+
     .art__tag {
       position: relative;
       z-index: var(--z-raised);
@@ -108,14 +187,36 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       background: var(--color-bg-inverse);
       color: var(--color-fg-inverse);
     }
+
+    @media (forced-colors: active) {
+      :host {
+        border-color: CanvasText;
+      }
+    }
   `,
+  imports: [NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Artwork {
   readonly variant = input<'solo' | 'group'>('solo');
-  readonly tilt = input(false);
-  readonly yellow = input(false);
+  /** Portrait is 4:5; `square` is 1:1 (the photo grid); `wide` is 16:9 (videos, the viewer). */
+  readonly ratio = input<'portrait' | 'square' | 'wide'>('portrait');
+  readonly tilt = input(false, { transform: booleanAttribute });
+  readonly yellow = input(false, { transform: booleanAttribute });
   readonly tag = input<string>();
   /** Describes the picture; without it the artwork is hidden from assistive technology. */
-  readonly label = input<string>();
+  readonly label = input('');
+  /** The photo; null shows the placeholder. */
+  readonly photo = input<ArtworkPhoto | null>(null);
+  /** Above the fold or the page's largest image: load eagerly with high priority. */
+  readonly priority = input(false, { transform: booleanAttribute });
+
+  /** The photo that failed to load; a different photo is tried afresh. */
+  protected readonly failedSrc = signal<string | null>(null);
+  protected readonly showPhoto = computed(() => {
+    const photo = this.photo();
+    return photo !== null && photo.src !== this.failedSrc();
+  });
+  /** The host's name while it shows the placeholder; a photo is named by its img's alt. */
+  protected readonly hostLabel = computed(() => (this.showPhoto() ? '' : this.label()));
 }

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Injector } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -11,10 +11,12 @@ import {
   Button,
   ButtonLink,
   type Crumb,
+  EmptyState,
   Icon,
   Marquee,
   Setlist,
   Skeleton,
+  VideoCard,
 } from 'components';
 import { map } from 'rxjs';
 import { LastSearch } from '../../shared/last-search';
@@ -25,8 +27,8 @@ const STRIP_SONGS = 5;
 
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
- * of songs, About and the setlist. A `?date=` carried from Discover names the date on the back
- * link and the Book button (L2-012.2). Photos, videos, reviews and the booking stub join later.
+ * of songs, About, videos, photos and the setlist. A `?date=` carried from Discover names the date
+ * on the back link and the Book button (L2-012.2). Reviews and the booking stub join later.
  */
 @Component({
   selector: 'zm-artist-page',
@@ -36,11 +38,13 @@ const STRIP_SONGS = 5;
     Breadcrumb,
     Button,
     ButtonLink,
+    EmptyState,
     Icon,
     Marquee,
     Setlist,
     Skeleton,
     TranslocoPipe,
+    VideoCard,
   ],
   providers: [ArtistProfileStore],
   host: { '[attr.aria-busy]': "store.showSkeletons() ? 'true' : null" },
@@ -55,6 +59,7 @@ export class ArtistPage {
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
   private readonly route = inject(ActivatedRoute);
+  private readonly injector = inject(Injector);
 
   /** The search date carried from Discover, when it is a real date. */
   private readonly date = toSignal(
@@ -156,6 +161,56 @@ export class ArtistPage {
       .filter(Boolean),
   );
 
+  /** The act-type illustration: a singer for a solo act, a group for the rest (L2-020.3). */
+  protected readonly artVariant = computed(() =>
+    this.store.profile()!.actType === 'solo' ? 'solo' : 'group',
+  );
+
+  protected readonly videos = computed(() =>
+    this.store.profile()!.videos.map((video) => {
+      const minutes = Math.floor(video.durationSeconds / 60);
+      const seconds = video.durationSeconds % 60;
+      return {
+        id: video.id,
+        title: video.title,
+        stamp: this.t('artist.videos.stamp', {
+          duration: `${minutes}:${String(seconds).padStart(2, '0')}`,
+        }),
+        // "Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds".
+        label: this.t('artist.videos.label', {
+          title: video.title.replace(' — ', ', '),
+          minutes,
+          seconds,
+        }),
+        poster: video.poster,
+        stream: video.stream,
+        captions: video.captions && {
+          src: video.captions.src,
+          srclang: video.captions.lang,
+          label: this.t('artist.videos.captions', { lang: video.captions.lang }),
+        },
+      };
+    }),
+  );
+
+  protected readonly photos = computed(() => {
+    const photos = this.store.profile()!.photos;
+    return photos.map((photo, index) => ({
+      id: photo.id,
+      openLabel: this.t('artist.photos.open', {
+        position: index + 1,
+        total: photos.length,
+        alt: photo.alt,
+      }),
+      image: { ...photo, sizes: '(min-width: 48rem) 25vw, 50vw' },
+    }));
+  });
+
+  protected readonly noPhotosLabel = computed(() => {
+    const profile = this.store.profile()!;
+    return this.t('artist.photos.none', { act: profile.actType, name: profile.displayName });
+  });
+
   protected readonly songs = computed(() =>
     this.store.profile()!.setlist.map((song) => ({
       title: song.title,
@@ -163,6 +218,17 @@ export class ArtistPage {
       key: this.keyLabel(song.key),
     })),
   );
+
+  /** The viewer loads on first use; it returns focus to the photo that opened it (L2-015.2). */
+  protected async openPhoto(index: number): Promise<void> {
+    const profile = this.store.profile()!;
+    const { openPhotoViewer } = await import('../../dialogs/photo-viewer/photo-viewer');
+    openPhotoViewer(this.injector, {
+      artistName: profile.displayName,
+      photos: profile.photos,
+      start: index,
+    });
+  }
 
   /** Moves focus to the booking stub's date field (L2-012.3); the stub arrives with tour dates. */
   protected book(): void {

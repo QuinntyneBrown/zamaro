@@ -218,8 +218,9 @@ export class ArtistProfilePage {
     return locator.evaluate((element) => element === document.activeElement);
   }
 
+  /** The failure message under a video; every card keeps an empty one ready to announce. */
   videoFailure(): Locator {
-    return this.videosSection().locator('.inline-msg--danger');
+    return this.videosSection().locator('.inline-msg--danger').filter({ hasText: /\S/ });
   }
 
   videosEmptyState(): Locator {

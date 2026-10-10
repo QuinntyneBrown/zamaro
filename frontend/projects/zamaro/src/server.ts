@@ -15,11 +15,18 @@ const angularApp = new AngularNodeAppEngine();
 
 /**
  * Browser calls to /api go to the Zamaro API. In production the load balancer routes /api before
- * requests reach this server; locally and in e2e this proxy stands in for it.
+ * requests reach this server; locally and in e2e this proxy stands in for it. /media is the API's
+ * local media disk, which stands in for the CDN until M4 (no object storage in M1).
  */
 const apiOrigin = process.env['API_ORIGIN'];
 if (apiOrigin) {
-  app.use(createProxyMiddleware({ target: apiOrigin, changeOrigin: true, pathFilter: '/api' }));
+  app.use(
+    createProxyMiddleware({
+      target: apiOrigin,
+      changeOrigin: true,
+      pathFilter: ['/api', '/media'],
+    }),
+  );
 }
 
 /**
