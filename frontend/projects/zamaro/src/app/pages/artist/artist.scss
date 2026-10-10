@@ -15,6 +15,20 @@
   padding-block: var(--space-12) var(--space-16);
 }
 
+// The screen-print halftone corner.
+.poster::after {
+  content: '';
+  position: absolute;
+  inset: auto -4rem -4rem auto;
+  width: 22rem;
+  height: 22rem;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--color-accent-on-stage) 22%, transparent 24%) 0 0 /
+    0.85rem 0.85rem;
+  mask-image: radial-gradient(circle at 100% 100%, currentColor 0, transparent 70%);
+  opacity: 0.35;
+}
+
 .poster > * {
   position: relative;
   z-index: var(--z-raised);
@@ -70,6 +84,17 @@
   width: 100%;
   min-height: 0;
   height: calc(var(--font-size-xl) + 2 * var(--space-3) + 2 * var(--border-width-thick));
+}
+
+// The booking stub's card while the profile loads (docs/mocks/pages/artist/loading.html).
+.stub-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  background: var(--color-bg-surface);
+  border: var(--border-width-thick) solid var(--color-border-strong);
+  box-shadow: var(--shadow-3);
 }
 
 .profile-layout {

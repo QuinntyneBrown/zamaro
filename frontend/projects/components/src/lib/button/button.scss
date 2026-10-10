@@ -155,9 +155,20 @@
   transform: none;
 }
 
+/* On the stage, every button but primary and pressed is a paper outline; hover inverts it. */
+:host-context(.on-stage) .btn:not(.btn--primary):not([aria-pressed='true']) {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-fg-on-stage);
+  --btn-border: var(--color-fg-on-stage);
+  --btn-bg-hover: var(--color-fg-on-stage);
+  --btn-fg-hover: var(--color-bg-stage);
+  --btn-shadow-hover: none;
+  --btn-transform-hover: none;
+}
+
 /* Ghost buttons in the top bar and on the stage take the surrounding colour. */
 :host-context(.topbar) .btn--ghost,
-:host-context(.on-stage) .btn--ghost {
+:host-context(.on-stage) .btn.btn--ghost:not(.btn--primary):not([aria-pressed='true']) {
   --btn-fg: currentColor;
   --btn-border: transparent;
   --btn-bg: transparent;
