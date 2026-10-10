@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\OpenApi\CsrfMismatchResponses;
 use App\Support\OpenApi\ProblemDetailsResponses;
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
 
@@ -154,7 +155,7 @@ return [
         RestrictedDocsAccess::class,
     ],
 
-    'extensions' => [ProblemDetailsResponses::class],
+    'extensions' => [ProblemDetailsResponses::class, CsrfMismatchResponses::class],
 
     /*
      * Automatically document API security (OpenAPI `security` / `securitySchemes`) based on route

@@ -29,7 +29,14 @@
             </zm-alert>
           }
           @default {
-            <p class="lead">{{ 'accounts.signIn.lead' | transloco }}</p>
+            @if (sessionEnded) {
+              <div class="message" role="status">
+                <p class="message__meta">{{ 'accounts.signIn.endedTitle' | transloco }}</p>
+                <p>{{ 'accounts.signIn.endedText' | transloco }}</p>
+              </div>
+            } @else {
+              <p class="lead">{{ 'accounts.signIn.lead' | transloco }}</p>
+            }
           }
         }
         <zm-form-field

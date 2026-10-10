@@ -87,7 +87,8 @@ export class Shell {
   }
 
   private signOut(): void {
-    this.auth.signOut().subscribe(() => this.toasts.dismissAll());
+    // A refusal has already said so (the CSRF toast); the person simply stays signed in.
+    this.auth.signOut().subscribe({ next: () => this.toasts.dismissAll(), error: () => undefined });
   }
 
   private readonly discover = translateSignal('common.nav.discover');

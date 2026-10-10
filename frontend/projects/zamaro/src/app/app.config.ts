@@ -1,4 +1,4 @@
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import {
   provideClientHydration,
@@ -10,6 +10,8 @@ import {
   ARTIST_AVAILABILITY_API,
   ARTIST_PROFILES_API,
   AUTH_API,
+  CSRF_REFUSED,
+  csrfRecoveryInterceptor,
   DISCOVERY_API,
   FEATURES_API,
   HttpArtistAvailabilityApi,
@@ -21,9 +23,11 @@ import {
   isTransferCacheable,
   provideI18n,
   REVIEWS_API,
+  sessionExpiredInterceptor,
   withApiXsrf,
 } from 'api';
 import { routes } from './app.routes';
+import { csrfRefusedToast } from './shared/session-notices';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,8 +37,14 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
     ),
-    // State-changing calls repeat the API's CSRF cookie in a header (ADR-0015).
-    provideHttpClient(withFetch(), withApiXsrf()),
+    // State-changing calls repeat the API's CSRF cookie in a header (ADR-0015). A refused token is
+    // fetched again once; a 401 while signed in means the session ended (manage-sessions-and-csrf).
+    provideHttpClient(
+      withFetch(),
+      withApiXsrf(),
+      withInterceptors([sessionExpiredInterceptor, csrfRecoveryInterceptor]),
+    ),
+    { provide: CSRF_REFUSED, useFactory: csrfRefusedToast },
     // GET responses made while rendering on the server are replayed in the browser, not re-fetched,
     // except personal ones (ADR-0017).
     provideClientHydration(

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AssignRequestId;
+use App\Http\Middleware\EnforceAbsoluteSessionLifetime;
 use App\Http\Middleware\LogRequest;
 use App\Support\Problems\ProblemDetailsRenderer;
 use Illuminate\Foundation\Application;
@@ -26,6 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Same-origin cookie sessions (ADR-0015): requests from ZAMARO_WEB_ORIGINS get the session,
         // cookie encryption and CSRF middleware on the api group; other callers stay stateless.
         $middleware->statefulApi();
+        // After the session has started: a session 30 days old ends here, whatever the route (L2-073.3).
+        $middleware->api(append: [EnforceAbsoluteSessionLifetime::class]);
         // An API with no sign-in page to redirect to: a guest always gets the 401 problem.
         $middleware->redirectGuestsTo(fn () => null);
     })

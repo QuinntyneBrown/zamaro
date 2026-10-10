@@ -4,8 +4,10 @@
 
 export * from './lib/auth/auth-api';
 export * from './lib/auth/auth.service';
+export * from './lib/auth/csrf-recovery.interceptor';
 export * from './lib/auth/provide-auth';
 export * from './lib/auth/return-url';
+export * from './lib/auth/session-expired.interceptor';
 export * from './lib/http/api-origin.backend';
 export * from './lib/i18n/calendar-date';
 export * from './lib/i18n/catalogue.loader';

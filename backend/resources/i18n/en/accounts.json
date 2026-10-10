@@ -2,6 +2,8 @@
   "required": "(required)",
   "signIn.email": "Email",
   "signIn.emailPlaceholder": "name@church.ca",
+  "signIn.endedText": "Sign in again to carry on. Nothing you typed is lost.",
+  "signIn.endedTitle": "Your session ended",
   "signIn.errorText": "Zamaro didn’t answer. Your email is still here; try again in a minute.",
   "signIn.errorTitle": "We couldn’t sign you in",
   "signIn.fine": "Artists sign in here too.",

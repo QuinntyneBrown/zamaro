@@ -53,13 +53,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
             return null;
         }
 
-        $body = (new OpenApiTypes\ObjectType)
-            ->addProperty('type', (new OpenApiTypes\StringType)->setDescription('Problem type URI, or about:blank.'))
-            ->addProperty('title', new OpenApiTypes\StringType)
-            ->addProperty('status', new OpenApiTypes\IntegerType)
-            ->addProperty('detail', new OpenApiTypes\StringType)
-            ->addProperty('requestId', (new OpenApiTypes\StringType)->format('uuid')->setDescription('Matches X-Request-Id.'))
-            ->setRequired(['type', 'title', 'status', 'detail', 'requestId']);
+        $body = self::problemBody();
         if ($validation) {
             $body->addProperty('errors', (new OpenApiTypes\ObjectType)
                 ->additionalProperties((new OpenApiTypes\ArrayType)->setItems(new OpenApiTypes\StringType))
@@ -80,5 +74,17 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
         return Response::make($status)
             ->setDescription($validation ? 'Validation failed' : $this->getDescription($type))
             ->setContent('application/problem+json', Schema::fromType($body));
+    }
+
+    /** The members every problem body has (RFC 9457 plus `requestId`). */
+    public static function problemBody(): OpenApiTypes\ObjectType
+    {
+        return (new OpenApiTypes\ObjectType)
+            ->addProperty('type', (new OpenApiTypes\StringType)->setDescription('Problem type URI, or about:blank.'))
+            ->addProperty('title', new OpenApiTypes\StringType)
+            ->addProperty('status', new OpenApiTypes\IntegerType)
+            ->addProperty('detail', new OpenApiTypes\StringType)
+            ->addProperty('requestId', (new OpenApiTypes\StringType)->format('uuid')->setDescription('Matches X-Request-Id.'))
+            ->setRequired(['type', 'title', 'status', 'detail', 'requestId']);
     }
 }

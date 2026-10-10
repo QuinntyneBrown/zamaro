@@ -21,11 +21,10 @@ export class Session {
 
   /** Replaces the CSRF token the browser holds with one the API never issued. */
   async spoilCsrfToken(): Promise<void> {
-    await this.page
-      .context()
-      .addCookies([
-        { name: 'XSRF-TOKEN', value: 'not-a-token-the-api-issued', url: this.page.url() },
-      ]);
+    const context = this.page.context();
+    const cookie = (await context.cookies()).find((each) => each.name === 'XSRF-TOKEN');
+    if (!cookie) throw new Error('The browser holds no XSRF-TOKEN cookie to spoil.');
+    await context.addCookies([{ ...cookie, value: 'not-a-token-the-api-issued' }]);
   }
 
   /** Every sign-out is refused as a CSRF mismatch, however often it is tried. */

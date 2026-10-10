@@ -61,6 +61,13 @@ class CsrfProtectionTest extends TestCase
             ->getJson('/api/v1/me')->assertOk();
     }
 
+    public function test_a_same_origin_request_without_the_token_is_refused_too(): void
+    {
+        // Laravel 13 lets a request marked `Sec-Fetch-Site: same-origin` through without a token;
+        // L2-073.2 asks for the token on every state-changing request (ADR-0018).
+        $this->withHeader('Sec-Fetch-Site', 'same-origin')->signOut(token: null)->assertStatus(419);
+    }
+
     public function test_the_token_from_the_xsrf_cookie_lets_the_request_through(): void
     {
         $this->signOut(token: $this->token)->assertNoContent();

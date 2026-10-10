@@ -12,7 +12,7 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AuthService, safeReturnUrl } from 'api';
+import { AuthService, safeReturnUrl, type SessionEndedState } from 'api';
 import {
   Alert,
   BookingForm,
@@ -28,7 +28,8 @@ type Status = 'idle' | 'submitting' | 'invalid' | 'error';
 /**
  * Sign in (docs/mocks/pages/sign-in, L2-023): email and password, then back to the page the person
  * came from (`returnUrl`). Wrong details get one message whichever was wrong, with the password
- * cleared; a failure on Zamaro's side keeps everything typed (L2-108.3).
+ * cleared; a failure on Zamaro's side keeps everything typed (L2-108.3). After a session ended
+ * (`ended=1`) it says so, with the email filled in when the app sent the person here (L2-073.3).
  */
 @Component({
   selector: 'zm-sign-in-page',
@@ -54,6 +55,7 @@ export class SignIn {
 
   protected readonly form = inject(NonNullableFormBuilder).group({ email: '', password: '' });
   protected readonly status = signal<Status>('idle');
+  protected readonly sessionEnded = this.route.snapshot.queryParamMap.get('ended') === '1';
   protected readonly busy = computed(() => this.status() === 'submitting');
   protected readonly summaryItems = computed<ErrorSummaryItem[]>(() =>
     this.status() === 'invalid'
@@ -70,8 +72,12 @@ export class SignIn {
       title: this.transloco.translate('accounts.signIn.pageTitle'),
       index: false,
     });
-    // Focus starts in Email, so the person can type at once.
-    this.afterRender(() => this.emailField().focus());
+    const ended = this.router.currentNavigation()?.extras.state as SessionEndedState | undefined;
+    if (this.sessionEnded && ended?.email) this.form.controls.email.setValue(ended.email);
+    // Focus starts in the first empty field, so the person can type at once.
+    this.afterRender(() =>
+      (this.form.controls.email.value ? this.passwordField() : this.emailField()).focus(),
+    );
   }
 
   protected submit(): void {

@@ -2,7 +2,7 @@
 
 namespace Tests\Concerns;
 
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use App\Http\Middleware\ValidateCsrfToken;
 use Illuminate\Testing\TestResponse;
 
 /**

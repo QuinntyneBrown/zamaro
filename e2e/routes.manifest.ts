@@ -31,6 +31,8 @@ export interface RouteState {
    * the network went quiet: the lineup's cards, or the sold-out panel.
    */
   shows?: 'lineup' | 'sold-out';
+  /** Copy that will change with a later slice, masked in captures: the session-ended line (M5 drafts). */
+  masks?: 'session-ended-line';
 }
 
 /** Naomi's search: Burlington, Sat 14 Nov, a worship night, within 120 km (docs/mocks/README.md). */
@@ -133,6 +135,15 @@ export const routes: RouteState[] = [
   // Sign in: the "Admit one · Your account" card on the stage. Its links to "Forgot your password?"
   // and "Create an account" join when those pages exist (M2 S8, S5).
   { name: 'sign-in', path: '/sign-in', app: 'zamaro', mock: 'sign-in/default.html' },
+  // A session that ended: "Your session ended" above the fields. Opened directly, the email is empty
+  // (the app fills it in when it sends the person here). The line names the kept draft from M5.
+  {
+    name: 'sign-in-ended',
+    path: '/sign-in?ended=1',
+    app: 'zamaro',
+    mock: 'sign-in/expired.html',
+    masks: 'session-ended-line',
+  },
   // Naomi signed in, before a search: "NF" in the header and her name over the footer's last column.
   // Saved and the hearts join with M2 S15, her church with S9.
   {

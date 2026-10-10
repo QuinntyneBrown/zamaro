@@ -78,9 +78,10 @@ class SessionLifetimeTest extends TestCase
         $this->keep($this->withTheSession()->getJson('/api/v1/features'))->assertOk();
     }
 
+    /** 10:00 in Toronto, in UTC so that a day is 24 hours across the clocks going back on 1 Nov. */
     private function signedInAt(): Carbon
     {
-        return Carbon::parse('2026-10-09 10:00', 'America/Toronto');
+        return Carbon::parse('2026-10-09 14:00', 'UTC');
     }
 
     private function signInAs(string $email): void

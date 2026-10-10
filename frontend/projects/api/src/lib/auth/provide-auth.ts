@@ -1,11 +1,14 @@
 import { type HttpRequest, withXsrfConfiguration } from '@angular/common/http';
 
+/** The header a state-changing request repeats the CSRF cookie in. */
+export const XSRF_HEADER_NAME = 'X-XSRF-TOKEN';
+
 /**
  * The API's CSRF cookie and header (ADR-0015). Pass to `provideHttpClient`: Angular copies the
  * cookie into the header on every state-changing request to a relative URL.
  */
 export function withApiXsrf(): ReturnType<typeof withXsrfConfiguration> {
-  return withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: 'X-XSRF-TOKEN' });
+  return withXsrfConfiguration({ cookieName: 'XSRF-TOKEN', headerName: XSRF_HEADER_NAME });
 }
 
 /** API paths whose answers name the signed-in person (ADR-0017). */

@@ -47,6 +47,12 @@ class ProblemDetailsRenderer
                 ->toResponse();
         }
 
+        // Laravel turns a TokenMismatchException into this 419 before rendering. Nothing changed.
+        if ($e instanceof HttpExceptionInterface && $e->getStatusCode() === 419) {
+            return ProblemDetails::of(ProblemType::CsrfTokenMismatch, 'Fetch /sanctum/csrf-cookie, then repeat the request with X-XSRF-TOKEN.', $requestId)
+                ->toResponse();
+        }
+
         if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
             return ProblemDetails::of(ProblemType::NotFound, 'Nothing exists at this address.', $requestId)
                 ->toResponse();
