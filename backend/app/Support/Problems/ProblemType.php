@@ -9,6 +9,7 @@ enum ProblemType: string
 {
     case NotFound = 'not-found';
     case ValidationFailed = 'validation-failed';
+    case TooManyRequests = 'too-many-requests';
     case ServerError = 'server-error';
 
     public function uri(): string
@@ -21,6 +22,7 @@ enum ProblemType: string
         return match ($this) {
             self::NotFound => 404,
             self::ValidationFailed => 422,
+            self::TooManyRequests => 429,
             self::ServerError => 500,
         };
     }
@@ -30,6 +32,7 @@ enum ProblemType: string
         return match ($this) {
             self::NotFound => 'Not found',
             self::ValidationFailed => 'Check the highlighted fields',
+            self::TooManyRequests => 'Too many requests',
             self::ServerError => 'Something went wrong',
         };
     }

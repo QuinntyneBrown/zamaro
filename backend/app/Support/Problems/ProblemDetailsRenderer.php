@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 
 /**
@@ -29,6 +30,11 @@ class ProblemDetailsRenderer
         if ($e instanceof ValidationException) {
             return ProblemDetails::of(ProblemType::ValidationFailed, 'Some fields need attention.', $requestId, $e->errors())
                 ->toResponse();
+        }
+
+        if ($e instanceof TooManyRequestsHttpException) {
+            return ProblemDetails::of(ProblemType::TooManyRequests, 'Wait for Retry-After seconds, then try again.', $requestId)
+                ->toResponse($e->getHeaders());
         }
 
         if ($e instanceof HttpExceptionInterface) {

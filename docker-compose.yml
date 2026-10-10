@@ -55,6 +55,9 @@ services:
       APP_ENV: e2e
       DB_DATABASE: zamaro_e2e
       ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
+      # Every browser in the suite searches from one address; the limit itself is covered by
+      # SearchRateLimitTest and the limited state by intercepting the response.
+      ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
     ports: ["8001:8001"]
 
   worker:

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Discovery\SearchArtistsRequest;
 use App\Http\Resources\Discovery\HeadlinerResource;
 use App\Http\Resources\Discovery\LineupCardResource;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SearchController extends Controller
@@ -14,6 +15,8 @@ class SearchController extends Controller
     /**
      * Artists free on the date who will drive to the event location: the headliner, then the
      * tickets closest first.
+     *
+     * @throws ThrottleRequestsException after 30 searches a minute from one address; see Retry-After
      */
     public function __invoke(SearchArtistsRequest $request, SearchAvailableArtists $search): AnonymousResourceCollection
     {

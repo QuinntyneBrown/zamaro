@@ -12,6 +12,7 @@ use Illuminate\Database\RecordsNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 /**
  * Documents every HTTP error as the RFC 9457 body ProblemDetailsRenderer returns (ADR-0006).
@@ -36,6 +37,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
         $status = match (true) {
             $validation => 422,
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
+            $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,
             default => parent::toResponse($type)?->code,
         };
         if ($status === null) {
