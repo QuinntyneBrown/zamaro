@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 
 export interface TopBarLink {
@@ -8,11 +9,24 @@ export interface TopBarLink {
   fragment?: string;
 }
 
-/** The sticky header on the charcoal stage: brand and primary navigation (docs/design-system/components/top-bar). */
+/**
+ * The sticky header on the charcoal stage (docs/design-system/components/top-bar). From LG it shows
+ * the primary links and the theme toggle; below LG a menu button opens the navigation drawer instead.
+ */
 @Component({
   selector: 'zm-top-bar',
-  imports: [Icon, RouterLink, RouterLinkActive],
+  imports: [Button, Icon, RouterLink, RouterLinkActive],
   template: `<header class="topbar">
+    <zm-button
+      class="topbar__menu"
+      variant="ghost"
+      iconOnly
+      [label]="menuLabel()"
+      [expanded]="menuExpanded()"
+      [controls]="menuControls()"
+      (click)="menuOpened.emit()"
+      ><zm-icon name="menu"
+    /></zm-button>
     <a class="topbar__brand" [routerLink]="homeLink()">
       <span class="brand-mark" aria-hidden="true"><zm-icon name="mic" size="sm" /></span
       >{{ brand() }}
@@ -31,6 +45,14 @@ export interface TopBarLink {
       }
     </nav>
     <span class="topbar__spacer"></span>
+    <zm-button
+      class="topbar__theme"
+      variant="ghost"
+      iconOnly
+      [pressed]="themePressed()"
+      (click)="themeToggled.emit()"
+      ><zm-icon name="moon" /><span class="visually-hidden">{{ themeLabel() }}</span></zm-button
+    >
   </header>`,
   styles: `
     .topbar {
@@ -87,6 +109,15 @@ export interface TopBarLink {
       flex: 1;
     }
 
+    .topbar__menu {
+      color: inherit;
+    }
+
+    /* From LG the toggle sits in the header; below LG it is the drawer's last item. */
+    .topbar__theme {
+      display: none;
+    }
+
     .nav-link {
       display: inline-flex;
       align-items: center;
@@ -128,6 +159,14 @@ export interface TopBarLink {
       .topbar__nav {
         display: flex;
       }
+
+      .topbar__menu {
+        display: none;
+      }
+
+      .topbar__theme {
+        display: inline-flex;
+      }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -138,6 +177,16 @@ export class TopBar {
   readonly homeLink = input('/');
   readonly navLabel = input.required<string>();
   readonly links = input.required<readonly TopBarLink[]>();
+  readonly menuLabel = input.required<string>();
+  readonly menuExpanded = input(false);
+  /** Id of the drawer the menu button opens. */
+  readonly menuControls = input<string>();
+  /** The toggle's constant accessible name ("Dark theme"); its state is `themePressed`. */
+  readonly themeLabel = input.required<string>();
+  readonly themePressed = input(false);
+
+  readonly menuOpened = output<void>();
+  readonly themeToggled = output<void>();
 
   protected readonly exactMatch = {
     paths: 'exact',

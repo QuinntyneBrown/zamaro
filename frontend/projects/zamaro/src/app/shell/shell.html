@@ -1,5 +1,16 @@
 <zm-skip-link>{{ 'common.skipToContent' | transloco }}</zm-skip-link>
-<zm-top-bar brand="Zamaro" [navLabel]="'common.nav.label' | transloco" [links]="links()" />
+<zm-top-bar
+  brand="Zamaro"
+  [navLabel]="'common.nav.label' | transloco"
+  [links]="links()"
+  [menuLabel]="'common.menu.open' | transloco"
+  [menuExpanded]="menuOpen()"
+  [menuControls]="menuId"
+  [themeLabel]="'common.theme.dark' | transloco"
+  [themePressed]="theme.isDark()"
+  (menuOpened)="openMenu()"
+  (themeToggled)="theme.toggle()"
+/>
 <main id="main" tabindex="-1">
   <router-outlet />
 </main>

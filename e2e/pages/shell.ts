@@ -1,4 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
+import { MenuDialog } from './menu.dialog';
+
+export type Theme = 'light' | 'dark';
 
 /** The header, skip link, main region and footer every zamaro page shares. */
 export class Shell {
@@ -8,8 +11,41 @@ export class Shell {
     return this.page.getByRole('link', { name: 'Skip to content' });
   }
 
+  primaryNav(): Locator {
+    return this.page.getByRole('navigation', { name: 'Primary' });
+  }
+
   primaryNavLinks(): Locator {
-    return this.page.getByRole('navigation', { name: 'Primary' }).getByRole('link');
+    return this.primaryNav().getByRole('link');
+  }
+
+  menuButton(): Locator {
+    return this.page.getByRole('banner').getByRole('button', { name: 'Open menu' });
+  }
+
+  /** The header's theme toggle (shown from LG); below LG it is an item in the menu. */
+  themeToggle(): Locator {
+    return this.page.getByRole('banner').getByRole('button', { name: 'Dark theme' });
+  }
+
+  async openMenu(): Promise<MenuDialog> {
+    await this.menuButton().click();
+    return new MenuDialog(this.page);
+  }
+
+  async toggleTheme(): Promise<void> {
+    await this.themeToggle().click();
+  }
+
+  /** The colour scheme the page is painted in. */
+  async paintedTheme(): Promise<Theme> {
+    return this.page.evaluate(
+      () => getComputedStyle(document.documentElement).colorScheme.trim() as Theme,
+    );
+  }
+
+  async scrollBehavior(): Promise<string> {
+    return this.page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior);
   }
 
   main(): Locator {

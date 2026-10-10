@@ -5,7 +5,13 @@ import { TopBar, type TopBarLink } from 'components';
 @Component({
   selector: 'zm-top-bar-scenario',
   imports: [TopBar],
-  template: `<zm-top-bar brand="Zamaro" navLabel="Primary" [links]="links" />`,
+  template: `<zm-top-bar
+    brand="Zamaro"
+    navLabel="Primary"
+    [links]="links"
+    menuLabel="Open menu"
+    themeLabel="Dark theme"
+  />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class TopBarScenario {

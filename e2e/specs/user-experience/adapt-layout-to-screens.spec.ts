@@ -48,6 +48,29 @@ test.describe('The page shell', () => {
     await expect(discover.shell.main()).toBeFocused();
   });
 
+  // L2-099.1, L2-101.4
+  test('collapses the header links into a menu at 375 px that traps focus and closes on Escape', async ({
+    page,
+  }) => {
+    const discover = new DiscoverPage(page);
+    await discover.useWidth(375);
+    await discover.openAndHydrate();
+
+    await expect(discover.shell.primaryNav()).toBeHidden();
+    const menu = await discover.shell.openMenu();
+
+    await expect(menu.dialog()).toBeVisible();
+    await expect(menu.links()).toHaveText(['Discover', 'How booking works', 'For artists']);
+    await expect(menu.themeToggle()).toBeVisible();
+    expect(await menu.focusIsInside()).toBe(true);
+    await menu.pressTab(8);
+    expect(await menu.focusIsInside()).toBe(true);
+
+    await menu.closeWithEscape();
+    await expect(menu.dialog()).toBeHidden();
+    await expect(discover.shell.menuButton()).toBeFocused();
+  });
+
   test('does not scroll sideways at 320 px', async ({ page }) => {
     const discover = new DiscoverPage(page);
     await discover.useWidth(320);

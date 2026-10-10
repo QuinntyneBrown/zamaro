@@ -1,5 +1,5 @@
 import type { Page, Request } from '@playwright/test';
-import { Shell } from './shell';
+import { Shell, type Theme } from './shell';
 
 /** Discover: the home page at `/` (docs/mocks/pages/discover). */
 export class DiscoverPage {
@@ -31,5 +31,27 @@ export class DiscoverPage {
 
   async useWidth(width: number): Promise<void> {
     await this.page.setViewportSize({ width, height: 800 });
+  }
+
+  async reload(): Promise<void> {
+    await this.page.reload({ waitUntil: 'networkidle' });
+  }
+
+  async useSystemTheme(theme: Theme): Promise<void> {
+    await this.page.emulateMedia({ colorScheme: theme });
+  }
+
+  async preferReducedMotion(): Promise<void> {
+    await this.page.emulateMedia({ reducedMotion: 'reduce' });
+  }
+
+  /** As if the person chose `theme` on an earlier visit from this device. */
+  async rememberThemeOnDevice(theme: Theme): Promise<void> {
+    await this.page.addInitScript((value) => localStorage.setItem('zamaro.theme', value), theme);
+  }
+
+  /** Keeps the Angular app from starting, so only the server HTML and its inline script run. */
+  async withoutTheApp(): Promise<void> {
+    await this.page.route('**/*.js', (route) => route.abort());
   }
 }

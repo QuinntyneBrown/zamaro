@@ -33,6 +33,7 @@
             "styles": [
               "projects/components/src/styles/tokens.css",
               "projects/components/src/styles/index.scss",
+              "@angular/cdk/overlay-prebuilt.css",
               "projects/zamaro/src/styles.scss"
             ],
             "server": "projects/zamaro/src/main.server.ts",

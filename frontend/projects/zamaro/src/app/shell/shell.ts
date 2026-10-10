@@ -1,7 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
+import { Dialog } from '@angular/cdk/dialog';
+import { createGlobalPositionStrategy } from '@angular/cdk/overlay';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  Injector,
+  signal,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 import { Footer, type FooterColumn, SkipLink, TopBar, type TopBarLink } from 'components';
+import { MENU_TITLE_ID, MenuDialog } from '../dialogs/menu/menu';
+import { ThemeService } from './theme.service';
 
 const CONTACT_EMAIL = 'hello@zamaro.ca';
 
@@ -13,6 +24,27 @@ const CONTACT_EMAIL = 'hello@zamaro.ca';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Shell {
+  protected readonly theme = inject(ThemeService);
+  protected readonly menuId = 'nav-drawer';
+  protected readonly menuOpen = signal(false);
+
+  private readonly dialog = inject(Dialog);
+  private readonly injector = inject(Injector);
+
+  /** The drawer traps focus, closes on Escape or the backdrop, and returns focus to the menu button. */
+  protected openMenu(): void {
+    const ref = this.dialog.open(MenuDialog, {
+      id: this.menuId,
+      ariaLabelledBy: MENU_TITLE_ID,
+      autoFocus: 'first-tabbable',
+      restoreFocus: true,
+      backdropClass: 'zm-backdrop',
+      positionStrategy: createGlobalPositionStrategy(this.injector).left('0').top('0'),
+    });
+    this.menuOpen.set(true);
+    ref.closed.subscribe(() => this.menuOpen.set(false));
+  }
+
   private readonly discover = translateSignal('common.nav.discover');
   private readonly how = translateSignal('common.nav.how');
   private readonly forArtists = translateSignal('common.nav.forArtists');

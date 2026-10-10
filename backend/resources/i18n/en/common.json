@@ -4,9 +4,14 @@
   "footer.findWhosFree": "Find who’s free",
   "footer.tagline": "Worship artists for churches around Toronto.",
   "footer.whatArtistsEarn": "What artists earn",
+  "menu.close": "Close menu",
+  "menu.label": "Main menu",
+  "menu.open": "Open menu",
+  "menu.title": "Menu",
   "nav.discover": "Discover",
   "nav.forArtists": "For artists",
   "nav.how": "How booking works",
   "nav.label": "Primary",
-  "skipToContent": "Skip to content"
+  "skipToContent": "Skip to content",
+  "theme.dark": "Dark theme"
 }

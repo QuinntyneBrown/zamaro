@@ -2,12 +2,20 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 
 /** 24-unit stroke paths from docs/design-system/foundations/iconography.html. Add one when a screen needs it. */
 const ICONS = {
+  close: 'M6 6l12 12M18 6 6 18',
+  compass: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M15 9l-2 5-4 1 2-5z',
+  help: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17v.5',
+  menu: 'M4 7h16M4 12h16M4 17h16',
   mic: 'M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8',
+  moon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z',
 } as const;
 
 export type IconName = keyof typeof ICONS;
 
-/** Decorative inline SVG icon. An icon-only control carries its own accessible name. */
+/**
+ * Decorative inline SVG icon. An icon-only control carries its own accessible name.
+ * A parent fills it ("on" state) by setting `--zm-icon-fill: currentColor`.
+ */
 @Component({
   selector: 'zm-icon',
   template: `<svg
@@ -29,7 +37,7 @@ export type IconName = keyof typeof ICONS;
       width: 1.25rem;
       height: 1.25rem;
       flex: none;
-      fill: none;
+      fill: var(--zm-icon-fill, none);
       stroke: currentColor;
       stroke-width: 2.25;
       stroke-linecap: square;
