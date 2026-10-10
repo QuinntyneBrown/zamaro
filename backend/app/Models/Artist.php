@@ -59,6 +59,23 @@ class Artist extends Model
             ->whereNotNull('published_at');
     }
 
+    /** The visible scope for an artist already loaded. */
+    public function isVisible(): bool
+    {
+        return $this->status === ArtistStatus::Approved && $this->payout_ready && $this->published_at !== null;
+    }
+
+    /** The first of the artist's styles in the chips' order: "solo vocalist" for Abigail (L2-021.1). */
+    public function primaryStyle(): ?Style
+    {
+        return $this->styles()->first()?->style;
+    }
+
+    public function slugHistories(): HasMany
+    {
+        return $this->hasMany(SlugHistory::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

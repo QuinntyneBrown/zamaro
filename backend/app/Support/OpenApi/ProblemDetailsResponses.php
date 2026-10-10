@@ -2,6 +2,8 @@
 
 namespace App\Support\OpenApi;
 
+use App\Actions\ArtistProfiles\ArtistMoved;
+use App\Actions\ArtistProfiles\ArtistNotFound;
 use Dedoc\Scramble\Support\ExceptionToResponseExtensions\HttpExceptionToResponseExtension;
 use Dedoc\Scramble\Support\Generator\Response;
 use Dedoc\Scramble\Support\Generator\Schema;
@@ -33,6 +35,10 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
         if (! $type instanceof ObjectType) {
             return null;
         }
+        if ($type->isInstanceOf(ArtistMoved::class)) {
+            return Response::make(301)
+                ->setDescription('A retired slug: `Location` is the same address under the current slug, with the query string kept.');
+        }
         $validation = $type->isInstanceOf(ValidationException::class);
         $status = match (true) {
             $validation => 422,
@@ -56,6 +62,16 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
                 ->additionalProperties((new OpenApiTypes\ArrayType)->setItems(new OpenApiTypes\StringType))
                 ->setDescription('Messages keyed by field.'));
             $body->setRequired(['type', 'title', 'status', 'detail', 'requestId', 'errors']);
+        }
+        if ($type->isInstanceOf(ArtistNotFound::class)) {
+            $body->addProperty('similarArtists', (new OpenApiTypes\ObjectType)
+                ->addProperty('date', (new OpenApiTypes\StringType)->format('date')->setDescription('The day they are free: the carried date, or the first bookable day.'))
+                ->addProperty('radiusKm', new OpenApiTypes\IntegerType)
+                ->addProperty('items', (new OpenApiTypes\ArrayType)
+                    ->setItems((new OpenApiTypes\ObjectType)->setDescription('A lineup ticket, as in `GET /search` `data`.'))
+                    ->setDescription('Up to 3, nearest first.'))
+                ->setRequired(['date', 'radiusKm', 'items'])
+                ->setDescription('On the profile only: artists of the same primary style free on the carried search date (L2-021).'));
         }
 
         return Response::make($status)

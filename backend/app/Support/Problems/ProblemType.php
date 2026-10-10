@@ -8,6 +8,7 @@ namespace App\Support\Problems;
 enum ProblemType: string
 {
     case NotFound = 'not-found';
+    case ArtistNotFound = 'artist-not-found';
     case ValidationFailed = 'validation-failed';
     case TooManyRequests = 'too-many-requests';
     case ServerError = 'server-error';
@@ -20,7 +21,7 @@ enum ProblemType: string
     public function status(): int
     {
         return match ($this) {
-            self::NotFound => 404,
+            self::NotFound, self::ArtistNotFound => 404,
             self::ValidationFailed => 422,
             self::TooManyRequests => 429,
             self::ServerError => 500,
@@ -31,6 +32,7 @@ enum ProblemType: string
     {
         return match ($this) {
             self::NotFound => 'Not found',
+            self::ArtistNotFound => 'This artist isn’t on Zamaro',
             self::ValidationFailed => 'Check the highlighted fields',
             self::TooManyRequests => 'Too many requests',
             self::ServerError => 'Something went wrong',

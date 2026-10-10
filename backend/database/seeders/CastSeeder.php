@@ -24,6 +24,7 @@ use App\Models\Booking;
 use App\Models\Review;
 use App\Models\ReviewReply;
 use App\Models\SetlistSong;
+use App\Models\SlugHistory;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
 use App\Services\Discovery\Coordinates;
@@ -232,6 +233,11 @@ class CastSeeder extends Seeder
 
     private const ABIGAIL_UNAVAILABLE = ['2026-11-26', '2026-11-27', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-31'];
 
+    /** retired slug => [artist, retired at]: old addresses that answer 301 (L2-021.3, L2-055.3). */
+    private const RETIRED_SLUGS = [
+        'abigail-sings' => ['abigail-mensah', '2026-03-02 12:00:00'],
+    ];
+
     public function run(): void
     {
         DB::transaction(function () {
@@ -243,9 +249,31 @@ class CastSeeder extends Seeder
             $this->reviews();
             $this->supportingCast();
             $this->christmasChoirs();
+            $this->suspendedVocalist();
+            $this->retiredSlugs();
             $this->profiles();
             $this->media();
         });
+    }
+
+    /**
+     * Selah Brooks, a solo vocalist suspended from Zamaro, for the not-found page (L2-021.2): her
+     * address answers the same 404 as one that never existed, suggesting free solo vocalists.
+     */
+    private function suspendedVocalist(): void
+    {
+        $this->artist('selah-brooks', 'Selah Brooks', 'ACT-0044', ActType::Solo, [Style::SoloVocalist, Style::Hymns], 'Mississauga', 120, 500, 4.4, 5, '2025-04-14');
+        Artist::where('slug', 'selah-brooks')->update(['status' => ArtistStatus::Suspended]);
+    }
+
+    private function retiredSlugs(): void
+    {
+        foreach (self::RETIRED_SLUGS as $slug => [$artist, $retiredAt]) {
+            SlugHistory::updateOrCreate(['slug' => $slug], [
+                'artist_id' => Artist::where('slug', $artist)->value('id'),
+                'retired_at' => $retiredAt,
+            ]);
+        }
     }
 
     /** Rows only; the keys point at files MediaSeeder writes to the media disk. */
@@ -478,6 +506,7 @@ class CastSeeder extends Seeder
             'payout_ready' => true,
             'published_at' => $published.' 09:00:00',
         ]);
+        SlugHistory::updateOrCreate(['slug' => $slug], ['artist_id' => $artist->id, 'retired_at' => null]);
 
         DB::table('artist_styles')->where('artist_id', $artist->id)->delete();
         DB::table('artist_styles')->insert(array_map(

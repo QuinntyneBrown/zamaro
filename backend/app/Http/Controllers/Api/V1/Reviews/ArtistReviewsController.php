@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\Reviews;
 
+use App\Actions\ArtistProfiles\ArtistMoved;
+use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Reviews\ListArtistReviews;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reviews\ListArtistReviewsRequest;
 use App\Http\Resources\Reviews\ReviewResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ArtistReviewsController extends Controller
 {
@@ -15,7 +16,8 @@ class ArtistReviewsController extends Controller
      * An artist's visible reviews, newest first, 10 at a time. The profile already carries the
      * first 4 and the cursor to continue from.
      *
-     * @throws NotFoundHttpException when no visible artist has the address
+     * @throws ArtistMoved when the address is the artist's retired slug
+     * @throws ArtistNotFound when no visible artist has the address
      */
     public function __invoke(ListArtistReviewsRequest $request, ListArtistReviews $reviews, string $slug): AnonymousResourceCollection
     {

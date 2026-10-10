@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers\Api\V1\ArtistProfiles;
 
+use App\Actions\ArtistProfiles\ArtistMoved;
+use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\ArtistProfiles\ListTourDates;
+use App\Actions\ArtistProfiles\ResolveArtistSlug;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArtistProfiles\CheckDateRequest;
 use App\Http\Requests\ArtistProfiles\ListTourDatesRequest;
 use App\Http\Resources\ArtistProfiles\TourDateResource;
-use App\Models\Artist;
 use App\Services\ArtistAvailability\AvailabilityService;
 use App\Services\Bookings\CancellationPolicy;
 use Illuminate\Http\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ArtistAvailabilityController extends Controller
 {
     /**
      * Whether the artist is free on one date, for the booking stub (L2-019).
      *
-     * @throws NotFoundHttpException when no visible artist has the address
+     * @throws ArtistMoved when the address is the artist's retired slug
+     * @throws ArtistNotFound when no visible artist has the address
      */
-    public function check(CheckDateRequest $request, AvailabilityService $availability, CancellationPolicy $policy, string $slug): JsonResponse
+    public function check(CheckDateRequest $request, AvailabilityService $availability, CancellationPolicy $policy, ResolveArtistSlug $slugs, string $slug): JsonResponse
     {
-        $artist = Artist::query()->visible()->where('slug', $slug)->first()
-            ?? throw new NotFoundHttpException('No artist has that address.');
+        $artist = $slugs->handle($slug);
         $date = $request->eventDate();
         $free = $availability->isFree($artist, $date);
 
@@ -39,7 +40,8 @@ class ArtistAvailabilityController extends Controller
     /**
      * The artist's next 6 free or booked dates, for the "On tour" list (L2-017).
      *
-     * @throws NotFoundHttpException when no visible artist has the address
+     * @throws ArtistMoved when the address is the artist's retired slug
+     * @throws ArtistNotFound when no visible artist has the address
      */
     public function tourDates(ListTourDatesRequest $request, ListTourDates $tourDates, string $slug): JsonResponse
     {

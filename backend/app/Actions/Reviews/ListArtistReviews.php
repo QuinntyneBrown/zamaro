@@ -2,11 +2,13 @@
 
 namespace App\Actions\Reviews;
 
+use App\Actions\ArtistProfiles\ArtistMoved;
+use App\Actions\ArtistProfiles\ArtistNotFound;
+use App\Actions\ArtistProfiles\ResolveArtistSlug;
 use App\Models\Artist;
 use App\Models\Review;
 use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Pagination\Cursor;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * A visible artist's visible reviews, newest first, a page at a time (L2-018, L2-095.1): the
@@ -19,12 +21,15 @@ class ListArtistReviews
 
     public const PER_PAGE = 10;
 
+    public function __construct(private readonly ResolveArtistSlug $slugs) {}
+
+    /**
+     * @throws ArtistMoved when the slug is the artist's retired one
+     * @throws ArtistNotFound when no visible artist has the slug
+     */
     public function handle(string $slug, ?Cursor $cursor): CursorPaginator
     {
-        $artist = Artist::query()->visible()->where('slug', $slug)->first()
-            ?? throw new NotFoundHttpException('No artist has that address.');
-
-        return $this->page($artist, self::PER_PAGE, $cursor);
+        return $this->page($this->slugs->handle($slug), self::PER_PAGE, $cursor);
     }
 
     public function page(Artist $artist, int $perPage, ?Cursor $cursor = null): CursorPaginator
