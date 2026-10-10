@@ -17,6 +17,13 @@ export class SignInPage {
     await this.page.goto(`/sign-in${query}`, { waitUntil: 'networkidle' });
   }
 
+  /** Opens the page as the app does when a session has ended: `?returnUrl=…&ended=1`. */
+  async openAfterSessionEnded(returnUrl: string): Promise<void> {
+    await freezeClock(this.page);
+    const query = new URLSearchParams({ returnUrl, ended: '1' });
+    await this.page.goto(`/sign-in?${query}`, { waitUntil: 'networkidle' });
+  }
+
   async signIn(email: string, password: string): Promise<void> {
     await this.email().fill(email);
     await this.password().fill(password);
@@ -86,6 +93,16 @@ export class SignInPage {
   /** The one message under both fields: "Email or password is incorrect." */
   credentialsError(): Locator {
     return this.card().locator('#credentials-error');
+  }
+
+  /** "Your session ended" and what is kept, above the fields. */
+  sessionEnded(): Locator {
+    return this.card().getByRole('status').filter({ hasText: 'Your session ended' });
+  }
+
+  /** The line under "Your session ended"; it names the kept draft once drafts exist (M5). */
+  sessionEndedDetail(): Locator {
+    return this.sessionEnded().locator('p').nth(1);
   }
 
   alert(): Locator {

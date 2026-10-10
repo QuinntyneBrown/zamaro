@@ -12,16 +12,19 @@ trait UsesTheWebApp
 {
     protected function fromTheWebApp(): static
     {
-        return $this->withHeader('Referer', 'http://localhost:4200/');
+        // A JSON test request sends its cookies only with credentials, as the browser's same-origin fetch does.
+        return $this->withHeader('Referer', 'http://localhost:4200/')->withCredentials();
     }
 
     /**
-     * The next request is known only by the cookies it carries. Within one test the app remembers
-     * who signed in; forgetting the guards makes it read the session again, as a new request would.
+     * The next request is known only by the cookies it carries. Within one test the app keeps the
+     * signed-in user and the last session's data in memory; forgetting both makes it read the session
+     * store again by the cookie's ID, as a new request would.
      */
     protected function asANewRequest(): static
     {
         $this->app['auth']->forgetGuards();
+        $this->app['session.store']->flush();
 
         return $this;
     }
