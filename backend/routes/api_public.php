@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
 use App\Http\Controllers\Api\V1\Discovery\PlaceController;
 use App\Http\Controllers\Api\V1\Discovery\SearchAlternativesController;
 use App\Http\Controllers\Api\V1\Discovery\SearchController;
+use App\Http\Controllers\Api\V1\Reviews\ArtistReviewsController;
 use App\Http\Controllers\Api\V1\UserExperience\TranslationCatalogueController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,3 +15,4 @@ Route::get('search', SearchController::class)->middleware('throttle:search')->na
 Route::get('search/alternatives', SearchAlternativesController::class)->middleware('throttle:search')->name('search.alternatives');
 Route::get('places', PlaceController::class)->name('places');
 Route::get('artists/{slug}', [ArtistProfileController::class, 'show'])->name('artists.show');
+Route::get('artists/{slug}/reviews', ArtistReviewsController::class)->name('artists.reviews');

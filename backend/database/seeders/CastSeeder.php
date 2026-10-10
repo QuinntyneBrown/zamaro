@@ -13,6 +13,7 @@ use App\Enums\Style;
 use App\Enums\VideoStatus;
 use App\Enums\VscStatus;
 use App\Integrations\Routing\CastRoutes;
+use App\Jobs\Reviews\RecalculateArtistRating;
 use App\Models\Artist;
 use App\Models\ArtistPhoto;
 use App\Models\ArtistRating;
@@ -21,12 +22,15 @@ use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
 use App\Models\Review;
+use App\Models\ReviewReply;
 use App\Models\SetlistSong;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
 use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -77,8 +81,66 @@ class CastSeeder extends Seeder
     private const REVIEWS = [
         'ZAM-0089' => ['Rev. Janet Clarke', 'janet-clarke', 5, '2026-09-15 19:00', 'She had the whole congregation singing in three-part harmony by the last verse.'],
         'ZAM-0078' => ['Tomi Oduya', 'tomi-oduya', 5, '2026-08-18 20:00', 'She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.'],
-        'ZAM-0061' => ['Naomi Fraser', 'naomi-fraser', 5, '2026-06-16 18:00', 'Our seniors asked for hymns and our youth asked for Jireh.'],
-        'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart.'],
+        'ZAM-0061' => ['Naomi Fraser', 'naomi-fraser', 5, '2026-06-16 18:00', 'Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.'],
+        'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.'],
+    ];
+
+    /** booking number => [replied at, text]: Abigail's replies (docs/mocks/pages/artist-reviews). */
+    private const REPLIES = [
+        'ZAM-0078' => ['2026-10-08 11:20', 'Thank you, Tomi! Your volunteers were ready for everything I threw at them. See you on Sun 1 Nov.'],
+        'ZAM-0061' => ['2026-06-16 21:00', 'Riverside, you sang the roof off. Thank you for having me.'],
+    ];
+
+    /**
+     * [reviewer, church, city]: the other 34 churches behind Abigail's 4.9 from 38 churches. Their
+     * reviews are older than the four on her profile; every seventh gives 4 stars and the rest 5,
+     * so the 38 reviews sum to 185 stars, a mean of 4.87 (L2-060).
+     */
+    private const EARLIER_REVIEWERS = [
+        ['Pastor Samuel Osei', 'Cornerstone Baptist', 'Scarborough'],
+        ['Ruth Kim', 'Agincourt Community Church', 'Scarborough'],
+        ['Rev. Michael Grant', 'St. Jude’s Anglican', 'Oakville'],
+        ['Esther Mwale', 'Bethel Pentecostal', 'Hamilton'],
+        ['Pastor Daniel Ruiz', 'Iglesia La Roca', 'North York'],
+        ['Joy Asante', 'Victory Chapel', 'Brampton'],
+        ['Rev. Carol Henderson', 'Knox Presbyterian', 'Guelph'],
+        ['Pastor Kwame Boateng', 'Grace Assembly', 'Ajax'],
+        ['Linda Tran', 'Hope City Church', 'Markham'],
+        ['Rev. Paul Whitfield', 'St. Andrew’s United', 'Burlington'],
+        ['Deborah Osei-Bonsu', 'Calvary Gospel Church', 'Whitby'],
+        ['Pastor Mark Chen', 'Living Stones Church', 'Richmond Hill'],
+        ['Sarah MacLeod', 'Westminster Chapel', 'Mississauga'],
+        ['Pastor Tunde Bakare', 'House of Praise', 'Etobicoke'],
+        ['Rev. Anne Doucette', 'Trinity Anglican', 'Cambridge'],
+        ['Joseph Mensah', 'Mount Zion Church', 'Pickering'],
+        ['Pastor Grace Lee', 'New Hope Fellowship', 'Vaughan'],
+        ['Rev. David Ellis', 'Christ Church', 'Georgetown'],
+        ['Abena Owusu', 'Faith Tabernacle', 'Oshawa'],
+        ['Pastor James Wright', 'The Meeting House', 'Kitchener'],
+        ['Rev. Patricia Moore', 'St. Paul’s United', 'Milton'],
+        ['Pastor Emmanuel Nwosu', 'Redeemed Life Centre', 'Brampton'],
+        ['Hannah Schultz', 'Lakeview Baptist', 'Mississauga'],
+        ['Pastor Robert Singh', 'Fountain of Life', 'Malton'],
+        ['Rev. Elizabeth Ford', 'All Saints Anglican', 'Waterloo'],
+        ['Pastor Isaac Darko', 'Shiloh Worship Centre', 'Toronto'],
+        ['Miriam Goldberg', 'Emmanuel Church', 'Newmarket'],
+        ['Pastor Andrew Clarke', 'Harbour Light Church', 'Port Credit'],
+        ['Rev. Susan Bell', 'St. Mark’s Lutheran', 'Kitchener'],
+        ['Pastor Femi Ogunleye', 'Kingdom Hall of Praise', 'Scarborough'],
+        ['Catherine Wong', 'Pacific Grace Church', 'Richmond Hill'],
+        ['Pastor Peter Nkansah', 'Restoration Church', 'Bowmanville'],
+        ['Rev. Thomas Hughes', 'Grace United', 'Brantford'],
+        ['Adwoa Mensah-Bonsu', 'Bread of Life Church', 'Ajax'],
+    ];
+
+    /** Rotated through the earlier reviews. */
+    private const EARLIER_TEXTS = [
+        'Our whole congregation is still humming the songs she led.',
+        'She arrived early, rehearsed with our team and led with real humility.',
+        'Beautiful voice, clear communication before the day, and right on time.',
+        'She chose songs our older members knew and taught us two new ones.',
+        'A worship night our youth keep asking us to repeat.',
+        'She prayed with our team before the service. It set the tone for everything.',
     ];
 
     /**
@@ -324,6 +386,69 @@ class CastSeeder extends Seeder
                 'created_at' => $writtenAt,
             ]);
         }
+
+        foreach (self::REPLIES as $number => [$repliedAt, $text]) {
+            $review = Review::whereRelation('booking', 'number', $number)->firstOrFail();
+            ReviewReply::updateOrCreate(['review_id' => $review->id], [
+                'artist_id' => $review->artist_id,
+                'text' => $text,
+                'created_at' => $repliedAt,
+            ]);
+        }
+
+        $abigail = Artist::where('slug', 'abigail-mensah')->firstOrFail();
+        $this->earlierReviews($abigail);
+        // Her summary comes from the reviews, as the worker keeps it; the rest of the cast keeps
+        // the seeded summaries in ARTISTS, which have no reviews behind them yet.
+        RecalculateArtistRating::dispatchSync($abigail->id);
+    }
+
+    /**
+     * Abigail's older reviews, one per church, each behind a completed Sunday booking: the newest
+     * on Tue 5 May 2026, then a week apart. Bulk upserts on the natural keys keep reseeding (and
+     * every test's setup) quick.
+     */
+    private function earlierReviews(Artist $abigail): void
+    {
+        $now = now();
+        $lastSunday = Carbon::parse('2026-05-03');
+        $users = $bookings = $reviews = [];
+        foreach (self::EARLIER_REVIEWERS as $index => [$name, $church, $city]) {
+            $email = Str::slug($name).'@cast.zamaro.test';
+            $number = sprintf('ZAM-%04d', $index + 1);
+            $eventDate = $lastSunday->copy()->subWeeks($index);
+            $users[$email] = ['name' => $name, 'email' => $email, 'created_at' => $now, 'updated_at' => $now];
+            $bookings[$number] = [
+                'number' => $number, 'artist_id' => $abigail->id, 'status' => BookingStatus::Completed->value,
+                'event_date' => $eventDate->toDateString(), 'kind' => GatheringKind::SundayService->value,
+                'church_name' => $church, 'church_city' => $city, 'created_at' => $now, 'updated_at' => $now,
+            ];
+            $reviews[$number] = [
+                'email' => $email,
+                'stars' => $index % 7 === 6 ? 4 : 5,
+                'text' => self::EARLIER_TEXTS[$index % count(self::EARLIER_TEXTS)],
+                'created_at' => $eventDate->copy()->addDays(2)->setTime(19, 0),
+            ];
+        }
+
+        // Cast accounts cannot sign in: one random password, hashed once and never shown.
+        $password = Hash::make(Str::random(40));
+        DB::table('users')->upsert(
+            array_map(fn (array $user) => $user + ['password' => $password], array_values($users)),
+            ['email'], ['name', 'updated_at'],
+        );
+        DB::table('bookings')->upsert(array_values($bookings), ['number'], ['artist_id', 'status', 'event_date', 'kind', 'church_name', 'church_city', 'updated_at']);
+
+        $userIds = User::whereIn('email', array_keys($users))->pluck('id', 'email');
+        $bookingIds = Booking::whereIn('number', array_keys($bookings))->pluck('id', 'number');
+        DB::table('reviews')->upsert(array_map(fn (string $number) => [
+            'booking_id' => $bookingIds[$number],
+            'artist_id' => $abigail->id,
+            'booker_id' => $userIds[$reviews[$number]['email']],
+            'stars' => $reviews[$number]['stars'],
+            'text' => $reviews[$number]['text'],
+            'created_at' => $reviews[$number]['created_at'],
+        ], array_keys($reviews)), ['booking_id'], ['artist_id', 'booker_id', 'stars', 'text', 'created_at']);
     }
 
     /**

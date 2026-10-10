@@ -199,7 +199,8 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['default'],
+            // `high` first: rating recalculation must land within 60 seconds (L2-060.3).
+            'queue' => ['high', 'default'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,

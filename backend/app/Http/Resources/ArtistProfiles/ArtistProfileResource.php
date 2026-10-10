@@ -2,12 +2,14 @@
 
 namespace App\Http\Resources\ArtistProfiles;
 
+use App\Http\Resources\Reviews\ReviewResource;
 use App\Models\Artist;
 use App\Models\ArtistPhoto;
 use App\Models\ArtistStyle;
 use App\Models\ArtistVideo;
 use App\Models\SetlistSong;
 use App\Support\Media;
+use Illuminate\Contracts\Pagination\CursorPaginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,6 +28,19 @@ class ArtistProfileResource extends JsonResource
     private const POSTER_WIDTH = 800;
 
     private const POSTER_HEIGHT = 450;
+
+    private ?CursorPaginator $latestReviews = null;
+
+    private int $reviewTotal = 0;
+
+    /** The newest visible reviews and how many there are in all (L2-018.1). */
+    public function withReviews(CursorPaginator $latest, int $total): static
+    {
+        $this->latestReviews = $latest;
+        $this->reviewTotal = $total;
+
+        return $this;
+    }
 
     /**
      * @return array<string, mixed>
@@ -99,6 +114,15 @@ class ArtistProfileResource extends JsonResource
                     'lang' => 'en',
                 ],
             ])->values()->all(),
+            /** The newest visible reviews, so the section renders without a second request. */
+            'reviews' => [
+                /** Visible reviews in all, for "Show all 38 reviews". */
+                'total' => $this->reviewTotal,
+                /** Up to 4, newest first. */
+                'items' => ReviewResource::collection($this->latestReviews?->items() ?? []),
+                /** Pass as `cursor` to `GET /artists/{slug}/reviews` for the rest; null when there are no more. */
+                'nextCursor' => $this->latestReviews?->nextCursor()?->encode(),
+            ],
         ];
     }
 
