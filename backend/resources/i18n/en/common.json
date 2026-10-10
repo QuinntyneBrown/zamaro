@@ -8,6 +8,7 @@
   "footer.findWhosFree": "Find who’s free",
   "footer.tagline": "Worship artists for churches around Toronto.",
   "footer.whatArtistsEarn": "What artists earn",
+  "format.date.dayMonth": "{day} {month}",
   "format.date.long": "{weekday} {day} {month} {year}",
   "format.date.monthYear": "{month} {year}",
   "format.date.short": "{weekday} {day} {month}",

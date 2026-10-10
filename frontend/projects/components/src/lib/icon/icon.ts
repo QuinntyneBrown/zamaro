@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 const ICONS = {
   'arrow-left': 'M20 12H5M11 6l-6 6 6 6',
   'arrow-right': 'M4 12h15M13 6l6 6-6 6',
+  check: 'M5 12l5 5L20 7',
   close: 'M6 6l12 12M18 6 6 18',
   compass: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M15 9l-2 5-4 1 2-5z',
   help: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.7M12 17v.5',

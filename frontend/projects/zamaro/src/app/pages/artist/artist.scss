@@ -199,4 +199,10 @@
     align-items: start;
     gap: var(--space-16);
   }
+
+  // The stub stays pinned beside the profile as it scrolls (L2-019.4); below LG it follows the reviews.
+  .profile-layout > aside {
+    position: sticky;
+    top: calc(var(--layout-topbar-height) + var(--space-6));
+  }
 }

@@ -2,18 +2,23 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { FormatService } from 'api';
-import { Marquee, Poster } from 'components';
+import { Band, Marquee, Poster } from 'components';
+import { HowBookingWorks } from './how-booking-works/how-booking-works';
 import { Lineup } from './lineup/lineup';
 import { QUICK_PICK_CITIES, SearchForm } from './search-form/search-form';
 import { fromParams } from './search-query-codec';
 import { SearchStore } from './search.store';
 
-/** Discover at `/` (docs/mocks/pages/discover): the poster with the search form, then the lineup. */
+/**
+ * Discover at `/` (docs/mocks/pages/discover): the poster with the search form, the lineup, then
+ * "How booking works" and the call to artists. "Apply as an artist" joins the band with the
+ * application (M3).
+ */
 @Component({
   selector: 'zm-discover',
-  imports: [Lineup, Marquee, Poster, SearchForm],
+  imports: [Band, HowBookingWorks, Lineup, Marquee, Poster, SearchForm, TranslocoPipe],
   providers: [SearchStore],
   template: `<zm-poster
       [kicker]="t('discover.poster.kicker')"
@@ -26,7 +31,19 @@ import { SearchStore } from './search.store';
     <zm-marquee [items]="cities" />
     @if (store.status() !== 'idle') {
       <zm-lineup />
-    }`,
+    }
+    <zm-how-booking-works />
+    <section id="join" class="section" aria-labelledby="join-title">
+      <div class="container">
+        <zm-band
+          headingId="join-title"
+          [kicker]="'discover.join.kicker' | transloco"
+          [title]="'discover.join.title' | transloco"
+        >
+          <p>{{ 'discover.join.body' | transloco }}</p>
+        </zm-band>
+      </div>
+    </section>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Discover {

@@ -83,6 +83,27 @@
   --btn-font-size: var(--font-size-md);
 }
 
+.btn--sm {
+  --btn-height: var(--control-height-sm);
+  --btn-padding: var(--space-3);
+  --btn-font-size: var(--font-size-xs);
+}
+
+/* Compact buttons grow to a comfortable target under a coarse pointer (L2-096). */
+@media (pointer: coarse) {
+  .btn--sm {
+    --btn-height: var(--target-comfortable);
+  }
+}
+
+:host:has(> .btn--block) {
+  display: flex;
+}
+
+.btn--block {
+  width: 100%;
+}
+
 .btn--icon {
   --btn-padding: 0;
   width: var(--btn-height);
@@ -153,4 +174,19 @@
 :host-context(.on-stage) .btn:focus-visible {
   outline-color: var(--color-accent-on-stage);
   box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-bg-stage);
+}
+
+/* In a band every button takes the stage skin, whatever its variant, even on the stage (band D-4). */
+:host-context(.band) .btn {
+  --btn-bg: var(--color-bg-stage);
+  --btn-fg: var(--color-fg-on-stage);
+  --btn-border: var(--color-bg-stage);
+  --btn-bg-hover: var(--color-bg-stage);
+  --btn-fg-hover: var(--color-fg-on-stage);
+  --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage);
+}
+
+:host-context(.band) .btn:focus-visible {
+  outline-color: var(--color-border-on-accent);
+  box-shadow: none;
 }

@@ -24,8 +24,13 @@
   color: var(--color-danger-fg);
 }
 
+.field__optional {
+  color: var(--color-fg-muted);
+}
+
 .input,
-.select {
+.select,
+.textarea {
   --field-bg: var(--color-bg-surface);
   --field-fg: var(--color-fg-default);
   --field-border: var(--color-border-strong);
@@ -44,29 +49,34 @@
 }
 
 .input:hover,
-.select:hover {
+.select:hover,
+.textarea:hover {
   --field-border: var(--color-fg-default);
 }
 
 .input:focus-visible,
-.select:focus-visible {
+.select:focus-visible,
+.textarea:focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus);
 }
 
 .input[aria-invalid='true'],
-.select[aria-invalid='true'] {
+.select[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
   --field-border: var(--color-danger-border);
   box-shadow: inset var(--border-width-thick) 0 0 var(--color-danger-border);
 }
 
 .input[aria-invalid='true']:focus-visible,
-.select[aria-invalid='true']:focus-visible {
+.select[aria-invalid='true']:focus-visible,
+.textarea[aria-invalid='true']:focus-visible {
   box-shadow: var(--shadow-focus);
 }
 
 .input:disabled,
-.select:disabled {
+.select:disabled,
+.textarea:disabled {
   --field-bg: var(--color-bg-subtle);
   --field-fg: var(--color-fg-disabled);
   --field-border: var(--color-fg-disabled);
@@ -89,4 +99,9 @@
     calc(100% - 0.8rem) 55%;
   background-size: 0.36rem 0.36rem;
   background-repeat: no-repeat;
+}
+
+.textarea {
+  min-height: 6rem;
+  resize: vertical;
 }

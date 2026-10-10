@@ -4,6 +4,7 @@ export const defaultIterations = 200;
 
 /** @type {Record<string, number>} */
 export const scenarioIterations = {
+  BookingStub: 150,
   DarkTheme: 60,
   Footer: 100,
   Lineup: 25,

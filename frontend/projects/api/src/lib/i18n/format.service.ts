@@ -50,6 +50,15 @@ export class FormatService {
     );
   }
 
+  /** A date as a tour-date stamp, the weekday over the day: `{ weekday: 'Sat', day: '14 Nov' }`. */
+  dayStamp(date: CalendarDate): { weekday: string; day: string } {
+    const parts = this.parts(date, { weekday: 'short', day: 'numeric', month: 'short' });
+    return {
+      weekday: parts['weekday'],
+      day: this.transloco.translate('common.format.date.dayMonth', parts),
+    };
+  }
+
   /** "Saturday". */
   weekday(date: CalendarDate): string {
     return this.parts(date, { weekday: 'long' })['weekday'];

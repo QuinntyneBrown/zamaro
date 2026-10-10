@@ -19,13 +19,15 @@ export const routes: RouteState[] = [
     app: 'zamaro',
     mock: 'discover/default.html',
   },
-  // Abigail's profile opened from that search, with videos, photos and reviews; the stub joins later.
+  // Abigail’s profile opened from that search: videos, photos, her dates from Sat 14 Nov, reviews and
+  // the booking stub. The booked-date mock needs a typed date, so it has no route state of its own.
   {
     path: '/artists/abigail-mensah?date=2026-11-14',
     app: 'zamaro',
     mock: 'artist/default.html',
   },
-  // Miriam, new to Zamaro, opened without a date: "Check dates" and "No church reviews yet".
+  // Miriam, new to Zamaro, opened without a date: "Check dates", six free dates from Mon 12 Oct and
+  // "No church reviews yet".
   { path: '/artists/miriam-haile', app: 'zamaro', mock: 'artist/empty.html' },
   // A band with no photos or videos: the act-type illustration and "No videos yet".
   { path: '/artists/marcus-bell-trio', app: 'zamaro', mock: 'artist/no-photos.html' },

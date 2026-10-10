@@ -9,28 +9,45 @@ import {
   Injector,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { type CalendarDate, FormatService, type MusicalKey } from 'api';
+import {
+  addDays,
+  addMonths,
+  type CalendarDate,
+  FeatureFlags,
+  FormatService,
+  GATHERING_KINDS,
+  type MusicalKey,
+  torontoToday,
+} from 'api';
 import {
   Alert,
   Artwork,
+  BookingForm,
   Breadcrumb,
   Button,
   ButtonLink,
   type Crumb,
   EmptyState,
+  type FieldOption,
+  FormField,
   Icon,
+  InlineMessage,
   Marquee,
   Rating,
   Review,
   Setlist,
   Skeleton,
+  TourDates,
+  type TourDate as TourDateRow,
   VideoCard,
 } from 'components';
 import { map } from 'rxjs';
 import { LastSearch } from '../../shared/last-search';
 import { ArtistProfileStore } from './artist-profile.store';
+import { BookingDateStore } from './booking-date.store';
 import { ProfileReviewsStore } from './profile-reviews.store';
 
 /** Songs shown in the strip under the header (L2-012.1). */
@@ -41,29 +58,36 @@ const REVIEWS_PER_PAGE = 10;
 
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
- * of songs, About, videos, photos, the setlist and what churches say. A `?date=` carried from
- * Discover names the date on the back link and the Book button (L2-012.2). The booking stub joins
- * later.
+ * of songs, About, videos, photos, the setlist, the upcoming dates, what churches say, and the
+ * booking stub. A `?date=` carried from Discover names the date on the back link and starts the
+ * dates and the stub there (L2-012.2, L2-017). Sending the request waits behind the
+ * `bookingRequests` flag (M5).
  */
 @Component({
   selector: 'zm-artist-page',
   imports: [
     Alert,
     Artwork,
+    BookingForm,
     Breadcrumb,
     Button,
     ButtonLink,
     EmptyState,
+    FormField,
     Icon,
+    InlineMessage,
     Marquee,
     Rating,
+    ReactiveFormsModule,
     Review,
+    RouterLink,
     Setlist,
     Skeleton,
+    TourDates,
     TranslocoPipe,
     VideoCard,
   ],
-  providers: [ArtistProfileStore, ProfileReviewsStore],
+  providers: [ArtistProfileStore, ProfileReviewsStore, BookingDateStore],
   host: { '[attr.aria-busy]': "store.showSkeletons() ? 'true' : null" },
   templateUrl: './artist.html',
   styleUrl: './artist.scss',
@@ -72,6 +96,8 @@ const REVIEWS_PER_PAGE = 10;
 export class ArtistPage {
   protected readonly store = inject(ArtistProfileStore);
   protected readonly reviewsStore = inject(ProfileReviewsStore);
+  protected readonly dates = inject(BookingDateStore);
+  protected readonly flags = inject(FeatureFlags);
   private readonly lastSearch = inject(LastSearch);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
@@ -93,17 +119,47 @@ export class ArtistPage {
     { initialValue: null },
   );
 
+  /** The booking stub's fields; the page owns the form (booking-form CRD D-3). */
+  protected readonly request = new FormGroup({
+    date: new FormControl('', { nonNullable: true }),
+    kind: new FormControl<string>('sunday-service', { nonNullable: true }),
+    church: new FormControl('', { nonNullable: true }),
+    message: new FormControl('', { nonNullable: true }),
+  });
+
+  protected readonly kinds: FieldOption[] = GATHERING_KINDS.map((kind) => ({
+    value: kind,
+    label: this.t(`discover.kind.${kind}`),
+  }));
+
+  /** The booking window: 3 days to 18 months ahead (L2-004). */
+  protected readonly minDate = addDays(torontoToday(), 3);
+  protected readonly maxDate = addMonths(torontoToday(), 18);
+
   constructor() {
     this.route.paramMap
       .pipe(
         map((params) => params.get('slug') ?? ''),
         takeUntilDestroyed(),
       )
-      .subscribe((slug) => this.store.load(slug));
+      .subscribe((slug) => {
+        const date = this.date();
+        const search = this.lastSearch.search();
+        this.store.load(slug);
+        this.dates.load(slug, date);
+        this.request.reset({
+          date: date ?? '',
+          kind: search && search.date === date ? search.params['kind'] : 'sunday-service',
+        });
+      });
+    this.request.controls.date.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((date) => this.dates.select(date));
   }
 
+  /** The stub's date: carried from Discover, picked or typed (L2-017.3). */
   private readonly shortDate = computed(() => {
-    const date = this.date();
+    const date = this.dates.selectedDate();
     return date ? this.format.shortDate(date) : null;
   });
 
@@ -114,7 +170,8 @@ export class ArtistPage {
   });
 
   private readonly back = computed<Crumb>(() => {
-    const date = this.shortDate();
+    const carried = this.date();
+    const date = carried ? this.format.shortDate(carried) : null;
     return {
       label: date
         ? this.t('artist.breadcrumb.discoverOn', { date })
@@ -296,9 +353,99 @@ export class ArtistPage {
     });
   }
 
-  /** Moves focus to the booking stub's date field (L2-012.3); the stub arrives with tour dates. */
+  /** "Upcoming dates" as the list shows them; the stub's date is "Your date" (L2-017). */
+  protected readonly tourRows = computed<TourDateRow[]>(() => {
+    const selected = this.dates.selectedDate();
+    return this.dates.tourDates().map((row) => {
+      const stamp = this.format.dayStamp(row.date);
+      const current = row.date === selected;
+      const booking =
+        row.status === 'booked'
+          ? { kind: this.t(`discover.kind.${row.kind}`), city: row.city }
+          : null;
+      return {
+        id: row.date,
+        dayLabel: stamp.weekday,
+        dayValue: stamp.day,
+        current,
+        status: row.status,
+        note: booking
+          ? this.t(current ? 'artist.dates.yourDateBooked' : 'artist.dates.booking', booking)
+          : this.t(current ? 'artist.dates.yourDate' : 'artist.dates.openAllDay'),
+        pickLabel: this.t('artist.dates.pickLabel', { date: this.format.shortDate(row.date) }),
+      };
+    });
+  });
+
+  /** "Pick a free date…" beside a list with bookings in it; a wide-open calendar says so. */
+  protected readonly datesNote = computed(() => {
+    const rows = this.dates.tourDates();
+    if (!rows.length || rows.some((row) => row.status === 'booked')) {
+      return this.t('artist.dates.note');
+    }
+    const month = Number(rows[0].date.slice(5, 7));
+    const season =
+      month >= 3 && month <= 5
+        ? 'spring'
+        : month >= 6 && month <= 8
+          ? 'summer'
+          : month >= 9 && month <= 11
+            ? 'autumn'
+            : 'winter';
+    return this.t('artist.dates.wideOpen', { name: this.store.profile()!.firstName, season });
+  });
+
+  protected readonly stubPrice = computed(() =>
+    this.t('artist.stub.price', {
+      price: this.format.money(this.store.profile()!.fromPrice.cents),
+    }),
+  );
+
+  /** "Abigail is free Sat 14 Nov" under the date, once the date is known to be free (L2-019.2). */
+  protected readonly dateFree = computed(() =>
+    this.dates.status() === 'free'
+      ? this.t('artist.stub.free', {
+          name: this.store.profile()!.firstName,
+          date: this.shortDate(),
+        })
+      : null,
+  );
+
+  /** The date field's error: the date is taken, or outside the booking window (L2-019.3). */
+  protected readonly dateError = computed(() => {
+    switch (this.dates.status()) {
+      case 'booked':
+        return this.t('artist.stub.booked', {
+          name: this.store.profile()!.firstName,
+          date: this.shortDate(),
+        });
+      case 'refused':
+        return this.dates.refusal();
+      default:
+        return null;
+    }
+  });
+
+  protected readonly submitLabel = computed(() => {
+    const date = this.shortDate();
+    return date ? this.t('artist.stub.submitForDate', { date }) : this.t('artist.stub.submit');
+  });
+
+  /** Moves focus to the booking stub's date field, scrolling the stub into view (L2-012.3, L2-019.5). */
   protected book(): void {
     this.document.getElementById('book-date')?.focus();
+  }
+
+  /** A free row's date moves into the stub and the Book button; focus follows it there (L2-017.3). */
+  protected pick(date: CalendarDate): void {
+    this.request.controls.date.setValue(date);
+    afterNextRender(() => this.book(), { injector: this.injector });
+  }
+
+  /** Opens the stub with the message written for them (L2-020.1). */
+  protected askForRecording(): void {
+    this.request.controls.message.setValue(this.t('artist.stub.recording'));
+    this.document.getElementById('book-message')?.focus();
   }
 
   protected t(key: string, params?: Record<string, unknown>): string {

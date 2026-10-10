@@ -7,10 +7,14 @@ import {
 } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
+  ARTIST_AVAILABILITY_API,
   ARTIST_PROFILES_API,
   DISCOVERY_API,
+  FEATURES_API,
+  HttpArtistAvailabilityApi,
   HttpArtistProfilesApi,
   HttpDiscoveryApi,
+  HttpFeaturesApi,
   HttpReviewsApi,
   provideI18n,
   REVIEWS_API,
@@ -27,6 +31,8 @@ export const appConfig: ApplicationConfig = {
     provideI18n(),
     { provide: DISCOVERY_API, useClass: HttpDiscoveryApi },
     { provide: ARTIST_PROFILES_API, useClass: HttpArtistProfilesApi },
+    { provide: ARTIST_AVAILABILITY_API, useClass: HttpArtistAvailabilityApi },
     { provide: REVIEWS_API, useClass: HttpReviewsApi },
+    { provide: FEATURES_API, useClass: HttpFeaturesApi },
   ],
 };

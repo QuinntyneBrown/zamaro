@@ -1,18 +1,45 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
- * The paper booking bar (docs/design-system/components/booking-form): a ticket with a yellow offset
- * shadow that stays light on the dark stage. Place it inside the page's `<form>`, labelled by
- * `titleId`; the projected fields form a two-column grid from SM. The page spans its own full-width
- * items (submit, error summary, chips) with `grid-column: 1 / -1`.
+ * The paper booking ticket (docs/design-system/components/booking-form), inside the page's `<form>`
+ * and labelled by `headingId`:
+ * - `bar`: the Discover search, with a yellow offset shadow that stays light on the dark stage. The
+ *   projected fields form a two-column grid from SM; the page spans full-width items with
+ *   `grid-column: 1 / -1`.
+ * - `stub`: the request form on a profile ("Book Abigail"), with the ticket number, the price and the
+ *   fine print in `[slot=fine]`. It follows the page theme.
+ * Only the head changes with the variant, so each slot is declared once.
  */
 @Component({
   selector: 'zm-booking-form',
-  host: { 'data-theme': 'light' },
-  template: `<h2 class="booking-bar__title" [id]="titleId()">
-      {{ heading() }} <small aria-hidden="true">{{ stamp() }}</small>
-    </h2>
-    <ng-content />`,
+  host: {
+    '[class.booking-bar]': "variant() === 'bar'",
+    '[class.stub]': "variant() === 'stub'",
+    '[attr.data-theme]': "variant() === 'bar' ? 'light' : null",
+  },
+  template: `@switch (variant()) {
+      @case ('stub') {
+        <div class="stub__head">
+          <h2 class="stub__title" tabindex="-1" [id]="headingId()">{{ heading() }}</h2>
+          @if (stamp()) {
+            <span class="stub__code" aria-hidden="true">{{ stamp() }}</span>
+          }
+        </div>
+        @if (price()) {
+          <p>
+            <span class="stub__price">{{ price() }}</span
+            ><br /><span class="text-muted">{{ priceNote() }}</span>
+          </p>
+        }
+      }
+      @default {
+        <h2 class="booking-bar__title" [id]="headingId()">
+          {{ heading() }} <small aria-hidden="true">{{ stamp() }}</small>
+        </h2>
+      }
+    }
+    <ng-content />
+    <p class="stub__fine"><ng-content select="[slot=fine]" /></p>`,
   styles: `
     :host {
       display: grid;
@@ -38,8 +65,54 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       font: var(--text-stub);
     }
 
+    :host(.stub) {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      box-shadow: var(--shadow-3);
+    }
+
+    .stub__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-2);
+      padding-bottom: var(--space-3);
+      border-bottom: var(--border-width-thick) dashed var(--color-border-strong);
+    }
+
+    .stub__title {
+      font: var(--text-h3);
+      text-transform: uppercase;
+    }
+
+    .stub__code {
+      font: var(--text-stub);
+      letter-spacing: var(--letter-spacing-stamp);
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--color-fg-muted);
+    }
+
+    .stub__price {
+      font: var(--text-figure-lg);
+    }
+
+    .text-muted {
+      color: var(--color-fg-muted);
+    }
+
+    .stub__fine {
+      font: var(--text-caption);
+      color: var(--color-fg-muted);
+    }
+
+    .stub__fine:empty {
+      display: none;
+    }
+
     @media (min-width: 36rem) {
-      :host {
+      :host(.booking-bar) {
         grid-template-columns: 1fr 1fr;
       }
 
@@ -51,9 +124,15 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingForm {
-  /** "Your event". */
+  readonly variant = input<'bar' | 'stub'>('bar');
+  /** "Your event", "Book Abigail". */
   readonly heading = input.required<string>();
-  /** The decorative stamp, hidden from assistive technology: "Admit one church". */
-  readonly stamp = input.required<string>();
-  readonly titleId = input.required<string>();
+  /** The heading's id; the page's `<form>` (and the stub's `<aside>`) is labelled by it. */
+  readonly headingId = input.required<string>();
+  /** Decoration hidden from assistive technology: "Admit one church", or "No. ACT-0027". */
+  readonly stamp = input<string>();
+  /** Stub only: "From $650". */
+  readonly price = input<string>();
+  /** Stub only: "per service · travel included". */
+  readonly priceNote = input<string>();
 }

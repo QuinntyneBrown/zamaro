@@ -6,7 +6,7 @@ import { BookingForm, FormField } from 'components';
   selector: 'zm-booking-form-scenario',
   imports: [BookingForm, FormField],
   template: `<form aria-labelledby="find-title">
-    <zm-booking-form heading="Your event" stamp="Admit one church" titleId="find-title">
+    <zm-booking-form heading="Your event" stamp="Admit one church" headingId="find-title">
       <zm-form-field fieldId="d" type="date" label="Event date" />
       <zm-form-field fieldId="k" type="select" label="Kind of gathering" [options]="kinds" />
       <zm-form-field fieldId="p" label="Church location" />

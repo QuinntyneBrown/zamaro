@@ -67,7 +67,7 @@ test.describe('Picking a date on a profile', () => {
     await expect(profile.stub.dateField()).toHaveAccessibleDescription(
       'Abigail is free Sat 14 Nov',
     );
-    await expect(profile.stub.kindField()).toHaveValue('worship-night');
+    await expect(profile.stub.kindField()).toHaveValue('sunday-service');
     await expect(profile.stub.finePrint()).toHaveText(
       'Nothing is charged until Abigail accepts. Cancel free up to 14 days before.',
     );
@@ -124,6 +124,8 @@ test.describe('Picking a date on a profile', () => {
     await profile.turnOnBookingRequests();
     await discover.lineup.headliner().openProfile();
 
+    // The stub carries the kind of gathering from the search.
+    await expect(profile.stub.kindField()).toHaveValue('worship-night');
     await expect(profile.stub.submitButton()).toHaveText('Request to book · Sat 14 Nov');
     await expect(profile.stub.submitButton()).toBeEnabled();
 
@@ -199,7 +201,7 @@ test.describe('Picking a date on a profile', () => {
     await profile.book();
 
     await expect(profile.stub.dateField()).toBeFocused();
-    expect(await profile.isInViewport(profile.stub.dateField())).toBe(true);
+    await expect.poll(() => profile.isInViewport(profile.stub.dateField())).toBe(true);
   });
 
   test('"Cancel free up to 14 days before" opens the full cancellation policy', async () => {
