@@ -1,4 +1,4 @@
-import type { Locator, Page, Request } from '@playwright/test';
+import { expect, type Locator, type Page, type Request } from '@playwright/test';
 import { freezeClock } from '../fixtures/clock';
 import { Shell } from './shell';
 
@@ -21,16 +21,21 @@ export class SignUpPage {
     this.shell = new Shell(page);
   }
 
-  /** Opens the page and waits for the app to take over. */
+  /** Opens the page and waits for the app to take over: it puts focus in Full name once it has. */
   async open(): Promise<void> {
     await freezeClock(this.page);
     await this.page.goto('/sign-up', { waitUntil: 'networkidle' });
+    await expect(this.name()).toBeFocused();
   }
 
-  /** Fills the form as given, then presses Create account. */
+  /** Fills the form as given, presses Create account and waits for the API's answer. */
   async register(registration: Registration): Promise<void> {
     await this.fill(registration);
+    const answered = this.page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/v1/register',
+    );
     await this.submit();
+    await answered;
   }
 
   async fill({ name, email, password, acceptTerms, news = false }: Registration): Promise<void> {
@@ -191,8 +196,13 @@ export class SignUpPage {
     return this.checkEmail().getByRole('button', { name: /^(Resend the email|Sent)$/ });
   }
 
+  /** Presses "Resend the email" and waits for the API to take the request. */
   async resend(): Promise<void> {
+    const answered = this.page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/v1/email/verification-notification',
+    );
     await this.resendButton().click();
+    await answered;
   }
 
   /** "A new link is on its way…", once resent. */

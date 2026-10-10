@@ -1,7 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, map, type Observable, of, tap, throwError } from 'rxjs';
-import type { CurrentUser, Registration, SignInCredentials } from '../models/accounts';
+import type {
+  CurrentUser,
+  Registration,
+  SignInCredentials,
+  VerificationResend,
+  VerifiedEmail,
+} from '../models/accounts';
 import { AUTH_API } from './auth-api';
 
 /**
@@ -51,6 +57,23 @@ export class AuthService {
   /** Registers a booker; they stay a guest until they verify and sign in (L2-022.1). */
   register(registration: Registration): Observable<void> {
     return this.api.register(registration);
+  }
+
+  /**
+   * Opens a verification link (L2-022.3). Verifying signs no one in; a person already signed in on
+   * this browser is asked for again, so the header and banners see the verified address.
+   */
+  verifyEmail(token: string): Observable<VerifiedEmail> {
+    return this.api.verifyEmail(token).pipe(
+      tap(() => {
+        if (this.user()) this.load();
+      }),
+    );
+  }
+
+  /** Sends a new verification link; the answer says nothing about whether one was due. */
+  resendVerification(request: VerificationResend = {}): Observable<void> {
+    return this.api.resendVerification(request);
   }
 
   /** Forgets the person on this browser without asking the server. */

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Accounts\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Accounts\RegistrationController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
@@ -32,4 +33,8 @@ Route::get('sitemap', SitemapController::class)->name('sitemap');
 Route::post('session', [SessionController::class, 'store'])->middleware(SetCachePolicy::class)->name('session.store');
 // Registering answers the same for every valid submission; the bot check runs before validation (L2-077.4).
 Route::post('register', RegistrationController::class)->middleware(['throttle:register', 'bot-challenge:register', SetCachePolicy::class])->name('register');
+// An emailed link: anyone holding it may use it, once (L2-022.3). The answer names the person.
+Route::post('email/verify', [EmailVerificationController::class, 'verify'])->middleware(SetCachePolicy::class)->name('email.verify');
+// A signed-in booker, an expired link's owner or a guest who just signed up; 3 in 15 minutes (M2 D6).
+Route::post('email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['throttle:resend-verification', SetCachePolicy::class])->name('email.resend');
 Route::get('legal-documents/current', [LegalDocumentController::class, 'current'])->name('legal-documents.current');

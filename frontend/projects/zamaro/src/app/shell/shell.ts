@@ -3,15 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   Injector,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
 import { AuthService, safeReturnUrl } from 'api';
 import {
+  Banner,
   Footer,
   type FooterColumn,
   SkipLink,
@@ -22,20 +24,26 @@ import {
   type TopBarAuth,
   type TopBarLink,
 } from 'components';
-import { filter, map } from 'rxjs';
+import { filter, map, timer } from 'rxjs';
+import { VerifiedNotice } from '../shared/verified-notice';
 import { ThemeService } from './theme.service';
 
 const CONTACT_EMAIL = 'hello@zamaro.ca';
+
+/** How long "Sent" stays before another verification link can be asked for. */
+const SENT_FOR_MS = 60_000;
 
 /**
  * Skip link, header, the routed main region and footer on every page (L2-102.1), then the one
  * toast region, present from load so every toast is announced (L2-102). The server renders every
  * page signed out; once the browser has taken over it asks who is signed in, and the header and
- * footer switch to that person (ADR-0017).
+ * footer switch to that person (ADR-0017). Under the top bar, a booker whose address is not verified
+ * is asked to verify it on every page, and a verification link's page is followed by "Email
+ * verified" (L2-022.3).
  */
 @Component({
   selector: 'zm-shell',
-  imports: [Footer, RouterOutlet, SkipLink, ToastRegion, TopBar, TranslocoPipe],
+  imports: [Banner, Footer, RouterOutlet, SkipLink, ToastRegion, TopBar, TranslocoPipe],
   templateUrl: './shell.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,6 +58,16 @@ export class Shell {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly toasts = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
+  protected readonly verified = inject(VerifiedNotice);
+  protected readonly resending = signal(false);
+  protected readonly resent = signal(false);
+
+  /** The address to verify, while the signed-in person has not verified it. */
+  protected readonly unverifiedEmail = computed(() => {
+    const user = this.auth.currentUser();
+    return user && !user.emailVerified ? user.email : null;
+  });
 
   /** The address of the page on screen, for the Sign in link's way back. */
   private readonly url = toSignal(
@@ -62,6 +80,30 @@ export class Shell {
 
   constructor() {
     afterNextRender(() => this.auth.load());
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.verified.pageChanged());
+  }
+
+  /** "Resend email": a new link, which revokes the earlier ones; "Sent" for a minute. */
+  protected resendVerification(): void {
+    this.resending.set(true);
+    this.auth
+      .resendVerification()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.resending.set(false);
+          this.resent.set(true);
+          timer(SENT_FOR_MS)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.resent.set(false));
+        },
+        error: () => this.resending.set(false),
+      });
   }
 
   /**

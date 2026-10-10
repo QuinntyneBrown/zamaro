@@ -39,6 +39,23 @@ export interface Registration {
   returnUrl?: string;
 }
 
+/** `POST /api/v1/email/verify`: whose address the link verified (L2-022.3). */
+export interface VerifiedEmail {
+  name: string;
+}
+
+/**
+ * `POST /api/v1/email/verification-notification`: a new link for the signed-in booker, else for the
+ * owner of an expired link's `token`, else for the `email` just signed up with. Earlier links stop
+ * working, and the answer is the same whether or not anything was sent.
+ */
+export interface VerificationResend {
+  token?: string;
+  email?: string;
+  /** Where the new link returns to. */
+  returnUrl?: string;
+}
+
 /** One version of a legal document (`GET /api/v1/legal-documents/current`). */
 export interface LegalDocument {
   /** "2026-10" */

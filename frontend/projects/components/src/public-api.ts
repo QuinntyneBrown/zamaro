@@ -3,6 +3,7 @@
  */
 
 export * from './lib/alert/alert';
+export * from './lib/alert/banner';
 export * from './lib/artwork/artwork';
 export * from './lib/avatar/avatar-button';
 export * from './lib/avatar/avatar-initials';
@@ -33,6 +34,7 @@ export * from './lib/review/review';
 export * from './lib/setlist/setlist';
 export * from './lib/skeleton/skeleton';
 export * from './lib/skip-link/skip-link';
+export * from './lib/stamp/stamp';
 export * from './lib/steps/steps';
 export * from './lib/ticket/ticket';
 export * from './lib/toast/toast-region';

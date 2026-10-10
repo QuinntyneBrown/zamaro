@@ -20,6 +20,9 @@ export default defineConfig({
   // Visual parity (adapt-layout-to-screens): 0.1 % of the pixels may differ (M9 D22). Baselines carry
   // the platform in their name: win32 from the Windows host, linux from `npm run test:docker` (ADR-0014).
   expect: {
+    // The API answers in 1-3 s under a full parallel run on a Windows host (bind-mounted PHP), so a
+    // page that makes two or three calls before it settles needs more than the 5 s default.
+    timeout: 10_000,
     toHaveScreenshot: {
       maxDiffPixelRatio: 0.001,
       animations: 'disabled',

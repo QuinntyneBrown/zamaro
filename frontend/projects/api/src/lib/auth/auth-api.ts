@@ -1,7 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { map, type Observable, switchMap } from 'rxjs';
-import type { CurrentUser, Registration, SignInCredentials } from '../models/accounts';
+import type {
+  CurrentUser,
+  Registration,
+  SignInCredentials,
+  VerificationResend,
+  VerifiedEmail,
+} from '../models/accounts';
 
 /**
  * The session endpoints (accounts/sign-in-and-recover-access). Wrong credentials fail with 422 and
@@ -17,6 +23,10 @@ export interface AuthApi {
    * has an account; a failed bot check is a 422 on challengeToken.
    */
   register(registration: Registration): Observable<void>;
+  /** Opens a verification link; a used, old or unknown one fails with 410 (L2-022.3). */
+  verifyEmail(token: string): Observable<VerifiedEmail>;
+  /** Sends a new verification link, which revokes the earlier ones. */
+  resendVerification(request: VerificationResend): Observable<void>;
 }
 
 export const AUTH_API = new InjectionToken<AuthApi>('AuthApi');
@@ -44,6 +54,21 @@ export class HttpAuthApi implements AuthApi {
   register(registration: Registration): Observable<void> {
     return this.http.get('/sanctum/csrf-cookie').pipe(
       switchMap(() => this.http.post('/api/v1/register', registration)),
+      map(() => undefined),
+    );
+  }
+
+  /** Fetches the CSRF cookie first: the link is often opened in a browser that has none yet. */
+  verifyEmail(token: string): Observable<VerifiedEmail> {
+    return this.http.get('/sanctum/csrf-cookie').pipe(
+      switchMap(() => this.http.post<{ data: VerifiedEmail }>('/api/v1/email/verify', { token })),
+      map((response) => response.data),
+    );
+  }
+
+  resendVerification(request: VerificationResend): Observable<void> {
+    return this.http.get('/sanctum/csrf-cookie').pipe(
+      switchMap(() => this.http.post('/api/v1/email/verification-notification', request)),
       map(() => undefined),
     );
   }

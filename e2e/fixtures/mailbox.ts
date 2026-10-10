@@ -59,6 +59,21 @@ export async function waitForEmail(address: string, subject: string | RegExp): P
   return found!;
 }
 
+/** Waits until `address` has been sent `count` emails, newest first, as queued mail can take a moment. */
+export async function waitForEmails(address: string, count: number): Promise<Email[]> {
+  let found: Email[] = [];
+  await expect
+    .poll(
+      async () => {
+        found = await emailsTo(address);
+        return found.length;
+      },
+      { message: `${count} emails to ${address}`, timeout: 15_000 },
+    )
+    .toBe(count);
+  return found;
+}
+
 /** The first link in an email's text part that starts with `prefix`, such as a verification link. */
 export function linkIn(email: Email, prefix: string): string {
   const link = email.text

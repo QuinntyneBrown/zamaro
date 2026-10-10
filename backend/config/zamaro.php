@@ -30,6 +30,9 @@ return [
         'search_per_minute' => (int) env('ZAMARO_SEARCH_LIMIT_PER_MINUTE', 30),
         // Registrations per address (M2 D6). The e2e API raises it too.
         'register_per_hour' => (int) env('ZAMARO_REGISTER_LIMIT_PER_HOUR', 10),
+        // New verification links per account, or per address for a guest, in 15 minutes (M2 D6). The
+        // e2e API raises it too.
+        'resend_verification_per_15_minutes' => (int) env('ZAMARO_RESEND_VERIFICATION_LIMIT', 3),
     ],
 
     // What the fake vendor adapters answer (ADR-0002).

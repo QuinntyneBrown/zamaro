@@ -9,6 +9,7 @@ export const scenarioIterations = {
   Footer: 100,
   Lineup: 25,
   Menu: 90,
+  Stamp: 240,
   TopBar: 120,
   TopBarSignedIn: 110,
 };

@@ -13,15 +13,25 @@ export class VerifyEmailPage {
     this.shell = new Shell(page);
   }
 
-  /** Opens a link from an email, which names the e2e site. */
+  /** Opens a link from an email, which names the e2e site, and waits for the check's answer. */
   async openLink(link: string): Promise<void> {
+    const answered = this.page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/v1/email/verify',
+    );
+    await this.startLink(link);
+    await answered;
+  }
+
+  /** Opens a link without waiting for its check, which may never answer. */
+  async startLink(link: string): Promise<void> {
     await freezeClock(this.page);
     const { pathname, search } = new URL(link);
     await this.page.goto(`${pathname}${search}`);
   }
 
-  async openToken(token: string): Promise<void> {
-    await this.openLink(`http://localhost:4000/verify-email?token=${token}&returnUrl=%2F`);
+  /** A link with this token, opened without waiting for its check. */
+  async startToken(token: string): Promise<void> {
+    await this.startLink(`http://localhost:4000/verify-email?token=${token}&returnUrl=%2F`);
   }
 
   /** The check never answers, so the card keeps checking. */
@@ -85,8 +95,13 @@ export class VerifyEmailPage {
     return this.checkingCard().getByRole('button', { name: 'Try again' });
   }
 
+  /** Presses Try again and waits for the check's answer. */
   async tryAgain(): Promise<void> {
+    const answered = this.page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/v1/email/verify',
+    );
     await this.tryAgainButton().click();
+    await answered;
   }
 
   // "This link has expired" (docs/mocks/pages/verify-email/expired)
@@ -108,8 +123,13 @@ export class VerifyEmailPage {
     return this.expiredCard().getByRole('button', { name: /^(Send a new link|Sent)$/ });
   }
 
+  /** Presses "Send a new link" and waits for the API to take the request. */
   async sendNewLink(): Promise<void> {
+    const answered = this.page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/v1/email/verification-notification',
+    );
     await this.sendNewLinkButton().click();
+    await answered;
   }
 
   /** "A new link is on its way…", once sent. */

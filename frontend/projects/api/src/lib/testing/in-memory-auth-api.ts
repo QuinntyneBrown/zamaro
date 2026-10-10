@@ -1,7 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { type Observable, of, throwError } from 'rxjs';
 import type { AuthApi } from '../auth/auth-api';
-import type { CurrentUser, Registration, SignInCredentials } from '../models/accounts';
+import type {
+  CurrentUser,
+  Registration,
+  SignInCredentials,
+  VerifiedEmail,
+} from '../models/accounts';
 
 /** Naomi Fraser, the booker in docs/mocks/README.md. */
 export const NAOMI: CurrentUser = {
@@ -20,7 +25,7 @@ export class InMemoryAuthApi implements AuthApi {
   private signedIn: CurrentUser | null = null;
 
   constructor(
-    private readonly account: CurrentUser = NAOMI,
+    private account: CurrentUser = NAOMI,
     private readonly password = 'hosanna-in-the-highest',
   ) {}
 
@@ -58,6 +63,19 @@ export class InMemoryAuthApi implements AuthApi {
           }),
       );
     }
+    return of(undefined);
+  }
+
+  /** Verifies the account's address for any token except `e2e-unknown`, which has expired. */
+  verifyEmail(token: string): Observable<VerifiedEmail> {
+    if (token === 'e2e-unknown') {
+      return throwError(() => new HttpErrorResponse({ status: 410 }));
+    }
+    this.account = { ...this.account, emailVerified: true };
+    return of({ name: this.account.name });
+  }
+
+  resendVerification(): Observable<void> {
     return of(undefined);
   }
 

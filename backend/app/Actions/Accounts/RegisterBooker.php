@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Notifications\DuplicateSignUpNotification;
 use App\Notifications\VerifyEmailNotification;
 use App\Services\Privacy\LegalDocumentRegistry;
+use App\Support\ReturnUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -59,17 +60,9 @@ class RegisterBooker
                 [ConsentKind::PrivacyPolicy, $data['privacyPolicyVersion'], true],
                 [ConsentKind::MarketingEmail, null, (bool) ($data['marketingOptIn'] ?? false)],
             ], ConsentSource::Registration, $request);
-            $user->notify(new VerifyEmailNotification($this->issueToken->handle($user), $this->returnUrl($data['returnUrl'] ?? null)));
+            $user->notify(new VerifyEmailNotification($this->issueToken->handle($user), ReturnUrl::orDiscover($data['returnUrl'] ?? null)));
         });
 
         return $email;
-    }
-
-    /** A path on the site, or Discover. */
-    private function returnUrl(?string $url): string
-    {
-        return $url !== null && str_starts_with($url, '/') && ! str_starts_with($url, '//') && ! str_contains($url, '\\')
-            ? $url
-            : '/';
     }
 }

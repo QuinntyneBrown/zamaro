@@ -2,6 +2,7 @@
 
 namespace App\Support\OpenApi;
 
+use App\Actions\Accounts\LinkExpired;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -49,6 +50,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
             $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,
             $type->isInstanceOf(LegalDocumentOutdated::class) => 409,
+            $type->isInstanceOf(LinkExpired::class) => 410,
             default => parent::toResponse($type)?->code,
         };
         if ($status === null) {

@@ -7,8 +7,9 @@ import {
   uniqueEmail,
 } from '../../fixtures/accounts';
 import { passTime, startClock } from '../../fixtures/clock';
-import { emailsTo, linkIn, waitForEmail } from '../../fixtures/mailbox';
+import { linkIn, waitForEmail, waitForEmails } from '../../fixtures/mailbox';
 import { DiscoverPage } from '../../pages/discover.page';
+import { NotFoundPage } from '../../pages/not-found.page';
 import { SignInPage } from '../../pages/sign-in.page';
 import { SignUpPage } from '../../pages/sign-up.page';
 import { VerifyEmailPage } from '../../pages/verify-email.page';
@@ -77,7 +78,7 @@ test.describe('Registering as a booker', () => {
     await expect(signUp.resentStatus()).toHaveText(
       `A new link is on its way to ${email}. It works for 24 hours.`,
     );
-    await expect.poll(async () => (await emailsTo(email)).length).toBe(2);
+    await waitForEmails(email, 2);
   });
 
   test('while the account is being created the card is busy and sends once', async () => {
@@ -124,12 +125,13 @@ test.describe('Registering as a booker', () => {
     const sent = signUp.registrationRequests();
     const email = uniqueEmail('naomi');
 
-    await signUp.register({
+    await signUp.fill({
       name: 'Naomi Fraser',
       email,
       password: 'grace2026',
       acceptTerms: false,
     });
+    await signUp.submit();
 
     await expect(signUp.errorSummaryTitle()).toHaveText('Fix 2 things to continue');
     await expect(signUp.errorSummaryLinks()).toHaveText([
@@ -249,7 +251,7 @@ test.describe('Verifying the email address', () => {
     const verify = new VerifyEmailPage(page);
     await verify.holdCheck();
 
-    await verify.openToken('held-token');
+    await verify.startToken('held-token');
 
     await expect(verify.heading()).toHaveText('Checking your link');
     await expect(verify.checkingCard()).toHaveAttribute('aria-busy', 'true');
@@ -285,16 +287,15 @@ test.describe('Verifying the email address', () => {
     const email = uniqueEmail('ruth');
     const first = await registerAndReadLink(page, email);
     await signUp.resend();
-    await expect.poll(async () => (await emailsTo(email)).length).toBe(2);
+    await waitForEmails(email, 2);
 
     // The resend revoked the first link.
     await verify.openLink(first);
     await expect(verify.heading()).toHaveText('This link has expired');
     await verify.sendNewLink();
 
-    await expect.poll(async () => (await emailsTo(email)).length).toBe(3);
-    const newest = linkIn((await emailsTo(email))[0], '/verify-email');
-    await verify.openLink(newest);
+    const [newest] = await waitForEmails(email, 3);
+    await verify.openLink(linkIn(newest, '/verify-email'));
     await expect(verify.shell.banner('Email verified').root).toBeVisible();
   });
 
@@ -324,22 +325,28 @@ test.describe('Verifying the email address', () => {
     await discover.openAndHydrate();
 
     const banner = discover.shell.banner('Verify your email');
-    await expect(banner.text()).toHaveText(
-      `Verify your emailWe sent a link to ${email}. You need it to send requests. Resend email`,
+    await expect(banner.text()).toContainText(
+      `We sent a link to ${email}. You need it to send requests.`,
     );
+    await expect(banner.action()).toHaveText('Resend email');
     await expect(banner.root).toHaveClass(/banner--persistent/);
     await expect(banner.closeButton()).toHaveCount(0);
 
     await banner.pressAction();
 
-    await expect(banner.text()).toHaveText(
-      `Verify your emailA new link is on its way to ${email}. It works for 24 hours. Sent`,
+    await expect(banner.text()).toContainText(
+      `A new link is on its way to ${email}. It works for 24 hours.`,
     );
+    await expect(banner.action()).toHaveText('Sent');
     await expect(banner.action()).toBeDisabled();
     await waitForEmail(email, 'Verify your email for Zamaro');
     await passTime(page, 60_000);
     await expect(banner.action()).toHaveText('Resend email');
     await expect(banner.action()).toBeEnabled();
+
+    const notFound = new NotFoundPage(page);
+    await notFound.open('/no-such-page');
+    await expect(notFound.shell.banner('Verify your email').root).toBeVisible();
   });
 
   test('a verified booker sees no banner', async ({ page }) => {

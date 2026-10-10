@@ -16,6 +16,32 @@
   (accountOpened)="openAccountMenu()"
   (themeToggled)="theme.toggle()"
 />
+@if (unverifiedEmail(); as email) {
+  <zm-banner
+    variant="warning"
+    persistent
+    [label]="'common.banner.verify.label' | transloco"
+    [actionLabel]="
+      (resent() ? 'common.banner.verify.sent' : 'common.banner.verify.resend') | transloco
+    "
+    [actionDisabled]="resent() || resending()"
+    (actionPressed)="resendVerification()"
+    >{{
+      (resent() ? 'common.banner.verify.resent' : 'common.banner.verify.body')
+        | transloco: { email }
+    }}</zm-banner
+  >
+}
+@if (verified.name(); as name) {
+  <zm-banner
+    variant="success"
+    dismissible
+    [label]="'common.banner.verified.label' | transloco"
+    [dismissLabel]="'common.banner.verified.dismiss' | transloco"
+    (dismissed)="verified.dismiss()"
+    >{{ 'common.banner.verified.body' | transloco: { name } }}</zm-banner
+  >
+}
 <main id="main" tabindex="-1">
   <router-outlet />
 </main>

@@ -36,5 +36,13 @@ class RateLimitServiceProvider extends ServiceProvider
         // M2 D6: registrations send email to whatever address is typed, so 10 an hour per address.
         RateLimiter::for('register', fn (Request $request) => Limit::perHour((int) config('zamaro.rate_limits.register_per_hour'))
             ->by('register-ip:'.$request->ip()));
+
+        // M2 D6: new verification links, 3 in 15 minutes per account, or per address for a guest.
+        RateLimiter::for('resend-verification', function (Request $request) {
+            $limit = Limit::perMinutes(15, (int) config('zamaro.rate_limits.resend_verification_per_15_minutes'));
+            $user = $request->user();
+
+            return $user === null ? $limit->by('resend-ip:'.$request->ip()) : $limit->by('resend-user:'.$user->getAuthIdentifier());
+        });
     }
 }

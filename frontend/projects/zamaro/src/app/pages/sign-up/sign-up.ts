@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   Injector,
   signal,
@@ -31,7 +32,8 @@ import {
   FormField,
   Icon,
 } from 'components';
-import { type Observable, of, switchMap, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { type Observable, of, switchMap, tap, timer } from 'rxjs';
 import { PageMeta } from '../../shared/page-meta';
 
 type Status = 'idle' | 'submitting' | 'invalid' | 'challenge' | 'error' | 'sent';
@@ -46,6 +48,8 @@ interface FieldError {
 const FIELDS: readonly Field[] = ['name', 'email', 'password', 'terms'];
 const PASSWORD_MIN = 12;
 const PASSWORD_MAX = 128;
+/** How long "Sent" stays before another link can be asked for. */
+const SENT_FOR_MS = 60_000;
 
 /**
  * Sign up (docs/mocks/pages/sign-up, L2-022): full name, email and password, the required terms box
@@ -81,6 +85,7 @@ export class SignUp {
   private readonly transloco = inject(TranslocoService);
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly form = inject(NonNullableFormBuilder).group({
     name: '',
@@ -100,6 +105,8 @@ export class SignUp {
   );
   /** The address the link went to, as the API wrote it. */
   protected readonly sentTo = signal('');
+  protected readonly resending = signal(false);
+  protected readonly resent = signal(false);
 
   /** Back to the page the guest came from, after signing in or verifying. */
   protected readonly returnUrl = safeReturnUrl(
@@ -163,6 +170,28 @@ export class SignUp {
           this.afterRender(() => this.document.getElementById('card-title')?.focus());
         },
         error: (error: unknown) => this.failed(error, wasInvalid),
+      });
+  }
+
+  /**
+   * "Resend the email": a new link to the address just typed, which revokes the earlier one. The
+   * answer is the same for any address; "Sent" stays for a minute.
+   */
+  protected resend(): void {
+    if (this.resending() || this.resent()) return;
+    this.resending.set(true);
+    this.auth
+      .resendVerification({ email: this.sentTo(), returnUrl: this.returnUrl })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.resending.set(false);
+          this.resent.set(true);
+          timer(SENT_FOR_MS)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(() => this.resent.set(false));
+        },
+        error: () => this.resending.set(false),
       });
   }
 

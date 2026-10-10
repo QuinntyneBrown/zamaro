@@ -2,6 +2,7 @@
 
 namespace App\Support\Problems;
 
+use App\Actions\Accounts\LinkExpired;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -66,6 +67,11 @@ class ProblemDetailsRenderer
 
         if ($e instanceof LegalDocumentOutdated) {
             return ProblemDetails::of(ProblemType::LegalDocumentOutdated, 'Fetch /legal-documents/current, show the new versions, then submit again.', $requestId)
+                ->toResponse();
+        }
+
+        if ($e instanceof LinkExpired) {
+            return ProblemDetails::of(ProblemType::LinkExpired, 'Links work once, for a limited time. Ask for a new one.', $requestId)
                 ->toResponse();
         }
 

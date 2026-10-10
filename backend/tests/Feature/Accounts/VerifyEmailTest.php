@@ -114,7 +114,7 @@ class VerifyEmailTest extends TestCase
         $response->assertStatus(202)->assertExactJson(['data' => ['accepted' => true]]);
         $this->assertMatchesContract($response);
         Notification::assertSentTo($this->ruth, VerifyEmailNotification::class);
-        $this->assertSame(1, DB::table('email_verification_tokens')->where('user_id', $this->ruth->id)->count());
+        $this->assertSame(1, DB::table('email_verification_tokens')->where('user_id', $this->ruth->id)->whereNull('used_at')->count());
         $this->verify($earlier)->assertStatus(410);
     }
 
@@ -141,6 +141,18 @@ class VerifyEmailTest extends TestCase
         $this->resend(['token' => $expired])->assertStatus(202)->assertExactJson(['data' => ['accepted' => true]]);
 
         Notification::assertSentTo($this->ruth, VerifyEmailNotification::class);
+    }
+
+    public function test_a_revoked_link_still_names_its_owner_for_another_link(): void
+    {
+        Notification::fake();
+        $revoked = $this->issueToken();
+        $this->resend(['email' => 'ruth.adeyemi@gracepoint.ca'])->assertStatus(202);
+        $this->verify($revoked)->assertStatus(410);
+
+        $this->resend(['token' => $revoked])->assertStatus(202);
+
+        Notification::assertSentToTimes($this->ruth, VerifyEmailNotification::class, 2);
     }
 
     public function test_a_guest_who_just_signed_up_is_sent_a_new_link_by_address(): void

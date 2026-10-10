@@ -1,5 +1,20 @@
 // "We sent a link to …" on the check-your-email card (docs/mocks/pages/sign-up/success): full size and
 // colour, where the form's lead is muted.
+// The card's buttons stack with the small gap.
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+// The live region for "A new link is on its way…" takes no room until it has something to say.
+.sent {
+  color: var(--color-fg-muted);
+}
+
+.sent:empty {
+  display: none;
+}
+
 .sent-lead {
   font: var(--text-body-lg);
   color: var(--color-fg-default);

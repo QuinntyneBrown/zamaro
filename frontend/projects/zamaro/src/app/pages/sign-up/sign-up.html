@@ -15,15 +15,28 @@
           >{{ 'accounts.signUp.sentLeadEnd' | transloco }}
         </p>
         <p>{{ 'accounts.signUp.sentBody' | transloco }}</p>
-        <zm-button-link link="/" variant="primary" size="lg" block
-          >{{ 'accounts.signUp.keepBrowsing' | transloco }}<zm-icon name="arrow-right"
-        /></zm-button-link>
+        <div class="actions">
+          <zm-button-link link="/" variant="primary" size="lg" block
+            >{{ 'accounts.signUp.keepBrowsing' | transloco }}<zm-icon name="arrow-right"
+          /></zm-button-link>
+          <zm-button block [busy]="resending()" [disabled]="resent()" (click)="resend()"
+            ><zm-icon name="mail" />{{
+              (resent() ? 'accounts.signUp.resent' : 'accounts.signUp.resend') | transloco
+            }}</zm-button
+          >
+        </div>
+        <p class="sent" role="status">
+          @if (resent()) {
+            {{ 'accounts.signUp.resentText' | transloco: { email: sentTo() } }}
+          }
+        </p>
         <a slot="links" href="/sign-up" (click)="startAgain($event)">{{
           'accounts.signUp.startAgain' | transloco
         }}</a>
         <a slot="links" routerLink="/sign-in" [queryParams]="returnQuery">{{
           'accounts.signUp.sentSignIn' | transloco
         }}</a>
+        <span slot="fine">{{ 'accounts.signUp.sentFine' | transloco }}</span>
       </zm-booking-form>
     } @else {
       <form

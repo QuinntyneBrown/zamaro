@@ -25,6 +25,13 @@ class CastBookerTest extends TestCase
             ->assertJsonPath('data.emailVerified', true);
     }
 
+    public function test_unverified_leaves_the_address_waiting_for_its_link(): void
+    {
+        $this->artisan('cast:booker', ['email' => 'booker-3@e2e.zamaro.test', '--unverified' => true])->assertSuccessful();
+
+        $this->signIn('booker-3@e2e.zamaro.test')->assertOk()->assertJsonPath('data.emailVerified', false);
+    }
+
     public function test_it_refuses_to_run_in_production(): void
     {
         $this->app['env'] = 'production';

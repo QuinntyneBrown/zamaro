@@ -166,6 +166,18 @@
   --btn-transform-hover: none;
 }
 
+/* The auth card is paper on the stage, so its secondary buttons keep the paper outline
+   (docs/mocks/pages/verify-email/expired, "Keep browsing artists"). */
+:host-context(.auth-card) .btn:not(.btn--primary):not(.btn--ghost):not([aria-pressed='true']) {
+  --btn-bg: var(--color-bg-surface);
+  --btn-fg: var(--color-fg-default);
+  --btn-border: var(--color-border-strong);
+  --btn-bg-hover: var(--color-bg-surface);
+  --btn-fg-hover: var(--color-fg-default);
+  --btn-shadow-hover: var(--shadow-1);
+  --btn-transform-hover: var(--transform-lift);
+}
+
 /* Ghost buttons in the top bar and on the stage take the surrounding colour. */
 :host-context(.topbar) .btn--ghost,
 :host-context(.on-stage) .btn.btn--ghost:not(.btn--primary):not([aria-pressed='true']) {

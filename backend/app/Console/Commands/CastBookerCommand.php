@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
  */
 class CastBookerCommand extends Command
 {
-    protected $signature = 'cast:booker {email : An address no other spec uses}';
+    protected $signature = 'cast:booker {email : An address no other spec uses} {--unverified : Leave the address waiting for its verification link}';
 
     protected $description = 'Create a verified booker who signs in with ZAMARO_CAST_PASSWORD (never in production)';
 
@@ -32,7 +32,7 @@ class CastBookerCommand extends Command
         $user->forceFill([
             'name' => Str::headline(Str::before($email, '@')),
             'password' => Hash::make($password),
-            'email_verified_at' => now(),
+            'email_verified_at' => $this->option('unverified') ? null : now(),
         ])->save();
         $user->grantRoles([Role::Booker]);
 

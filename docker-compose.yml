@@ -34,6 +34,8 @@ x-e2e-environment: &e2e-environment
   ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: "100000"
   # Every spec that registers comes from the same address too; RegisterBookerTest proves the 10.
   ZAMARO_REGISTER_LIMIT_PER_HOUR: "100000"
+  # So does every guest who asks for a new verification link; VerifyEmailTest proves the 3.
+  ZAMARO_RESEND_VERIFICATION_LIMIT: "100000"
   # Links in emails point at the site the suite drives (playwright.config.ts).
   ZAMARO_WEB_URL: http://localhost:4000
   # e2e/fixtures/accounts.ts signs the cast in with the same value (M2 D28).

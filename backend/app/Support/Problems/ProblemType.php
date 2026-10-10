@@ -15,6 +15,7 @@ enum ProblemType: string
     case PayloadTooLarge = 'payload-too-large';
     case UnsupportedMediaType = 'unsupported-media-type';
     case LegalDocumentOutdated = 'legal-document-outdated';
+    case LinkExpired = 'link-expired';
     case TooManyRequests = 'too-many-requests';
     case ServerError = 'server-error';
 
@@ -33,6 +34,7 @@ enum ProblemType: string
             self::PayloadTooLarge => 413,
             self::UnsupportedMediaType => 415,
             self::LegalDocumentOutdated => 409,
+            self::LinkExpired => 410,
             self::TooManyRequests => 429,
             self::ServerError => 500,
         };
@@ -49,6 +51,7 @@ enum ProblemType: string
             self::PayloadTooLarge => 'The request is too large',
             self::UnsupportedMediaType => 'Send the request as JSON',
             self::LegalDocumentOutdated => 'The terms have changed',
+            self::LinkExpired => 'This link has expired',
             self::TooManyRequests => 'Too many requests',
             self::ServerError => 'Something went wrong',
         };

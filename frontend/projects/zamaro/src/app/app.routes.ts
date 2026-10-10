@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/sign-up/sign-up').then((m) => m.SignUp),
   },
   {
+    path: 'verify-email',
+    loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFoundPage),
   },

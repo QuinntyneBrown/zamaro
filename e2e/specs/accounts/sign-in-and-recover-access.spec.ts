@@ -85,7 +85,7 @@ test.describe('Signing in', () => {
     await signIn.open();
     await signIn.holdSignIn();
 
-    await signIn.signIn(accounts.naomi.email, CAST_PASSWORD);
+    await signIn.enter(accounts.naomi.email, CAST_PASSWORD);
 
     await expect(signIn.submitButton()).toHaveText('Signing in…');
     await expect(signIn.submitButton()).toHaveAttribute('aria-busy', 'true');

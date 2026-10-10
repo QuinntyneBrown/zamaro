@@ -1,4 +1,4 @@
-import type { Cookie, Locator, Page } from '@playwright/test';
+import { type Cookie, expect, type Locator, type Page } from '@playwright/test';
 import { freezeClock } from '../fixtures/clock';
 import { Shell } from './shell';
 
@@ -15,6 +15,7 @@ export class SignInPage {
     await freezeClock(this.page);
     const query = returnUrl === undefined ? '' : `?returnUrl=${encodeURIComponent(returnUrl)}`;
     await this.page.goto(`/sign-in${query}`, { waitUntil: 'networkidle' });
+    await this.waitForApp();
   }
 
   /** Opens the page as the app does when a session has ended: `?returnUrl=…&ended=1`. */
@@ -22,9 +23,28 @@ export class SignInPage {
     await freezeClock(this.page);
     const query = new URLSearchParams({ returnUrl, ended: '1' });
     await this.page.goto(`/sign-in?${query}`, { waitUntil: 'networkidle' });
+    await this.waitForApp();
   }
 
+  /**
+   * The app has taken over once it puts focus in the first empty field; a click before that would
+   * submit the server-rendered form natively.
+   */
+  private async waitForApp(): Promise<void> {
+    await expect(this.page.locator(':focus')).toHaveAttribute('id', /^(email|password)$/);
+  }
+
+  /** Types the email and password, presses Sign in and waits for the API's answer. */
   async signIn(email: string, password: string): Promise<void> {
+    const answered = this.page.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/api/v1/session',
+    );
+    await this.enter(email, password);
+    await answered;
+  }
+
+  /** Types the email and password and presses Sign in, without waiting for an answer. */
+  async enter(email: string, password: string): Promise<void> {
     await this.email().fill(email);
     await this.password().fill(password);
     await this.submitButton().click();
