@@ -3,8 +3,11 @@
 namespace App\Http\Resources\ArtistProfiles;
 
 use App\Models\Artist;
+use App\Models\ArtistPhoto;
 use App\Models\ArtistStyle;
+use App\Models\ArtistVideo;
 use App\Models\SetlistSong;
+use App\Support\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,6 +19,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ArtistProfileResource extends JsonResource
 {
+    /** The photo rendition used as `src`; browsers pick from the srcsets. */
+    private const PHOTO_SRC_WIDTH = 800;
+
+    /** Poster frames are stored as one 16:9 WebP. */
+    private const POSTER_WIDTH = 800;
+
+    private const POSTER_HEIGHT = 450;
+
     /**
      * @return array<string, mixed>
      */
@@ -55,6 +66,55 @@ class ArtistProfileResource extends JsonResource
                 /** A key such as `B-flat` or `E-minor`, or `any`. */
                 'key' => $song->key->value,
             ])->values()->all(),
+            /** In the artist's order. `src` is the 800 px WebP, and `width` and `height` are its size. */
+            'photos' => $artist->photos->map(fn (ArtistPhoto $photo) => [
+                'id' => $photo->id,
+                /** The artist's alt text (L2-015.1). */
+                'alt' => $photo->alt_text,
+                'src' => Media::url($this->rendition($photo, 'webp', self::PHOTO_SRC_WIDTH)['key']),
+                'width' => self::PHOTO_SRC_WIDTH,
+                'height' => (int) round($photo->height * self::PHOTO_SRC_WIDTH / $photo->width),
+                /** WebP renditions with width descriptors (400, 800, 1200 and 1600 px). */
+                'srcset' => $this->srcset($photo, 'webp'),
+                /** The same widths in AVIF. */
+                'avifSrcset' => $this->srcset($photo, 'avif'),
+            ])->values()->all(),
+            /** Live videos only, in the artist's order (L2-014.3). */
+            'videos' => $artist->videos->map(fn (ArtistVideo $video) => [
+                'id' => $video->id,
+                /** Song and setting: "Way Maker — live at Bethel Pentecostal, Hamilton". */
+                'title' => $video->title,
+                'durationSeconds' => (int) $video->duration_seconds,
+                /** The poster frame, or null to keep the halftone placeholder. */
+                'poster' => $video->poster_key === null ? null : [
+                    'src' => Media::url($video->poster_key),
+                    'width' => self::POSTER_WIDTH,
+                    'height' => self::POSTER_HEIGHT,
+                ],
+                /** The HLS manifest of the adaptive renditions. */
+                'stream' => Media::url((string) $video->manifest_key),
+                /** The artist's WebVTT captions, or null when they supplied none (L2-014.2). */
+                'captions' => $video->captions_key === null ? null : [
+                    'src' => Media::url($video->captions_key),
+                    'lang' => 'en',
+                ],
+            ])->values()->all(),
         ];
+    }
+
+    private function srcset(ArtistPhoto $photo, string $format): string
+    {
+        return implode(', ', array_map(
+            fn (array $rendition) => Media::url($rendition['key'])." {$rendition['width']}w",
+            $photo->renditionsIn($format),
+        ));
+    }
+
+    /**
+     * @return array{width: int, format: string, key: string}
+     */
+    private function rendition(ArtistPhoto $photo, string $format, int $width): array
+    {
+        return collect($photo->renditionsIn($format))->firstWhere('width', $width);
     }
 }

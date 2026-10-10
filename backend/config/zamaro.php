@@ -19,6 +19,12 @@ return [
         'search_per_minute' => (int) env('ZAMARO_SEARCH_LIMIT_PER_MINUTE', 30),
     ],
 
+    'media' => [
+        // The disk holding photo renditions, posters, streams and captions. M1 has no object
+        // storage: the local `media` disk is served under /media. M4 switches it to object storage.
+        'disk' => env('ZAMARO_MEDIA_DISK', 'media'),
+    ],
+
     'i18n' => [
         // One directory per locale, one JSON file per namespace (L2-111).
         'path' => env('ZAMARO_I18N_PATH', resource_path('i18n')),

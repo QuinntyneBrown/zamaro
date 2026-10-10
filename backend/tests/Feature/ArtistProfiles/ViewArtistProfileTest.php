@@ -21,7 +21,7 @@ class ViewArtistProfileTest extends TestCase
     /** Every field the public profile may carry; anything else must stay server-side (L2-083). */
     private const PUBLIC_FIELDS = [
         'slug', 'displayName', 'firstName', 'pronoun', 'actType', 'headline', 'aboutHeading', 'bio',
-        'baseCity', 'maxDriveKm', 'fromPrice', 'ticketNumber', 'rating', 'reviewCount', 'styles', 'setlist',
+        'baseCity', 'maxDriveKm', 'fromPrice', 'ticketNumber', 'rating', 'reviewCount', 'styles', 'setlist', 'photos', 'videos',
     ];
 
     protected function setUp(): void

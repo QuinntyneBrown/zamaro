@@ -10,10 +10,13 @@ use App\Enums\MusicalKey;
 use App\Enums\OverrideState;
 use App\Enums\Pronoun;
 use App\Enums\Style;
+use App\Enums\VideoStatus;
 use App\Enums\VscStatus;
 use App\Integrations\Routing\CastRoutes;
 use App\Models\Artist;
+use App\Models\ArtistPhoto;
 use App\Models\ArtistRating;
+use App\Models\ArtistVideo;
 use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
@@ -123,6 +126,37 @@ class CastSeeder extends Seeder
             ['en'], [['Blessed Assurance', 'Fanny Crosby', MusicalKey::D], ['Goodness of God', 'Bethel Music', MusicalKey::A]]],
     ];
 
+    /** slug => alt text per photo, in order (docs/mocks/pages/artist). MediaSeeder writes the files. */
+    private const PHOTOS = [
+        'abigail-mensah' => [
+            'Abigail at the microphone during a Sunday service',
+            'Abigail rehearsing with a church volunteer band',
+            'Portrait of Abigail smiling in a kente scarf',
+            'Abigail leading a youth night from the floor, not the stage',
+        ],
+        'miriam-haile' => [
+            'Miriam at the piano during a Sunday evening service',
+            'Portrait of Miriam in a white netela shawl',
+        ],
+    ];
+
+    /**
+     * slug => [title, seconds, status, captioned] in order (docs/mocks/pages/artist,
+     * docs/mocks/pages/edit-profile/video-processing). Every live video plays the one sample stream.
+     */
+    private const VIDEOS = [
+        'abigail-mensah' => [
+            ['Way Maker — live at Bethel Pentecostal, Hamilton', 372, VideoStatus::Live, true],
+            ['Great Is Thy Faithfulness — acoustic', 280, VideoStatus::Live, false],
+            ['Twi praise medley — Harvest Sunday 2025', 485, VideoStatus::Live, true],
+            ['Goodness of God — women’s retreat, Muskoka', 330, VideoStatus::Live, true],
+            ['Jireh — live at Living Waters, Brampton', 462, VideoStatus::Processing, false],
+        ],
+    ];
+
+    /** Seeded photos are 4:3; renditions keep the ratio at each width (L2-051). */
+    private const PHOTO_WIDTHS = [400, 800, 1200, 1600];
+
     private const SUPPORTING_CAST = [
         'Kempenfelt Worship Collective', 'Allandale Gospel Singers', 'Simcoe Street Praise Band',
         'Minets Point Trio', 'Painswick Hymn Choir', 'Georgian Voices', 'Shanty Bay Strings',
@@ -148,7 +182,45 @@ class CastSeeder extends Seeder
             $this->supportingCast();
             $this->christmasChoirs();
             $this->profiles();
+            $this->media();
         });
+    }
+
+    /** Rows only; the keys point at files MediaSeeder writes to the media disk. */
+    private function media(): void
+    {
+        foreach (self::PHOTOS as $slug => $alts) {
+            $artistId = Artist::where('slug', $slug)->value('id');
+            foreach ($alts as $index => $alt) {
+                $position = $index + 1;
+                $renditions = [];
+                foreach (['avif', 'webp'] as $format) {
+                    foreach (self::PHOTO_WIDTHS as $width) {
+                        $renditions[] = ['width' => $width, 'format' => $format, 'key' => "artists/{$slug}/photos/{$position}-{$width}.{$format}"];
+                    }
+                }
+                ArtistPhoto::updateOrCreate(
+                    ['artist_id' => $artistId, 'position' => $position],
+                    ['alt_text' => $alt, 'renditions' => $renditions, 'width' => 1600, 'height' => 1200],
+                );
+            }
+        }
+
+        foreach (self::VIDEOS as $slug => $videos) {
+            $artistId = Artist::where('slug', $slug)->value('id');
+            foreach ($videos as $index => [$title, $seconds, $status, $captioned]) {
+                $position = $index + 1;
+                $live = $status === VideoStatus::Live;
+                ArtistVideo::updateOrCreate(['artist_id' => $artistId, 'position' => $position], [
+                    'title' => $title,
+                    'status' => $status,
+                    'duration_seconds' => $seconds,
+                    'manifest_key' => $live ? MediaSeeder::SAMPLE_STREAM : null,
+                    'captions_key' => $live && $captioned ? MediaSeeder::SAMPLE_CAPTIONS : null,
+                    'poster_key' => $live ? "artists/{$slug}/videos/{$position}-poster-800.webp" : null,
+                ]);
+            }
+        }
     }
 
     private function profiles(): void

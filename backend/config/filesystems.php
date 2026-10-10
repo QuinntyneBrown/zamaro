@@ -47,6 +47,18 @@ return [
             'report' => false,
         ],
 
+        // Profile media in dev and e2e (M1 has no object storage). `serve` lets Laravel answer GET
+        // /media/{path}; the web app's servers proxy /media like /api.
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('app/media'),
+            'url' => env('MEDIA_URL', '/media'),
+            'visibility' => 'public',
+            'serve' => true,
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
