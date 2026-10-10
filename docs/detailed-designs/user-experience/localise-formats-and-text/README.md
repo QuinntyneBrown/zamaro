@@ -85,8 +85,12 @@ Worker, and CI checks on both codebases.
     decimals otherwise ("$162.50"). Amounts arrive from the API as integer cents.
   - `distance(km, approximate)` — "44 km", "Under 1 km" below 1 km, and the "about"
     phrase for approximate values.
-- **Pipes** — `zShortDate`, `zLongDate`, `zTime`, `zMoney` and `zDistance`, pure
-  pipes over `FormatService`.
+- **Pipes** — `zmShortDate`, `zmLongDate`, `zmTime`, `zmMoney` and `zmDistance`, pure
+  pipes over `FormatService`. They use the `zm` prefix like every Zamaro selector. Each pipe
+  is added when a template first needs it; the Discover lineup formats in its view model.
+  `FormatService` (`projects/api/src/lib/i18n`) reads its patterns from the catalogue keys
+  `common.format.date.short`, `shortWithYear`, `long` and `common.format.distance.km`,
+  `about`, `under1`.
 - **Wire formats** — the API sends calendar dates as `YYYY-MM-DD`, times of day as
   `HH:MM`, instants as ISO 8601 UTC, money as integer cents and distances as whole
   kilometres, so no value is pre-formatted on the server for the web.

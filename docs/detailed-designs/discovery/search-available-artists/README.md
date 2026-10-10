@@ -36,7 +36,35 @@ the provider is down (L2-002).
 The slice runs from the Discover page in Zamaro Web to the search endpoint in the
 Zamaro API, the Zamaro database and the routing provider.
 
-**Frontend (Zamaro Web, `features/discover`)**
+**Frontend (Zamaro Web, `app/pages/discover`; locations per ADR-0007)**
+
+The page, form and lineup map to `Discover`, `pages/discover/search-form/SearchForm` and
+`pages/discover/lineup/Lineup`. `SearchStore` lives in `pages/discover/search.store.ts`, and
+`SearchApi` is the `api` library's `DiscoveryApi` (token `DISCOVERY_API`). The presentational
+pieces are `zm-poster`, `zm-booking-form`, `zm-form-field`, `zm-chip`, `zm-ticket`,
+`zm-rating`, `zm-artwork` and `zm-marquee`.
+
+**Church location.** The location field resolves through `GET /api/v1/places?q=`
+(`PlaceController` and the `Geocoder` port). The endpoint fills a gap in the original design.
+- A quick-pick chip looks up its city and fills the field with the label ("Burlington, ON").
+- A typed town is looked up on submit. A town that cannot be found shows the field's own error,
+  "Enter your church’s address or town, or pick a city below.", so no new copy is needed.
+- The city centres are:
+  - Toronto (City Hall): 43.6534, -79.3841
+  - Burlington: 43.325, -79.799
+  - Mississauga: 43.589, -79.6441
+  - Brampton: 43.7315, -79.7624
+  - Hamilton: 43.2557, -79.8711
+  - Markham: 43.8561, -79.337
+  - Ajax: 43.8509, -79.0204
+  - Oshawa: 43.8971, -78.8658
+  - Barrie: 44.3894, -79.6903
+  - Kitchener: 43.4516, -80.4925
+  - Niagara (Niagara Falls): 43.0896, -79.0849
+- The summary links read "Pick your event date." and "Enter your church’s location.", as in the
+  invalid mock.
+
+Until the headliner lands (S6), the tickets start at "No. 01".
 
 - **`DiscoverPage`** — routed page component for `/`. It hosts the poster headline,
   the search form and the lineup region. The radius starts at 120 km for everyone. It
