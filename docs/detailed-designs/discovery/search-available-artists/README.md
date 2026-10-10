@@ -157,8 +157,19 @@ row from LG.
 - **`LineupResource`** — API resource that serialises the cards, the total and the
   next cursor: `{"data":[card…],"meta":{"total":7}}`. Each card is
   `{slug, name, actType, styles[], city, distance:{km, driveMinutes, approximate},
-  rating|null, reviewCount, fromPrice:{cents, currency:"CAD"}}`. The headliner fields
-  (S6) and the cursor (S9) are added by their slices.
+  rating|null, reviewCount, fromPrice:{cents, currency:"CAD"}}`.
+  - The headliner (S6) is a top-level `headliner` object.
+  - `meta` also carries `perPage` (24) and `nextCursor`.
+  - The first page holds the headliner and 23 tickets; later pages hold 24 tickets and
+    `headliner: null`.
+  - The cursor (`PageCursor`) is URL-safe base64 of the sort and the last ticket's
+    `LineupSorter::key()`. A cursor that does not decode, or comes from another sort, is a 422
+    on `cursor`.
+  - The search is ranked in memory, because distances come from routing, so the whole lineup is
+    rebuilt for each page. That is cheap at this scale and keeps the cursor stable.
+  - `CastSeeder` adds a supporting cast of 30 artists around Barrie for paging. They lie more
+    than 120 km by road from Burlington.
+  - On Discover, "Show more artists" appends the next page and focuses its first card.
 
 **Mocks**
 
