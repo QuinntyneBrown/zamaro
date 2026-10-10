@@ -549,6 +549,12 @@ Nothing animates. Errors, help and success appear without a transition; under
 
 ## Implementation notes
 
+**Interim additions in M1 (S14), before the split:** for the booking stub the monolithic field
+gained `type="textarea"`, `placeholder`, `optionalMarker`, `live` (a visually hidden
+`role="status"` region repeating the error) and `[slot=message]` with a `messageId` input (D-14,
+which replaces the `contentChild` read described under Content slots). The split below is still to
+do.
+
 The library has `zm-form-field`, but it is a different component: a monolithic
 labelled control that renders its own `<input>` or `<select>` (inputs `label`,
 `fieldId`, `type: 'text' | 'date' | 'select'`, `options`, `error`, `min`,
@@ -593,3 +599,4 @@ this CRD:
 - **D-11** *What happens to a field while its form is busy?* It dims to 0.6 opacity with pointer events off, under `form[aria-busy="true"]`, matching `.form[aria-busy="true"] .field` and `.stub[aria-busy="true"] .field`. The page makes the text controls `readonly` (focus and values stay, L2-108) and disables the rest, as the busy mocks do; the design-system textarea page's "disabled while sending" is the older wording.
 - **D-13** *How does the booking stub's availability message ([inline message](inline-message.md) D-3) compose with the field?* Through `[slot=message]`. The stub needs the message's checking (busy) and success states and its own `role="status"`, which a plain `success` string cannot carry; the slot accepts the component and the field lists its `id` first in `aria-describedby`, as the inline-message CRD requires. `success` stays for a static success line, and both render in the same place, replacing the help.
 - **D-12** *The search field in a page head is the `<form role="search">` itself in the mocks (`form.field`). How is it built?* The page writes the `<form role="search" class="page-head__search">` and puts a `zm-form-field` inside it. A component cannot become the page's form, and the visual result is the same.
+- **D-14** *How does the field learn the slotted message's `id`?* From a `messageId` input the page sets while the message is shown, not a `contentChild` query. Built in M1 (S14), the query made every field about 8 % slower to render in the `FormField` perf scenario (127 ms against 137 ms for 200 fields) to serve one field in the product; the input costs nothing when unused. The message still goes in `[slot=message]` and is listed first in `aria-describedby`.

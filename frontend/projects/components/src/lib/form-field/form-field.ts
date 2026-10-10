@@ -54,7 +54,7 @@ export class FormField implements ControlValueAccessor {
 
   /**
    * The `id` of the message in `[slot=message]` while it is shown. An input rather than a content
-   * query, which cost every field about 8 % more to render (form-field CRD D-12).
+   * query, which cost every field about 8 % more to render (form-field CRD D-14).
    */
   readonly messageId = input<string | null>(null);
 

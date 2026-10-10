@@ -93,6 +93,58 @@ share.
   link (L2-044). The stub carries the short form, "Cancel free up to 14 days before",
   with the same link (L2-019).
 
+**As built in M1 (S14)**
+
+- **Layout (ADR-0007):** both regions are sections of `pages/artist/ArtistPage`, not separate page
+  components. The list is the library's `zm-tour-dates` and the stub is `zm-booking-form
+  variant="stub"` with `zm-form-field`s and a `zm-inline-message`. The date state lives in
+  `BookingDateStore` beside `ArtistProfileStore` (as S13 put reviews in `ProfileReviewsStore`), with
+  `tourDates`, `selectedDate` and a computed `status` (`none`, `checking`, `free`, `booked`,
+  `refused`). `ArtistAvailabilityApi` sits behind `ARTIST_AVAILABILITY_API` in the `api` library.
+- **Endpoints:** as designed, on public routes, with the slug looked up by `Artist::visible()` until
+  S15 settles `ResolveArtistSlug`. The date check returns `{ date, free, freeCancellationUntil }`:
+  `freeCancellationUntil` is the `CancellationPolicy` date for a free date and null otherwise, so the
+  policy is exercised through the API from M1 (Sat 14 Nov → Sat 31 Oct). Dates outside 3 days to 18
+  months are a 422 with the search form's copy ("Pick a date at least 3 days away."); the stub shows
+  it as the date's error. `tour-dates?from=` starts at 3 days from today when `from` is sooner, and a
+  `from` that is not a date is a 422. Rows are `{ date, status, kind, city }`.
+- **Availability:** `AvailabilityService` gains `isFree(Artist, date)` (no kind, so no youth-event
+  rule) and `days(Artist, from, until)`, a generator that reads rules, overrides and Confirmed
+  bookings once each; `ListTourDates` takes the first 6. A Confirmed booking shows as booked even on a
+  day the artist blocked. `BookingWindow` holds the 3-day and 18-month bounds for the new code.
+- **"Your date" follows the stub:** the current row is the stub's date, carried, picked or typed, as
+  the tour-dates CRD (AC-12) says. The [booked-date mock](../../../mocks/pages/artist/booked-date.html)
+  keeps Sat 14 Nov stamped after Sun 15 Nov is typed; the build stamps Sun 15 Nov ("Your date ·
+  Sunday service, Oakville") and gives Sat 14 Nov a Pick.
+- **Pick:** sets the stub's date without a request (the row says it is free) and moves focus to the
+  stub's date field, which also scrolls the stub into view below LG. There is no busy Pick and no
+  "Date changed to …" status line; the date's inline message is a live region and announces "Abigail
+  is free Fri 20 Nov".
+- **Date check:** a date the list shows needs no request; any other complete date is checked. While a
+  check runs the stub shows nothing under the date (no busy "Checking Abigail's calendar…": there is
+  no `zm-spinner` yet). A failed check leaves the date unchecked and silent, as Discover does. A
+  booked or refused date is the field's error with `aria-invalid`, announced through the field's live
+  region.
+- **The note beside "Upcoming dates":** "Pick a free date to book it instead." when the list has a
+  booked row; otherwise "{first name}'s calendar is wide open this {season}.", the season of the first
+  listed date (L2-006's months), as on Miriam's mock.
+- **Submit behind a flag (user decision, ADR-0012):** "Request to book · {date}" renders only when
+  `bookingRequests` is on, and is disabled for a booked or refused date. The flag is off, so M1 shows
+  no submit, and there is no `/artists/:slug/book` route. Submitting with the flag on does nothing
+  until M5 hands over to the request page.
+- **Kind of gathering:** carried from the remembered search when its date is the carried date
+  ("Worship night" from Naomi's search), otherwise "Sunday service". Church starts empty for guests;
+  the saved church arrives with sign-in (M2).
+- **Empty states point at the stub (L2-020):** "Ask {first name} for a recording" writes "Could you
+  send a recording of a recent set?" into the message and focuses it; "Be {pronoun} first booking"
+  focuses the date.
+- **Policy link:** "Cancel free up to 14 days before" links to `/#how`, Discover's "How booking
+  works" section, which ends with the "Cancellation policy" list (`#policy`).
+- **Loading and errors:** while the list loads it shows four skeleton rows ("Loading dates"). A failed
+  list renders no rows and the stub checks every date itself. An artist with no free or booked date
+  in the window shows the heading and an empty list (no mock covers it).
+- **Seed:** Miriam's ticket number is ACT-0154, as the mocks show.
+
 **Mocks**
 
 - [Artist profile · default](../../../mocks/pages/artist/default.html) — Abigail's

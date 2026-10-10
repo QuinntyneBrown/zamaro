@@ -175,6 +175,14 @@ name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio
   GD-drawn photo renditions and posters, and one committed sample HLS stream with WebVTT captions
   that every live video plays.
 
+**As built in M1 (S14)**
+
+- **Book:** its label follows the stub's date, not only the carried one: "Book for Fri 20 Nov" after
+  a Pick, "Book for Sun 15 Nov" after typing that date, "Check dates" with none. It still moves focus
+  to `#book-date`. The back link keeps the carried date.
+- **No videos:** the empty state has "Ask {first name} for a recording", which writes the request
+  into the stub's message (L2-020.1). See `pick-a-date-and-start-booking`.
+
 **Mocks**
 
 - [Artist profile · default](../../../mocks/pages/artist/default.html) — Abigail's

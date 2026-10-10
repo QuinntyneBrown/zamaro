@@ -6,8 +6,8 @@ milestones get their own plan in this folder when they start.
 
 ## Current status (2026-10-10)
 
-**Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is about
-four-fifths done: S0–S13 are built; S14–S16 remain.
+**Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is
+nearly done: S0–S14 are built; S15 and S16 remain.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -26,24 +26,23 @@ four-fifths done: S0–S13 are built; S14–S16 remain.
 | — | e2e API gets its own database, clock, limits and cache keys | Done | `331a03f` |
 | S12 | Photos and videos (local disk, no object storage in M1) | Done | `37d8f6c`, `263ee86`, `9c56457` (ADR-0010) |
 | S13 | Reviews on the profile | Done | `eb1853c`, `7724bea`, `d9ed059` |
-| S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | **Next** | |
-| S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0011 |
+| S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | Done | `b1e73c7`, `0dccb9e`, `ce741f7` (ADR-0012) |
+| S15 | Missing artist, renamed slug, generic 404 | **Next** | ADR-0011 |
 | S16 | Index and share (optional, last) | To do | |
 
 **Checks at the last commit:**
-- Backend: 87 Feature tests pass, with OpenAPI contract assertions.
+- Backend: 101 Feature tests pass, with OpenAPI contract assertions.
 - Frontend: lint and `format:check` are clean.
-- e2e: 53 Playwright tests pass in Chromium against a freshly seeded e2e database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `Review`, `ReviewList` and `RatingSummary` are new scenarios.
+- e2e: 66 Playwright tests pass in Chromium against a freshly seeded e2e database.
+- Perf: `--fail-on-regression` against the base build flags no rows. `TourDates`, `InlineMessage`, `Steps`, `DescriptionList`, `Band` and `BookingStub` are new scenarios.
 
 **Open items carried forward:**
 - **L2-009.2:** Back restores the Discover results but not the scroll position yet.
 - **S12:** serve the seeded photos and videos from the API's local disk; object storage waits for M4 (user decision).
 - **M7:** only Abigail's rating has reviews behind it; the rest of the cast keeps seeded summaries, so their profiles show "No church reviews yet" under a rating. `QueueRatingRecalculation` and the review events arrive with leaving and moderating reviews.
-- **S14:**
-  - "Be her first booking" (no reviews) focuses `#book-date`, like the header's Book button.
-  - Miriam's seeded ticket number is ACT-0041; the mocks say ACT-0154.
-  - The book submit stays behind the off `bookingRequests` flag (user decision).
+- **M5:** the stub's "Request to book" renders only when the `bookingRequests` flag is on (ADR-0012; off, a user decision). M5 adds the `/artists/:slug/book` route, hands the stub's values to it on submit, and turns the flag on in dev and e2e.
+- **M3:** the Discover band ships without "Apply as an artist"; the action joins with the application page.
+- **Later, with their screens:** `zm-tour-dates` `schedule` variant (M4), `zm-inline-message` `busy` (needs `zm-spinner`), the stepper and timeline (M3, M5), the other description-list variants, and the booking form's `auth` variant (M2). The `zm-form-field` split its CRD asks for is still to do.
 - **S15:** settle `ArtistSlugResolver` (change-profile-address) against `ResolveArtistSlug` (view-artist-profile).
 - **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest already lists four route states.
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
@@ -235,6 +234,15 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **Seed (the S6 open item):** Abigail now has 38 reviews from 38 churches, her four mock reviews the newest (Naomi's and Femi's texts are now the mocks' full text), plus Tomi's and Naomi's replies; 185 stars, shown as 4.9. The seeder runs the job for her, bulk-upserting the 34 older reviews so test setup stays quick. Every other artist keeps its seeded summary with no reviews behind it, so search sorting and the headliner tests are unchanged (backing them would give Marcus a headliner quote).
   - **Components:** `zm-review` (no `zm-review-skeleton` yet: its consumer is the artist's Reviews page, M7) and `zm-rating variant="summary"`. Per-review stars are drawn by `zm-review` (review CRD D-5), not a `stars` rating variant.
   - **Drift recorded in the design:** after the first page the button reads "Show 10 more" ("Show 4 more" last), taken from the artist's Reviews page mock; "Be her first booking" is a button that focuses the booking date instead of the mock's `#book-title` link; a failed page is silent, as on Discover; Report waits for sign-in.
+- **S14 is done** (b1e73c7 API, flags and seed, 0dccb9e red e2e tests, ce741f7 page and components, then ADR-0012 and docs).
+  - **API:** `GET /api/v1/artists/{slug}/tour-dates?from=` (`ArtistAvailabilityController::tourDates`, `ListTourDates`) returns the next 6 free or booked days as `{ date, status, kind, city }`, from 3 days ahead when `from` is missing or sooner. `GET /api/v1/artists/{slug}/availability?date=` returns `{ date, free, freeCancellationUntil }`; the last field comes from `CancellationPolicy` (`Services/Bookings`, 14 days) so the policy is tested through the API from M1. Out-of-window dates are 422 with the search form's copy. `AvailabilityService` gained `isFree()` and `days()` (three reads, then a walk); `BookingWindow` holds the 3-day and 18-month bounds for the new code (search and alternatives still compute their own).
+  - **Feature flags (user decision; ADR-0012, OK, accepted default, 2026-10-10):** `config('zamaro.features.booking_requests')` from `ZAMARO_FEATURE_BOOKING_REQUESTS`, off by default, served by `GET /api/v1/features`; the frontend's root `FeatureFlags` reads it once (transfer-cached) and the stub renders "Request to book" only when it is on. No `/artists/:slug/book` route. ADR-0011 stays reserved for S15's slug history, so the flags took 0012.
+  - **Seed:** Miriam's ticket number is ACT-0154 (upserted on the slug, so reseeding is idempotent). No test asserted ACT-0041.
+  - **Page:** "Upcoming dates" and the stub are sections of `ArtistPage`, with `BookingDateStore` for the list, the stub's date and its check. "Your date" follows the stub's date (tour-dates CRD AC-12), so typing Sun 15 Nov stamps that row, unlike the booked-date mock. Pick needs no request and focuses the stub's date. The header's Book label follows the stub's date; the back link keeps the carried one. Kind of gathering comes from the remembered search when its date matches. The stub is sticky from LG and follows the reviews below it. "Ask {name} for a recording" writes the message into the stub and focuses it; "Be her first booking" focuses the date. The note beside the list reads "{name}'s calendar is wide open this {season}." when no listed date is booked.
+  - **Discover:** `pages/discover/how-booking-works` renders `#how` (three `zm-steps` and the `#policy` list in `zm-description-list`), and `#join` is a `zm-band` without "Apply as an artist" until M3. The stub's "Cancel free up to 14 days before" links to `/#how`.
+  - **Components:** `zm-tour-dates` (`public` variant, loading), `zm-inline-message` (no `busy` yet), `zm-steps` (no stepper or timeline), `zm-description-list` (`definition`), `zm-band`, and `zm-booking-form variant="stub"` (`titleId` renamed `headingId`). Also `zm-button` `size="sm"` and `block` and the band's stage skin, `zm-badge variant="booked"`, the `check` icon, and interim `zm-form-field` additions: a textarea, `placeholder`, `optionalMarker`, a live error region and `[slot=message]` named by a `messageId` input (form-field CRD D-14: a content query cost every field about 8 %). Each CRD records what is built.
+  - **Perf:** no rows flagged. New scenarios `TourDates`, `InlineMessage`, `Steps`, `DescriptionList`, `Band` and `BookingStub` (150 iterations). `FormField` rose about 9 % (120 to 131 ms) and `BookingForm` about 6–13 % with the textarea, marker and live region, within the overlap rule.
+  - **Tests:** `tests/Feature/ArtistProfiles/PickADateTest.php` (12), `tests/Feature/Operations/FeatureFlagsTest.php` (2) and `e2e/specs/artist-profiles/pick-a-date-and-start-booking.spec.ts` (13, including Discover's sections and the flag turned on by intercepting `/api/v1/features` after client-side navigation).
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
@@ -425,7 +433,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **Build:**
   - `ArtistAvailabilityController`, `ListTourDates`, `CancellationPolicy`.
   - `/#how` and `/#join` sections.
-  - A `/artists/:slug/book` placeholder behind the `bookingRequests` flag. **Needs your OK**, because no mock covers it.
+  - ~~A `/artists/:slug/book` placeholder behind the `bookingRequests` flag.~~ Decided by the user (2026-10-09): no placeholder route; the submit is hidden behind the off flag.
 - **Components:** `zm-tour-dates`, `zm-inline-message`, `zm-steps`, `zm-description-list`, `zm-band`, and a stub scenario for `zm-booking-form`.
 
 #### S15 — Missing artist, renamed slug, generic 404
