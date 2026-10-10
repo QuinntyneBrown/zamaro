@@ -247,6 +247,71 @@ export class ArtistProfilePage {
     });
   }
 
+  // Reviews (L2-018, L2-020.2)
+
+  private reviewsSection(): Locator {
+    return this.page.locator('[aria-labelledby="reviews-title"]');
+  }
+
+  reviewsHeading(): Locator {
+    return this.page.locator('#reviews-title');
+  }
+
+  reviewsKicker(): Locator {
+    return this.reviewsSection().locator('.section__kicker');
+  }
+
+  /** The rating beside the heading, one image: "Rated 4.9 out of 5 by 38 churches". */
+  reviewsRating(): Locator {
+    return this.reviewsSection().locator('.section__head').getByRole('img');
+  }
+
+  /** Each review in the list, newest first. */
+  reviews(): Locator {
+    return this.reviewsSection().locator('ul.reviews > li');
+  }
+
+  /** The reviewer named in each review's caption (its own text, between stars and source), in order. */
+  async reviewerNames(): Promise<string[]> {
+    return this.reviews()
+      .locator('figcaption')
+      .evaluateAll((captions) =>
+        captions.map((caption) =>
+          [...caption.childNodes]
+            .filter((node) => node.nodeType === Node.TEXT_NODE)
+            .map((node) => node.textContent ?? '')
+            .join('')
+            .trim(),
+        ),
+      );
+  }
+
+  review(reviewer: string): ProfileReview {
+    return new ProfileReview(
+      this.reviews().filter({ has: this.page.locator('figcaption', { hasText: reviewer }) }),
+    );
+  }
+
+  /** "Show all 38 reviews", then "Show 10 more". */
+  showMoreReviewsButton(): Locator {
+    return this.reviewsSection().getByRole('button', { name: /^Show (all \d+ reviews|\d+ more)$/ });
+  }
+
+  async showMoreReviews(): Promise<void> {
+    await this.showMoreReviewsButton().click();
+  }
+
+  reviewsEmptyState(): Locator {
+    return this.reviewsSection().locator('.empty');
+  }
+
+  /** How many columns the review list lays out. */
+  async reviewColumns(): Promise<number> {
+    return this.reviewsSection()
+      .locator('ul.reviews')
+      .evaluate((list) => getComputedStyle(list).gridTemplateColumns.split(' ').length);
+  }
+
   /** The loading region and its status line. */
   busyRegion(): Locator {
     return this.page.locator('[aria-busy="true"]');
@@ -271,5 +336,37 @@ export class ArtistProfilePage {
   /** True when a script in the page set `window.zmPwned`. */
   async scriptRan(): Promise<boolean> {
     return this.page.evaluate(() => 'zmPwned' in window);
+  }
+}
+
+/** One review on the profile: a figure with the quote and its caption, and any reply beneath. */
+export class ProfileReview {
+  constructor(readonly item: Locator) {}
+
+  /** One image: "5 out of 5 stars". */
+  stars(): Locator {
+    return this.item.locator('figure.review .stars');
+  }
+
+  quote(): Locator {
+    return this.item.locator('figure.review blockquote');
+  }
+
+  /** "St. Brendan’s Anglican, Oshawa · September 2026". */
+  source(): Locator {
+    return this.item.locator('figcaption > span:not(.stars)');
+  }
+
+  /** "Reply from Abigail Mensah · October 2026". */
+  replyMeta(): Locator {
+    return this.item.locator('.message .message__meta');
+  }
+
+  replyText(): Locator {
+    return this.item.locator('.message blockquote');
+  }
+
+  buttons(): Locator {
+    return this.item.getByRole('button');
   }
 }
