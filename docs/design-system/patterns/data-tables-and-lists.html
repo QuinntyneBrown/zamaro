@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Data tables &amp; lists — Zamaro design system</title>
-<meta name="description" content="How Zamaro shows collections: a lineup of tickets for choosing artists, lists for dates and saved artists, tables for comparing booking requests; sorting and filtering with chips and the sort select; paging with show more; and responsive tables.">
+<meta name="description" content="How Zamaro shows collections: a lineup of tickets for choosing artists, lists for dates and saved artists, tables for comparing booking requests; sorting and filtering with chips and the sort select; show more versus pagination; and responsive tables.">
 <link rel="stylesheet" href="../tokens/tokens.css">
 <link rel="stylesheet" href="../assets/components.css">
 <link rel="stylesheet" href="../assets/ds.css">
@@ -42,15 +42,17 @@
       <li><a href="../components/date-picker.html">Date picker</a></li>
       <li><a href="../components/checkbox.html">Checkbox</a></li>
       <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
       <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
-      <li><a href="../components/settings-navigation.html">Settings navigation</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
       <li><a href="../components/tabs.html">Tabs</a></li>
       <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
       <li><a href="../components/skip-link.html">Skip link</a></li>
       <li><a href="../components/footer.html">Footer</a></li>
     </ul></details>
@@ -59,6 +61,7 @@
       <li><a href="../components/divider.html">Divider</a></li>
       <li><a href="../components/card.html">Card</a></li>
       <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
     </ul></details>
     <details open><summary>Components · Data display</summary><ul>
       <li><a href="../components/table.html">Table</a></li>
@@ -124,7 +127,7 @@
         <li><b>Load a page, then show more.</b> The lineup loads 24 artists and “Show more artists” brings the rest (L2-010); profile reviews show 4, then 10 more at a time (L2-018). Numbered pages only for records people return to.</li>
         <li><b>Tables scroll inside their frame</b> on phones, with the first column pinned, unless they are four columns or fewer and can become a list.</li>
       </ul>
-      <p>Composes: <a href="../components/ticket.html">ticket card</a>, <a href="../components/headliner.html">headliner</a>, <a href="../components/chip.html">chip</a>, <a href="../components/select.html">select</a>, <a href="../components/list.html">list</a>, <a href="../components/tour-dates.html">tour dates</a>, <a href="../components/setlist.html">setlist</a>, <a href="../components/table.html">table</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/save-toggle.html">save toggle</a> and <a href="../components/skeleton.html">skeleton</a>.</p>
+      <p>Composes: <a href="../components/ticket.html">ticket card</a>, <a href="../components/headliner.html">headliner</a>, <a href="../components/chip.html">chip</a>, <a href="../components/select.html">select</a>, <a href="../components/list.html">list</a>, <a href="../components/tour-dates.html">tour dates</a>, <a href="../components/setlist.html">setlist</a>, <a href="../components/table.html">table</a>, <a href="../components/pagination.html">pagination</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/save-toggle.html">save toggle</a> and <a href="../components/skeleton.html">skeleton</a>.</p>
     </section>
 
     <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
@@ -139,13 +142,13 @@
           <tr><td>Facts about one booking</td><td><a href="../components/description-list.html">Description list</a></td><td>Pairs of label and value, not rows.</td></tr>
         </tbody>
       </table></div>
-      <h3>Paging with “show more”</h3>
+      <h3>Pagination or “show more”</h3>
       <div class="ds-table-wrap"><table class="ds-table">
         <thead><tr><th scope="col">Size and use</th><th scope="col">Pattern</th></tr></thead>
         <tbody>
           <tr><td>Up to one page (24 artists in the lineup)</td><td>Show them all, with no button (L2-010 AC3). A search on one date rarely passes this.</td></tr>
           <tr><td>More than one page, browsed once</td><td>A button below the list: “Show more artists” appends the next page of the lineup (L2-010); reviews add 10 at a time, newest first (“Show 10 more”, L2-018); the audit log’s “Show older entries” follows a cursor. Focus moves to the first new item; the button goes when nothing is left.</td></tr>
-          <tr><td>Records people come back to (requests, payouts)</td><td>The same “Show more” button over cursor pages (L2-095); the tab and filters stay in the URL.</td></tr>
+          <tr><td>Records people come back to (requests, payouts)</td><td>Numbered <a href="../components/pagination.html">pagination</a>, 20 per page, page number in the URL.</td></tr>
           <tr><td>Never</td><td>Infinite scroll: it hides the footer, loses the place on Back and gives keyboard users no end.</td></tr>
         </tbody>
       </table></div>
@@ -217,7 +220,7 @@
       <h3>Show more</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--stack">
-          <div class="cluster cluster--between"><p class="text-caption" role="status">Showing 24 of 30</p><button class="btn" type="button">Show more artists</button></div>
+          <div class="cluster cluster--between"><p class="pagination__status" role="status">Showing 24 of 30</p><button class="btn" type="button">Show more artists</button></div>
         </div>
         <div class="ds-example__caption"><span>Under the last ticket when a wide search (200 km) returns more than 24 artists (L2-010): the next 6 append, focus moves to the first new ticket and the button is removed.</span></div>
       </div>
@@ -258,9 +261,17 @@
               </tbody>
             </table>
           </div>
-          <div class="cluster cluster--between"><p class="text-caption" role="status">Showing 20 of 23 requests</p><button class="btn" type="button">Show more requests</button></div>
+          <nav class="pagination" aria-label="Pagination, booking requests">
+            <p class="pagination__status">Page 1 of 2 · 23 requests</p>
+            <ul class="pagination__list">
+              <li><a class="pagination__link" role="link" aria-disabled="true" aria-label="Previous page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></a></li>
+              <li><a class="pagination__link" href="#structure" aria-current="page" aria-label="Page 1">1</a></li>
+              <li><a class="pagination__link" href="#structure" aria-label="Page 2">2</a></li>
+              <li><a class="pagination__link" href="#structure" aria-label="Next page"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></li>
+            </ul>
+          </nav>
         </div>
-        <div class="ds-example__caption"><span>Caption, row headers, a sortable date column (<code>aria-sort</code>), status as flat stamps, money right-aligned, one action per row, and “Show more” under the table. The third row is hovered. The admin lists (pages/admin-applications, admin-bookings, admin-audit) use this table.</span></div>
+        <div class="ds-example__caption"><span>Caption, row headers, a sortable date column (<code>aria-sort</code>), status as flat stamps, money right-aligned, one action per row, numbered pages. The third row is hovered. The admin lists (pages/admin-applications, admin-bookings, admin-audit) use this table without pagination.</span></div>
       </div>
     </section>
 
@@ -282,13 +293,14 @@
         <thead><tr><th scope="col">Control</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Pressed / current</th><th scope="col">Disabled</th></tr></thead>
         <tbody>
           <tr><th scope="row">Filter chip</th><td><button class="chip" type="button" aria-pressed="false">Hymns</button></td><td><button class="chip" type="button" aria-pressed="false" data-state="hover">Hymns</button></td><td><button class="chip" type="button" aria-pressed="false" data-state="focus">Hymns</button></td><td><button class="chip" type="button" aria-pressed="true">Hymns</button></td><td><button class="chip" type="button" aria-pressed="false" disabled>Hymns</button></td></tr>
+          <tr><th scope="row">Page link</th><td><a class="pagination__link" href="#states" aria-label="Page 2, default">2</a></td><td><a class="pagination__link" href="#states" data-state="hover" aria-label="Page 2, hover">2</a></td><td><a class="pagination__link" href="#states" data-state="focus" aria-label="Page 2, focus">2</a></td><td><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, current">1</a></td><td><a class="pagination__link" role="link" aria-disabled="true" aria-label="Previous page, disabled"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 12H5M11 6l-6 6 6 6"/></svg></a></td></tr>
           <tr><th scope="row">Sort header</th><td><table class="table"><thead><tr><th scope="col"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th></tr></thead></table></td><td>Not applicable</td><td><table class="table"><thead><tr><th scope="col"><button class="table__sort" type="button" data-state="focus">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th></tr></thead></table></td><td><table class="table"><thead><tr><th scope="col" aria-sort="descending"><button class="table__sort" type="button">Fee <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></th></tr></thead></table></td><td>Not applicable</td></tr>
         </tbody>
       </table></div>
       <h3>Both themes</h3>
       <div class="ds-themes">
-        <div data-theme="light"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><span class="stamp stamp--flat stamp--accepted">Accepted</span></div></div>
-        <div data-theme="dark"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><span class="stamp stamp--flat stamp--accepted">Accepted</span></div></div>
+        <div data-theme="light"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, light theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, light theme">2</a></div><span class="stamp stamp--flat stamp--accepted">Accepted</span></div></div>
+        <div data-theme="dark"><div class="stack"><div class="cluster"><button class="chip" type="button" aria-pressed="true">Under $800</button><button class="chip" type="button" aria-pressed="false">Band</button></div><div class="pagination__list"><a class="pagination__link" href="#states" aria-current="page" aria-label="Page 1, dark theme">1</a><a class="pagination__link" href="#states" aria-label="Page 2, dark theme">2</a></div><span class="stamp stamp--flat stamp--accepted">Accepted</span></div></div>
       </div>
     </section>
 
@@ -351,7 +363,7 @@
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><label class="field" style="min-width: 12rem;"><span class="field__label">Sort</span><select class="select"><option>Closest first</option></select></label></div><figcaption>Four mocks set <code>style="min-width: 12rem"</code> inline on the sort field.</figcaption></figure>
         <figure class="ds-do"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Hymns <span class="chip__count">2<span class="visually-hidden"> artists</span></span></button><button class="chip" type="button" aria-pressed="false" disabled>Band</button></div><figcaption>The count is full-colour text; disabled chips look disabled.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><button class="chip" type="button" aria-pressed="true">Hymns <span class="chip__count" style="opacity: 0.75;">2</span></button></div><figcaption>The count faded with <code>opacity: .75</code> dropped below 4.5:1 on the pressed chip.</figcaption></figure>
-        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster cluster--between"><p class="text-caption">Showing 4 of 38, newest first</p><button class="btn btn--sm" type="button">Show 10 more</button></div></div><figcaption>Say how many are left and let the person ask for them.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="cluster cluster--between"><p class="pagination__status">Showing 4 of 38, newest first</p><button class="btn btn--sm" type="button">Show 10 more</button></div></div><figcaption>Say how many are left and let the person ask for them.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="table-wrap"><table class="table table--dense"><caption>Artists</caption><thead><tr><th scope="col">Name</th><th scope="col" class="table__num">Price</th><th scope="col" class="table__num">km</th></tr></thead><tbody><tr><td>Elijah Park</td><td class="table__num">350</td><td class="table__num">74</td></tr></tbody></table></div></div><figcaption>A table of artists strips out the pictures and styles churches choose by.</figcaption></figure>
       </div>
     </section>
@@ -375,7 +387,7 @@
         <li><code>.chip__count</code> used <code>opacity: .75</code>, a contrast risk. It now uses the full text colour.</li>
         <li>Pressed chips borrowed <code>--color-fg-default</code> and <code>--color-bg-canvas</code>. They now use the inverse pair.</li>
         <li>Ticket notches always painted <code>--color-bg-canvas</code>; they now read <code>--ticket-notch-bg</code>, so tickets on a card show the right colour. The notch grew from 0.9rem to 1rem.</li>
-        <li>Tables are in the admin mocks. Numbered pagination was removed from the system: no mock, spec or design uses it, and every list pages by cursor (L2-095) and loads more in place: “Show 10 more” on <a href="../../mocks/pages/artist-reviews/default.html">pages/artist-reviews/default</a> (L2-018) and “Show older entries” on <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a>; “Show more artists” (L2-010) is not drawn because the mocked lineup has seven artists. The guidance here said “Show everything up to 12, then Show 6 more”; it now follows L2-010’s 24-per-page and the button copy in the specs. Booker and artist lists use <code>.booking-list</code> rows rather than tables.</li>
+        <li>Tables are in the admin mocks; numbered pagination is still not in any mock. The lists that grow load more in place instead: “Show 10 more” on <a href="../../mocks/pages/artist-reviews/default.html">pages/artist-reviews/default</a> (L2-018) and “Show older entries” on <a href="../../mocks/pages/admin-audit/default.html">pages/admin-audit/default</a>; “Show more artists” (L2-010) is not drawn because the mocked lineup has seven artists. The guidance here said “Show everything up to 12, then Show 6 more”; it now follows L2-010’s 24-per-page and the button copy in the specs. Booker and artist lists use <code>.booking-list</code> rows rather than tables.</li>
       </ul>
     </section>
 

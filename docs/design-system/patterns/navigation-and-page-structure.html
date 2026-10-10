@@ -42,15 +42,17 @@
       <li><a href="../components/date-picker.html">Date picker</a></li>
       <li><a href="../components/checkbox.html">Checkbox</a></li>
       <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
       <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
-      <li><a href="../components/settings-navigation.html">Settings navigation</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
       <li><a href="../components/tabs.html">Tabs</a></li>
       <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
       <li><a href="../components/skip-link.html">Skip link</a></li>
       <li><a href="../components/footer.html">Footer</a></li>
     </ul></details>
@@ -59,6 +61,7 @@
       <li><a href="../components/divider.html">Divider</a></li>
       <li><a href="../components/card.html">Card</a></li>
       <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
     </ul></details>
     <details open><summary>Components · Data display</summary><ul>
       <li><a href="../components/table.html">Table</a></li>
@@ -125,7 +128,7 @@
         <li><b>The search is state, kept in the URL.</b> Date, place, kind of gathering, radius, filters and sort travel to the profile and back, through the breadcrumb or the browser’s Back.</li>
         <li><b>The phone gets the same places,</b> behind a menu button in the top bar.</li>
       </ul>
-      <p>Composes: <a href="../components/skip-link.html">skip link</a>, <a href="../components/top-bar.html">top bar</a>, <a href="../components/poster.html">poster hero</a>, <a href="../components/marquee.html">marquee</a>, <a href="../components/container.html">container &amp; stack</a>, <a href="../components/breadcrumb.html">breadcrumb</a>, <a href="../components/footer.html">footer</a>, <a href="../components/band.html">band</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/menu.html">menu</a>, <a href="../components/tabs.html">tabs</a>, <a href="../components/settings-navigation.html">settings navigation</a> and the <a href="../components/booking-form.html">booking ticket</a>.</p>
+      <p>Composes: <a href="../components/skip-link.html">skip link</a>, <a href="../components/top-bar.html">top bar</a>, <a href="../components/poster.html">poster hero</a>, <a href="../components/marquee.html">marquee</a>, <a href="../components/container.html">container &amp; stack</a>, <a href="../components/breadcrumb.html">breadcrumb</a>, <a href="../components/footer.html">footer</a>, <a href="../components/band.html">band</a>, <a href="../components/badge.html">badge</a>, <a href="../components/avatar.html">avatar</a>, <a href="../components/menu.html">menu</a>, <a href="../components/tabs.html">tabs</a>, <a href="../components/sidebar-navigation.html">sidebar navigation</a> and the <a href="../components/booking-form.html">booking ticket</a>.</p>
     </section>
 
     <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
@@ -147,7 +150,7 @@
         <tbody>
           <tr><td>Get back to the search that led here</td><td><a href="../components/breadcrumb.html">Breadcrumb</a> carrying the search in its label and URL</td><td>“Discover · Sat 14 Nov / Abigail Mensah”</td></tr>
           <tr><td>Switch between views of the same list</td><td><a href="../components/tabs.html">Tabs</a></td><td>Your requests: Waiting · Accepted · Past</td></tr>
-          <tr><td>Move between different tasks in an area</td><td>Links in the top bar’s menu</td><td>Your requests · Saved artists · Church details</td></tr>
+          <tr><td>Move between different tasks in an area</td><td>Sub-pages in <a href="../components/sidebar-navigation.html">sidebar navigation</a></td><td>Your requests · Saved artists · Church details</td></tr>
           <tr><td>Move between the main areas</td><td>Top bar navigation</td><td>Discover · How booking works · For artists</td></tr>
           <tr><td>Jump within a long page</td><td>An in-page link</td><td>“Book for Sat 14 Nov” jumps to the stub on phones</td></tr>
         </tbody>
@@ -276,9 +279,17 @@
         </div>
         <div class="ds-example__caption"><span>Forced phone layout. The button becomes “Close menu” with <code>aria-expanded="true"</code>; Saved shows the heart and the count only.</span></div>
       </div>
-      <h3>Account pages: tabs</h3>
+      <h3>Account pages: sub-pages and tabs</h3>
       <div class="ds-example">
         <div class="ds-example__canvas ds-example__canvas--canvas" style="align-items: flex-start;">
+          <nav class="sidenav" aria-label="Account">
+            <ul class="sidenav__list">
+              <li><a class="sidenav__link" href="#structure" aria-current="page">Your requests <span class="badge badge--count">1<span class="visually-hidden"> needs action</span></span></a></li>
+              <li><a class="sidenav__link" href="#structure">Saved artists</a></li>
+              <li><a class="sidenav__link" href="#structure">Church details</a></li>
+              <li><a class="sidenav__link" href="#structure">Email preferences</a></li>
+            </ul>
+          </nav>
           <div class="tabs" style="flex: 1 1 20rem; min-width: 0;">
             <div class="tabs__list" role="tablist" aria-label="Your requests">
               <button class="tabs__tab" type="button" role="tab" id="rq-t1" aria-selected="false" aria-controls="rq-p1" tabindex="-1">Waiting <span class="tabs__count">1</span></button>
@@ -290,7 +301,7 @@
             <div class="tabs__panel" role="tabpanel" id="rq-p3" aria-labelledby="rq-t3" hidden><p>Four past bookings.</p></div>
           </div>
         </div>
-        <div class="ds-example__caption"><span>Views of the same list are tabs, on pages/bookings (“Upcoming · Past”) and pages/requests (“New · Accepted · Confirmed · Past”).</span></div>
+        <div class="ds-example__caption"><span>Different tasks are sub-pages in the sidebar; views of the same list are tabs. The grouped sidebar is not in the mocks yet; the tabs are, on pages/bookings (“Upcoming · Past”) and pages/requests (“New · Accepted · Confirmed · Past”).</span></div>
       </div>
     </section>
 

@@ -42,15 +42,17 @@
       <li><a href="../components/date-picker.html">Date picker</a></li>
       <li><a href="../components/checkbox.html">Checkbox</a></li>
       <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
       <li><a href="../components/chip.html">Chip</a></li>
       <li><a href="../components/form-layout.html">Form layout</a></li>
       <li><a href="../components/calendar.html">Calendar</a></li>
     </ul></details>
     <details open><summary>Components · Navigation</summary><ul>
       <li><a href="../components/top-bar.html">Top bar</a></li>
-      <li><a href="../components/settings-navigation.html">Settings navigation</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
       <li><a href="../components/tabs.html">Tabs</a></li>
       <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
       <li><a href="../components/skip-link.html">Skip link</a></li>
       <li><a href="../components/footer.html">Footer</a></li>
     </ul></details>
@@ -59,6 +61,7 @@
       <li><a href="../components/divider.html">Divider</a></li>
       <li><a href="../components/card.html">Card</a></li>
       <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
     </ul></details>
     <details open><summary>Components · Data display</summary><ul>
       <li><a href="../components/table.html">Table</a></li>
@@ -121,6 +124,7 @@
       <p>Use a checkbox for an independent yes/no that takes effect when the form is sent, or for picking any number of options from a short list. In the booking request: “What would you like from the artist?” and “I’ve read the cancellation terms”.</p>
       <ul>
         <li>One choice from several: <a href="radio-group.html">radio group</a>.</li>
+        <li>A setting that applies at once, with no submit: <a href="switch.html">switch</a>.</li>
         <li>Filters that apply instantly to the lineup: filter <a href="chip.html">chips</a>.</li>
       </ul>
       <p>The box is a real <code>&lt;input type="checkbox"&gt;</code>, visually hidden but focusable, followed by a drawn <code>.check__box</code> that holds two icons: a tick for checked and a dash for indeterminate.</p>
@@ -399,6 +403,8 @@ all.indeterminate = on &gt; 0 &amp;&amp; on &lt; items.length;</code></pre>
       <div class="ds-dodont">
         <figure class="ds-do"><div class="ds-example__canvas"><fieldset class="choice-group"><legend>What would you like?</legend><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Lead the congregation</span></label><label class="check"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Bring backing tracks</span></label></fieldset></div><figcaption>A fieldset and legend, so each box is read with its question.</figcaption></figure>
         <figure class="ds-dont"><div class="ds-example__canvas"><div class="stack stack--sm"><p><b>What would you like?</b></p><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Lead the congregation</span></label><label class="check"><input type="checkbox"><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Bring backing tracks</span></label></div></div><figcaption>A bold paragraph as the “legend”. Screen readers never connect it to the boxes.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><label class="switch"><input type="checkbox" role="switch" checked><span class="switch__track"></span><span class="switch__text">Email me when an artist accepts</span></label></div><figcaption>A setting that saves on its own is a switch.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><label class="check"><input type="checkbox" checked><span class="check__box"><svg class="icon check__tick" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><svg class="icon check__dash" style="grid-area: 1 / 1;" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></span><span class="check__text">Email me when an artist accepts</span></label></div><figcaption>A checkbox that saves the moment it is ticked, with no submit. People expect checkboxes to wait for the form.</figcaption></figure>
       </div>
     </section>
 
