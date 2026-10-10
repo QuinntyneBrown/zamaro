@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Context;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,6 +23,11 @@ class ProblemDetailsRenderer
 
         if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
             return ProblemDetails::of(ProblemType::NotFound, 'Nothing exists at this address.', $requestId)
+                ->toResponse();
+        }
+
+        if ($e instanceof ValidationException) {
+            return ProblemDetails::of(ProblemType::ValidationFailed, 'Some fields need attention.', $requestId, $e->errors())
                 ->toResponse();
         }
 

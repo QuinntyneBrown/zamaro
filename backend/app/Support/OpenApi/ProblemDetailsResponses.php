@@ -9,6 +9,7 @@ use Dedoc\Scramble\Support\Generator\Types as OpenApiTypes;
 use Dedoc\Scramble\Support\Type\ObjectType;
 use Dedoc\Scramble\Support\Type\Type;
 use Illuminate\Database\RecordsNotFoundException;
+use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -21,14 +22,22 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
     public function shouldHandle(Type $type)
     {
         return $type instanceof ObjectType
-            && ($type->isInstanceOf(HttpException::class) || $type->isInstanceOf(RecordsNotFoundException::class));
+            && ($type->isInstanceOf(HttpException::class)
+                || $type->isInstanceOf(RecordsNotFoundException::class)
+                || $type->isInstanceOf(ValidationException::class));
     }
 
     public function toResponse(Type $type)
     {
-        $notFound = $type instanceof ObjectType
-            && ($type->isInstanceOf(RecordsNotFoundException::class) || $type->isInstanceOf(NotFoundHttpException::class));
-        $status = $notFound ? 404 : parent::toResponse($type)?->code;
+        if (! $type instanceof ObjectType) {
+            return null;
+        }
+        $validation = $type->isInstanceOf(ValidationException::class);
+        $status = match (true) {
+            $validation => 422,
+            $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
+            default => parent::toResponse($type)?->code,
+        };
         if ($status === null) {
             return null;
         }
@@ -40,9 +49,15 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
             ->addProperty('detail', new OpenApiTypes\StringType)
             ->addProperty('requestId', (new OpenApiTypes\StringType)->format('uuid')->setDescription('Matches X-Request-Id.'))
             ->setRequired(['type', 'title', 'status', 'detail', 'requestId']);
+        if ($validation) {
+            $body->addProperty('errors', (new OpenApiTypes\ObjectType)
+                ->additionalProperties((new OpenApiTypes\ArrayType)->setItems(new OpenApiTypes\StringType))
+                ->setDescription('Messages keyed by field.'));
+            $body->setRequired(['type', 'title', 'status', 'detail', 'requestId', 'errors']);
+        }
 
         return Response::make($status)
-            ->setDescription($this->getDescription($type))
+            ->setDescription($validation ? 'Validation failed' : $this->getDescription($type))
             ->setContent('application/problem+json', Schema::fromType($body));
     }
 }

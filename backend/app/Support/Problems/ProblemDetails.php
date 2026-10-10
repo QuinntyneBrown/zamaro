@@ -21,9 +21,12 @@ final class ProblemDetails
         public readonly ?array $errors = null,
     ) {}
 
-    public static function of(ProblemType $type, string $detail, ?string $requestId): self
+    /**
+     * @param  array<string, list<string>>|null  $errors
+     */
+    public static function of(ProblemType $type, string $detail, ?string $requestId, ?array $errors = null): self
     {
-        return new self($type->uri(), $type->title(), $type->status(), $detail, $requestId);
+        return new self($type->uri(), $type->title(), $type->status(), $detail, $requestId, $errors);
     }
 
     /**
