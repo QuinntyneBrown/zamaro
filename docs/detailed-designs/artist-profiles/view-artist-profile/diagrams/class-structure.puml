@@ -88,15 +88,13 @@ package "Zamaro API (Laravel)" {
   class SetlistSong <<Eloquent>> {
     +int position
     +string title
-    +?string writerOrSource
+    +?string writer
     +string key
   }
   enum Pronoun {
-    SheHer
-    HeHim
-    TheyThem
-    +objective(): string
-    +possessive(): string
+    She
+    He
+    They
   }
   class Artist <<Eloquent>> {
     +int id

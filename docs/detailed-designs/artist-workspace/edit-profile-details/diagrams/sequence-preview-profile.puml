@@ -48,7 +48,7 @@ else draft valid
   db --> action : Saved state
   action -> action : Overlay unsaved values; persist nothing (L2-054)
   action --> controller : PublicProfile
-  controller --> client : 200 PublicProfileResource, Cache-Control: no-store
+  controller --> client : 200 ArtistProfileResource, Cache-Control: no-store
   client --> store : PublicProfile
   store --> preview : Profile data
   preview --> actor : Public profile layout with banner "This is a preview" (L2-054)

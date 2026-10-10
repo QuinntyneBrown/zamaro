@@ -21,7 +21,7 @@ box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "ArtistProfileApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
-  participant "ArtistProfileController" as controller
+  participant "ProfileDetailsController" as controller
   participant "UpdateArtistProfileRequest" as req
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
@@ -61,7 +61,7 @@ else all fields valid
   action -> db : COMMIT
   action -> cache : Queue ArtistProfileUpdated listener for cache purge (L2-089)
   action --> controller : Artist
-  controller --> client : 200 ArtistProfileResource
+  controller --> client : 200 ProfileDetailsResource
   client --> store : ArtistProfile
   store --> page : status = saved
   page --> actor : Success banner "Your changes are on your public profile now."

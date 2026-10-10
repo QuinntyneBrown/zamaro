@@ -107,13 +107,43 @@ through the CDN.
   count, styles, photos, videos and setlist. It omits base coordinates, the account email, the private contact phone, the HST
   number and payout data (L2-083). A contract test in CI fails when the serialised profile gains a
   field outside this list.
-- **`Pronoun`** — enum with `SheHer`, `HeHim` and `TheyThem`, offering `objective()`
-  ("her") and `possessive()` ("her", "his", "their") for profile copy.
+- **`Pronoun`** — enum with `She`, `He` and `They` (serialised `she`, `he`, `they`;
+  ADR-0008), shared with `artist-workspace/edit-profile-details`. Profile copy such as
+  "Watch her lead" comes from catalogue `select` messages on the serialised value.
+- **`MusicalKey`** — enum for a setlist song's key, serialised as `E`, `B-flat`,
+  `F-sharp-minor` or `any`. The page turns it into "Key of B♭" from catalogue templates.
 - **`MediaUrlSigner`** — builds CDN URLs for image renditions, video manifests,
   poster frames and caption files on the separate media domain (L2-088).
 
 The rule that derives the first name for a solo act is the first word of the display
-name. The rule for duos, bands and choirs is `<TO SUPPLY>`.
+name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio",
+"Songs Marcus Bell Trio leads").
+
+**As built in M1 (S11)**
+
+- **Layout:** AGENTS.md's layout applies (ADR-0007).
+  - The page is `pages/artist/ArtistPage` with `ArtistProfileStore`.
+  - The header, About and setlist are sections of one template, not separate components.
+  - `zm-breadcrumb` and `zm-setlist` are library components.
+  - `ArtistProfilesApi` sits behind the `ARTIST_PROFILES_API` token in the `api` library.
+- **Transfer cache:** the profile response is sent as `Cache-Control: public, max-age=0,
+  s-maxage=60`, so Angular's HTTP transfer cache carries the server render's copy to the
+  browser. Validators (ETag) arrive with `index-and-share-profile`.
+- **The remembered search:** `SearchStore` writes the last search that showed a lineup to the
+  root `LastSearch` service: its query parameters, date and headliner slug.
+  - The back link and "Back to the lineup" use those parameters. Without them, they use
+    `/?date=` with the carried date, or `/`.
+  - "Headliner · …" shows only when the remembered search's date matches the carried date
+    and its headliner is this artist.
+- **Book:** a button. It moves focus to `#book-date`, the stub's date field from
+  `book-artist-from-profile` (S14).
+- **Save and Share:** not rendered yet. Save arrives with sign-in (M2) and Share with
+  `index-and-share-profile` (S16).
+- **Base city:** the API returns the city alone ("Brampton"); the page adds the province from
+  the catalogue ("Brampton, ON").
+- **Not yet built:** returning to the same scroll position on Back (L2-009.2). The results
+  come back, but scroll restoration waits for Discover to restore its position after the
+  lineup reloads.
 
 **Mocks**
 

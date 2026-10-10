@@ -86,7 +86,7 @@ the Zamaro API, and the Zamaro database.
   `slug_histories.slug`, which holds every current and retired slug. Whether an artist may take back one of
   their own retired slugs is `<TO SUPPLY>`; the rule against reassignment covers
   other artists (L2-055).
-- **`ArtistSlugResolver`** — domain service used by `PublicArtistProfileController`
+- **`ArtistSlugResolver`** — domain service used by `ArtistProfileController`
   (`GET /api/v1/artists/{slug}`, public profile slice). It looks the slug up in
   `artists.slug`, then in `slug_histories.slug`, and returns the owning artist. Every
   retired slug points to the artist rather than to the next slug, so a chain of
