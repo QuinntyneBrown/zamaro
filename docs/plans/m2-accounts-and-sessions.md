@@ -1,6 +1,27 @@
 # Milestone 2 plan: accounts and sessions
 
-**Status:** Not started. Depends on M1 (`feat/m1-foundations-and-browse`) being merged to `main`.
+**Status:** In progress on `feat/m2-accounts-and-sessions`, cut from the finished M1 branch.
+
+## Current status (2026-10-10)
+
+| Slice | Scope | Status | Commits |
+|---|---|---|---|
+| S0 | Groundwork: Sanctum, Redis sessions, Horizon queues, Mailpit, e2e account fixtures | Done | (ADR-0015) |
+| S1 | Sign in | Not started | |
+| S2–S18 | | Not started | |
+
+## Changes made while implementing
+
+- **S0 — Mailpit host ports.** Mailpit listens on 1025 and 8025 inside Compose, but its host ports are
+  `:1026` (SMTP) and `:8026` (inbox and API), because Mailpit's defaults are often held by another
+  local stack (they were on this machine). The verify step reads `:8026/api/v1/info`; e2e reads
+  `E2E_MAILPIT_URL` (default `http://localhost:8026`). Recorded in ADR-0015.
+- **S0 — e2e session lifetime.** `api-e2e` sets `SESSION_LIFETIME=525600`. Cookie expiry dates are
+  computed from the frozen clock, so a 7-day lifetime would make the browser drop the session and
+  XSRF cookies once the real date passes Fri 16 Oct 2026. The 7- and 30-day limits stay in the
+  backend tests (S3), with time travel. Recorded in ADR-0015.
+- **S0 — Horizon.** One supervisor per queue (`high`, `notifications`, `default`), one process each
+  locally and in every environment without its own entry (D18).
 
 ## Context
 
@@ -101,7 +122,7 @@ shown and are recorded in the slice's ADR or the design.
 | D15 | Does a new privacy-policy version trigger the terms gate? (record-consent) | No. Only Terms do (L2-080.3); the privacy version is recorded at registration | OK |
 | D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK |
 | D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | |
-| D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | |
+| D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
 | D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | |
 | D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | |
 | D21 | Email on two-step changes (mocks say "We emailed…"; the design is silent) | Add `TwoStepSignInChangedNotification` for on, off and new codes; update the design | OK |

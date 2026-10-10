@@ -50,7 +50,7 @@ zamaro/
 │   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
 │       └── components/            # CRDs: <component>.md + <component>.html, trace to L2
-├── docker-compose.yml             # local dev: postgres, redis, api, api-e2e, worker, scheduler (ADR-0002)
+├── docker-compose.yml             # local dev: postgres, redis, mailpit, api, api-e2e, worker, scheduler (ADR-0002)
 ├── backend/                       # Laravel 13 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
 │   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
