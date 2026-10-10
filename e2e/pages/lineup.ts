@@ -195,6 +195,16 @@ export class Ticket {
     return this.card.getByRole('heading', { level: 3 }).getByRole('link');
   }
 
+  /** Scrolls the page until the card is in view. */
+  async scrollIntoView(): Promise<void> {
+    await this.card.scrollIntoViewIfNeeded();
+  }
+
+  /** Opens the artist's profile from the card's name. */
+  async openProfile(): Promise<void> {
+    await this.link().click();
+  }
+
   /** The act and styles line, then the place line ("Hamilton · 14 km from you"). */
   meta(): Locator {
     return this.card.locator('.ticket__meta');

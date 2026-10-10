@@ -80,6 +80,11 @@ export class Shell {
     await this.page.keyboard.press('Enter');
   }
 
+  /** How far the page is scrolled down, in CSS pixels. */
+  async scrollTop(): Promise<number> {
+    return this.page.evaluate(() => Math.round(window.scrollY));
+  }
+
   async hasHorizontalScroll(): Promise<boolean> {
     return this.page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
