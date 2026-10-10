@@ -13,6 +13,7 @@ export * from './lib/breadcrumb/breadcrumb';
 export * from './lib/button/button';
 export * from './lib/button/button-anchor';
 export * from './lib/button/button-link';
+export * from './lib/checkbox/checkbox';
 export * from './lib/chip/chip';
 export * from './lib/description-list/description-list';
 export * from './lib/dialog/dialog';

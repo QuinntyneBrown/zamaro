@@ -4,6 +4,7 @@ namespace App\Support\OpenApi;
 
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
+use App\Actions\Privacy\LegalDocumentOutdated;
 use Dedoc\Scramble\Support\ExceptionToResponseExtensions\HttpExceptionToResponseExtension;
 use Dedoc\Scramble\Support\Generator\Response;
 use Dedoc\Scramble\Support\Generator\Schema;
@@ -47,6 +48,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
             $type->isInstanceOf(AuthenticationException::class) => 401,
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
             $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,
+            $type->isInstanceOf(LegalDocumentOutdated::class) => 409,
             default => parent::toResponse($type)?->code,
         };
         if ($status === null) {

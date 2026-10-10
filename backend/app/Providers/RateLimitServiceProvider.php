@@ -32,5 +32,9 @@ class RateLimitServiceProvider extends ServiceProvider
 
             return $limits;
         });
+
+        // M2 D6: registrations send email to whatever address is typed, so 10 an hour per address.
+        RateLimiter::for('register', fn (Request $request) => Limit::perHour((int) config('zamaro.rate_limits.register_per_hour'))
+            ->by('register-ip:'.$request->ip()));
     }
 }

@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Enums\ActType;
 use App\Enums\ArtistStatus;
 use App\Enums\BookingStatus;
+use App\Enums\ConsentKind;
+use App\Enums\ConsentSource;
 use App\Enums\GatheringKind;
 use App\Enums\MusicalKey;
 use App\Enums\OverrideState;
@@ -22,6 +24,7 @@ use App\Models\ArtistVideo;
 use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
+use App\Models\ConsentRecord;
 use App\Models\Review;
 use App\Models\ReviewReply;
 use App\Models\SetlistSong;
@@ -265,6 +268,7 @@ class CastSeeder extends Seeder
             $this->profiles();
             $this->media();
             $this->accounts();
+            $this->consents();
         });
     }
 
@@ -288,6 +292,35 @@ class CastSeeder extends Seeder
                 'email_verified_at' => '2026-09-01 12:00:00',
                 'password' => Hash::make($canSignIn ? $password : Str::random(40)),
             ]);
+        }
+    }
+
+    /**
+     * What the cast agreed to (L2-080): Naomi accepted the October terms and privacy policy and said no
+     * to marketing email; Tomi last accepted the March terms, so the terms gate stops him (M2 S14).
+     * Written once per person, as records are never changed.
+     */
+    private function consents(): void
+    {
+        $consents = [
+            'naomi.fraser@riversidecc.ca' => ['2026-10-08 09:30:00', [
+                [ConsentKind::Terms, '2026-10', true], [ConsentKind::PrivacyPolicy, '2026-10', true], [ConsentKind::MarketingEmail, null, false],
+            ]],
+            'tomi.oduya@harvestpointchurch.ca' => ['2026-03-04 19:15:00', [
+                [ConsentKind::Terms, '2026-03', true], [ConsentKind::PrivacyPolicy, '2026-03', true], [ConsentKind::MarketingEmail, null, false],
+            ]],
+        ];
+        foreach ($consents as $email => [$at, $items]) {
+            $user = User::where('email', $email)->firstOrFail();
+            if (ConsentRecord::where('user_id', $user->id)->exists()) {
+                continue;
+            }
+            foreach ($items as [$kind, $version, $granted]) {
+                ConsentRecord::create([
+                    'user_id' => $user->id, 'kind' => $kind, 'document_version' => $version, 'granted' => $granted,
+                    'recorded_at' => $at, 'source' => ConsentSource::Registration,
+                ]);
+            }
         }
     }
 

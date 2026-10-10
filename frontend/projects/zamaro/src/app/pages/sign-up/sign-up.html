@@ -1,0 +1,135 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    @if (status() === 'sent') {
+      <zm-booking-form
+        class="auth-form"
+        variant="auth"
+        landmark
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.signUp.sentTitle' | transloco"
+        [stamp]="'accounts.signUp.sentStamp' | transloco"
+      >
+        <p class="lead sent-lead">
+          {{ 'accounts.signUp.sentLeadStart' | transloco }} <strong>{{ sentTo() }}</strong
+          >{{ 'accounts.signUp.sentLeadEnd' | transloco }}
+        </p>
+        <p>{{ 'accounts.signUp.sentBody' | transloco }}</p>
+        <zm-button-link link="/" variant="primary" size="lg" block
+          >{{ 'accounts.signUp.keepBrowsing' | transloco }}<zm-icon name="arrow-right"
+        /></zm-button-link>
+        <a slot="links" href="/sign-up" (click)="startAgain($event)">{{
+          'accounts.signUp.startAgain' | transloco
+        }}</a>
+        <a slot="links" routerLink="/sign-in" [queryParams]="returnQuery">{{
+          'accounts.signUp.sentSignIn' | transloco
+        }}</a>
+      </zm-booking-form>
+    } @else {
+      <form
+        class="auth-form"
+        aria-labelledby="card-title"
+        novalidate
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+      >
+        <zm-booking-form
+          variant="auth"
+          headingId="card-title"
+          [headingLevel]="1"
+          [heading]="'accounts.signUp.title' | transloco"
+          [stamp]="'accounts.signUp.stamp' | transloco"
+          [busy]="busy()"
+        >
+          @switch (status()) {
+            @case ('invalid') {
+              <zm-error-summary
+                summaryId="error-summary"
+                [heading]="
+                  'accounts.signUp.invalidTitle' | transloco: { count: summaryItems().length }
+                "
+                [items]="summaryItems()"
+              />
+            }
+            @case ('challenge') {
+              <zm-alert
+                variant="danger"
+                compact
+                [heading]="'accounts.signUp.challengeTitle' | transloco"
+              >
+                <p>{{ 'accounts.signUp.challengeText' | transloco }}</p>
+              </zm-alert>
+            }
+            @case ('error') {
+              <zm-alert
+                variant="danger"
+                compact
+                [heading]="'accounts.signUp.errorTitle' | transloco"
+              >
+                <p>{{ 'accounts.signUp.errorText' | transloco }}</p>
+              </zm-alert>
+            }
+            @default {
+              <p class="lead">{{ 'accounts.signUp.lead' | transloco }}</p>
+            }
+          }
+          <zm-form-field
+            #nameField
+            fieldId="name"
+            formControlName="name"
+            autocomplete="name"
+            [label]="'accounts.signUp.name' | transloco"
+            [requiredMarker]="'accounts.required' | transloco"
+            [readonly]="busy()"
+            [error]="status() === 'invalid' ? (errors().name?.message ?? null) : null"
+          />
+          <zm-form-field
+            #emailField
+            fieldId="email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            [label]="'accounts.signUp.email' | transloco"
+            [requiredMarker]="'accounts.required' | transloco"
+            [placeholder]="'accounts.signUp.emailPlaceholder' | transloco"
+            [help]="'accounts.signUp.emailHelp' | transloco"
+            [readonly]="busy()"
+            [error]="status() === 'invalid' ? (errors().email?.message ?? null) : null"
+          />
+          <zm-form-field
+            fieldId="password"
+            type="password"
+            formControlName="password"
+            autocomplete="new-password"
+            [label]="'accounts.signUp.password' | transloco"
+            [requiredMarker]="'accounts.required' | transloco"
+            [help]="'accounts.signUp.passwordHelp' | transloco"
+            [readonly]="busy()"
+            [error]="status() === 'invalid' ? (errors().password?.message ?? null) : null"
+          />
+          <zm-checkbox
+            id="terms"
+            name="terms"
+            formControlName="terms"
+            [requiredMarker]="'accounts.required' | transloco"
+            [error]="status() === 'invalid' ? (errors().terms?.message ?? null) : null"
+            >{{ 'accounts.signUp.terms' | transloco }}</zm-checkbox
+          >
+          <zm-checkbox
+            id="news"
+            name="news"
+            formControlName="news"
+            [description]="'accounts.signUp.newsHelp' | transloco"
+            >{{ 'accounts.signUp.news' | transloco }}</zm-checkbox
+          >
+          <zm-button variant="primary" size="lg" block type="submit" [busy]="busy()">
+            {{ (busy() ? 'accounts.signUp.submitting' : 'accounts.signUp.submit') | transloco }}
+          </zm-button>
+          <a slot="links" routerLink="/sign-in" [queryParams]="returnQuery">{{
+            'accounts.signUp.signIn' | transloco
+          }}</a>
+        </zm-booking-form>
+      </form>
+    }
+  </div>
+</div>

@@ -72,6 +72,9 @@
         <zm-button variant="primary" size="lg" block type="submit" [busy]="busy()">
           {{ (busy() ? 'accounts.signIn.submitting' : 'accounts.signIn.submit') | transloco }}
         </zm-button>
+        <a slot="links" routerLink="/sign-up" [queryParams]="returnQuery">{{
+          'accounts.signIn.createAccount' | transloco
+        }}</a>
         <span slot="fine">{{ 'accounts.signIn.fine' | transloco }}</span>
       </zm-booking-form>
     </form>

@@ -4,6 +4,7 @@ namespace App\Support\Problems;
 
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
+use App\Actions\Privacy\LegalDocumentOutdated;
 use App\Http\Resources\Discovery\LineupCardResource;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -60,6 +61,11 @@ class ProblemDetailsRenderer
 
         if ($e instanceof ValidationException) {
             return ProblemDetails::of(ProblemType::ValidationFailed, 'Some fields need attention.', $requestId, $e->errors())
+                ->toResponse();
+        }
+
+        if ($e instanceof LegalDocumentOutdated) {
+            return ProblemDetails::of(ProblemType::LegalDocumentOutdated, 'Fetch /legal-documents/current, show the new versions, then submit again.', $requestId)
                 ->toResponse();
         }
 

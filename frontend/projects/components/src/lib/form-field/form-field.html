@@ -64,6 +64,9 @@
   @if (error()) {
     <span class="field__error" [id]="errorId()">{{ error() }}</span>
   }
+  @for (line of helpLines(); track line.id) {
+    <span class="field__help" [id]="line.id">{{ line.text }}</span>
+  }
   <ng-content select="[slot=message]" />
   @if (live()) {
     <span class="visually-hidden" role="status" [id]="fieldId() + '-live'">{{ error() }}</span>

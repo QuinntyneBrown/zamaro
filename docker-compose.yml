@@ -12,6 +12,33 @@ x-api: &api
     redis: { condition: service_healthy }
     mailpit: { condition: service_started }
 
+# The e2e API and its worker: their own database, cache and Redis keys, and the mocks' frozen clock.
+x-e2e-environment: &e2e-environment
+  APP_ENV: e2e
+  DB_DATABASE: zamaro_e2e
+  # Its own cache keys, so rate-limit counters and cached distances are not shared with dev.
+  CACHE_PREFIX: zamaro-e2e-cache-
+  # Its own Redis keys too, so sessions, throttles and queues never meet dev's.
+  REDIS_PREFIX: zamaro-e2e-database-
+  ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
+  # Cookie expiry dates are computed from the frozen clock, so with the 7-day lifetime the browser
+  # would drop the session and XSRF cookies once the real date is a week past it. The idle and
+  # absolute limits are proven in the backend tests with time travel instead.
+  SESSION_LIFETIME: "525600"
+  # Every browser in the suite searches from one address; the limit itself is covered by
+  # SearchRateLimitTest and the limited state by intercepting the response.
+  ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
+  # The same for every API call (L2-077.1): the suite and its server renders share one address.
+  # AnonymousRateLimitTest proves the 120 and 300 a minute.
+  ZAMARO_API_LIMIT_PER_MINUTE: "100000"
+  ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: "100000"
+  # Every spec that registers comes from the same address too; RegisterBookerTest proves the 10.
+  ZAMARO_REGISTER_LIMIT_PER_HOUR: "100000"
+  # Links in emails point at the site the suite drives (playwright.config.ts).
+  ZAMARO_WEB_URL: http://localhost:4000
+  # e2e/fixtures/accounts.ts signs the cast in with the same value (M2 D28).
+  ZAMARO_CAST_PASSWORD: hosanna-in-the-highest
+
 services:
   postgres:
     image: postgres:16
@@ -60,28 +87,19 @@ services:
     # so the overrides below would be dropped and requests would use the dev database and clock.
     command: php artisan serve --host=0.0.0.0 --port=8001 --no-reload
     environment:
+      <<: *e2e-environment
       PHP_CLI_SERVER_WORKERS: "4"
-      APP_ENV: e2e
-      DB_DATABASE: zamaro_e2e
-      # Its own cache keys, so rate-limit counters and cached distances are not shared with dev.
-      CACHE_PREFIX: zamaro-e2e-cache-
-      # Its own Redis keys too, so sessions, throttles and queues never meet dev's.
-      REDIS_PREFIX: zamaro-e2e-database-
-      ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
-      # Cookie expiry dates are computed from the frozen clock, so with the 7-day lifetime the browser
-      # would drop the session and XSRF cookies once the real date is a week past it. The idle and
-      # absolute limits are proven in the backend tests with time travel instead.
-      SESSION_LIFETIME: "525600"
-      # Every browser in the suite searches from one address; the limit itself is covered by
-      # SearchRateLimitTest and the limited state by intercepting the response.
-      ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
-      # The same for every API call (L2-077.1): the suite and its server renders share one address.
-      # AnonymousRateLimitTest proves the 120 and 300 a minute.
-      ZAMARO_API_LIMIT_PER_MINUTE: "100000"
-      ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: "100000"
-      # e2e/fixtures/accounts.ts signs the cast in with the same value (M2 D28).
-      ZAMARO_CAST_PASSWORD: hosanna-in-the-highest
     ports: ["8001:8001"]
+
+  # Runs the e2e API's queued jobs, such as the emails registration sends, on its database, Redis keys
+  # and frozen clock (ADR-0019). After a PHP change, restart it with api-e2e: it keeps the code it
+  # started with.
+  worker-e2e:
+    <<: *api
+    profiles: [e2e]
+    command: php artisan queue:work --queue=high,notifications,default --sleep=1
+    environment:
+      <<: *e2e-environment
 
   worker:
     <<: *api

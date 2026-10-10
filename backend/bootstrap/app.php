@@ -6,6 +6,7 @@ use App\Http\Middleware\EnsureJsonRequest;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\LimitRequestBodySize;
 use App\Http\Middleware\LogRequest;
+use App\Http\Middleware\VerifyBotChallenge;
 use App\Support\Problems\ProblemDetailsRenderer;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -40,7 +41,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // An API with no sign-in page to redirect to: a guest always gets the 401 problem.
         $middleware->redirectGuestsTo(fn () => null);
         // role:artist, role:admin: anyone without the role gets 404 (L2-074.1).
-        $middleware->alias(['role' => EnsureUserHasRole::class]);
+        // bot-challenge:{action}: the forms that send email to any address need a passing bot check (L2-077.4).
+        $middleware->alias(['role' => EnsureUserHasRole::class, 'bot-challenge' => VerifyBotChallenge::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // The app is API-only: every error is RFC 9457 problem details (L2-095.2).

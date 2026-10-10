@@ -68,6 +68,7 @@ test.describe('Registering as a booker', () => {
     await expect(signUp.terms()).toBeDisabled();
     await expect(signUp.terms()).toBeChecked();
     await expect(signUp.news()).toBeDisabled();
+    await expect.poll(() => sent.length).toBe(1);
     await signUp.submitButton().click({ force: true });
     expect(sent).toHaveLength(1);
   });
@@ -168,7 +169,7 @@ test.describe('Registering as a booker', () => {
     await signUp.signInLink().click();
 
     await expect(signIn.heading()).toHaveText('Sign in');
-    await expect(signIn.shell.createAccountLink()).toHaveText('Create account');
+    await expect(signIn.shell.createAccountLink()).toHaveAccessibleName('Create account');
     await signIn.createAccountLink().click();
     await expect(signUp.heading()).toHaveText('Create your account');
     expect(signUp.path()).toBe('/sign-up');

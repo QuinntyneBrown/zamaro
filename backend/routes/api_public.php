@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Accounts\RegistrationController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Api\V1\Discovery\PlaceController;
 use App\Http\Controllers\Api\V1\Discovery\SearchAlternativesController;
 use App\Http\Controllers\Api\V1\Discovery\SearchController;
 use App\Http\Controllers\Api\V1\Operations\FeatureFlagsController;
+use App\Http\Controllers\Api\V1\Privacy\LegalDocumentController;
 use App\Http\Controllers\Api\V1\Reviews\ArtistReviewsController;
 use App\Http\Controllers\Api\V1\UserExperience\TranslationCatalogueController;
 use App\Http\Middleware\SetCachePolicy;
@@ -28,3 +30,6 @@ Route::get('artists/{slug}/tour-dates', [ArtistAvailabilityController::class, 't
 Route::get('sitemap', SitemapController::class)->name('sitemap');
 // Signing in answers with the account, so it is never cached (L2-089.3).
 Route::post('session', [SessionController::class, 'store'])->middleware(SetCachePolicy::class)->name('session.store');
+// Registering answers the same for every valid submission; the bot check runs before validation (L2-077.4).
+Route::post('register', RegistrationController::class)->middleware(['throttle:register', 'bot-challenge:register', SetCachePolicy::class])->name('register');
+Route::get('legal-documents/current', [LegalDocumentController::class, 'current'])->name('legal-documents.current');

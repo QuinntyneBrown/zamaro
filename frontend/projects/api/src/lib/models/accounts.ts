@@ -20,3 +20,36 @@ export interface SignInCredentials {
   email: string;
   password: string;
 }
+
+/** `POST /api/v1/register` (accounts/register-booker). */
+export interface Registration {
+  name: string;
+  email: string;
+  password: string;
+  /** The terms of use and privacy policy box. */
+  acceptedTerms: boolean;
+  /** The separate "Email me about new artists near my church" box. */
+  marketingOptIn: boolean;
+  /** The versions the form showed; the API refuses them with 409 once they are no longer current. */
+  termsVersion: string;
+  privacyPolicyVersion: string;
+  /** The bot challenge provider's single-use token. */
+  challengeToken: string;
+  /** Where the verification link returns to. */
+  returnUrl?: string;
+}
+
+/** One version of a legal document (`GET /api/v1/legal-documents/current`). */
+export interface LegalDocument {
+  /** "2026-10" */
+  version: string;
+  /** ISO date it takes effect. */
+  effectiveFrom: string;
+  url: string;
+  summaryOfChanges: string[];
+}
+
+export interface CurrentLegalDocuments {
+  terms: LegalDocument;
+  privacyPolicy: LegalDocument;
+}

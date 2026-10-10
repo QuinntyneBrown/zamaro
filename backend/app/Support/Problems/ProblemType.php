@@ -14,6 +14,7 @@ enum ProblemType: string
     case ValidationFailed = 'validation-failed';
     case PayloadTooLarge = 'payload-too-large';
     case UnsupportedMediaType = 'unsupported-media-type';
+    case LegalDocumentOutdated = 'legal-document-outdated';
     case TooManyRequests = 'too-many-requests';
     case ServerError = 'server-error';
 
@@ -31,6 +32,7 @@ enum ProblemType: string
             self::ValidationFailed => 422,
             self::PayloadTooLarge => 413,
             self::UnsupportedMediaType => 415,
+            self::LegalDocumentOutdated => 409,
             self::TooManyRequests => 429,
             self::ServerError => 500,
         };
@@ -46,6 +48,7 @@ enum ProblemType: string
             self::ValidationFailed => 'Check the highlighted fields',
             self::PayloadTooLarge => 'The request is too large',
             self::UnsupportedMediaType => 'Send the request as JSON',
+            self::LegalDocumentOutdated => 'The terms have changed',
             self::TooManyRequests => 'Too many requests',
             self::ServerError => 'Something went wrong',
         };

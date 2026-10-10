@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { type Observable, of, throwError } from 'rxjs';
 import type { AuthApi } from '../auth/auth-api';
-import type { CurrentUser, SignInCredentials } from '../models/accounts';
+import type { CurrentUser, Registration, SignInCredentials } from '../models/accounts';
 
 /** Naomi Fraser, the booker in docs/mocks/README.md. */
 export const NAOMI: CurrentUser = {
@@ -41,6 +41,23 @@ export class InMemoryAuthApi implements AuthApi {
   signOut(): Observable<void> {
     if (!this.signedIn) return throwError(() => new HttpErrorResponse({ status: 401 }));
     this.signedIn = null;
+    return of(undefined);
+  }
+
+  /** Accepts every registration, as the API answers alike, except a `fail` bot challenge token. */
+  register({ challengeToken }: Registration): Observable<void> {
+    if (challengeToken === 'fail') {
+      return throwError(
+        () =>
+          new HttpErrorResponse({
+            status: 422,
+            error: {
+              status: 422,
+              errors: { challengeToken: ['We couldn’t check that you’re a person.'] },
+            },
+          }),
+      );
+    }
     return of(undefined);
   }
 

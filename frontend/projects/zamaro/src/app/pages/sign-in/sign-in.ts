@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService, safeReturnUrl, type SessionEndedState } from 'api';
 import {
@@ -40,6 +40,7 @@ type Status = 'idle' | 'submitting' | 'invalid' | 'error';
     ErrorSummary,
     FormField,
     ReactiveFormsModule,
+    RouterLink,
     TranslocoPipe,
   ],
   templateUrl: './sign-in.html',
@@ -56,6 +57,10 @@ export class SignIn {
   protected readonly form = inject(NonNullableFormBuilder).group({ email: '', password: '' });
   protected readonly status = signal<Status>('idle');
   protected readonly sessionEnded = this.route.snapshot.queryParamMap.get('ended') === '1';
+  /** "Create an account" carries the way back on to sign-up. */
+  protected readonly returnQuery = this.returnQueryFrom(
+    this.route.snapshot.queryParamMap.get('returnUrl'),
+  );
   protected readonly busy = computed(() => this.status() === 'submitting');
   protected readonly summaryItems = computed<ErrorSummaryItem[]>(() =>
     this.status() === 'invalid'
@@ -101,6 +106,11 @@ export class SignIn {
         }
       },
     });
+  }
+
+  private returnQueryFrom(returnUrl: string | null): Record<string, string> {
+    const safe = safeReturnUrl(returnUrl);
+    return safe === '/' ? {} : { returnUrl: safe };
   }
 
   private afterRender(callback: () => void): void {

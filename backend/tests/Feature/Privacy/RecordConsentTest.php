@@ -56,7 +56,8 @@ class RecordConsentTest extends TestCase
     {
         $this->register(['marketingOptIn' => true])->assertStatus(202);
 
-        $this->assertTrue((bool) DB::table('consent_records')->where('kind', 'marketing-email')->value('granted'));
+        $ruth = User::where('email', 'ruth.adeyemi@gracepoint.ca')->value('id');
+        $this->assertTrue((bool) DB::table('consent_records')->where('user_id', $ruth)->where('kind', 'marketing-email')->value('granted'));
     }
 
     public function test_versions_that_are_no_longer_current_are_refused_and_nothing_is_written(): void

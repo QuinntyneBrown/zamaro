@@ -1,0 +1,15 @@
+{
+  "duplicate.action": "Sign in",
+  "duplicate.greeting": "Hi {name},",
+  "duplicate.ignore": "If it wasn’t you, there’s nothing to do: your account and password are as they were.",
+  "duplicate.intro": "Someone tried to create a Zamaro account with {email} on {date}. You already have one, so nothing changed.",
+  "duplicate.signIn": "If that was you, sign in instead.",
+  "duplicate.subject": "Someone tried to sign up with your email",
+  "footer": "Zamaro · Worship artists for churches around Toronto · hello@zamaro.ca",
+  "verify.action": "Verify your email",
+  "verify.expiry": "The link works for 24 hours, and only once.",
+  "verify.greeting": "Hi {name},",
+  "verify.ignore": "If you didn’t sign up for Zamaro, ignore this email and nothing will happen.",
+  "verify.intro": "Confirm this is your address to finish signing up. Until you do, you can browse and save artists, but you can’t send a booking request.",
+  "verify.subject": "Verify your email for Zamaro"
+}

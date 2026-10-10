@@ -54,6 +54,11 @@ export class FormField implements ControlValueAccessor {
    * sign-in's "Email or password is incorrect." (text-field CRD D-6). ORed with `error`.
    */
   readonly invalid = input(false, { transform: booleanAttribute });
+  /**
+   * Muted lines after the error, one .field__help each, in order: "12 to 128 characters. Passwords
+   * found in known data breaches are refused." IDs {fieldId}-help, -help-2, … (form-field CRD).
+   */
+  readonly help = input<string | readonly string[]>();
   /** Further IDs that describe the control, after its own ("credentials-error"). */
   readonly describedBy = input<string>();
   /** Announces each change of `error` politely, for a check that runs after the value changes. */
@@ -69,10 +74,25 @@ export class FormField implements ControlValueAccessor {
    */
   readonly messageId = input<string | null>(null);
 
-  /** The slotted message, then the error, then any form-level message: only the parts that render. */
+  /** Each help line with its ID. Help gives way to a slotted message, as the CRD says. */
+  protected readonly helpLines = computed(() => {
+    const help = this.help();
+    if (!help || this.messageId()) return [];
+    return (typeof help === 'string' ? [help] : help).filter(Boolean).map((text, index) => ({
+      id: index ? `${this.fieldId()}-help-${index + 1}` : `${this.fieldId()}-help`,
+      text,
+    }));
+  });
+
+  /** The slotted message, the error, the help, then any form-level message: only the parts that render. */
   protected readonly descriptions = computed(
     () =>
-      [this.messageId(), this.error() ? this.errorId() : null, this.describedBy()]
+      [
+        this.messageId(),
+        this.error() ? this.errorId() : null,
+        ...this.helpLines().map((line) => line.id),
+        this.describedBy(),
+      ]
         .filter(Boolean)
         .join(' ') || null,
   );

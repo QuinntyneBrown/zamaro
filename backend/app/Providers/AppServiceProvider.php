@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\BotChallenge;
+use App\Contracts\BreachedPasswordChecker;
 use App\Contracts\Geocoder;
 use App\Contracts\RoutingProvider;
+use App\Integrations\BotChallenge\FakeBotChallenge;
+use App\Integrations\BreachedPasswords\FakeBreachedPasswordChecker;
 use App\Integrations\Geocoding\FakeGeocoder;
 use App\Integrations\Routing\FakeRoutingProvider;
 use Carbon\CarbonImmutable;
@@ -21,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
     private const FAKES = [
         Geocoder::class => FakeGeocoder::class,
         RoutingProvider::class => FakeRoutingProvider::class,
+        BotChallenge::class => FakeBotChallenge::class,
+        BreachedPasswordChecker::class => FakeBreachedPasswordChecker::class,
     ];
 
     public function register(): void

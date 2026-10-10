@@ -10,7 +10,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
-import { AuthService } from 'api';
+import { AuthService, safeReturnUrl } from 'api';
 import {
   Footer,
   type FooterColumn,
@@ -100,6 +100,9 @@ export class Shell {
   private readonly whatArtistsEarn = translateSignal('common.footer.whatArtistsEarn');
   private readonly yourAccount = translateSignal('common.footer.yourAccount');
   private readonly signIn = translateSignal('common.auth.signIn');
+  private readonly createAccount = translateSignal('common.auth.createAccount');
+  private readonly signUp = translateSignal('common.auth.signUp');
+  private readonly footerCreateAccount = translateSignal('common.footer.createAccount');
   private readonly accountLabel = translateSignal(
     'common.account.open',
     computed(() => ({ name: this.auth.currentUser()?.name ?? '' })),
@@ -110,10 +113,25 @@ export class Shell {
     return user ? { name: user.name, label: this.accountLabel() } : null;
   });
 
-  /** "Sign in", back to this page afterwards. The sign-in page's own "Create account" joins in M2 S5. */
+  /**
+   * "Sign in", back to this page afterwards. On the sign-in page, "Create account" ("Sign up" below
+   * 480 px) instead; between the two pages the way back is passed on, never the pages themselves.
+   */
   protected readonly authLink = computed<TopBarAuth | null>(() => {
     const url = this.url();
-    if (url.split(/[?#]/)[0] === '/sign-in') return null;
+    const [path, query = ''] = url.split('#')[0].split('?');
+    const returnUrl = safeReturnUrl(new URLSearchParams(query).get('returnUrl'));
+    const passedOn = returnUrl === '/' ? {} : { returnUrl };
+    if (path === '/sign-in') {
+      return {
+        label: this.createAccount(),
+        shortLabel: this.signUp(),
+        link: '/sign-up',
+        queryParams: passedOn,
+      };
+    }
+    if (path === '/sign-up')
+      return { label: this.signIn(), link: '/sign-in', queryParams: passedOn };
     return { label: this.signIn(), link: '/sign-in', queryParams: { returnUrl: url } };
   });
 
@@ -141,13 +159,19 @@ export class Shell {
   ]);
 
   /**
-   * Signed out: Sign in (Create an account joins in M2 S5). Signed in: the person's name; their
+   * Signed out: Sign in and Create an account. Signed in: the person's name; their
    * church (S9) and Saved artists (S15) join it.
    */
   private accountColumn(): FooterColumn {
     const user = this.auth.currentUser();
     return user
       ? { heading: user.name, items: [] }
-      : { heading: this.yourAccount(), items: [{ label: this.signIn(), link: '/sign-in' }] };
+      : {
+          heading: this.yourAccount(),
+          items: [
+            { label: this.signIn(), link: '/sign-in' },
+            { label: this.footerCreateAccount(), link: '/sign-up' },
+          ],
+        };
   }
 }

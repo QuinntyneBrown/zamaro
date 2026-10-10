@@ -93,16 +93,18 @@ class RegisterBookerTest extends TestCase
     {
         Notification::fake();
         $naomi = User::where('email', 'naomi.fraser@riversidecc.ca')->firstOrFail();
-        $before = $naomi->only(['name', 'password', 'email_verified_at']);
+        $before = [$naomi->name, $naomi->password, (string) $naomi->email_verified_at];
         $users = User::count();
+        $consents = DB::table('consent_records')->count();
 
         $response = $this->register(['email' => 'Naomi.Fraser@RiversideCC.ca', 'name' => 'Someone Else']);
 
         // The same answer a new address gets: the address, as it will be written to.
         $response->assertStatus(202)->assertExactJson(['data' => ['email' => 'naomi.fraser@riversidecc.ca']]);
         $this->assertSame($users, User::count());
-        $this->assertSame($before, $naomi->fresh()->only(['name', 'password', 'email_verified_at']));
-        $this->assertSame(0, DB::table('consent_records')->where('user_id', $naomi->id)->where('source', 'registration')->count());
+        $after = $naomi->fresh();
+        $this->assertSame($before, [$after->name, $after->password, (string) $after->email_verified_at]);
+        $this->assertSame($consents, DB::table('consent_records')->count());
         Notification::assertSentTo($naomi, DuplicateSignUpNotification::class);
         Notification::assertNotSentTo($naomi, VerifyEmailNotification::class);
     }

@@ -24,6 +24,11 @@
   color: var(--color-danger-fg);
 }
 
+.field__help {
+  font: var(--text-caption);
+  color: var(--color-fg-muted);
+}
+
 .field__optional {
   color: var(--color-fg-muted);
 }

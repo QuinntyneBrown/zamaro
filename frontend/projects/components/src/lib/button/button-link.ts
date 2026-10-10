@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { type ButtonSize, type ButtonVariant, buttonClasses } from './button';
 
@@ -20,6 +26,10 @@ export class ButtonLink {
   readonly queryParams = input<Record<string, string>>({});
   readonly variant = input<ButtonVariant>('secondary');
   readonly size = input<ButtonSize>('md');
+  /** Fills its container: "Keep browsing artists" on the sign-up card. */
+  readonly block = input(false, { transform: booleanAttribute });
 
-  protected readonly classes = computed(() => buttonClasses(this.variant(), this.size()));
+  protected readonly classes = computed(() =>
+    buttonClasses(this.variant(), this.size(), false, this.block()),
+  );
 }

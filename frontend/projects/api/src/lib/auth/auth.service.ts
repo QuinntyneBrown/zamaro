@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { catchError, map, type Observable, of, tap, throwError } from 'rxjs';
-import type { CurrentUser, SignInCredentials } from '../models/accounts';
+import type { CurrentUser, Registration, SignInCredentials } from '../models/accounts';
 import { AUTH_API } from './auth-api';
 
 /**
@@ -46,6 +46,11 @@ export class AuthService {
       ),
       map(() => this.clear()),
     );
+  }
+
+  /** Registers a booker; they stay a guest until they verify and sign in (L2-022.1). */
+  register(registration: Registration): Observable<void> {
+    return this.api.register(registration);
   }
 
   /** Forgets the person on this browser without asking the server. */

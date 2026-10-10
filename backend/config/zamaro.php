@@ -2,6 +2,9 @@
 
 return [
 
+    // Zamaro Web's address, for links in emails, which are sent with no request to take it from.
+    'web_url' => rtrim(env('ZAMARO_WEB_URL', 'http://localhost:4200'), '/'),
+
     // Release version written to every log line (L2-093).
     'release' => env('APP_RELEASE', 'dev'),
 
@@ -25,6 +28,14 @@ return [
         'api_signed_in_per_minute' => (int) env('ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE', 300),
         // L2-077.2, per address and per account. The e2e API raises it too.
         'search_per_minute' => (int) env('ZAMARO_SEARCH_LIMIT_PER_MINUTE', 30),
+        // Registrations per address (M2 D6). The e2e API raises it too.
+        'register_per_hour' => (int) env('ZAMARO_REGISTER_LIMIT_PER_HOUR', 10),
+    ],
+
+    // What the fake vendor adapters answer (ADR-0002).
+    'fakes' => [
+        // Passwords FakeBreachedPasswordChecker reports as breached.
+        'breached_passwords' => ['password1234', 'qwertyuiop123', 'iloveyou1234'],
     ],
 
     'media' => [

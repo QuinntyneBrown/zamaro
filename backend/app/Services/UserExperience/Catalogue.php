@@ -2,6 +2,9 @@
 
 namespace App\Services\UserExperience;
 
+use InvalidArgumentException;
+use MessageFormatter;
+
 /**
  * Translation catalogues in resources/i18n/{locale}/{namespace}.json. A locale exists when its directory
  * does; English is complete and every other locale falls back to it per key (L2-111.2).
@@ -29,6 +32,19 @@ class Catalogue
         ksort($messages);
 
         return $messages;
+    }
+
+    /**
+     * One ICU message, formatted: what the server writes itself, such as an email (L2-111.1).
+     *
+     * @param  array<string, mixed>  $params
+     */
+    public function message(string $key, array $params = [], string $locale = self::FALLBACK): string
+    {
+        $pattern = $this->messages($locale)[$key] ?? throw new InvalidArgumentException("No message {$key} in the catalogue.");
+        $message = MessageFormatter::formatMessage($locale, $pattern, $params);
+
+        return $message === false ? throw new InvalidArgumentException("The message {$key} does not format.") : $message;
     }
 
     /**
