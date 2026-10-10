@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-avatar`, `zm-avatar-button`, `zm-avatar-group` |
 | Library path | `frontend/projects/components/src/lib/avatar/` |
-| Status | planned |
+| Status | built in part (M2 S2): `zm-avatar-button` with initials, `kind`, `label`, `expanded` and `controls`, and `avatarInitials`; planned: `photo` and `loading` on the button, `zm-avatar` and `zm-avatar-group` |
 | Traces to | L2-024, L2-086, L2-088, L2-096, L2-099, L2-100, L2-101, L2-103, L2-104, L2-105, L2-111 |
 | Design system | [`avatar.html`](../../design-system/components/avatar.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`dialogs/account-menu/default`](../../mocks/dialogs/account-menu/default.html), [`dialogs/account-menu/artist`](../../mocks/dialogs/account-menu/artist.html), [`pages/dashboard/default`](../../mocks/pages/dashboard/default.html), [`pages/dashboard/empty`](../../mocks/pages/dashboard/empty.html), [`pages/admin-applications/default`](../../mocks/pages/admin-applications/default.html), [`pages/earnings/setup`](../../mocks/pages/earnings/setup.html), and every signed-in screen (see Usage) |
@@ -485,7 +485,12 @@ simply larger while hovered.
 
 ## Implementation notes
 
-Planned. To build it:
+Built in M2 S2: `avatar-initials.ts` (`avatarInitials`, `AvatarKind`) and
+`avatar-button.ts` (`AvatarButton`), exported from `public-api.ts`, with the
+button's styles inline (the hit area, the hover scale, the ink variant and the
+ring in the top bar through `:host-context(.topbar)`). Its scenario is
+`AvatarButton.ts` (the M2 plan called it `Avatar.ts`; the picture avatar's
+`Avatar.ts` comes with `zm-avatar`). The rest, as planned:
 
 - Folder `frontend/projects/components/src/lib/avatar/`: `avatar.ts` (`Avatar`,
   `zm-avatar`), `avatar-button.ts` (`AvatarButton`, `zm-avatar-button`),

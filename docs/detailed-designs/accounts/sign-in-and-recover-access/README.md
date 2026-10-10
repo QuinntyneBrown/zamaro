@@ -208,6 +208,29 @@ library is `<TO SUPPLY>`. The breached-password service vendor is `<TO SUPPLY>`.
   password. Focus starts in Email.
 - **Not yet:** the card's "Forgot your password?" and "Create an account" links join when those pages
   exist (S8, S5); the lockout is S8 and two-step sign-in S12.
+
+**As built in M2 (S2, signed-in header and sign-out)**
+
+- **Endpoint:** `DELETE /api/v1/session` (`SessionController@destroy`, in `routes/api.php` behind
+  `auth:sanctum`) runs `SignOut`: the web guard logs out, the session is invalidated and the CSRF
+  token regenerated, and the answer is 204 with `Cache-Control: private, no-store`. The cookie the
+  browser held then gets 401 from `/me`; a guest gets the 401 problem. `SessionRegistry` joins
+  `SignOut` with S8, and sign-out is not audited (the design lists no entry for it).
+- **Header and footer (ADR-0017):** the server renders every page signed out. In the browser the shell
+  calls `AuthService.load()` after the first render; once `/me` answers, the top bar shows the
+  `zm-avatar-button` "NF", named "Account menu for Naomi Fraser", and the footer's last column is
+  headed with her name (her church joins in S9, "Saved artists (3)" in S15). Guests see "Sign in" in
+  the header, carrying the page as `returnUrl` (top-bar D-14), and a "Your account" footer column
+  with "Sign in". On `/sign-in` the header has no auth link until "Create account" can go to
+  `/sign-up` (S5).
+- **Account menu:** `dialogs/account-menu/AccountMenuDialog`, a CDK dialog (`zm-dialog
+  variant="menu"`, transparent backdrop) under the top bar's right edge. It lists her name and email
+  in the who header (the dialog's description), Account settings (`/account`, built in S9), a
+  separator and Sign out; focus starts on the first item and returns to the avatar. "Your bookings"
+  waits for M5 and "Saved artists" for S17 (M2 D23).
+- **Sign out:** `AuthService.signOut()` calls `DELETE /api/v1/session`, treats a 401 (the session had
+  already ended) as signed out, clears `currentUser` and dismisses every toast; the header then shows
+  "Sign in".
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

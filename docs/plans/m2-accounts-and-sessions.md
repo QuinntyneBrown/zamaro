@@ -8,14 +8,32 @@
 |---|---|---|---|
 | S0 | Groundwork: Sanctum, Redis sessions, Horizon queues, Mailpit, e2e account fixtures | Done | `dd82204`, `c57df76` (ADR-0015) |
 | S1 | Sign in | Done | `193c96c` red tests, `e2a97ff` (ADR-0016) |
-| S2–S18 | | Not started | |
+| S2 | Signed-in header, account menu and sign-out | Done | `4210c1f` red tests, `23effd2` (ADR-0017) |
+| S3–S18 | | Not started | |
 
-**Checks at the last commit (S1, 2026-10-10):** 135 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown` and Pint are clean; `db:seed` twice on the dev database
-leaves every count unchanged (81 users, 81 role rows); frontend lint, format and `ng build zamaro` are
-clean; `npx playwright test` passes 183 tests on win32, and `npm run test:docker -- visual a11y` passes
-84 in the Linux image. The perf test against the S0 build flags no row; AuthCard (248 ms) and
-ErrorSummary (206 ms) are new at 200 iterations.
+**Checks at the last commit (S2, 2026-10-10):** 139 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown` and Pint are clean; frontend lint, format and
+`ng build zamaro` are clean; `npx playwright test` passes 203 tests on win32 (171 specs, a11y and perf,
+32 visual), and `npm run test:docker -- visual a11y` passes 96 in the Linux image. The perf test
+against the S1 build flags no row; AvatarButton (126 ms), MenuAccount (278 ms) and TopBarSignedIn
+(at 110 iterations) are new.
+
+**S2 acceptance criteria (as tested):**
+- Given Naomi signed in, when she sends `DELETE /api/v1/session`, then she gets 204 (private, no-store),
+  is a guest, the session cookie she held gets 401 from `/me`, and the answer sets a new session ID and
+  CSRF token. A guest gets the 401 `unauthenticated` problem.
+- Given a guest on Discover, then the header shows "Sign in" and the footer's last column is "Your
+  account" with "Sign in". Given a guest on Abigail's profile, when they follow the header's "Sign
+  in" and sign in, then they are back on her profile.
+- Given Naomi signed in, when Discover has loaded in the browser, then the header shows "NF" named
+  "Account menu for Naomi Fraser", no "Sign in", and the footer's last column is headed "Naomi
+  Fraser". The server HTML for her contains neither her name nor her email. At 320 px the initials
+  stay beside the menu button and the page does not scroll sideways.
+- Given the account menu open, then it is named "Account menu for Naomi Fraser", shows her name and
+  email, lists Account settings and Sign out (no "Your bookings"), focuses Account settings, and the
+  avatar is `aria-expanded`. Tab reaches Sign out; Escape closes it and focus returns to the avatar.
+- Given a fresh booker who signs out from the menu, then the header shows "Sign in" and their old
+  session cookie gets 401 from `/me`.
 
 **S1 acceptance criteria (as tested):**
 - Given Naomi's email and password from a web origin, when she signs in, then she gets 200 with her
@@ -82,6 +100,33 @@ ErrorSummary (206 ms) are new at 200 iterations.
   lineup was still growing (3,987 px, then 7,141 px tall); it passed alone three times and in the next
   full run. Watch it; if it recurs, the route state should wait for the lineup rather than for
   network idle.
+
+- **S2 — "Sign in", not "Sign up", after signing out.** L2-023.5 and the mocks show "Sign in" in the
+  signed-out header; the plan's "Sign up" is the sign-in page's own header link ("Create account",
+  "Sign up" below 480 px), which joins with `/sign-up` in S5. Until then `/sign-in` has no auth link.
+- **S2 — The header's "Sign in" carries `returnUrl`.** `TopBarAuth` gained `queryParams` (top-bar
+  CRD D-14) so L2-023.1's way back works from every page. The footer's "Sign in" is a plain link.
+- **S2 — Parts that wait for their screens.** The footer's signed-in column has only Naomi's name
+  until her church (S9) and "Saved artists (3)" (S15); the menu's who line has no church line until
+  S9 (menu CRD D-9, `detail` optional). "Account settings" already links to `/account` (S9), as the
+  slice's behaviour lists it.
+- **S2 — No private routes yet.** `RenderMode.Client` lands with the first private route (S9, S17);
+  ADR-0017 records the rule. Sign-out is not audited: the sign-in design lists no entry for it.
+- **S2 — No CSRF cookie at start-up.** `AuthService.load()` asks `/me` after the first render in the
+  browser; sign-in fetches `/sanctum/csrf-cookie` first and every signed-in answer carries a fresh
+  `XSRF-TOKEN`, so the start-up call the sessions design lists is not needed. S3's recovery covers a
+  stale token.
+- **S2 — Avatar.** Only `zm-avatar-button` and `avatarInitials` are built; its scenario is
+  `AvatarButton.ts` (the avatar CRD's name). `zm-avatar` and its `Avatar.ts` come with their first
+  caller. The top bar's `account="loading"` waits for the first private route.
+- **S2 — The menu dialog is styles only.** Built with `@if` and `ngTemplateOutlet`, `zm-dialog`'s menu
+  variant made the `Dialog` scenario 45 % slower (flagged); the variant now hides the header parts with
+  CSS and renders the same nodes (dialog CRD D-17). `zm-menu` renamed `toggled` to `activated`.
+- **S2 — Visual baselines.** Every baseline was rewritten (`--update-snapshots=all`) on win32 and linux:
+  the header's "Sign in" and the footer column change every page by less than the 0.1 % tolerance at
+  some widths, so a plain update would have kept stale images. Discover states now wait for the
+  lineup's cards (`shows: 'lineup'`) or the sold-out panel before capture: the S1 flake was a capture
+  taken before a late client-side search answered.
 
 ## Context
 

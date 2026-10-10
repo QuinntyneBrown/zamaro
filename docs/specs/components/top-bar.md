@@ -187,6 +187,7 @@ export interface TopBarAuth {
   label: string;                      // "Sign in", or the long form "Create account"
   shortLabel?: string;                // "Sign up": shown below 480 px instead of `label`
   link: string | readonly unknown[];  // "/sign-in", "/sign-up"
+  queryParams?: Params;               // { returnUrl: "/artists/abigail-mensah?date=2026-11-14" } (D-14)
 }
 ```
 
@@ -597,6 +598,7 @@ drawer's slide is the dialog's.
 ### Signed out and loading
 
 - **AC-12** Given a guest on `/apply` with `account` null and `auth` "Sign in", when the bar renders, then there is no Saved link and no avatar, a "Sign in" link to `/sign-in` follows the theme toggle, and "For artists" is current. (L2-102)
+- **AC-12a** Given a guest on Abigail Mensah's profile with `auth` { label "Sign in", link `/sign-in`, queryParams { returnUrl: "/artists/abigail-mensah?date=2026-11-14" } }, when the link is followed, then the address is `/sign-in?returnUrl=%2Fartists%2Fabigail-mensah%3Fdate%3D2026-11-14`. (L2-023)
 - **AC-13** Given the sign-in page with `auth` { label "Create account", shortLabel "Sign up", link `/sign-up` }, when the bar renders at 360 px, then the link shows "Sign up"; at 576 px it shows "Create account"; and its accessible name always matches the visible text. (L2-100)
 - **AC-14** Given a signed-in route before the session is known (`account="loading"`), when the bar renders, then a skeleton circle the avatar's size takes the account button's place with `aria-hidden="true"`; when Naomi's session arrives, then "NF" replaces it with a cumulative layout shift of 0. (L2-105)
 
@@ -639,6 +641,14 @@ drawer's slide is the dialog's.
 - **AC-31** Given the `TopBar` and `TopBarWorkspace` scenarios, when the perf test runs against the base branch with `--fail-on-regression`, then neither is flagged as a possible regression and each renders in its tuned 100–300 ms window. (L2-086)
 
 ## Implementation notes
+
+Built in M2 S2: `account` (without `'loading'`, which comes with the first
+private route), `accountExpanded`, `accountControls`, `auth` (with
+`queryParams`, D-14, and the short and long labels at 30 rem) and the
+`accountOpened` output; the account button is `zm-avatar-button`. The new
+`TopBarSignedIn.ts` scenario renders Naomi's bar without Saved (S15);
+`TopBar.ts` stays the guest bar so its measurements stay comparable. The rest
+of this list is still to do.
 
 The library has `zm-top-bar` with `brand`, `homeLink`, `navLabel`, `links`
 (`label`, `link`, `fragment`), `menuLabel`, `menuExpanded`, `menuControls`,
@@ -692,3 +702,4 @@ Its perf-test scenario renders the guest bar. To meet this CRD:
 - **D-11** *Should the bar render a Saved link on a workspace bar if one is passed?* No. `.topbar--workspace` hides `.topbar__saved` in the design system; the component does not render it and logs a dev-mode error, so a shell mistake is caught rather than shipped.
 - **D-12** *Does the menu button render when there is nothing to collapse?* Yes, always; CSS shows it only below LG (below XL on a workspace bar). Rendering the same DOM at every width keeps server and browser output identical and the breakpoints in CSS.
 - **D-13** *Where does the theme toggle go below LG?* Into the drawer, as the last [menu](menu.md) item with the same name and state; the bar hides `.topbar__theme` below LG. On a workspace bar from LG to XL, where the links are still in the drawer, the toggle shows in both places, as the design-system CSS does; both reflect the one theme.
+- **D-14** *L2-023.1 returns a person to the page they were on after signing in, but `TopBarAuth` had no query parameters, and a `routerLink` string cannot carry one. How does the header's "Sign in" say where the person was?* `TopBarAuth` takes `queryParams`, the same field `TopBarLinkBase` has; the shell passes `{ returnUrl: router.url }`, and the sign-in page keeps only a path on the site (M2 S2).

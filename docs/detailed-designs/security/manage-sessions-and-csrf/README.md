@@ -62,6 +62,13 @@ URLs on one origin.
   render in their signed-out form and the header switches to the signed-in state after
   hydration, when `AuthService` loads `/api/v1/me`.
 
+**As built in M2 (S2)** — the SSR rule is recorded in ADR-0017, with the transfer-cache filter
+(`isTransferCacheable`) that leaves out `/api/v1/me`, `/api/v1/account/**` and
+`/api/v1/saved-artists/**`. `AuthService` loads `/me` once in the browser, after the first render; it
+does not fetch `/sanctum/csrf-cookie` at start-up, because every answer to a signed-in browser carries
+a fresh `XSRF-TOKEN` and sign-in fetches the cookie first. It exposes `signIn`, `signOut`, `clear` and
+`load`.
+
 **Mock screens** — the session-ended state is
 [`pages/sign-in/expired`](../../../mocks/pages/sign-in/expired.html).
 
