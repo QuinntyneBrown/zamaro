@@ -10,6 +10,7 @@ x-api: &api
   depends_on:
     postgres: { condition: service_healthy }
     redis: { condition: service_healthy }
+    mailpit: { condition: service_started }
 
 services:
   postgres:
@@ -35,6 +36,12 @@ services:
       interval: 3s
       retries: 20
 
+  # Catches every email the API and worker send to mailpit:1025. The inbox and its API are on the
+  # host at :8026 (and SMTP at :1026), off Mailpit's defaults, which other local stacks often hold.
+  mailpit:
+    image: axllent/mailpit:v1.27.11
+    ports: ["1026:1025", "8026:8025"]
+
   api:
     <<: *api
     command: php artisan serve --host=0.0.0.0 --port=8000
@@ -58,7 +65,13 @@ services:
       DB_DATABASE: zamaro_e2e
       # Its own cache keys, so rate-limit counters and cached distances are not shared with dev.
       CACHE_PREFIX: zamaro-e2e-cache-
+      # Its own Redis keys too, so sessions, throttles and queues never meet dev's.
+      REDIS_PREFIX: zamaro-e2e-database-
       ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
+      # Cookie expiry dates are computed from the frozen clock, so with the 7-day lifetime the browser
+      # would drop the session and XSRF cookies once the real date is a week past it. The idle and
+      # absolute limits are proven in the backend tests with time travel instead.
+      SESSION_LIFETIME: "525600"
       # Every browser in the suite searches from one address; the limit itself is covered by
       # SearchRateLimitTest and the limited state by intercepting the response.
       ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"

@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
 import type { RouteState } from '../routes.manifest';
+import { signInAs } from './accounts';
 import { freezeClock } from './clock';
 
 /** The wait the rate-limited state is given, as `Retry-After`, as in docs/mocks/pages/discover/limited. */
@@ -16,6 +17,7 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   const profile = new ArtistProfilePage(page);
   const slug = new URL(state.path, 'http://zamaro').pathname.split('/')[2] ?? '';
   await freezeClock(page);
+  if (state.signedInAs) await signInAs(page.context(), state.signedInAs);
 
   switch (state.setup) {
     case 'search-pending':

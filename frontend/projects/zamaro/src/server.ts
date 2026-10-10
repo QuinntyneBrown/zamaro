@@ -15,9 +15,10 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Browser calls to /api go to the Zamaro API. In production the load balancer routes /api before
- * requests reach this server; locally and in e2e this proxy stands in for it. /media is the API's
- * local media disk, which stands in for the CDN until M4 (no object storage in M1).
+ * Browser calls to /api and /sanctum go to the Zamaro API. In production the load balancer routes
+ * them before requests reach this server; locally and in e2e this proxy stands in for it, so the
+ * session cookie stays on the site's own origin (ADR-0015). /media is the API's local media disk,
+ * which stands in for the CDN until M4 (no object storage in M1).
  */
 const apiOrigin = process.env['API_ORIGIN'];
 if (apiOrigin) {
@@ -25,7 +26,7 @@ if (apiOrigin) {
     createProxyMiddleware({
       target: apiOrigin,
       changeOrigin: true,
-      pathFilter: ['/api', '/media'],
+      pathFilter: ['/api', '/sanctum', '/media'],
     }),
   );
 }

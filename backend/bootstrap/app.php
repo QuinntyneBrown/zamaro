@@ -23,6 +23,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // LogRequest is terminable, so it logs the final status after exceptions are rendered.
         $middleware->prepend(AssignRequestId::class);
         $middleware->append(LogRequest::class);
+        // Same-origin cookie sessions (ADR-0015): requests from ZAMARO_WEB_ORIGINS get the session,
+        // cookie encryption and CSRF middleware on the api group; other callers stay stateless.
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // The app is API-only: every error is RFC 9457 problem details (L2-095.2).

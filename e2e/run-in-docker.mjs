@@ -43,6 +43,8 @@ execFileSync(
     '-e',
     'E2E_API_ORIGIN=http://host.docker.internal:8001',
     '-e',
+    'E2E_MAILPIT_URL=http://host.docker.internal:8026',
+    '-e',
     'CI=',
     IMAGE,
     'npx',

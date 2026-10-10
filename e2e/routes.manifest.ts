@@ -1,3 +1,5 @@
+import type { CastMember } from './fixtures/accounts';
+
 /**
  * How a state that the seeded API cannot produce on its own is reached. The browser's requests are
  * held or answered in Playwright and never reach the API (adapt-layout-to-screens).
@@ -22,6 +24,8 @@ export interface RouteState {
   setup?: RouteSetup;
   /** The page whose link leads to `path`, for states reached in the browser. */
   from?: string;
+  /** The cast member whose session the browser holds; signed out when absent. */
+  signedInAs?: CastMember;
 }
 
 /** Naomi's search: Burlington, Sat 14 Nov, a worship night, within 120 km (docs/mocks/README.md). */
