@@ -119,6 +119,16 @@ export class DiscoverPage {
     await this.page.goto('/', { waitUntil: 'networkidle' });
   }
 
+  /** Opens a shared Discover link with these query parameters. */
+  async openLink(params: Record<string, string>): Promise<void> {
+    await this.page.goto(`/?${new URLSearchParams(params)}`, { waitUntil: 'networkidle' });
+  }
+
+  /** The query parameters in the address bar. */
+  urlParams(): URLSearchParams {
+    return new URL(this.page.url()).searchParams;
+  }
+
   /** Translation catalogue requests the browser made itself (the server's own fetch is not seen here). */
   catalogueRequestsFromBrowser(): number {
     return this.catalogueRequests.length;

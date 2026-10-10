@@ -1,7 +1,35 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  untracked,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FormatService, type LineupCard } from 'api';
-import { Alert, Button, ButtonAnchor, Headliner, Icon, Skeleton, Ticket } from 'components';
+import {
+  FormatService,
+  type LineupCard,
+  SEARCH_SORTS,
+  type SearchSort,
+  STYLES,
+  type Style,
+} from 'api';
+import {
+  Alert,
+  Button,
+  ButtonAnchor,
+  Chip,
+  type FieldOption,
+  FormField,
+  Headliner,
+  Icon,
+  Skeleton,
+  Ticket,
+} from 'components';
 import { actLine } from '../../../shared/act-line';
 import { SearchStore } from '../search.store';
 
@@ -28,7 +56,19 @@ const SKELETON_TICKETS = [0, 1, 2, 3];
  */
 @Component({
   selector: 'zm-lineup',
-  imports: [Alert, Button, ButtonAnchor, Headliner, Icon, Skeleton, Ticket, TranslocoPipe],
+  imports: [
+    Alert,
+    Button,
+    ButtonAnchor,
+    Chip,
+    FormField,
+    Headliner,
+    Icon,
+    ReactiveFormsModule,
+    Skeleton,
+    Ticket,
+    TranslocoPipe,
+  ],
   templateUrl: './lineup.html',
   styleUrl: './lineup.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +77,47 @@ export class Lineup {
   protected readonly store = inject(SearchStore);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
+
+  protected readonly styles = STYLES;
+  protected readonly sortControl = new FormControl<string>('closest', { nonNullable: true });
+  protected readonly sorts: FieldOption[] = SEARCH_SORTS.map((sort) => ({
+    value: sort,
+    label: this.t(`discover.sort.${sort}`),
+  }));
+
+  constructor() {
+    effect(() => this.sortControl.setValue(this.store.state().sort, { emitEvent: false }));
+    this.sortControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((sort) => this.store.navigate({ sort: sort as SearchSort }, { replace: true }));
+    // L2-102.2: the summary line is announced politely after each search.
+    const announcer = inject(LiveAnnouncer);
+    effect(() => {
+      if (this.store.status() === 'loaded') {
+        const summary = this.kicker();
+        untracked(() => void announcer.announce(summary, 'polite'));
+      }
+    });
+  }
+
+  protected isPressed(style: Style): boolean {
+    return this.store.state().styles.includes(style);
+  }
+
+  protected toggleStyle(style: Style): void {
+    const styles = this.store.state().styles;
+    const next = styles.includes(style)
+      ? styles.filter((each) => each !== style)
+      : [...styles, style];
+    this.store.navigate(
+      { styles: STYLES.filter((each) => next.includes(each)) },
+      { replace: true },
+    );
+  }
+
+  protected toggleUnder800(): void {
+    this.store.navigate({ under800: !this.store.state().under800 }, { replace: true });
+  }
 
   protected readonly contactHref = `mailto:${CONTACT_EMAIL}`;
   protected readonly statusPage = STATUS_PAGE;

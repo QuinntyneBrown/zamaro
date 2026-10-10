@@ -25,6 +25,29 @@ export class Lineup {
     return this.section();
   }
 
+  sortField(): Locator {
+    return this.section().getByLabel('Sort');
+  }
+
+  async sortBy(label: string): Promise<void> {
+    await this.sortField().selectOption({ label });
+  }
+
+  styleChip(name: string): Locator {
+    return this.section()
+      .getByRole('group', { name: 'Filter by style' })
+      .getByRole('button', { name, exact: true });
+  }
+
+  async toggleStyle(name: string): Promise<void> {
+    await this.styleChip(name).click();
+  }
+
+  /** What the polite live region last announced (L2-102.2). */
+  announcement(): Locator {
+    return this.page.locator('.cdk-live-announcer-element');
+  }
+
   /** The status line announcing what is loading. */
   status(): Locator {
     return this.section().getByRole('status');

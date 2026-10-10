@@ -6,9 +6,36 @@
 >
   <div class="container lineup-section">
     <div class="section__head">
-      <p class="section__kicker">{{ kicker() }}</p>
-      <h2 id="lineup-title">{{ 'discover.lineup.title' | transloco }}</h2>
+      <div>
+        <p class="section__kicker">{{ kicker() }}</p>
+        <h2 id="lineup-title">{{ 'discover.lineup.title' | transloco }}</h2>
+      </div>
+      <zm-form-field
+        class="sort"
+        fieldId="lineup-sort"
+        type="select"
+        [label]="'discover.lineup.sort' | transloco"
+        [options]="sorts"
+        [formControl]="sortControl"
+      />
     </div>
+    <fieldset class="filters">
+      <legend>{{ 'discover.filters.legend' | transloco }}</legend>
+      @for (style of styles; track style) {
+        <zm-chip
+          [pressed]="isPressed(style)"
+          [disabled]="store.status() === 'loading'"
+          (click)="toggleStyle(style)"
+          >{{ t('common.style.' + style) }}</zm-chip
+        >
+      }
+      <zm-chip
+        [pressed]="store.state().under800"
+        [disabled]="store.status() === 'loading'"
+        (click)="toggleUnder800()"
+        >{{ 'discover.filters.under800' | transloco }}</zm-chip
+      >
+    </fieldset>
 
     @if (store.showSkeletons()) {
       <p class="lead">

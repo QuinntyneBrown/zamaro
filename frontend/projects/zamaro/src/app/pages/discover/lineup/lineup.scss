@@ -4,6 +4,37 @@
   gap: var(--space-10);
 }
 
+.section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+}
+
+.sort {
+  min-width: 12rem;
+}
+
+/* L2-097.4: the chips wrap onto as many rows as they need. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.filters > legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+}
+
 .section__kicker {
   display: inline-block;
   margin-bottom: var(--space-2);

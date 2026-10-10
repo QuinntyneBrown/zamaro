@@ -23,7 +23,18 @@ export class HttpDiscoveryApi implements DiscoveryApi {
   private readonly http = inject(HttpClient);
 
   search(query: SearchQuery): Observable<SearchResult> {
-    const params = new HttpParams({ fromObject: { ...query } });
+    let params = new HttpParams({
+      fromObject: {
+        date: query.date,
+        kind: query.kind,
+        lat: query.lat,
+        lng: query.lng,
+        radius: query.radius,
+        sort: query.sort,
+      },
+    });
+    if (query.styles.length) params = params.set('styles', query.styles.join(','));
+    if (query.under800) params = params.set('price', 'under-800');
     return this.http
       .get<{
         data: LineupCard[];

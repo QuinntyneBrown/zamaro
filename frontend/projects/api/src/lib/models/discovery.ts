@@ -14,7 +14,21 @@ export const RADII_KM = [40, 80, 120, 200] as const;
 export type RadiusKm = (typeof RADII_KM)[number];
 
 export type ActType = 'solo' | 'duo' | 'band' | 'choir';
-export type Style = 'band' | 'solo-vocalist' | 'gospel-choir' | 'acoustic' | 'hymns' | 'spanish';
+
+/** The style chips, in their order on Discover (L2-008). */
+export const STYLES = [
+  'band',
+  'solo-vocalist',
+  'gospel-choir',
+  'acoustic',
+  'hymns',
+  'spanish',
+] as const;
+export type Style = (typeof STYLES)[number];
+
+/** How the tickets are ordered (L2-007). */
+export const SEARCH_SORTS = ['closest', 'rating', 'price'] as const;
+export type SearchSort = (typeof SEARCH_SORTS)[number];
 
 /** `GET /api/v1/search` query. */
 export interface SearchQuery {
@@ -24,6 +38,11 @@ export interface SearchQuery {
   lat: number;
   lng: number;
   radius: RadiusKm;
+  sort: SearchSort;
+  /** Any selected style matches. */
+  styles: Style[];
+  /** Only artists whose From price is below $800. */
+  under800: boolean;
 }
 
 export interface Distance {

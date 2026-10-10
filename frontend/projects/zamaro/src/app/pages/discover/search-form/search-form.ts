@@ -2,8 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -40,6 +42,11 @@ export const QUICK_PICK_CITIES = [
 ] as const;
 
 type FieldName = 'date' | 'location';
+
+/** The precision coordinates keep in the address bar (L2-009.4). */
+function roundTo3(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
 
 /**
  * "Your event" (L2-004): date, kind of gathering, church location (typed, or a city chip) and radius.
@@ -94,6 +101,32 @@ export class SearchForm {
         this.place.set(null);
       }
     });
+    // The address bar is the source of truth: show whatever search it holds.
+    effect(() => {
+      const state = this.store.state();
+      untracked(() => {
+        // The place this form already resolved keeps its label ("Burlington, ON") as entered.
+        const current = this.place();
+        const samePlace =
+          current !== null &&
+          current.city === state.place &&
+          roundTo3(current.lat) === state.lat &&
+          roundTo3(current.lng) === state.lng;
+        if (!samePlace) {
+          this.place.set(
+            state.lat !== null && state.lng !== null
+              ? { label: state.place, city: state.place, lat: state.lat, lng: state.lng }
+              : null,
+          );
+        }
+        this.form.setValue({
+          date: state.date,
+          kind: state.kind,
+          location: samePlace ? current.label : state.place,
+          radius: String(state.radius),
+        });
+      });
+    });
   }
 
   protected pickCity(city: string): Promise<void> {
@@ -123,15 +156,16 @@ export class SearchForm {
       return;
     }
     this.place.set(place);
-    this.store.search(
+    this.store.navigate(
       {
         date,
         kind: kind as GatheringKind,
         lat: place.lat,
         lng: place.lng,
+        place: place.city,
         radius: Number(radius) as RadiusKm,
       },
-      place.city,
+      { replace: false },
     );
   }
 

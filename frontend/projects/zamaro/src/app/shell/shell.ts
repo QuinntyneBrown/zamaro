@@ -1,5 +1,3 @@
-import { Dialog } from '@angular/cdk/dialog';
-import { createGlobalPositionStrategy } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -27,25 +25,16 @@ export class Shell {
   protected readonly menuId = 'nav-drawer';
   protected readonly menuOpen = signal(false);
 
-  private readonly dialog = inject(Dialog);
   private readonly injector = inject(Injector);
 
   /**
-   * The drawer traps focus, closes on Escape or the backdrop, and returns focus to the menu button.
-   * It loads on first use: it only shows below LG and only after a tap.
+   * The drawer and the CDK overlay behind it load on first use: the menu only shows below LG and
+   * only after a tap, so they stay out of every page's first download.
    */
   protected async openMenu(): Promise<void> {
-    const { MENU_TITLE_ID, MenuDialog } = await import('../dialogs/menu/menu');
-    const ref = this.dialog.open(MenuDialog, {
-      id: this.menuId,
-      ariaLabelledBy: MENU_TITLE_ID,
-      autoFocus: 'first-tabbable',
-      restoreFocus: true,
-      backdropClass: 'zm-backdrop',
-      positionStrategy: createGlobalPositionStrategy(this.injector).left('0').top('0'),
-    });
+    const { openMenuDialog } = await import('../dialogs/menu/menu');
     this.menuOpen.set(true);
-    ref.closed.subscribe(() => this.menuOpen.set(false));
+    openMenuDialog(this.injector, this.menuId).closed.subscribe(() => this.menuOpen.set(false));
   }
 
   private readonly discover = translateSignal('common.nav.discover');

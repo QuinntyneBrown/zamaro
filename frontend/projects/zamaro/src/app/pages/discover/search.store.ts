@@ -1,7 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { DISCOVERY_API, type SearchQuery, type SearchResult } from 'api';
 import type { Subscription } from 'rxjs';
+import { DEFAULT_STATE, type SearchState, toParams, toQuery } from './search-query-codec';
 
 export type SearchStatus = 'idle' | 'loading' | 'loaded' | 'error' | 'limited';
 
@@ -13,18 +15,20 @@ export const SLOW_SEARCH_MS = 8000;
 const DEFAULT_RETRY_SECONDS = 60;
 
 /**
- * The Discover search: what was asked, where, and how it went. A failure keeps the criteria and
- * counts consecutive failures (L2-106); a 429 counts down from Retry-After (L2-077) but never
- * retries on its own.
+ * The Discover search. The address bar is the source of truth (L2-009): the page loads each state
+ * from it, and every change navigates. A failure keeps the criteria and counts consecutive
+ * failures (L2-106); a 429 counts down from Retry-After (L2-077) but never retries on its own.
  */
 @Injectable()
 export class SearchStore {
   private readonly api = inject(DISCOVERY_API);
+  private readonly router = inject(Router);
 
+  /** The criteria in the address bar, complete or not. */
+  readonly state = signal<SearchState>(DEFAULT_STATE);
   readonly status = signal<SearchStatus>('idle');
+  /** The search that ran, when the state was complete enough to run one. */
   readonly query = signal<SearchQuery | null>(null);
-  /** The town the search ran from, as the poster says it: "Burlington". */
-  readonly placeName = signal('');
   readonly result = signal<SearchResult | null>(null);
   /** True once a search has been loading for 300 ms: show skeletons, mark the region busy. */
   readonly showSkeletons = signal(false);
@@ -42,10 +46,34 @@ export class SearchStore {
     inject(DestroyRef).onDestroy(() => this.stopTimers());
   }
 
-  search(query: SearchQuery, placeName: string): void {
-    this.query.set(query);
-    this.placeName.set(placeName);
-    this.run();
+  /** The town the search ran from, as the poster says it: "Burlington". */
+  placeName(): string {
+    return this.state().place;
+  }
+
+  /** Takes a state from the address bar; searches when it is complete and `search` is set. */
+  load(state: SearchState, search: boolean): void {
+    this.state.set(state);
+    const query = toQuery(state);
+    if (query && search) {
+      this.query.set(query);
+      this.run();
+    }
+  }
+
+  /**
+   * Moves to a new state through the address bar. "Show the lineup" adds a history entry; a sort
+   * or chip change replaces it, so Back does not step through every chip.
+   */
+  navigate(change: Partial<SearchState>, options: { replace: boolean }): void {
+    const next = { ...this.state(), ...change };
+    const params = toParams(next);
+    const unchanged = JSON.stringify(toParams(this.state())) === JSON.stringify(params);
+    if (unchanged && this.query()) {
+      this.retry();
+      return;
+    }
+    void this.router.navigate(['/'], { queryParams: params, replaceUrl: options.replace });
   }
 
   /** Try again: the same search. */

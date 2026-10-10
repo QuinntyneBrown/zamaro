@@ -1,10 +1,26 @@
-import { DialogRef } from '@angular/cdk/dialog';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { Dialog as CdkDialog, DialogRef } from '@angular/cdk/dialog';
+import { createGlobalPositionStrategy } from '@angular/cdk/overlay';
+import { ChangeDetectionStrategy, Component, computed, inject, type Injector } from '@angular/core';
 import { translateSignal } from '@jsverse/transloco';
 import { Dialog, Menu, type MenuItem } from 'components';
 import { ThemeService } from '../../shell/theme.service';
 
 export const MENU_TITLE_ID = 'menu-title';
+
+/**
+ * Opens the drawer at the left edge. It traps focus, closes on Escape or the backdrop, and
+ * returns focus to the menu button (L2-101.4).
+ */
+export function openMenuDialog(injector: Injector, id: string): DialogRef<unknown, MenuDialog> {
+  return injector.get(CdkDialog).open(MenuDialog, {
+    id,
+    ariaLabelledBy: MENU_TITLE_ID,
+    autoFocus: 'first-tabbable',
+    restoreFocus: true,
+    backdropClass: 'zm-backdrop',
+    positionStrategy: createGlobalPositionStrategy(injector).left('0').top('0'),
+  });
+}
 
 /** The navigation drawer below LG (docs/mocks/dialogs/menu): primary links, then the theme toggle. */
 @Component({
