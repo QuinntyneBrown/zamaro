@@ -80,6 +80,30 @@ export class Shell {
     await this.page.keyboard.press('Enter');
   }
 
+  async useWidth(width: number): Promise<void> {
+    await this.page.setViewportSize({ width, height: 800 });
+  }
+
+  /** Paints the page as a device set to `theme` would, with nothing stored on it. */
+  async useSystemTheme(theme: Theme): Promise<void> {
+    await this.page.emulateMedia({ colorScheme: theme });
+  }
+
+  /** Follows the page's link to `path`, so the next page is rendered in the browser. */
+  async followLinkTo(path: string): Promise<void> {
+    await this.page.locator(`a[href="${path}"]`).first().click();
+  }
+
+  /** Loads every image now, lazy or not, and waits for the images and web fonts to be ready. */
+  async settle(): Promise<void> {
+    await this.page.evaluate(async () => {
+      const images = [...document.images];
+      images.forEach((image) => (image.loading = 'eager'));
+      await Promise.all(images.map((image) => image.decode().catch(() => undefined)));
+      await document.fonts.ready;
+    });
+  }
+
   /** How far the page is scrolled down, in CSS pixels. */
   async scrollTop(): Promise<number> {
     return this.page.evaluate(() => Math.round(window.scrollY));

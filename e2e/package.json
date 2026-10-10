@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "playwright test",
+    "test:docker": "node run-in-docker.mjs",
     "perf-test": "node perf-test/perf-test.mjs"
   },
   "devDependencies": {

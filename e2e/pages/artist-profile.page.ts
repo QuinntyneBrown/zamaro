@@ -60,6 +60,11 @@ export class ArtistProfilePage {
     });
   }
 
+  /** The profile request is held and never answered, so the page keeps loading. */
+  async holdProfile(slug: string): Promise<void> {
+    await this.page.route(profileUrl(slug), () => new Promise<void>(() => undefined));
+  }
+
   async restoreProfile(slug: string): Promise<void> {
     await this.page.unroute(profileUrl(slug));
   }

@@ -31,6 +31,11 @@ export class DiscoverPage {
     });
   }
 
+  /** Every search is held and never answered, so the lineup keeps loading. */
+  async holdSearches(): Promise<void> {
+    await this.page.route('**/api/v1/search?*', () => new Promise<void>(() => undefined));
+  }
+
   /** Every search fails as if the network dropped. */
   async failSearches(): Promise<void> {
     await this.page.route('**/api/v1/search?*', (route) => route.abort('connectionfailed'));
