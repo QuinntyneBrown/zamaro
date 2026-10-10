@@ -43,14 +43,19 @@ dispatched and where their results are seen.
 
 - **`RetriesWithBackoff`** — trait used by every job and queued notification. It sets
   `$tries = 6`, one attempt plus up to 5 retries, and `backoff()` returns 5 delays that
-  grow exponentially. Base delay, multiplier and jitter are `<TO SUPPLY>`.
+  grow exponentially: 10, 30, 90, 270 and 810 seconds (base 10 s, factor 3), each varied
+  by up to ±10 % when the job is queued, so jobs that failed together do not retry
+  together (M2 D17; `App\Jobs\Concerns\RetriesWithBackoff`, built in M2 S6).
 - **Horizon supervisors** — process the queues in priority order. Queue names and
   process counts are `<TO SUPPLY>`; payment, webhook and CDN-purge jobs run on a
   high-priority queue.
 - **`ReportFailedJob`** — listener for Laravel's `JobFailed` event, fired when a job
   exhausts its attempts. Laravel stores the job in `failed_jobs` (`database-uuids`
-  driver). The listener reports the exception with the job name, request ID and
-  release version, and raises a "job failed" alert through `OnCallAlerter`. The on-call
+  driver). The listener (`App\Listeners\Operations\ReportFailedJob`) reports the
+  exception through `ErrorReporter` with the job name, queue, attempts, request ID and
+  release version, and raises a `job-failed` alert of severity Critical through
+  `OnCallAlerter`, naming the job and the request. Both ports live in `app/Contracts`
+  with fakes that redact and record each call until M10 (ADR-0002). The on-call
   person re-runs the job with `queue:retry` once the cause is fixed.
 
 Domain retries are separate from job retries. A failed balance charge is retried after

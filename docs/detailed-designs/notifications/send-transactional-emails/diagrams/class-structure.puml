@@ -25,7 +25,7 @@ package "Zamaro Web (Angular)" {
 package "Zamaro API and Worker (Laravel)" {
   abstract class TransactionalNotification <<notification>> {
     +string queue = "notifications"
-    +int tries = 5
+    +int tries = 6
     +backoff(): int[]
     +via(user: User): string[]
     +shouldSend(user: User, channel: string): bool

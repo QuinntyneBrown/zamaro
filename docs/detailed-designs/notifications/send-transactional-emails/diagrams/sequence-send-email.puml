@@ -42,8 +42,8 @@ else deliverable
   notif -> email : Send
   alt transient failure
     email --> notif : 429 or 5xx
-    notif -> notif : Retry with exponential backoff, up to 5 tries (L2-065)
-    opt fifth failure
+    notif -> notif : Retry with exponential backoff, up to 5 retries (L2-065)
+    opt sixth failed attempt
       notif -> db : EmailMessage Failed; failed-jobs store
       notif -> notif : Alert on-call (L2-092)
     end

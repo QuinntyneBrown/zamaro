@@ -12,13 +12,27 @@
 | S3 | CSRF and session limits | Done | `81b4823` red tests, `82f6684` (ADR-0018) |
 | S4 | The request gate | Done | `c9d2d56` red tests, `1014b36` |
 | S5 | Register a booker, with consent | Done | `690da3b` red tests, `c6902ed` (ADR-0019) |
-| S6–S18 | | Not started | |
+| S6 | Email delivery rules and failed jobs | Done | `cd08f71` red tests, `dc02dc1` |
+| S7–S18 | | Not started | |
 
-**Checks at the last commit (S5, 2026-10-10):** 193 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown`, Pint and Larastan are clean; frontend lint, format and
-`ng build zamaro` are clean; `npx playwright test` passes 228 tests on win32, and
-`npm run test:docker -- visual a11y` passes 108 in the Linux image. The perf run against the S3 build
-flagged no row (Checkbox 146 ms at 200 iterations is new; FormField 140 ms, ButtonLink 174 ms).
+**Checks at the last commit (S6, 2026-10-10):** 206 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean;
+`npx playwright test` passes 228 tests on win32. S6 changed no frontend code or `zm-*` component, so
+the frontend checks, the Linux baselines and the perf run stand as S5 left them.
+
+**S6 acceptance criteria (as tested):**
+- Given the mail server refuses every send, when `VerifyEmailNotification` runs, then it is released
+  on `notifications` after about 10, 30, 90, 270 and 810 s (each within ±10 %), is not tried before
+  its delay, and after the 6th failed attempt leaves the queue for `failed_jobs` (a UUID, the
+  `database` connection, the `notifications` queue, the transport exception).
+- Given that 6th failure, then `ErrorReporter` gets the exception with the request ID that queued the
+  job, the release, the job name, queue and attempts, and `OnCallAlerter` gets one Critical
+  `job-failed` alert naming the job and the request. A send that succeeds on a retry is neither stored
+  nor reported. The fakes record what they are sent after redaction.
+- Given every Zamaro email, then it has HTML and plain-text parts and no card number.
+- Given `php artisan i18n:check`, then the repository's emails pass; a literal "Welcome" in an email
+  view, a literal subject in a notification class, or a key missing from the English catalogue fails
+  with the file and line. Blade comments, echoes and mail components are not text.
 
 **S5 acceptance criteria (as tested):**
 - Given a guest with a full name, an email, a 12–128 character password, the terms box ticked, the
@@ -290,6 +304,27 @@ flagged no row (Checkbox 146 ms at 200 iterations is new; FormField 140 ms, Butt
   its links, so every visual baseline was rewritten on win32 and linux (`--update-snapshots=all`).
   One a11y run in the Linux image timed out once on `discover-results-naomi` (dark, XL) and passed alone
   and in the next full run; watch it as S1's Discover flake was watched.
+- **S6 — `failed_jobs` already existed** with the `uuid` column and the `database-uuids` driver from
+  Laravel's skeleton, so no migration was needed. Horizon's supervisors keep `tries => 1`, which only
+  applies to a job that sets none; `RetriesWithBackoff` sets 6 on every job and email.
+- **S6 — Jitter is drawn when the job is queued.** Laravel writes `backoff()` into the payload at
+  dispatch, so one job's five delays are fixed then; jobs queued together still spread out.
+- **S6 — The request ID travels in the job.** Laravel's Context is serialised into every payload and
+  restored when the worker picks the job up, so `ReportFailedJob` reads the queuing request's ID.
+- **S6 — `Alert` and `AlertSeverity`.** `OnCallAlerter::raise(Alert)` takes the monitor-health design's
+  value object (key, summary, severity, context); job failures are `job-failed`, Critical.
+  `ErrorReporter::report()` takes the exception, request ID, release and a context map. Both ports and
+  `Alert` live in `app/Contracts`; the fakes are in `Integrations/{ErrorTracking, Alerting}` and use
+  `RedactSensitiveData::redact()`, now public.
+- **S6 — What `i18n:check` reads.** Emails print only variables built from the catalogue
+  (ADR-0019), so the check reads `copy()` (the `emails` namespace), `message()` and `@t` for keys,
+  any letters left in a view once Blade comments, echoes, directives, tags and entities are set aside,
+  and literals passed to `MailMessage` text methods. Frontend keys and text are the existing
+  `zamaro/no-hardcoded-text` ESLint rule's job. The scanned folders are `zamaro.i18n.check.*`, so the
+  test points them at fixtures.
+- **S6 — Load and the 5 s waits.** A full e2e run made while the backend suite and PlantUML ran beside
+  it failed 8 Discover and profile specs on 5 s waits for search answers; the same tree passed all 228
+  alone. Run the e2e suite on a quiet machine.
 - **S4 — The ESLint bans** cover `bypassSecurityTrust*` and `[innerHTML]`/`[outerHTML]`, inline
   templates included; nothing in the app needed an exception.
 
@@ -391,7 +426,7 @@ shown and are recorded in the slice's ADR or the design.
 | D14 | Most recent search date: per browser or per account (view-saved-artists) | Per browser: `LastSearch` writes `localStorage['zamaro.lastSearchDate']` | OK |
 | D15 | Does a new privacy-policy version trigger the terms gate? (record-consent) | No. Only Terms do (L2-080.3); the privacy version is recorded at registration | OK |
 | D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK (accepted default, 2026-10-10); built in S5 (ADR-0019) |
-| D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | |
+| D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | OK (accepted default, 2026-10-10); built in S6 |
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
 | D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | OK (accepted default, 2026-10-10); `{email}` built in S1, the options join with their slices |
 | D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | |
