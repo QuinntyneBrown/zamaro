@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\OpenApi\ProblemDetailsResponses;
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
 
 return [
@@ -153,7 +154,7 @@ return [
         RestrictedDocsAccess::class,
     ],
 
-    'extensions' => [\App\Support\OpenApi\ProblemDetailsResponses::class],
+    'extensions' => [ProblemDetailsResponses::class],
 
     /*
      * Automatically document API security (OpenAPI `security` / `securitySchemes`) based on route
