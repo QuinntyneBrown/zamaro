@@ -39,6 +39,7 @@
   "lineup.checking": "{date} · checking calendars",
   "lineup.finding": "Finding who’s free on {date}…",
   "lineup.listLabel": "Artists free {date}",
+  "lineup.more": "Show more artists",
   "lineup.moreLabel": "More artists free {date}",
   "lineup.paused": "{date} · search paused",
   "lineup.slow": "Still checking — thanks for waiting.",

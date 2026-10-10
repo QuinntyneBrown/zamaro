@@ -25,6 +25,14 @@ export class Lineup {
     return this.section();
   }
 
+  showMoreButton(): Locator {
+    return this.section().getByRole('button', { name: 'Show more artists' });
+  }
+
+  async showMore(): Promise<void> {
+    await this.showMoreButton().click();
+  }
+
   sortField(): Locator {
     return this.section().getByLabel('Sort');
   }
@@ -124,6 +132,10 @@ export class Headliner {
 
 export class Ticket {
   constructor(private readonly card: Locator) {}
+
+  static at(lineup: Lineup, index: number): Ticket {
+    return new Ticket(lineup.tickets().nth(index));
+  }
 
   /** "No. 01". */
   position(): Locator {

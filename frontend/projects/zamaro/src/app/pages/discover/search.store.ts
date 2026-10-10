@@ -34,6 +34,7 @@ export class SearchStore {
   readonly showSkeletons = signal(false);
   readonly slow = signal(false);
   readonly consecutiveFailures = signal(0);
+  readonly loadingMore = signal(false);
   /** The wait the API asked for, and the seconds still to go. */
   readonly retryAfter = signal(0);
   readonly retryIn = signal(0);
@@ -79,6 +80,31 @@ export class SearchStore {
   /** Try again: the same search. */
   retry(): void {
     if (this.query()) this.run();
+  }
+
+  /** Appends the next page of tickets (L2-010); resolves with how many came. */
+  loadMore(): Promise<number> {
+    const query = this.query();
+    const result = this.result();
+    if (!query || !result?.nextCursor || this.loadingMore()) return Promise.resolve(0);
+    this.loadingMore.set(true);
+    return new Promise((resolve) => {
+      this.api.search({ ...query, cursor: result.nextCursor! }).subscribe({
+        next: (page) => {
+          this.result.set({
+            ...result,
+            cards: [...result.cards, ...page.cards],
+            nextCursor: page.nextCursor,
+          });
+          this.loadingMore.set(false);
+          resolve(page.cards.length);
+        },
+        error: () => {
+          this.loadingMore.set(false);
+          resolve(0);
+        },
+      });
+    });
   }
 
   private run(): void {

@@ -35,17 +35,19 @@ export class HttpDiscoveryApi implements DiscoveryApi {
     });
     if (query.styles.length) params = params.set('styles', query.styles.join(','));
     if (query.under800) params = params.set('price', 'under-800');
+    if (query.cursor) params = params.set('cursor', query.cursor);
     return this.http
       .get<{
         data: LineupCard[];
         headliner: HeadlinerCard | null;
-        meta: { total: number };
+        meta: { total: number; nextCursor: string | null };
       }>('/api/v1/search', { params })
       .pipe(
         map((response) => ({
           headliner: response.headliner,
           cards: response.data,
           total: response.meta.total,
+          nextCursor: response.meta.nextCursor,
         })),
       );
   }

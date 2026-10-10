@@ -43,6 +43,8 @@ export interface SearchQuery {
   styles: Style[];
   /** Only artists whose From price is below $800. */
   under800: boolean;
+  /** The previous page's `nextCursor`; absent for the first page. */
+  cursor?: string;
 }
 
 export interface Distance {
@@ -84,6 +86,8 @@ export interface SearchResult {
   cards: LineupCard[];
   /** Everyone free, the headliner included. */
   total: number;
+  /** Pass as `cursor` for the next page; null on the last page (L2-010). */
+  nextCursor: string | null;
 }
 
 /** A town's centre point from `GET /api/v1/places`. */

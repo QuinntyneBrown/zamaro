@@ -7,7 +7,12 @@ export class InMemoryDiscoveryApi implements DiscoveryApi {
   readonly searches: SearchQuery[] = [];
 
   constructor(
-    private readonly result: SearchResult = { headliner: null, cards: [], total: 0 },
+    private readonly result: SearchResult = {
+      headliner: null,
+      cards: [],
+      total: 0,
+      nextCursor: null,
+    },
     private readonly places: readonly Place[] = [],
   ) {}
 

@@ -144,6 +144,11 @@
           }
         </ol>
       }
+      @if (store.result()?.nextCursor) {
+        <zm-button class="more" size="lg" [busy]="store.loadingMore()" (click)="showMore()">{{
+          'discover.lineup.more' | transloco
+        }}</zm-button>
+      }
     }
   </div>
 </section>

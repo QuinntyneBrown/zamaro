@@ -1,10 +1,13 @@
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
+  Injector,
   untracked,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -77,6 +80,8 @@ export class Lineup {
   protected readonly store = inject(SearchStore);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
 
   protected readonly styles = STYLES;
   protected readonly sortControl = new FormControl<string>('closest', { nonNullable: true });
@@ -98,6 +103,20 @@ export class Lineup {
         untracked(() => void announcer.announce(summary, 'polite'));
       }
     });
+  }
+
+  /** Appends the next page and moves focus to its first ticket (L2-010.2). */
+  protected async showMore(): Promise<void> {
+    const firstNew = this.tickets().length;
+    if (!(await this.store.loadMore())) return;
+    afterNextRender(
+      () =>
+        this.host.nativeElement
+          .querySelectorAll<HTMLElement>('.lineup > li')
+          [firstNew]?.querySelector<HTMLElement>('a')
+          ?.focus(),
+      { injector: this.injector },
+    );
   }
 
   protected isPressed(style: Style): boolean {
