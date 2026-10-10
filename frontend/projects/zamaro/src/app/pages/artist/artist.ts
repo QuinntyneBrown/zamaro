@@ -1,5 +1,13 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, Injector } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  Injector,
+} from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -14,6 +22,8 @@ import {
   EmptyState,
   Icon,
   Marquee,
+  Rating,
+  Review,
   Setlist,
   Skeleton,
   VideoCard,
@@ -21,14 +31,19 @@ import {
 import { map } from 'rxjs';
 import { LastSearch } from '../../shared/last-search';
 import { ArtistProfileStore } from './artist-profile.store';
+import { ProfileReviewsStore } from './profile-reviews.store';
 
 /** Songs shown in the strip under the header (L2-012.1). */
 const STRIP_SONGS = 5;
 
+/** Reviews each "Show more" adds (L2-018.2). */
+const REVIEWS_PER_PAGE = 10;
+
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
- * of songs, About, videos, photos and the setlist. A `?date=` carried from Discover names the date
- * on the back link and the Book button (L2-012.2). Reviews and the booking stub join later.
+ * of songs, About, videos, photos, the setlist and what churches say. A `?date=` carried from
+ * Discover names the date on the back link and the Book button (L2-012.2). The booking stub joins
+ * later.
  */
 @Component({
   selector: 'zm-artist-page',
@@ -41,12 +56,14 @@ const STRIP_SONGS = 5;
     EmptyState,
     Icon,
     Marquee,
+    Rating,
+    Review,
     Setlist,
     Skeleton,
     TranslocoPipe,
     VideoCard,
   ],
-  providers: [ArtistProfileStore],
+  providers: [ArtistProfileStore, ProfileReviewsStore],
   host: { '[attr.aria-busy]': "store.showSkeletons() ? 'true' : null" },
   templateUrl: './artist.html',
   styleUrl: './artist.scss',
@@ -54,12 +71,14 @@ const STRIP_SONGS = 5;
 })
 export class ArtistPage {
   protected readonly store = inject(ArtistProfileStore);
+  protected readonly reviewsStore = inject(ProfileReviewsStore);
   private readonly lastSearch = inject(LastSearch);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
   private readonly route = inject(ActivatedRoute);
   private readonly injector = inject(Injector);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** The search date carried from Discover, when it is a real date. */
   private readonly date = toSignal(
@@ -218,6 +237,53 @@ export class ArtistPage {
       key: this.keyLabel(song.key),
     })),
   );
+
+  protected readonly ratingCount = computed(() =>
+    this.t('common.rating.churches', { count: this.store.profile()!.reviewCount }),
+  );
+
+  /** Each review as the card shows it, with the month and reply line formatted (L2-110). */
+  protected readonly reviews = computed(() =>
+    this.reviewsStore.reviews().map((review) => ({
+      id: review.id,
+      quote: review.text,
+      stars: review.stars,
+      starsLabel: this.t('artist.reviews.stars', { n: review.stars }),
+      reviewer: review.attribution.reviewerName,
+      source: this.t('artist.reviews.source', {
+        church: review.attribution.churchName,
+        city: review.attribution.city,
+        month: this.format.monthYear(review.attribution.month),
+      }),
+      reply: review.reply?.text ?? null,
+      replyMeta: review.reply
+        ? this.t('artist.reviews.replyMeta', {
+            name: review.reply.artistName,
+            month: this.format.monthYear(review.reply.month),
+          })
+        : '',
+    })),
+  );
+
+  /** "Show all 38 reviews" from the profile's first few, then "Show 10 more" (or fewer at the end). */
+  protected readonly moreReviewsLabel = computed(() => {
+    const shown = this.reviews().length;
+    const total = this.reviewsStore.total();
+    return shown <= this.store.profile()!.reviews.items.length
+      ? this.t('artist.reviews.showAll', { count: total })
+      : this.t('artist.reviews.more', { count: Math.min(REVIEWS_PER_PAGE, total - shown) });
+  });
+
+  /** Appends the next reviews and moves focus to the first new one (L2-018.2, L2-101). */
+  protected async showMoreReviews(): Promise<void> {
+    const firstNew = this.reviews().length;
+    if (!(await this.reviewsStore.loadMore())) return;
+    afterNextRender(
+      () =>
+        this.host.nativeElement.querySelectorAll<HTMLElement>('.reviews > li')[firstNew]?.focus(),
+      { injector: this.injector },
+    );
+  }
 
   /** The viewer loads on first use; it returns focus to the photo that opened it (L2-015.2). */
   protected async openPhoto(index: number): Promise<void> {

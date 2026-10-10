@@ -122,6 +122,59 @@
         </div>
         <zm-setlist [songs]="songs()" />
       </section>
+      <section class="section" aria-labelledby="reviews-title">
+        <div class="section__head">
+          <div>
+            <p class="section__kicker">{{ 'artist.reviews.kicker' | transloco }}</p>
+            <h2 id="reviews-title">{{ 'artist.reviews.title' | transloco }}</h2>
+          </div>
+          @if (reviews().length && profile.rating !== null) {
+            <p>
+              <zm-rating
+                variant="summary"
+                [score]="profile.rating"
+                [label]="ratingLabel()"
+                [countText]="ratingCount()"
+              />
+            </p>
+          }
+        </div>
+        @if (reviews().length) {
+          <ul class="reviews" role="list">
+            @for (review of reviews(); track review.id) {
+              <li tabindex="-1">
+                <zm-review
+                  [quote]="review.quote"
+                  [stars]="review.stars"
+                  [starsLabel]="review.starsLabel"
+                  [reviewer]="review.reviewer"
+                  [source]="review.source"
+                  [reply]="review.reply"
+                  [replyMeta]="review.replyMeta"
+                />
+              </li>
+            }
+          </ul>
+          @if (reviewsStore.nextCursor()) {
+            <div class="cluster reviews-more">
+              <zm-button [busy]="reviewsStore.loadingMore()" (click)="showMoreReviews()">{{
+                moreReviewsLabel()
+              }}</zm-button>
+            </div>
+          }
+        } @else {
+          <zm-empty-state
+            [quiet]="true"
+            [stamp]="'artist.reviews.empty.stamp' | transloco"
+            [heading]="'artist.reviews.empty.title' | transloco"
+          >
+            <p>{{ t('artist.reviews.empty.body', { name: profile.firstName }) }}</p>
+            <zm-button slot="actions" variant="primary" (click)="book()">{{
+              t('artist.reviews.empty.book', { pronoun: profile.pronoun })
+            }}</zm-button>
+          </zm-empty-state>
+        }
+      </section>
     </div>
   </div>
 } @else if (store.status() === 'error') {

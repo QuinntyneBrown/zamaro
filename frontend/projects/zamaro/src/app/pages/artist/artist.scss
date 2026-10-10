@@ -140,6 +140,19 @@
   cursor: zoom-in;
 }
 
+// Reviews: one per row below MD, two from MD; each item keeps its reply under its own card (L2-098).
+.reviews {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  list-style: none;
+  padding: 0;
+}
+
+.reviews-more {
+  margin-top: var(--space-6);
+}
+
 .page-error {
   padding-block: var(--space-10);
 }
@@ -165,6 +178,10 @@
 
   .photo-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .reviews {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

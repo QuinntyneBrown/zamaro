@@ -9,6 +9,7 @@
   "footer.tagline": "Worship artists for churches around Toronto.",
   "footer.whatArtistsEarn": "What artists earn",
   "format.date.long": "{weekday} {day} {month} {year}",
+  "format.date.monthYear": "{month} {year}",
   "format.date.short": "{weekday} {day} {month}",
   "format.date.shortWithYear": "{weekday} {day} {month} {year}",
   "format.distance.about": "about {km} km",

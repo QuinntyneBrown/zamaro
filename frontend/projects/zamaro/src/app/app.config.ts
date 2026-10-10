@@ -11,7 +11,9 @@ import {
   DISCOVERY_API,
   HttpArtistProfilesApi,
   HttpDiscoveryApi,
+  HttpReviewsApi,
   provideI18n,
+  REVIEWS_API,
 } from 'api';
 import { routes } from './app.routes';
 
@@ -25,5 +27,6 @@ export const appConfig: ApplicationConfig = {
     provideI18n(),
     { provide: DISCOVERY_API, useClass: HttpDiscoveryApi },
     { provide: ARTIST_PROFILES_API, useClass: HttpArtistProfilesApi },
+    { provide: REVIEWS_API, useClass: HttpReviewsApi },
   ],
 };

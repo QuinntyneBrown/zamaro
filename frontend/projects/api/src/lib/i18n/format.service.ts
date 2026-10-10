@@ -42,6 +42,14 @@ export class FormatService {
     );
   }
 
+  /** "September 2026", from a `YYYY-MM` month. */
+  monthYear(month: string): string {
+    return this.transloco.translate(
+      'common.format.date.monthYear',
+      this.parts(`${month}-01` as CalendarDate, { month: 'long', year: 'numeric' }),
+    );
+  }
+
   /** "Saturday". */
   weekday(date: CalendarDate): string {
     return this.parts(date, { weekday: 'long' })['weekday'];

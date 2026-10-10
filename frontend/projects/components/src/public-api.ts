@@ -21,6 +21,7 @@ export * from './lib/marquee/marquee';
 export * from './lib/menu/menu';
 export * from './lib/poster/poster';
 export * from './lib/rating/rating';
+export * from './lib/review/review';
 export * from './lib/setlist/setlist';
 export * from './lib/skeleton/skeleton';
 export * from './lib/skip-link/skip-link';

@@ -1,4 +1,5 @@
 import type { ActType, Money, Style } from './discovery';
+import type { ProfileReviews } from './reviews';
 
 /** A setlist song's key: `E`, `B-flat`, `F-sharp-minor`, or `any`. */
 export type MusicalKey = string;
@@ -66,4 +67,6 @@ export interface ArtistProfile {
   /** In the artist's order; empty shows the act-type illustration (L2-020.3). */
   photos: ProfilePhoto[];
   videos: ProfileVideo[];
+  /** The newest reviews; `GET /artists/{slug}/reviews` pages the rest. */
+  reviews: ProfileReviews;
 }
