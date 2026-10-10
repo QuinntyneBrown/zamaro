@@ -146,6 +146,35 @@ email" button and the "Nothing after 5 minutes?" line join with resend (S7); "Wr
 address? Start again" returns to the form with every value kept. The card's "Apply as
 an artist" fine print joins with the application page (M3, `/artists/apply`).
 
+**As built (M2 S7).**
+
+- `POST /api/v1/email/verify` answers 200 with `{ "data": { "name": … } }`, not 204, so the
+  page can thank the person by name on the page it returns to: "Email verified" with "Thanks,
+  Naomi. You can send booking requests now.", dismissible ("Dismiss verified notice"), for one
+  page. Verifying signs no one in; a person already signed in on that browser is asked for again
+  (`/me`), so their banner clears. A used, more than 24-hour-old or unknown token is the 410
+  `link-expired` problem ("This link has expired"); a request with no token is a 422, which the
+  page shows as expired too.
+- The page checks the token after the browser has taken over (`afterNextRender`), never in the
+  server render, so a link preview cannot use it up. It shows "Checking your link" with
+  "Confirming {email}…" when the person is signed in, else "Confirming your email…" (no mock
+  covers a guest), and "We couldn’t check your link" with Try again when the API does not
+  answer. The mock's inline spinner waits for `zm-spinner`.
+- `POST /api/v1/email/verification-notification` takes no body from a signed-in booker, `token`
+  from an expired link's page (the new link goes to that link's owner) or `email` from the
+  sign-up page's "Check your email" state; it always answers 202 with
+  `{ "data": { "accepted": true } }`, and sends nothing to an unknown or already verified
+  address. Earlier links are marked used rather than deleted, so a revoked link still names its
+  owner for the next resend. 3 in 15 minutes per account, or per address for a guest
+  (`resend-verification`, M2 D6), raised on the e2e API.
+- The persistent "Verify your email" banner is the shell's, under the top bar, on every page while
+  the signed-in person's address is unverified: "We sent a link to {email}. You need it to send
+  requests." with "Resend email"; after a resend, "A new link is on its way to {email}. It works
+  for 24 hours." with "Sent", disabled for a minute. The expired page and the sign-up page's
+  "Resend the email" do the same, with a status line ("A new link is on its way to the email you
+  signed up with…", no mock) and the "Nothing after 5 minutes?" fine print.
+- `EnsureEmailIsVerified` and `pages/book/unverified` wait for the booking request (M5, L2-022.4).
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

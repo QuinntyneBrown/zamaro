@@ -482,6 +482,11 @@ as a static ring).
 
 ## Implementation notes
 
+**As built in M2 (S7):** inside the auth card (`.auth-card`, paper on the stage) secondary buttons
+keep the paper outline instead of the stage's light outline, as `pages/verify-email/expired` shows
+"Keep browsing artists". The rule adds about 360 bytes to `button.scss`, which was already over the
+4 kB component-style warning.
+
 The library has `zm-button`, `zm-button-link` and `zm-button-anchor`. To meet
 this CRD:
 

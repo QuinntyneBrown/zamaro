@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-alert`, `zm-banner` |
 | Library path | `frontend/projects/components/src/lib/alert/` |
-| Status | built (`zm-alert`); `zm-banner` planned |
+| Status | built (`zm-alert`, `zm-banner`) |
 | Traces to | L2-022, L2-037, L2-038, L2-057, L2-067, L2-077, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-106, L2-107, L2-108, L2-111, L2-114 |
 | Design system | [`alert.html`](../../design-system/components/alert.html) |
 | Source mocks | [`pages/discover/error`](../../mocks/pages/discover/error.html), [`pages/discover/limited`](../../mocks/pages/discover/limited.html), [`pages/artist/error`](../../mocks/pages/artist/error.html), [`pages/book/duplicate`](../../mocks/pages/book/duplicate.html), [`dialogs/pay-deposit/failed`](../../mocks/dialogs/pay-deposit/failed.html), [`dialogs/block-dates/warning`](../../mocks/dialogs/block-dates/warning.html), [`pages/admin-booking/held`](../../mocks/pages/admin-booking/held.html), [`notifications/system-banner/*`](../../mocks/notifications/system-banner/info.html), [`pages/offline/default`](../../mocks/pages/offline/default.html), and every error, failed and success screen in Usage |
@@ -518,6 +518,11 @@ lift, which reduced motion removes.
 - **AC-30** Given the `Alert`, `AlertCompact` and `Banner` scenarios, when the perf test runs against the base branch with `--fail-on-regression`, then none is flagged as a possible regression and each renders in its tuned window. (L2-086)
 
 ## Implementation notes
+
+**As built in M2 (S7):** `zm-banner` (`banner.ts`, class `Banner`) with every input and output above,
+its `Banner.ts` perf scenario ("Verify your email" with "Resend email"), and the shell's "Verify your
+email" and "Email verified" banners. A disabled button action reads in `--color-fg-muted`. The banner
+logs no dev-mode error for `dismissible` with `persistent`; the close button is simply not rendered.
 
 **As built in M2 (S1):** `compact` (`.alert--compact`: `--space-4` padding, `--text-h4` title and a
 20 px icon), for the sign-in card's "We couldn’t sign you in".

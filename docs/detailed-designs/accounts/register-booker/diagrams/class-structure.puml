@@ -19,13 +19,13 @@ package "Zamaro Web (Angular)" {
     +onSubmit(form: RegistrationForm): void
   }
   class VerifyEmailPage {
-    +state: Signal<'verifying'|'verified'|'expired'>
-    +resend(): void
+    +status: Signal<'checking'|'error'|'expired'>
+    +sendNewLink(): void
   }
   class AuthApi {
     +register(form: RegistrationForm): Observable<void>
-    +verifyEmail(token: string): Observable<void>
-    +resendVerification(email: string): Observable<void>
+    +verifyEmail(token: string): Observable<VerifiedEmail>
+    +resendVerification(request: VerificationResend): Observable<void>
   }
   class RegistrationForm <<interface>> {
     +name: string

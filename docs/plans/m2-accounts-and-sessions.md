@@ -13,12 +13,43 @@
 | S4 | The request gate | Done | `c9d2d56` red tests, `1014b36` |
 | S5 | Register a booker, with consent | Done | `690da3b` red tests, `c6902ed` (ADR-0019) |
 | S6 | Email delivery rules and failed jobs | Done | `cd08f71` red tests, `dc02dc1` |
-| S7–S18 | | Not started | |
+| S7 | Verify the email address | Done | `fdc2b5b` red tests, `257d4c3` |
+| S8–S18 | | Not started | |
 
-**Checks at the last commit (S6, 2026-10-10):** 206 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean;
-`npx playwright test` passes 228 tests on win32. S6 changed no frontend code or `zm-*` component, so
-the frontend checks, the Linux baselines and the perf run stand as S5 left them.
+**Checks at the last commit (S7, 2026-10-10):** 221 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 242 tests on win32 and
+`npm run test:docker -- visual a11y` passes 114 in the Linux image (no timeout on
+`discover-results-naomi`). The perf run against the S6 build flagged no row (Banner 180 ms and Stamp
+104 ms at 240 iterations are new).
+
+**S7 acceptance criteria (as tested):**
+- Given a link issued less than 24 hours ago, when it is opened, then the address is verified, the
+  token used, the answer is 200 with the name (private, no-store) and no one is signed in; the same
+  link again, one 24 hours and a minute old, or an unknown token gets the 410 `link-expired` problem
+  ("This link has expired") and verifies nothing.
+- Given Ruth signed in, unverified, when she asks for a new link, then 202 `{ accepted: true }`, one
+  working 24-hour link is emailed (back to Discover) and the earlier one gets 410. A guest gets one by
+  an expired or revoked link's token, or by the address just signed up with; an unknown address or
+  token, or a verified one, gets the same 202 and nothing is sent. The 4th in 15 minutes gets 429.
+- Given a guest who registers and opens the link from Mailpit, then Discover shows "Email verified"
+  with "Thanks, Ruth. You can send booking requests now." and "Dismiss verified notice", and the next
+  page has no banner. While the check is pending the card reads "Checking your link", `aria-busy`,
+  "Confirming your email…"; when the API fails, "We couldn’t check your link" with "Zamaro didn’t
+  answer. Your link still works; try again in a minute.", and Try again verifies.
+- Given a used link, then "This link has expired" with the Expired stamp, "Keep browsing artists" to
+  `/` and the fine print; "Send a new link" turns to "Sent" (disabled) with "A new link is on its way
+  to the email you signed up with. It works for 24 hours.", and that new link works.
+- Given an unverified booker signed in, then Discover and the 404 page show the persistent "Verify your
+  email" banner, "We sent a link to {email}. You need it to send requests.", "Resend email" and no
+  close button; pressing it shows "A new link is on its way to {email}. It works for 24 hours." and a
+  disabled "Sent", the email arrives, and a minute later "Resend email" is back. A verified booker sees
+  no banner.
+- Given "Check your email to finish signing up", then the fine print reads "Nothing after 5 minutes?
+  Check spam or junk, then resend.", and "Resend the email" sends a second email and shows "Sent" with
+  the status line.
+- Route state `verify-email-expired` (`/verify-email?token=e2e-unknown`) matches
+  `verify-email/expired.html` in both themes at every width, with no axe violations.
 
 **S6 acceptance criteria (as tested):**
 - Given the mail server refuses every send, when `VerifyEmailNotification` runs, then it is released
@@ -304,6 +335,29 @@ the frontend checks, the Linux baselines and the perf run stand as S5 left them.
   its links, so every visual baseline was rewritten on win32 and linux (`--update-snapshots=all`).
   One a11y run in the Linux image timed out once on `discover-results-naomi` (dark, XL) and passed alone
   and in the next full run; watch it as S1's Discover flake was watched.
+- **S7 — Verify answers 200 with the name, and signs no one in.** `POST /email/verify` returns
+  `{ data: { name } }` (the design said 204) so "Email verified" can say "Thanks, Naomi." on the page
+  the link returns to; a browser already signed in asks `/me` again. The token is checked only after
+  the browser takes over, so a link preview cannot use it up. A missing token (422) shows as expired.
+- **S7 — One resend endpoint for three callers.** `POST /email/verification-notification` serves the
+  signed-in banner (no body), the expired page (`token`: the link's owner) and the sign-up page's
+  "Resend the email" (`email`), always 202 `{ data: { accepted: true } }`. Earlier links are marked
+  used, not deleted, so a revoked link still finds its owner. D6's 3 in 15 minutes counts per account,
+  or per address for a guest; `api-e2e` raises it (`ZAMARO_RESEND_VERIFICATION_LIMIT`).
+- **S7 — Components.** `zm-banner` and `zm-stamp` were built from their CRDs (alert, stamp) with
+  `Banner.ts` and `Stamp.ts`; `zm-icon` gained `mail`. Inside the auth card, secondary buttons keep the
+  paper outline instead of the stage's (button CRD note; `button.scss` was already over its 4 kB
+  warning and grows by about 360 bytes). The checking state's inline spinner waits for `zm-spinner`.
+- **S7 — Copy without a mock.** "Confirming your email…" for a guest; the status lines after a resend
+  ("A new link is on its way to {email}. It works for 24 hours." on sign-up, "…to the email you signed
+  up with…" on the expired page); "Sent" stays a minute on the banner, the expired page and sign-up.
+- **S7 — e2e readiness.** `SignUpPage.open()` waits for focus in Full name (the app's own signal that
+  it has taken over): under load the old networkidle wait let a click land before hydration.
+  `VerifyEmailPage.openLink()` and Try again wait for the check's answer, and `waitForEmails()` polls
+  Mailpit for 15 s like `waitForEmail()`.
+- **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
+  made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
+  `worker-e2e` does). Don't edit PHP while the suite runs.
 - **S6 — `failed_jobs` already existed** with the `uuid` column and the `database-uuids` driver from
   Laravel's skeleton, so no migration was needed. Horizon's supervisors keep `tries => 1`, which only
   applies to a job that sets none; `RetriesWithBackoff` sets 6 on every job and email.
@@ -415,7 +469,7 @@ shown and are recorded in the slice's ADR or the design.
 | D3 | Bot provider unreachable (limit-request-rates) | Fail closed, with the usual challenge message | OK (accepted default, 2026-10-10); built in S5 |
 | D4 | Breached-password vendor (sign-in-and-recover-access) | `Contracts/BreachedPasswordChecker`; the fake rejects a configured list; the HIBP range adapter in M10 | OK (accepted default, 2026-10-10); built in S5 (`zamaro.fakes.breached_passwords`) |
 | D5 | TOTP library (sign-in-and-recover-access) | `pragmarx/google2fa` with `bacon/bacon-qr-code` (SVG), behind `Services/Accounts/TotpVerifier` | |
-| D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK (accepted default, 2026-10-10); register built in S5 |
+| D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK (accepted default, 2026-10-10); register built in S5, resend in S7 (per address for a guest) |
 | D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | OK (accepted default, 2026-10-10); built in S4 |
 | D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK (accepted default, 2026-10-10); built in S3 as kind "Failed", title "That didn’t go through.", text "Reload the page and try again." |
 | D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK (accepted default, 2026-10-10); built in S3 |

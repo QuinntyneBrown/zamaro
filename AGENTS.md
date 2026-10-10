@@ -106,7 +106,7 @@ zamaro/
 │   │   │       │   ├── shell/     # header, footer, navigation menu, theme switch
 │   │   │       │   ├── pages/     # routed screens, one folder per docs/mocks/pages entry
 │   │   │       │   │   ├── discover/  artist/  book/  saved/  bookings/  booking-detail/
-│   │   │       │   │   ├── sign-in/  sign-up/  forgot-password/  reset-password/  account/
+│   │   │       │   │   ├── sign-in/  sign-up/  verify-email/  forgot-password/  reset-password/  account/
 │   │   │       │   │   ├── apply/  dashboard/  requests/  request-detail/  availability/
 │   │   │       │   │   ├── edit-profile/  earnings/
 │   │   │       │   │   └── not-found/  server-error/  offline/
