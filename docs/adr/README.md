@@ -12,8 +12,9 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0001](0001-admin-as-separate-application.md) | Administrator area is a separate Angular application | Accepted |
 | [0002](0002-compose-dev-environment-and-vendor-ports.md) | Docker Compose dev environment; outside vendors behind ports with fakes | Accepted |
 | [0003](0003-design-tokens-copied-into-components-library.md) | Design tokens are copied into the components library | Accepted |
-| [0004](0004-stay-on-laravel-11-with-ignored-advisories.md) | Stay on Laravel 11 and ignore its seven blocking advisories by ID | Accepted |
+| [0004](0004-stay-on-laravel-11-with-ignored-advisories.md) | Stay on Laravel 11 and ignore its seven blocking advisories by ID | Superseded by 0009 |
 | [0005](0005-api-skeleton-route-files-support-and-problem-types.md) | API skeleton: route files, `app/Support`, problem types and health responses | Accepted |
 | [0006](0006-openapi-from-code-with-scramble-and-opis.md) | OpenAPI 3.1 generated from code with Scramble; contract tests validate with opis | Accepted |
 | [0007](0007-frontend-layout-pages-shell-and-libraries.md) | Frontend layout: AGENTS.md pages, shell and libraries replace the designs' core, features and shared | Accepted |
 | [0008](0008-artist-profile-names-public-and-editor.md) | Artist profile names: one public profile, a separate editor, and the designs' shared enums | Accepted |
+| [0009](0009-upgrade-to-laravel-13.md) | Upgrade to Laravel 13 and drop the ignored advisories | Accepted |

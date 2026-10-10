@@ -97,7 +97,7 @@ After M9 the product is complete and hardened, but it has never left Docker Comp
 | V4 | `PaymentGateway` (deposits, balances, refunds, webhooks, payouts) | Stripe: Payment Element hosted fields, Connect Express for artist payouts, and idempotency keys passed through. | **Yes** |
 | V5 | `MediaScanner` | ClamAV `clamd` as an internal ECS service, streamed with `INSTREAM`. Above its stream limit, GuardDuty Malware Protection for S3 handles videos up to 1 GB; confirm the limits in the ADR. | **Yes** |
 | V6 | `ObjectStorage` | S3 `ca-central-1`: SSE (AES-256), Block Public Access on `quarantine/` and `documents/`, and a lifecycle rule that deletes quarantine objects after 24 h. | **Yes** (with H1) |
-| V7 | `VideoTranscoder` | AWS Elemental MediaConvert in `ca-central-1`: HLS (ADR-0009, hls.js), 4-second segments at 360p, 720p and 1080p, with completion through EventBridge to a webhook. | **Yes** |
+| V7 | `VideoTranscoder` | AWS Elemental MediaConvert in `ca-central-1`: HLS (ADR-0010, hls.js), 4-second segments at 360p, 720p and 1080p, with completion through EventBridge to a webhook. | **Yes** |
 | V8 | CDN and `CdnPurger` | CloudFront for web assets (per-release prefix) and for the media domain, with purges through `CreateInvalidation`. The 60 s `s-maxage` is the guarantee; purges only shorten staleness. | **Yes** |
 | V9 | `BotChallenge` | Cloudflare Turnstile (privacy-respecting, L2-077.4). When the provider is unreachable, fail closed with the 422 copy and alert. | **Yes** |
 | V10 | `BreachedPasswordChecker` | HIBP Pwned Passwords range API. Only a 5-character SHA-1 prefix leaves Zamaro. | **Yes** |

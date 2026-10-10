@@ -5,9 +5,9 @@
 ## Context
 
 **What exists after M3:**
-- **Public side (M1):** the profile at `/artists/{slug}` serves photos, videos (hls.js, ADR-0009), reviews and tour dates.
+- **Public side (M1):** the profile at `/artists/{slug}` serves photos, videos (hls.js, ADR-0010), reviews and tour dates.
   - **Media:** the seeded photos and videos come from the API's local disk. The user decided against object storage in M1.
-  - **Slugs:** `slug_histories` and the 301 for a renamed slug are in place (ADR-0010).
+  - **Slugs:** `slug_histories` and the 301 for a renamed slug are in place (ADR-0011).
   - **Tables M4 builds on:** `artists` (with `pronoun`, `headline`, `about_heading`, `bio`, `languages`), `artist_styles` (string values of `App\Enums\Style`), `setlist_songs` (`writer`, `key` as `App\Enums\MusicalKey`, the deferrable `(artist_id, position)` unique), `availability_rules`, `availability_overrides`, `bookings` (number, status, event_date, kind, church_name, church_city only), `booking_transitions`, `reviews`, `review_replies` and `artist_ratings`.
   - **Search:** `AvailabilityService::freeArtistIds()` already applies the override-then-weekly-default rule.
 - **M2:** sessions, `auth:sanctum` on `routes/api.php`, `role:` middleware that answers 404, rate limits, log redaction, the email foundation (Mailpit), Horizon jobs, the form components and toasts.
@@ -143,7 +143,7 @@ Each decision has a recommended default. Those marked **Needs your OK** wait for
 - **D20 — Video provider and pipeline.** **Needs your OK.**
   - **Vendor:** chosen in M10.
   - **Port, fixed now:** `VideoTranscoder::submit(sourceUrl, outputPrefix, maxHeight): jobId`.
-  - **Output:** the provider writes HLS into our `zamaro-media` bucket, so URLs stay on our media domain (L2-076.3). HLS is already settled by ADR-0009.
+  - **Output:** the provider writes HLS into our `zamaro-media` bucket, so URLs stay on our media domain (L2-076.3). HLS is already settled by ADR-0010.
     - fMP4 segments of 6 s;
     - 360p, 720p and 1080p, never above the source height;
     - a poster frame at 10% of the duration.

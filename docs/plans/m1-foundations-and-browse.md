@@ -24,10 +24,10 @@ two-thirds done: S0–S11 are built; S12–S16 remain.
 | S10 | Sold-out alternatives | Done | `929af7f`, `c6adc9a`, `b8a3ad1` |
 | S11 | Artist profile: header, About, setlist, loading and error | Done | `31dcbf4`, `9e7f58f`, `f48451c`, `a10df34` (ADR-0008) |
 | — | e2e API gets its own database, clock, limits and cache keys | Done | `331a03f` |
-| S12 | Photos and videos (local disk, no object storage in M1) | **Next** | ADR-0009 (hls.js) |
+| S12 | Photos and videos (local disk, no object storage in M1) | **Next** | ADR-0010 (hls.js) |
 | S13 | Reviews on the profile | To do | |
 | S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | To do | |
-| S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0010 |
+| S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0011 |
 | S16 | Index and share (optional, last) | To do | |
 
 **Checks at the last commit:**

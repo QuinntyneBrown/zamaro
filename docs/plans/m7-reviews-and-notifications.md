@@ -44,7 +44,7 @@
 - Every new `zm-*` component gets a perf scenario.
 - No inline forms: every edit opens a CDK dialog.
 - No architecture tests.
-- ADRs are named by topic and numbered when they are written. M1 still reserves 0009 (hls.js) and 0010 (slug history).
+- ADRs are named by topic and numbered when they are written. M1 still reserves 0010 (hls.js) and 0011 (slug history); 0009 went to the Laravel 13 upgrade.
 
 ## Entry criteria and dependencies
 
