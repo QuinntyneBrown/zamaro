@@ -11,7 +11,7 @@ Container_Boundary(api, "Zamaro API") {
   Component(gen, "GenerateArtistSlug", "Action", "Builds the first slug from the display name at publication")
   Component(registry, "SlugRegistry", "Domain service", "Checks a slug against every slug ever held")
   Component(resolver, "ArtistSlugResolver", "Domain service", "Maps any current or retired slug to the artist")
-  Component(pub, "PublicArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}, owned by the public profile slice")
+  Component(pub, "ArtistProfileController", "Laravel controller", "GET /api/v1/artists/{slug}, owned by the public profile slice")
   ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists.slug; slug_histories.slug unique across all artists")
 }
 Rel(web, ctrl, "GET, PUT /api/v1/artist/profile/address", "JSON/HTTPS")

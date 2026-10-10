@@ -97,8 +97,9 @@ in the Zamaro API, the Zamaro database and the geocoding and routing providers.
 
 - **`EnsureArtistRole`** — route middleware on every `/api/v1/artist/*` endpoint. It
   answers 404 to any caller who is not a signed-in approved artist (L2-074).
-- **`ArtistProfileController`** — `show` returns the editor payload and `update`
-  saves the details. Both act on the signed-in artist only; no artist identifier
+- **`ArtistWorkspace\ProfileDetailsController`** — `show` returns the editor payload
+  and `update` saves the details. The name `ArtistProfileController` belongs to the
+  public profile (ADR-0008). Both act on the signed-in artist only; no artist identifier
   appears in the URL.
 - **`UpdateArtistProfileRequest`** — FormRequest holding the L2-050 rules. Display
   name is 2–80 characters, headline is required and at most 80, About heading is
@@ -132,9 +133,10 @@ in the Zamaro API, the Zamaro database and the geocoding and routing providers.
   distance of Toronto City Hall through `DistanceService`.
 - **`Geocoder`** — interface with one adapter for the geocoding provider (vendor
   `<TO SUPPLY>`).
-- **`ArtistProfileResource`** and **`PublicProfileResource`** — API resources. The
+- **`ProfileDetailsResource`** and **`ArtistProfileResource`** — API resources. The
   first serialises the editor payload, including `completeness` (percent and the
-  missing checks). The second is shared with the public profile
+  missing checks). The second is the public profile's allowlist from
+  `artist-profiles/view-artist-profile` (ADR-0008), shared with the public profile
   endpoint and carries `preview: true` on preview responses, which are sent with
   `Cache-Control: no-store`.
 

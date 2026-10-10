@@ -86,11 +86,14 @@ personal data (L2-084).
 
 - **`HealthController`** — `GET /health/live` returns 200 with no dependency checks.
   `GET /health/ready` runs `ReadinessChecker` and returns 200 when every check passes
-  and 503 with the failed check names otherwise. Both routes live outside `/api/v1`,
-  skip session, CSRF and rate-limit middleware, and are blocked at the CDN.
-- **`ReadinessChecker`** — runs `DatabaseCheck` (`SELECT 1`), `CacheCheck` (`PING` on
-  the cache connection) and `QueueCheck` (`PING` on the queue connection), each with a
-  timeout `<TO SUPPLY>`.
+  and 503 with the failed check names otherwise: `{"status":"ready"}` or
+  `{"status":"not ready","failed":["cache"]}`. Both routes live in `routes/health.php`,
+  outside `/api/v1`, skip session, CSRF and rate-limit middleware, and are blocked at the
+  CDN.
+- **`ReadinessChecker`** (`app/Services/Operations/Readiness`) — runs `DatabaseCheck`
+  (`SELECT 1`), a `RedisCheck` named `cache` (`PING` on the cache connection) and one
+  named `queue` (`PING` on the queue connection). A refused connection fails at once; a
+  per-check timeout for a hung dependency is `<TO SUPPLY>` (ADR-0005).
 - **Hosting platform** — calls both endpoints on every API instance, restarts an
   instance that fails liveness and removes an instance that fails readiness from the
   load balancer.

@@ -3,3 +3,5 @@
 /node_modules
 /coverage
 package-lock.json
+# Copied verbatim from docs/design-system by npm run tokens:sync (ADR-0003)
+/projects/components/src/styles/tokens.css

@@ -1,0 +1,143 @@
+:host {
+  --notch: 1rem;
+  --ticket-border: var(--color-border-strong);
+  --ticket-notch-bg: var(--color-bg-canvas);
+  position: relative;
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  grid-template-areas: 'art body' 'stub stub';
+  background: var(--color-bg-surface);
+  border: var(--border-width-thick) solid var(--ticket-border);
+  transition:
+    transform var(--duration-base) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard);
+}
+
+:host(:hover),
+:host(:focus-within) {
+  transform: var(--transform-lift) rotate(-0.4deg);
+  box-shadow: var(--shadow-2);
+}
+
+.ticket__art {
+  grid-area: art;
+  border: 0;
+  border-right: var(--border-width-thick) solid var(--ticket-border);
+  aspect-ratio: auto;
+  min-height: 100%;
+}
+
+.ticket__body {
+  grid-area: body;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  min-width: 0;
+}
+
+.ticket__no {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  color: var(--color-fg-muted);
+}
+
+.ticket__name {
+  font: var(--text-h3);
+  text-transform: uppercase;
+}
+
+.ticket__name a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* The whole ticket is the link's target. */
+.ticket__name a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.ticket__name a:hover {
+  background: none;
+}
+
+.ticket__meta {
+  font: var(--text-body-sm);
+  color: var(--color-fg-muted);
+}
+
+.ticket__stub {
+  grid-area: stub;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: var(--border-width-thick) dashed var(--ticket-border);
+  font: var(--text-stub);
+  text-transform: uppercase;
+}
+
+/* Perforation notches. */
+.ticket__stub::before,
+.ticket__stub::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--notch) * -1 - var(--border-width-thick) / 2);
+  width: calc(var(--notch) * 2);
+  height: calc(var(--notch) * 2);
+  border-radius: var(--radius-full);
+  background: var(--ticket-notch-bg);
+  border: var(--border-width-thick) solid var(--ticket-border);
+}
+
+.ticket__stub::before {
+  left: calc(var(--notch) * -1 - var(--border-width-thick));
+  clip-path: inset(0 0 0 50%);
+}
+
+.ticket__stub::after {
+  right: calc(var(--notch) * -1 - var(--border-width-thick));
+  clip-path: inset(0 50% 0 0);
+}
+
+.ticket__price {
+  font: var(--text-figure);
+}
+
+.ticket__price small {
+  display: block;
+  font: var(--text-overline);
+}
+
+@media (min-width: 36rem) {
+  :host {
+    grid-template-columns: 9rem minmax(0, 1fr) 10.5rem;
+    grid-template-areas: 'art body stub';
+  }
+
+  .ticket__stub {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-top: 0;
+    border-left: var(--border-width-thick) dashed var(--ticket-border);
+  }
+
+  .ticket__stub::before {
+    top: calc(var(--notch) * -1 - var(--border-width-thick));
+    left: calc(var(--notch) * -1 - var(--border-width-thick) / 2);
+    clip-path: inset(50% 0 0 0);
+  }
+
+  .ticket__stub::after {
+    top: auto;
+    bottom: calc(var(--notch) * -1 - var(--border-width-thick));
+    right: auto;
+    left: calc(var(--notch) * -1 - var(--border-width-thick) / 2);
+    clip-path: inset(0 0 50% 0);
+  }
+}

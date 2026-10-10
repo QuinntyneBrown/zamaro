@@ -84,7 +84,11 @@ failed bot challenge is
   throws `ThrottleRequestsException` carrying `Retry-After`, `X-RateLimit-Limit` and
   `X-RateLimit-Remaining`.
 - **`ProblemDetailsRenderer`** — renders `ThrottleRequestsException` as 429 problem
-  details and keeps its headers. Its `type` URI is `<TO SUPPLY>`.
+  details and keeps its headers. Its `type` URI is `{problems base}/too-many-requests`
+  (`ProblemType::TooManyRequests`). The search limit is `zamaro.rate_limits.search_per_minute`
+  (default 30). The e2e API raises it, because every browser in the suite shares one address.
+  M1 has the `search` limiter only; the `api` limiter and the per-account search limit arrive
+  with sign-in (M2).
 - **`App\Actions\Bookings\EnsureBookingRequestAllowance`** — called by
   `SendBookingRequest` inside its `DB::transaction`, after locking the booker's
   `users` row with `lockForUpdate()`. It counts the booker's `bookings` created in the

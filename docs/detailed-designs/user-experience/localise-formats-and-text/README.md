@@ -47,10 +47,13 @@ Worker, and CI checks on both codebases.
   (`format.distance.km`, `format.distance.under1`, `format.distance.about`). A
   French catalogue can therefore reorder or rename them without code changes
   (L2-111).
-- **`TranslationCatalogueController`** — `GET /api/v1/i18n/{locale}` returns the
-  merged catalogue for one locale with a strong `ETag` and a public
-  `Cache-Control` lifetime of `<TO SUPPLY>`; a matching `If-None-Match` returns 304.
-  `GET /api/v1/i18n` lists the available locales.
+- **`TranslationCatalogueController`** — `GET /api/v1/i18n/{locale}` (anonymous,
+  `routes/api_public.php`) returns the merged catalogue for one locale as
+  `{"data":{"locale":"fr","messages":{"common.nav.discover":"Découvrir", ...}}}`, keys being
+  `{namespace}.{key}`. It sends a strong `ETag` (SHA-256 of the body) and
+  `Cache-Control: public, max-age=0, s-maxage=60`, so browsers revalidate and a matching
+  `If-None-Match` returns 304. A locale with no directory returns a 404 problem.
+  `GET /api/v1/i18n` lists the available locales; it is built when a locale switcher needs it.
 - **`Catalogue`** — backend service that discovers locales from the directories present,
   loads and caches the merged JSON, and resolves a key with fallback to `en`. Adding
   `resources/i18n/fr/` makes French available with no code change (L2-111).
@@ -59,12 +62,15 @@ Worker, and CI checks on both codebases.
   recipient's language. The control a person uses to choose French, and whether
   `Accept-Language` sets a guest's locale, are `<TO SUPPLY>`.
 
-**Frontend (Zamaro Web, `core/i18n`)**
+**Frontend (Zamaro Web, `projects/api/src/lib/i18n`, ADR-0007)**
 
 - **`TranslocoService`** — runtime catalogue with `@jsverse/transloco-messageformat`
   for ICU messages. `CatalogueLoader` implements `TranslocoLoader` and calls
-  `GET /api/v1/i18n/{locale}`. During server-side rendering the catalogue travels to
-  the browser through `TransferState`, so hydration makes no second request.
+  `GET /api/v1/i18n/{locale}`; `provideI18n()` loads it in an app initializer, before
+  the first render. During server-side rendering the catalogue travels to the browser
+  through the HTTP transfer cache, so hydration makes no second request. On the server,
+  `ApiOriginBackend` sends the call to `API_ORIGIN` below the interceptors, so the cache
+  key is the same relative URL the browser uses.
   Templates use the `transloco` pipe or the `*transloco` structural directive; code
   uses `translate()`.
 - **`FormatService`** — single entry point for display formats, backed by `Intl` with
@@ -79,8 +85,12 @@ Worker, and CI checks on both codebases.
     decimals otherwise ("$162.50"). Amounts arrive from the API as integer cents.
   - `distance(km, approximate)` — "44 km", "Under 1 km" below 1 km, and the "about"
     phrase for approximate values.
-- **Pipes** — `zShortDate`, `zLongDate`, `zTime`, `zMoney` and `zDistance`, pure
-  pipes over `FormatService`.
+- **Pipes** — `zmShortDate`, `zmLongDate`, `zmTime`, `zmMoney` and `zmDistance`, pure
+  pipes over `FormatService`. They use the `zm` prefix like every Zamaro selector. Each pipe
+  is added when a template first needs it; the Discover lineup formats in its view model.
+  `FormatService` (`projects/api/src/lib/i18n`) reads its patterns from the catalogue keys
+  `common.format.date.short`, `shortWithYear`, `long` and `common.format.distance.km`,
+  `about`, `under1`.
 - **Wire formats** — the API sends calendar dates as `YYYY-MM-DD`, times of day as
   `HH:MM`, instants as ISO 8601 UTC, money as integer cents and distances as whole
   kilometres, so no value is pre-formatted on the server for the web.

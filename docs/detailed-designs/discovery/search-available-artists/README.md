@@ -36,7 +36,35 @@ the provider is down (L2-002).
 The slice runs from the Discover page in Zamaro Web to the search endpoint in the
 Zamaro API, the Zamaro database and the routing provider.
 
-**Frontend (Zamaro Web, `features/discover`)**
+**Frontend (Zamaro Web, `app/pages/discover`; locations per ADR-0007)**
+
+The page, form and lineup map to `Discover`, `pages/discover/search-form/SearchForm` and
+`pages/discover/lineup/Lineup`. `SearchStore` lives in `pages/discover/search.store.ts`, and
+`SearchApi` is the `api` library's `DiscoveryApi` (token `DISCOVERY_API`). The presentational
+pieces are `zm-poster`, `zm-booking-form`, `zm-form-field`, `zm-chip`, `zm-ticket`,
+`zm-rating`, `zm-artwork` and `zm-marquee`.
+
+**Church location.** The location field resolves through `GET /api/v1/places?q=`
+(`PlaceController` and the `Geocoder` port). The endpoint fills a gap in the original design.
+- A quick-pick chip looks up its city and fills the field with the label ("Burlington, ON").
+- A typed town is looked up on submit. A town that cannot be found shows the field's own error,
+  "Enter your church’s address or town, or pick a city below.", so no new copy is needed.
+- The city centres are:
+  - Toronto (City Hall): 43.6534, -79.3841
+  - Burlington: 43.325, -79.799
+  - Mississauga: 43.589, -79.6441
+  - Brampton: 43.7315, -79.7624
+  - Hamilton: 43.2557, -79.8711
+  - Markham: 43.8561, -79.337
+  - Ajax: 43.8509, -79.0204
+  - Oshawa: 43.8971, -78.8658
+  - Barrie: 44.3894, -79.6903
+  - Kitchener: 43.4516, -80.4925
+  - Niagara (Niagara Falls): 43.0896, -79.0849
+- The summary links read "Pick your event date." and "Enter your church’s location.", as in the
+  invalid mock.
+
+Until the headliner lands (S6), the tickets start at "No. 01".
 
 - **`DiscoverPage`** — routed page component for `/`. It hosts the poster headline,
   the search form and the lineup region. The radius starts at 120 km for everyone. It
@@ -62,7 +90,10 @@ Zamaro API, the Zamaro database and the routing provider.
   Each card links to `/artists/{slug}` with the search date carried forward.
 - **`SearchErrorComponent`** — the "We lost the signal" state with Try again, the
   team email link and, after the third consecutive failure, the status-page link
-  (L2-106).
+  (L2-106). The status link is "Check status.zamaro.ca" (`https://status.zamaro.ca`). It is
+  rendered in `pages/discover/lineup` with `zm-alert`, as is the rate-limited state. In the
+  error states the poster keeps its introduction: the mock's "Seven … are usually free" needs
+  data the API does not have.
 
 Layout follows L2-097: one column at XS with stubs beneath card bodies, two-column
 form at SM and MD with stubs to the right, and poster beside form with two cards per
@@ -74,7 +105,16 @@ row from LG.
   search rate limiter (L2-077).
 - **`SearchArtistsRequest`** — FormRequest that validates the date window, the
   `GatheringKind`, coordinates inside the service area, the radius from the allowed
-  set, and the cursor. It produces a `SearchCriteria` value object.
+  set, and the cursor. It produces a `SearchCriteria` value object. Query:
+  `date=YYYY-MM-DD&kind={slug}&lat&lng&radius={40|80|120|200}`. A failure is a 422
+  problem whose `errors` use the form's field names. `lat` and `lng` errors and the
+  service-area check report under `location`. The copy matches the form:
+  - "Pick your event date."
+  - "Pick a date at least 3 days away."
+  - "We take bookings up to 18 months ahead."
+  - "Enter your church’s address or town, or pick a city below."
+  - "Zamaro serves churches within 200 km of Toronto." This is checked by road from
+    City Hall through `ServiceArea` and `DistanceService`.
 - **`SearchAvailableArtists`** — action that runs the search. It pre-filters approved,
   published, payout-ready artists whose base lies within a bounding box of the radius,
   asks `AvailabilityService` which are free, measures each with `DistanceService`,
@@ -88,19 +128,48 @@ row from LG.
   cancelled, with ties going to the higher average rating, then the shorter distance,
   then the lower artist ID. It runs on the first page only, so later pages hold
   tickets alone.
+  - A booking counts when its `booking_transitions` row to Confirmed has `occurred_at` on or
+    after midnight on the season's first day in Toronto, and the booking is not now Cancelled.
+  - With no bookings this season among the results, the tie-breaks alone pick the headliner.
+  - `quoteFor()` takes the newest review where `stars = 5` and `hidden_at` is null. Its text is
+    cut to 160 characters at the last space and ends with "…". It is attributed to the
+    booker's name and the booking's `church_city`, or null when there is no such review.
+  - The response puts it in a top-level `headliner` object, next to `data` (the tickets): the
+    card fields plus `season` and `quote: {text, reviewerName, city} | null`.
+  - The primary photo arrives with media in S12. Until then the headliner shows the yellow
+    halftone artwork tagged "Headliner".
 - **`AvailabilityService`** — domain service shared with profiles and bookings. It
   applies weekly rules, date overrides and Confirmed bookings, and for
-  `GatheringKind::YouthEvent` requires a verified VSC issued within the last 3 years.
+  `GatheringKind::YouthEvent` requires a verified VSC whose expiry (issue + 3 years) is
+  on or after the event date. A Free date override beats the weekly rule.
 - **`DistanceService`** — returns a `Distance` (whole km, drive time rounded to
   5 minutes, `approximate` flag). It reads the Redis cache keyed on the coordinate
   pair rounded to 4 decimal places, calls `RoutingProvider` with a 2-second timeout on
-  a miss, and stores the result for 30 days. On provider failure it returns straight-line
-  distance × 1.3 flagged approximate and records a warning metric. Distances below
-  1 km render as "Under 1 km".
+  a miss, and stores the result for 30 days. The cache key is `distance:{a}|{b}`, with
+  the two `lat,lng` keys sorted so the pair matches whichever way round it is asked.
+  Every miss in a search goes into one `RoutingProvider::matrix()` call. On provider
+  failure it returns straight-line distance × 1.3, flagged approximate, with an
+  estimated drive time at 80 km/h, logs a `routing.unavailable` warning, and caches
+  nothing. Distances below 1 km render as "Under 1 km".
 - **`RoutingProvider`** — interface with one adapter for the routing provider
-  (vendor `<TO SUPPLY>`).
+  (vendor `<TO SUPPLY>`). Until then `FakeRoutingProvider` reproduces the mocks' road
+  distances from `CastRoutes` (ADR-0002).
 - **`LineupResource`** — API resource that serialises the cards, the total and the
-  next cursor.
+  next cursor: `{"data":[card…],"meta":{"total":7}}`. Each card is
+  `{slug, name, actType, styles[], city, distance:{km, driveMinutes, approximate},
+  rating|null, reviewCount, fromPrice:{cents, currency:"CAD"}}`.
+  - The headliner (S6) is a top-level `headliner` object.
+  - `meta` also carries `perPage` (24) and `nextCursor`.
+  - The first page holds the headliner and 23 tickets; later pages hold 24 tickets and
+    `headliner: null`.
+  - The cursor (`PageCursor`) is URL-safe base64 of the sort and the last ticket's
+    `LineupSorter::key()`. A cursor that does not decode, or comes from another sort, is a 422
+    on `cursor`.
+  - The search is ranked in memory, because distances come from routing, so the whole lineup is
+    rebuilt for each page. That is cheap at this scale and keeps the cursor stable.
+  - `CastSeeder` adds a supporting cast of 30 artists around Barrie for paging. They lie more
+    than 120 km by road from Burlington.
+  - On Discover, "Show more artists" appends the next page and focuses its first card.
 
 **Mocks**
 
@@ -124,9 +193,10 @@ row from LG.
 
 The query reads `artists`, `artist_styles`, `availability_rules`,
 `availability_overrides`, `bookings` (status `Confirmed` only),
-`vulnerable_sector_checks` and an aggregate of visible `reviews`. A GiST or
-latitude/longitude B-tree index on artist base location supports the bounding-box
-pre-filter; the exact index choice is `<TO SUPPLY>`.
+`vulnerable_sector_checks` and `artist_ratings` (the aggregate of visible `reviews`). A
+B-tree index on `artists (status, base_latitude, base_longitude)` supports the
+bounding-box pre-filter; PostGIS is not needed at this scale. `bookings` carries
+`church_name` and `church_city` snapshots, which tour dates show (S14).
 
 ## Requirements
 

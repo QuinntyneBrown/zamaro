@@ -45,7 +45,9 @@ zamaro/
 │   ├── design-system/             # tokens/, foundations/, components/, patterns/, assets/
 │   ├── detailed-designs/          # {subsystem}/{feature}/README.md + diagrams/
 │   ├── mocks/                     # pages/, dialogs/, notifications/, assets/
+│   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
+├── docker-compose.yml             # local dev: postgres, redis, api, api-e2e, worker, scheduler (ADR-0002)
 ├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
 │   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
@@ -59,6 +61,7 @@ zamaro/
 │   │   ├── Policies/              # ownership and role authorisation
 │   │   ├── Notifications/         # transactional email
 │   │   ├── Console/Commands/      # artisan commands (i18n:check, ...)
+│   │   ├── Support/               # cross-cutting code with no subsystem (Problems/ for RFC 9457)
 │   │   └── Http/
 │   │       ├── Controllers/Api/V1/{Subsystem}/   # thin: validate, call an action, return a resource
 │   │       ├── Controllers/Health/               # /health/live, /health/ready
@@ -77,12 +80,14 @@ zamaro/
 │   ├── routes/
 │   │   ├── api.php                # /api/v1, authenticated by default
 │   │   ├── api_public.php         # intentional anonymous routes
+│   │   ├── health.php             # /health/live and /health/ready, outside /api/v1 (ADR-0005)
 │   │   └── console.php            # scheduled commands
 │   ├── tests/
 │   │   ├── Feature/{Subsystem}/   # integration tests against the API
 │   │   ├── Feature/Security/      # cross-user access suite and route-ownership fixtures
 │   │   └── load/                  # load scenarios for the response-time budgets
 │   ├── composer.json
+│   ├── docker/                    # backend container assets (postgres init script); see ADR-0002
 │   └── Dockerfile                 # zamaro-api image (API and Worker)
 ├── frontend/                      # Angular workspace — Zamaro Web; angular.json declares every project
 │   ├── angular.json  package.json  tsconfig.json  eslint.config.js  .prettierrc
@@ -114,6 +119,7 @@ zamaro/
 │   │   ├── api/                   # library: HTTP access and the contracts pages depend on
 │   │   │   └── src/
 │   │   │       ├── lib/services/  # per subsystem: contract, injection token, HTTP implementation
+│   │   │       ├── lib/http/      # HTTP plumbing: the SSR API-origin backend (ADR-0007)
 │   │   │       ├── lib/models/    # request and response types (models/admin/ for admin endpoints)
 │   │   │       ├── lib/auth/      # session, CSRF, interceptors, and route guards for both applications
 │   │   │       ├── lib/i18n/      # translation catalogues; date, money, and distance formatting

@@ -1,0 +1,92 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.field__label {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+  color: var(--color-fg-default);
+}
+
+.field__error {
+  display: block;
+  font: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger-fg);
+}
+
+.input,
+.select {
+  --field-bg: var(--color-bg-surface);
+  --field-fg: var(--color-fg-default);
+  --field-border: var(--color-border-strong);
+  --field-height: var(--control-height-md);
+  width: 100%;
+  min-height: var(--field-height);
+  padding: var(--space-2) var(--space-3);
+  font: var(--text-body);
+  color: var(--field-fg);
+  background-color: var(--field-bg);
+  border: var(--border-width-thick) solid var(--field-border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.input:hover,
+.select:hover {
+  --field-border: var(--color-fg-default);
+}
+
+.input:focus-visible,
+.select:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.input[aria-invalid='true'],
+.select[aria-invalid='true'] {
+  --field-border: var(--color-danger-border);
+  box-shadow: inset var(--border-width-thick) 0 0 var(--color-danger-border);
+}
+
+.input[aria-invalid='true']:focus-visible,
+.select[aria-invalid='true']:focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+.input:disabled,
+.select:disabled {
+  --field-bg: var(--color-bg-subtle);
+  --field-fg: var(--color-fg-disabled);
+  --field-border: var(--color-fg-disabled);
+  cursor: not-allowed;
+}
+
+.input[type='date'] {
+  font-variant-numeric: tabular-nums;
+}
+
+.select {
+  appearance: none;
+  padding-right: var(--space-10);
+  cursor: pointer;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.15rem) 55%,
+    calc(100% - 0.8rem) 55%;
+  background-size: 0.36rem 0.36rem;
+  background-repeat: no-repeat;
+}

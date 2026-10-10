@@ -1,0 +1,129 @@
+.lineup-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.section__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+}
+
+.sort {
+  min-width: 12rem;
+}
+
+/* L2-097.4: the chips wrap onto as many rows as they need. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.filters > legend {
+  margin-bottom: var(--space-2);
+  padding: 0;
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+}
+
+.section__kicker {
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+}
+
+.lineup {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.more {
+  align-self: center;
+}
+
+.lead {
+  font: var(--text-body-lg);
+}
+
+/* Skeletons take the final cards' tracks and sizes so the swap does not move the page (L2-105.2). */
+.headliner-skeleton {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  border: var(--border-width-poster) solid var(--color-border-default);
+}
+
+.headliner-skeleton__body,
+.ticket-skeleton__body,
+.ticket-skeleton__stub {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ticket-skeleton {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  grid-template-areas: 'art body' 'stub stub';
+  border: var(--border-width-thick) solid var(--color-border-default);
+}
+
+.ticket-skeleton__art {
+  grid-area: art;
+}
+
+.ticket-skeleton__body {
+  grid-area: body;
+  padding: var(--space-5);
+}
+
+.ticket-skeleton__stub {
+  grid-area: stub;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+}
+
+@media (min-width: 36rem) {
+  .ticket-skeleton {
+    grid-template-columns: 9rem minmax(0, 1fr) 10.5rem;
+    grid-template-areas: 'art body stub';
+  }
+
+  .ticket-skeleton__stub {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 48rem) {
+  .headliner-skeleton {
+    grid-template-columns: 16rem 1fr;
+    align-items: end;
+  }
+}
+
+@media (min-width: 62rem) {
+  .lineup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .headliner-skeleton {
+    grid-template-columns: 20rem 1fr;
+    padding: var(--space-10);
+    gap: var(--space-10);
+  }
+}

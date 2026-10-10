@@ -6,6 +6,11 @@ Zamaro is built as an Angular web application with server-side rendering (Zamaro
 
 Details that the specs leave open are marked `<TO SUPPLY>` inside each design.
 
+Frontend locations such as `core/a11y`, `features/{area}` and `shared/` and class names such as
+`AppShellComponent` predate the repository layout in AGENTS.md. Read them through the mapping in
+[ADR-0007](../adr/0007-frontend-layout-pages-shell-and-libraries.md). Each design is updated as its
+feature lands.
+
 ## Subsystems and features
 
 ### discovery

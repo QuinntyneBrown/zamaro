@@ -43,11 +43,15 @@ second charge.
 - **`delayedFlag(source, 300)`** — signal helper that turns true only after its source
   has been true for 300 ms and turns false at once when the source clears. For the
   first 300 ms the region keeps its previous content (L2-105).
-- **`BusyRegionDirective` (`zBusyRegion`)** — binds `aria-busy="true"` on the host
+- **`BusyRegionDirective` (`zmBusyRegion`)** — binds `aria-busy="true"` on the host
   while the delayed flag is set and swaps in the region's skeleton template. One
-  visually hidden status line names what is loading, for example "Finding who's free on
-  Saturday 14 November 2026…"; after 8 s it changes to "Still checking — thanks for
-  waiting.", following the design system's feedback pattern.
+  status line names what is loading, for example "Finding who's free on Saturday 14
+  November 2026…"; after 8 s it changes to "Still checking — thanks for waiting.",
+  following the design system's feedback pattern. It is visible, as in the loading mock.
+  Discover, the first busy region (S7), binds `aria-busy` from `SearchStore.showSkeletons`
+  (the 300 ms delayed flag). The directive is extracted when the profile becomes the second
+  busy region. The skeletons there are `zm-skeleton` blocks laid out in the cards' own grid
+  tracks.
 - **Skeleton components** — `TicketCardSkeletonComponent`,
   `HeadlinerSkeletonComponent`, `ProfileHeaderSkeletonComponent` and
   `ProfileSectionSkeletonComponent`, built from the design-system skeleton modifiers.

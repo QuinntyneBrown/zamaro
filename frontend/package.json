@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "serve:ssr:zamaro": "node dist/zamaro/server/server.mjs",
+    "tokens:sync": "node tools/sync-tokens.mjs",
     "prepare": "cd .. && husky"
   },
   "lint-staged": {
@@ -26,6 +27,7 @@
     "*.{scss,css,js,mjs,cjs,json,md}": "prettier --write"
   },
   "dependencies": {
+    "@angular/cdk": "^22.2.2",
     "@angular/common": "^22.2.0",
     "@angular/compiler": "^22.2.0",
     "@angular/core": "^22.2.0",
@@ -34,7 +36,10 @@
     "@angular/platform-server": "^22.2.0",
     "@angular/router": "^22.2.0",
     "@angular/ssr": "^22.2.2",
+    "@jsverse/transloco": "^8.4.0",
+    "@jsverse/transloco-messageformat": "^8.4.0",
     "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.7",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },

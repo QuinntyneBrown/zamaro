@@ -1,0 +1,22 @@
+<zm-artwork class="ticket__art" [variant]="artVariant()" />
+<div class="ticket__body">
+  <span class="ticket__no"
+    >{{ positionLabel() }} ·
+    <zm-rating
+      [score]="rating()"
+      [label]="ratingLabel()"
+      [countText]="ratingCount()"
+      [newText]="ratingNew()"
+  /></span>
+  <h3 class="ticket__name">
+    <a [routerLink]="link()" [queryParams]="queryParams()">{{ name() }}</a>
+  </h3>
+  <p class="ticket__meta">{{ actLine() }}<br />{{ placeLine() }}</p>
+</div>
+<div class="ticket__stub">
+  <p class="ticket__price">
+    <small>{{ priceLabel() }}</small
+    >{{ price() }}
+  </p>
+  <ng-content />
+</div>

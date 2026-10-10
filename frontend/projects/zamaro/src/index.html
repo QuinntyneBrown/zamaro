@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- Paint a stored theme choice from the first frame (L2-104.3). Keep the key in step with
+         ThemeService; with nothing stored, tokens.css follows prefers-color-scheme. -->
+    <script>
+      try {
+        var theme = localStorage.getItem('zamaro.theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
     <title>Zamaro</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

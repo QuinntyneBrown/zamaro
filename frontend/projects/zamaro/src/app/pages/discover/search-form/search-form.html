@@ -1,0 +1,82 @@
+<form aria-labelledby="find-title" novalidate [formGroup]="form" (ngSubmit)="submit()">
+  <zm-booking-form
+    titleId="find-title"
+    [heading]="'discover.form.title' | transloco"
+    [stamp]="'discover.form.stamp' | transloco"
+  >
+    @if (errorCount()) {
+      <div class="error-summary span-all" role="alert" aria-labelledby="error-summary-title">
+        <h3 id="error-summary-title" class="error-summary__title">
+          {{ 'discover.errors.summary' | transloco: { count: errorCount() } }}
+        </h3>
+        <ul>
+          @if (errors().date) {
+            <li>
+              <a href="#find-date" (click)="focusField($event, 'date')">{{
+                summaryItem('date')
+              }}</a>
+            </li>
+          }
+          @if (errors().location) {
+            <li>
+              <a href="#find-place" (click)="focusField($event, 'location')">{{
+                summaryItem('location')
+              }}</a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+    <zm-form-field
+      #dateField
+      fieldId="find-date"
+      type="date"
+      formControlName="date"
+      [label]="'discover.form.date' | transloco"
+      [min]="earliest"
+      [max]="latest"
+      [error]="errors().date ?? null"
+    />
+    <zm-form-field
+      fieldId="find-kind"
+      type="select"
+      formControlName="kind"
+      [label]="'discover.form.kind' | transloco"
+      [options]="kinds"
+    />
+    <zm-form-field
+      #locationField
+      fieldId="find-place"
+      formControlName="location"
+      autocomplete="address-level2"
+      [label]="'discover.form.location' | transloco"
+      [error]="errors().location ?? null"
+    />
+    <zm-form-field
+      fieldId="find-radius"
+      type="select"
+      formControlName="radius"
+      [label]="'discover.form.radius' | transloco"
+      [options]="radii"
+    />
+    <fieldset class="filters span-all">
+      <legend>{{ 'discover.form.cities' | transloco }}</legend>
+      @for (city of cities; track city) {
+        <zm-chip size="sm" [pressed]="place()?.city === city" (click)="pickCity(city)">{{
+          city
+        }}</zm-chip>
+      }
+    </fieldset>
+    <zm-button
+      class="span-all"
+      variant="primary"
+      size="lg"
+      type="submit"
+      [busy]="store.status() === 'loading'"
+      >{{
+        (store.status() === 'loading' ? 'discover.form.checking' : 'discover.form.submit')
+          | transloco
+      }}</zm-button
+    >
+  </zm-booking-form>
+</form>

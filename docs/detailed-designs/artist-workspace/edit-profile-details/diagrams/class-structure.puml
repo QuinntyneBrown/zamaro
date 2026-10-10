@@ -49,12 +49,12 @@ package "Zamaro Web (Angular)" {
 }
 
 package "Zamaro API (Laravel)" {
-  class ArtistProfileController {
-    +show(request: Request): ArtistProfileResource
-    +update(request: UpdateArtistProfileRequest): ArtistProfileResource
+  class ProfileDetailsController {
+    +show(request: Request): ProfileDetailsResource
+    +update(request: UpdateArtistProfileRequest): ProfileDetailsResource
   }
   class ArtistProfilePreviewController {
-    +__invoke(request: UpdateArtistProfileRequest): PublicProfileResource
+    +__invoke(request: UpdateArtistProfileRequest): ArtistProfileResource
   }
   class UpdateArtistProfileRequest {
     +rules(): array
@@ -121,12 +121,12 @@ ArtistProfileEditorPage *-- ProfileDetailsFormComponent
 ProfilePreviewPage --> ArtistProfileEditorStore
 ProfilePreviewPage *-- PreviewBannerComponent
 ArtistProfileEditorStore --> ArtistProfileApi
-ArtistProfileApi ..> ArtistProfileController : GET, PUT /api/v1/artist/profile
+ArtistProfileApi ..> ProfileDetailsController : GET, PUT /api/v1/artist/profile
 ArtistProfileApi ..> ArtistProfilePreviewController : POST /api/v1/artist/profile/preview
-ArtistProfileController ..> UpdateArtistProfileRequest : validates
+ProfileDetailsController ..> UpdateArtistProfileRequest : validates
 ArtistProfilePreviewController ..> UpdateArtistProfileRequest : validates
 UpdateArtistProfileRequest ..> ArtistProfileData : creates
-ArtistProfileController --> UpdateArtistProfile
+ProfileDetailsController --> UpdateArtistProfile
 ArtistProfilePreviewController --> BuildProfilePreview
 UpdateArtistProfileRequest --> Geocoder
 UpdateArtistProfileRequest --> ServiceArea

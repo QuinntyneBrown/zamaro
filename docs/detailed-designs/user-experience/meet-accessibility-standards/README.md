@@ -35,11 +35,13 @@ The slice lives mostly in Zamaro Web. It touches the Zamaro API where server dat
 shapes what assistive technology hears: field-level validation errors, rating values
 and server-rendered markup.
 
-**Frontend (Zamaro Web, `core/a11y`)**
+**Frontend (Zamaro Web; locations per ADR-0007)**
 
-- **`SkipLinkComponent`** — the design-system skip link, first in `AppShellComponent`.
-  It is visually hidden until focused, reads "Skip to content" and moves focus to
-  `<main id="main" tabindex="-1">` (L2-101).
+- **`SkipLinkComponent`** (`zm-skip-link`, components library) — the design-system skip
+  link, first in `AppShellComponent` (`app/shell`). It is visually hidden until focused,
+  reads "Skip to content" and moves focus to `<main id="main" tabindex="-1">` (L2-101).
+  It focuses the target itself, because `<base href="/">` would turn `#main` into a
+  navigation.
 - **`AppShellComponent` landmarks** — every route renders inside one `header`
   (`TopBarComponent`), one `nav aria-label="Primary"`, one `main` and one `footer`.
   Each page component renders exactly one `h1`, marked `data-route-heading` with

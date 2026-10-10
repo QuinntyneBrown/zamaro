@@ -50,8 +50,15 @@ searches never need.
 - **`SearchApi`** (extended) — adds `alternatives(criteria)` for
   `GET /api/v1/search/alternatives`.
 - **`DateDescriptionPipe`** — turns a date into its date description through
-  `FormatService` and the translation catalogue. The list of named days, such as
-  Christmas Eve, is `<TO SUPPLY>`. Every other date uses the short date.
+  `FormatService` and the translation catalogue. The named days are the catalogue keys
+  `common.namedDay.{MM-DD}`:
+  - Christmas Eve (12-24)
+  - Christmas Day (12-25)
+  - New Year's Eve (12-31)
+  - New Year's Day (01-01)
+
+  Every other date uses the short date. In M1 this is `FormatService.dateDescription()`; no pipe
+  is needed yet.
 
 **Backend (Zamaro API)**
 
@@ -68,8 +75,8 @@ searches never need.
      bookable window of 3 days to 18 months from today are skipped (L2-004).
   4. For each date it counts candidates that pass the travel match at the current
      radius. It keeps dates with a count above 0, orders them by distance in days from
-     the searched date and takes the first 3. The tie-break between two dates the same
-     number of days away is `<TO SUPPLY>`.
+     the searched date and takes the first 3. Of two dates the same number of days away,
+     the earlier comes first.
   5. For each wider radius in ascending order it counts candidates that pass the
      travel match on the searched date, and returns the first radius with a count above 0.
 - **`AvailabilityService`** (extended) — adds `freeArtistIdsByDate(ids, dates)`, which
@@ -78,8 +85,21 @@ searches never need.
 - **`SoldOutExplainer`** — picks the explanation sentence from catalogue templates. It
   uses the gathering kind, the filter set, the location label and the best alternative,
   as in "Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby
-  date, or widen the radius: 2 choirs are free within 120 km." The full set of
-  templates and the rule that chooses between them are `<TO SUPPLY>`.
+  date, or widen the radius: 2 choirs are free within 120 km."
+  - **Built on the frontend:** in M1 the API returns only the structured
+    `{nearbyDates:[{date,count}], widerRadius:{km,count}|null, filtersApplied}`. The sold-out
+    panel (`pages/discover/sold-out`) builds the sentence from catalogue templates, so the API
+    returns no prose and a new locale needs no code.
+  - **Why:** `discover.soldOut.whyStyle` when exactly one style chip is pressed ("Every
+    gospel choir near …"); `whyAnyone` otherwise.
+  - **Next step:** `nextBoth`, `nextDates`, `nextRadius` or `nextNone`, depending on which ways
+    forward exist.
+  - **Counts:** `who` and `dateCount` count in the pressed style's noun ("2 choirs") or
+    "artists".
+  - **ICU:** `select` keys cannot contain hyphens in `@messageformat`, so styles are passed as
+    `gospel_choir` and the like.
+  - **Fixtures:** `CastSeeder::christmasChoirs()` holds the mock's fixtures. Each choir is free
+    only on its listed dates.
 - **`SearchAlternativesResource`** — serialises `nearbyDates` (date and count),
   `widerRadius` (km and count, or null), `filtersApplied` and `explanation`.
 

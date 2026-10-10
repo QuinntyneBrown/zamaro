@@ -1,0 +1,16 @@
+{
+  "name": "zamaro-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "perf-test": "node perf-test/perf-test.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^22.12.0",
+    "typescript": "~6.0.2"
+  }
+}

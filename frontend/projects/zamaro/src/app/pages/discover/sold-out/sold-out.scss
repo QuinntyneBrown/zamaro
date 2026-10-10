@@ -1,0 +1,47 @@
+.sold-out__dates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sold-out__dates h4 {
+  font: var(--text-h4);
+}
+
+.date-swap {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.date-swap button {
+  width: 100%;
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  text-align: left;
+  cursor: pointer;
+  background: var(--color-bg-surface);
+  color: var(--color-fg-default);
+  border: var(--border-width-thick) solid var(--color-border-strong);
+  font: var(--text-body-sm);
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.date-swap button:hover {
+  background: var(--color-accent);
+  color: var(--color-fg-on-accent);
+  border-color: var(--color-border-on-accent);
+  box-shadow: var(--shadow-1);
+  transform: var(--transform-lift);
+}
+
+.date-swap strong {
+  font: var(--text-figure);
+  text-transform: uppercase;
+}

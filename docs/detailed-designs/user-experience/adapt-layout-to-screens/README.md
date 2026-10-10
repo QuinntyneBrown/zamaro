@@ -46,8 +46,9 @@ and through the seeded API that the visual test suite runs against.
   `isCompact: Signal<boolean>` (true below LG). Components read it only where
   behaviour changes, not to lay out content. During server-side rendering it reports
   `xs`, so the first paint of a phone needs no client correction.
-- **`AppShellComponent`** — root layout holding the skip link, `TopBarComponent`,
-  the routed `<main>` and `FooterComponent`.
+- **`AppShellComponent`** (`app/shell`, ADR-0007) — root layout holding the skip link,
+  `TopBarComponent`, the routed `<main>` and `FooterComponent` (`zm-top-bar` and
+  `zm-footer` in the components library).
 - **`TopBarComponent`** — the design-system top bar. From LG it shows Discover,
   How booking works and For artists inline, with the theme toggle from
   `user-experience/switch-theme`. Below LG it uses the compact header: the three
@@ -58,9 +59,15 @@ and through the seeded API that the visual test suite runs against.
   The workspace bar (`topbar--workspace`: the artist area and the admin app) has five
   primary links and stays compact until XL. The Saved
   button keeps its word in the accessible name when only the heart and count show.
-- **`NavDrawerComponent`** — CDK overlay holding the primary links. It traps focus,
-  closes on Escape, on backdrop click and on `NavigationEnd`, and returns focus to
-  the menu button.
+- **`NavDrawerComponent`** (`app/dialogs/menu`, `MenuDialog`) — a CDK `Dialog` with the
+  `zm-dialog` drawer frame holding the primary links (`zm-menu`) and the theme toggle. The
+  menu button carries `aria-controls="nav-drawer"`, the dialog's id. Initial focus goes to
+  the close button, which comes first (as in `docs/mocks/dialogs/menu`). The drawer traps focus,
+  closes on Escape, on backdrop click and when a link is chosen, and returns focus to
+  the menu button. The guest drawer omits the mock's "Saved artists and your account
+  stay in the top bar" line, because guests have neither; it returns with sign-in (M2).
+  The open/close behaviour needs no `BreakpointService`: CSS shows the menu button only
+  below LG.
 - **`DialogService`** — wrapper around the CDK `Dialog` used by every dialog. Its
   panel uses the design-system `.dialog` classes, which at XS fill the screen:
   `100vw` by `100dvh`, the header holding the title and close button at the top, a
