@@ -58,11 +58,25 @@ state and the query string, and sort and filter handling in the search endpoint.
   so `radius=999` becomes 120 while the other parameters still apply. Parameter value
   spellings, such as `sort=rating` and `styles=band,gospel-choir`, are listed in the
   class diagram.
+  - Defaults are left out of the URL.
+  - The code is in `pages/discover/search-query-codec.ts` (`fromParams`, `toParams`, `toQuery`).
+  - When the URL names the place the form has already resolved, the location field keeps its
+    label as entered ("Burlington, ON").
+  - A link opened from scratch shows the town label ("Burlington").
 - **`SearchStore`** (extended) — gains `sort` and `filters` signals. Its
   `applySort()` and `toggleFilter()` methods navigate to the same route with the new
   query parameters. The store reacts to every query-parameter change by decoding the
   state and running the search. It also keeps the last `Lineup`, with every page
   loaded so far, keyed by the canonical query string.
+  - In M1 its `navigate()` replaces the history entry for sort and chip changes, as the
+    design system's navigation pattern says, so Back does not step through every chip. "Show
+    the lineup" adds an entry.
+  - Re-submitting an unchanged search runs it again.
+  - The server fills the form from the URL. Only the browser runs the search, so a shared
+    link counts once against the rate limit.
+  - After each search, the summary line is announced through the CDK `LiveAnnouncer` (polite).
+  - The sort select and the chips sit in the lineup section. The chips are disabled while a
+    search loads.
 - **`DiscoverPage`** (extended) — subscribes to `ActivatedRoute.queryParamMap`. When
   the decoded state matches the cached key, as it does after Back from a profile, it
   renders the cached lineup at once. The router, configured with
@@ -71,10 +85,12 @@ state and the query string, and sort and filter handling in the search endpoint.
 
 **Backend (Zamaro API)**
 
-- **`SearchArtistsRequest`** (extended) — accepts `sort` as a `SearchSort` value and
-  `styles[]` as `Style` values, and the price filter as `price=under-800`. Unknown
-  values return 422 problem details. The API stays strict, and only the frontend codec
-  substitutes defaults.
+- **`SearchArtistsRequest`** (extended) — accepts `sort` as a `SearchSort` value
+  (`closest|rating|price`), `styles` as a comma-separated list of `Style` slugs (a repeated
+  `styles` key would keep only the last value in PHP), and the price filter as
+  `price=under-800`. Unknown values return 422 problem details. The API stays strict, and
+  only the frontend codec substitutes defaults. `meta` echoes `sort`, `styles` and `price`
+  beside the filtered `total`.
 - **`SearchSort`** — enum with `Closest`, `HighestRated` and `PriceLowToHigh`.
 - **`LineupFilter`** — value object holding the selected `Style` values and an optional
   `maxPriceCentsExclusive` of 80,000. `SearchAvailableArtists` applies it in the SQL
