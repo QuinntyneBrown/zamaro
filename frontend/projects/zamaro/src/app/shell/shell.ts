@@ -8,15 +8,25 @@ import {
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
-import { Footer, type FooterColumn, SkipLink, TopBar, type TopBarLink } from 'components';
+import {
+  Footer,
+  type FooterColumn,
+  SkipLink,
+  ToastRegion,
+  TopBar,
+  type TopBarLink,
+} from 'components';
 import { ThemeService } from './theme.service';
 
 const CONTACT_EMAIL = 'hello@zamaro.ca';
 
-/** Skip link, header, the routed main region and footer on every page (L2-102.1). */
+/**
+ * Skip link, header, the routed main region and footer on every page (L2-102.1), then the one
+ * toast region, present from load so every toast is announced (L2-102).
+ */
 @Component({
   selector: 'zm-shell',
-  imports: [Footer, RouterOutlet, SkipLink, TopBar, TranslocoPipe],
+  imports: [Footer, RouterOutlet, SkipLink, ToastRegion, TopBar, TranslocoPipe],
   templateUrl: './shell.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

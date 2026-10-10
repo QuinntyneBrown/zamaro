@@ -3,6 +3,7 @@ import { cast } from '../../fixtures/cast';
 import { freezeClock, passTime, startClock } from '../../fixtures/clock';
 import { ArtistProfilePage } from '../../pages/artist-profile.page';
 import { Crawler } from '../../pages/crawler';
+import { DiscoverPage } from '../../pages/discover.page';
 
 const abigail = cast.artists.headliner;
 const ABIGAIL_TITLE = 'Abigail Mensah · Worship artist in Brampton · Zamaro';
@@ -183,6 +184,29 @@ test.describe('The head follows the page in the browser', () => {
     expect(head.canonical).toBe(`${baseURL}/`);
     expect(head.structuredData).toEqual([]);
     expect(head.openGraph['image']).toBeUndefined();
+  });
+
+  test('a profile that fails to load says so in the title and is kept out of the index', async ({
+    page,
+  }) => {
+    const discover = new DiscoverPage(page);
+    const profile = new ArtistProfilePage(page);
+    await freezeClock(page);
+    await discover.openLink({
+      date: cast.search.date,
+      kind: 'worship-night',
+      lat: '43.325',
+      lng: '-79.799',
+      place: 'Burlington',
+      radius: '120',
+    });
+    await profile.failProfile(abigail.slug);
+
+    await discover.lineup.headliner().openProfile();
+
+    await expect(profile.errorAlert()).toBeVisible();
+    await expect(page).toHaveTitle('This profile didn’t load · Zamaro');
+    expect((await profile.shell.head()).robots).toBe('noindex');
   });
 });
 

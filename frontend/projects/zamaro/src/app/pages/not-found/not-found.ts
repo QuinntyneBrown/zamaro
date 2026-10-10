@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { ButtonLink, ErrorPage, Icon } from 'components';
 import { HttpStatus } from '../../shared/http-status';
+import { PageMeta } from '../../shared/page-meta';
 
 const CONTACT_EMAIL = 'hello@zamaro.ca';
 
@@ -35,5 +36,9 @@ export class NotFoundPage {
 
   constructor() {
     inject(HttpStatus).set(404);
+    inject(PageMeta).set({
+      title: inject(TranslocoService).translate('errors.notFound.pageTitle'),
+      index: false,
+    });
   }
 }

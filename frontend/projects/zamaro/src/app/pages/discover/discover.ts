@@ -8,6 +8,7 @@ import { Band, Marquee, Poster } from 'components';
 import { HowBookingWorks } from './how-booking-works/how-booking-works';
 import { Lineup } from './lineup/lineup';
 import { QUICK_PICK_CITIES, SearchForm } from './search-form/search-form';
+import { PageMeta } from '../../shared/page-meta';
 import { fromParams } from './search-query-codec';
 import { SearchStore } from './search.store';
 
@@ -58,6 +59,11 @@ export class Discover {
    * also runs the search, so a shared link counts once against the rate limit and is never cached.
    */
   constructor() {
+    inject(PageMeta).set({
+      title: this.t('discover.meta.title'),
+      description: this.t('discover.meta.description'),
+      path: '/',
+    });
     const browser = isPlatformBrowser(inject(PLATFORM_ID));
     inject(ActivatedRoute)
       .queryParamMap.pipe(takeUntilDestroyed())

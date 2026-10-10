@@ -13,6 +13,7 @@ const ICONS = {
   mic: 'M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8',
   moon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z',
   refresh: 'M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5',
+  share: 'M12 3v13M7 8l5-5 5 5M5 14v7h14v-7',
   warning: 'M12 3 2 21h20zM12 10v5M12 18v.5',
 } as const;
 

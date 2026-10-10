@@ -7,6 +7,7 @@ import {
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
+import { robotsTxt, type SitemapProfile, sitemapXml } from './crawler-files';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -28,6 +29,36 @@ if (apiOrigin) {
     }),
   );
 }
+
+/** Where the site is served from, as the request reached it. */
+function siteOrigin(req: express.Request): string {
+  return `${req.protocol}://${req.get('host')}`;
+}
+
+/** What crawlers may index (L2-112.4). */
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').send(robotsTxt(siteOrigin(req)));
+});
+
+/** Every published profile, from the API, at this site's addresses (L2-112.3). */
+app.get('/sitemap.xml', async (req, res, next) => {
+  try {
+    const response = await fetch(`${apiOrigin ?? 'http://localhost:8000'}/api/v1/sitemap`, {
+      headers: { accept: 'application/json' },
+    });
+    if (!response.ok) {
+      res.sendStatus(502);
+      return;
+    }
+    const { data } = (await response.json()) as { data: SitemapProfile[] };
+    res
+      .type('application/xml')
+      .set('Cache-Control', 'public, max-age=0, s-maxage=60')
+      .send(sitemapXml(siteOrigin(req), data));
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * Serve static files from /browser

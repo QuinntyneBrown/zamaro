@@ -4,12 +4,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   Injector,
+  untracked,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
@@ -47,10 +50,13 @@ import {
 } from 'components';
 import { map } from 'rxjs';
 import { LastSearch } from '../../shared/last-search';
+import { PageMeta } from '../../shared/page-meta';
+import { ShareLink } from '../../shared/share-link';
 import { ArtistNotFoundPage } from '../not-found/artist-not-found';
 import { ArtistProfileStore } from './artist-profile.store';
 import { BookingDateStore } from './booking-date.store';
 import { ProfileReviewsStore } from './profile-reviews.store';
+import { ProfileSeo } from './profile-seo';
 
 /** Songs shown in the strip under the header (L2-012.1). */
 const STRIP_SONGS = 5;
@@ -61,10 +67,10 @@ const REVIEWS_PER_PAGE = 10;
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
  * of songs, About, videos, photos, the setlist, the upcoming dates, what churches say, and the
- * booking stub. A `?date=` carried from Discover names the date on the back link and starts the
- * dates and the stub there (L2-012.2, L2-017). Sending the request waits behind the
- * `bookingRequests` flag (M5). A missing or hidden artist shows the not-found page in its place
- * (L2-021).
+ * booking stub, with the head that crawlers and link previews read (L2-112, L2-113). A `?date=`
+ * carried from Discover names the date on the back link and starts the dates and the stub there
+ * (L2-012.2, L2-017). Sending the request waits behind the `bookingRequests` flag (M5). A missing
+ * or hidden artist shows the not-found page in its place (L2-021).
  */
 @Component({
   selector: 'zm-artist-page',
@@ -109,6 +115,10 @@ export class ArtistPage {
   private readonly route = inject(ActivatedRoute);
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly seo = inject(ProfileSeo);
+  private readonly pageMeta = inject(PageMeta);
+  private readonly title = inject(Title);
+  private readonly shareLink = inject(ShareLink);
 
   /** The search date carried from Discover, when it is a real date. */
   private readonly date = toSignal(
@@ -156,6 +166,17 @@ export class ArtistPage {
           kind: search && search.date === date ? search.params['kind'] : 'sunday-service',
         });
       });
+    // The missing-artist page sets its own head.
+    effect(() => {
+      const status = this.store.status();
+      const profile = this.store.profile();
+      untracked(() => {
+        if (status === 'loaded' && profile) this.seo.apply(profile);
+        if (status === 'error') {
+          this.pageMeta.set({ title: this.t('artist.error.title'), index: false });
+        }
+      });
+    });
     this.request.controls.date.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe((date) => this.dates.select(date));
@@ -453,6 +474,11 @@ export class ArtistPage {
     const date = this.shortDate();
     return date ? this.t('artist.stub.submitForDate', { date }) : this.t('artist.stub.submit');
   });
+
+  /** The share sheet with the profile's title and canonical address, or a copied link (L2-113). */
+  protected share(): void {
+    void this.shareLink.share(this.title.getTitle(), this.seo.canonical(this.store.profile()!));
+  }
 
   /** Moves focus to the booking stub's date field, scrolling the stub into view (L2-012.3, L2-019.5). */
   protected book(): void {

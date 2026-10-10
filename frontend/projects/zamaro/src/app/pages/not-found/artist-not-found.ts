@@ -4,6 +4,7 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { type CalendarDate, FormatService, type SimilarArtists } from 'api';
 import { ButtonLink, ErrorPage, Icon, Ticket } from 'components';
 import { actLine } from '../../shared/act-line';
+import { PageMeta } from '../../shared/page-meta';
 
 /**
  * A missing, suspended or deleted artist (docs/mocks/pages/not-found/artist), in place of the
@@ -26,6 +27,10 @@ export class ArtistNotFoundPage {
 
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
+
+  constructor() {
+    inject(PageMeta).set({ title: this.t('errors.artist.pageTitle'), index: false });
+  }
 
   private readonly date = computed(() => this.similar().date as CalendarDate);
 

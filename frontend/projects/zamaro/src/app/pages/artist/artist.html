@@ -26,6 +26,9 @@
           </p>
           <div class="cluster">
             <zm-button variant="primary" (click)="book()">{{ bookLabel() }}</zm-button>
+            <zm-button (click)="share()"
+              ><zm-icon name="share" />{{ 'common.share.label' | transloco }}</zm-button
+            >
           </div>
         </div>
       </div>
