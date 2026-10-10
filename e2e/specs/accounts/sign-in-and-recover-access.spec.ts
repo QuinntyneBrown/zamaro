@@ -1,6 +1,15 @@
 import { expect, test } from '@playwright/test';
-import { accounts, CAST_PASSWORD, createBooker, uniqueEmail } from '../../fixtures/accounts';
+import {
+  accounts,
+  CAST_PASSWORD,
+  createBooker,
+  meStatusWith,
+  signIn as signInWith,
+  signInAs,
+  uniqueEmail,
+} from '../../fixtures/accounts';
 import { ArtistProfilePage } from '../../pages/artist-profile.page';
+import { DiscoverPage } from '../../pages/discover.page';
 import { SignInPage } from '../../pages/sign-in.page';
 
 // L2-023.1–.2, L2-073.1, L2-108.1 and .3 (sign-in-and-recover-access).
@@ -98,5 +107,130 @@ test.describe('Signing in', () => {
     await expect(signIn.email()).toHaveValue(accounts.naomi.email);
     await expect(signIn.password()).toHaveValue(CAST_PASSWORD);
     await expect(signIn.submitButton()).toHaveText('Sign in');
+  });
+});
+
+// L2-023.1 and .5, L2-024.2 (initials and name), L2-099.1, L2-101.4.
+test.describe('The signed-in header and footer', () => {
+  test('a guest finds Sign in in the header and in the footer', async ({ page }) => {
+    const discover = new DiscoverPage(page);
+
+    await discover.openAndHydrate();
+
+    await expect(discover.shell.signInLink()).toBeVisible();
+    await expect(discover.shell.accountButton()).toHaveCount(0);
+    await expect(discover.shell.footerHeadings()).toHaveText([
+      'Churches',
+      'Artists',
+      'Your account',
+    ]);
+    await expect(discover.shell.footerColumn('Your account')).toHaveText(['Sign in']);
+  });
+
+  test('Sign in in the header returns the guest to the page they were on', async ({ page }) => {
+    const profile = new ArtistProfilePage(page);
+    const signIn = new SignInPage(page);
+    await profile.open('abigail-mensah', '2026-11-14');
+
+    await profile.shell.signInFromHeader();
+    await expect(signIn.heading()).toHaveText('Sign in');
+    await signIn.signIn(accounts.naomi.email, CAST_PASSWORD);
+
+    await expect(profile.name()).toHaveText('Abigail Mensah');
+    expect(signIn.address()).toBe('/artists/abigail-mensah?date=2026-11-14');
+  });
+
+  test('after the page loads, Naomi’s header shows NF and the footer names her', async ({
+    page,
+  }) => {
+    const discover = new DiscoverPage(page);
+    await signInAs(page.context(), 'naomi');
+
+    await discover.openAndHydrate();
+
+    await expect(discover.shell.accountButton()).toHaveText('NF');
+    await expect(discover.shell.accountButton()).toHaveAccessibleName(
+      'Account menu for Naomi Fraser',
+    );
+    await expect(discover.shell.signInLink()).toHaveCount(0);
+    await expect(discover.shell.footerHeadings()).toHaveText([
+      'Churches',
+      'Artists',
+      'Naomi Fraser',
+    ]);
+  });
+
+  test('the server never renders Naomi’s name into the page', async ({ page }) => {
+    const discover = new DiscoverPage(page);
+    await signInAs(page.context(), 'naomi');
+
+    const html = await discover.shell.serverRenderedHtml('/');
+
+    expect(html).not.toContain('Naomi Fraser');
+    expect(html).not.toContain(accounts.naomi.email);
+  });
+
+  test('at 320 px her initials stay in the header beside the menu button', async ({ page }) => {
+    const discover = new DiscoverPage(page);
+    await signInAs(page.context(), 'naomi');
+    await discover.useWidth(320);
+
+    await discover.openAndHydrate();
+
+    await expect(discover.shell.menuButton()).toBeVisible();
+    await expect(discover.shell.accountButton()).toBeVisible();
+    expect(await discover.shell.hasHorizontalScroll()).toBe(false);
+  });
+});
+
+test.describe('The account menu', () => {
+  let discover: DiscoverPage;
+
+  test.beforeEach(async ({ page }) => {
+    discover = new DiscoverPage(page);
+    await signInAs(page.context(), 'naomi');
+    await discover.openAndHydrate();
+  });
+
+  test('lists Naomi, her email, Account settings and Sign out', async () => {
+    const menu = await discover.shell.openAccountMenu();
+
+    await expect(menu.dialog()).toHaveAccessibleName('Account menu for Naomi Fraser');
+    await expect(menu.whoName()).toHaveText('Naomi Fraser');
+    await expect(menu.who()).toContainText(accounts.naomi.email);
+    await expect(menu.items()).toHaveText(['Account settings', 'Sign out']);
+    await expect(menu.link('Your bookings')).toHaveCount(0);
+    await expect(menu.items().first()).toBeFocused();
+    await expect(discover.shell.accountButton()).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test('Tab moves through the items and Escape returns focus to the avatar', async () => {
+    const menu = await discover.shell.openAccountMenu();
+
+    await menu.pressTab();
+    await expect(menu.signOutButton()).toBeFocused();
+
+    await menu.closeWithEscape();
+    await expect(menu.dialog()).toBeHidden();
+    await expect(discover.shell.accountButton()).toBeFocused();
+    await expect(discover.shell.accountButton()).toHaveAttribute('aria-expanded', 'false');
+  });
+});
+
+test.describe('Signing out', () => {
+  test('ends the session on the server and the header shows Sign in again', async ({ page }) => {
+    const discover = new DiscoverPage(page);
+    const booker = createBooker();
+    await signInWith(page.context().request, booker.email, booker.password);
+    await discover.openAndHydrate();
+    const session = await new SignInPage(page).sessionCookie();
+
+    const menu = await discover.shell.openAccountMenu();
+    await menu.signOut();
+
+    await expect(discover.shell.signInLink()).toBeVisible();
+    await expect(discover.shell.accountButton()).toHaveCount(0);
+    await expect(menu.dialog()).toBeHidden();
+    expect(await meStatusWith(session!)).toBe(401);
   });
 });

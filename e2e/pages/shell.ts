@@ -1,4 +1,5 @@
 import type { Locator, Page } from '@playwright/test';
+import { AccountMenuDialog } from './account-menu.dialog';
 import { MenuDialog } from './menu.dialog';
 import { readHead, type PageHead } from './page-head';
 
@@ -39,6 +40,25 @@ export class Shell {
     return new MenuDialog(this.page);
   }
 
+  /** The avatar that opens the account menu: "Account menu for Naomi Fraser". */
+  accountButton(): Locator {
+    return this.page.getByRole('banner').getByRole('button', { name: /^Account menu for/ });
+  }
+
+  /** The header's link for someone signed out. */
+  signInLink(): Locator {
+    return this.page.getByRole('banner').getByRole('link', { name: 'Sign in' });
+  }
+
+  async openAccountMenu(): Promise<AccountMenuDialog> {
+    await this.accountButton().click();
+    return new AccountMenuDialog(this.page);
+  }
+
+  async signInFromHeader(): Promise<void> {
+    await this.signInLink().click();
+  }
+
   async toggleTheme(): Promise<void> {
     await this.themeToggle().click();
   }
@@ -60,6 +80,19 @@ export class Shell {
 
   footer(): Locator {
     return this.page.getByRole('contentinfo');
+  }
+
+  /** The footer's column headings, in order: "Churches", "Artists", "Your account". */
+  footerHeadings(): Locator {
+    return this.footer().getByRole('heading', { level: 2 });
+  }
+
+  /** The entries under one footer heading. */
+  footerColumn(heading: string): Locator {
+    return this.footer()
+      .getByRole('heading', { name: heading, exact: true })
+      .locator('xpath=following-sibling::ul[1]')
+      .getByRole('listitem');
   }
 
   /** How many of each landmark and level-one heading the page renders. */
@@ -113,6 +146,12 @@ export class Shell {
     return this.page.evaluate(
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
+  }
+
+  /** The HTML the server renders for `path` with this browser's cookies, before any script runs. */
+  async serverRenderedHtml(path: string): Promise<string> {
+    const response = await this.page.request.get(path);
+    return response.text();
   }
 
   /** The live document's head, as it stands after the browser took over. */

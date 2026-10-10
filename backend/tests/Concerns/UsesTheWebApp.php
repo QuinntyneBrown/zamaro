@@ -15,6 +15,17 @@ trait UsesTheWebApp
         return $this->withHeader('Referer', 'http://localhost:4200/');
     }
 
+    /**
+     * The next request is known only by the cookies it carries. Within one test the app remembers
+     * who signed in; forgetting the guards makes it read the session again, as a new request would.
+     */
+    protected function asANewRequest(): static
+    {
+        $this->app['auth']->forgetGuards();
+
+        return $this;
+    }
+
     protected function signIn(string $email, ?string $password = null): TestResponse
     {
         return $this->fromTheWebApp()->postJson('/api/v1/session', [

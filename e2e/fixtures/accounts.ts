@@ -1,4 +1,9 @@
-import type { APIRequestContext, BrowserContext } from '@playwright/test';
+import {
+  type APIRequestContext,
+  type BrowserContext,
+  type Cookie,
+  request,
+} from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 
@@ -79,6 +84,22 @@ export function createBooker(email: string = uniqueEmail()): { email: string; pa
     { cwd: new URL('../..', import.meta.url), stdio: 'pipe' },
   );
   return { email, password: CAST_PASSWORD };
+}
+
+/** What `GET /api/v1/me` answers a browser holding only this session cookie: 200 or 401. */
+export async function meStatusWith(sessionCookie: Cookie): Promise<number> {
+  const context = await request.newContext({
+    baseURL: SITE,
+    storageState: { cookies: [sessionCookie], origins: [] },
+  });
+  try {
+    const response = await context.get('/api/v1/me', {
+      headers: { Referer: `${SITE}/`, Accept: 'application/json' },
+    });
+    return response.status();
+  } finally {
+    await context.dispose();
+  }
 }
 
 async function xsrfToken(request: APIRequestContext): Promise<string> {
