@@ -3,6 +3,7 @@
 namespace App\Actions\Discovery;
 
 use App\Models\Artist;
+use App\Services\ArtistAvailability\AvailabilityService;
 use App\Services\Discovery\Coordinates;
 use App\Services\Discovery\DistanceService;
 use App\Services\Discovery\LineupCard;
@@ -17,7 +18,10 @@ class SearchAvailableArtists
 {
     private const KM_PER_DEGREE_LATITUDE = 111.0;
 
-    public function __construct(private readonly DistanceService $distances) {}
+    public function __construct(
+        private readonly AvailabilityService $availability,
+        private readonly DistanceService $distances,
+    ) {}
 
     /**
      * @return list<LineupCard>
@@ -30,6 +34,9 @@ class SearchAvailableArtists
             ->with(['styles', 'rating'])
             ->get()
             ->keyBy('id');
+        $candidates = $candidates->only(
+            $this->availability->freeArtistIds($candidates->keys()->all(), $criteria->eventDate, $criteria->kind),
+        );
 
         $distances = $this->distances->fromOrigin(
             $criteria->location,
