@@ -219,7 +219,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **Decided by the user (2026-10-09):**
   - **No object storage in M1.** S12 serves the seeded photos and videos from the API's local disk in dev and e2e. Object storage arrives with uploads in M4, with its own ADR.
   - **The S14 book button stays hidden until M5.** The stub and date picking ship; the submit sits behind a `bookingRequests` flag that is off. There is no placeholder route.
-- **ADR renumbering (current):** 0008 went to S11, as S5 needed no ADR. S12 takes 0009 and S15 takes 0010.
+- **ADR renumbering (current):** 0008 went to S11, as S5 needed no ADR. S12 takes 0010 and S15 takes 0011 (0009 went to the Laravel 13 upgrade).
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
