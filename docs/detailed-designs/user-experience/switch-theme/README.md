@@ -144,8 +144,8 @@ the account preference in the Zamaro database and returns it through
 
 ### Components
 
-The boot script and `ThemeService` share one storage key. `ThemeToggleComponent`
-calls `ThemeService`, which calls `PreferencesApi`; in the API,
+The boot script and `ThemeService` share one storage key. The toggle in `zm-top-bar`, or the
+"Dark theme" item of `zm-menu` in the drawer, calls `ThemeService`, which calls `PreferencesApi`; in the API,
 `PreferencesController` validates with `UpdatePreferencesRequest` and runs
 `UpdateUserPreferences`.
 

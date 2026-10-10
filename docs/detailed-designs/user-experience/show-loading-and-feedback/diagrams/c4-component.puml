@@ -9,7 +9,7 @@ Container_Boundary(web, "Zamaro Web") {
   Component(busy, "BusyRegionDirective", "Angular directive", "aria-busy and skeleton after 300 ms")
   Component(skel, "Skeleton components", "Angular components", "Ticket, headliner and profile skeletons")
   Component(submitter, "FormSubmitter", "TypeScript helper", "exhaustMap, keeps values on error")
-  Component(button, "SubmitButtonComponent", "Angular component", "Busy (aria-busy + aria-disabled), spinner")
+  Component(button, "zm-button", "Library component", "Busy (aria-busy + aria-disabled), spinner")
   Component(keys, "IdempotencyKeyStore", "Angular service", "One key per logical submission")
   Component(toasts, "ToastService", "Angular service", "Timers, pause, stack of 3, queue")
   Component(region, "ToastRegionComponent", "Angular component", "Fixed region, newest first")

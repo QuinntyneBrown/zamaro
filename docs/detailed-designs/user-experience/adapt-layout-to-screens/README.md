@@ -31,9 +31,9 @@ Terms used in this design:
 
 The slice lives almost entirely in Zamaro Web. It touches the Zamaro API only through
 the current-user endpoint that feeds the header's Saved count and account initials,
-and through the seeded API that the visual test suite runs against.
+and through the mocked API that the e2e visual suite runs against (AGENTS.md).
 
-**Frontend (Zamaro Web, `core/layout`)**
+**Frontend (Zamaro Web, `app/shell`; locations per ADR-0007)**
 
 - **`breakpoints.scss`** — the single SCSS map of the L2 breakpoints and the
   `respond-to(xs|sm|md|lg|xl)` mixin. Layout itself is CSS: mobile-first media

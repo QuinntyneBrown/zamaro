@@ -52,8 +52,9 @@ personal data (L2-084).
 - **`LogRequest`** — terminable middleware that writes one line per request with
   timestamp, level, `request_id`, `release`, method, route name, status, `duration_ms`
   and user ID when signed in.
-- **`JsonLogFormatter`** and **`RedactSensitiveFields`** — Monolog formatter and
-  processor on the `stderr` channel. The processor removes passwords, tokens, session
+- **JSON logs and `RedactSensitiveFields`** — the `stderr` channel uses Monolog's
+  `JsonFormatter` (`config/logging.php`, built in S1). The `RedactSensitiveFields` processor
+  arrives in M2 with the first sensitive fields; it removes passwords, tokens, session
   IDs, payment identifiers beyond the last 4 digits and message bodies (L2-079). The
   platform ships stdout and stderr to the log management service. Log retention is
   `<TO SUPPLY>`.
@@ -74,7 +75,7 @@ personal data (L2-084).
   root service that record the `X-Request-Id` of each failed response.
 - **`ErrorTrackingErrorHandler`** — Angular `ErrorHandler` that reports unhandled
   browser and SSR exceptions with the last request ID and the build's release version.
-- **`ErrorReferenceComponent`** — small presentational component on the server error
+- **`ErrorReference`** — small presentational component on the server error
   page, as in the [`server-error`](../../../mocks/pages/server-error/default.html) mock:
   a design-system receipt with a "Reference" row holding the request ID and a "When"
   row with the Toronto time ("Fri 9 Oct, 10:42 a.m."), then "Email us the reference",

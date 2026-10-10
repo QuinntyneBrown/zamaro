@@ -40,8 +40,7 @@ alt invalid input
   page --> actor : Inline errors, focus first invalid field, no search
 else valid input
   page -> store : navigate(criteria)
-  store -> store : Write the criteria to the address bar;
-Discover hands them back through load() (L2-009)
+  store -> store : Write the criteria to the address bar;\nDiscover hands them back through load() (L2-009)
   store -> store : Set status loading, aria-busy after 300 ms (L2-105)
   store -> client : search(query)
   client -> controller : GET /api/v1/search?date&kind&lat&lng&radius&sort

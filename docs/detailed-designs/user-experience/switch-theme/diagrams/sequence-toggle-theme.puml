@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Guest or signed-in user" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ThemeToggleComponent" as toggle
+  participant "Theme toggle (zm-top-bar or zm-menu)" as toggle
   participant "ThemeService" as service
   participant "PreferencesApi" as prefapi
 end box

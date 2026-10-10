@@ -14,7 +14,7 @@ skinparam class {
 title Class structure — Meet response-time budgets
 
 package "Zamaro Web (Angular)" {
-  class ArtistProfilePage {
+  class ArtistPage {
     +profile: Signal<ArtistProfile | null>
     +load(slug: string, date?: string): void
   }
@@ -98,7 +98,7 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-ArtistProfilePage --> ArtistsApi
+ArtistPage --> ArtistsApi
 ArtistsApi ..> ArtistProfileController : GET /api/v1/artists/{slug}
 RecordServerTiming --> MetricsRecorder
 RecordServerTiming ..> RequestClass : tags with
