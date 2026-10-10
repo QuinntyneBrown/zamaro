@@ -53,19 +53,25 @@ Laravel middleware stack, the policy, the FormRequest, the action and the databa
   booker's booking answers 404 and looks like a mistyped link
   ([`pages/booking-detail/forbidden`](../../../mocks/pages/booking-detail/forbidden.html),
   [`pages/not-found`](../../../mocks/pages/not-found/default.html)).
-- **Lint rule** — the ESLint configuration bans calls to `bypassSecurityTrust*` and
-  template bindings of `[innerHTML]` outside an allow-list of static, translated
-  strings. A violation fails CI.
+- **Lint rule** — the ESLint configuration (`frontend/eslint.config.js`) bans any use of
+  `bypassSecurityTrust*` and template bindings of `[innerHTML]` and `[outerHTML]`, inline
+  templates included. A violation fails CI. No static, translated string needs an HTML
+  binding yet; the first one is allowed with a commented `eslint-disable` line naming its
+  catalogue key.
 
 **Backend (Zamaro API), in request order**
 
 - **`App\Http\Middleware\LimitRequestBodySize`** — first middleware on the `api` group.
   It rejects a request whose `Content-Length`, or whose streamed body, exceeds
-  1,048,576 bytes with 413 (L2-075). Routes tagged with the `uploads` middleware group
-  are exempt and enforce their own limits. The edge body limit for non-upload paths is
+  1,048,576 bytes with 413 and the `payload-too-large` problem (L2-075). Routes tagged with
+  the `uploads` middleware group are exempt and enforce their own limits; the exemption
+  arrives with the first upload route (M4). The edge body limit for non-upload paths is
   `<TO SUPPLY>`.
+- **`App\Http\Middleware\EnsureJsonRequest`** — second on the `api` group. A request with a
+  body that is not `application/json` gets 415 and the `unsupported-media-type` problem
+  (L2-095); a request with no body, such as signing out, needs no `Content-Type`.
 - **`auth:sanctum`** — returns 401 when no session user is present.
-- **`App\Http\Middleware\EnsureUserHasRole`** — route middleware used as `role:artist`
+- **`App\Http\Middleware\EnsureUserHasRole`** — route middleware, alias `role`, used as `role:artist`
   on `/api/v1/artist/*` and `role:admin` on `/api/v1/admin/*`. A user without the role
   receives `abort(404)`, never 403 (L2-074).
 - **Route model binding** — `{booking:number}` resolves the `Booking` by its number,
@@ -97,7 +103,10 @@ Laravel middleware stack, the policy, the FormRequest, the action and the databa
 Every database access uses Eloquent or the query builder with bound parameters. A CI
 static-analysis rule fails the build when `DB::raw`, `DB::select`, `DB::statement` or
 any `*Raw` builder method receives a non-literal first argument, which catches
-concatenated or interpolated SQL. The tool that hosts the rule is `<TO SUPPLY>`.
+concatenated or interpolated SQL. The rule is `Zamaro\PHPStan\NoNonLiteralRawSqlRule` in
+`backend/tools/phpstan/`, run by Larastan at level 0 (`backend/phpstan.neon`) in
+`.ci/backend-test.sh` (M2 D27). A literal, or literals joined with `.`, passes; values travel as
+bindings, as `Artist::styles()` passes its order as a bound array.
 
 **Cross-user acceptance suite**
 
@@ -105,7 +114,10 @@ concatenated or interpolated SQL. The tool that hosts the rule is `<TO SUPPLY>`.
 `auth:sanctum`. For each route it reads a fixture from
 `tests/Feature/Security/route-ownership-fixtures.php` that creates a resource owned by
 user A and a signed-in user B. It asserts a 404 whose body contains none of the
-resource's fields. Role-restricted routes also assert 404 for a booker. A route with no
+resource's fields. A route with no identifier, such as `GET /me` or `DELETE /session`,
+acts on the caller alone: its case asserts that B's answer holds none of A's values and
+that A is unaffected. Role-restricted routes also assert 404 for a booker, with the same
+body as an unknown address. A route with no
 fixture fails the test, so a new endpoint cannot ship without its cross-user proof
 (L2-074).
 

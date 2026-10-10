@@ -90,7 +90,8 @@ zamaro/
 │   │   ├── Feature/{Subsystem}/   # integration tests against the API
 │   │   ├── Feature/Security/      # cross-user access suite and route-ownership fixtures
 │   │   └── load/                  # load scenarios for the response-time budgets
-│   ├── composer.json
+│   ├── tools/phpstan/             # Zamaro's own Larastan rules (the raw-SQL rule, L2-075.2)
+│   ├── composer.json  phpstan.neon
 │   ├── docker/                    # backend container assets (postgres init script); see ADR-0002
 │   └── Dockerfile                 # zamaro-api image (API and Worker)
 ├── frontend/                      # Angular workspace — Zamaro Web; angular.json declares every project

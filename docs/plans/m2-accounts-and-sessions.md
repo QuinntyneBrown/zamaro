@@ -10,14 +10,37 @@
 | S1 | Sign in | Done | `193c96c` red tests, `e2a97ff` (ADR-0016) |
 | S2 | Signed-in header, account menu and sign-out | Done | `4210c1f` red tests, `23effd2` (ADR-0017) |
 | S3 | CSRF and session limits | Done | `81b4823` red tests, `82f6684` (ADR-0018) |
-| S4–S18 | | Not started | |
+| S4 | The request gate | Done | `c9d2d56` red tests, `1014b36` |
+| S5–S18 | | Not started | |
 
-**Checks at the last commit (S3, 2026-10-10):** 149 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown` and Pint are clean; frontend lint, format and
-`ng build zamaro` are clean; `npx playwright test` passes 213 tests on win32, and
-`npm run test:docker -- visual a11y` passes 102 in the Linux image. S3 changes no `zm-*` component, so
-no perf run was needed; S2's run against the S1 build flagged no row (AvatarButton 126 ms,
-MenuAccount 278 ms and TopBarSignedIn at 110 iterations are new).
+**Checks at the last commit (S4, 2026-10-10):** 172 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, Pint and Larastan are clean; frontend lint, format
+and `ng build zamaro` are clean; `npx playwright test` passes 213 tests on win32. S4 changes no
+screen and no `zm-*` component, so no baselines and no perf run changed.
+
+**S4 acceptance criteria (as tested):**
+- Given a booker, when they call a `role:artist` or `role:admin` route, then they get the
+  `not-found` 404 with the same title and detail as an unknown address, and none of the route's data;
+  an artist gets through `role:artist`.
+- Given every `auth:sanctum` route, then `route-ownership-fixtures.php` has its case, and another
+  signed-in user gets none of the owner's data: `GET /me` answers the intruder with their own account,
+  and the intruder signing out leaves the owner signed in. A route with no case fails the suite.
+- Given a body of 1,048,577 bytes, or a declared `Content-Length` over 1 MB, then 413
+  `payload-too-large`; exactly 1,048,576 bytes reaches validation (422).
+- Given a `text/plain`, form or untyped body, then 415 `unsupported-media-type`; JSON with a charset
+  is accepted, and a request with no body needs no `Content-Type`.
+- Given one address, when it sends its 121st anonymous request in a minute, to any mix of routes, then
+  it gets the 429 `too-many-requests` problem with `Retry-After`; another address has its own
+  allowance and the next minute starts afresh. Given Naomi signed in, then her 300 requests a minute
+  pass and the 301st gets 429 from any address.
+- Given Naomi signed in, when she makes her 31st search in a minute from a new address each time, then
+  it gets 429.
+- Given a preflight from `http://localhost:4200`, then it may send credentials; another origin gets no
+  `Access-Control-Allow-Origin`, on a preflight or a read.
+- Given a log line whose context holds `password`, `current_password`, `password_confirmation`,
+  `challengeToken`, `X-XSRF-TOKEN`, `Cookie`, `Authorization`, `remember_token`, `session_id` or a
+  message `body`, at any depth, then each value is `[REDACTED]` and none reaches the log;
+  `processor_payment_id` and card numbers keep their last 4 digits (`…4242`).
 
 **S3 acceptance criteria (as tested):**
 - Given Naomi signed in, when `DELETE /api/v1/session` arrives without `X-XSRF-TOKEN`, with a wrong
@@ -168,6 +191,30 @@ MenuAccount 278 ms and TopBarSignedIn at 110 iterations are new).
   and session state hid ended sessions. `UsesTheWebApp` now sends credentials, and `asANewRequest()`
   forgets the guard and session data between requests; time-travel tests use UTC so 30 days are
   30 × 24 hours across the 1 Nov clock change.
+- **S4 — No role-guarded route exists yet.** The role tests register a throwaway `role:artist` and
+  `role:admin` route; the first real ones (`ArtistContactController`, S9) join the cross-user suite.
+  The two identifier-less routes (`/me`, `DELETE /session`) assert that the intruder sees nothing of
+  the owner's and leaves the owner signed in (authorise-and-validate design).
+- **S4 — The gate runs first.** `LimitRequestBodySize` and `EnsureJsonRequest` are prepended to the
+  `api` group, before the session, CSRF check and limiter, so an oversized or non-JSON body is refused
+  without touching Redis. The `uploads` exemption waits for M4's first upload route.
+- **S4 — `throttleApi()`, not `throttleWithRedis()`.** The counters already live in Redis through the
+  cache store; the limit-request-rates design now says so. The api limits are
+  `ZAMARO_API_LIMIT_PER_MINUTE` and `ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE`, raised on `api-e2e`.
+- **S4 — Server renders share one address (open, M9).** Zamaro Web's SSR calls the API from its own
+  container, so in production every server render would count toward one anonymous allowance. M9's
+  trusted proxies must include the web container and the SSR backend must forward the client
+  address; recorded in the limit-request-rates design.
+- **S4 — 413 and 415 are problem types** (`payload-too-large`, `unsupported-media-type`, D10), and PHP's
+  own `PostTooLargeException` renders as the same 413. `RequestGateResponses` documents 429 on every
+  operation and 413 and 415 on POST, PUT and PATCH.
+- **S4 — Redaction spares UUIDs.** A card number must stand alone and pass the Luhn check, so request
+  IDs and other long numbers stay readable.
+- **S4 — Larastan at level 0.** The raw-SQL rule lives in `backend/tools/phpstan/` (AGENTS.md tree)
+  and runs in `.ci/backend-test.sh`; it found `Artist::styles()` interpolating the style order, which
+  is now a bound array. Raising the level is left for M9.
+- **S4 — The ESLint bans** cover `bypassSecurityTrust*` and `[innerHTML]`/`[outerHTML]`, inline
+  templates included; nothing in the app needed an exception.
 
 ## Context
 
@@ -257,7 +304,7 @@ shown and are recorded in the slice's ADR or the design.
 | D4 | Breached-password vendor (sign-in-and-recover-access) | `Contracts/BreachedPasswordChecker`; the fake rejects a configured list; the HIBP range adapter in M10 | |
 | D5 | TOTP library (sign-in-and-recover-access) | `pragmarx/google2fa` with `bacon/bacon-qr-code` (SVG), behind `Services/Accounts/TotpVerifier` | |
 | D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK |
-| D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | |
+| D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | OK (accepted default, 2026-10-10); built in S4 |
 | D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK (accepted default, 2026-10-10); built in S3 as kind "Failed", title "That didn’t go through.", text "Reload the page and try again." |
 | D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK (accepted default, 2026-10-10); built in S3 |
 | D10 | Problem types for 401, 419 and the new cases | `unauthenticated`, `csrf-token-mismatch`, `link-expired` (410), `payload-too-large`, `unsupported-media-type`, `saved-artist-limit`, `terms-acceptance-required`, `sign-in-paused` (429). Bad credentials: 422 with `errors.credentials` | OK (accepted default, 2026-10-10); `unauthenticated` and `errors.credentials` built in S1, `csrf-token-mismatch` in S3 |
@@ -276,8 +323,8 @@ shown and are recorded in the slice's ADR or the design.
 | D23 | Mock parts that belong to later screens | Hide `#data` and `#delete` (M9), the reminder and review boxes (M7), "Your bookings" (M5), and the artist's Dashboard item and request count (M4/M5). Visual tests mask them | OK |
 | D24 | The saved card's "Request" link (`/book` is M5) | Until M5 it links to `/artists/{slug}?date=…` | OK |
 | D25 | Street-address type-ahead source (manage-church-profile) | A plain field until the geocoder vendor (M10) | |
-| D26 | Cross-user suite fails on a route with no fixture (L2-074.3), against "no architecture tests" | Keep it: L2-074.3 and the AGENTS.md tree both name it, and every case asserts behaviour | OK |
-| D27 | Raw-SQL lint tool (authorise-and-validate) | Larastan with a custom PHPStan rule against non-literal `DB::raw`, `select`, `statement` and `*Raw` | |
+| D26 | Cross-user suite fails on a route with no fixture (L2-074.3), against "no architecture tests" | Keep it: L2-074.3 and the AGENTS.md tree both name it, and every case asserts behaviour | OK (accepted default, 2026-10-10); built in S4 |
+| D27 | Raw-SQL lint tool (authorise-and-validate) | Larastan with a custom PHPStan rule against non-literal `DB::raw`, `select`, `statement` and `*Raw` | OK (accepted default, 2026-10-10); built in S4 at level 0 |
 | D28 | Cast sign-in password | `ZAMARO_CAST_PASSWORD` for Naomi, Abigail and Tomi, seeded only in `local`, `testing` and `e2e` | OK (accepted default, 2026-10-10) |
 
 ## Design conflicts and their resolutions

@@ -46,9 +46,10 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
 - **API-only rendering** — the backend serves no web pages, so `withExceptions()` renders
   every exception as problem details whatever the `Accept` header; no `ForceJsonResponse`
   middleware is needed (ADR-0005).
-- **`EnsureJsonRequest`** — middleware that rejects a body-carrying request whose
-  `Content-Type` is not `application/json` with 415. Upload endpoints that receive file
-  chunks are the named exception (L2-051, L2-052).
+- **`EnsureJsonRequest`** — middleware on the `api` group that rejects a request with a
+  body whose `Content-Type` is not `application/json` (or `+json`) with 415; a request with
+  no body needs no `Content-Type`. Upload endpoints that receive file chunks are the named
+  exception (L2-051, L2-052), added with the first of them (M4).
 - **JSON shape** — resources return `{ "data": ... }`. Dates are ISO 8601, money is
   integer cents with a currency code, and distances are whole kilometres. Properties
   are camelCase (ADR-0005).
@@ -91,6 +92,7 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
 | Disallowed booking transition (L2-029) | 409 | `Conflict` |
 | `ThrottleRequestsException` (L2-077) | 429 | `TooManyRequests`, with `Retry-After` |
 | Non-JSON body | 415 | `UnsupportedMediaType` |
+| Body over 1 MB (L2-075), or PHP's `PostTooLargeException` | 413 | `PayloadTooLarge` |
 | Any other `Throwable` | 500 | `ServerError`, generic `detail`, no stack trace |
 
 - **`ApiProblemInterceptor`** — Angular HTTP interceptor that parses any

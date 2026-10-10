@@ -102,8 +102,12 @@ screens of its own.
   `token`, any key ending in `_token`, `challengeToken`, `authorization`, `cookie`,
   `set-cookie`, `x-xsrf-token`, `session_id`, `recovery_codes`, and message `body`. It
   reduces `processor_payment_id`, `payment_method_id` and any 12–19 digit card-number
-  pattern to the last 4 digits (L2-079). The backend error tracking client applies the
-  same processor before sending.
+  pattern to the last 4 digits, shown as `…4242` (L2-079). Keys match in any case and at
+  any depth. A card number is a run of digits, optionally grouped by spaces or hyphens,
+  that stands alone and passes the Luhn check, so request IDs and order numbers stay
+  readable. The tap pushes the processor last, so it runs before the channel's own
+  processors and no placeholder copies a secret into the message first. The backend error
+  tracking client applies the same processor before sending.
 
 **At-rest encryption (Zamaro Infrastructure)**
 
