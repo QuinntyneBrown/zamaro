@@ -63,6 +63,17 @@ class ProblemDetailsRenderer
                 ->toResponse();
         }
 
+        // LimitRequestBodySize, and PHP's own post size check, both answer 413 (L2-075.4).
+        if ($e instanceof HttpExceptionInterface && $e->getStatusCode() === 413) {
+            return ProblemDetails::of(ProblemType::PayloadTooLarge, 'Send at most 1 MB.', $requestId)
+                ->toResponse();
+        }
+
+        if ($e instanceof HttpExceptionInterface && $e->getStatusCode() === 415) {
+            return ProblemDetails::of(ProblemType::UnsupportedMediaType, 'Send the body as application/json.', $requestId)
+                ->toResponse();
+        }
+
         if ($e instanceof TooManyRequestsHttpException) {
             return ProblemDetails::of(ProblemType::TooManyRequests, 'Wait for Retry-After seconds, then try again.', $requestId)
                 ->toResponse($e->getHeaders());

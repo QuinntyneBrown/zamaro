@@ -12,8 +12,25 @@ class RateLimitServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        // L2-077.2: 30 searches a minute per address; the per-account limit joins it with sign-in.
-        RateLimiter::for('search', fn (Request $request) => Limit::perMinute((int) config('zamaro.rate_limits.search_per_minute'))
-            ->by('search-ip:'.$request->ip()));
+        // L2-077.1: every /api/v1 request. Anonymous traffic is counted by address; a signed-in person
+        // by account, wherever they connect from (M2 D7).
+        RateLimiter::for('api', function (Request $request) {
+            $user = $request->user();
+
+            return $user === null
+                ? Limit::perMinute((int) config('zamaro.rate_limits.api_per_minute'))->by('ip:'.$request->ip())
+                : Limit::perMinute((int) config('zamaro.rate_limits.api_signed_in_per_minute'))->by('user:'.$user->getAuthIdentifier());
+        });
+
+        // L2-077.2: 30 searches a minute per address and, once signed in, per account as well.
+        RateLimiter::for('search', function (Request $request) {
+            $perMinute = (int) config('zamaro.rate_limits.search_per_minute');
+            $limits = [Limit::perMinute($perMinute)->by('search-ip:'.$request->ip())];
+            if ($user = $request->user()) {
+                $limits[] = Limit::perMinute($perMinute)->by('search-user:'.$user->getAuthIdentifier());
+            }
+
+            return $limits;
+        });
     }
 }

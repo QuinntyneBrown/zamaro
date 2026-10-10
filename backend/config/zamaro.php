@@ -19,7 +19,11 @@ return [
     ],
 
     'rate_limits' => [
-        // L2-077.2. The e2e API raises it: every browser in the suite shares one address.
+        // L2-077.1: anonymous /api/v1 requests per address, and per account once signed in (M2 D7).
+        // The e2e API raises both: every browser in the suite shares one address.
+        'api_per_minute' => (int) env('ZAMARO_API_LIMIT_PER_MINUTE', 120),
+        'api_signed_in_per_minute' => (int) env('ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE', 300),
+        // L2-077.2, per address and per account. The e2e API raises it too.
         'search_per_minute' => (int) env('ZAMARO_SEARCH_LIMIT_PER_MINUTE', 30),
     ],
 

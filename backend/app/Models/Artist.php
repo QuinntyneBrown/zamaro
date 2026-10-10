@@ -84,9 +84,9 @@ class Artist extends Model
     /** In the chips' order (the Style enum), so every card and profile lists them alike. */
     public function styles(): HasMany
     {
-        $order = implode(',', array_map(fn (Style $style) => "'{$style->value}'", Style::cases()));
+        $order = '{'.implode(',', array_map(fn (Style $style) => $style->value, Style::cases())).'}';
 
-        return $this->hasMany(ArtistStyle::class)->orderByRaw("array_position(ARRAY[{$order}]::text[], style)");
+        return $this->hasMany(ArtistStyle::class)->orderByRaw('array_position(?::text[], style)', [$order]);
     }
 
     public function rating(): HasOne

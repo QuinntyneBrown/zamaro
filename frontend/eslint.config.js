@@ -60,6 +60,31 @@ module.exports = defineConfig([
     plugins: { zamaro },
     rules: { 'zamaro/no-hardcoded-text': 'error' },
   },
+  // User text is rendered as text (L2-075.3): no bypassing Angular's sanitiser, no HTML bindings.
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'MemberExpression[property.name=/^bypassSecurityTrust/]',
+          message: 'Render user content as text; never bypass Angular sanitisation (L2-075.3).',
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.html'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'BoundAttribute[name=/^(innerHTML|outerHTML)$/]',
+          message: 'Bind text with interpolation, not [innerHTML] (L2-075.3).',
+        },
+      ],
+    },
+  },
   // Prettier owns formatting: turn off every lint rule that would fight it.
   prettier,
 ]);

@@ -2,6 +2,9 @@
 
 use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnforceAbsoluteSessionLifetime;
+use App\Http\Middleware\EnsureJsonRequest;
+use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\LimitRequestBodySize;
 use App\Http\Middleware\LogRequest;
 use App\Support\Problems\ProblemDetailsRenderer;
 use Illuminate\Foundation\Application;
@@ -27,10 +30,17 @@ return Application::configure(basePath: dirname(__DIR__))
         // Same-origin cookie sessions (ADR-0015): requests from ZAMARO_WEB_ORIGINS get the session,
         // cookie encryption and CSRF middleware on the api group; other callers stay stateless.
         $middleware->statefulApi();
+        // Before the session or any limiter: a body over 1 MB, or one that is not JSON, goes no further
+        // (L2-075.4, L2-095.1).
+        $middleware->api(prepend: [LimitRequestBodySize::class, EnsureJsonRequest::class]);
+        // Every /api/v1 route, anonymous or not, counts toward the `api` limiter (L2-077.1).
+        $middleware->throttleApi();
         // After the session has started: a session 30 days old ends here, whatever the route (L2-073.3).
         $middleware->api(append: [EnforceAbsoluteSessionLifetime::class]);
         // An API with no sign-in page to redirect to: a guest always gets the 401 problem.
         $middleware->redirectGuestsTo(fn () => null);
+        // role:artist, role:admin: anyone without the role gets 404 (L2-074.1).
+        $middleware->alias(['role' => EnsureUserHasRole::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // The app is API-only: every error is RFC 9457 problem details (L2-095.2).
