@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
 use App\Http\Controllers\Api\V1\Discovery\PlaceController;
 use App\Http\Controllers\Api\V1\Discovery\SearchAlternativesController;
 use App\Http\Controllers\Api\V1\Discovery\SearchController;
+use App\Http\Controllers\Api\V1\Operations\FeatureFlagsController;
 use App\Http\Controllers\Api\V1\Reviews\ArtistReviewsController;
 use App\Http\Controllers\Api\V1\UserExperience\TranslationCatalogueController;
 use Illuminate\Support\Facades\Route;
@@ -11,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 // /api/v1 routes that are intentionally anonymous. Everything else belongs in api.php.
 
 Route::get('i18n/{locale}', [TranslationCatalogueController::class, 'show'])->name('i18n.show');
+Route::get('features', FeatureFlagsController::class)->name('features');
 Route::get('search', SearchController::class)->middleware('throttle:search')->name('search');
 Route::get('search/alternatives', SearchAlternativesController::class)->middleware('throttle:search')->name('search.alternatives');
 Route::get('places', PlaceController::class)->name('places');
 Route::get('artists/{slug}', [ArtistProfileController::class, 'show'])->name('artists.show');
 Route::get('artists/{slug}/reviews', ArtistReviewsController::class)->name('artists.reviews');
+Route::get('artists/{slug}/availability', [ArtistAvailabilityController::class, 'check'])->name('artists.availability');
+Route::get('artists/{slug}/tour-dates', [ArtistAvailabilityController::class, 'tourDates'])->name('artists.tour-dates');

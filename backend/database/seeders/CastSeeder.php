@@ -52,7 +52,7 @@ class CastSeeder extends Seeder
         'grace-tabernacle-mass-choir' => ['Grace Tabernacle Mass Choir', 'ACT-0008', ActType::Choir, [Style::GospelChoir], 'Scarborough', 120, 2400, 4.8, 26, '2024-05-13'],
         'daniel-and-ruth-okonkwo' => ['Daniel & Ruth Okonkwo', 'ACT-0022', ActType::Duo, [Style::Acoustic, Style::Hymns], 'Ajax', 120, 700, 4.9, 14, '2025-01-20'],
         // Drives up to 40 km; Riverside in Burlington is 48 km away, so she is not in Naomi's lineup.
-        'miriam-haile' => ['Miriam Haile', 'ACT-0041', ActType::Solo, [Style::SoloVocalist], 'Etobicoke', 40, 300, null, 0, '2026-10-05'],
+        'miriam-haile' => ['Miriam Haile', 'ACT-0154', ActType::Solo, [Style::SoloVocalist], 'Etobicoke', 40, 300, null, 0, '2026-10-05'],
     ];
 
     /**

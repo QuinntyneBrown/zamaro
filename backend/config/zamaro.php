@@ -25,6 +25,13 @@ return [
         'disk' => env('ZAMARO_MEDIA_DISK', 'media'),
     ],
 
+    // Unfinished features, off unless the environment turns them on (ADR-0012). The frontend reads
+    // them from GET /api/v1/features.
+    'features' => [
+        // Sending a booking request from the profile's booking stub (M5).
+        'booking_requests' => (bool) env('ZAMARO_FEATURE_BOOKING_REQUESTS', false),
+    ],
+
     'i18n' => [
         // One directory per locale, one JSON file per namespace (L2-111).
         'path' => env('ZAMARO_I18N_PATH', resource_path('i18n')),
