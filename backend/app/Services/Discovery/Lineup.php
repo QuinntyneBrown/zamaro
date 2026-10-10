@@ -2,22 +2,25 @@
 
 namespace App\Services\Discovery;
 
-/** A search result: the headliner, then the other artists as tickets (L2-006). */
+/**
+ * One page of a search result (L2-006, L2-010): on the first page the headliner, then the tickets;
+ * later pages hold tickets alone.
+ */
 final class Lineup
 {
+    public const PER_PAGE = 24;
+
     /**
-     * @param  list<LineupCard>  $tickets  without the headliner
+     * @param  list<LineupCard>  $tickets  this page's tickets, without the headliner
+     * @param  int  $total  every artist free and in range, the headliner included
+     * @param  string|null  $nextCursor  null on the last page
      */
     public function __construct(
         public readonly ?LineupCard $headliner,
         public readonly ?HeadlinerQuote $quote,
         public readonly Season $season,
         public readonly array $tickets,
+        public readonly int $total,
+        public readonly ?string $nextCursor = null,
     ) {}
-
-    /** Every artist free and in range, the headliner included. */
-    public function total(): int
-    {
-        return count($this->tickets) + ($this->headliner ? 1 : 0);
-    }
 }

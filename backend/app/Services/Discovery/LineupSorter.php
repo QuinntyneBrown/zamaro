@@ -21,8 +21,12 @@ class LineupSorter
         return $cards;
     }
 
-    /** Smaller keys come first. */
-    private function key(LineupCard $card, SearchSort $sort): array
+    /**
+     * The card's position in the sort; smaller keys come first. The paging cursor stores it.
+     *
+     * @return list<int|float>
+     */
+    public function key(LineupCard $card, SearchSort $sort): array
     {
         $rating = $card->artist->rating;
 

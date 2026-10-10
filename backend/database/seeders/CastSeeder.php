@@ -18,6 +18,7 @@ use App\Models\Booking;
 use App\Models\Review;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
+use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -74,6 +75,17 @@ class CastSeeder extends Seeder
         'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart.'],
     ];
 
+    private const SUPPORTING_CAST = [
+        'Kempenfelt Worship Collective', 'Allandale Gospel Singers', 'Simcoe Street Praise Band',
+        'Minets Point Trio', 'Painswick Hymn Choir', 'Georgian Voices', 'Shanty Bay Strings',
+        'Heritage Park Praise', 'Bayfield Worship Band', 'Holly Choir of Barrie', 'Little Lake Acoustic',
+        'Ardagh Bluffs Ensemble', 'Sunnidale Singers', 'Innisfil Beach Worship', 'Oro Valley Voices',
+        'Midhurst Praise Collective', 'Springwater Hymn Duo', 'Wasaga Light Worship', 'Lefroy Gospel Choir',
+        'Stroud Harmony', 'Cundles Road Band', 'Grove Street Worship', 'Mapleview Praise',
+        'East Bayfield Acoustic', 'Letitia Heights Choir', 'Tollendale Worship Duo', 'Queens Park Singers',
+        'Codrington Praise Band', 'Victoria Village Voices', 'Lampman Lane Worship',
+    ];
+
     private const ABIGAIL_UNAVAILABLE = ['2026-11-26', '2026-11-27', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-31'];
 
     public function run(): void
@@ -85,7 +97,29 @@ class CastSeeder extends Seeder
             $this->abigailsCalendar(Artist::where('slug', 'abigail-mensah')->firstOrFail());
             $this->bookings();
             $this->reviews();
+            $this->supportingCast();
         });
+    }
+
+    /**
+     * Thirty artists around Barrie, for paging (L2-010): all free on Sat 14 Nov within 40 km of
+     * Barrie, and more than 120 km by road from Burlington, so Naomi's lineup is unchanged. Styles,
+     * prices and ratings vary by position; every seventh has no reviews yet.
+     */
+    private function supportingCast(): void
+    {
+        $barrie = CastRoutes::anchor('Barrie');
+        $styles = [[Style::Band, Style::Hymns], [Style::SoloVocalist, Style::Acoustic], [Style::GospelChoir], [Style::Acoustic, Style::Spanish], [Style::Band]];
+        $acts = [ActType::Band, ActType::Solo, ActType::Choir, ActType::Duo, ActType::Band];
+        foreach (self::SUPPORTING_CAST as $index => $name) {
+            $reviewed = ($index + 1) % 7 !== 0;
+            $this->artist(
+                Str::slug($name), $name, sprintf('ACT-%04d', 1001 + $index), $acts[$index % 5], $styles[$index % 5], 'Barrie',
+                120, 300 + ($index * 37 % 20) * 100, $reviewed ? round(4.0 + ($index * 13 % 11) / 10, 1) : null,
+                $reviewed ? 3 + $index * 7 % 30 : 0, '2025-09-01',
+                new Coordinates($barrie->latitude + ($index % 6) * 0.004, $barrie->longitude + intdiv($index, 6) * 0.006),
+            );
+        }
     }
 
     private function bookings(): void
@@ -129,11 +163,12 @@ class CastSeeder extends Seeder
     private function artist(
         string $slug, string $name, string $ticket, ActType $act, array $styles, string $base,
         int $maxDriveKm, int $fromDollars, ?float $rating, int $reviews, string $published,
+        ?Coordinates $at = null,
     ): void {
         // Cast accounts cannot sign in: the password is random and never shown.
         $user = User::firstOrCreate(['email' => "{$slug}@cast.zamaro.test"], ['name' => $name, 'password' => Str::random(40)]);
         $user->update(['name' => $name]);
-        $baseCoordinates = CastRoutes::anchor($base);
+        $baseCoordinates = $at ?? CastRoutes::anchor($base);
 
         $artist = Artist::updateOrCreate(['slug' => $slug], [
             'user_id' => $user->id,

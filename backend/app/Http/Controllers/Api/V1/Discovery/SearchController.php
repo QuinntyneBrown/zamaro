@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Discovery\SearchArtistsRequest;
 use App\Http\Resources\Discovery\HeadlinerResource;
 use App\Http\Resources\Discovery\LineupCardResource;
+use App\Services\Discovery\Lineup;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -22,13 +23,18 @@ class SearchController extends Controller
     public function __invoke(SearchArtistsRequest $request, SearchAvailableArtists $search): AnonymousResourceCollection
     {
         $criteria = $request->criteria();
-        $lineup = $search->handle($criteria);
+        $lineup = $search->handle($criteria, $request->cursorKey());
 
         return LineupCardResource::collection($lineup->tickets)->additional([
+            /** The first page only. */
             'headliner' => $lineup->headliner ? new HeadlinerResource($lineup) : null,
             'meta' => [
                 /** How many artists are free and pass the filters, the headliner included. */
-                'total' => $lineup->total(),
+                'total' => $lineup->total,
+                /** Cards per page, the headliner included on the first. */
+                'perPage' => Lineup::PER_PAGE,
+                /** Pass as `cursor` for the next page; null on the last page. */
+                'nextCursor' => $lineup->nextCursor,
                 /** @var 'closest'|'rating'|'price' */
                 'sort' => $criteria->sort->value,
                 /** @var list<string> */

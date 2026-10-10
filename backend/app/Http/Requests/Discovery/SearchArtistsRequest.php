@@ -7,6 +7,7 @@ use App\Enums\SearchSort;
 use App\Enums\Style;
 use App\Services\Discovery\Coordinates;
 use App\Services\Discovery\LineupFilter;
+use App\Services\Discovery\PageCursor;
 use App\Services\Discovery\SearchCriteria;
 use App\Services\Discovery\ServiceArea;
 use Carbon\CarbonImmutable;
@@ -60,7 +61,30 @@ class SearchArtistsRequest extends FormRequest
             }],
             /** `under-800`: only artists whose From price is below $800. */
             'price' => ['nullable', 'string', Rule::in([self::UNDER_800])],
+            /** `meta.nextCursor` from the previous page of the same search and sort. */
+            'cursor' => ['nullable', 'string', function (string $attribute, string $value, Closure $fail) {
+                if (PageCursor::decode($value, $this->sortOrDefault()) === null) {
+                    $fail('Start the search again: these results have changed.');
+                }
+            }],
         ];
+    }
+
+    /**
+     * The sort key to continue after, or null on the first page.
+     *
+     * @return list<int|float>|null
+     */
+    public function cursorKey(): ?array
+    {
+        $cursor = $this->validated('cursor');
+
+        return $cursor === null ? null : PageCursor::decode($cursor, $this->sortOrDefault());
+    }
+
+    private function sortOrDefault(): SearchSort
+    {
+        return SearchSort::tryFrom((string) $this->query('sort')) ?? SearchSort::Closest;
     }
 
     /**
