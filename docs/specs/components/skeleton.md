@@ -409,6 +409,10 @@ CRD:
 - Keep the reduced-motion rule. Keep the `Skeleton.ts` scenario as it is; do
   not lower its iterations.
 
+**Built at the close of M1:** the stage mapping (AC-10, without the forced-colours outline) and the
+`control`, `control-lg` and `wide` shapes, for the profile's loading state (its video block and the
+booking stub's card). The other shapes, widths and inputs above are still to do.
+
 ## Decisions
 
 - **D-1** *A wrapper component for the loading region (busy, hidden list, status)?* No. The status line sits in a different place on every loading mock (a `.lead`, a visually hidden paragraph, the page-head subtitle, a visually hidden `<h1>`), so the page owns `aria-busy`, the `aria-hidden` container and the status. The skeleton stays one inert block.

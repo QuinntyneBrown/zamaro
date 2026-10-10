@@ -504,6 +504,9 @@ this CRD:
   `.on-stage`. Also map the expanded fill on the stage.
 - Make the `.band` mapping beat `.on-stage` when a band sits on the stage. Use
   `:host-context(.on-stage .band)` or a later, more specific rule (D-9).
+  *Built at the close of M1:* the `.on-stage` outline for every variant but primary and pressed
+  (the profile header's Share). No band sits on the stage yet, so D-9's ordering is still to do:
+  the outline rule is more specific than the band rule.
 - Stop the spinner under reduced motion.
 - Log a dev-mode console error when `iconOnly` is set without `label`.
 - Add perf-test cases to the existing scenarios only if the scenario's rendered

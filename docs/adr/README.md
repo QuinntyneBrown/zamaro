@@ -22,3 +22,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0011](0011-slug-history-and-artist-slug-resolution.md) | Slug history and one slug resolver for every artist address | Accepted |
 | [0012](0012-feature-flags-from-api-configuration.md) | Feature flags live in the API's configuration and reach the frontend through one endpoint | Accepted |
 | [0013](0013-site-origin-from-the-request-for-crawler-urls.md) | Absolute URLs for crawlers and link previews use the origin the request arrived at | Accepted |
+| [0014](0014-deterministic-visual-parity-baselines.md) | Visual parity runs on a self-hosted display face with one baseline set per platform | Accepted |

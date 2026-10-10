@@ -138,6 +138,7 @@ zamaro/
 │   └── Dockerfile                 # zamaro-web image: serves zamaro (SSR) and admin under /admin
 └── e2e/                           # Playwright, Chromium only; one Playwright project per application
     ├── playwright.config.ts
+    ├── run-in-docker.mjs          # npm run test:docker: Playwright in the official Linux image (ADR-0014)
     ├── routes.manifest.ts         # every route in every state, shared by visual, a11y, and perf
     ├── pages/                     # page objects, one per screen; they own every selector
     │   └── admin/                 # page objects for the admin application

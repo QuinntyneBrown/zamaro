@@ -118,6 +118,29 @@ and through the seeded API that the visual test suite runs against.
   difference above the threshold fails the build until a reviewer approves the new
   baseline in the same pull request (L2-096). The diff threshold and whether every
   capture also runs in both themes are `<TO SUPPLY>`.
+  - *As built (M1 close, ADR-0014):* `maxDiffPixelRatio: 0.001` (M9 D22; OK, accepted
+    default, 2026-10-10), full-page captures in the light and dark themes at all five widths,
+    animations disabled. Each test opens one state per theme and resizes through the widths.
+    States the seeded API cannot produce (loading, error, rate-limited, the profile's loading
+    and error) are reached by holding or answering the browser's requests through the page
+    objects (`e2e/fixtures/route-states.ts`); no `VisualFixtureSeeder` is needed while M1 is
+    read-only. The rate-limit countdown is masked. Bebas Neue is self-hosted, and baselines are
+    kept per platform: `-win32` from the Windows host and `-linux` from the Playwright image
+    (`npm run test:docker`).
+  - *Not built yet:* `layout.spec.ts` (overflow, 44 px targets and 200 % zoom across the
+    manifest). `adapt-layout-to-screens.spec.ts` already checks 320 px overflow on Discover;
+    the rest moves to the M9 accessibility audit.
+  - *Deliberate differences from the mocks (M1):* headings use the self-hosted Bebas Neue,
+    narrower than the mocks' Impact fallback, so they wrap differently; the signed-out shell has
+    no Saved, account or save toggles (M2), and the footer and drawer only link to screens that
+    exist; the Discover band has no "Apply as an artist" (M3) and the stub no "Request to book"
+    (M5 flag); the profile is opened without a search in the manifest, so it has no "Headliner"
+    kicker and its kind defaults to Sunday service; seeded photos replace the mocks' artwork;
+    the poster's subtitle in the rate-limited and sold-out states keeps the app's intro and
+    count lines rather than the mocks' editorial lines; the Discover loading tickets are page
+    skeletons without the ticket frame, notches and perforation until `zm-ticket-skeleton`
+    (ticket CRD D-5) is built with M2's saved list, and their status line sits under the
+    filters.
 - **`layout.spec.ts`** — at 320 px it asserts that
   `document.documentElement.scrollWidth` does not exceed the viewport width and that
   no text element with hidden overflow has a `scrollWidth` larger than its
