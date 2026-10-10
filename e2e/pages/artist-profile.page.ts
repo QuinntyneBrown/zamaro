@@ -6,12 +6,14 @@ import { Shell } from './shell';
 export class ArtistProfilePage {
   readonly shell: Shell;
   readonly photoViewer: PhotoViewerDialog;
+  readonly stub: BookingStub;
   /** Paths of the video manifests, segments and captions the browser fetched. */
   private readonly playbackRequests: string[] = [];
 
   constructor(private readonly page: Page) {
     this.shell = new Shell(page);
     this.photoViewer = new PhotoViewerDialog(page);
+    this.stub = new BookingStub(page);
     page.on('request', (request) => {
       const path = new URL(request.url()).pathname;
       if (/\.(m3u8|ts|vtt)$/.test(path)) this.playbackRequests.push(path);
@@ -312,6 +314,109 @@ export class ArtistProfilePage {
       .evaluate((list) => getComputedStyle(list).gridTemplateColumns.split(' ').length);
   }
 
+  // Upcoming dates (L2-017)
+
+  private datesSection(): Locator {
+    return this.page.locator('[aria-labelledby="dates-title"]');
+  }
+
+  datesKicker(): Locator {
+    return this.datesSection().locator('.section__kicker');
+  }
+
+  datesHeading(): Locator {
+    return this.page.locator('#dates-title');
+  }
+
+  datesNote(): Locator {
+    return this.datesSection().locator('.section__head > p');
+  }
+
+  tourDates(): Locator {
+    return this.datesSection().locator('.tour-dates > li');
+  }
+
+  /** Each row's day as one line, "Sat 14 Nov", in order. */
+  async tourDays(): Promise<string[]> {
+    return this.tourDates()
+      .locator('.tour-dates__day')
+      .evaluateAll((days) =>
+        days.map(
+          (day) => `${day.querySelector('small')?.textContent} ${day.lastChild?.textContent}`,
+        ),
+      );
+  }
+
+  /** The row for a day such as "Sun 15 Nov". */
+  tourDate(day: string): TourDateRow {
+    const [weekday, ...date] = day.split(' ');
+    return new TourDateRow(
+      this.tourDates().filter({
+        has: this.page.locator('.tour-dates__day', { hasText: `${weekday}${date.join(' ')}` }),
+      }),
+    );
+  }
+
+  /** The row marked as the booker's date. */
+  currentTourDate(): Locator {
+    return this.datesSection().locator('.tour-dates > li[aria-current="date"]');
+  }
+
+  /** Every Pick in the list, each named "Pick Tue 17 Nov". */
+  pickButtons(): Locator {
+    return this.datesSection().getByRole('button', { name: /^Pick / });
+  }
+
+  async pick(day: string): Promise<void> {
+    await this.datesSection()
+      .getByRole('button', { name: `Pick ${day}` })
+      .click();
+  }
+
+  // Booking stub (L2-019)
+
+  /** The header's Book button: "Book for Sat 14 Nov" or "Check dates". */
+  async book(): Promise<void> {
+    await this.bookButton().click();
+  }
+
+  /** "Ask Miriam for a recording" in the videos' empty state. */
+  async askForRecording(): Promise<void> {
+    await this.videosEmptyState().getByRole('button').click();
+  }
+
+  /** "Be her first booking" in the reviews' empty state. */
+  async beFirstBooking(): Promise<void> {
+    await this.reviewsEmptyState().getByRole('button').click();
+  }
+
+  /** Scrolls the page to the reviews section. */
+  async scrollToReviews(): Promise<void> {
+    await this.reviewsHeading().scrollIntoViewIfNeeded();
+  }
+
+  /** The reviews section's box on the page. */
+  async reviewsBox(): Promise<{ top: number; bottom: number }> {
+    return this.reviewsSection().evaluate((section) => {
+      const box = section.getBoundingClientRect();
+      return { top: box.top + window.scrollY, bottom: box.bottom + window.scrollY };
+    });
+  }
+
+  /** The browser sees the `bookingRequests` flag on, for the features it fetches from now on. */
+  async turnOnBookingRequests(): Promise<void> {
+    await this.page.route('**/api/v1/features', (route) =>
+      route.fulfill({ json: { data: { bookingRequests: true } } }),
+    );
+  }
+
+  async isInViewport(locator: Locator): Promise<boolean> {
+    return locator.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      return box.top >= 0 && box.bottom <= window.innerHeight;
+    });
+  }
+
   /** The loading region and its status line. */
   busyRegion(): Locator {
     return this.page.locator('[aria-busy="true"]');
@@ -336,6 +441,103 @@ export class ArtistProfilePage {
   /** True when a script in the page set `window.zmPwned`. */
   async scriptRan(): Promise<boolean> {
     return this.page.evaluate(() => 'zmPwned' in window);
+  }
+}
+
+/** One row of "Upcoming dates": the day stamp, a note, a Free or Booked badge, or Pick. */
+export class TourDateRow {
+  constructor(readonly item: Locator) {}
+
+  note(): Locator {
+    return this.item.locator('.tour-dates__note');
+  }
+
+  /** The "Free" or "Booked" badge. */
+  badge(): Locator {
+    return this.item.locator('.badge');
+  }
+
+  pickButton(): Locator {
+    return this.item.getByRole('button', { name: /^Pick / });
+  }
+}
+
+/** The ticket-styled booking form in the profile's aside. */
+export class BookingStub {
+  constructor(private readonly page: Page) {}
+
+  /** The aside holding the stub, named by its title. */
+  region(): Locator {
+    return this.page.getByRole('complementary', { name: /^Book / });
+  }
+
+  title(): Locator {
+    return this.page.locator('#book-title');
+  }
+
+  /** The decorative ticket number, "No. ACT-0027". */
+  code(): Locator {
+    return this.region().locator('.stub__code');
+  }
+
+  price(): Locator {
+    return this.region().locator('.stub__price');
+  }
+
+  priceNote(): Locator {
+    return this.region().locator('.stub__price + br + .text-muted');
+  }
+
+  /** Every field label in order. */
+  fieldLabels(): Locator {
+    return this.region().locator('.field__label');
+  }
+
+  dateField(): Locator {
+    return this.region().getByLabel('Event date');
+  }
+
+  kindField(): Locator {
+    return this.region().getByLabel('Kind of gathering');
+  }
+
+  churchField(): Locator {
+    return this.region().getByLabel('Church');
+  }
+
+  messageField(): Locator {
+    return this.region().getByLabel(/^Message/);
+  }
+
+  async typeDate(date: string): Promise<void> {
+    await this.dateField().fill(date);
+  }
+
+  /** "Request to book · Sat 14 Nov", or "Request to book" before a date is chosen. */
+  submitButton(): Locator {
+    return this.region().getByRole('button', { name: /^Request to book/ });
+  }
+
+  finePrint(): Locator {
+    return this.region().locator('.stub__fine');
+  }
+
+  policyLink(): Locator {
+    return this.finePrint().getByRole('link');
+  }
+
+  async openPolicy(): Promise<void> {
+    await this.policyLink().click();
+  }
+
+  /** Where the stub's top edge sits in the viewport. */
+  async topInViewport(): Promise<number> {
+    return this.region().evaluate((aside) => aside.getBoundingClientRect().top);
+  }
+
+  /** Where the stub starts on the page. */
+  async topOnPage(): Promise<number> {
+    return this.region().evaluate((aside) => aside.getBoundingClientRect().top + window.scrollY);
   }
 }
 

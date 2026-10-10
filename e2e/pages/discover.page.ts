@@ -42,7 +42,12 @@ export class DiscoverPage {
       route.fulfill({
         status: 429,
         headers: { 'Content-Type': 'application/problem+json', 'Retry-After': String(seconds) },
-        body: JSON.stringify({ type: 'about:blank', title: 'Too many requests', status: 429, detail: '' }),
+        body: JSON.stringify({
+          type: 'about:blank',
+          title: 'Too many requests',
+          status: 429,
+          detail: '',
+        }),
       }),
     );
   }
@@ -153,6 +158,63 @@ export class DiscoverPage {
   /** As if the person chose `theme` on an earlier visit from this device. */
   async rememberThemeOnDevice(theme: Theme): Promise<void> {
     await this.page.addInitScript((value) => localStorage.setItem('zamaro.theme', value), theme);
+  }
+
+  // How booking works (#how) and the artists' band (#join)
+
+  private howSection(): Locator {
+    return this.page.locator('section#how');
+  }
+
+  howHeading(): Locator {
+    return this.page.locator('#how-title');
+  }
+
+  howNote(): Locator {
+    return this.howSection().locator('.section__head > p');
+  }
+
+  /** Each step's title, in order. */
+  stepTitles(): Locator {
+    return this.howSection().locator('ol.steps > li h3');
+  }
+
+  stepDescriptions(): Locator {
+    return this.howSection().locator('ol.steps > li p');
+  }
+
+  policyHeading(): Locator {
+    return this.page.locator('#policy-title');
+  }
+
+  /** The cancellation policy's terms, in order. */
+  policyTerms(): Locator {
+    return this.page.locator('section#policy dt');
+  }
+
+  policyDetails(): Locator {
+    return this.page.locator('section#policy dd');
+  }
+
+  /** The "For artists" band, a region named by its headline. */
+  band(): Locator {
+    return this.page.getByRole('region', { name: 'Lead worship? Get on the bill.' });
+  }
+
+  bandKicker(): Locator {
+    return this.band().locator('.overline');
+  }
+
+  /** The address bar's fragment, "#how". */
+  hash(): string {
+    return new URL(this.page.url()).hash;
+  }
+
+  async isInViewport(locator: Locator): Promise<boolean> {
+    return locator.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      return box.top >= 0 && box.top < window.innerHeight;
+    });
   }
 
   /** Keeps the Angular app from starting, so only the server HTML and its inline script run. */

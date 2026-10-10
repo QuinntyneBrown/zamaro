@@ -92,7 +92,9 @@ export class Lineup {
   }
 
   ticket(name: string): Ticket {
-    return new Ticket(this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }));
+    return new Ticket(
+      this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }),
+    );
   }
 
   headliner(): Headliner {
@@ -169,6 +171,11 @@ export class Headliner {
 
   profileLink(): Locator {
     return this.card.getByRole('link', { name: /^See / });
+  }
+
+  /** Opens the profile from the headliner's name. */
+  async openProfile(): Promise<void> {
+    await this.name().getByRole('link').click();
   }
 }
 

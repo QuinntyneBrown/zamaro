@@ -19,6 +19,11 @@ export class Shell {
     return this.primaryNav().getByRole('link');
   }
 
+  /** Follows a header link such as "How booking works". */
+  async followNavLink(name: string): Promise<void> {
+    await this.primaryNav().getByRole('link', { name }).click();
+  }
+
   menuButton(): Locator {
     return this.page.getByRole('banner').getByRole('button', { name: 'Open menu' });
   }
