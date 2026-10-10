@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1b1b19;--ink2:#34322e;--muted:#5a5853;--paper:#f4f2ec;--signal:#f3cc3f;--rule:#3f3d38;--dmuted:#b5b2aa;--dtext:#e9e6de}
+*{margin:0;box-sizing:border-box}
+:root{--b:0px}html.bleed{--b:16.5px}
+body{width:calc(1050px + 2*var(--b));height:calc(600px + 2*var(--b));overflow:hidden;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+.card{width:calc(1050px + 2*var(--b));height:calc(600px + 2*var(--b));position:relative;padding:calc(72px + var(--b)) calc(80px + var(--b));display:none}
+.d{font-family:"Bebas Neue",Impact,sans-serif;letter-spacing:.02em;line-height:.9}
+.mark{display:inline-grid;place-items:center;background:var(--signal);color:var(--ink)}
+.mark svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* front */
+.front{flex-direction:column;justify-content:space-between}
+.front .top{display:flex;align-items:center;gap:18px}
+.front .top .mark{width:56px;height:56px}.front .top .mark svg{width:32px;height:32px}
+.front .top .d{font-size:52px;padding-top:6px}
+.front .name{font-size:112px}
+.front .bar{width:120px;height:10px;background:var(--signal);margin:22px 0 22px}
+.front .title{font-size:30px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.front .title span{display:block;font-weight:400;letter-spacing:.08em;font-size:26px;margin-top:10px}
+.front .stub{position:absolute;right:0;top:0;bottom:0;width:calc(170px + var(--b));border-left:4px dashed;display:flex;align-items:center;justify-content:center}
+.front .stub .d{margin-right:var(--b);writing-mode:vertical-rl;transform:rotate(180deg);font-size:56px;letter-spacing:.12em}
+/* back */
+.back{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:26px}
+.back .mark{width:140px;height:140px}.back .mark svg{width:80px;height:80px}
+.back .d{font-size:150px}
+.back .tag{font-size:24px;letter-spacing:.2em;text-transform:uppercase}
+/* themes */
+.light{background:var(--paper);color:var(--ink2)}
+.light .title span,.light .tag{color:var(--muted)}
+.light .stub{border-color:var(--rule);background:var(--ink);color:var(--signal)}
+.dark{background:var(--ink);color:var(--dtext)}
+.dark .title span,.dark .tag{color:var(--dmuted)}
+.dark .stub{border-color:var(--dmuted);background:var(--signal);color:var(--ink)}
+.back.light{background:var(--ink);color:var(--dtext)}.back.light .tag{color:var(--dmuted)}
+.back.dark{background:var(--signal);color:var(--ink)}.back.dark .mark{background:var(--ink);color:var(--signal)}.back.dark .tag{color:var(--ink2)}
+.card.show{display:flex}
+.front{padding-right:calc(250px + var(--b))}.front .url{margin-left:auto;font-size:24px;font-weight:700;letter-spacing:.06em}
+.back .url{font-size:30px;font-weight:700;letter-spacing:.08em;margin-top:-8px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><symbol id="mic" viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8"/></symbol></svg>
+<div class="card front" id="front">
+  <div class="top"><span class="mark"><svg viewBox="0 0 24 24"><use href="#mic"/></svg></span><span class="d">Zamaro</span><span class="url">zamaro.com</span></div>
+  <div><div class="d name">Quinntyne Brown</div><div class="bar"></div>
+  <div class="title">CEO / Founder<span>Principal Product Engineer</span></div></div>
+  <div class="stub"><span class="d">Admit one</span></div>
+</div>
+<div class="card back" id="back">
+  <span class="mark"><svg viewBox="0 0 24 24"><use href="#mic"/></svg></span>
+  <div class="d">Zamaro</div>
+  <div class="tag">Book praise &amp; worship artists · Toronto</div>
+  <div class="url">zamaro.com</div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);if(p.get('bleed'))document.documentElement.classList.add('bleed');const el=document.getElementById(p.get('side'));el.classList.add('show',p.get('theme'));
+</script></body></html>
