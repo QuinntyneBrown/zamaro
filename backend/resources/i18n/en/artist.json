@@ -33,6 +33,8 @@
   "kicker.new": "New to Zamaro · {headline}",
   "loading.status": "Loading the artist’s profile…",
   "loading.title": "Artist profile",
+  "meta.description": "{headline}. {bio}",
+  "meta.title": "{name} · Worship artist in {city}",
   "photos.kicker": "Gallery",
   "photos.none": "{act, select, solo {Solo vocalist} duo {Duo} band {Band} other {Choir}} illustration: {name} hasn’t added photos yet",
   "photos.open": "Open photo {position} of {total}: {alt}",

@@ -5,6 +5,7 @@
   "artist.leadNone": "They may have left or changed their address.",
   "artist.listLabel": "Similar artists free {date}",
   "artist.overline": "Error 404 · Artist not found",
+  "artist.pageTitle": "Artist not found",
   "artist.placeFromChurch": "{city} · {distance} from you",
   "artist.placeFromToronto": "{city} · {distance} from Toronto",
   "artist.poster": "No show",
@@ -17,6 +18,7 @@
   "notFound.noteBefore": "Followed a link from one of our emails?",
   "notFound.noteLink": "Tell us",
   "notFound.overline": "Error 404 · Page not found",
+  "notFound.pageTitle": "Page not found",
   "notFound.poster": "No show",
   "notFound.suffix": ": page not found"
 }

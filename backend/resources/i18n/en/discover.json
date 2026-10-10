@@ -55,6 +55,8 @@
   "lineup.moreLabel": "More artists free {date}",
   "lineup.paused": "{date} · search paused",
   "lineup.slow": "Still checking — thanks for waiting.",
+  "meta.description": "Tell us the date and where your church is. We’ll show who’s free and will drive to you.",
+  "meta.title": "Worship artists within driving distance of Toronto",
   "lineup.sort": "Sort",
   "lineup.summary": "{date} · {count} free · within {radius} km",
   "lineup.title": "The lineup",

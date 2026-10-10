@@ -20,6 +20,7 @@
   "menu.label": "Main menu",
   "menu.open": "Open menu",
   "menu.title": "Menu",
+  "meta.title": "{page} · Zamaro",
   "namedDay.01-01": "New Year’s Day",
   "namedDay.12-24": "Christmas Eve",
   "namedDay.12-25": "Christmas Day",
@@ -31,6 +32,9 @@
   "rating.churches": "{count, plural, one {# church} other {# churches}}",
   "rating.label": "Rated {rating} out of 5 by {count, plural, one {# church} other {# churches}}",
   "rating.new": "New",
+  "share.copied": "Link copied",
+  "share.kind": "Shared",
+  "share.label": "Share",
   "skipToContent": "Skip to content",
   "style.acoustic": "Acoustic",
   "style.band": "Band",
@@ -38,5 +42,6 @@
   "style.hymns": "Hymns",
   "style.solo-vocalist": "Solo vocalist",
   "style.spanish": "Spanish",
-  "theme.dark": "Dark theme"
+  "theme.dark": "Dark theme",
+  "toast.dismiss": "Dismiss: {title}"
 }

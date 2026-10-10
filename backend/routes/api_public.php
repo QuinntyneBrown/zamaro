@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
+use App\Http\Controllers\Api\V1\ArtistProfiles\SitemapController;
 use App\Http\Controllers\Api\V1\Discovery\PlaceController;
 use App\Http\Controllers\Api\V1\Discovery\SearchAlternativesController;
 use App\Http\Controllers\Api\V1\Discovery\SearchController;
@@ -17,7 +18,9 @@ Route::get('features', FeatureFlagsController::class)->name('features');
 Route::get('search', SearchController::class)->middleware('throttle:search')->name('search');
 Route::get('search/alternatives', SearchAlternativesController::class)->middleware('throttle:search')->name('search.alternatives');
 Route::get('places', PlaceController::class)->name('places');
-Route::get('artists/{slug}', [ArtistProfileController::class, 'show'])->name('artists.show');
+// Public profile responses revalidate with an ETag of their body; 304 when unchanged (L2-089.1).
+Route::get('artists/{slug}', [ArtistProfileController::class, 'show'])->middleware('cache.headers:etag')->name('artists.show');
 Route::get('artists/{slug}/reviews', ArtistReviewsController::class)->name('artists.reviews');
-Route::get('artists/{slug}/availability', [ArtistAvailabilityController::class, 'check'])->name('artists.availability');
-Route::get('artists/{slug}/tour-dates', [ArtistAvailabilityController::class, 'tourDates'])->name('artists.tour-dates');
+Route::get('artists/{slug}/availability', [ArtistAvailabilityController::class, 'check'])->middleware('cache.headers:etag')->name('artists.availability');
+Route::get('artists/{slug}/tour-dates', [ArtistAvailabilityController::class, 'tourDates'])->middleware('cache.headers:etag')->name('artists.tour-dates');
+Route::get('sitemap', SitemapController::class)->name('sitemap');

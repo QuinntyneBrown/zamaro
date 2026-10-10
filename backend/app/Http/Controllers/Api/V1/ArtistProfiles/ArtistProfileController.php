@@ -35,8 +35,8 @@ class ArtistProfileController extends Controller
             throw $missing->withSimilarArtists($similar->forMissingArtist($missing->primaryStyle, $request->carriedSearch()));
         }
 
-        // Public and shared: the server render's copy reaches the browser and the CDN may reuse it
-        // briefly. Validators (ETag) arrive with index-and-share-profile.
+        // Public and shared: the server render's copy reaches the browser and the CDN may reuse it for
+        // 60 seconds; the route's cache.headers middleware adds the ETag and answers 304 (L2-089.1).
         return (new ArtistProfileResource($artist))
             ->withReviews($reviews->page($artist, ListArtistReviews::ON_PROFILE), $reviews->total($artist))
             ->response($request)
