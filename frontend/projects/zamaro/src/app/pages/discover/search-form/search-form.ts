@@ -54,7 +54,7 @@ type FieldName = 'date' | 'location';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchForm {
-  private readonly store = inject(SearchStore);
+  protected readonly store = inject(SearchStore);
   private readonly api = inject(DISCOVERY_API);
   private readonly transloco = inject(TranslocoService);
 
@@ -107,6 +107,7 @@ export class SearchForm {
   }
 
   protected async submit(): Promise<void> {
+    if (this.store.status() === 'loading') return;
     // A chip pressed just before submitting still counts.
     await this.pendingCity;
     const { date, kind, location, radius } = this.form.getRawValue();

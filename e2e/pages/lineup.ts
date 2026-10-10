@@ -21,6 +21,40 @@ export class Lineup {
     return this.tickets().getByRole('heading', { level: 3 });
   }
 
+  region(): Locator {
+    return this.section();
+  }
+
+  /** The status line announcing what is loading. */
+  status(): Locator {
+    return this.section().getByRole('status');
+  }
+
+  /** Placeholder cards shown while waiting; hidden from assistive technology. */
+  skeletons(): Locator {
+    return this.section().locator('.skeleton');
+  }
+
+  alert(): Locator {
+    return this.section().getByRole('alert');
+  }
+
+  tryAgainButton(): Locator {
+    return this.alert().getByRole('button', { name: /^Try again/ });
+  }
+
+  async tryAgain(): Promise<void> {
+    await this.tryAgainButton().click();
+  }
+
+  emailLink(): Locator {
+    return this.alert().getByRole('link', { name: 'Email the Zamaro team' });
+  }
+
+  statusLink(): Locator {
+    return this.alert().getByRole('link', { name: 'Check status.zamaro.ca' });
+  }
+
   ticket(name: string): Ticket {
     return new Ticket(this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }));
   }

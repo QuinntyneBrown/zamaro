@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FormatService, type LineupCard, type SearchQuery, type SearchResult } from 'api';
-import { Headliner, Ticket } from 'components';
+import { FormatService, type LineupCard } from 'api';
+import { Alert, Button, ButtonAnchor, Headliner, Icon, Skeleton, Ticket } from 'components';
 import { actLine } from '../../../shared/act-line';
+import { SearchStore } from '../search.store';
 
 interface CardView {
   card: LineupCard;
@@ -13,40 +14,69 @@ interface CardView {
   ratingCount: string;
 }
 
+const CONTACT_EMAIL = 'hello@zamaro.ca';
+const STATUS_PAGE = 'https://status.zamaro.ca';
+/** The status page joins the error after this many failures in a row (L2-106.3). */
+const FAILURES_BEFORE_STATUS_LINK = 3;
+const SKELETON_TICKETS = [0, 1, 2, 3];
+
 /**
- * The lineup (docs/mocks/pages/discover/default.html): a summary line, the headliner as "No. 01",
- * then the tickets closest first from "No. 02" (L2-006).
+ * The lineup (docs/mocks/pages/discover): the headliner as "No. 01", then the tickets closest first
+ * from "No. 02" (L2-006). While a search takes longer than 300 ms it shows skeletons in a busy
+ * region (L2-105); a failure or the rate limit shows an alert and keeps the criteria (L2-106,
+ * L2-077).
  */
 @Component({
   selector: 'zm-lineup',
-  imports: [Headliner, Ticket, TranslocoPipe],
+  imports: [Alert, Button, ButtonAnchor, Headliner, Icon, Skeleton, Ticket, TranslocoPipe],
   templateUrl: './lineup.html',
   styleUrl: './lineup.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Lineup {
-  readonly query = input.required<SearchQuery>();
-  readonly result = input.required<SearchResult>();
-
+  protected readonly store = inject(SearchStore);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
 
-  protected readonly summary = computed(() =>
-    this.t('discover.lineup.summary', {
-      date: this.format.shortDate(this.query().date),
-      count: this.result().total,
-      radius: this.query().radius,
-    }),
+  protected readonly contactHref = `mailto:${CONTACT_EMAIL}`;
+  protected readonly statusPage = STATUS_PAGE;
+  protected readonly skeletonTickets = SKELETON_TICKETS;
+
+  private readonly date = computed(() => this.store.query()?.date ?? '');
+  protected readonly longDate = computed(() => this.format.longDate(this.date()));
+  protected readonly showStatusLink = computed(
+    () => this.store.consecutiveFailures() >= FAILURES_BEFORE_STATUS_LINK,
   );
 
+  protected readonly kicker = computed(() => {
+    const date = this.format.shortDate(this.date());
+    switch (this.store.status()) {
+      case 'loaded':
+        return this.t('discover.lineup.summary', {
+          date,
+          count: this.store.result()?.total ?? 0,
+          radius: this.store.query()?.radius,
+        });
+      case 'error':
+        return this.t('discover.lineup.unavailable', { date });
+      case 'limited':
+        return this.t('discover.lineup.paused', { date });
+      default:
+        return this.t('discover.lineup.checking', { date });
+    }
+  });
+
   protected readonly listLabel = computed(() =>
-    this.t(this.result().headliner ? 'discover.lineup.moreLabel' : 'discover.lineup.listLabel', {
-      date: this.format.longDate(this.query().date),
-    }),
+    this.t(
+      this.store.result()?.headliner ? 'discover.lineup.moreLabel' : 'discover.lineup.listLabel',
+      {
+        date: this.longDate(),
+      },
+    ),
   );
 
   protected readonly headliner = computed(() => {
-    const card = this.result().headliner;
+    const card = this.store.result()?.headliner;
     if (!card) return null;
     return {
       ...this.view(card, 1),
@@ -60,14 +90,16 @@ export class Lineup {
       }),
       quote: card.quote?.text ?? null,
       attribution: card.quote ? `${card.quote.reviewerName}, ${card.quote.city}` : '',
-      badge: this.t('discover.headliner.free', { date: this.format.shortDate(this.query().date) }),
+      badge: this.t('discover.headliner.free', { date: this.format.shortDate(this.date()) }),
       profileLabel: this.t('discover.headliner.profile', { name: this.callName(card) }),
     };
   });
 
   protected readonly tickets = computed(() => {
-    const first = this.result().headliner ? 2 : 1;
-    return this.result().cards.map((card, index) => ({
+    const result = this.store.result();
+    if (!result) return [];
+    const first = result.headliner ? 2 : 1;
+    return result.cards.map((card, index) => ({
       ...this.view(card, first + index),
       placeLine: this.t('discover.ticket.place', {
         city: card.city,
@@ -104,7 +136,7 @@ export class Lineup {
     return card.actType === 'solo' ? card.name.split(' ')[0] : card.name;
   }
 
-  private t(key: string, params?: Record<string, unknown>): string {
+  protected t(key: string, params?: Record<string, unknown>): string {
     return this.transloco.translate(key, params);
   }
 }

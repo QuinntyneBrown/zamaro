@@ -67,8 +67,16 @@
         }}</zm-chip>
       }
     </fieldset>
-    <zm-button class="span-all" variant="primary" size="lg" type="submit">{{
-      'discover.form.submit' | transloco
-    }}</zm-button>
+    <zm-button
+      class="span-all"
+      variant="primary"
+      size="lg"
+      type="submit"
+      [busy]="store.status() === 'loading'"
+      >{{
+        (store.status() === 'loading' ? 'discover.form.checking' : 'discover.form.submit')
+          | transloco
+      }}</zm-button
+    >
   </zm-booking-form>
 </form>

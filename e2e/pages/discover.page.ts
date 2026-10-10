@@ -23,6 +23,66 @@ export class DiscoverPage {
     });
   }
 
+  /** Holds every search response back for `ms` before letting it through. */
+  async delaySearches(ms: number): Promise<void> {
+    await this.page.route('**/api/v1/search?*', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, ms));
+      await route.continue();
+    });
+  }
+
+  /** Every search fails as if the network dropped. */
+  async failSearches(): Promise<void> {
+    await this.page.route('**/api/v1/search?*', (route) => route.abort('connectionfailed'));
+  }
+
+  /** Every search is refused as over the rate limit, with `Retry-After: seconds`. */
+  async limitSearches(seconds: number): Promise<void> {
+    await this.page.route('**/api/v1/search?*', (route) =>
+      route.fulfill({
+        status: 429,
+        headers: { 'Content-Type': 'application/problem+json', 'Retry-After': String(seconds) },
+        body: JSON.stringify({ type: 'about:blank', title: 'Too many requests', status: 429, detail: '' }),
+      }),
+    );
+  }
+
+  async restoreSearches(): Promise<void> {
+    await this.page.unroute('**/api/v1/search?*');
+  }
+
+  /** Records layout shifts from the first paint on; call before opening the page. */
+  async recordLayoutShifts(): Promise<void> {
+    await this.page.addInitScript(() => {
+      const shifts: { at: number; value: number }[] = [];
+      (window as unknown as { zmShifts: typeof shifts }).zmShifts = shifts;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries() as (PerformanceEntry & {
+          value: number;
+          hadRecentInput: boolean;
+        })[]) {
+          if (!entry.hadRecentInput) shifts.push({ at: entry.startTime, value: entry.value });
+        }
+      }).observe({ type: 'layout-shift', buffered: true });
+    });
+  }
+
+  /** The page's clock reading, to measure shifts from. */
+  async now(): Promise<number> {
+    return this.page.evaluate(() => performance.now());
+  }
+
+  /** Cumulative layout shift since `since` (a `now()` reading). */
+  async layoutShiftSince(since: number): Promise<number> {
+    return this.page.evaluate(
+      (from) =>
+        (window as unknown as { zmShifts: { at: number; value: number }[] }).zmShifts
+          .filter((shift) => shift.at >= from)
+          .reduce((sum, shift) => sum + shift.value, 0),
+      since,
+    );
+  }
+
   /** The app's today is Fri 9 Oct 2026 (docs/mocks/README.md). */
   async freezeClock(): Promise<void> {
     await this.page.clock.setFixedTime(FROZEN_NOW);

@@ -20,8 +20,8 @@ import { SearchStore } from './search.store';
       <zm-search-form />
     </zm-poster>
     <zm-marquee [items]="cities" />
-    @if (store.status() === 'loaded') {
-      <zm-lineup [query]="store.query()!" [result]="store.result()!" />
+    @if (store.status() !== 'idle') {
+      <zm-lineup />
     }`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -40,6 +40,9 @@ export class Discover {
   protected readonly subtitle = computed(() => {
     const query = this.store.query();
     const result = this.store.result();
+    if (this.store.status() === 'loading') {
+      return this.t('discover.poster.checking', { place: this.store.placeName() });
+    }
     if (!query || !result || this.store.status() !== 'loaded') {
       return this.t('discover.poster.intro');
     }

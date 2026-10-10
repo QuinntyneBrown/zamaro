@@ -20,8 +20,75 @@
   list-style: none;
 }
 
+.lead {
+  font: var(--text-body-lg);
+}
+
+/* Skeletons take the final cards' tracks and sizes so the swap does not move the page (L2-105.2). */
+.headliner-skeleton {
+  display: grid;
+  gap: var(--space-8);
+  padding: var(--space-8);
+  border: var(--border-width-poster) solid var(--color-border-default);
+}
+
+.headliner-skeleton__body,
+.ticket-skeleton__body,
+.ticket-skeleton__stub {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ticket-skeleton {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  grid-template-areas: 'art body' 'stub stub';
+  border: var(--border-width-thick) solid var(--color-border-default);
+}
+
+.ticket-skeleton__art {
+  grid-area: art;
+}
+
+.ticket-skeleton__body {
+  grid-area: body;
+  padding: var(--space-5);
+}
+
+.ticket-skeleton__stub {
+  grid-area: stub;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+}
+
+@media (min-width: 36rem) {
+  .ticket-skeleton {
+    grid-template-columns: 9rem minmax(0, 1fr) 10.5rem;
+    grid-template-areas: 'art body stub';
+  }
+
+  .ticket-skeleton__stub {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 48rem) {
+  .headliner-skeleton {
+    grid-template-columns: 16rem 1fr;
+    align-items: end;
+  }
+}
+
 @media (min-width: 62rem) {
   .lineup {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .headliner-skeleton {
+    grid-template-columns: 20rem 1fr;
+    padding: var(--space-10);
+    gap: var(--space-10);
   }
 }

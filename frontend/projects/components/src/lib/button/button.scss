@@ -96,6 +96,38 @@
   --zm-icon-fill: currentColor;
 }
 
+.btn:disabled {
+  --btn-bg: var(--color-bg-subtle);
+  --btn-fg: var(--color-fg-disabled);
+  --btn-border: var(--color-fg-disabled);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+/* A busy button keeps its colours; aria-disabled only blocks a second press. */
+.btn[aria-busy='true'] {
+  cursor: progress;
+  pointer-events: none;
+}
+
+.btn[aria-busy='true']::after {
+  content: '';
+  width: 1em;
+  height: 1em;
+  flex: none;
+  border: var(--border-width-thick) solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--radius-full);
+  animation: spin var(--duration-loop) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 .btn[aria-expanded='true'] {
   --btn-bg: var(--color-bg-subtle);
   box-shadow: none;

@@ -24,6 +24,9 @@ export function buttonClasses(variant: ButtonVariant, size: ButtonSize, iconOnly
   template: `<button
     [class]="classes()"
     [type]="type()"
+    [disabled]="disabled()"
+    [attr.aria-busy]="busy() ? 'true' : null"
+    [attr.aria-disabled]="busy() ? 'true' : null"
     [attr.aria-label]="label()"
     [attr.aria-pressed]="pressed()"
     [attr.aria-expanded]="expanded()"
@@ -45,6 +48,9 @@ export class Button {
   readonly pressed = input<boolean>();
   readonly expanded = input<boolean>();
   readonly controls = input<string>();
+  /** Waiting on the action it started: a spinner, and a second press is ignored by the owner. */
+  readonly busy = input(false);
+  readonly disabled = input(false);
 
   protected readonly classes = computed(() =>
     buttonClasses(this.variant(), this.size(), this.iconOnly()),

@@ -4,10 +4,12 @@ export type Scenario = () => Promise<{ default: Type<unknown> }>;
 
 // One entry per scenario file in this folder, keyed by the file name.
 export const scenarios: Record<string, Scenario> = {
+  Alert: () => import('./Alert'),
   Artwork: () => import('./Artwork'),
   Badge: () => import('./Badge'),
   BookingForm: () => import('./BookingForm'),
   Button: () => import('./Button'),
+  ButtonAnchor: () => import('./ButtonAnchor'),
   ButtonLink: () => import('./ButtonLink'),
   Chip: () => import('./Chip'),
   DarkTheme: () => import('./DarkTheme'),
@@ -21,6 +23,7 @@ export const scenarios: Record<string, Scenario> = {
   Menu: () => import('./Menu'),
   Poster: () => import('./Poster'),
   Rating: () => import('./Rating'),
+  Skeleton: () => import('./Skeleton'),
   SkipLink: () => import('./SkipLink'),
   Ticket: () => import('./Ticket'),
   TopBar: () => import('./TopBar'),

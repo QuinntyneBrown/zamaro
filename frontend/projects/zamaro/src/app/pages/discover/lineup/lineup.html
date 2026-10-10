@@ -1,51 +1,122 @@
-<section id="lineup" class="section" aria-labelledby="lineup-title">
+<section
+  id="lineup"
+  class="section"
+  aria-labelledby="lineup-title"
+  [attr.aria-busy]="store.showSkeletons() ? 'true' : null"
+>
   <div class="container lineup-section">
     <div class="section__head">
-      <p class="section__kicker">{{ summary() }}</p>
+      <p class="section__kicker">{{ kicker() }}</p>
       <h2 id="lineup-title">{{ 'discover.lineup.title' | transloco }}</h2>
     </div>
-    @if (headliner(); as headliner) {
-      <zm-headliner
-        [kicker]="headliner.kicker"
-        [name]="headliner.card.name"
-        [link]="'/artists/' + headliner.card.slug"
-        [queryParams]="{ date: query().date }"
-        [artTag]="'discover.headliner.tag' | transloco"
-        [actLine]="headliner.actLine"
-        [placeLine]="headliner.placeLine"
-        [priceLine]="headliner.priceLine"
-        [rating]="headliner.card.rating"
-        [ratingLabel]="headliner.ratingLabel"
-        [ratingCount]="headliner.ratingCount"
-        [ratingNew]="'common.rating.new' | transloco"
-        [quote]="headliner.quote"
-        [attribution]="headliner.attribution"
-        [badge]="headliner.badge"
-        [profileLabel]="headliner.profileLabel"
-      />
-    }
-    @if (tickets().length) {
-      <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
-        @for (ticket of tickets(); track ticket.card.slug) {
-          <li>
-            <zm-ticket
-              [positionLabel]="ticket.positionLabel"
-              [name]="ticket.card.name"
-              [link]="'/artists/' + ticket.card.slug"
-              [queryParams]="{ date: query().date }"
-              [actLine]="ticket.actLine"
-              [placeLine]="ticket.placeLine"
-              [priceLabel]="'discover.ticket.from' | transloco"
-              [price]="ticket.price"
-              [rating]="ticket.card.rating"
-              [ratingLabel]="ticket.ratingLabel"
-              [ratingCount]="ticket.ratingCount"
-              [ratingNew]="'common.rating.new' | transloco"
-              [artVariant]="artVariant(ticket.card)"
-            />
+
+    @if (store.showSkeletons()) {
+      <p class="lead">
+        <span role="status">{{
+          store.slow()
+            ? t('discover.lineup.slow')
+            : t('discover.lineup.finding', { date: longDate() })
+        }}</span>
+      </p>
+      <div class="headliner-skeleton" aria-hidden="true">
+        <zm-skeleton shape="portrait" />
+        <div class="headliner-skeleton__body">
+          <zm-skeleton width="short" />
+          <zm-skeleton shape="poster" />
+          <zm-skeleton />
+          <zm-skeleton width="long" />
+        </div>
+      </div>
+      <ul class="lineup" role="list" aria-hidden="true">
+        @for (index of skeletonTickets; track index) {
+          <li class="ticket-skeleton">
+            <zm-skeleton shape="block" class="ticket-skeleton__art" />
+            <div class="ticket-skeleton__body">
+              <zm-skeleton width="short" />
+              <zm-skeleton shape="title" />
+              <zm-skeleton />
+            </div>
+            <div class="ticket-skeleton__stub">
+              <zm-skeleton shape="title" width="short" />
+              <zm-skeleton shape="target" />
+            </div>
           </li>
         }
-      </ol>
+      </ul>
+    } @else if (store.status() === 'error') {
+      <zm-alert variant="danger" [heading]="'discover.error.title' | transloco">
+        <p>{{ t('discover.error.body', { date: longDate() }) }}</p>
+        <zm-button slot="actions" variant="primary" (click)="store.retry()"
+          ><zm-icon name="refresh" />{{ 'discover.error.retry' | transloco }}</zm-button
+        >
+        <zm-button-anchor slot="actions" [href]="contactHref">{{
+          'discover.error.email' | transloco
+        }}</zm-button-anchor>
+        @if (showStatusLink()) {
+          <zm-button-anchor slot="actions" [href]="statusPage">{{
+            'discover.error.status' | transloco
+          }}</zm-button-anchor>
+        }
+      </zm-alert>
+    } @else if (store.status() === 'limited') {
+      <zm-alert variant="danger" [heading]="'discover.limited.title' | transloco">
+        <p>{{ t('discover.limited.body', { seconds: store.retryAfter() }) }}</p>
+        <zm-button
+          slot="actions"
+          variant="primary"
+          [disabled]="store.retryIn() > 0"
+          (click)="store.retry()"
+          ><zm-icon name="refresh" />{{
+            store.retryIn() > 0
+              ? t('discover.limited.retryIn', { seconds: store.retryIn() })
+              : t('discover.error.retry')
+          }}</zm-button
+        >
+      </zm-alert>
+    } @else {
+      @if (headliner(); as headliner) {
+        <zm-headliner
+          [kicker]="headliner.kicker"
+          [name]="headliner.card.name"
+          [link]="'/artists/' + headliner.card.slug"
+          [queryParams]="{ date: store.query()!.date }"
+          [artTag]="'discover.headliner.tag' | transloco"
+          [actLine]="headliner.actLine"
+          [placeLine]="headliner.placeLine"
+          [priceLine]="headliner.priceLine"
+          [rating]="headliner.card.rating"
+          [ratingLabel]="headliner.ratingLabel"
+          [ratingCount]="headliner.ratingCount"
+          [ratingNew]="'common.rating.new' | transloco"
+          [quote]="headliner.quote"
+          [attribution]="headliner.attribution"
+          [badge]="headliner.badge"
+          [profileLabel]="headliner.profileLabel"
+        />
+      }
+      @if (tickets().length) {
+        <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
+          @for (ticket of tickets(); track ticket.card.slug) {
+            <li>
+              <zm-ticket
+                [positionLabel]="ticket.positionLabel"
+                [name]="ticket.card.name"
+                [link]="'/artists/' + ticket.card.slug"
+                [queryParams]="{ date: store.query()!.date }"
+                [actLine]="ticket.actLine"
+                [placeLine]="ticket.placeLine"
+                [priceLabel]="'discover.ticket.from' | transloco"
+                [price]="ticket.price"
+                [rating]="ticket.card.rating"
+                [ratingLabel]="ticket.ratingLabel"
+                [ratingCount]="ticket.ratingCount"
+                [ratingNew]="'common.rating.new' | transloco"
+                [artVariant]="artVariant(ticket.card)"
+              />
+            </li>
+          }
+        </ol>
+      }
     }
   </div>
 </section>

@@ -2,7 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { RouterLink } from '@angular/router';
 import { type ButtonSize, type ButtonVariant, buttonClasses } from './button';
 
-/** A route link styled as a button, e.g. the headliner's "See Abigail’s profile". */
+/**
+ * A route link styled as a button, e.g. the headliner's "See Abigail’s profile". An address outside
+ * the app is `zm-button-anchor`; keeping them apart keeps each free of a conditional slot.
+ */
 @Component({
   selector: 'zm-button-link',
   imports: [RouterLink],
