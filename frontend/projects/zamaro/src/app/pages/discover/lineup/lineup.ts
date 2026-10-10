@@ -35,6 +35,7 @@ import {
 } from 'components';
 import { actLine } from '../../../shared/act-line';
 import { SearchStore } from '../search.store';
+import { SoldOut } from '../sold-out/sold-out';
 
 interface CardView {
   card: LineupCard;
@@ -69,6 +70,7 @@ const SKELETON_TICKETS = [0, 1, 2, 3];
     Icon,
     ReactiveFormsModule,
     Skeleton,
+    SoldOut,
     Ticket,
     TranslocoPipe,
   ],

@@ -11,6 +11,7 @@ export * from './lib/button/button-anchor';
 export * from './lib/button/button-link';
 export * from './lib/chip/chip';
 export * from './lib/dialog/dialog';
+export * from './lib/empty-state/empty-state';
 export * from './lib/footer/footer';
 export * from './lib/form-field/form-field';
 export * from './lib/headliner/headliner';

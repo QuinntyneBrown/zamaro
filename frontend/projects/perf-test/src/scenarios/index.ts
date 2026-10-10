@@ -14,6 +14,7 @@ export const scenarios: Record<string, Scenario> = {
   Chip: () => import('./Chip'),
   DarkTheme: () => import('./DarkTheme'),
   Dialog: () => import('./Dialog'),
+  EmptyState: () => import('./EmptyState'),
   Footer: () => import('./Footer'),
   FormField: () => import('./FormField'),
   Headliner: () => import('./Headliner'),

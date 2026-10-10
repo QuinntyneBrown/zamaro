@@ -100,6 +100,8 @@
           }}</zm-button
         >
       </zm-alert>
+    } @else if (store.status() === 'loaded' && store.result()?.total === 0) {
+      <zm-sold-out />
     } @else {
       @if (headliner(); as headliner) {
         <zm-headliner

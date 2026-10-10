@@ -25,6 +25,11 @@ export class Lineup {
     return this.section();
   }
 
+  /** The "Sold out" panel shown when nobody is free (L2-011). */
+  soldOut(): SoldOut {
+    return new SoldOut(this.section().getByRole('status').filter({ hasText: 'Nobody’s free' }));
+  }
+
   showMoreButton(): Locator {
     return this.section().getByRole('button', { name: 'Show more artists' });
   }
@@ -92,6 +97,43 @@ export class Lineup {
 
   headliner(): Headliner {
     return new Headliner(this.section().getByRole('article'));
+  }
+}
+
+export class SoldOut {
+  constructor(private readonly panel: Locator) {}
+
+  root(): Locator {
+    return this.panel;
+  }
+
+  title(): Locator {
+    return this.panel.getByRole('heading', { level: 3 });
+  }
+
+  /** The sentence explaining why, and the way forward. */
+  explanation(): Locator {
+    return this.panel.locator('.sold-out__why');
+  }
+
+  datesHeading(): Locator {
+    return this.panel.getByRole('heading', { level: 4 });
+  }
+
+  nearbyDates(): Locator {
+    return this.panel.getByRole('list').getByRole('button');
+  }
+
+  async pickDate(shortDate: string): Promise<void> {
+    await this.nearbyDates().filter({ hasText: shortDate }).click();
+  }
+
+  widerRadiusButton(): Locator {
+    return this.panel.getByRole('button', { name: /^Search within/ });
+  }
+
+  showAllStylesButton(): Locator {
+    return this.panel.getByRole('button', { name: 'Show all styles' });
   }
 }
 

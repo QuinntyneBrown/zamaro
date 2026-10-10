@@ -24,6 +24,16 @@ export class FormatService {
         });
   }
 
+  /**
+   * A named day when the date has one ("Christmas Eve"), otherwise the short date. The names are
+   * catalogue keys `common.namedDay.{MM-DD}`.
+   */
+  dateDescription(date: CalendarDate): string {
+    const key = `common.namedDay.${date.slice(5)}`;
+    const named = key in this.transloco.getTranslation(this.transloco.getActiveLang());
+    return named ? this.transloco.translate(key) : this.shortDate(date);
+  }
+
   /** "Saturday 14 November 2026". */
   longDate(date: CalendarDate): string {
     return this.transloco.translate(

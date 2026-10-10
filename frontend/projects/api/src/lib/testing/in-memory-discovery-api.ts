@@ -1,5 +1,5 @@
 import { type Observable, of } from 'rxjs';
-import type { Place, SearchQuery, SearchResult } from '../models/discovery';
+import type { Place, SearchAlternatives, SearchQuery, SearchResult } from '../models/discovery';
 import type { DiscoveryApi } from '../services/discovery';
 
 /** In-memory DiscoveryApi for scenarios and component tests: returns what it is given. */
@@ -14,11 +14,20 @@ export class InMemoryDiscoveryApi implements DiscoveryApi {
       nextCursor: null,
     },
     private readonly places: readonly Place[] = [],
+    private readonly ways: SearchAlternatives = {
+      nearbyDates: [],
+      widerRadius: null,
+      filtersApplied: false,
+    },
   ) {}
 
   search(query: SearchQuery): Observable<SearchResult> {
     this.searches.push(query);
     return of(this.result);
+  }
+
+  alternatives(): Observable<SearchAlternatives> {
+    return of(this.ways);
   }
 
   lookUpPlace(text: string): Observable<Place | null> {

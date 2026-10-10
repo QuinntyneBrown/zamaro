@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { DISCOVERY_API, type SearchQuery, type SearchResult } from 'api';
+import { DISCOVERY_API, type SearchAlternatives, type SearchQuery, type SearchResult } from 'api';
 import type { Subscription } from 'rxjs';
 import { DEFAULT_STATE, type SearchState, toParams, toQuery } from './search-query-codec';
 
@@ -35,6 +35,8 @@ export class SearchStore {
   readonly slow = signal(false);
   readonly consecutiveFailures = signal(0);
   readonly loadingMore = signal(false);
+  /** Ways forward, loaded only when a search finds nobody (L2-011). */
+  readonly alternatives = signal<SearchAlternatives | null>(null);
   /** The wait the API asked for, and the seconds still to go. */
   readonly retryAfter = signal(0);
   readonly retryIn = signal(0);
@@ -121,6 +123,11 @@ export class SearchStore {
         this.settle('loaded');
         this.result.set(result);
         this.consecutiveFailures.set(0);
+        this.alternatives.set(null);
+        // A separate call, so the search itself never pays for it.
+        if (result.total === 0) {
+          this.api.alternatives(query).subscribe((ways) => this.alternatives.set(ways));
+        }
       },
       error: (error: unknown) => {
         if (error instanceof HttpErrorResponse && error.status === 429) {

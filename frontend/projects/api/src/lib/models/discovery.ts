@@ -90,6 +90,16 @@ export interface SearchResult {
   nextCursor: string | null;
 }
 
+/** Ways forward when nobody is free (L2-011). */
+export interface SearchAlternatives {
+  /** Up to three dates within 7 days either side, closest first. */
+  nearbyDates: { date: string; count: number }[];
+  /** The smallest wider radius with someone free, or null. */
+  widerRadius: { km: RadiusKm; count: number } | null;
+  /** Whether style or price filters narrowed the search. */
+  filtersApplied: boolean;
+}
+
 /** A town's centre point from `GET /api/v1/places`. */
 export interface Place {
   /** As the location field shows it: "Burlington, ON". */
