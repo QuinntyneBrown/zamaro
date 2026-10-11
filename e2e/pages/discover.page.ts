@@ -1,8 +1,8 @@
-import type { Locator, Page, Request } from "@playwright/test";
-import { FROZEN_NOW } from "../fixtures/clock";
-import { Lineup } from "./lineup";
-import { SearchForm } from "./search-form";
-import { Shell, type Theme } from "./shell";
+import type { Locator, Page, Request } from '@playwright/test';
+import { FROZEN_NOW } from '../fixtures/clock';
+import { Lineup } from './lineup';
+import { SearchForm } from './search-form';
+import { Shell, type Theme } from './shell';
 
 /** Discover: the home page at `/` (docs/mocks/pages/discover). */
 export class DiscoverPage {
@@ -16,17 +16,16 @@ export class DiscoverPage {
     this.shell = new Shell(page);
     this.form = new SearchForm(page);
     this.lineup = new Lineup(page);
-    page.on("request", (request) => {
+    page.on('request', (request) => {
       const path = new URL(request.url()).pathname;
-      if (path.startsWith("/api/v1/i18n/"))
-        this.catalogueRequests.push(request);
-      if (path === "/api/v1/search") this.searchRequests.push(request);
+      if (path.startsWith('/api/v1/i18n/')) this.catalogueRequests.push(request);
+      if (path === '/api/v1/search') this.searchRequests.push(request);
     });
   }
 
   /** Holds every search response back for `ms` before letting it through. */
   async delaySearches(ms: number): Promise<void> {
-    await this.page.route("**/api/v1/search?*", async (route) => {
+    await this.page.route('**/api/v1/search?*', async (route) => {
       await new Promise((resolve) => setTimeout(resolve, ms));
       await route.continue();
     });
@@ -34,40 +33,32 @@ export class DiscoverPage {
 
   /** Every search is held and never answered, so the lineup keeps loading. */
   async holdSearches(): Promise<void> {
-    await this.page.route(
-      "**/api/v1/search?*",
-      () => new Promise<void>(() => undefined),
-    );
+    await this.page.route('**/api/v1/search?*', () => new Promise<void>(() => undefined));
   }
 
   /** Every search fails as if the network dropped. */
   async failSearches(): Promise<void> {
-    await this.page.route("**/api/v1/search?*", (route) =>
-      route.abort("connectionfailed"),
-    );
+    await this.page.route('**/api/v1/search?*', (route) => route.abort('connectionfailed'));
   }
 
   /** Every search is refused as over the rate limit, with `Retry-After: seconds`. */
   async limitSearches(seconds: number): Promise<void> {
-    await this.page.route("**/api/v1/search?*", (route) =>
+    await this.page.route('**/api/v1/search?*', (route) =>
       route.fulfill({
         status: 429,
-        headers: {
-          "Content-Type": "application/problem+json",
-          "Retry-After": String(seconds),
-        },
+        headers: { 'Content-Type': 'application/problem+json', 'Retry-After': String(seconds) },
         body: JSON.stringify({
-          type: "about:blank",
-          title: "Too many requests",
+          type: 'about:blank',
+          title: 'Too many requests',
           status: 429,
-          detail: "",
+          detail: '',
         }),
       }),
     );
   }
 
   async restoreSearches(): Promise<void> {
-    await this.page.unroute("**/api/v1/search?*");
+    await this.page.unroute('**/api/v1/search?*');
   }
 
   /** Records layout shifts from the first paint on; call before opening the page. */
@@ -80,10 +71,9 @@ export class DiscoverPage {
           value: number;
           hadRecentInput: boolean;
         })[]) {
-          if (!entry.hadRecentInput)
-            shifts.push({ at: entry.startTime, value: entry.value });
+          if (!entry.hadRecentInput) shifts.push({ at: entry.startTime, value: entry.value });
         }
-      }).observe({ type: "layout-shift", buffered: true });
+      }).observe({ type: 'layout-shift', buffered: true });
     });
   }
 
@@ -96,9 +86,7 @@ export class DiscoverPage {
   async layoutShiftSince(since: number): Promise<number> {
     return this.page.evaluate(
       (from) =>
-        (
-          window as unknown as { zmShifts: { at: number; value: number }[] }
-        ).zmShifts
+        (window as unknown as { zmShifts: { at: number; value: number }[] }).zmShifts
           .filter((shift) => shift.at >= from)
           .reduce((sum, shift) => sum + shift.value, 0),
       since,
@@ -112,7 +100,7 @@ export class DiscoverPage {
 
   /** "Who’s free Sat 14 Nov". */
   posterHeadline(): Locator {
-    return this.page.getByRole("heading", { level: 1 });
+    return this.page.getByRole('heading', { level: 1 });
   }
 
   searchesSent(): number {
@@ -121,32 +109,25 @@ export class DiscoverPage {
 
   /** Marks the current document so a full page load can be detected later. */
   async markDocument(): Promise<void> {
-    await this.page.evaluate(
-      () => ((window as unknown as { zmMarker: boolean }).zmMarker = true),
-    );
+    await this.page.evaluate(() => ((window as unknown as { zmMarker: boolean }).zmMarker = true));
   }
 
   async documentWasReloaded(): Promise<boolean> {
-    return this.page.evaluate(
-      () => !(window as unknown as { zmMarker?: boolean }).zmMarker,
-    );
+    return this.page.evaluate(() => !(window as unknown as { zmMarker?: boolean }).zmMarker);
   }
 
   focusedElement(): Locator {
-    return this.page.locator(":focus");
+    return this.page.locator(':focus');
   }
 
   /** Saving fails on the server's side until unrouted. */
   async failSaves(): Promise<void> {
-    await this.page.route("**/api/v1/saved-artists/*", (route) =>
-      route.request().method() === "PUT"
+    await this.page.route('**/api/v1/saved-artists/*', (route) =>
+      route.request().method() === 'PUT'
         ? route.fulfill({
             status: 500,
-            headers: { "Content-Type": "application/problem+json" },
-            body: JSON.stringify({
-              title: "Something went wrong",
-              status: 500,
-            }),
+            headers: { 'Content-Type': 'application/problem+json' },
+            body: JSON.stringify({ title: 'Something went wrong', status: 500 }),
           })
         : route.fallback(),
     );
@@ -154,14 +135,14 @@ export class DiscoverPage {
 
   /** Saving is refused as over the 200-artist limit. */
   async limitSaves(): Promise<void> {
-    await this.page.route("**/api/v1/saved-artists/*", (route) =>
-      route.request().method() === "PUT"
+    await this.page.route('**/api/v1/saved-artists/*', (route) =>
+      route.request().method() === 'PUT'
         ? route.fulfill({
             status: 422,
-            headers: { "Content-Type": "application/problem+json" },
+            headers: { 'Content-Type': 'application/problem+json' },
             body: JSON.stringify({
-              type: "https://zamaro.ca/problems/saved-artist-limit",
-              title: "You can save up to 200 artists",
+              type: 'https://zamaro.ca/problems/saved-artist-limit',
+              title: 'You can save up to 200 artists',
               status: 422,
             }),
           })
@@ -170,19 +151,17 @@ export class DiscoverPage {
   }
 
   async open(): Promise<void> {
-    await this.page.goto("/");
+    await this.page.goto('/');
   }
 
   /** Opens the page and waits until the browser app has hydrated and gone quiet. */
   async openAndHydrate(): Promise<void> {
-    await this.page.goto("/", { waitUntil: "networkidle" });
+    await this.page.goto('/', { waitUntil: 'networkidle' });
   }
 
   /** Opens a shared Discover link with these query parameters. */
   async openLink(params: Record<string, string>): Promise<void> {
-    await this.page.goto(`/?${new URLSearchParams(params)}`, {
-      waitUntil: "networkidle",
-    });
+    await this.page.goto(`/?${new URLSearchParams(params)}`, { waitUntil: 'networkidle' });
   }
 
   /** The path and query in the address bar. */
@@ -206,7 +185,7 @@ export class DiscoverPage {
   }
 
   async reload(): Promise<void> {
-    await this.page.reload({ waitUntil: "networkidle" });
+    await this.page.reload({ waitUntil: 'networkidle' });
   }
 
   async useSystemTheme(theme: Theme): Promise<void> {
@@ -214,62 +193,57 @@ export class DiscoverPage {
   }
 
   async preferReducedMotion(): Promise<void> {
-    await this.page.emulateMedia({ reducedMotion: "reduce" });
+    await this.page.emulateMedia({ reducedMotion: 'reduce' });
   }
 
   /** As if the person chose `theme` on an earlier visit from this device. */
   async rememberThemeOnDevice(theme: Theme): Promise<void> {
-    await this.page.addInitScript(
-      (value) => localStorage.setItem("zamaro.theme", value),
-      theme,
-    );
+    await this.page.addInitScript((value) => localStorage.setItem('zamaro.theme', value), theme);
   }
 
   // How booking works (#how) and the artists' band (#join)
 
   private howSection(): Locator {
-    return this.page.locator("section#how");
+    return this.page.locator('section#how');
   }
 
   howHeading(): Locator {
-    return this.page.locator("#how-title");
+    return this.page.locator('#how-title');
   }
 
   howNote(): Locator {
-    return this.howSection().locator(".section__head > p");
+    return this.howSection().locator('.section__head > p');
   }
 
   /** Each step's title, in order. */
   stepTitles(): Locator {
-    return this.howSection().locator("ol.steps > li h3");
+    return this.howSection().locator('ol.steps > li h3');
   }
 
   stepDescriptions(): Locator {
-    return this.howSection().locator("ol.steps > li p");
+    return this.howSection().locator('ol.steps > li p');
   }
 
   policyHeading(): Locator {
-    return this.page.locator("#policy-title");
+    return this.page.locator('#policy-title');
   }
 
   /** The cancellation policy's terms, in order. */
   policyTerms(): Locator {
-    return this.page.locator("section#policy dt");
+    return this.page.locator('section#policy dt');
   }
 
   policyDetails(): Locator {
-    return this.page.locator("section#policy dd");
+    return this.page.locator('section#policy dd');
   }
 
   /** The "For artists" band, a region named by its headline. */
   band(): Locator {
-    return this.page.getByRole("region", {
-      name: "Lead worship? Get on the bill.",
-    });
+    return this.page.getByRole('region', { name: 'Lead worship? Get on the bill.' });
   }
 
   bandKicker(): Locator {
-    return this.band().locator(".overline");
+    return this.band().locator('.overline');
   }
 
   /** The address bar's fragment, "#how". */
@@ -286,6 +260,6 @@ export class DiscoverPage {
 
   /** Keeps the Angular app from starting, so only the server HTML and its inline script run. */
   async withoutTheApp(): Promise<void> {
-    await this.page.route("**/*.js", (route) => route.abort());
+    await this.page.route('**/*.js', (route) => route.abort());
   }
 }

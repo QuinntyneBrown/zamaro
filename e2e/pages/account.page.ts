@@ -1,6 +1,6 @@
-import { expect, type Locator, type Page } from "@playwright/test";
-import { freezeClock } from "../fixtures/clock";
-import { Shell } from "./shell";
+import { expect, type Locator, type Page } from '@playwright/test';
+import { freezeClock } from '../fixtures/clock';
+import { Shell } from './shell';
 
 export interface ChurchDetails {
   name: string;
@@ -14,13 +14,13 @@ export interface ChurchDetails {
 
 /** Riverside Community Church as docs/mocks/README.md has it. */
 export const RIVERSIDE: ChurchDetails = {
-  name: "Riverside Community Church",
-  streetAddress: "2150 Lakeshore Road",
-  city: "Burlington",
-  postalCode: "L7R 1A3",
-  phone: "905-555-0123",
-  denomination: "Non-denominational",
-  typicalAttendance: "350",
+  name: 'Riverside Community Church',
+  streetAddress: '2150 Lakeshore Road',
+  city: 'Burlington',
+  postalCode: 'L7R 1A3',
+  phone: '905-555-0123',
+  denomination: 'Non-denominational',
+  typicalAttendance: '350',
 };
 
 /**
@@ -37,26 +37,26 @@ export class AccountPage {
   /** Opens the page and waits until the settings have loaded into the form. */
   async open(): Promise<void> {
     await freezeClock(this.page);
-    await this.page.goto("/account");
+    await this.page.goto('/account');
     await expect(this.form()).toBeVisible();
   }
 
   /** Opens the page without waiting for the form, for a guest or a failed load. */
   async openOnly(): Promise<void> {
     await freezeClock(this.page);
-    await this.page.goto("/account");
+    await this.page.goto('/account');
   }
 
   /** Fills the church section as given, leaving out what is not given. */
   async fillChurch(church: Partial<ChurchDetails>): Promise<void> {
     const fields: [keyof ChurchDetails, Locator][] = [
-      ["name", this.churchName()],
-      ["streetAddress", this.streetAddress()],
-      ["city", this.city()],
-      ["postalCode", this.postalCode()],
-      ["phone", this.churchPhone()],
-      ["denomination", this.denomination()],
-      ["typicalAttendance", this.attendance()],
+      ['name', this.churchName()],
+      ['streetAddress', this.streetAddress()],
+      ['city', this.city()],
+      ['postalCode', this.postalCode()],
+      ['phone', this.churchPhone()],
+      ['denomination', this.denomination()],
+      ['typicalAttendance', this.attendance()],
     ];
     for (const [key, field] of fields) {
       const value = church[key];
@@ -68,12 +68,12 @@ export class AccountPage {
   async save(): Promise<void> {
     const answered = this.page.waitForResponse(
       (response) =>
-        response.request().method() !== "GET" &&
-        new URL(response.url()).pathname.startsWith("/api/v1/account/"),
+        response.request().method() !== 'GET' &&
+        new URL(response.url()).pathname.startsWith('/api/v1/account/'),
     );
     await this.saveButton().click();
     await answered;
-    await expect(this.saveButton()).not.toHaveAttribute("aria-busy", "true");
+    await expect(this.saveButton()).not.toHaveAttribute('aria-busy', 'true');
   }
 
   async discard(): Promise<void> {
@@ -83,10 +83,10 @@ export class AccountPage {
   /** Every save request the page sends from now on. */
   saveRequests(): string[] {
     const sent: string[] = [];
-    this.page.on("request", (request) => {
+    this.page.on('request', (request) => {
       if (
-        request.method() === "PUT" &&
-        new URL(request.url()).pathname.startsWith("/api/v1/account/")
+        request.method() === 'PUT' &&
+        new URL(request.url()).pathname.startsWith('/api/v1/account/')
       ) {
         sent.push(new URL(request.url()).pathname);
       }
@@ -96,24 +96,19 @@ export class AccountPage {
 
   /** Saving never answers, so the bar stays busy. */
   async holdSaves(): Promise<void> {
-    await this.page.route("**/api/v1/account/**", (route) =>
-      route.request().method() === "PUT"
-        ? new Promise<void>(() => undefined)
-        : route.fallback(),
+    await this.page.route('**/api/v1/account/**', (route) =>
+      route.request().method() === 'PUT' ? new Promise<void>(() => undefined) : route.fallback(),
     );
   }
 
   /** Saving fails on the server's side. */
   async failSaves(): Promise<void> {
-    await this.page.route("**/api/v1/account/**", (route) =>
-      route.request().method() === "PUT"
+    await this.page.route('**/api/v1/account/**', (route) =>
+      route.request().method() === 'PUT'
         ? route.fulfill({
             status: 500,
-            headers: { "Content-Type": "application/problem+json" },
-            body: JSON.stringify({
-              title: "Something went wrong",
-              status: 500,
-            }),
+            headers: { 'Content-Type': 'application/problem+json' },
+            body: JSON.stringify({ title: 'Something went wrong', status: 500 }),
           })
         : route.fallback(),
     );
@@ -121,10 +116,8 @@ export class AccountPage {
 
   /** Loading the settings fails, as if the network dropped. */
   async failLoading(): Promise<void> {
-    await this.page.route("**/api/v1/account/church", (route) =>
-      route.request().method() === "GET"
-        ? route.abort("failed")
-        : route.fallback(),
+    await this.page.route('**/api/v1/account/church', (route) =>
+      route.request().method() === 'GET' ? route.abort('failed') : route.fallback(),
     );
   }
 
@@ -139,253 +132,224 @@ export class AccountPage {
   }
 
   heading(): Locator {
-    return this.page.getByRole("heading", { level: 1 });
+    return this.page.getByRole('heading', { level: 1 });
   }
 
   /** "Naomi Fraser · Riverside Community Church" under the heading. */
   subtitle(): Locator {
-    return this.page.locator(".page-head__sub");
+    return this.page.locator('.page-head__sub');
   }
 
   settingsNav(): Locator {
-    return this.page.getByRole("navigation", { name: "Settings sections" });
+    return this.page.getByRole('navigation', { name: 'Settings sections' });
   }
 
   settingsNavLinks(): Locator {
-    return this.settingsNav().getByRole("link");
+    return this.settingsNav().getByRole('link');
   }
 
   form(): Locator {
-    return this.page.getByRole("form", { name: "Account settings" });
+    return this.page.getByRole('form', { name: 'Account settings' });
   }
 
   section(name: string): Locator {
-    return this.page.getByRole("region", { name, exact: true });
+    return this.page.getByRole('region', { name, exact: true });
   }
 
   sectionLead(name: string): Locator {
-    return this.section(name).locator(".form-section__lead");
+    return this.section(name).locator('.form-section__lead');
   }
 
   yourName(): Locator {
-    return this.section("Profile").getByRole("textbox", { name: /^Your name/ });
+    return this.section('Profile').getByRole('textbox', { name: /^Your name/ });
   }
 
   churchName(): Locator {
-    return this.section("Church").getByRole("textbox", {
-      name: /^Church name/,
-    });
+    return this.section('Church').getByRole('textbox', { name: /^Church name/ });
   }
 
   streetAddress(): Locator {
-    return this.section("Church").getByRole("textbox", {
-      name: /^Street address/,
-    });
+    return this.section('Church').getByRole('textbox', { name: /^Street address/ });
   }
 
   city(): Locator {
-    return this.section("Church").getByRole("textbox", { name: /^City/ });
+    return this.section('Church').getByRole('textbox', { name: /^City/ });
   }
 
   postalCode(): Locator {
-    return this.section("Church").getByRole("textbox", {
-      name: /^Postal code/,
-    });
+    return this.section('Church').getByRole('textbox', { name: /^Postal code/ });
   }
 
   churchPhone(): Locator {
-    return this.section("Church").getByRole("textbox", {
-      name: /^Contact phone/,
-    });
+    return this.section('Church').getByRole('textbox', { name: /^Contact phone/ });
   }
 
   denomination(): Locator {
-    return this.section("Church").getByRole("textbox", {
-      name: /^Denomination/,
-    });
+    return this.section('Church').getByRole('textbox', { name: /^Denomination/ });
   }
 
   attendance(): Locator {
-    return this.section("Church").getByRole("spinbutton", {
-      name: /^Typical attendance/,
-    });
+    return this.section('Church').getByRole('spinbutton', { name: /^Typical attendance/ });
   }
 
   newEmail(): Locator {
-    return this.section("Email").getByRole("textbox", { name: /^New email/ });
+    return this.section('Email').getByRole('textbox', { name: /^New email/ });
   }
 
   /** The Email section's "Current password". */
   emailPassword(): Locator {
-    return this.section("Email").getByLabel(/^Current password/);
+    return this.section('Email').getByLabel(/^Current password/);
   }
 
   /** "We sent a link to … You sign in with … until you open it.", after a change is asked for. */
   emailPending(): Locator {
-    return this.section("Email").getByRole("status");
+    return this.section('Email').getByRole('status');
   }
 
   /** The Password section's "Current password". */
   currentPassword(): Locator {
-    return this.section("Password").getByLabel(/^Current password/);
+    return this.section('Password').getByLabel(/^Current password/);
   }
 
   newPassword(): Locator {
-    return this.section("Password").getByLabel(/^New password/);
+    return this.section('Password').getByLabel(/^New password/);
   }
 
   /** The banner after a confirmed email change: "Email changed. You now sign in with …". */
   emailChangedBanner(): Locator {
-    return this.page.getByRole("status").filter({ hasText: /^Email changed/ });
+    return this.page.getByRole('status').filter({ hasText: /^Email changed/ });
   }
 
   /** "Off" or "On", the badge in the Two-step sign-in section. */
   twoStepStatus(): Locator {
-    return this.section("Two-step sign-in").locator(
-      ".form-section__lead .badge",
-    );
+    return this.section('Two-step sign-in').locator('.form-section__lead .badge');
   }
 
   turnOffTwoStepButton(): Locator {
-    return this.section("Two-step sign-in").getByRole("button", {
-      name: "Turn off",
-    });
+    return this.section('Two-step sign-in').getByRole('button', { name: 'Turn off' });
   }
 
   newRecoveryCodesButton(): Locator {
-    return this.section("Two-step sign-in").getByRole("button", {
-      name: "New recovery codes",
-    });
+    return this.section('Two-step sign-in').getByRole('button', { name: 'New recovery codes' });
   }
 
   turnOnTwoStepLink(): Locator {
-    return this.section("Two-step sign-in").getByRole("link", {
-      name: "Turn on two-step sign-in",
-    });
+    return this.section('Two-step sign-in').getByRole('link', { name: 'Turn on two-step sign-in' });
   }
 
   /** "Bookings and payments", always on. */
   alwaysOnChoice(): Locator {
-    return this.section("Email preferences").getByRole("checkbox").first();
+    return this.section('Email preferences').getByRole('checkbox').first();
   }
 
   /** "New artists near my church": the marketing choice. */
   marketingChoice(): Locator {
-    return this.section("Email preferences").getByRole("checkbox", {
+    return this.section('Email preferences').getByRole('checkbox', {
       name: /^New artists near my church/,
     });
   }
 
   /** The Signed-in devices list (docs/specs/components/list, device variant). */
   deviceList(): Locator {
-    return this.section("Signed-in devices").locator(".device-list");
+    return this.section('Signed-in devices').locator('.device-list');
   }
 
   /** Each device's name, in list order: "Chrome on Windows". */
   deviceNames(): Locator {
-    return this.deviceList().locator("li strong");
+    return this.deviceList().locator('li strong');
   }
 
   /** The line under a device: "Burlington, ON · This device · active now". */
   deviceDetail(device: string): Locator {
-    return this.deviceRow(device).locator(".text-muted");
+    return this.deviceRow(device).locator('.text-muted');
   }
 
   deviceRow(device: string): Locator {
     return this.deviceList()
-      .getByRole("listitem")
-      .filter({ has: this.page.locator("strong", { hasText: device }) });
+      .getByRole('listitem')
+      .filter({ has: this.page.locator('strong', { hasText: device }) });
   }
 
   /** "End session on Safari on iPhone". */
   endSessionButton(device: string): Locator {
-    return this.section("Signed-in devices").getByRole("button", {
+    return this.section('Signed-in devices').getByRole('button', {
       name: `End session on ${device}`,
     });
   }
 
   contactPhone(): Locator {
-    return this.section("Contact").getByRole("textbox", {
-      name: /^Contact phone/,
-    });
+    return this.section('Contact').getByRole('textbox', { name: /^Contact phone/ });
   }
 
   /** The help line or error a field points to with aria-describedby. */
   async descriptionOf(field: Locator): Promise<string> {
-    const ids =
-      (await field.getAttribute("aria-describedby"))?.split(/\s+/) ?? [];
-    const texts = await Promise.all(
-      ids.map((id) => this.page.locator(`[id="${id}"]`).innerText()),
-    );
-    return texts.join(" ");
+    const ids = (await field.getAttribute('aria-describedby'))?.split(/\s+/) ?? [];
+    const texts = await Promise.all(ids.map((id) => this.page.locator(`[id="${id}"]`).innerText()));
+    return texts.join(' ');
   }
 
   /** The inline error under a field. */
   errorFor(field: Locator): Locator {
-    return field
-      .locator('xpath=ancestor::*[contains(@class,"field")][1]')
-      .locator(".field__error");
+    return field.locator('xpath=ancestor::*[contains(@class,"field")][1]').locator('.field__error');
   }
 
   errorSummary(): Locator {
-    return this.page.locator(".error-summary");
+    return this.page.locator('.error-summary');
   }
 
   errorSummaryTitle(): Locator {
-    return this.errorSummary().getByRole("heading");
+    return this.errorSummary().getByRole('heading');
   }
 
   errorSummaryLinks(): Locator {
-    return this.errorSummary().getByRole("link");
+    return this.errorSummary().getByRole('link');
   }
 
   /** The save bar's status line: "Saved just now", "Saving…". */
   status(): Locator {
-    return this.page.locator(".form-actions").getByRole("status");
+    return this.page.locator('.form-actions').getByRole('status');
   }
 
   saveButton(): Locator {
     return this.page
-      .locator(".form-actions")
-      .getByRole("button", { name: /^(Save changes|Saving…)/ });
+      .locator('.form-actions')
+      .getByRole('button', { name: /^(Save changes|Saving…)/ });
   }
 
   discardButton(): Locator {
-    return this.page
-      .locator(".form-actions")
-      .getByRole("button", { name: "Discard" });
+    return this.page.locator('.form-actions').getByRole('button', { name: 'Discard' });
   }
 
   /** The "Saved" banner after a save. */
   savedBanner(): Locator {
     return this.page
-      .getByRole("status")
+      .getByRole('status')
       .filter({ hasText: /^Saved/ })
-      .filter({ has: this.page.locator(".banner__text") });
+      .filter({ has: this.page.locator('.banner__text') });
   }
 
   dismissSavedBanner(): Locator {
-    return this.savedBanner().getByRole("button", { name: "Dismiss message" });
+    return this.savedBanner().getByRole('button', { name: 'Dismiss message' });
   }
 
   /** "We couldn’t save your changes" above the form, or "We couldn’t load your settings". */
   alert(): Locator {
-    return this.page.locator(".page-body .alert");
+    return this.page.locator('.page-body .alert');
   }
 
   alertTitle(): Locator {
-    return this.alert().locator(".alert__title");
+    return this.alert().locator('.alert__title');
   }
 
   tryAgainButton(): Locator {
-    return this.alert().getByRole("button", { name: "Try again" });
+    return this.alert().getByRole('button', { name: 'Try again' });
   }
 
   backToDiscoverLink(): Locator {
-    return this.alert().getByRole("link", { name: "Back to Discover" });
+    return this.alert().getByRole('link', { name: 'Back to Discover' });
   }
 
   async followSettingsLink(name: string): Promise<void> {
-    await this.settingsNav().getByRole("link", { name }).click();
+    await this.settingsNav().getByRole('link', { name }).click();
   }
 }

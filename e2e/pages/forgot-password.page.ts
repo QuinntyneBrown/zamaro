@@ -1,6 +1,6 @@
-import { expect, type Locator, type Page } from "@playwright/test";
-import { freezeClock } from "../fixtures/clock";
-import { Shell } from "./shell";
+import { expect, type Locator, type Page } from '@playwright/test';
+import { freezeClock } from '../fixtures/clock';
+import { Shell } from './shell';
 
 /**
  * Forgot your password at `/forgot-password` (docs/mocks/pages/forgot-password): the email, then
@@ -16,7 +16,7 @@ export class ForgotPasswordPage {
   /** Opens the page and waits for the app to take over: it puts focus in Email once it has. */
   async open(): Promise<void> {
     await freezeClock(this.page);
-    await this.page.goto("/forgot-password", { waitUntil: "networkidle" });
+    await this.page.goto('/forgot-password', { waitUntil: 'networkidle' });
     await expect(this.email()).toBeFocused();
   }
 
@@ -31,22 +31,16 @@ export class ForgotPasswordPage {
    * real provider would refuse an automated submission.
    */
   async failBotCheck(): Promise<void> {
-    await this.page.route("**/api/v1/password/forgot", (route) =>
+    await this.page.route('**/api/v1/password/forgot', (route) =>
       route.continue({
-        postData: JSON.stringify({
-          ...route.request().postDataJSON(),
-          challengeToken: "fail",
-        }),
+        postData: JSON.stringify({ ...route.request().postDataJSON(), challengeToken: 'fail' }),
       }),
     );
   }
 
   /** The request never answers, so the card stays busy. */
   async holdRequest(): Promise<void> {
-    await this.page.route(
-      "**/api/v1/password/forgot",
-      () => new Promise<void>(() => undefined),
-    );
+    await this.page.route('**/api/v1/password/forgot', () => new Promise<void>(() => undefined));
   }
 
   path(): string {
@@ -54,54 +48,52 @@ export class ForgotPasswordPage {
   }
 
   heading(): Locator {
-    return this.page.getByRole("heading", { level: 1 });
+    return this.page.getByRole('heading', { level: 1 });
   }
 
   private form(): Locator {
-    return this.page.getByRole("form", { name: "Forgot your password?" });
+    return this.page.getByRole('form', { name: 'Forgot your password?' });
   }
 
   email(): Locator {
-    return this.form().getByRole("textbox", { name: /^Email/ });
+    return this.form().getByRole('textbox', { name: /^Email/ });
   }
 
   submitButton(): Locator {
-    return this.form().getByRole("button");
+    return this.form().getByRole('button');
   }
 
   signInLink(): Locator {
-    return this.form().getByRole("link", { name: "Remembered it? Sign in" });
+    return this.form().getByRole('link', { name: 'Remembered it? Sign in' });
   }
 
   errorSummaryTitle(): Locator {
-    return this.form().locator(".error-summary").getByRole("heading");
+    return this.form().locator('.error-summary').getByRole('heading');
   }
 
   emailError(): Locator {
-    return this.form().locator("#email-error");
+    return this.form().locator('#email-error');
   }
 
   alertTitle(): Locator {
-    return this.form().getByRole("alert").locator(".alert__title");
+    return this.form().getByRole('alert').locator('.alert__title');
   }
 
   // "Check your email" (docs/mocks/pages/forgot-password/success)
 
   private checkEmail(): Locator {
-    return this.page.getByRole("region", { name: "Check your email" });
+    return this.page.getByRole('region', { name: 'Check your email' });
   }
 
   checkEmailLead(): Locator {
-    return this.checkEmail().locator(".lead");
+    return this.checkEmail().locator('.lead');
   }
 
   backToSignInLink(): Locator {
-    return this.checkEmail().getByRole("link", { name: "Back to sign in" });
+    return this.checkEmail().getByRole('link', { name: 'Back to sign in' });
   }
 
   sendAgainButton(): Locator {
-    return this.checkEmail().getByRole("button", {
-      name: /^(Send it again|Sent)$/,
-    });
+    return this.checkEmail().getByRole('button', { name: /^(Send it again|Sent)$/ });
   }
 }

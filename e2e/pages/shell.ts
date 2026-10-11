@@ -1,42 +1,38 @@
-import type { Locator, Page } from "@playwright/test";
-import { AccountMenuDialog } from "./account-menu.dialog";
-import { MenuDialog } from "./menu.dialog";
-import { readHead, type PageHead } from "./page-head";
+import type { Locator, Page } from '@playwright/test';
+import { AccountMenuDialog } from './account-menu.dialog';
+import { MenuDialog } from './menu.dialog';
+import { readHead, type PageHead } from './page-head';
 
-export type Theme = "light" | "dark";
+export type Theme = 'light' | 'dark';
 
 /** The header, skip link, main region and footer every zamaro page shares. */
 export class Shell {
   constructor(private readonly page: Page) {}
 
   skipLink(): Locator {
-    return this.page.getByRole("link", { name: "Skip to content" });
+    return this.page.getByRole('link', { name: 'Skip to content' });
   }
 
   primaryNav(): Locator {
-    return this.page.getByRole("navigation", { name: "Primary" });
+    return this.page.getByRole('navigation', { name: 'Primary' });
   }
 
   primaryNavLinks(): Locator {
-    return this.primaryNav().getByRole("link");
+    return this.primaryNav().getByRole('link');
   }
 
   /** Follows a header link such as "How booking works". */
   async followNavLink(name: string): Promise<void> {
-    await this.primaryNav().getByRole("link", { name }).click();
+    await this.primaryNav().getByRole('link', { name }).click();
   }
 
   menuButton(): Locator {
-    return this.page
-      .getByRole("banner")
-      .getByRole("button", { name: "Open menu" });
+    return this.page.getByRole('banner').getByRole('button', { name: 'Open menu' });
   }
 
   /** The header's theme toggle (shown from LG); below LG it is an item in the menu. */
   themeToggle(): Locator {
-    return this.page
-      .getByRole("banner")
-      .getByRole("button", { name: "Dark theme" });
+    return this.page.getByRole('banner').getByRole('button', { name: 'Dark theme' });
   }
 
   async openMenu(): Promise<MenuDialog> {
@@ -48,25 +44,23 @@ export class Shell {
   accountButton(): Locator {
     // Found while the account menu hides the rest of the page from assistive technology, too.
     return this.page
-      .getByRole("banner", { includeHidden: true })
-      .getByRole("button", { name: /^Account menu for/, includeHidden: true });
+      .getByRole('banner', { includeHidden: true })
+      .getByRole('button', { name: /^Account menu for/, includeHidden: true });
   }
 
   /** The header's Saved link, named "Saved 3 artists" with its count (L2-026). */
   savedLink(): Locator {
-    return this.page.getByRole("banner").locator(".topbar__saved");
+    return this.page.getByRole('banner').locator('.topbar__saved');
   }
 
   /** The header's link for someone signed out. */
   signInLink(): Locator {
-    return this.page.getByRole("banner").getByRole("link", { name: "Sign in" });
+    return this.page.getByRole('banner').getByRole('link', { name: 'Sign in' });
   }
 
   /** The sign-in page's header link: "Create account", "Sign up" below 480 px. */
   createAccountLink(): Locator {
-    return this.page
-      .getByRole("banner")
-      .getByRole("link", { name: /^(Create account|Sign up)/ });
+    return this.page.getByRole('banner').getByRole('link', { name: /^(Create account|Sign up)/ });
   }
 
   async openAccountMenu(): Promise<AccountMenuDialog> {
@@ -85,61 +79,56 @@ export class Shell {
   /** The colour scheme the page is painted in. */
   async paintedTheme(): Promise<Theme> {
     return this.page.evaluate(
-      () =>
-        getComputedStyle(document.documentElement).colorScheme.trim() as Theme,
+      () => getComputedStyle(document.documentElement).colorScheme.trim() as Theme,
     );
   }
 
   async scrollBehavior(): Promise<string> {
-    return this.page.evaluate(
-      () => getComputedStyle(document.documentElement).scrollBehavior,
-    );
+    return this.page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior);
   }
 
   main(): Locator {
-    return this.page.getByRole("main");
+    return this.page.getByRole('main');
   }
 
   footer(): Locator {
-    return this.page.getByRole("contentinfo");
+    return this.page.getByRole('contentinfo');
   }
 
   /** The footer's column headings, in order: "Churches", "Artists", "Your account". */
   footerHeadings(): Locator {
-    return this.footer().getByRole("heading", { level: 2 });
+    return this.footer().getByRole('heading', { level: 2 });
   }
 
   /** The entries under one footer heading. */
   footerColumn(heading: string): Locator {
     return this.footer()
-      .getByRole("heading", { name: heading, exact: true })
-      .locator("xpath=following-sibling::ul[1]")
-      .getByRole("listitem");
+      .getByRole('heading', { name: heading, exact: true })
+      .locator('xpath=following-sibling::ul[1]')
+      .getByRole('listitem');
   }
 
   /** The entries of the footer's last column: "Your account", or the signed-in person's. */
   accountFooterColumn(): Locator {
-    return this.footer().locator("ul").last().getByRole("listitem");
+    return this.footer().locator('ul').last().getByRole('listitem');
   }
 
   /** How many of each landmark and level-one heading the page renders. */
-  async landmarkCounts(): Promise<
-    Record<"banner" | "main" | "contentinfo" | "h1", number>
-  > {
+  async landmarkCounts(): Promise<Record<'banner' | 'main' | 'contentinfo' | 'h1', number>> {
     return {
-      banner: await this.page.getByRole("banner").count(),
+      banner: await this.page.getByRole('banner').count(),
       main: await this.main().count(),
       contentinfo: await this.footer().count(),
-      h1: await this.page.getByRole("heading", { level: 1 }).count(),
+      h1: await this.page.getByRole('heading', { level: 1 }).count(),
     };
   }
 
   async pressTab(): Promise<void> {
-    await this.page.keyboard.press("Tab");
+    await this.page.keyboard.press('Tab');
   }
 
   async useSkipLink(): Promise<void> {
-    await this.page.keyboard.press("Enter");
+    await this.page.keyboard.press('Enter');
   }
 
   async useWidth(width: number): Promise<void> {
@@ -160,10 +149,8 @@ export class Shell {
   async settle(): Promise<void> {
     await this.page.evaluate(async () => {
       const images = [...document.images];
-      images.forEach((image) => (image.loading = "eager"));
-      await Promise.all(
-        images.map((image) => image.decode().catch(() => undefined)),
-      );
+      images.forEach((image) => (image.loading = 'eager'));
+      await Promise.all(images.map((image) => image.decode().catch(() => undefined)));
       await document.fonts.ready;
     });
   }
@@ -175,9 +162,7 @@ export class Shell {
 
   async hasHorizontalScroll(): Promise<boolean> {
     return this.page.evaluate(
-      () =>
-        document.documentElement.scrollWidth >
-        document.documentElement.clientWidth,
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
   }
 
@@ -196,38 +181,34 @@ export class Shell {
 
   /** The one polite status region every page ends with. */
   toastRegion(): Locator {
-    return this.page.locator(".toast-region");
+    return this.page.locator('.toast-region');
   }
 
   toasts(): Locator {
-    return this.toastRegion().locator(".toast");
+    return this.toastRegion().locator('.toast');
   }
 
   /** A toast found by its title, such as "Link copied". */
   toast(title: string): Toast {
     return new Toast(
-      this.toasts().filter({
-        has: this.page.locator(".toast__title", { hasText: title }),
-      }),
+      this.toasts().filter({ has: this.page.locator('.toast__title', { hasText: title }) }),
     );
   }
 
   async pressEscape(): Promise<void> {
-    await this.page.keyboard.press("Escape");
+    await this.page.keyboard.press('Escape');
   }
 
   // Banners under the top bar (docs/specs/components/alert.md)
 
   banners(): Locator {
-    return this.page.locator(".banner");
+    return this.page.locator('.banner');
   }
 
   /** A banner found by its label, such as "Verify your email". */
   banner(label: string): Banner {
     return new Banner(
-      this.banners().filter({
-        has: this.page.locator(".banner__text strong", { hasText: label }),
-      }),
+      this.banners().filter({ has: this.page.locator('.banner__text strong', { hasText: label }) }),
     );
   }
 }
@@ -237,20 +218,20 @@ export class Banner {
   constructor(readonly root: Locator) {}
 
   label(): Locator {
-    return this.root.locator(".banner__text strong");
+    return this.root.locator('.banner__text strong');
   }
 
   /** The label, the sentence and the action's name, as one line. */
   text(): Locator {
-    return this.root.locator(".banner__text");
+    return this.root.locator('.banner__text');
   }
 
   action(): Locator {
-    return this.root.locator(".banner__action");
+    return this.root.locator('.banner__action');
   }
 
   closeButton(): Locator {
-    return this.root.getByRole("button", { name: /^Dismiss/ });
+    return this.root.getByRole('button', { name: /^Dismiss/ });
   }
 
   async pressAction(): Promise<void> {
@@ -267,19 +248,19 @@ export class Toast {
   constructor(readonly root: Locator) {}
 
   kind(): Locator {
-    return this.root.locator(".toast__kind");
+    return this.root.locator('.toast__kind');
   }
 
   title(): Locator {
-    return this.root.locator(".toast__title");
+    return this.root.locator('.toast__title');
   }
 
   text(): Locator {
-    return this.root.locator(".toast__text");
+    return this.root.locator('.toast__text');
   }
 
   dismissButton(): Locator {
-    return this.root.getByRole("button", { name: /^Dismiss/ });
+    return this.root.getByRole('button', { name: /^Dismiss/ });
   }
 
   async dismiss(): Promise<void> {

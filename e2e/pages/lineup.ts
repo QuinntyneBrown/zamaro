@@ -1,38 +1,36 @@
-import type { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from '@playwright/test';
 
 /** The lineup of ticket cards under the Discover poster. */
 export class Lineup {
   constructor(private readonly page: Page) {}
 
   private section(): Locator {
-    return this.page.getByRole("region", { name: "The lineup" });
+    return this.page.getByRole('region', { name: 'The lineup' });
   }
 
   /** "Sat 14 Nov · 7 free · within 120 km". */
   summary(): Locator {
-    return this.section().locator(".section__kicker");
+    return this.section().locator('.section__kicker');
   }
 
   tickets(): Locator {
-    return this.section().getByRole("listitem");
+    return this.section().getByRole('listitem');
   }
 
   /** The heart on an artist's ticket: "Save Elijah Park to your saved artists". */
   saveToggle(artist: string): Locator {
-    return this.section().getByRole("button", {
-      name: new RegExp(
-        `^(Save ${artist} to|Remove ${artist} from) your saved artists$`,
-      ),
+    return this.section().getByRole('button', {
+      name: new RegExp(`^(Save ${artist} to|Remove ${artist} from) your saved artists$`),
     });
   }
 
   /** Every heart in the lineup, headliner included. */
   saveToggles(): Locator {
-    return this.section().locator(".save");
+    return this.section().locator('.save');
   }
 
   ticketNames(): Locator {
-    return this.tickets().getByRole("heading", { level: 3 });
+    return this.tickets().getByRole('heading', { level: 3 });
   }
 
   region(): Locator {
@@ -41,13 +39,11 @@ export class Lineup {
 
   /** The "Sold out" panel shown when nobody is free (L2-011). */
   soldOut(): SoldOut {
-    return new SoldOut(
-      this.section().getByRole("status").filter({ hasText: "Nobody’s free" }),
-    );
+    return new SoldOut(this.section().getByRole('status').filter({ hasText: 'Nobody’s free' }));
   }
 
   showMoreButton(): Locator {
-    return this.section().getByRole("button", { name: "Show more artists" });
+    return this.section().getByRole('button', { name: 'Show more artists' });
   }
 
   async showMore(): Promise<void> {
@@ -55,7 +51,7 @@ export class Lineup {
   }
 
   sortField(): Locator {
-    return this.section().getByLabel("Sort");
+    return this.section().getByLabel('Sort');
   }
 
   async sortBy(label: string): Promise<void> {
@@ -64,8 +60,8 @@ export class Lineup {
 
   styleChip(name: string): Locator {
     return this.section()
-      .getByRole("group", { name: "Filter by style" })
-      .getByRole("button", { name, exact: true });
+      .getByRole('group', { name: 'Filter by style' })
+      .getByRole('button', { name, exact: true });
   }
 
   async toggleStyle(name: string): Promise<void> {
@@ -74,25 +70,25 @@ export class Lineup {
 
   /** What the polite live region last announced (L2-102.2). */
   announcement(): Locator {
-    return this.page.locator(".cdk-live-announcer-element");
+    return this.page.locator('.cdk-live-announcer-element');
   }
 
   /** The status line announcing what is loading. */
   status(): Locator {
-    return this.section().getByRole("status");
+    return this.section().getByRole('status');
   }
 
   /** Placeholder cards shown while waiting; hidden from assistive technology. */
   skeletons(): Locator {
-    return this.section().locator(".skeleton");
+    return this.section().locator('.skeleton');
   }
 
   alert(): Locator {
-    return this.section().getByRole("alert");
+    return this.section().getByRole('alert');
   }
 
   tryAgainButton(): Locator {
-    return this.alert().getByRole("button", { name: /^Try again/ });
+    return this.alert().getByRole('button', { name: /^Try again/ });
   }
 
   async tryAgain(): Promise<void> {
@@ -100,23 +96,21 @@ export class Lineup {
   }
 
   emailLink(): Locator {
-    return this.alert().getByRole("link", { name: "Email the Zamaro team" });
+    return this.alert().getByRole('link', { name: 'Email the Zamaro team' });
   }
 
   statusLink(): Locator {
-    return this.alert().getByRole("link", { name: "Check status.zamaro.ca" });
+    return this.alert().getByRole('link', { name: 'Check status.zamaro.ca' });
   }
 
   ticket(name: string): Ticket {
     return new Ticket(
-      this.tickets().filter({
-        has: this.page.getByRole("heading", { name, level: 3 }),
-      }),
+      this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }),
     );
   }
 
   headliner(): Headliner {
-    return new Headliner(this.section().getByRole("article"));
+    return new Headliner(this.section().getByRole('article'));
   }
 }
 
@@ -128,20 +122,20 @@ export class SoldOut {
   }
 
   title(): Locator {
-    return this.panel.getByRole("heading", { level: 3 });
+    return this.panel.getByRole('heading', { level: 3 });
   }
 
   /** The sentence explaining why, and the way forward. */
   explanation(): Locator {
-    return this.panel.locator(".sold-out__why");
+    return this.panel.locator('.sold-out__why');
   }
 
   datesHeading(): Locator {
-    return this.panel.getByRole("heading", { level: 4 });
+    return this.panel.getByRole('heading', { level: 4 });
   }
 
   nearbyDates(): Locator {
-    return this.panel.getByRole("list").getByRole("button");
+    return this.panel.getByRole('list').getByRole('button');
   }
 
   async pickDate(shortDate: string): Promise<void> {
@@ -149,11 +143,11 @@ export class SoldOut {
   }
 
   widerRadiusButton(): Locator {
-    return this.panel.getByRole("button", { name: /^Search within/ });
+    return this.panel.getByRole('button', { name: /^Search within/ });
   }
 
   showAllStylesButton(): Locator {
-    return this.panel.getByRole("button", { name: "Show all styles" });
+    return this.panel.getByRole('button', { name: 'Show all styles' });
   }
 }
 
@@ -167,37 +161,37 @@ export class Headliner {
 
   /** "No. 01 · Most booked this autumn". */
   kicker(): Locator {
-    return this.card.locator(".headliner__kicker");
+    return this.card.locator('.headliner__kicker');
   }
 
   name(): Locator {
-    return this.card.getByRole("heading", { level: 3 });
+    return this.card.getByRole('heading', { level: 3 });
   }
 
   meta(): Locator {
-    return this.card.locator(".headliner__meta");
+    return this.card.locator('.headliner__meta');
   }
 
   quote(): Locator {
-    return this.card.locator(".headliner__quote");
+    return this.card.locator('.headliner__quote');
   }
 
   /** "Free Sat 14 Nov". */
   badge(): Locator {
-    return this.card.locator(".badge");
+    return this.card.locator('.badge');
   }
 
   profileLink(): Locator {
-    return this.card.getByRole("link", { name: /^See / });
+    return this.card.getByRole('link', { name: /^See / });
   }
 
   saveToggle(): Locator {
-    return this.card.locator(".save");
+    return this.card.locator('.save');
   }
 
   /** Opens the profile from the headliner's name. */
   async openProfile(): Promise<void> {
-    await this.name().getByRole("link").click();
+    await this.name().getByRole('link').click();
   }
 }
 
@@ -210,11 +204,11 @@ export class Ticket {
 
   /** "No. 01". */
   position(): Locator {
-    return this.card.locator(".ticket__no");
+    return this.card.locator('.ticket__no');
   }
 
   link(): Locator {
-    return this.card.getByRole("heading", { level: 3 }).getByRole("link");
+    return this.card.getByRole('heading', { level: 3 }).getByRole('link');
   }
 
   /** Scrolls the page until the card is in view. */
@@ -229,15 +223,15 @@ export class Ticket {
 
   /** The act and styles line, then the place line ("Hamilton · 14 km from you"). */
   meta(): Locator {
-    return this.card.locator(".ticket__meta");
+    return this.card.locator('.ticket__meta');
   }
 
   price(): Locator {
-    return this.card.locator(".ticket__price");
+    return this.card.locator('.ticket__price');
   }
 
   /** The rating, read as one labelled image ("Rated 4.6 out of 5 by 17 churches"). */
   rating(): Locator {
-    return this.card.getByRole("img", { name: /^Rated / });
+    return this.card.getByRole('img', { name: /^Rated / });
   }
 }

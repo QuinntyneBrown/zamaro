@@ -1,6 +1,6 @@
-import type { Locator, Page } from "@playwright/test";
-import { freezeClock } from "../fixtures/clock";
-import { Shell } from "./shell";
+import type { Locator, Page } from '@playwright/test';
+import { freezeClock } from '../fixtures/clock';
+import { Shell } from './shell';
 
 /**
  * The email change link's page at `/account/email/confirm` (docs/mocks/pages/confirm-email):
@@ -16,8 +16,7 @@ export class ConfirmEmailPage {
   /** Opens a link from an email, which names the e2e site, and waits for the API's answer. */
   async openLink(link: string): Promise<void> {
     const answered = this.page.waitForResponse(
-      (response) =>
-        new URL(response.url()).pathname === "/api/v1/account/email/confirm",
+      (response) => new URL(response.url()).pathname === '/api/v1/account/email/confirm',
     );
     await this.startLink(link);
     await answered;
@@ -33,24 +32,24 @@ export class ConfirmEmailPage {
   /** Confirming never answers, so the card keeps confirming. */
   async holdConfirm(): Promise<void> {
     await this.page.route(
-      "**/api/v1/account/email/confirm",
+      '**/api/v1/account/email/confirm',
       () => new Promise<void>(() => undefined),
     );
   }
 
   /** Confirming fails on the server's side until `restoreConfirm()`. */
   async failConfirm(): Promise<void> {
-    await this.page.route("**/api/v1/account/email/confirm", (route) =>
+    await this.page.route('**/api/v1/account/email/confirm', (route) =>
       route.fulfill({
         status: 500,
-        headers: { "Content-Type": "application/problem+json" },
-        body: JSON.stringify({ title: "Something went wrong", status: 500 }),
+        headers: { 'Content-Type': 'application/problem+json' },
+        body: JSON.stringify({ title: 'Something went wrong', status: 500 }),
       }),
     );
   }
 
   async restoreConfirm(): Promise<void> {
-    await this.page.unroute("**/api/v1/account/email/confirm");
+    await this.page.unroute('**/api/v1/account/email/confirm');
   }
 
   path(): string {
@@ -58,60 +57,57 @@ export class ConfirmEmailPage {
   }
 
   heading(): Locator {
-    return this.page.getByRole("heading", { level: 1 });
+    return this.page.getByRole('heading', { level: 1 });
   }
 
   // "Confirming your new email" (default and error)
 
   confirmingCard(): Locator {
-    return this.page.getByRole("region", { name: "Confirming your new email" });
+    return this.page.getByRole('region', { name: 'Confirming your new email' });
   }
 
   /** "Switching your sign-in to {new address}…". */
   confirmingStatus(): Locator {
-    return this.confirmingCard().getByRole("status");
+    return this.confirmingCard().getByRole('status');
   }
 
   alertTitle(): Locator {
-    return this.confirmingCard().getByRole("alert").locator(".alert__title");
+    return this.confirmingCard().getByRole('alert').locator('.alert__title');
   }
 
   tryAgainButton(): Locator {
-    return this.confirmingCard().getByRole("button", { name: "Try again" });
+    return this.confirmingCard().getByRole('button', { name: 'Try again' });
   }
 
   async tryAgain(): Promise<void> {
     const answered = this.page.waitForResponse(
-      (response) =>
-        new URL(response.url()).pathname === "/api/v1/account/email/confirm",
+      (response) => new URL(response.url()).pathname === '/api/v1/account/email/confirm',
     );
     await this.tryAgainButton().click();
     await answered;
   }
 
   backToAccountLink(): Locator {
-    return this.confirmingCard().getByRole("link", {
-      name: "Back to account settings",
-    });
+    return this.confirmingCard().getByRole('link', { name: 'Back to account settings' });
   }
 
   // "This link has expired" (expired)
 
   expiredCard(): Locator {
-    return this.page.getByRole("region", { name: "This link has expired" });
+    return this.page.getByRole('region', { name: 'This link has expired' });
   }
 
   stamp(): Locator {
-    return this.expiredCard().locator(".stamp");
+    return this.expiredCard().locator('.stamp');
   }
 
   expiredText(): Locator {
     return this.expiredCard()
-      .locator("p")
-      .filter({ hasText: "Nothing changed" });
+      .locator('p')
+      .filter({ hasText: 'Nothing changed' });
   }
 
   changeAgainLink(): Locator {
-    return this.expiredCard().getByRole("link", { name: "Change email again" });
+    return this.expiredCard().getByRole('link', { name: 'Change email again' });
   }
 }

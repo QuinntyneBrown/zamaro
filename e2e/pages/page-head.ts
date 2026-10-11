@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Page } from '@playwright/test';
 
 /** What a page's `<head>` tells crawlers and link previews (L2-112, L2-113). */
 export interface PageHead {
@@ -24,36 +24,27 @@ export interface PageHead {
 export async function readHead(page: Page, html?: string): Promise<PageHead> {
   return page.evaluate((markup) => {
     const doc =
-      markup === undefined
-        ? document
-        : new DOMParser().parseFromString(markup, "text/html");
+      markup === undefined ? document : new DOMParser().parseFromString(markup, 'text/html');
     const content = (selector: string) =>
-      doc.querySelector(selector)?.getAttribute("content") ?? null;
+      doc.querySelector(selector)?.getAttribute('content') ?? null;
     const prefixed = (attribute: string, prefix: string) =>
       Object.fromEntries(
-        [...doc.querySelectorAll(`meta[${attribute}^="${prefix}"]`)].map(
-          (meta) => [
-            meta.getAttribute(attribute)!.slice(prefix.length),
-            meta.getAttribute("content") ?? "",
-          ],
-        ),
+        [...doc.querySelectorAll(`meta[${attribute}^="${prefix}"]`)].map((meta) => [
+          meta.getAttribute(attribute)!.slice(prefix.length),
+          meta.getAttribute('content') ?? '',
+        ]),
       );
     return {
       title: doc.title,
       description: content('meta[name="description"]'),
-      canonical:
-        doc.querySelector('link[rel="canonical"]')?.getAttribute("href") ??
-        null,
+      canonical: doc.querySelector('link[rel="canonical"]')?.getAttribute('href') ?? null,
       robots: content('meta[name="robots"]'),
-      openGraph: prefixed("property", "og:"),
-      twitter: prefixed("name", "twitter:"),
-      structuredData: [
-        ...doc.querySelectorAll('script[type="application/ld+json"]'),
-      ].map((script) => JSON.parse(script.textContent ?? "null")),
-      mainText: (doc.querySelector("main")?.textContent ?? "").replace(
-        /\s+/g,
-        " ",
+      openGraph: prefixed('property', 'og:'),
+      twitter: prefixed('name', 'twitter:'),
+      structuredData: [...doc.querySelectorAll('script[type="application/ld+json"]')].map(
+        (script) => JSON.parse(script.textContent ?? 'null'),
       ),
+      mainText: (doc.querySelector('main')?.textContent ?? '').replace(/\s+/g, ' '),
     };
   }, html);
 }

@@ -1,5 +1,5 @@
-import type { Page } from "@playwright/test";
-import { readHead, type PageHead } from "./page-head";
+import type { Page } from '@playwright/test';
+import { readHead, type PageHead } from './page-head';
 
 /** One `<url>` of the sitemap. */
 export interface SitemapEntry {
@@ -22,25 +22,25 @@ export class Crawler {
 
   /** The rules in `/robots.txt`, one trimmed line each, comments left out. */
   async robots(): Promise<string[]> {
-    const text = await (await this.page.request.get("/robots.txt")).text();
+    const text = await (await this.page.request.get('/robots.txt')).text();
     return text
-      .split("\n")
+      .split('\n')
       .map((line) => line.trim())
-      .filter((line) => line && !line.startsWith("#"));
+      .filter((line) => line && !line.startsWith('#'));
   }
 
   async sitemap(): Promise<{ contentType: string; entries: SitemapEntry[] }> {
-    const response = await this.page.request.get("/sitemap.xml");
+    const response = await this.page.request.get('/sitemap.xml');
     const entries = await this.page.evaluate(
       (xml) => {
-        const doc = new DOMParser().parseFromString(xml, "application/xml");
-        return [...doc.getElementsByTagName("url")].map((url) => ({
-          loc: url.getElementsByTagName("loc")[0]?.textContent ?? "",
-          lastmod: url.getElementsByTagName("lastmod")[0]?.textContent ?? null,
+        const doc = new DOMParser().parseFromString(xml, 'application/xml');
+        return [...doc.getElementsByTagName('url')].map((url) => ({
+          loc: url.getElementsByTagName('loc')[0]?.textContent ?? '',
+          lastmod: url.getElementsByTagName('lastmod')[0]?.textContent ?? null,
         }));
       },
       await response.text(),
     );
-    return { contentType: response.headers()["content-type"] ?? "", entries };
+    return { contentType: response.headers()['content-type'] ?? '', entries };
   }
 }
