@@ -225,6 +225,14 @@ export class AccountPage {
     return this.section('Two-step sign-in').locator('.form-section__lead .badge');
   }
 
+  turnOffTwoStepButton(): Locator {
+    return this.section('Two-step sign-in').getByRole('button', { name: 'Turn off' });
+  }
+
+  newRecoveryCodesButton(): Locator {
+    return this.section('Two-step sign-in').getByRole('button', { name: 'New recovery codes' });
+  }
+
   turnOnTwoStepLink(): Locator {
     return this.section('Two-step sign-in').getByRole('link', { name: 'Turn on two-step sign-in' });
   }

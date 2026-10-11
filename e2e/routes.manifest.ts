@@ -8,9 +8,15 @@ import type { CastMember } from './fixtures/accounts';
  * - `search-limited`: the search is refused as over the rate limit.
  * - `profile-pending` and `profile-fails`: the profile is opened from `from` in the browser, since
  *   the server renders a profile it can reach, and its request never answers or fails.
+ * - `two-step-on`: `/me` says two-step sign-in is on, as no seeded cast member has it on.
  */
 export type RouteSetup =
-  'search-pending' | 'search-fails' | 'search-limited' | 'profile-pending' | 'profile-fails';
+  | 'search-pending'
+  | 'search-fails'
+  | 'search-limited'
+  | 'profile-pending'
+  | 'profile-fails'
+  | 'two-step-on';
 
 export interface RouteState {
   /** Names the state in screenshots and test titles. */
@@ -234,5 +240,16 @@ export const routes: RouteState[] = [
     path: '/account/sign-in/verify',
     app: 'zamaro',
     mock: 'mfa-challenge/default.html',
+  },
+  // Naomi's settings with two-step sign-in on: "On", New recovery codes and Turn off.
+  {
+    name: 'account-two-step-on',
+    path: '/account#two-step',
+    app: 'zamaro',
+    mock: 'account/two-step-on.html',
+    signedInAs: 'naomi',
+    setup: 'two-step-on',
+    shows: 'account-form',
+    masks: 'devices',
   },
 ];

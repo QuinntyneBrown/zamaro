@@ -52,6 +52,15 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
         state.setup === 'profile-pending' ? profile.busyRegion() : profile.errorAlert(),
       ).toBeVisible();
       break;
+    case 'two-step-on':
+      await page.route('**/api/v1/me', async (route) => {
+        const response = await route.fetch();
+        const body = (await response.json()) as { data: Record<string, unknown> };
+        await route.fulfill({ response, json: { data: { ...body.data, mfaEnabled: true } } });
+      });
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.main()).toBeVisible();
+      break;
     default:
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();

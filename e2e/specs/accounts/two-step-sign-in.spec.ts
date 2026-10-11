@@ -7,6 +7,7 @@ import { ArtistProfilePage } from '../../pages/artist-profile.page';
 import { MfaChallengePage } from '../../pages/mfa-challenge.page';
 import { MfaSetupPage } from '../../pages/mfa-setup.page';
 import { SignInPage } from '../../pages/sign-in.page';
+import { TwoStepCodeDialog } from '../../pages/two-step-code.dialog';
 
 // L2-072.3 (sign-in-and-recover-access): turning on two-step sign-in, with recovery codes.
 test.describe('Turning on two-step sign-in', () => {
@@ -169,5 +170,119 @@ test.describe('Signing in with two-step sign-in on', () => {
     await challenge.verify(recoveryCodes[0]!);
 
     await expect(challenge.shell.accountButton()).toBeVisible();
+  });
+});
+
+// L2-072.5 and M2 D21: turning it off and new recovery codes need a code first.
+test.describe('Managing two-step sign-in', () => {
+  async function bookerWithTwoStep(
+    page: import('@playwright/test').Page,
+  ): Promise<{ email: string; secret: string; recoveryCodes: string[] }> {
+    const booker = createBooker();
+    await signIn(page.request, booker.email);
+    const { secret, recoveryCodes } = await turnOnTwoFactor(page.request);
+    return { email: booker.email, secret, recoveryCodes };
+  }
+
+  test('Turn off asks for a code, with Keep it on first, and a right one turns it off', async ({
+    page,
+  }) => {
+    const account = new AccountPage(page);
+    const dialog = new TwoStepCodeDialog(page);
+    const booker = await bookerWithTwoStep(page);
+    await account.open();
+    await expect(account.twoStepStatus()).toHaveText('On');
+
+    await account.turnOffTwoStepButton().click();
+
+    await expect(dialog.heading()).toHaveText('Turn off two-step sign-in?');
+    await expect(dialog.dialog()).toHaveAccessibleDescription('Enter a code to show it’s you.');
+    await expect(dialog.consequences()).toHaveText([
+      'You sign in with your password only.',
+      'Your recovery codes stop working.',
+      `We email ${booker.email} to say it’s off.`,
+    ]);
+    await expect(dialog.footerButtons()).toHaveText(['Keep it on', 'Turn off']);
+    await expect(dialog.code()).toBeFocused();
+
+    await dialog.submit('000000');
+    await expect(dialog.errorSummaryTitle()).toHaveText('Check the code');
+    await expect(dialog.errorSummaryLinks()).toHaveText(['That code didn’t work']);
+    await expect(dialog.codeError()).toHaveText(
+      'That code is wrong or has expired. Enter the code your app shows now, or an unused recovery code.',
+    );
+
+    await dialog.submit(totp(booker.secret));
+
+    await expect(dialog.dialog()).toHaveCount(0);
+    await expect(account.twoStepStatus()).toHaveText('Off');
+    await waitForEmail(booker.email, 'Two-step sign-in is off for your Zamaro account');
+  });
+
+  test('Escape closes the dialog and focus returns to the button that opened it', async ({
+    page,
+  }) => {
+    const account = new AccountPage(page);
+    const dialog = new TwoStepCodeDialog(page);
+    await bookerWithTwoStep(page);
+    await account.open();
+    await account.turnOffTwoStepButton().click();
+    await expect(dialog.heading()).toBeVisible();
+
+    await dialog.pressEscape();
+
+    await expect(dialog.dialog()).toHaveCount(0);
+    await expect(account.turnOffTwoStepButton()).toBeFocused();
+    await expect(account.twoStepStatus()).toHaveText('On');
+  });
+
+  test('new recovery codes replace the old ones and are shown once', async ({ page }) => {
+    const account = new AccountPage(page);
+    const dialog = new TwoStepCodeDialog(page);
+    const booker = await bookerWithTwoStep(page);
+    await account.open();
+
+    await account.newRecoveryCodesButton().click();
+    await expect(dialog.heading()).toHaveText('Get new recovery codes?');
+    await expect(dialog.footerButtons()).toHaveText(['Cancel', 'Get new codes']);
+    await dialog.submit(booker.recoveryCodes[0]!);
+
+    await expect(dialog.heading()).toHaveText('Save your new recovery codes');
+    await expect(dialog.newCodes()).toHaveCount(10);
+    const codes = await dialog.newCodes().allInnerTexts();
+    expect(codes.some((code) => booker.recoveryCodes.includes(code))).toBe(false);
+    await waitForEmail(booker.email, 'New recovery codes for your Zamaro account');
+
+    await dialog.savedThemButton().click();
+    await expect(dialog.dialog()).toHaveCount(0);
+    await expect(account.newRecoveryCodesButton()).toBeFocused();
+  });
+
+  test('while turning off, the dialog is busy; a failure says nothing changed', async ({
+    page,
+  }) => {
+    const account = new AccountPage(page);
+    const dialog = new TwoStepCodeDialog(page);
+    const booker = await bookerWithTwoStep(page);
+    await account.open();
+    await account.turnOffTwoStepButton().click();
+    await dialog.failRequests();
+
+    await dialog.submit(totp(booker.secret));
+
+    await expect(dialog.alertTitle()).toHaveText('We couldn’t turn off two-step sign-in');
+    await expect(dialog.dialog().getByRole('alert')).toContainText(
+      'Nothing changed; it’s still on. Check your connection, then enter the code your app shows now.',
+    );
+    await expect(dialog.actionButton()).toHaveText('Try again');
+    await expect(dialog.wayBackButton()).toBeFocused();
+
+    await page.unrouteAll();
+    await dialog.holdRequests();
+    await dialog.actionButton().click();
+    await expect(dialog.actionButton()).toHaveText('Turning off…');
+    await expect(dialog.actionButton()).toHaveAttribute('aria-busy', 'true');
+    await expect(dialog.wayBackButton()).toBeDisabled();
+    await expect(dialog.code()).toHaveAttribute('readonly', '');
   });
 });
