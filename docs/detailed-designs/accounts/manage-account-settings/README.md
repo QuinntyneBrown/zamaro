@@ -159,11 +159,44 @@ change link is `<TO SUPPLY>`.
   encrypted (ADR-0020), and never on the public profile.
 - **Status line:** empty until something is saved. The mock's "Saved 2 min ago" needs a saved time the
   frozen e2e clock cannot give.
-- **Not yet:** Email and Password (S10), Signed-in devices (S11), Two-step sign-in (S12), Email
+- **Not yet:** Signed-in devices (S11), Two-step sign-in (S12), Email
   preferences (S14); Your data and Delete account wait for M9 (M2 D23). The loading state announces
   "Loading your settings…" without the skeleton sections until `zm-form-section-skeleton` is built.
 
-## Requirements
+**As built in M2 (S10)**
+
+- **Change email:** `PUT /api/v1/account/email` (`AccountEmailController@update`, `ChangeEmailRequest`:
+  a full address other than the current one, and `currentPassword`, refused with "That password isn’t
+  right. Check it and try again.") runs `RequestEmailChange` and answers 202 `{ data: { email } }`.
+  Earlier links are used up; the new address gets `ConfirmNewEmailNotification` ("Confirm your new email
+  for Zamaro", a `{web}/account/email/confirm?token=…` link that works once, for 24 hours, M2 D11) and the
+  current one `EmailChangeRequestedNotification` ("Your Zamaro email is changing", with a reset link).
+  An address another account uses gets the same answer and notice, but no link and no pending address.
+  `users.pending_email` holds the new address, which `/me` returns as `pendingEmail`.
+- **Confirm:** `POST /api/v1/account/email/confirm` is public (the token is the proof; it signs no one
+  in), limited like the reset endpoints (30 a minute per address). `ConfirmEmailChange` moves the account
+  once, within 24 hours, while the address is still free: `email` changes, verified, `pending_email`
+  clears, and `account.email_changed` is audited. Otherwise the 410 `link-expired` names the address the
+  account still signs in with when the link existed.
+- **Change password:** `PUT /api/v1/account/password` (`AccountPasswordController`,
+  `ChangePasswordRequest` with `currentPassword`, `PasswordPolicy` and the confirmation) runs
+  `ChangePassword`: the hash changes, `auth.password_changed` is audited, `PasswordChangedNotification`
+  is queued, `SessionRegistry::endAll` ends every session, and this one is regenerated (new ID and CSRF
+  token) and registered again. It answers 204.
+- **Page:** the Email section ("You sign in with {email}. …", New email, Current password with "Needed to
+  change your email.") and the Password section ("Leave these empty to keep your password. A new one signs
+  you out on your other devices.", Current password, New password with "12 to 128 characters. We check it
+  against known leaked passwords.") join the form; Save changes sends them after Profile and Church or
+  Contact, and empties their fields once sent. After a request the Email section's status line reads "We
+  sent a link to {new}. You sign in with {current} until you open it." The page sends the new password as
+  its own confirmation: the form has one field, as in the mock.
+- **Confirm page:** `pages/confirm-email/ConfirmEmail` at `/account/email/confirm` (client-rendered):
+  "Confirming your new email" (busy) with "Switching your sign-in to {new}…" and "Until this finishes you
+  still sign in with {current}." when signed in, "We couldn’t confirm your new email" with Try again and
+  Back to account settings, and "This link has expired" with the stamp, "Nothing changed: you still sign
+  in with {email}. …" and "Change email again" (`/account#email`). On success it goes to `/account`, where
+  the shell shows "Email changed" with "You now sign in with {email}." for one page.
+
 
 The feature realises the following level-2 (L2) requirement, quoted from
 `docs/specs/L2.md`.

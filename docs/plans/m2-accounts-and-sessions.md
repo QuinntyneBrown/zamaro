@@ -16,14 +16,51 @@
 | S7 | Verify the email address | Done | `fdc2b5b` red tests, `257d4c3` |
 | S8 | Lockout and password reset | Done | `9c18620` red tests, `e5d3f3d` |
 | S9 | Account settings: profile, church and contact phone | Done | `68008cd` red tests, `a23b482` (ADR-0020) |
-| S10–S18 | | Not started | |
+| S10 | Change email and password | Done | `06caf7a` red tests, `06f77d8` |
+| S11–S18 | | Not started | |
 
-**Checks at the last commit (S9, 2026-10-11):** 270 backend Feature tests pass with the contract
+**Checks at the last commit (S10, 2026-10-11):** 285 backend Feature tests pass with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
-lint, format and `ng build zamaro` are clean; `npx playwright test` passes 287 tests on win32 and the
-account and Naomi states pass visual and a11y in the Linux image. The perf run against the S8 build
-flagged no row (FormField 138.1 → 142.3 ms; FormSection 239, FormActions 149 and SettingsNav 168 ms
-are new).
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 302 tests on win32
+and the account and confirm-email states pass visual and a11y in the Linux image. The perf run against
+the S9 build flagged no row (ButtonLink 181.9 → 189.6 ms with `fragment`).
+
+**S10 acceptance criteria (as tested):**
+- Given a booker with their password, when they ask for a new email, then 202 with the address in lower
+  case; the account email is unchanged and `pending_email` holds the new one; the new address gets
+  "Confirm your new email for Zamaro" with a `/account/email/confirm?token=…` link stored as SHA-256 and
+  valid 24 hours, and the old one "Your Zamaro email is changing" naming it. A new request uses up the
+  earlier link.
+- Given the link, when anyone opens it, then 200 with the new address; the account signs in with it,
+  verified, `pending_email` cleared and `account.email_changed` audited. Used, 24 hours and a minute old,
+  unknown, or its address taken meanwhile: 410, and a link that existed names the current address.
+- Given an address another account uses, then the same 202 and body, the notice to the old address, no
+  link and no pending address. A wrong current password gets "That password isn’t right. Check it and try
+  again."; an incomplete or unchanged address gets 422; a guest 401.
+- Given a new password with the current one, then 204: the old password stops working and the new one
+  signs in, every other session gets 401, this one continues under a new ID (the old cookie gets 401),
+  one session stays registered, the owner is emailed and `auth.password_changed` is audited. A wrong
+  current password, a 9-character or mismatched new one get 422.
+- Given `/account`, then the nav reads Profile, Church (or Contact), Email, Password; the Email section
+  says "You sign in with {email}. …". Asking for a new address shows "Saved just now", empties the fields
+  and says "We sent a link to {new}. You sign in with {current} until you open it." (after a reload too);
+  both emails arrive; opening the link lands on `/account` with "Email changed" and "You now sign in with
+  {new}.", and the Email section names the new address.
+- Given the link held, then "Confirming your new email" (busy), "Switching your sign-in to {new}…" and
+  "Until this finishes you still sign in with {current}."; a 500 shows "We couldn’t confirm your new
+  email" and "Zamaro didn’t answer. Nothing changed and your link still works; try again in a minute.",
+  Back to account settings, and Try again confirms; a used link shows "This link has expired", the stamp,
+  "Nothing changed: you still sign in with {new}. Ask for the change again to get a new link." and
+  "Change email again" (`/account#email`).
+- Given Naomi's address as the new one, then the page looks the same and no confirm email reaches her.
+  A wrong password is named at Current password ("The password isn’t right" in the summary); an
+  incomplete address ("Enter a full new email address", "Enter an email address like name@church.ca.")
+  sends nothing.
+- Given a new password from one browser, then "Saved just now", the fields empty, the page still works
+  after a reload and the other browser's `/me` gets 401. A 9-character one shows "This one has 9
+  characters. Use at least 12." and a wrong current one "That password isn’t right. …".
+- Route state `confirm-email-expired` (Naomi, `/account/email/confirm?token=e2e-unknown`) matches
+  `confirm-email/expired.html` in both themes at every width, with no axe violations.
 
 **S9 acceptance criteria (as tested):**
 - Given Naomi signed in, when she reads `GET /account/church`, then she gets Riverside (2150 Lakeshore
@@ -499,6 +536,22 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S10 — The confirm endpoint is public**, like email verification: the token is the proof and it
+  signs no one in, so the link works in any browser. It shares the reset endpoints' limit (30 a minute
+  per address). A guest who confirms goes to `/account`, signs in, and sees "Email changed" there.
+- **S10 — `/me` carries `pendingEmail`**, so the Email section and the confirm card can name the new
+  address after a reload or in the browser that asked.
+- **S10 — The password form has one new-password field**, as the mock shows; the page sends it as its own
+  confirmation, and the API still checks `passwordConfirmation` for other callers.
+- **S10 — A password change emails the owner** (`PasswordChangedNotification`, as a reset does) and is
+  audited as `auth.password_changed`; the design names only the audit entry.
+- **S10 — "Your other devices", without a count.** The mock's "your other 2 devices" needs the session
+  list, which arrives in S11.
+- **S10 — Copy without a mock.** The two emails, "We sent a link to {new}. You sign in with {current}
+  until you open it.", "Switching your sign-in to your new email…" and "Nothing changed. Ask for the
+  change again to get a new link." for a guest, "Enter your current password to make this change.", and
+  the banner's "Email changed" label with "You now sign in with {email}.".
+- **S10 — `zm-button-link` gains `fragment`** (button CRD), for "Change email again".
 - **S9 — Sections arrive with their slices.** `/account` has Profile and Church (or Contact) and the
   save bar. Email and Password join in S10, Signed-in devices in S11, Two-step sign-in in S12 and Email
   preferences (with the marketing box) in S14, each with the backend it needs; the plan listed the
