@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import { AcceptTermsPage } from '../pages/accept-terms.page';
 import { AccountPage } from '../pages/account.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
@@ -77,6 +78,8 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
   if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
   if (state.shows === 'mfa-key') await expect(new MfaSetupPage(page).key()).toBeVisible();
+  if (state.shows === 'accept-terms')
+    await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
   await discover.shell.settle();
   if (state.masks === 'mfa-key') {
     const setup = new MfaSetupPage(page);

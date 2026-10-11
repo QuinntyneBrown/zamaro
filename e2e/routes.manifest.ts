@@ -37,7 +37,7 @@ export interface RouteState {
    * the network went quiet: the lineup's cards, the sold-out panel, an emailed link's "This link
    * has expired" card, or the account settings form.
    */
-  shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form' | 'mfa-key';
+  shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form' | 'mfa-key' | 'accept-terms';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
    * devices (only this device is shown) with the Password lead's count of the others, which every spec
@@ -253,5 +253,14 @@ export const routes: RouteState[] = [
     setup: 'two-step-on',
     shows: 'account-form',
     masks: 'devices',
+  },
+  // Tomi Oduya last accepted the March terms: "We’ve updated our terms" with the three changes.
+  {
+    name: 'accept-terms',
+    path: '/account/accept-terms',
+    app: 'zamaro',
+    mock: 'accept-terms/default.html',
+    signedInAs: 'tomi',
+    shows: 'accept-terms',
   },
 ];

@@ -27,6 +27,7 @@ test.describe('Account settings', () => {
       'Church',
       'Email',
       'Password',
+      'Email preferences',
       'Two-step sign-in',
       'Signed-in devices',
     ]);
@@ -145,6 +146,7 @@ test.describe('An artist’s account settings', () => {
       'Contact',
       'Email',
       'Password',
+      'Email preferences',
       'Two-step sign-in',
       'Signed-in devices',
     ]);

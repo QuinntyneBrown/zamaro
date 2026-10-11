@@ -89,11 +89,12 @@ export async function signInAs(context: BrowserContext, member: CastMember): Pro
 /**
  * A fresh booker in the e2e database, made with the `cast:booker` artisan helper (D19). Registration
  * itself is tested through the sign-up page; this is for specs that need an account to change.
- * `verified: false` leaves the address waiting for its link.
+ * `verified: false` leaves the address waiting for its link; `terms` is the terms version they last
+ * accepted (the current one unless given).
  */
 export function createBooker(
   email: string = uniqueEmail(),
-  { verified = true }: { verified?: boolean } = {},
+  { verified = true, terms }: { verified?: boolean; terms?: string } = {},
 ): { email: string; password: string } {
   execFileSync(
     'docker',
@@ -109,6 +110,7 @@ export function createBooker(
       'cast:booker',
       email,
       ...(verified ? [] : ['--unverified']),
+      ...(terms ? [`--terms=${terms}`] : []),
     ],
     { cwd: new URL('../..', import.meta.url), stdio: 'pipe' },
   );

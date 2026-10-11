@@ -237,6 +237,18 @@ export class AccountPage {
     return this.section('Two-step sign-in').getByRole('link', { name: 'Turn on two-step sign-in' });
   }
 
+  /** "Bookings and payments", always on. */
+  alwaysOnChoice(): Locator {
+    return this.section('Email preferences').getByRole('checkbox').first();
+  }
+
+  /** "New artists near my church": the marketing choice. */
+  marketingChoice(): Locator {
+    return this.section('Email preferences').getByRole('checkbox', {
+      name: /^New artists near my church/,
+    });
+  }
+
   /** The Signed-in devices list (docs/specs/components/list, device variant). */
   deviceList(): Locator {
     return this.section('Signed-in devices').locator('.device-list');
