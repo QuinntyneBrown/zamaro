@@ -154,4 +154,22 @@ return [
 
         $test->as($owner)->deleteJson('/api/v1/account/two-factor', ['code' => $codes[0]])->assertNoContent();
     },
+
+    'POST api/v1/account/consents/terms' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->postJson('/api/v1/account/consents/terms', ['termsVersion' => 'none'])->assertStatus(404);
+
+        $test->as($owner)->getJson('/api/v1/me')->assertOk()->assertJsonPath('data.email', $owner->email);
+    },
+
+    'GET api/v1/account/consents/marketing' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($owner)->postJson('/api/v1/account/consents/marketing', ['granted' => true])->assertOk();
+
+        $test->as($intruder)->getJson('/api/v1/account/consents/marketing')->assertOk()->assertJsonPath('data.granted', false);
+    },
+
+    'POST api/v1/account/consents/marketing' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->postJson('/api/v1/account/consents/marketing', ['granted' => true])->assertOk();
+
+        $test->as($owner)->getJson('/api/v1/account/consents/marketing')->assertJsonPath('data.granted', false);
+    },
 ];

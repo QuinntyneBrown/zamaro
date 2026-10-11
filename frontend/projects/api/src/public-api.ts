@@ -10,6 +10,8 @@ export * from './lib/auth/provide-auth';
 export * from './lib/auth/return-url';
 export * from './lib/auth/session-expired.interceptor';
 export * from './lib/auth/signed-in.guard';
+export * from './lib/auth/terms.guard';
+export * from './lib/auth/terms.interceptor';
 export * from './lib/http/api-origin.backend';
 export * from './lib/i18n/calendar-date';
 export * from './lib/i18n/catalogue.loader';

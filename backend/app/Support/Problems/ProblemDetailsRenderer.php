@@ -8,6 +8,7 @@ use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
+use App\Actions\Privacy\TermsAcceptanceRequired;
 use App\Http\Resources\Discovery\LineupCardResource;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -65,6 +66,10 @@ class ProblemDetailsRenderer
         if ($e instanceof ValidationException) {
             return ProblemDetails::of(ProblemType::ValidationFailed, 'Some fields need attention.', $requestId, $e->errors())
                 ->toResponse();
+        }
+
+        if ($e instanceof TermsAcceptanceRequired) {
+            return ProblemDetails::of(ProblemType::TermsAcceptanceRequired, 'Fetch /legal-documents/current and accept the terms at /account/consents/terms first.', $requestId)->toResponse();
         }
 
         if ($e instanceof LegalDocumentOutdated) {

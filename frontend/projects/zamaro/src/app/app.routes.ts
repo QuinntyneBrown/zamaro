@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { signedInGuard } from 'api';
+import { signedInGuard, termsGuard } from 'api';
 
 export const routes: Routes = [
   {
@@ -34,7 +34,7 @@ export const routes: Routes = [
   },
   {
     path: 'account/security/mfa',
-    canActivate: [signedInGuard],
+    canActivate: [signedInGuard, termsGuard],
     loadComponent: () => import('./pages/mfa-setup/mfa-setup').then((m) => m.MfaSetup),
   },
   {
@@ -46,8 +46,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/confirm-email/confirm-email').then((m) => m.ConfirmEmail),
   },
   {
-    path: 'account',
+    path: 'account/accept-terms',
     canActivate: [signedInGuard],
+    loadComponent: () => import('./pages/accept-terms/accept-terms').then((m) => m.AcceptTerms),
+  },
+  {
+    path: 'account',
+    canActivate: [signedInGuard, termsGuard],
     loadComponent: () => import('./pages/account/account').then((m) => m.Account),
   },
   {

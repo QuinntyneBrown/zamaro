@@ -11,10 +11,11 @@ import {
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   ACCOUNT_API,
+  CONSENT_API,
   type AccountSession,
   AuthService,
   type Church,
@@ -27,6 +28,7 @@ import {
   Banner,
   Button,
   ButtonLink,
+  Checkbox,
   ErrorSummary,
   type ErrorSummaryItem,
   FormActions,
@@ -62,7 +64,7 @@ type Field =
   | 'emailPassword'
   | 'currentPassword'
   | 'newPassword';
-type Section = 'profile' | 'church' | 'contact' | 'email' | 'password';
+type Section = 'profile' | 'church' | 'contact' | 'email' | 'password' | 'marketing';
 type Errors = Partial<Record<Field, FieldError>>;
 
 interface FieldError {
@@ -125,6 +127,7 @@ class Refused extends Error {
     Banner,
     Button,
     ButtonLink,
+    Checkbox,
     ErrorSummary,
     FormActions,
     FormField,
@@ -142,6 +145,7 @@ class Refused extends Error {
 })
 export class Account {
   private readonly api = inject(ACCOUNT_API);
+  private readonly consent = inject(CONSENT_API);
   private readonly auth = inject(AuthService);
   private readonly transloco = inject(TranslocoService);
   private readonly injector = inject(Injector);
@@ -162,6 +166,7 @@ export class Account {
     }),
     contactPhone: [''],
     email: this.fb.group({ newEmail: [''], currentPassword: [''] }),
+    marketing: [false],
     password: this.fb.group({ currentPassword: [''], newPassword: [''] }),
   });
 
@@ -174,6 +179,10 @@ export class Account {
   /** The church as last saved; null until the booker saves one. */
   private readonly savedChurch = signal<Church | null>(null);
   private savedContactPhone: string | null = null;
+  /** "Bookings and payments": always on (notifications/manage-email-preferences). */
+  protected readonly alwaysOn = new FormControl({ value: true, disabled: true });
+  /** The marketing choice as last saved (L2-080.4). */
+  private savedMarketing = false;
   /** The new address a link was sent to, until it is opened (L2-025.1). */
   protected readonly pendingEmail = signal<string | null>(null);
   private readonly summary = viewChild(ErrorSummary);
@@ -220,6 +229,7 @@ export class Account {
       : { id: 'church', label: this.t('church.title') },
     { id: 'email', label: this.t('email.title') },
     { id: 'password', label: this.t('password.title') },
+    { id: 'preferences', label: this.t('preferences.title') },
     { id: 'two-step', label: this.t('twoStep.title') },
     { id: 'devices', label: this.t('devices.title') },
   ]);
@@ -278,10 +288,12 @@ export class Account {
       church: artist ? of(null) : this.api.church(),
       contactPhone: artist ? this.api.contactPhone() : of(null),
       sessions: this.api.sessions(),
+      marketing: artist ? of(false) : this.consent.marketingChoice(),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ church, contactPhone, sessions }) => {
+        next: ({ church, contactPhone, sessions, marketing }) => {
+          this.savedMarketing = marketing;
           this.savedChurch.set(church);
           this.savedContactPhone = contactPhone;
           this.sessions.set(sessions);
@@ -372,6 +384,7 @@ export class Account {
     }
     if (value.email.newEmail.trim()) sections.push('email');
     if (value.password.newPassword || value.password.currentPassword) sections.push('password');
+    if (!this.isArtist() && value.marketing !== this.savedMarketing) sections.push('marketing');
     return sections;
   }
 
@@ -399,6 +412,11 @@ export class Account {
             ),
           );
           this.form.controls.email.reset();
+          break;
+        case 'marketing':
+          this.savedMarketing = await firstValueFrom(
+            this.consent.saveMarketingChoice(value.marketing),
+          );
           break;
         case 'password':
           await firstValueFrom(
@@ -533,6 +551,7 @@ export class Account {
         typicalAttendance: church?.typicalAttendance?.toString() ?? '',
       },
       contactPhone: this.savedContactPhone ?? '',
+      marketing: this.savedMarketing,
     });
     this.errors.set({});
     this.addressProblem.set(null);

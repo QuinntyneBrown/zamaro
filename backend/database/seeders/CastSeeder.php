@@ -298,14 +298,18 @@ class CastSeeder extends Seeder
     }
 
     /**
-     * What the cast agreed to (L2-080): Naomi accepted the October terms and privacy policy and said no
-     * to marketing email; Tomi last accepted the March terms, so the terms gate stops him (M2 S14).
+     * What the cast agreed to (L2-080): Naomi and Abigail accepted the October terms and privacy policy
+     * and said no to marketing email; Tomi last accepted the March terms, so the terms gate stops him
+     * (M2 S14).
      * Written once per person, as records are never changed.
      */
     private function consents(): void
     {
         $consents = [
             'naomi.fraser@riversidecc.ca' => ['2026-10-08 09:30:00', [
+                [ConsentKind::Terms, '2026-10', true], [ConsentKind::PrivacyPolicy, '2026-10', true], [ConsentKind::MarketingEmail, null, false],
+            ]],
+            'abigail@abigailmensah.ca' => ['2026-10-08 12:00:00', [
                 [ConsentKind::Terms, '2026-10', true], [ConsentKind::PrivacyPolicy, '2026-10', true], [ConsentKind::MarketingEmail, null, false],
             ]],
             'tomi.oduya@harvestpointchurch.ca' => ['2026-03-04 19:15:00', [

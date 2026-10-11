@@ -2,6 +2,7 @@
 
 namespace App\Support\OpenApi;
 
+use App\Http\Middleware\EnsureCurrentTermsAccepted;
 use Dedoc\Scramble\Extensions\OperationExtension;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Response;
@@ -22,6 +23,14 @@ class RequestGateResponses extends OperationExtension
 
         if (! $this->documents($operation, 429)) {
             $operation->addResponse($problem(429, '`too-many-requests`: over 120 requests a minute from one address, or 300 from one signed-in account. Wait for `Retry-After` seconds.'));
+        }
+
+        // The terms gate (L2-080.3) answers before the controller on every signed-in route but its open ones.
+        $route = $routeInfo->route;
+        if (in_array(EnsureCurrentTermsAccepted::class, $route->gatherMiddleware(), true)
+            && ! in_array($route->getName(), EnsureCurrentTermsAccepted::OPEN, true)
+            && ! $this->documents($operation, 409)) {
+            $operation->addResponse($problem(409, '`terms-acceptance-required`: the current terms must be accepted first, at `POST /account/consents/terms`.'));
         }
 
         if (in_array(strtoupper($operation->method), ['POST', 'PUT', 'PATCH'], true)) {

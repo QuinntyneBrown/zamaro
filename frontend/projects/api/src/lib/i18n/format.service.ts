@@ -24,6 +24,15 @@ export class FormatService {
         });
   }
 
+  /** "Thu 8 Oct 2026": the short date with its year, whatever the year. */
+  shortDateWithYear(date: CalendarDate): string {
+    const parts = this.parts(date, { weekday: 'short', day: 'numeric', month: 'short' });
+    return this.transloco.translate('common.format.date.shortWithYear', {
+      ...parts,
+      year: date.slice(0, 4),
+    });
+  }
+
   /**
    * A named day when the date has one ("Christmas Eve"), otherwise the short date. The names are
    * catalogue keys `common.namedDay.{MM-DD}`.

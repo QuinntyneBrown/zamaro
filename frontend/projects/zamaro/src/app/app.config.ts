@@ -30,6 +30,7 @@ import {
   provideI18n,
   REVIEWS_API,
   sessionExpiredInterceptor,
+  termsInterceptor,
   withApiXsrf,
 } from 'api';
 import { routes } from './app.routes';
@@ -48,7 +49,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withFetch(),
       withApiXsrf(),
-      withInterceptors([sessionExpiredInterceptor, csrfRecoveryInterceptor]),
+      withInterceptors([sessionExpiredInterceptor, csrfRecoveryInterceptor, termsInterceptor]),
     ),
     { provide: CSRF_REFUSED, useFactory: csrfRefusedToast },
     // GET responses made while rendering on the server are replayed in the browser, not re-fetched,

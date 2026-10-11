@@ -1,5 +1,5 @@
 import { type Observable, of } from 'rxjs';
-import type { CurrentLegalDocuments } from '../models/accounts';
+import type { CurrentLegalDocuments, CurrentUser } from '../models/accounts';
 import type { ConsentApi } from '../services/consent';
 
 /** The terms and privacy policy in force on Fri 9 Oct 2026 (the M2 seed). */
@@ -20,9 +20,27 @@ export const CURRENT_LEGAL_DOCUMENTS: CurrentLegalDocuments = {
 
 /** In-memory ConsentApi for scenarios and component tests. */
 export class InMemoryConsentApi implements ConsentApi {
-  constructor(private readonly documents: CurrentLegalDocuments = CURRENT_LEGAL_DOCUMENTS) {}
+  private marketing = false;
+
+  constructor(
+    private readonly user: CurrentUser,
+    private readonly documents: CurrentLegalDocuments = CURRENT_LEGAL_DOCUMENTS,
+  ) {}
 
   currentDocuments(): Observable<CurrentLegalDocuments> {
     return of(this.documents);
+  }
+
+  acceptTerms(): Observable<CurrentUser> {
+    return of({ ...this.user, termsAcceptanceRequired: false });
+  }
+
+  marketingChoice(): Observable<boolean> {
+    return of(this.marketing);
+  }
+
+  saveMarketingChoice(granted: boolean): Observable<boolean> {
+    this.marketing = granted;
+    return of(granted);
   }
 }

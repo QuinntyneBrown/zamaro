@@ -264,6 +264,34 @@
                   />
                 </div>
               </zm-form-section>
+              <zm-form-section
+                id="preferences"
+                headingId="preferences-title"
+                [heading]="'accounts.account.preferences.title' | transloco"
+              >
+                <fieldset class="fieldset">
+                  <legend>{{ 'accounts.account.preferences.legend' | transloco }}</legend>
+                  <zm-checkbox
+                    id="n-booking"
+                    [formControl]="alwaysOn"
+                    [description]="'accounts.account.preferences.alwaysOnHelp' | transloco"
+                    >{{
+                      (isArtist()
+                        ? 'accounts.account.preferences.alwaysOnArtist'
+                        : 'accounts.account.preferences.alwaysOn'
+                      ) | transloco
+                    }}</zm-checkbox
+                  >
+                  @if (!isArtist()) {
+                    <zm-checkbox
+                      id="n-news"
+                      formControlName="marketing"
+                      [description]="'accounts.account.preferences.newsHelp' | transloco"
+                      >{{ 'accounts.account.preferences.news' | transloco }}</zm-checkbox
+                    >
+                  }
+                </fieldset>
+              </zm-form-section>
               <zm-form-actions [status]="statusText()" [statusTone]="statusTone()">
                 <zm-button [disabled]="saving()" (click)="discard($event)">{{
                   'accounts.account.discard' | transloco

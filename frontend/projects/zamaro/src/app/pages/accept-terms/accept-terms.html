@@ -1,0 +1,71 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    <zm-booking-form
+      class="auth-form"
+      variant="auth"
+      landmark
+      headingId="card-title"
+      [headingLevel]="1"
+      [heading]="'accounts.acceptTerms.title' | transloco"
+      [stamp]="'accounts.acceptTerms.stamp' | transloco"
+      [busy]="busy() || status() === 'loading'"
+    >
+      @if (status() === 'error') {
+        <zm-alert
+          variant="danger"
+          compact
+          [heading]="'accounts.acceptTerms.errorTitle' | transloco"
+        >
+          <p>{{ 'accounts.acceptTerms.errorText' | transloco }}</p>
+        </zm-alert>
+      }
+      @if (documents(); as docs) {
+        <p class="lead">{{ 'accounts.acceptTerms.lead' | transloco }}</p>
+        <ul class="changes">
+          @for (change of docs.terms.summaryOfChanges; track change) {
+            <li>{{ change }}</li>
+          }
+        </ul>
+        <p>
+          <a class="full-terms" [href]="docs.terms.url"
+            >{{ 'accounts.acceptTerms.fullTerms' | transloco }}<zm-icon name="arrow-right"
+          /></a>
+        </p>
+        <div class="actions">
+          <zm-button
+            id="accept-terms"
+            variant="primary"
+            size="lg"
+            block
+            [busy]="busy()"
+            (click)="accept()"
+            >{{
+              (busy() ? 'accounts.acceptTerms.accepting' : 'accounts.acceptTerms.accept')
+                | transloco
+            }}</zm-button
+          >
+          <zm-button block [disabled]="busy()" (click)="signOut()">{{
+            'accounts.acceptTerms.signOut' | transloco
+          }}</zm-button>
+        </div>
+      } @else {
+        <p class="visually-hidden" role="status">
+          {{ 'accounts.acceptTerms.loading' | transloco }}
+        </p>
+        <div class="skeletons" aria-hidden="true">
+          <zm-skeleton shape="text" width="long" />
+          <zm-skeleton shape="text" width="long" />
+          <zm-skeleton shape="text" />
+          <zm-skeleton shape="text" width="medium" />
+          <zm-skeleton shape="control-lg" />
+        </div>
+      }
+      @if (documents(); as docs) {
+        <span slot="fine">{{
+          'accounts.acceptTerms.fine'
+            | transloco: { version: docs.terms.version, date: effectiveFrom() }
+        }}</span>
+      }
+    </zm-booking-form>
+  </div>
+</div>

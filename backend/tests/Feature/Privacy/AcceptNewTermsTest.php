@@ -88,9 +88,10 @@ class AcceptNewTermsTest extends TestCase
     public function test_a_new_privacy_policy_alone_stops_no_one(): void
     {
         LegalDocument::create([
-            'kind' => ConsentKind::PrivacyPolicy, 'version' => '2026-10-b', 'effective_from' => '2026-10-09',
+            'kind' => ConsentKind::PrivacyPolicy, 'version' => '2026-11', 'effective_from' => '2026-11-01',
             'url' => 'https://zamaro.ca/legal/privacy', 'summary_of_changes' => [],
         ]);
+        $this->travelTo(Carbon::parse('2026-11-02 10:00', 'America/Toronto'));
 
         $this->signIn('naomi.fraser@riversidecc.ca')->assertJsonPath('data.termsAcceptanceRequired', false);
         $this->getJson('/api/v1/account/church')->assertOk();

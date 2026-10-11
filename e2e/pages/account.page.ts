@@ -64,11 +64,11 @@ export class AccountPage {
     }
   }
 
-  /** Presses Save changes and waits for every request it sends to answer. */
+  /** Presses Save changes and waits for the first request it sends to answer. */
   async save(): Promise<void> {
     const answered = this.page.waitForResponse(
       (response) =>
-        response.request().method() === 'PUT' &&
+        response.request().method() !== 'GET' &&
         new URL(response.url()).pathname.startsWith('/api/v1/account/'),
     );
     await this.saveButton().click();

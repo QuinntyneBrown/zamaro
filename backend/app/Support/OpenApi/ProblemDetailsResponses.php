@@ -8,6 +8,7 @@ use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
+use App\Actions\Privacy\TermsAcceptanceRequired;
 use Dedoc\Scramble\Support\ExceptionToResponseExtensions\HttpExceptionToResponseExtension;
 use Dedoc\Scramble\Support\Generator\Response;
 use Dedoc\Scramble\Support\Generator\Schema;
@@ -51,7 +52,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
             $type->isInstanceOf(AuthenticationException::class) => 401,
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
             $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,
-            $type->isInstanceOf(LegalDocumentOutdated::class), $type->isInstanceOf(TwoFactorAlreadyOn::class) => 409,
+            $type->isInstanceOf(LegalDocumentOutdated::class), $type->isInstanceOf(TwoFactorAlreadyOn::class), $type->isInstanceOf(TermsAcceptanceRequired::class) => 409,
             $type->isInstanceOf(LinkExpired::class) => 410,
             default => parent::toResponse($type)?->code,
         };

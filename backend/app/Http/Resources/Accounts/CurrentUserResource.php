@@ -4,6 +4,7 @@ namespace App\Http\Resources\Accounts;
 
 use App\Enums\Role;
 use App\Models\User;
+use App\Services\Privacy\LegalDocumentRegistry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -53,8 +54,12 @@ class CurrentUserResource extends JsonResource
              * @var 'light'|'dark'|null
              */
             'themePreference' => null,
-            /** True when the current terms must be accepted first. Always false until terms versions exist (M2 S14). */
-            'termsAcceptanceRequired' => false,
+            /**
+             * True when the current terms must be accepted before anything else (L2-080.3).
+             *
+             * @var bool
+             */
+            'termsAcceptanceRequired' => app(LegalDocumentRegistry::class)->termsAcceptanceRequired($user),
         ];
     }
 }
