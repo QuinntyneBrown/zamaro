@@ -192,6 +192,34 @@ export class AccountPage {
     return this.section('Church').getByRole('spinbutton', { name: /^Typical attendance/ });
   }
 
+  newEmail(): Locator {
+    return this.section('Email').getByRole('textbox', { name: /^New email/ });
+  }
+
+  /** The Email section's "Current password". */
+  emailPassword(): Locator {
+    return this.section('Email').getByLabel(/^Current password/);
+  }
+
+  /** "We sent a link to … You sign in with … until you open it.", after a change is asked for. */
+  emailPending(): Locator {
+    return this.section('Email').getByRole('status');
+  }
+
+  /** The Password section's "Current password". */
+  currentPassword(): Locator {
+    return this.section('Password').getByLabel(/^Current password/);
+  }
+
+  newPassword(): Locator {
+    return this.section('Password').getByLabel(/^New password/);
+  }
+
+  /** The banner after a confirmed email change: "Email changed. You now sign in with …". */
+  emailChangedBanner(): Locator {
+    return this.page.getByRole('status').filter({ hasText: /^Email changed/ });
+  }
+
   contactPhone(): Locator {
     return this.section('Contact').getByRole('textbox', { name: /^Contact phone/ });
   }

@@ -130,6 +130,14 @@ export async function meStatusWith(sessionCookie: Cookie): Promise<number> {
   }
 }
 
+/** What `GET /api/v1/me` answers a browser context: 200 while signed in, 401 once its session ended. */
+export async function meStatusIn(context: BrowserContext): Promise<number> {
+  const response = await context.request.get('/api/v1/me', {
+    headers: { Referer: `${SITE}/`, Accept: 'application/json' },
+  });
+  return response.status();
+}
+
 async function xsrfToken(request: APIRequestContext): Promise<string> {
   const { cookies } = await request.storageState();
   const cookie = cookies.find((candidate) => candidate.name === 'XSRF-TOKEN');

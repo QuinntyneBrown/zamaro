@@ -202,4 +202,14 @@ export const routes: RouteState[] = [
     signedInAs: 'abigail',
     shows: 'account-form',
   },
+  // An email change link that was used, ran out or never existed, opened by Naomi: "This link has
+  // expired" with the Expired stamp, her address and "Change email again".
+  {
+    name: 'confirm-email-expired',
+    path: '/account/email/confirm?token=e2e-unknown',
+    app: 'zamaro',
+    mock: 'confirm-email/expired.html',
+    signedInAs: 'naomi',
+    shows: 'link-expired',
+  },
 ];
