@@ -32,6 +32,7 @@
   "format.distance.about": "about {km} km",
   "format.distance.km": "{km} km",
   "format.distance.under1": "Under 1 km",
+  "format.time": "{hour}:{minute} {dayPeriod}",
   "menu.close": "Close menu",
   "menu.label": "Main menu",
   "menu.open": "Open menu",

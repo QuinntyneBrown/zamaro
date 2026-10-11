@@ -4,10 +4,13 @@ namespace App\Notifications;
 
 use App\Jobs\Concerns\RetriesWithBackoff;
 use App\Services\UserExperience\Catalogue;
+use Carbon\CarbonInterface;
+use DateTimeZone;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use IntlDateFormatter;
 
 /**
  * Every Zamaro email (notifications/send-transactional-emails, ADR-0019): queued on `notifications`
@@ -56,6 +59,12 @@ abstract class TransactionalNotification extends Notification implements ShouldQ
     protected function webUrl(string $path): string
     {
         return config('zamaro.web_url').$path;
+    }
+
+    /** A time as the site writes it, in Toronto: "10:57 a.m." (L2-110). */
+    protected function time(CarbonInterface $at): string
+    {
+        return (string) IntlDateFormatter::formatObject($at->toDateTimeImmutable()->setTimezone(new DateTimeZone(config('app.timezone'))), 'h:mm a', 'en-CA');
     }
 
     /** "Naomi" from "Naomi Fraser", for the greeting. */

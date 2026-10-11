@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Accounts\EmailVerificationController;
+use App\Http\Controllers\Api\V1\Accounts\PasswordResetController;
 use App\Http\Controllers\Api\V1\Accounts\RegistrationController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
@@ -37,4 +38,8 @@ Route::post('register', RegistrationController::class)->middleware(['throttle:re
 Route::post('email/verify', [EmailVerificationController::class, 'verify'])->middleware(SetCachePolicy::class)->name('email.verify');
 // A signed-in booker, an expired link's owner or a guest who just signed up; 3 in 15 minutes (M2 D6).
 Route::post('email/verification-notification', [EmailVerificationController::class, 'resend'])->middleware(['throttle:resend-verification', SetCachePolicy::class])->name('email.resend');
+// Forgotten passwords: the same answer for any address, behind the bot check (L2-023.3, L2-077.4).
+Route::post('password/forgot', [PasswordResetController::class, 'forgot'])->middleware(['throttle:forgot-password', 'bot-challenge:forgot-password', SetCachePolicy::class])->name('password.forgot');
+Route::post('password/reset/check', [PasswordResetController::class, 'check'])->middleware(['throttle:password-reset', SetCachePolicy::class])->name('password.check');
+Route::post('password/reset', [PasswordResetController::class, 'reset'])->middleware(['throttle:password-reset', SetCachePolicy::class])->name('password.reset');
 Route::get('legal-documents/current', [LegalDocumentController::class, 'current'])->name('legal-documents.current');

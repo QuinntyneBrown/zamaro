@@ -12,7 +12,7 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AuthService, safeReturnUrl, type SessionEndedState } from 'api';
+import { AuthService, FormatService, safeReturnUrl, type SessionEndedState } from 'api';
 import {
   Alert,
   BookingForm,
@@ -23,13 +23,15 @@ import {
 } from 'components';
 import { PageMeta } from '../../shared/page-meta';
 
-type Status = 'idle' | 'submitting' | 'invalid' | 'error';
+type Status = 'idle' | 'submitting' | 'invalid' | 'paused' | 'error';
 
 /**
  * Sign in (docs/mocks/pages/sign-in, L2-023): email and password, then back to the page the person
  * came from (`returnUrl`). Wrong details get one message whichever was wrong, with the password
  * cleared; a failure on Zamaro's side keeps everything typed (L2-108.3). After a session ended
  * (`ended=1`) it says so, with the email filled in when the app sent the person here (L2-073.3).
+ * After 5 failures for an address, sign-in is paused for 15 minutes and the card says until when
+ * (L2-072.4).
  */
 @Component({
   selector: 'zm-sign-in-page',
@@ -53,6 +55,7 @@ export class SignIn {
   private readonly route = inject(ActivatedRoute);
   private readonly transloco = inject(TranslocoService);
   private readonly injector = inject(Injector);
+  private readonly format = inject(FormatService);
 
   protected readonly form = inject(NonNullableFormBuilder).group({ email: '', password: '' });
   protected readonly status = signal<Status>('idle');
@@ -62,6 +65,8 @@ export class SignIn {
     this.route.snapshot.queryParamMap.get('returnUrl'),
   );
   protected readonly busy = computed(() => this.status() === 'submitting');
+  /** "10:57 a.m.": when a paused sign-in resumes. */
+  protected readonly pausedUntil = signal('');
   protected readonly summaryItems = computed<ErrorSummaryItem[]>(() =>
     this.status() === 'invalid'
       ? [{ fieldId: 'email', message: this.transloco.translate('accounts.signIn.incorrect') }]
@@ -95,7 +100,14 @@ export class SignIn {
           safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl')),
         ),
       error: (error: unknown) => {
-        if (error instanceof HttpErrorResponse && error.status === 422) {
+        if (
+          error instanceof HttpErrorResponse &&
+          error.status === 429 &&
+          error.error?.pausedUntil
+        ) {
+          this.pausedUntil.set(this.format.time(error.error.pausedUntil));
+          this.status.set('paused');
+        } else if (error instanceof HttpErrorResponse && error.status === 422) {
           this.form.controls.password.setValue('');
           this.status.set('invalid');
           // A summary already on screen is not created again, so it does not take focus itself.

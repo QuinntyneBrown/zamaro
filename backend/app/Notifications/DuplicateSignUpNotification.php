@@ -25,6 +25,9 @@ class DuplicateSignUpNotification extends TransactionalNotification
             'signIn' => $this->copy('duplicate.signIn'),
             'action' => $this->copy('duplicate.action'),
             'link' => $this->webUrl('/sign-in'),
+            'forgot' => $this->copy('duplicate.forgot'),
+            'forgotAction' => $this->copy('duplicate.forgotAction'),
+            'forgotLink' => $this->webUrl('/forgot-password'),
             'ignore' => $this->copy('duplicate.ignore'),
         ]);
     }

@@ -23,6 +23,15 @@
               [items]="summaryItems()"
             />
           }
+          @case ('paused') {
+            <zm-alert
+              variant="danger"
+              compact
+              [heading]="'accounts.signIn.pausedTitle' | transloco"
+            >
+              <p>{{ 'accounts.signIn.pausedText' | transloco: { time: pausedUntil() } }}</p>
+            </zm-alert>
+          }
           @case ('error') {
             <zm-alert variant="danger" compact [heading]="'accounts.signIn.errorTitle' | transloco">
               <p>{{ 'accounts.signIn.errorText' | transloco }}</p>
@@ -72,10 +81,19 @@
         <zm-button variant="primary" size="lg" block type="submit" [busy]="busy()">
           {{ (busy() ? 'accounts.signIn.submitting' : 'accounts.signIn.submit') | transloco }}
         </zm-button>
+        <a slot="links" routerLink="/forgot-password">{{
+          (status() === 'paused'
+            ? 'accounts.signIn.resetPassword'
+            : 'accounts.signIn.forgotPassword'
+          ) | transloco
+        }}</a>
         <a slot="links" routerLink="/sign-up" [queryParams]="returnQuery">{{
           'accounts.signIn.createAccount' | transloco
         }}</a>
-        <span slot="fine">{{ 'accounts.signIn.fine' | transloco }}</span>
+        <span slot="fine">{{
+          (status() === 'paused' ? 'accounts.signIn.pausedFine' : 'accounts.signIn.fine')
+            | transloco
+        }}</span>
       </zm-booking-form>
     </form>
   </div>

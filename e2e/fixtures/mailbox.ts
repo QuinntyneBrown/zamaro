@@ -76,8 +76,9 @@ export async function waitForEmails(address: string, count: number): Promise<Ema
 
 /** The first link in an email's text part that starts with `prefix`, such as a verification link. */
 export function linkIn(email: Email, prefix: string): string {
+  // A Markdown link in the text part ends in ")".
   const link = email.text
-    .match(/https?:\/\/\S+/g)
+    .match(/https?:\/\/[^\s)>]+/g)
     ?.find((url) => new URL(url).pathname.startsWith(prefix));
   if (!link) throw new Error(`No ${prefix} link in "${email.subject}".`);
   return link;

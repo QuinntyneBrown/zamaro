@@ -122,7 +122,7 @@ export class ResetPasswordPage {
   }
 
   expiredText(): Locator {
-    return this.expiredCard().getByText(/^Reset links work once/);
+    return this.expiredCard().locator('p').filter({ hasText: 'Reset links work once' });
   }
 
   expiredFinePrint(): Locator {

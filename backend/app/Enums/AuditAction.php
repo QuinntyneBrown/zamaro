@@ -7,4 +7,5 @@ enum AuditAction: string
 {
     case SignIn = 'auth.sign_in';
     case SignInFailed = 'auth.sign_in_failed';
+    case PasswordReset = 'auth.password_reset';
 }

@@ -3,6 +3,8 @@ import { type Observable, of, throwError } from 'rxjs';
 import type { AuthApi } from '../auth/auth-api';
 import type {
   CurrentUser,
+  PasswordReset,
+  PasswordResetLink,
   Registration,
   SignInCredentials,
   VerifiedEmail,
@@ -26,7 +28,7 @@ export class InMemoryAuthApi implements AuthApi {
 
   constructor(
     private account: CurrentUser = NAOMI,
-    private readonly password = 'hosanna-in-the-highest',
+    private password = 'hosanna-in-the-highest',
   ) {}
 
   signIn({ email, password }: SignInCredentials): Observable<CurrentUser> {
@@ -77,6 +79,24 @@ export class InMemoryAuthApi implements AuthApi {
 
   resendVerification(): Observable<void> {
     return of(undefined);
+  }
+
+  forgotPassword(): Observable<void> {
+    return of(undefined);
+  }
+
+  /** Every token works for an hour except `e2e-unknown`, which has expired. */
+  checkPasswordReset(token: string): Observable<PasswordResetLink> {
+    return token === 'e2e-unknown'
+      ? throwError(() => new HttpErrorResponse({ status: 410 }))
+      : of({ email: this.account.email, expiresAt: '2026-10-09T11:00:00-04:00' });
+  }
+
+  resetPassword({ token, password }: PasswordReset): Observable<CurrentUser> {
+    if (token === 'e2e-unknown') return throwError(() => new HttpErrorResponse({ status: 410 }));
+    this.password = password;
+    this.signedIn = this.account;
+    return of(this.account);
   }
 
   me(): Observable<CurrentUser> {

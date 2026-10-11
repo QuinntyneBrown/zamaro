@@ -33,6 +33,10 @@ return [
         // New verification links per account, or per address for a guest, in 15 minutes (M2 D6). The
         // e2e API raises it too.
         'resend_verification_per_15_minutes' => (int) env('ZAMARO_RESEND_VERIFICATION_LIMIT', 3),
+        // Reset links per address and per email typed, an hour; checks and resets per address, a
+        // minute (M2 D6). The e2e API raises both.
+        'forgot_password_per_hour' => (int) env('ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR', 5),
+        'password_reset_per_minute' => (int) env('ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE', 30),
     ],
 
     // What the fake vendor adapters answer (ADR-0002).

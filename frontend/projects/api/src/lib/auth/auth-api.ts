@@ -3,6 +3,9 @@ import { inject, Injectable, InjectionToken } from '@angular/core';
 import { map, type Observable, switchMap } from 'rxjs';
 import type {
   CurrentUser,
+  PasswordReset,
+  PasswordResetLink,
+  PasswordResetRequest,
   Registration,
   SignInCredentials,
   VerificationResend,
@@ -27,6 +30,12 @@ export interface AuthApi {
   verifyEmail(token: string): Observable<VerifiedEmail>;
   /** Sends a new verification link, which revokes the earlier ones. */
   resendVerification(request: VerificationResend): Observable<void>;
+  /** Asks for a reset link; the answer is the same for any address. A failed bot check is a 422. */
+  forgotPassword(request: PasswordResetRequest): Observable<void>;
+  /** Whether a reset link still works, without using it; 410 when it does not. */
+  checkPasswordReset(token: string): Observable<PasswordResetLink>;
+  /** Sets the new password with the link and signs this browser in (L2-023.4). */
+  resetPassword(reset: PasswordReset): Observable<CurrentUser>;
 }
 
 export const AUTH_API = new InjectionToken<AuthApi>('AuthApi');
@@ -70,6 +79,30 @@ export class HttpAuthApi implements AuthApi {
     return this.http.get('/sanctum/csrf-cookie').pipe(
       switchMap(() => this.http.post('/api/v1/email/verification-notification', request)),
       map(() => undefined),
+    );
+  }
+
+  /** The reset endpoints fetch the CSRF cookie first, as the link is often opened in a new browser. */
+  forgotPassword(request: PasswordResetRequest): Observable<void> {
+    return this.http.get('/sanctum/csrf-cookie').pipe(
+      switchMap(() => this.http.post('/api/v1/password/forgot', request)),
+      map(() => undefined),
+    );
+  }
+
+  checkPasswordReset(token: string): Observable<PasswordResetLink> {
+    return this.http.get('/sanctum/csrf-cookie').pipe(
+      switchMap(() =>
+        this.http.post<{ data: PasswordResetLink }>('/api/v1/password/reset/check', { token }),
+      ),
+      map((response) => response.data),
+    );
+  }
+
+  resetPassword(reset: PasswordReset): Observable<CurrentUser> {
+    return this.http.get('/sanctum/csrf-cookie').pipe(
+      switchMap(() => this.http.post<{ data: CurrentUser }>('/api/v1/password/reset', reset)),
+      map((response) => response.data),
     );
   }
 

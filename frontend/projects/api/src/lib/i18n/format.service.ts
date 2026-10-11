@@ -64,6 +64,22 @@ export class FormatService {
     return this.parts(date, { weekday: 'long' })['weekday'];
   }
 
+  /** "10:57 a.m.", in Toronto, from an ISO time. */
+  time(instant: string): string {
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat(LOCALE, {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'America/Toronto',
+      })
+        .formatToParts(new Date(instant))
+        .filter((part) => part.type !== 'literal')
+        .map((part) => [part.type, part.value]),
+    );
+    return this.transloco.translate('common.format.time', parts);
+  }
+
   money(cents: number): string {
     const whole = cents % 100 === 0;
     return new Intl.NumberFormat(LOCALE, {

@@ -16,6 +16,8 @@
 {{ $action }}
 </x-mail::button>
 
+{{ $forgot }} [{{ $forgotAction }}]({{ $forgotLink }})
+
 {{ $ignore }}
 
 <x-slot:footer>

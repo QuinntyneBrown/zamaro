@@ -3,6 +3,7 @@
 namespace App\Support\Problems;
 
 use App\Actions\Accounts\LinkExpired;
+use App\Actions\Accounts\SignInPaused;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -71,8 +72,14 @@ class ProblemDetailsRenderer
         }
 
         if ($e instanceof LinkExpired) {
-            return ProblemDetails::of(ProblemType::LinkExpired, 'Links work once, for a limited time. Ask for a new one.', $requestId)
+            return ProblemDetails::of(ProblemType::LinkExpired, 'Links work once, for a limited time. Ask for a new one.', $requestId, extensions: $e->extensions())
                 ->toResponse();
+        }
+
+        if ($e instanceof SignInPaused) {
+            return ProblemDetails::of(ProblemType::SignInPaused, 'There were too many tries for this email. Try again later, or reset the password.', $requestId, extensions: [
+                'pausedUntil' => $e->pausedUntil->setTimezone(config('app.timezone'))->toIso8601String(),
+            ])->toResponse($e->getHeaders());
         }
 
         // LimitRequestBodySize, and PHP's own post size check, both answer 413 (L2-075.4).

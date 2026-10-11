@@ -3,6 +3,7 @@
 namespace App\Support\OpenApi;
 
 use App\Actions\Accounts\LinkExpired;
+use App\Actions\Accounts\SignInPaused;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -63,6 +64,14 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
                 ->additionalProperties((new OpenApiTypes\ArrayType)->setItems(new OpenApiTypes\StringType))
                 ->setDescription('Messages keyed by field.'));
             $body->setRequired(['type', 'title', 'status', 'detail', 'requestId', 'errors']);
+        }
+        if ($type->isInstanceOf(SignInPaused::class)) {
+            $body->addProperty('pausedUntil', (new OpenApiTypes\StringType)->format('date-time')->setDescription('When sign-in for the address resumes.'));
+            $body->setRequired(['type', 'title', 'status', 'detail', 'requestId', 'pausedUntil']);
+        }
+        if ($type->isInstanceOf(LinkExpired::class)) {
+            $body->addProperty('email', (new OpenApiTypes\StringType)->format('email')->setDescription('A reset link that existed: the account it belongs to.'));
+            $body->addProperty('sentAt', (new OpenApiTypes\StringType)->format('date-time')->setDescription('A reset link that existed: when it was sent.'));
         }
         if ($type->isInstanceOf(ArtistNotFound::class)) {
             $body->addProperty('similarArtists', (new OpenApiTypes\ObjectType)

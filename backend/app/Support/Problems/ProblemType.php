@@ -17,6 +17,7 @@ enum ProblemType: string
     case LegalDocumentOutdated = 'legal-document-outdated';
     case LinkExpired = 'link-expired';
     case TooManyRequests = 'too-many-requests';
+    case SignInPaused = 'sign-in-paused';
     case ServerError = 'server-error';
 
     public function uri(): string
@@ -35,7 +36,7 @@ enum ProblemType: string
             self::UnsupportedMediaType => 415,
             self::LegalDocumentOutdated => 409,
             self::LinkExpired => 410,
-            self::TooManyRequests => 429,
+            self::TooManyRequests, self::SignInPaused => 429,
             self::ServerError => 500,
         };
     }
@@ -53,6 +54,7 @@ enum ProblemType: string
             self::LegalDocumentOutdated => 'The terms have changed',
             self::LinkExpired => 'This link has expired',
             self::TooManyRequests => 'Too many requests',
+            self::SignInPaused => 'Sign-in is paused for 15 minutes',
             self::ServerError => 'Something went wrong',
         };
     }

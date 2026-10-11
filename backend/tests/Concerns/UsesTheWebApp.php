@@ -29,6 +29,15 @@ trait UsesTheWebApp
         return $this;
     }
 
+    /** The next request comes from another browser: none of the cookies set so far go with it. */
+    protected function withoutCookies(): static
+    {
+        $this->defaultCookies = [];
+        $this->unencryptedCookies = [];
+
+        return $this;
+    }
+
     protected function signIn(string $email, ?string $password = null): TestResponse
     {
         return $this->fromTheWebApp()->postJson('/api/v1/session', [

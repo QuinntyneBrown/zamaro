@@ -3,6 +3,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { catchError, map, type Observable, of, tap, throwError } from 'rxjs';
 import type {
   CurrentUser,
+  PasswordReset,
+  PasswordResetLink,
+  PasswordResetRequest,
   Registration,
   SignInCredentials,
   VerificationResend,
@@ -74,6 +77,20 @@ export class AuthService {
   /** Sends a new verification link; the answer says nothing about whether one was due. */
   resendVerification(request: VerificationResend = {}): Observable<void> {
     return this.api.resendVerification(request);
+  }
+
+  /** Asks for a reset link (L2-023.3). */
+  forgotPassword(request: PasswordResetRequest): Observable<void> {
+    return this.api.forgotPassword(request);
+  }
+
+  checkPasswordReset(token: string): Observable<PasswordResetLink> {
+    return this.api.checkPasswordReset(token);
+  }
+
+  /** Sets the new password; this browser is then signed in as the account (L2-023.4). */
+  resetPassword(reset: PasswordReset): Observable<CurrentUser> {
+    return this.api.resetPassword(reset).pipe(tap((user) => this.set(user)));
   }
 
   /** Forgets the person on this browser without asking the server. */

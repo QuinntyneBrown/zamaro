@@ -56,6 +56,27 @@ export interface VerificationResend {
   returnUrl?: string;
 }
 
+/** `POST /api/v1/password/forgot`: the same answer whether or not the address has an account. */
+export interface PasswordResetRequest {
+  email: string;
+  /** The bot challenge provider's single-use token. */
+  challengeToken: string;
+}
+
+/** `POST /api/v1/password/reset/check`: a link that still works (L2-023.3). */
+export interface PasswordResetLink {
+  email: string;
+  /** ISO time it stops working. */
+  expiresAt: string;
+}
+
+/** `POST /api/v1/password/reset`. */
+export interface PasswordReset {
+  token: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
 /** One version of a legal document (`GET /api/v1/legal-documents/current`). */
 export interface LegalDocument {
   /** "2026-10" */

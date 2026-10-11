@@ -6,6 +6,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 /** Named rate limiters (L2-077, security/limit-request-rates). */
 class RateLimitServiceProvider extends ServiceProvider
@@ -44,5 +45,19 @@ class RateLimitServiceProvider extends ServiceProvider
 
             return $user === null ? $limit->by('resend-ip:'.$request->ip()) : $limit->by('resend-user:'.$user->getAuthIdentifier());
         });
+
+        // M2 D6: reset links, 5 an hour per address and per email typed.
+        RateLimiter::for('forgot-password', function (Request $request) {
+            $perHour = (int) config('zamaro.rate_limits.forgot_password_per_hour');
+
+            return [
+                Limit::perHour($perHour)->by('forgot-ip:'.$request->ip()),
+                Limit::perHour($perHour)->by('forgot-email:'.hash('sha256', Str::lower(trim((string) $request->input('email'))))),
+            ];
+        });
+
+        // M2 D6: checking and using reset links, 30 a minute per address.
+        RateLimiter::for('password-reset', fn (Request $request) => Limit::perMinute((int) config('zamaro.rate_limits.password_reset_per_minute'))
+            ->by('reset-ip:'.$request->ip()));
     }
 }
