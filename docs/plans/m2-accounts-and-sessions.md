@@ -1,6 +1,6 @@
 # Milestone 2 plan: accounts and sessions
 
-**Status:** Done (2026-10-11) on `feat/m2-accounts-and-sessions`, cut from `main` after M1 merged (PR #13): S0–S18 and the end-of-milestone checks below. Not pushed; no pull request yet.
+**Status:** Done (2026-10-11) on `feat/m2-accounts-and-sessions`, cut from `main` after M1 merged (PR #13): S0–S18, the end-of-milestone checks and the walkthrough below. Not pushed; no pull request yet.
 
 ## Current status (2026-10-11)
 
@@ -1567,7 +1567,7 @@ In the browser, the `BOT_CHALLENGE` fake resolves `pass`. A fake bound in produc
    9. Stop Mailpit, send an email, and find the failed job in Horizon after 6 attempts.
    10. Check each signed-in page at 320 px.
 
-### Result (2026-10-11, at `fa9389e`)
+### Result (2026-10-11, at `d4ef3da`)
 
 1. All 346 backend Feature tests pass, including the contract assertions and `CrossUserAccessTest`.
 2. `scramble:export --fail-on-unknown` exports with no warnings; `i18n:check` passes; Pint and Larastan are
@@ -1588,16 +1588,30 @@ In the browser, the `BOT_CHALLENGE` fake resolves `pass`. A fake bound in produc
    names: the save bar is `FormActions` and the device list is `List` (device variant); recovery codes
    have no component of their own. `FormField` rose 12–24% across M2: it gained its `tel`,
    `number`, help and live inputs. It is worth profiling before it is next changed.
-7. The manual walkthrough was not done by hand in this run; the automated suites cover each step:
-   1. `register-booker.spec.ts` (link, Email verified banner);
-   2. `sign-in-and-recover-access.spec.ts` (returnUrl back to the profile);
-   3. `save-artist.spec.ts` and `view-saved-artists.spec.ts`;
-   4. `manage-church-profile.spec.ts` (Ottawa refused, Burlington pre-filled);
-   5. `manage-account-settings.spec.ts` (password change ends other sessions);
-   6. `two-step-sign-in.spec.ts`;
-   7. `record-consent.spec.ts` (Tomi);
-   8. `switch-theme.spec.ts` (a second browser follows dark);
-   9. `Feature/Notifications` and the S6 job tests (6 attempts, then a failed job);
-   10. the XS captures in `visual/` and `a11y/`.
-   A person should still walk through it once before the pull request.
-
+7. The walkthrough was done on 2026-10-11 against the dev stack (`npm start` on :4200, the compose `api`,
+   Horizon in `worker`, Mailpit on :8026). It was driven step by step in Chromium with a screenshot at
+   each step, and the screenshots were checked against the mocks:
+   1. Ruth registered; the link from Mailpit opened Discover with "Email verified · Thanks, Ruth."
+   2. Signing in from Abigail’s profile returned to it; signing out from the account menu worked.
+   3. Naomi saved Elijah ("Saved Elijah Park", the header at 4), removed him and used Undo, then removed
+      him again; `/saved` read "3 saved · free or booked on Sat 14 Nov, your last search".
+   4. 180 Elgin Street, Ottawa was refused at the street address ("Zamaro serves churches within 200 km
+      of Toronto.", "Church address outside the area · Not saved"); Riverside saved, and Discover
+      started at Burlington.
+   5. Ruth changed her password, and her second browser was sent to sign in on its next load.
+   6. Ruth turned on two-step sign-in (10 recovery codes), signed in elsewhere with a code, and turned it
+      off with a code.
+   7. Tomi signing in onto Discover was **not** asked for the new terms: the guard covers private pages
+      and the interceptor gated calls, but a public page makes neither. L2-080.3 says the terms come
+      first at the next sign-in. Fixed test-first: `e88d391` (red), `d4ef3da` (sign-in and the code step
+      go to the terms first when `/me` says so, keeping the page). Run again, Tomi was asked and went on
+      after accepting. The suite then passed 378 tests.
+   8. Naomi chose dark; her second browser, light on its device, was dark after a reload. Her account was
+      then set back to following the device.
+   9. With Mailpit stopped, a reset email for Naomi was retried and failed at 12:01:16, 19½ minutes
+      after the request; Horizon lists `ResetPasswordNotification` on `notifications` with 6 attempts
+      (Mailpit unreachable). Mailpit was started again.
+   10. At 320 px, Discover, the profile, account settings, Saved artists and two-step setup have no
+       sideways scroll, and the menu opens.
+   The dev database keeps what the walkthrough made: the Ruth accounts, Tomi’s October terms, and one
+   failed job in Horizon.
