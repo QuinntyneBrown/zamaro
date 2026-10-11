@@ -76,8 +76,8 @@ The query reads `saved_artists`, `artists`, `artist_styles`, `artist_photos`, an
 aggregate of visible `reviews`, and, through `AvailabilityService`,
 `availability_rules`, `availability_overrides` and Confirmed `bookings`.
 
-The most recent search date is held per browser. Storing it on the account instead,
-so it follows the booker across devices, is an open choice: `<TO SUPPLY>`. The card
+The most recent search date is held per browser (M2 D14): `LastSearch` writes it to
+`localStorage['zamaro.lastSearchDate']` whenever a search shows a lineup. The card
 shows the distance from the booker's church, as lineup cards do.
 
 **Mock screens** — the page is
@@ -86,6 +86,27 @@ shows the distance from the booker's church, as lineup cards do.
 [`empty`](../../../mocks/pages/saved/empty.html) and
 [`error`](../../../mocks/pages/saved/error.html). Removing an artist shows
 [`notifications/saved-toast/with-action`](../../../mocks/notifications/saved-toast/with-action.html).
+
+**As built in M2 (S17)**
+
+- **API:** `GET /api/v1/saved-artists?date=YYYY-MM-DD` (`role:booker`, private) answers
+  `{ artists, total, date }`. Each card carries the lineup card's fields (`id`, `slug`, `pronoun`,
+  `name`, `actType`, `styles`, `city`, `distance`, `rating`, `reviewCount`, `fromPrice`) plus `savedAt`
+  and `availability` (`free`, `booked`, or `null` without a date). `distance` is `null` for a booker with
+  no church yet. `ListSavedArtists` joins visible artists, orders by `saved_artists.created_at` and then
+  `saved_artists.id` (added in migration `000500`, so saves in the same instant keep their order), and
+  calls `freeArtistIds` once. An artist answers 404, a guest 401, a malformed date 422.
+- **Page:** `pages/saved` (the design's `features/saved`), behind `signedInGuard` and `termsGuard`, rendered
+  in the browser only like the account pages. The subtitle reads "{n} saved · free or booked on {date},
+  your last search", "{n} saved · free or booked on {date}" after Check date, "{n} saved · pick a date to
+  see who’s free" without a date, "Nothing saved yet" when empty and "{n} saved · list unavailable" (the
+  header's count) when the list fails. Cards link to `/artists/{slug}?date=…`; "Request" goes to the same
+  address until M5 (D24); a booked artist offers "See free dates" to `/artists/{slug}#dates-title`. Both
+  links are named in full with visually hidden text ("Request Abigail Mensah for Sat 14 Nov").
+- **Removing:** the heart calls the shared store; the card leaves while its artist is unsaved, so Undo
+  or a failed removal brings it back. The list's `aria-busy` sits on the page body, since the shell owns
+  `<main>`.
+- **Without a date:** the date field is empty and the cards show no badge or Request link.
 
 ## Requirements
 

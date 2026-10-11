@@ -23,7 +23,37 @@
 | S14 | Accept updated terms, and the marketing choice | Done | `166d8dd` red tests, `74d36d5` |
 | S15 | Save an artist | Done | `8df925f` red tests, `a515feb` |
 | S16 | Guest save through sign-in or sign-up | Done | `1b6fc36` red tests, `74847fe` |
-| S17–S18 | | Not started | |
+| S17 | Saved artists list | Done | `462965c` red tests, `e590e85` |
+| S18 | | Not started | |
+
+**Checks at the last commit (S17, 2026-10-11):** 340 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 374 tests on win32; the new
+`saved-default` and `saved-empty` states pass visual and a11y on win32 and in the Linux image, and the
+Discover and not-found states still match there. Perf against the S16 build flagged nothing (numbers in
+the ticket CRD).
+
+**S17 acceptance criteria (as tested):**
+- Given Naomi, then `GET /saved-artists?date=2026-11-14` lists Abigail, Hosanna Collective and Luz Viva in
+  that order, all `free`, 44, 32 and 63 km from Riverside, `total` 3; on 2026-11-15 Abigail is `booked`;
+  without a date every `availability` is null. A suspended saved artist is left out and not counted, and
+  comes back when approved again. A new booker has `[]`; one with no church gets `distance: null`. A
+  malformed date is 422, an artist 404, a guest 401; another booker's list is never seen.
+- Given Naomi who searched Burlington, Sat 14 Nov, then the header's Saved link opens `/saved` ("Saved
+  artists", "3 saved · free or booked on Sat 14 Nov, your last search", the date field at 2026-11-14) with
+  "Saved Wed 7 Oct", "Saved Sun 27 Sep" and "Saved Sat 12 Sep", "Brampton · 44 km from you", "From $650",
+  "Free Sat 14 Nov" and "Request Abigail Mensah for Sat 14 Nov" to `/artists/abigail-mensah?date=2026-11-14`,
+  pressed hearts, the privacy note, and the Saved link current.
+- Given Check date for 2026-11-15, then Abigail reads "Booked Sun 15 Nov" with "See free dates for Abigail
+  Mensah" and no Request, and Hosanna "Free Sun 15 Nov".
+- Given no search in the browser, then "3 saved · pick a date to see who’s free", an empty date field and
+  no badges.
+- Given a booker who removes Luz Viva, then her card leaves, "1 saved", "Saved 1 artists"; Undo brings it
+  back.
+- Given no saved artists, then "Nothing saved yet", "No saved artists yet", the text and "Find who’s free"
+  to `/`, and no date field. While loading, "Loading your saved artists…", three skeleton tickets and a
+  busy body; a failure says "We couldn’t load your saved artists" with Try again. A guest is sent to
+  `/sign-in?returnUrl=%2Fsaved`.
 
 **Checks at the last commit (S16, 2026-10-11):** frontend lint, format and `ng build zamaro` are clean;
 `npx playwright test` passes 354 tests on win32; the Discover and profile states pass visual and a11y on
@@ -683,6 +713,19 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S17 — `saved_artists.id`.** The e2e clock is frozen, so two saves share an instant; a new
+  additive migration gives the table an identity that keeps them in the order they were made.
+- **S17 — Copy without a mock.** "{n} saved · free or booked on {date}" after Check date, "{n} saved ·
+  pick a date to see who’s free" without a search, and "See free dates for {name}".
+- **S17 — Skeletons.** `zm-ticket-skeleton` is built and used on Saved artists; Discover's own
+  skeleton markup moves to it later, so its loading baselines do not change here.
+- **S17 — Ruth Adeyemi.** The empty state needs a booker who saved no one; `cast:booker` makes her once
+  per run after the seed, since making her again re-hashes her password and ends her sessions.
+- **S17 — Style restored.** S16's red tests had reformatted e2e page objects with Prettier's defaults;
+  `889c5e1` restores them. Run Prettier in `e2e/` with
+  `--config ../frontend/.prettierrc`.
+- **S17 — Seen, not changed:** at LG the narrow ticket body also lets the "Free" badge reach the
+  perforation, the same layout limit as the mid-word name breaks noted in S15.
 - **S16 — The replay is in the store.** The design has `AuthService` ask `PendingIntentService` to
   replay; the `api` library knows nothing of saved artists, so `SavedArtistsStore` replays once a booker's
   ids load. The intent carries the name and pronoun for the toast.
