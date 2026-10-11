@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 import { createBooker, signIn } from '../../fixtures/accounts';
 import { AcceptTermsPage } from '../../pages/accept-terms.page';
 import { AccountPage } from '../../pages/account.page';
+import { ArtistProfilePage } from '../../pages/artist-profile.page';
+import { SignInPage } from '../../pages/sign-in.page';
 
 // L2-080.3 (privacy/record-consent): new terms must be accepted before anything else.
 test.describe('Accepting updated terms', () => {
@@ -33,6 +35,26 @@ test.describe('Accepting updated terms', () => {
 
     await expect(account.form()).toBeVisible();
     expect(terms.address()).toBe('/account');
+  });
+
+  test('signing in onto a public page asks for the new terms first, then goes on there', async ({
+    page,
+  }) => {
+    const terms = new AcceptTermsPage(page);
+    const profile = new ArtistProfilePage(page);
+    const signInPage = new SignInPage(page);
+    const booker = createBooker(undefined, { terms: '2026-03' });
+    await signInPage.open('/artists/abigail-mensah');
+
+    await signInPage.signIn(booker.email, booker.password);
+
+    await expect(terms.heading()).toHaveText('We’ve updated our terms');
+    expect(terms.address()).toBe('/account/accept-terms?returnUrl=%2Fartists%2Fabigail-mensah');
+
+    await terms.accept();
+
+    await expect(profile.saveButton()).toBeVisible();
+    expect(profile.address()).toBe('/artists/abigail-mensah');
   });
 
   test('a signed-in call the API stops sends the booker to the terms too', async ({ page }) => {
