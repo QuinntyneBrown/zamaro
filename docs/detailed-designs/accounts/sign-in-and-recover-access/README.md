@@ -265,6 +265,37 @@ design describes; see `security/manage-sessions-and-csrf`.
   `/forgot-password`.
 - **Times** in pages and emails read "10:57 a.m." (`FormatService.time`, `format.time`).
 
+**As built in M2 (S12, two-step sign-in on, and signing in with a code)**
+
+- **Library (ADR-0021):** `pragmarx/google2fa` behind `TotpVerifier` (one step either side, the real
+  clock) and `bacon/bacon-qr-code` for the QR code, served as SVG from `GET
+  /api/v1/account/two-factor/qr`. The TOTP library is no longer `<TO SUPPLY>`.
+- **Turning on:** `POST /api/v1/account/two-factor` (`TwoFactorController@begin`, `EnableTwoFactor`)
+  stores a new key with the field key and answers `{ key, otpauthUri }`, the key in groups of four; a
+  second call replaces it, and with two-step sign-in already on it is the 409 `two-factor-already-on`.
+  `POST …/two-factor/confirm` checks the first code ("That code didn’t match. Codes change every 30
+  seconds; enter the one showing now."), sets `mfa_enabled` and `two_factor_confirmed_at`, replaces the
+  10 recovery codes (`RecoveryCodes`: `xxxx-xxxx`, SHA-256, once each), audits
+  `auth.two_factor_enabled` and queues `TwoStepSignInChangedNotification` ("Two-step sign-in is on for
+  your Zamaro account", M2 D21), answering the codes once. `/me` gains `mfaEnabled`.
+- **Signing in:** with the right password and two-step sign-in on, `POST /session` answers 202 `{
+  twoFactorRequired, email }` and `TwoFactorChallenge` leaves a 10-minute marker in the session instead
+  of signing in. `POST /api/v1/session/two-factor` (public, 30 a minute per address) takes `code` or
+  `recoveryCode` (with or without the dash, any case): right, it signs in with a new session ID and
+  audits `auth.sign_in`; wrong, 422 ("That code is wrong or has expired. Enter the code your app shows
+  now." / "That recovery code is wrong or was used. Enter another of your saved codes.") and a failure
+  for the lockout, which pauses codes and passwords alike (429 `sign-in-paused`); no marker or an old
+  one, 401. A password reset leads to the same code step (202).
+- **Pages:** `pages/mfa-setup/MfaSetup` at `/account/security/mfa` (guarded, client-rendered): loading,
+  the QR code and key, the 6-digit code ("Turn on", "Checking…"), "Check the code", "We couldn’t turn
+  on two-step sign-in", then "Save your recovery codes" with the codes as `zm-list variant="grid"
+  ordered`, Download codes (a text file), Copy codes and "I’ve saved them". `pages/mfa-challenge/
+  MfaChallenge` at `/account/sign-in/verify`: "Enter your code" with "Signing in as {email}." (passed
+  on by the sign-in page), "Use a recovery code instead", "That code didn’t work", "We couldn’t check
+  your code", the pause, and "Sign in as someone else"; success returns to the sign-in page's
+  `returnUrl`. Account settings gains the Two-step sign-in section ("Off" or "On", "Turn on two-step
+  sign-in"); turning off and new codes are S13.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

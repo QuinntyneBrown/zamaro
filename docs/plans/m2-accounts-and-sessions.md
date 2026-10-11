@@ -18,13 +18,46 @@
 | S9 | Account settings: profile, church and contact phone | Done | `68008cd` red tests, `a23b482` (ADR-0020) |
 | S10 | Change email and password | Done | `06caf7a` red tests, `06f77d8` |
 | S11 | Signed-in devices | Done | `119f81a` red tests, `2265bb0` |
-| S12–S18 | | Not started | |
+| S12 | Two-step sign-in: turn on and sign in with a code | Done | `51c4e93` red tests, `137843b` (ADR-0021) |
+| S13–S18 | | Not started | |
 
-**Checks at the last commit (S11, 2026-10-11):** 293 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
-lint, format and `ng build zamaro` are clean; `npx playwright test` passes 304 tests on win32 and the
-account states pass visual and a11y in the Linux image. The perf run against the S10 build flagged no
-row (`List` is new at 259 ms).
+**Checks at the last commit (S12, 2026-10-11):** 308 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; `composer
+audit` finds nothing; frontend lint, format and `ng build zamaro` are clean; `npx playwright test`
+passes 322 tests on win32 and the account and two-step states pass visual and a11y in the Linux
+image. The perf run against the S11 build flagged no row (Badge 75.8 → 72.3 ms, Icon 78.7 → 82.9 ms).
+
+**S12 acceptance criteria (as tested):**
+- Given a booker, when they begin, then 200 with a base32 key in groups of four and an
+  `otpauth://totp/Zamaro:` address holding it; nothing is on, the key is stored as `v1:` ciphertext, and
+  the QR code is an `image/svg+xml`, no-store. A second key replaces the first; a code before any key, or
+  for the replaced key, gets 422.
+- Given the first right code, then 10 distinct `xxxx-xxxx` recovery codes once, stored as hashes only;
+  `/me` says `mfaEnabled`; `auth.two_factor_enabled` is audited and "Two-step sign-in is on for your
+  Zamaro account" is emailed. A wrong code gets "That code didn’t match. Codes change every 30 seconds;
+  enter the one showing now." and turns nothing on. Turning it on again gets 409; a guest 401.
+- Given two-step sign-in on, when the right password is sent, then 202 `{ twoFactorRequired, email }`
+  and the browser is not signed in. A current code then signs in with a new session ID and audits the
+  sign-in; a wrong one gets "That code is wrong or has expired. Enter the code your app shows now." and
+  the step stays open; a recovery code works once, in any case and without its dash ("That recovery code
+  is wrong or was used. …" the second time). No password step, or one 11 minutes old: 401. Three wrong
+  passwords and two wrong codes pause sign-in (429) even for the right code. A reset with two-step
+  sign-in on answers 202 and the code completes it.
+- Given account settings, then Two-step sign-in reads "Off" and "Turn it on and Zamaro asks for a 6-digit
+  code …"; "Turn on two-step sign-in" opens the setup page with the key, the QR code named "QR code that
+  adds Zamaro, {email}, to an authenticator app", focus in the code and "Cancel and keep it off" to
+  `/account#two-step`. The code from the key shows "Save your recovery codes", 10 codes, Copy and
+  Download, the fine print naming the address; the email arrives, and "I’ve saved them" shows "On".
+- Given a wrong code, then "Check the code", "That code didn’t match. Enter the one showing now.", the
+  field's message, `aria-invalid` and the value kept. A failure shows "We couldn’t turn on two-step
+  sign-in" and "Nothing changed; …"; a held request shows "Checking…", busy, with the field read-only.
+- Given a booker with two-step sign-in on signing in from Abigail's profile, then "Enter your code" at
+  `/account/sign-in/verify`, focus in the code, "Signing in as {email}.", and the code returns them to
+  the profile, signed in. A wrong code shows "That code didn’t work", "Enter the code your app shows
+  now" and the field's message; "Use a recovery code instead" shows its lead and help, and a recovery
+  code signs in.
+- Route states `mfa-setup` (Naomi, QR code and key masked) and `mfa-challenge` match their mocks in both
+  themes at every width with no axe violations.
 
 **S11 acceptance criteria (as tested):**
 - Given a booker signed in from Firefox on a Mac (10.0.0.7), then Safari on an iPhone an hour later, then
@@ -558,6 +591,21 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S12 — The QR code is an image from the API** (ADR-0021): the lint rules ban inserting markup, so
+  `GET /account/two-factor/qr` serves the SVG for an `<img>`.
+- **S12 — `zm-recovery-codes` is `zm-list variant="grid" ordered`**, as the list CRD specifies it; no
+  new component or scenario.
+- **S12 — The 202 for the code step.** `POST /session` and `POST /password/reset` answer 202 `{
+  twoFactorRequired, email }` rather than the design's `SignInResult` type; the challenge marker lives
+  10 minutes (the design gives no lifetime).
+- **S12 — "Signing in as {email}."** comes from the sign-in page as navigation state; opened directly,
+  the challenge page has no such line.
+- **S12 — `/account/security/mfa` and `/account/sign-in/verify`** render in the browser only, as every
+  `/account` path does; the setup page is behind `signedInGuard`.
+- **S12 — Copy without a mock.** The emails, "That recovery code is wrong or was used. Enter another of
+  your saved codes." with "Enter an unused recovery code", and the pause's line when the address is not
+  known ("We’ve emailed the account owner").
+- **S12 — `zm-badge` gains `success`** and `zm-icon` gains `copy`, `download` and `lock` (their CRDs).
 - **S11 — The device list is `zm-list variant="device"`**, as the list CRD specifies it; the plan's
   `zm-device-list` and `DeviceList.ts` are its `List` scenario.
 - **S11 — Session keys.** The list's `id` is the registry key (the SHA-256 of the session ID), which is
@@ -729,7 +777,7 @@ shown and are recorded in the slice's ADR or the design.
 | D2 | Bot challenge vendor (register-booker, limit-request-rates) | `Contracts/BotChallenge` with a fake until M10 | OK (accepted default, 2026-10-10); built in S5, with `BOT_CHALLENGE` in Zamaro Web |
 | D3 | Bot provider unreachable (limit-request-rates) | Fail closed, with the usual challenge message | OK (accepted default, 2026-10-10); built in S5 |
 | D4 | Breached-password vendor (sign-in-and-recover-access) | `Contracts/BreachedPasswordChecker`; the fake rejects a configured list; the HIBP range adapter in M10 | OK (accepted default, 2026-10-10); built in S5 (`zamaro.fakes.breached_passwords`) |
-| D5 | TOTP library (sign-in-and-recover-access) | `pragmarx/google2fa` with `bacon/bacon-qr-code` (SVG), behind `Services/Accounts/TotpVerifier` | |
+| D5 | TOTP library (sign-in-and-recover-access) | `pragmarx/google2fa` with `bacon/bacon-qr-code` (SVG), behind `Services/Accounts/TotpVerifier` | OK (accepted default, 2026-10-10); built in S12 (ADR-0021) |
 | D6 | Limits on register, resend, forgot and reset (the designs only say "rate-limited") | Register 10/h per IP; resend 3/15 min per user; forgot 5/h per IP and per email; reset 30/min per IP | OK (accepted default, 2026-10-10); register built in S5, resend in S7 (per address for a guest) |
 | D7 | Signed-in `api` limit (limit-request-rates) | 300/min per user; anonymous stays at 120/min per IP | OK (accepted default, 2026-10-10); built in S4 |
 | D8 | Toast after a second 419 (manage-sessions-and-csrf; no mock) | "That didn't go through. Reload the page and try again." Error toast, stays until dismissed | OK (accepted default, 2026-10-10); built in S3 as kind "Failed", title "That didn’t go through.", text "Reload the page and try again." |
@@ -745,7 +793,7 @@ shown and are recorded in the slice's ADR or the design.
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
 | D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | OK (accepted default, 2026-10-10); `{email}` built in S1, the options join with their slices |
 | D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | |
-| D21 | Email on two-step changes (mocks say "We emailed…"; the design is silent) | Add `TwoStepSignInChangedNotification` for on, off and new codes; update the design | OK |
+| D21 | Email on two-step changes (mocks say "We emailed…"; the design is silent) | Add `TwoStepSignInChangedNotification` for on, off and new codes; update the design | OK; built in S12 (on), S13 (off, new codes) |
 | D22 | M2 actions call `RecordAuditEntry`, which is M3 | Add the append-only `audit_entries` table and the action in S1; the viewer stays in M3 | OK (accepted default, 2026-10-10) |
 | D23 | Mock parts that belong to later screens | Hide `#data` and `#delete` (M9), the reminder and review boxes (M7), "Your bookings" (M5), and the artist's Dashboard item and request count (M4/M5). Visual tests mask them | OK |
 | D24 | The saved card's "Request" link (`/book` is M5) | Until M5 it links to `/artists/{slug}?date=…` | OK |

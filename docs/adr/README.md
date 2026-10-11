@@ -29,3 +29,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0018](0018-csrf-token-on-every-state-changing-request.md) | Every state-changing request carries the CSRF token, same-origin or not | Accepted |
 | [0019](0019-email-foundation-and-e2e-queue-worker.md) | Email foundation: catalogue-built Markdown mail on one base class, and an e2e queue worker | Accepted |
 | [0020](0020-field-encryption-keys.md) | Field encryption with a versioned key that is not APP_KEY | Accepted |
+| [0021](0021-totp-library.md) | TOTP two-step sign-in with google2fa, and the QR code as an image from the API | Accepted |
