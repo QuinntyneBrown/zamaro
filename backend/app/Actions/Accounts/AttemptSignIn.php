@@ -26,6 +26,7 @@ class AttemptSignIn
         private readonly StartSession $startSession,
         private readonly RecordAuditEntry $audit,
         private readonly SignInThrottle $throttle,
+        private readonly TwoFactorChallenge $challenge,
     ) {}
 
     /**
@@ -51,6 +52,13 @@ class AttemptSignIn
             $this->throttle->recordFailure($email);
 
             throw ValidationException::withMessages(['credentials' => 'Email or password is incorrect.']);
+        }
+
+        if ($user->mfa_enabled) {
+            // The password was right; the code step completes the sign-in (L2-072.3).
+            $this->challenge->begin($user, $request);
+
+            return $user;
         }
 
         $this->throttle->clear($email);

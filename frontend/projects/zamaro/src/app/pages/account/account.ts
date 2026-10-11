@@ -216,6 +216,7 @@ export class Account {
       : { id: 'church', label: this.t('church.title') },
     { id: 'email', label: this.t('email.title') },
     { id: 'password', label: this.t('password.title') },
+    { id: 'two-step', label: this.t('twoStep.title') },
     { id: 'devices', label: this.t('devices.title') },
   ]);
 

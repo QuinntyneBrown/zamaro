@@ -7,6 +7,7 @@ import type {
   ChurchDetails,
   CurrentUser,
   PasswordChange,
+  TwoFactorKey,
 } from '../models/accounts';
 
 /**
@@ -39,6 +40,10 @@ export interface AccountApi {
   sessions(): Observable<AccountSession[]>;
   /** Signs that device out at once. */
   endSession(id: string): Observable<void>;
+  /** A new key for an authenticator app; nothing changes until a code confirms it (L2-072.3). */
+  beginTwoFactor(): Observable<TwoFactorKey>;
+  /** The first code turns two-step sign-in on; answers the 10 recovery codes, once. */
+  confirmTwoFactor(code: string): Observable<string[]>;
 }
 
 export const ACCOUNT_API = new InjectionToken<AccountApi>('AccountApi');
@@ -95,6 +100,20 @@ export class HttpAccountApi implements AccountApi {
     return this.http
       .get<{ data: AccountSession[] }>('/api/v1/account/sessions')
       .pipe(map((response) => response.data));
+  }
+
+  beginTwoFactor(): Observable<TwoFactorKey> {
+    return this.http
+      .post<{ data: TwoFactorKey }>('/api/v1/account/two-factor', {})
+      .pipe(map((response) => response.data));
+  }
+
+  confirmTwoFactor(code: string): Observable<string[]> {
+    return this.http
+      .post<{
+        data: { recoveryCodes: string[] };
+      }>('/api/v1/account/two-factor/confirm', { code })
+      .pipe(map((response) => response.data.recoveryCodes));
   }
 
   endSession(id: string): Observable<void> {

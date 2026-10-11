@@ -8,6 +8,8 @@ import type {
   PasswordResetRequest,
   Registration,
   SignInCredentials,
+  SignInResult,
+  TwoFactorAnswer,
   VerificationResend,
   VerifiedEmail,
 } from '../models/accounts';
@@ -60,8 +62,14 @@ export class AuthService {
     );
   }
 
-  signIn(credentials: SignInCredentials): Observable<CurrentUser> {
-    return this.api.signIn(credentials).pipe(tap((user) => this.set(user)));
+  /** Signs in; with two-step sign-in on, answers that the code step comes next and signs no one in. */
+  signIn(credentials: SignInCredentials): Observable<SignInResult> {
+    return this.api.signIn(credentials).pipe(tap((result) => this.signedIn(result)));
+  }
+
+  /** The code step: a current code or a recovery code completes the sign-in (L2-072.3). */
+  completeTwoFactor(answer: TwoFactorAnswer): Observable<CurrentUser> {
+    return this.api.completeTwoFactor(answer).pipe(tap((user) => this.set(user)));
   }
 
   /**
@@ -111,13 +119,17 @@ export class AuthService {
   }
 
   /** Sets the new password; this browser is then signed in as the account (L2-023.4). */
-  resetPassword(reset: PasswordReset): Observable<CurrentUser> {
-    return this.api.resetPassword(reset).pipe(tap((user) => this.set(user)));
+  resetPassword(reset: PasswordReset): Observable<SignInResult> {
+    return this.api.resetPassword(reset).pipe(tap((result) => this.signedIn(result)));
   }
 
   /** Forgets the person on this browser without asking the server. */
   clear(): void {
     this.set(null);
+  }
+
+  private signedIn(result: SignInResult): void {
+    if (!('twoFactorRequired' in result)) this.set(result);
   }
 
   private set(user: CurrentUser | null): void {

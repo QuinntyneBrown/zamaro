@@ -33,6 +33,15 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
   },
   {
+    path: 'account/security/mfa',
+    canActivate: [signedInGuard],
+    loadComponent: () => import('./pages/mfa-setup/mfa-setup').then((m) => m.MfaSetup),
+  },
+  {
+    path: 'account/sign-in/verify',
+    loadComponent: () => import('./pages/mfa-challenge/mfa-challenge').then((m) => m.MfaChallenge),
+  },
+  {
     path: 'account/email/confirm',
     loadComponent: () => import('./pages/confirm-email/confirm-email').then((m) => m.ConfirmEmail),
   },

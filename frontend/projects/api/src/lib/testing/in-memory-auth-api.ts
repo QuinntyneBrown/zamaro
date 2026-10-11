@@ -19,6 +19,7 @@ export const NAOMI: CurrentUser = {
   roles: ['booker'],
   emailVerified: true,
   pendingEmail: null,
+  mfaEnabled: false,
   church: {
     name: 'Riverside Community Church',
     city: 'Burlington',
@@ -102,6 +103,11 @@ export class InMemoryAuthApi implements AuthApi {
   resetPassword({ token, password }: PasswordReset): Observable<CurrentUser> {
     if (token === 'e2e-unknown') return throwError(() => new HttpErrorResponse({ status: 410 }));
     this.password = password;
+    this.signedIn = this.account;
+    return of(this.account);
+  }
+
+  completeTwoFactor(): Observable<CurrentUser> {
     this.signedIn = this.account;
     return of(this.account);
   }

@@ -34,6 +34,8 @@ class CurrentUserResource extends JsonResource
             'emailVerified' => $user->email_verified_at !== null,
             /** A new address asked for and not yet confirmed from its link (L2-025.1), or null. */
             'pendingEmail' => $user->pending_email,
+            /** Two-step sign-in is on (L2-072.3). */
+            'mfaEnabled' => (bool) $user->mfa_enabled,
             /**
              * A booker's church, for the header's menu, the footer and Discover's starting point
              * (L2-024.2, L2-004.1); null for an artist or a booker without one.

@@ -274,6 +274,43 @@
               </zm-form-actions>
             </form>
             <zm-form-section
+              id="two-step"
+              headingId="two-step-title"
+              [heading]="'accounts.account.twoStep.title' | transloco"
+            >
+              @if (user()?.mfaEnabled) {
+                <span slot="lead"
+                  ><zm-badge variant="success">{{
+                    'accounts.account.twoStep.on' | transloco
+                  }}</zm-badge>
+                  {{ 'accounts.account.twoStep.onLead' | transloco }}</span
+                >
+              }
+              @if (!user()?.mfaEnabled) {
+                <span slot="lead"
+                  ><zm-badge>{{ 'accounts.account.twoStep.off' | transloco }}</zm-badge>
+                  {{ 'accounts.account.twoStep.offLead' | transloco }}</span
+                >
+              }
+              @if (!user()?.mfaEnabled) {
+                <div class="cluster">
+                  <zm-button-link link="/account/security/mfa"
+                    ><zm-icon name="lock" />{{
+                      'accounts.account.twoStep.turnOn' | transloco
+                    }}</zm-button-link
+                  >
+                </div>
+              }
+              <p class="field__help">
+                {{
+                  (user()?.mfaEnabled
+                    ? 'accounts.account.twoStep.onHelp'
+                    : 'accounts.account.twoStep.offHelp'
+                  ) | transloco
+                }}
+              </p>
+            </zm-form-section>
+            <zm-form-section
               id="devices"
               headingId="devices-title"
               [heading]="'accounts.account.devices.title' | transloco"

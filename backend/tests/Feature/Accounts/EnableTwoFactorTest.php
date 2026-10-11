@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Testing\TestResponse;
 use PragmaRX\Google2FA\Google2FA;
 use Tests\Concerns\AssertsOpenApiContract;
 use Tests\Concerns\UsesTheWebApp;
@@ -133,7 +134,7 @@ class EnableTwoFactorTest extends TestCase
         return str_replace(' ', '', $this->fromTheWebApp()->postJson('/api/v1/account/two-factor')->assertOk()->json('data.key'));
     }
 
-    private function confirm(string $code): \Illuminate\Testing\TestResponse
+    private function confirm(string $code): TestResponse
     {
         return $this->fromTheWebApp()->postJson('/api/v1/account/two-factor/confirm', ['code' => $code]);
     }

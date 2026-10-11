@@ -1,5 +1,11 @@
 import { type Observable, of } from 'rxjs';
-import type { AccountSession, Church, ChurchDetails, CurrentUser } from '../models/accounts';
+import type {
+  AccountSession,
+  Church,
+  ChurchDetails,
+  CurrentUser,
+  TwoFactorKey,
+} from '../models/accounts';
 import type { AccountApi } from '../services/account';
 
 /** Riverside Community Church as docs/mocks/README.md has it. */
@@ -13,6 +19,20 @@ export const RIVERSIDE: Church = {
   denomination: 'Non-denominational',
   typicalAttendance: 350,
 };
+
+/** Naomi's recovery codes (docs/mocks/pages/mfa-setup/codes). */
+export const RECOVERY_CODES = [
+  '7kq4-m2xd',
+  'p9rt-4wza',
+  'c3vn-8hye',
+  'u6bs-1jqf',
+  'e2lm-9tkc',
+  'w8gd-3rnv',
+  'h5xp-7aum',
+  'z1fy-6cwe',
+  'r4nq-2dsb',
+  'j7ve-5pkh',
+];
 
 /** Naomi's three signed-in devices (docs/mocks/pages/account). */
 export const NAOMIS_DEVICES: AccountSession[] = [
@@ -89,6 +109,17 @@ export class InMemoryAccountApi implements AccountApi {
 
   sessions(): Observable<AccountSession[]> {
     return of(this.devices);
+  }
+
+  beginTwoFactor(): Observable<TwoFactorKey> {
+    return of({
+      key: 'JBSW Y3DP EHPK 3PXP',
+      otpauthUri: 'otpauth://totp/Zamaro:naomi.fraser@riversidecc.ca?secret=JBSWY3DPEHPK3PXP',
+    });
+  }
+
+  confirmTwoFactor(): Observable<string[]> {
+    return of(RECOVERY_CODES);
   }
 
   endSession(id: string): Observable<void> {

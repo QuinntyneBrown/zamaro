@@ -4,6 +4,7 @@ namespace App\Support\Problems;
 
 use App\Actions\Accounts\LinkExpired;
 use App\Actions\Accounts\SignInPaused;
+use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -69,6 +70,10 @@ class ProblemDetailsRenderer
         if ($e instanceof LegalDocumentOutdated) {
             return ProblemDetails::of(ProblemType::LegalDocumentOutdated, 'Fetch /legal-documents/current, show the new versions, then submit again.', $requestId)
                 ->toResponse();
+        }
+
+        if ($e instanceof TwoFactorAlreadyOn) {
+            return ProblemDetails::of(ProblemType::TwoFactorAlreadyOn, 'Turn it off first to set up a new key.', $requestId)->toResponse();
         }
 
         if ($e instanceof LinkExpired) {

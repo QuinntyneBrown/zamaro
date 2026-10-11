@@ -8,6 +8,8 @@ import type {
   PasswordResetRequest,
   Registration,
   SignInCredentials,
+  SignInResult,
+  TwoFactorAnswer,
   VerificationResend,
   VerifiedEmail,
 } from '../models/accounts';
@@ -17,7 +19,10 @@ import type {
  * `errors.credentials`, whichever was wrong (L2-023.2).
  */
 export interface AuthApi {
-  signIn(credentials: SignInCredentials): Observable<CurrentUser>;
+  /** Signs in, or answers that a code from the authenticator app comes next. */
+  signIn(credentials: SignInCredentials): Observable<SignInResult>;
+  /** The code step: a current code or a recovery code completes the sign-in (L2-072.3). */
+  completeTwoFactor(answer: TwoFactorAnswer): Observable<CurrentUser>;
   /** Ends the session on the server; a session that already ended answers 401. */
   signOut(): Observable<void>;
   me(): Observable<CurrentUser>;
@@ -35,7 +40,7 @@ export interface AuthApi {
   /** Whether a reset link still works, without using it; 410 when it does not. */
   checkPasswordReset(token: string): Observable<PasswordResetLink>;
   /** Sets the new password with the link and signs this browser in (L2-023.4). */
-  resetPassword(reset: PasswordReset): Observable<CurrentUser>;
+  resetPassword(reset: PasswordReset): Observable<SignInResult>;
 }
 
 export const AUTH_API = new InjectionToken<AuthApi>('AuthApi');
@@ -48,11 +53,17 @@ export class HttpAuthApi implements AuthApi {
    * Fetches the CSRF cookie first: the API only accepts a state-changing request that repeats it in
    * `X-XSRF-TOKEN`, which Angular's XSRF interceptor adds (ADR-0015).
    */
-  signIn(credentials: SignInCredentials): Observable<CurrentUser> {
+  signIn(credentials: SignInCredentials): Observable<SignInResult> {
     return this.http.get('/sanctum/csrf-cookie').pipe(
-      switchMap(() => this.http.post<{ data: CurrentUser }>('/api/v1/session', credentials)),
+      switchMap(() => this.http.post<{ data: SignInResult }>('/api/v1/session', credentials)),
       map((response) => response.data),
     );
+  }
+
+  completeTwoFactor(answer: TwoFactorAnswer): Observable<CurrentUser> {
+    return this.http
+      .post<{ data: CurrentUser }>('/api/v1/session/two-factor', answer)
+      .pipe(map((response) => response.data));
   }
 
   signOut(): Observable<void> {
@@ -99,9 +110,9 @@ export class HttpAuthApi implements AuthApi {
     );
   }
 
-  resetPassword(reset: PasswordReset): Observable<CurrentUser> {
+  resetPassword(reset: PasswordReset): Observable<SignInResult> {
     return this.http.get('/sanctum/csrf-cookie').pipe(
-      switchMap(() => this.http.post<{ data: CurrentUser }>('/api/v1/password/reset', reset)),
+      switchMap(() => this.http.post<{ data: SignInResult }>('/api/v1/password/reset', reset)),
       map((response) => response.data),
     );
   }

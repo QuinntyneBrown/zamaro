@@ -16,6 +16,7 @@ enum ProblemType: string
     case UnsupportedMediaType = 'unsupported-media-type';
     case LegalDocumentOutdated = 'legal-document-outdated';
     case LinkExpired = 'link-expired';
+    case TwoFactorAlreadyOn = 'two-factor-already-on';
     case TooManyRequests = 'too-many-requests';
     case SignInPaused = 'sign-in-paused';
     case ServerError = 'server-error';
@@ -34,7 +35,7 @@ enum ProblemType: string
             self::ValidationFailed => 422,
             self::PayloadTooLarge => 413,
             self::UnsupportedMediaType => 415,
-            self::LegalDocumentOutdated => 409,
+            self::LegalDocumentOutdated, self::TwoFactorAlreadyOn => 409,
             self::LinkExpired => 410,
             self::TooManyRequests, self::SignInPaused => 429,
             self::ServerError => 500,
@@ -53,6 +54,7 @@ enum ProblemType: string
             self::UnsupportedMediaType => 'Send the request as JSON',
             self::LegalDocumentOutdated => 'The terms have changed',
             self::LinkExpired => 'This link has expired',
+            self::TwoFactorAlreadyOn => 'Two-step sign-in is already on',
             self::TooManyRequests => 'Too many requests',
             self::SignInPaused => 'Sign-in is paused for 15 minutes',
             self::ServerError => 'Something went wrong',

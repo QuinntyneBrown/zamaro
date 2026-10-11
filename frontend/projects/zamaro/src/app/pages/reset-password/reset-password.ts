@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { AuthService, BOT_CHALLENGE, FormatService } from 'api';
 import {
@@ -80,6 +80,7 @@ export class ResetPassword {
   private readonly injector = inject(Injector);
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
   private readonly token = inject(ActivatedRoute).snapshot.paramMap.get('token') ?? '';
 
   protected readonly form = inject(NonNullableFormBuilder).group({
@@ -130,7 +131,14 @@ export class ResetPassword {
       .resetPassword({ token: this.token, password, passwordConfirmation: confirmation })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: (result) => {
+          if ('twoFactorRequired' in result) {
+            // Two-step sign-in is on: the code step signs this browser in.
+            void this.router.navigate(['/account/sign-in/verify'], {
+              state: { email: result.email },
+            });
+            return;
+          }
           this.status.set('changed');
           this.afterRender(() => this.document.getElementById('card-title')?.focus());
         },

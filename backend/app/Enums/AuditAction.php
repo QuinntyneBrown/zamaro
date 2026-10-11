@@ -10,4 +10,5 @@ enum AuditAction: string
     case PasswordReset = 'auth.password_reset';
     case PasswordChanged = 'auth.password_changed';
     case EmailChanged = 'account.email_changed';
+    case TwoFactorEnabled = 'auth.two_factor_enabled';
 }

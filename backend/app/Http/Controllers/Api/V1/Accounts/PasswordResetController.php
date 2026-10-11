@@ -68,9 +68,13 @@ class PasswordResetController extends Controller
      *
      * @throws LinkExpired 410 when the link was used, is more than 60 minutes old or is unknown
      */
-    public function reset(ResetPasswordRequest $request, ResetPassword $reset): CurrentUserResource
+    public function reset(ResetPasswordRequest $request, ResetPassword $reset): CurrentUserResource|JsonResponse
     {
         $user = $reset->handle($request->validated('token'), $request->validated('password'), $request);
+        if ($user->mfa_enabled) {
+            // With two-step sign-in on, the code step signs this browser in (202).
+            return SessionController::codeNeeded($user);
+        }
 
         return new CurrentUserResource($user->load('roles'));
     }

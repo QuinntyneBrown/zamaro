@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Accounts\ArtistContactController;
 use App\Http\Controllers\Api\V1\Accounts\ChurchController;
 use App\Http\Controllers\Api\V1\Accounts\MeController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
+use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
 use App\Http\Middleware\SetCachePolicy;
 use App\Http\Middleware\TrackSessionActivity;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,9 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
     Route::put('account/profile', [AccountProfileController::class, 'update'])->name('account.profile.update');
     Route::put('account/email', [AccountEmailController::class, 'update'])->name('account.email.update');
     Route::put('account/password', [AccountPasswordController::class, 'update'])->name('account.password.update');
+    Route::post('account/two-factor', [TwoFactorController::class, 'begin'])->name('account.two-factor.begin');
+    Route::get('account/two-factor/qr', [TwoFactorController::class, 'qr'])->name('account.two-factor.qr');
+    Route::post('account/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('account.two-factor.confirm');
     Route::get('account/sessions', [AccountSessionController::class, 'index'])->name('account.sessions.index');
     Route::delete('account/sessions/{session}', [AccountSessionController::class, 'destroy'])->name('account.sessions.destroy');
     Route::middleware('role:booker')->group(function () {

@@ -24,6 +24,7 @@ class ResetPassword
         private readonly SessionRegistry $sessions,
         private readonly StartSession $startSession,
         private readonly RecordAuditEntry $audit,
+        private readonly TwoFactorChallenge $challenge,
     ) {}
 
     /**
@@ -59,6 +60,12 @@ class ResetPassword
 
             return $user;
         });
+
+        if ($user->mfa_enabled) {
+            $this->challenge->begin($user, $request);
+
+            return $user;
+        }
 
         return $this->startSession->handle($user, $request);
     }

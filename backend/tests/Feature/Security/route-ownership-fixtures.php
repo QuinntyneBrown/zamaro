@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use PragmaRX\Google2FA\Google2FA;
 use Tests\Feature\Security\CrossUserAccessTest;
 
 /** A church the owner saves before the intruder tries the church routes. */
@@ -109,5 +110,30 @@ return [
         $test->as($intruder)->deleteJson("/api/v1/account/sessions/{$ownerSession}")->assertNotFound();
 
         $test->as($owner)->getJson('/api/v1/me')->assertOk();
+    },
+
+    'POST api/v1/account/two-factor' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $ownerKey = $test->as($owner)->postJson('/api/v1/account/two-factor')->assertOk()->json('data.key');
+
+        $intruderKey = $test->as($intruder)->postJson('/api/v1/account/two-factor')->assertOk()->json('data.key');
+
+        $test->assertNotSame($ownerKey, $intruderKey);
+        $test->as($owner)->getJson('/api/v1/me')->assertJsonPath('data.mfaEnabled', false);
+    },
+
+    'GET api/v1/account/two-factor/qr' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($owner)->postJson('/api/v1/account/two-factor')->assertOk();
+
+        $test->as($intruder)->get('/api/v1/account/two-factor/qr')->assertNotFound();
+    },
+
+    'POST api/v1/account/two-factor/confirm' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $key = str_replace(' ', '', $test->as($owner)->postJson('/api/v1/account/two-factor')->json('data.key'));
+
+        $test->as($intruder)->postJson('/api/v1/account/two-factor/confirm', [
+            'code' => (new Google2FA)->getCurrentOtp($key),
+        ])->assertUnprocessable();
+
+        $test->as($owner)->getJson('/api/v1/me')->assertJsonPath('data.mfaEnabled', false);
     },
 ];

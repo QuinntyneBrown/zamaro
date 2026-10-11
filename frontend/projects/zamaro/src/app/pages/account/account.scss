@@ -51,3 +51,9 @@
 .pending:empty {
   display: none;
 }
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

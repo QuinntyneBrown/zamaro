@@ -94,11 +94,16 @@ export class SignIn {
     if (this.busy()) return;
     const wasInvalid = this.status() === 'invalid';
     this.status.set('submitting');
+    const returnUrl = safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl'));
     this.auth.signIn(this.form.getRawValue()).subscribe({
-      next: () =>
-        void this.router.navigateByUrl(
-          safeReturnUrl(this.route.snapshot.queryParamMap.get('returnUrl')),
-        ),
+      next: (result) =>
+        // With two-step sign-in on, the code step completes it (L2-072.3).
+        void ('twoFactorRequired' in result
+          ? this.router.navigate(['/account/sign-in/verify'], {
+              queryParams: returnUrl === '/' ? {} : { returnUrl },
+              state: { email: result.email },
+            })
+          : this.router.navigateByUrl(returnUrl)),
       error: (error: unknown) => {
         if (
           error instanceof HttpErrorResponse &&

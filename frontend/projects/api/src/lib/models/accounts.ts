@@ -12,6 +12,8 @@ export interface CurrentUser {
   emailVerified: boolean;
   /** A new address asked for and not yet confirmed from its link (L2-025.1), or null. */
   pendingEmail: string | null;
+  /** Two-step sign-in is on (L2-072.3). */
+  mfaEnabled: boolean;
   /** A booker's church, for the menu, the footer and Discover's starting point; null otherwise. */
   church: ChurchSummary | null;
   /** The theme chosen on any signed-in device, or null to follow the device. */
@@ -75,6 +77,26 @@ export interface PasswordChange {
   currentPassword: string;
   password: string;
   passwordConfirmation: string;
+}
+
+/** The password was right and two-step sign-in is on: a code comes next (202). */
+export interface TwoFactorRequired {
+  twoFactorRequired: true;
+  /** The account being signed in to. */
+  email: string;
+}
+
+/** A sign-in or reset: the person signed in, or the code step. */
+export type SignInResult = CurrentUser | TwoFactorRequired;
+
+/** `POST /api/v1/session/two-factor`: a current code, or one recovery code. */
+export type TwoFactorAnswer = { code: string } | { recoveryCode: string };
+
+/** `POST /api/v1/account/two-factor`: a new key for an authenticator app. */
+export interface TwoFactorKey {
+  /** In groups of four: "JBSW Y3DP …". */
+  key: string;
+  otpauthUri: string;
 }
 
 export interface SignInCredentials {

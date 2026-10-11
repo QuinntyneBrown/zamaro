@@ -1,0 +1,128 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    <form
+      class="auth-form"
+      aria-labelledby="card-title"
+      novalidate
+      [formGroup]="form"
+      (ngSubmit)="verify()"
+    >
+      <zm-booking-form
+        variant="auth"
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.mfaChallenge.title' | transloco"
+        [stamp]="'accounts.mfaChallenge.stamp' | transloco"
+        [busy]="busy()"
+      >
+        @switch (status()) {
+          @case ('invalid') {
+            <zm-error-summary
+              summaryId="error-summary"
+              [heading]="'accounts.mfaChallenge.invalidTitle' | transloco"
+              [items]="summaryItems()"
+            />
+          }
+          @case ('error') {
+            <zm-alert
+              variant="danger"
+              compact
+              [heading]="'accounts.mfaChallenge.errorTitle' | transloco"
+            >
+              <p>{{ 'accounts.mfaChallenge.errorText' | transloco }}</p>
+            </zm-alert>
+          }
+          @case ('paused') {
+            <zm-alert
+              variant="danger"
+              compact
+              [heading]="'accounts.mfaChallenge.pausedTitle' | transloco"
+            >
+              <p>
+                {{
+                  (email
+                    ? 'accounts.mfaChallenge.pausedText'
+                    : 'accounts.mfaChallenge.pausedTextAnyone'
+                  ) | transloco: { time: pausedUntil(), email }
+                }}
+              </p>
+            </zm-alert>
+          }
+        }
+        <p class="lead">
+          {{
+            (mode() === 'code'
+              ? 'accounts.mfaChallenge.lead'
+              : 'accounts.mfaChallenge.recoveryLead'
+            ) | transloco
+          }}
+        </p>
+        @if (mode() === 'code') {
+          <zm-form-field
+            #field
+            fieldId="code"
+            formControlName="code"
+            autocomplete="one-time-code"
+            [label]="'accounts.mfaChallenge.code' | transloco"
+            [requiredMarker]="'accounts.required' | transloco"
+            [help]="
+              status() === 'paused'
+                ? ('accounts.mfaChallenge.pausedHelp' | transloco)
+                : email
+                  ? ('accounts.mfaChallenge.signingInAs' | transloco: { email })
+                  : undefined
+            "
+            [readonly]="busy() || status() === 'paused'"
+            [error]="
+              status() === 'invalid' ? ('accounts.mfaChallenge.codeWrong' | transloco) : null
+            "
+          />
+        } @else {
+          <zm-form-field
+            #field
+            fieldId="recovery-code"
+            formControlName="code"
+            autocomplete="off"
+            [label]="'accounts.mfaChallenge.recoveryCode' | transloco"
+            [requiredMarker]="'accounts.required' | transloco"
+            [help]="'accounts.mfaChallenge.recoveryHelp' | transloco"
+            [readonly]="busy() || status() === 'paused'"
+            [error]="
+              status() === 'invalid' ? ('accounts.mfaChallenge.recoveryWrong' | transloco) : null
+            "
+          />
+        }
+        <zm-button
+          variant="primary"
+          size="lg"
+          block
+          type="submit"
+          [busy]="busy()"
+          [disabled]="status() === 'paused'"
+          >{{
+            (busy() ? 'accounts.mfaChallenge.checking' : 'accounts.mfaChallenge.verify') | transloco
+          }}</zm-button
+        >
+        @if (status() === 'paused') {
+          <a slot="links" routerLink="/forgot-password">{{
+            'accounts.mfaChallenge.resetPassword' | transloco
+          }}</a>
+        }
+        @if (status() !== 'paused' && mode() === 'code') {
+          <a slot="links" href="/account/sign-in/verify" (click)="switchMode($event, 'recovery')">{{
+            'accounts.mfaChallenge.useRecovery' | transloco
+          }}</a>
+        }
+        @if (status() !== 'paused' && mode() === 'recovery') {
+          <a slot="links" href="/account/sign-in/verify" (click)="switchMode($event, 'code')">{{
+            'accounts.mfaChallenge.useApp' | transloco
+          }}</a>
+        }
+        <a slot="links" routerLink="/sign-in">{{
+          'accounts.mfaChallenge.someoneElse' | transloco
+        }}</a>
+        <span slot="fine">{{ 'accounts.mfaChallenge.fine' | transloco }}</span>
+      </zm-booking-form>
+    </form>
+  </div>
+</div>

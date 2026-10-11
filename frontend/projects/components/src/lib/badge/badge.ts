@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     class="badge"
     [class.badge--free]="variant() === 'free'"
     [class.badge--booked]="variant() === 'booked'"
+    [class.badge--success]="variant() === 'success'"
     ><ng-content
   /></span>`,
   styles: `
@@ -45,6 +46,12 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       --badge-border: var(--color-border-on-accent);
     }
 
+    .badge--success {
+      --badge-bg: var(--color-success-bg);
+      --badge-fg: var(--color-success-fg);
+      --badge-border: var(--color-success-border);
+    }
+
     .badge--booked {
       --badge-fg: var(--color-fg-muted);
       text-decoration: line-through;
@@ -53,5 +60,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Badge {
-  readonly variant = input<'default' | 'free' | 'booked'>('default');
+  readonly variant = input<'default' | 'free' | 'booked' | 'success'>('default');
 }

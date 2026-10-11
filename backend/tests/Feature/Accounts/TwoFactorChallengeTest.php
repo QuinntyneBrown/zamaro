@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Accounts;
 
+use App\Actions\Accounts\IssuePasswordResetToken;
 use App\Models\User;
 use Database\Seeders\CastSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -124,7 +125,7 @@ class TwoFactorChallengeTest extends TestCase
 
     public function test_a_reset_password_leads_to_the_challenge_too(): void
     {
-        $token = app(\App\Actions\Accounts\IssuePasswordResetToken::class)->handle($this->user());
+        $token = app(IssuePasswordResetToken::class)->handle($this->user());
 
         $response = $this->newBrowser()->fromTheWebApp()->postJson('/api/v1/password/reset', [
             'token' => $token, 'password' => 'a-song-of-ascents-121', 'passwordConfirmation' => 'a-song-of-ascents-121',

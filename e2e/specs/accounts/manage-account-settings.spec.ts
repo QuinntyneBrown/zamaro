@@ -27,6 +27,7 @@ test.describe('Account settings', () => {
       'Church',
       'Email',
       'Password',
+      'Two-step sign-in',
       'Signed-in devices',
     ]);
     await expect(account.settingsNavLinks().first()).toHaveAttribute('aria-current', 'true');
@@ -144,6 +145,7 @@ test.describe('An artist’s account settings', () => {
       'Contact',
       'Email',
       'Password',
+      'Two-step sign-in',
       'Signed-in devices',
     ]);
     await expect(account.section('Church')).toHaveCount(0);
