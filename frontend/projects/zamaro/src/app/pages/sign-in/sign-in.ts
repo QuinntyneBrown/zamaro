@@ -12,7 +12,13 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AuthService, FormatService, safeReturnUrl, type SessionEndedState } from 'api';
+import {
+  afterSignIn,
+  AuthService,
+  FormatService,
+  safeReturnUrl,
+  type SessionEndedState,
+} from 'api';
 import {
   Alert,
   BookingForm,
@@ -103,7 +109,7 @@ export class SignIn {
               queryParams: returnUrl === '/' ? {} : { returnUrl },
               state: { email: result.email },
             })
-          : this.router.navigateByUrl(returnUrl)),
+          : this.router.navigateByUrl(afterSignIn(this.router, result, returnUrl))),
       error: (error: unknown) => {
         if (
           error instanceof HttpErrorResponse &&

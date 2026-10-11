@@ -12,7 +12,7 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { AuthService, FormatService, safeReturnUrl } from 'api';
+import { afterSignIn, AuthService, FormatService, safeReturnUrl } from 'api';
 import {
   Alert,
   BookingForm,
@@ -112,7 +112,8 @@ export class MfaChallenge {
     this.auth
       .completeTwoFactor(this.mode() === 'code' ? { code: value } : { recoveryCode: value })
       .subscribe({
-        next: () => void this.router.navigateByUrl(this.returnUrl),
+        next: (user) =>
+          void this.router.navigateByUrl(afterSignIn(this.router, user, this.returnUrl)),
         error: (error: unknown) => {
           if (!(error instanceof HttpErrorResponse)) {
             this.status.set('error');
