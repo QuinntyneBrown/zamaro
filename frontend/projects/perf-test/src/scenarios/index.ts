@@ -34,6 +34,7 @@ export const scenarios: Record<string, Scenario> = {
   Icon: () => import('./Icon'),
   InlineMessage: () => import('./InlineMessage'),
   Lineup: () => import('./Lineup'),
+  List: () => import('./List'),
   Marquee: () => import('./Marquee'),
   MediaGrid: () => import('./MediaGrid'),
   Menu: () => import('./Menu'),

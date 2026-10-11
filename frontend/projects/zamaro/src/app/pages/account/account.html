@@ -48,228 +48,257 @@
             [sections]="sections()"
             [(current)]="section"
           />
-          <form
-            class="form-stack"
-            id="account-form"
-            aria-labelledby="settings-title"
-            novalidate
-            [formGroup]="form"
-            [attr.aria-busy]="saving() ? 'true' : 'false'"
-            (ngSubmit)="save()"
-          >
-            @if (status() === 'invalid') {
-              <zm-error-summary
-                summaryId="error-summary"
-                [heading]="summaryHeading()"
-                [items]="summaryItems()"
-              />
-            }
-            <zm-form-section
-              id="profile"
-              headingId="profile-title"
-              [heading]="'accounts.account.profile.title' | transloco"
+          <div class="form-stack">
+            <form
+              class="form-stack"
+              id="account-form"
+              aria-labelledby="settings-title"
+              novalidate
+              [formGroup]="form"
+              [attr.aria-busy]="saving() ? 'true' : 'false'"
+              (ngSubmit)="save()"
             >
-              <div class="form-grid">
-                <zm-form-field
-                  formControlName="name"
-                  autocomplete="name"
-                  [fieldId]="ids.name"
-                  [label]="'accounts.account.profile.name' | transloco"
-                  [requiredMarker]="'accounts.required' | transloco"
-                  [help]="
-                    (isArtist()
-                      ? 'accounts.account.profile.nameHelpArtist'
-                      : 'accounts.account.profile.nameHelp'
-                    ) | transloco
-                  "
-                  [error]="fieldError('name')"
-                  [readonly]="saving()"
+              @if (status() === 'invalid') {
+                <zm-error-summary
+                  summaryId="error-summary"
+                  [heading]="summaryHeading()"
+                  [items]="summaryItems()"
                 />
-              </div>
-            </zm-form-section>
-            @if (isArtist()) {
+              }
               <zm-form-section
-                id="contact"
-                headingId="contact-title"
-                [heading]="'accounts.account.contact.title' | transloco"
+                id="profile"
+                headingId="profile-title"
+                [heading]="'accounts.account.profile.title' | transloco"
               >
                 <div class="form-grid">
                   <zm-form-field
-                    formControlName="contactPhone"
-                    type="tel"
-                    autocomplete="tel"
-                    [fieldId]="ids.contactPhone"
-                    [label]="'accounts.account.contact.phone' | transloco"
-                    [requiredMarker]="'accounts.required' | transloco"
-                    [help]="'accounts.account.contact.phoneHelp' | transloco"
-                    [error]="fieldError('contactPhone')"
-                    [readonly]="saving()"
-                  />
-                </div>
-              </zm-form-section>
-            } @else {
-              <zm-form-section
-                id="church"
-                headingId="church-title"
-                formGroupName="church"
-                [heading]="'accounts.account.church.title' | transloco"
-              >
-                <span slot="lead">{{ 'accounts.account.church.lead' | transloco }}</span>
-                <div class="form-grid">
-                  <zm-form-field
-                    class="field--full"
                     formControlName="name"
-                    [fieldId]="ids.churchName"
-                    [label]="'accounts.account.church.name' | transloco"
+                    autocomplete="name"
+                    [fieldId]="ids.name"
+                    [label]="'accounts.account.profile.name' | transloco"
                     [requiredMarker]="'accounts.required' | transloco"
-                    [help]="'accounts.account.church.nameHelp' | transloco"
-                    [error]="fieldError('churchName')"
-                    [readonly]="saving()"
-                  />
-                  <zm-form-field
-                    formControlName="streetAddress"
-                    autocomplete="street-address"
-                    [fieldId]="ids.streetAddress"
-                    [label]="'accounts.account.church.street' | transloco"
-                    [requiredMarker]="'accounts.required' | transloco"
-                    [help]="'accounts.account.church.streetHelp' | transloco"
-                    [error]="fieldError('streetAddress')"
-                    [readonly]="saving()"
-                  />
-                  <zm-form-field
-                    formControlName="city"
-                    autocomplete="address-level2"
-                    [fieldId]="ids.city"
-                    [label]="'accounts.account.church.city' | transloco"
-                    [requiredMarker]="'accounts.required' | transloco"
-                    [error]="fieldError('city')"
-                    [invalid]="addressInvalid()"
-                    [describedBy]="addressInvalid() ? 'street-error' : undefined"
-                    [readonly]="saving()"
-                  />
-                  <zm-form-field
-                    formControlName="postalCode"
-                    autocomplete="postal-code"
-                    [fieldId]="ids.postalCode"
-                    [label]="'accounts.account.church.postalCode' | transloco"
-                    [requiredMarker]="'accounts.required' | transloco"
-                    [error]="fieldError('postalCode')"
-                    [invalid]="addressInvalid()"
-                    [describedBy]="addressInvalid() ? 'street-error' : undefined"
-                    [readonly]="saving()"
-                  />
-                  <zm-form-field
-                    formControlName="phone"
-                    type="tel"
-                    autocomplete="tel"
-                    [fieldId]="ids.churchPhone"
-                    [label]="'accounts.account.church.phone' | transloco"
-                    [requiredMarker]="'accounts.required' | transloco"
-                    [help]="'accounts.account.church.phoneHelp' | transloco"
-                    [error]="fieldError('churchPhone')"
-                    [readonly]="saving()"
-                  />
-                  <zm-form-field
-                    formControlName="denomination"
-                    fieldId="denomination"
-                    [label]="'accounts.account.church.denomination' | transloco"
-                    [optionalMarker]="'accounts.optional' | transloco"
-                    [readonly]="saving()"
-                  />
-                  <zm-form-field
-                    formControlName="typicalAttendance"
-                    type="number"
-                    min="1"
-                    [fieldId]="ids.attendance"
-                    [label]="'accounts.account.church.attendance' | transloco"
-                    [optionalMarker]="'accounts.optional' | transloco"
-                    [error]="fieldError('attendance')"
+                    [help]="
+                      (isArtist()
+                        ? 'accounts.account.profile.nameHelpArtist'
+                        : 'accounts.account.profile.nameHelp'
+                      ) | transloco
+                    "
+                    [error]="fieldError('name')"
                     [readonly]="saving()"
                   />
                 </div>
               </zm-form-section>
-            }
+              @if (isArtist()) {
+                <zm-form-section
+                  id="contact"
+                  headingId="contact-title"
+                  [heading]="'accounts.account.contact.title' | transloco"
+                >
+                  <div class="form-grid">
+                    <zm-form-field
+                      formControlName="contactPhone"
+                      type="tel"
+                      autocomplete="tel"
+                      [fieldId]="ids.contactPhone"
+                      [label]="'accounts.account.contact.phone' | transloco"
+                      [requiredMarker]="'accounts.required' | transloco"
+                      [help]="'accounts.account.contact.phoneHelp' | transloco"
+                      [error]="fieldError('contactPhone')"
+                      [readonly]="saving()"
+                    />
+                  </div>
+                </zm-form-section>
+              } @else {
+                <zm-form-section
+                  id="church"
+                  headingId="church-title"
+                  formGroupName="church"
+                  [heading]="'accounts.account.church.title' | transloco"
+                >
+                  <span slot="lead">{{ 'accounts.account.church.lead' | transloco }}</span>
+                  <div class="form-grid">
+                    <zm-form-field
+                      class="field--full"
+                      formControlName="name"
+                      [fieldId]="ids.churchName"
+                      [label]="'accounts.account.church.name' | transloco"
+                      [requiredMarker]="'accounts.required' | transloco"
+                      [help]="'accounts.account.church.nameHelp' | transloco"
+                      [error]="fieldError('churchName')"
+                      [readonly]="saving()"
+                    />
+                    <zm-form-field
+                      formControlName="streetAddress"
+                      autocomplete="street-address"
+                      [fieldId]="ids.streetAddress"
+                      [label]="'accounts.account.church.street' | transloco"
+                      [requiredMarker]="'accounts.required' | transloco"
+                      [help]="'accounts.account.church.streetHelp' | transloco"
+                      [error]="fieldError('streetAddress')"
+                      [readonly]="saving()"
+                    />
+                    <zm-form-field
+                      formControlName="city"
+                      autocomplete="address-level2"
+                      [fieldId]="ids.city"
+                      [label]="'accounts.account.church.city' | transloco"
+                      [requiredMarker]="'accounts.required' | transloco"
+                      [error]="fieldError('city')"
+                      [invalid]="addressInvalid()"
+                      [describedBy]="addressInvalid() ? 'street-error' : undefined"
+                      [readonly]="saving()"
+                    />
+                    <zm-form-field
+                      formControlName="postalCode"
+                      autocomplete="postal-code"
+                      [fieldId]="ids.postalCode"
+                      [label]="'accounts.account.church.postalCode' | transloco"
+                      [requiredMarker]="'accounts.required' | transloco"
+                      [error]="fieldError('postalCode')"
+                      [invalid]="addressInvalid()"
+                      [describedBy]="addressInvalid() ? 'street-error' : undefined"
+                      [readonly]="saving()"
+                    />
+                    <zm-form-field
+                      formControlName="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      [fieldId]="ids.churchPhone"
+                      [label]="'accounts.account.church.phone' | transloco"
+                      [requiredMarker]="'accounts.required' | transloco"
+                      [help]="'accounts.account.church.phoneHelp' | transloco"
+                      [error]="fieldError('churchPhone')"
+                      [readonly]="saving()"
+                    />
+                    <zm-form-field
+                      formControlName="denomination"
+                      fieldId="denomination"
+                      [label]="'accounts.account.church.denomination' | transloco"
+                      [optionalMarker]="'accounts.optional' | transloco"
+                      [readonly]="saving()"
+                    />
+                    <zm-form-field
+                      formControlName="typicalAttendance"
+                      type="number"
+                      min="1"
+                      [fieldId]="ids.attendance"
+                      [label]="'accounts.account.church.attendance' | transloco"
+                      [optionalMarker]="'accounts.optional' | transloco"
+                      [error]="fieldError('attendance')"
+                      [readonly]="saving()"
+                    />
+                  </div>
+                </zm-form-section>
+              }
+              <zm-form-section
+                id="email"
+                headingId="email-title"
+                formGroupName="email"
+                [heading]="'accounts.account.email.title' | transloco"
+              >
+                <span slot="lead">{{
+                  'accounts.account.email.lead' | transloco: { email: user()?.email }
+                }}</span>
+                <div class="form-grid">
+                  <zm-form-field
+                    formControlName="newEmail"
+                    type="email"
+                    autocomplete="email"
+                    [fieldId]="ids.newEmail"
+                    [label]="'accounts.account.email.newEmail' | transloco"
+                    [optionalMarker]="'accounts.optional' | transloco"
+                    [error]="fieldError('newEmail')"
+                    [readonly]="saving()"
+                  />
+                  <zm-form-field
+                    formControlName="currentPassword"
+                    type="password"
+                    autocomplete="current-password"
+                    [fieldId]="ids.emailPassword"
+                    [label]="'accounts.account.currentPassword' | transloco"
+                    [optionalMarker]="'accounts.optional' | transloco"
+                    [help]="'accounts.account.email.passwordHelp' | transloco"
+                    [error]="fieldError('emailPassword')"
+                    [readonly]="saving()"
+                  />
+                </div>
+                <p class="pending" role="status">
+                  @if (pendingEmail(); as pending) {
+                    {{
+                      'accounts.account.email.pending'
+                        | transloco: { email: pending, current: user()?.email }
+                    }}
+                  }
+                </p>
+              </zm-form-section>
+              <zm-form-section
+                id="password"
+                headingId="password-title"
+                formGroupName="password"
+                [heading]="'accounts.account.password.title' | transloco"
+              >
+                <span slot="lead">{{
+                  'accounts.account.password.lead' | transloco: { count: otherSessions() }
+                }}</span>
+                <div class="form-grid">
+                  <zm-form-field
+                    formControlName="currentPassword"
+                    type="password"
+                    autocomplete="current-password"
+                    [fieldId]="ids.currentPassword"
+                    [label]="'accounts.account.currentPassword' | transloco"
+                    [optionalMarker]="'accounts.optional' | transloco"
+                    [error]="fieldError('currentPassword')"
+                    [readonly]="saving()"
+                  />
+                  <zm-form-field
+                    formControlName="newPassword"
+                    type="password"
+                    autocomplete="new-password"
+                    [fieldId]="ids.newPassword"
+                    [label]="'accounts.account.password.newPassword' | transloco"
+                    [optionalMarker]="'accounts.optional' | transloco"
+                    [help]="'accounts.account.password.help' | transloco"
+                    [error]="fieldError('newPassword')"
+                    [readonly]="saving()"
+                  />
+                </div>
+              </zm-form-section>
+              <zm-form-actions [status]="statusText()" [statusTone]="statusTone()">
+                <zm-button [disabled]="saving()" (click)="discard($event)">{{
+                  'accounts.account.discard' | transloco
+                }}</zm-button>
+                <zm-button variant="primary" type="submit" [busy]="saving()">{{
+                  (saving() ? 'accounts.account.saving' : 'accounts.account.save') | transloco
+                }}</zm-button>
+              </zm-form-actions>
+            </form>
             <zm-form-section
-              id="email"
-              headingId="email-title"
-              formGroupName="email"
-              [heading]="'accounts.account.email.title' | transloco"
+              id="devices"
+              headingId="devices-title"
+              [heading]="'accounts.account.devices.title' | transloco"
             >
-              <span slot="lead">{{
-                'accounts.account.email.lead' | transloco: { email: user()?.email }
-              }}</span>
-              <div class="form-grid">
-                <zm-form-field
-                  formControlName="newEmail"
-                  type="email"
-                  autocomplete="email"
-                  [fieldId]="ids.newEmail"
-                  [label]="'accounts.account.email.newEmail' | transloco"
-                  [optionalMarker]="'accounts.optional' | transloco"
-                  [error]="fieldError('newEmail')"
-                  [readonly]="saving()"
-                />
-                <zm-form-field
-                  formControlName="currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  [fieldId]="ids.emailPassword"
-                  [label]="'accounts.account.currentPassword' | transloco"
-                  [optionalMarker]="'accounts.optional' | transloco"
-                  [help]="'accounts.account.email.passwordHelp' | transloco"
-                  [error]="fieldError('emailPassword')"
-                  [readonly]="saving()"
-                />
-              </div>
-              <p class="pending" role="status">
-                @if (pendingEmail(); as pending) {
-                  {{
-                    'accounts.account.email.pending'
-                      | transloco: { email: pending, current: user()?.email }
-                  }}
-                }
-              </p>
+              <zm-list variant="device" [items]="devices()">
+                <ng-template zmListTrail let-item>
+                  @if (item.id === sessions()[0]?.id && sessions()[0]?.isCurrent) {
+                    <zm-badge>{{ 'accounts.account.devices.thisDevice' | transloco }}</zm-badge>
+                  } @else {
+                    <zm-button
+                      size="sm"
+                      [label]="
+                        'accounts.account.devices.endLabel' | transloco: { device: item.title }
+                      "
+                      [busy]="ending() === item.id"
+                      [disabled]="saving()"
+                      (click)="endSession(item.id)"
+                      >{{ 'accounts.account.devices.end' | transloco }}</zm-button
+                    >
+                  }
+                </ng-template>
+              </zm-list>
+              <p class="field__help">{{ 'accounts.account.devices.help' | transloco }}</p>
             </zm-form-section>
-            <zm-form-section
-              id="password"
-              headingId="password-title"
-              formGroupName="password"
-              [heading]="'accounts.account.password.title' | transloco"
-            >
-              <span slot="lead">{{ 'accounts.account.password.lead' | transloco }}</span>
-              <div class="form-grid">
-                <zm-form-field
-                  formControlName="currentPassword"
-                  type="password"
-                  autocomplete="current-password"
-                  [fieldId]="ids.currentPassword"
-                  [label]="'accounts.account.currentPassword' | transloco"
-                  [optionalMarker]="'accounts.optional' | transloco"
-                  [error]="fieldError('currentPassword')"
-                  [readonly]="saving()"
-                />
-                <zm-form-field
-                  formControlName="newPassword"
-                  type="password"
-                  autocomplete="new-password"
-                  [fieldId]="ids.newPassword"
-                  [label]="'accounts.account.password.newPassword' | transloco"
-                  [optionalMarker]="'accounts.optional' | transloco"
-                  [help]="'accounts.account.password.help' | transloco"
-                  [error]="fieldError('newPassword')"
-                  [readonly]="saving()"
-                />
-              </div>
-            </zm-form-section>
-            <zm-form-actions [status]="statusText()" [statusTone]="statusTone()">
-              <zm-button [disabled]="saving()" (click)="discard($event)">{{
-                'accounts.account.discard' | transloco
-              }}</zm-button>
-              <zm-button variant="primary" type="submit" [busy]="saving()">{{
-                (saving() ? 'accounts.account.saving' : 'accounts.account.save') | transloco
-              }}</zm-button>
-            </zm-form-actions>
-          </form>
+          </div>
         </div>
       }
     }

@@ -56,6 +56,20 @@ export interface Church {
   typicalAttendance: number | null;
 }
 
+/** `GET /api/v1/account/sessions`: one signed-in session (L2-025.3). */
+export interface AccountSession {
+  /** Names the session for ending it; never the session ID. */
+  id: string;
+  /** "Chrome on Windows". */
+  deviceLabel: string;
+  /** "Burlington, ON", or null. */
+  approximateCity: string | null;
+  /** ISO time. */
+  lastActiveAt: string;
+  /** The browser asking. */
+  isCurrent: boolean;
+}
+
 /** `PUT /api/v1/account/password` (L2-025.2). */
 export interface PasswordChange {
   currentPassword: string;

@@ -1,5 +1,5 @@
 import { type Observable, of } from 'rxjs';
-import type { Church, ChurchDetails, CurrentUser } from '../models/accounts';
+import type { AccountSession, Church, ChurchDetails, CurrentUser } from '../models/accounts';
 import type { AccountApi } from '../services/account';
 
 /** Riverside Community Church as docs/mocks/README.md has it. */
@@ -14,12 +14,38 @@ export const RIVERSIDE: Church = {
   typicalAttendance: 350,
 };
 
+/** Naomi's three signed-in devices (docs/mocks/pages/account). */
+export const NAOMIS_DEVICES: AccountSession[] = [
+  {
+    id: 'chrome',
+    deviceLabel: 'Chrome on Windows',
+    approximateCity: 'Burlington, ON',
+    lastActiveAt: '2026-10-09T10:00:00-04:00',
+    isCurrent: true,
+  },
+  {
+    id: 'safari',
+    deviceLabel: 'Safari on iPhone',
+    approximateCity: 'Burlington, ON',
+    lastActiveAt: '2026-10-09T08:00:00-04:00',
+    isCurrent: false,
+  },
+  {
+    id: 'firefox',
+    deviceLabel: 'Firefox on Mac',
+    approximateCity: 'Hamilton, ON',
+    lastActiveAt: '2026-10-06T19:30:00-04:00',
+    isCurrent: false,
+  },
+];
+
 /** In-memory AccountApi for scenarios and component tests: it keeps what it is given. */
 export class InMemoryAccountApi implements AccountApi {
   constructor(
     private readonly user: CurrentUser,
     private storedChurch: Church | null = RIVERSIDE,
     private phone: string | null = null,
+    private devices: AccountSession[] = NAOMIS_DEVICES,
   ) {}
 
   updateProfile(name: string): Observable<CurrentUser> {
@@ -58,6 +84,15 @@ export class InMemoryAccountApi implements AccountApi {
   }
 
   changePassword(): Observable<void> {
+    return of(undefined);
+  }
+
+  sessions(): Observable<AccountSession[]> {
+    return of(this.devices);
+  }
+
+  endSession(id: string): Observable<void> {
+    this.devices = this.devices.filter((session) => session.id !== id);
     return of(undefined);
   }
 }

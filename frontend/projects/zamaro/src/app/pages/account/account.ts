@@ -13,9 +13,17 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { ACCOUNT_API, AuthService, type Church, type ChurchDetails } from 'api';
+import {
+  ACCOUNT_API,
+  type AccountSession,
+  AuthService,
+  type Church,
+  type ChurchDetails,
+  FormatService,
+} from 'api';
 import {
   Alert,
+  Badge,
   Banner,
   Button,
   ButtonLink,
@@ -26,6 +34,9 @@ import {
   FormField,
   FormSection,
   Icon,
+  List,
+  type ListItem,
+  ListTrail,
   type SettingsSection,
   SettingsNav,
 } from 'components';
@@ -106,6 +117,7 @@ class Refused extends Error {
   selector: 'zm-account',
   imports: [
     Alert,
+    Badge,
     Banner,
     Button,
     ButtonLink,
@@ -114,6 +126,8 @@ class Refused extends Error {
     FormField,
     FormSection,
     Icon,
+    List,
+    ListTrail,
     ReactiveFormsModule,
     SettingsNav,
     TranslocoPipe,
@@ -129,6 +143,7 @@ export class Account {
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly format = inject(FormatService);
 
   protected readonly form = this.fb.group({
     name: [''],
@@ -158,6 +173,29 @@ export class Account {
   /** The new address a link was sent to, until it is opened (L2-025.1). */
   protected readonly pendingEmail = signal<string | null>(null);
   private readonly summary = viewChild(ErrorSummary);
+  /** The signed-in devices, this one first (L2-025.3). */
+  protected readonly sessions = signal<AccountSession[]>([]);
+  protected readonly ending = signal<string | null>(null);
+
+  /** "Chrome on Windows" over "Burlington, ON · This device · active now". */
+  protected readonly devices = computed<ListItem[]>(() =>
+    this.sessions().map((session) => {
+      const place = session.approximateCity
+        ? this.t('devices.place', { city: session.approximateCity })
+        : '';
+      return {
+        id: session.id,
+        title: session.deviceLabel,
+        meta: session.isCurrent
+          ? this.t('devices.current', { place })
+          : this.t('devices.other', { place, ago: this.format.ago(session.lastActiveAt) }),
+      };
+    }),
+  );
+  /** The sessions a new password would end. */
+  protected readonly otherSessions = computed(
+    () => this.sessions().filter((session) => !session.isCurrent).length,
+  );
 
   protected readonly user = this.auth.currentUser;
   protected readonly isArtist = computed(() => !!this.user()?.roles.includes('artist'));
@@ -178,6 +216,7 @@ export class Account {
       : { id: 'church', label: this.t('church.title') },
     { id: 'email', label: this.t('email.title') },
     { id: 'password', label: this.t('password.title') },
+    { id: 'devices', label: this.t('devices.title') },
   ]);
 
   protected readonly summaryItems = computed<ErrorSummaryItem[]>(() =>
@@ -233,12 +272,14 @@ export class Account {
     forkJoin({
       church: artist ? of(null) : this.api.church(),
       contactPhone: artist ? this.api.contactPhone() : of(null),
+      sessions: this.api.sessions(),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ church, contactPhone }) => {
+        next: ({ church, contactPhone, sessions }) => {
           this.savedChurch.set(church);
           this.savedContactPhone = contactPhone;
+          this.sessions.set(sessions);
           this.pendingEmail.set(this.user()?.pendingEmail ?? null);
           this.reset();
           this.load.set('ready');
@@ -270,6 +311,22 @@ export class Account {
       if (error instanceof Refused) this.showErrors(error.errors, wasInvalid);
       else this.status.set('failed');
     }
+  }
+
+  /** End session: that device is signed out at once, with no confirmation (L2-025.3). */
+  protected endSession(id: string): void {
+    if (this.ending()) return;
+    this.ending.set(id);
+    this.api
+      .endSession(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.sessions.update((sessions) => sessions.filter((session) => session.id !== id));
+          this.ending.set(null);
+        },
+        error: () => this.ending.set(null),
+      });
   }
 
   /** Discard: back to what was last saved. */
@@ -337,6 +394,8 @@ export class Account {
             }),
           );
           this.form.controls.password.reset();
+          // Every other session ended with the change.
+          this.sessions.set(await firstValueFrom(this.api.sessions()));
           break;
       }
     } catch (error) {

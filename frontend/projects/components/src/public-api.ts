@@ -28,6 +28,8 @@ export * from './lib/form-field/form-field';
 export * from './lib/headliner/headliner';
 export * from './lib/icon/icon';
 export * from './lib/inline-message/inline-message';
+export * from './lib/list/list';
+export * from './lib/list/list-trail';
 export * from './lib/marquee/marquee';
 export * from './lib/menu/menu';
 export * from './lib/poster/poster';

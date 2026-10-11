@@ -94,4 +94,20 @@ return [
 
         $test->as($owner)->getJson('/api/v1/me')->assertOk()->assertJsonPath('data.email', $owner->email);
     },
+
+    'GET api/v1/account/sessions' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($owner)->getJson('/api/v1/me')->assertOk();
+
+        $response = $test->as($intruder)->getJson('/api/v1/account/sessions')->assertOk()->assertJsonCount(1, 'data');
+
+        $test->assertHoldsNothingOf($owner, $response);
+    },
+
+    'DELETE api/v1/account/sessions/{session}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $ownerSession = $test->as($owner)->getJson('/api/v1/account/sessions')->json('data.0.id');
+
+        $test->as($intruder)->deleteJson("/api/v1/account/sessions/{$ownerSession}")->assertNotFound();
+
+        $test->as($owner)->getJson('/api/v1/me')->assertOk();
+    },
 ];

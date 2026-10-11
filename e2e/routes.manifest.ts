@@ -34,7 +34,8 @@ export interface RouteState {
   shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
-   * devices, which every spec signing in as the same cast member adds to.
+   * devices (only this device is shown) with the Password lead's count of the others, which every spec
+   * signing in as the same cast member changes.
    */
   masks?: 'session-ended-line' | 'devices';
 }

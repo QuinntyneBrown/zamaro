@@ -47,7 +47,7 @@ class SignedInDevicesTest extends TestCase
         $this->travel(1)->hours();
         $here = $this->signInFrom(self::CHROME_WINDOWS, '127.0.0.1');
 
-        $response = $this->from($here)->getJson('/api/v1/account/sessions');
+        $response = $this->browser($here)->getJson('/api/v1/account/sessions');
 
         $response->assertOk();
         $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
@@ -67,35 +67,35 @@ class SignedInDevicesTest extends TestCase
     {
         $here = $this->signInFrom(self::CHROME_WINDOWS, '203.0.113.5');
 
-        $this->from($here)->getJson('/api/v1/account/sessions')->assertJsonPath('data.0.approximateCity', null);
+        $this->browser($here)->getJson('/api/v1/account/sessions')->assertJsonPath('data.0.approximateCity', null);
     }
 
     public function test_ending_a_session_signs_that_device_out_at_once(): void
     {
         $phone = $this->signInFrom(self::SAFARI_IPHONE, '192.168.1.20');
         $here = $this->signInFrom(self::CHROME_WINDOWS, '127.0.0.1');
-        $id = collect($this->from($here)->getJson('/api/v1/account/sessions')->json('data'))->firstWhere('isCurrent', false)['id'];
+        $id = collect($this->browser($here)->getJson('/api/v1/account/sessions')->json('data'))->firstWhere('isCurrent', false)['id'];
 
-        $response = $this->from($here)->deleteJson("/api/v1/account/sessions/{$id}");
+        $response = $this->browser($here)->deleteJson("/api/v1/account/sessions/{$id}");
 
         $response->assertNoContent();
         $this->assertMatchesContract($response);
-        $this->from($phone)->getJson('/api/v1/me')->assertUnauthorized();
-        $this->from($here)->getJson('/api/v1/me')->assertOk();
-        $this->assertCount(1, $this->from($here)->getJson('/api/v1/account/sessions')->json('data'));
+        $this->browser($phone)->getJson('/api/v1/me')->assertUnauthorized();
+        $this->browser($here)->getJson('/api/v1/me')->assertOk();
+        $this->assertCount(1, $this->browser($here)->getJson('/api/v1/account/sessions')->json('data'));
     }
 
     public function test_another_persons_session_is_not_found_and_keeps_working(): void
     {
         $theirs = $this->signInFrom(self::SAFARI_IPHONE, '192.168.1.20', 'naomi.fraser@riversidecc.ca');
-        $theirId = collect($this->from($theirs)->getJson('/api/v1/account/sessions')->json('data'))->firstWhere('isCurrent', true)['id'];
+        $theirId = collect($this->browser($theirs)->getJson('/api/v1/account/sessions')->json('data'))->firstWhere('isCurrent', true)['id'];
         $here = $this->signInFrom(self::CHROME_WINDOWS, '127.0.0.1');
 
-        $response = $this->from($here)->deleteJson("/api/v1/account/sessions/{$theirId}");
+        $response = $this->browser($here)->deleteJson("/api/v1/account/sessions/{$theirId}");
 
         $response->assertNotFound()->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
-        $this->from($theirs)->getJson('/api/v1/me')->assertOk();
-        $this->from($here)->deleteJson('/api/v1/account/sessions/not-a-session')->assertNotFound();
+        $this->browser($theirs)->getJson('/api/v1/me')->assertOk();
+        $this->browser($here)->deleteJson('/api/v1/account/sessions/not-a-session')->assertNotFound();
     }
 
     public function test_activity_is_recorded_at_most_every_5_minutes(): void
@@ -104,11 +104,11 @@ class SignedInDevicesTest extends TestCase
         $lastActive = fn () => Carbon::parse(DB::table('user_sessions')->where('user_id', $this->user()->id)->value('last_active_at'));
 
         $this->travel(4)->minutes();
-        $this->from($here)->getJson('/api/v1/me')->assertOk();
+        $this->browser($here)->getJson('/api/v1/me')->assertOk();
         $this->assertTrue($lastActive()->equalTo(Carbon::parse('2026-10-09 10:00', 'America/Toronto')));
 
         $this->travel(2)->minutes();
-        $this->from($here)->getJson('/api/v1/me')->assertOk();
+        $this->browser($here)->getJson('/api/v1/me')->assertOk();
         $this->assertTrue($lastActive()->equalTo(Carbon::parse('2026-10-09 10:06', 'America/Toronto')));
     }
 
@@ -118,7 +118,7 @@ class SignedInDevicesTest extends TestCase
         $this->travel(config('session.lifetime') + 1)->minutes();
         $here = $this->signInFrom(self::CHROME_WINDOWS, '127.0.0.1');
 
-        $this->assertSame(['Chrome on Windows'], array_column($this->from($here)->getJson('/api/v1/account/sessions')->json('data'), 'deviceLabel'));
+        $this->assertSame(['Chrome on Windows'], array_column($this->browser($here)->getJson('/api/v1/account/sessions')->json('data'), 'deviceLabel'));
     }
 
     public function test_devices_are_named_by_browser_and_system(): void
@@ -133,7 +133,7 @@ class SignedInDevicesTest extends TestCase
         ];
         foreach ($agents as $agent => $label) {
             $here = $this->signInFrom($agent, '127.0.0.1');
-            $this->assertSame($label, $this->from($here)->getJson('/api/v1/account/sessions')->json('data.0.deviceLabel'), $agent);
+            $this->assertSame($label, $this->browser($here)->getJson('/api/v1/account/sessions')->json('data.0.deviceLabel'), $agent);
         }
     }
 
@@ -153,7 +153,7 @@ class SignedInDevicesTest extends TestCase
     }
 
     /** The next request from the browser holding this session cookie. */
-    private function from(string $session): static
+    private function browser(string $session): static
     {
         return $this->asANewRequest()->withoutCookies()->fromTheWebApp()->withCookie('zamaro_session', $session);
     }

@@ -67,6 +67,14 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
   if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
   await discover.shell.settle();
-  if (state.masks === 'devices') return [new AccountPage(page).deviceList()];
+  if (state.masks === 'devices') {
+    // Other specs signed in as the same cast member add rows: keep this device (always first) so the
+    // page's height does not depend on them, and mask its line and the count in the Password lead.
+    await page.addStyleTag({
+      content: '.device-list > li:not(:first-child) { display: none !important; }',
+    });
+    const account = new AccountPage(page);
+    return [account.deviceList(), account.sectionLead('Password')];
+  }
   return state.masks === 'session-ended-line' ? [new SignInPage(page).sessionEndedDetail()] : [];
 }

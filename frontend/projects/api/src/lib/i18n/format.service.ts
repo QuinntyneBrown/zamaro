@@ -80,6 +80,23 @@ export class FormatService {
     return this.transloco.translate('common.format.time', parts);
   }
 
+  /**
+   * How long ago an instant was, for "Last active …" (L2-110): "just now" within a minute, "12 min
+   * ago", "2 hours ago" within a day, then the short date ("Tue 6 Oct").
+   */
+  ago(instant: string, now: Date = new Date()): string {
+    const minutes = Math.floor((now.getTime() - new Date(instant).getTime()) / 60_000);
+    if (minutes < 1) return this.transloco.translate('common.format.ago.now');
+    if (minutes < 60)
+      return this.transloco.translate('common.format.ago.minutes', { count: minutes });
+    if (minutes < 24 * 60) {
+      return this.transloco.translate('common.format.ago.hours', {
+        count: Math.floor(minutes / 60),
+      });
+    }
+    return this.shortDate(torontoToday(new Date(instant)));
+  }
+
   money(cents: number): string {
     const whole = cents % 100 === 0;
     return new Intl.NumberFormat(LOCALE, {

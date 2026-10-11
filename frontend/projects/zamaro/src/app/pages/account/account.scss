@@ -40,3 +40,14 @@
     gap: var(--space-16);
   }
 }
+
+// Help under a section that acts at once (Signed-in devices), as a field's help reads.
+.field__help {
+  font: var(--text-caption);
+  color: var(--color-fg-muted);
+}
+
+// The pending email change line under the Email fields.
+.pending:empty {
+  display: none;
+}

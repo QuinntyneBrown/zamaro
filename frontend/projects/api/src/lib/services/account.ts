@@ -1,7 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { map, type Observable, switchMap } from 'rxjs';
-import type { Church, ChurchDetails, CurrentUser, PasswordChange } from '../models/accounts';
+import type {
+  AccountSession,
+  Church,
+  ChurchDetails,
+  CurrentUser,
+  PasswordChange,
+} from '../models/accounts';
 
 /**
  * Account settings (accounts/manage-account-settings, accounts/manage-church-profile): the account
@@ -29,6 +35,10 @@ export interface AccountApi {
   confirmEmailChange(token: string): Observable<string>;
   /** A new password: every other session ends and this one gets a new ID (L2-025.2). */
   changePassword(change: PasswordChange): Observable<void>;
+  /** The signed-in devices: this one first, then the most recently active (L2-025.3). */
+  sessions(): Observable<AccountSession[]>;
+  /** Signs that device out at once. */
+  endSession(id: string): Observable<void>;
 }
 
 export const ACCOUNT_API = new InjectionToken<AccountApi>('AccountApi');
@@ -79,6 +89,18 @@ export class HttpAccountApi implements AccountApi {
 
   changePassword(change: PasswordChange): Observable<void> {
     return this.http.put('/api/v1/account/password', change).pipe(map(() => undefined));
+  }
+
+  sessions(): Observable<AccountSession[]> {
+    return this.http
+      .get<{ data: AccountSession[] }>('/api/v1/account/sessions')
+      .pipe(map((response) => response.data));
+  }
+
+  endSession(id: string): Observable<void> {
+    return this.http
+      .delete(`/api/v1/account/sessions/${encodeURIComponent(id)}`)
+      .pipe(map(() => undefined));
   }
 
   saveContactPhone(contactPhone: string): Observable<string | null> {
