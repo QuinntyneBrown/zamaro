@@ -181,6 +181,13 @@ return [
         $test->as($intruder)->getJson('/api/v1/saved-artists/ids')->assertOk()->assertJsonPath('data.count', 0);
     },
 
+    'GET api/v1/saved-artists' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $artist = $test->makeArtist(User::factory()->create())->id;
+        $test->as($owner)->putJson("/api/v1/saved-artists/{$artist}")->assertOk();
+
+        $test->as($intruder)->getJson('/api/v1/saved-artists')->assertOk()->assertJsonPath('data.total', 0)->assertJsonPath('data.artists', []);
+    },
+
     'PUT api/v1/saved-artists/{artist}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
         $artist = $test->makeArtist(User::factory()->create())->id;
         $test->as($owner)->putJson("/api/v1/saved-artists/{$artist}")->assertOk();
