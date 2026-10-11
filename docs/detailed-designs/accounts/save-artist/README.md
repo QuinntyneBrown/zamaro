@@ -114,6 +114,20 @@ a newer intent replaces an older one.
   "Save" / "Saved" (`zm-button` pressed, heart icon) in the profile header; the top bar's Saved link with
   the count badge, named "Saved 3 artists". Artists browsing see none. Guests' hearts join with S16.
 
+**As built in M2 (S16)**
+
+- Guests see the hearts and the profile's Save (the store's `shown()`); bookers too, artists and
+  administrators not. The header's Saved link stays for signed-in bookers.
+- `app/shared/PendingIntentService` holds `{ kind: 'save-artist', artistId, name, pronoun, returnUrl }`
+  under `zamaro.pending-intent` in `sessionStorage`; a newer press replaces it. The press opens
+  `/sign-in?returnUrl={the page}`; sign-in, the two-step code and the verification link already carry
+  `returnUrl`, so registering, verifying and then signing in comes back to the same page.
+- The replay lives in `SavedArtistsStore`, not `AuthService`: once a booker is signed in and their ids
+  have loaded, it takes the intent and saves (an artist already saved is left as it is), with the usual
+  toasts. Keeping it in the store keeps the `api` library free of the app's saved artists. Someone who
+  signs in and cannot save (an artist) drops the intent. Verifying an email signs no one in
+  (`accounts/register-booker`), so the registration path ends in a sign-in too.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

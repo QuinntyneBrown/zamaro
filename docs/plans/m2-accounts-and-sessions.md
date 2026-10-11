@@ -22,7 +22,23 @@
 | S13 | Two-step sign-in: turn off and new recovery codes | Done | `2305396` red tests, `5612167` |
 | S14 | Accept updated terms, and the marketing choice | Done | `166d8dd` red tests, `74d36d5` |
 | S15 | Save an artist | Done | `8df925f` red tests, `a515feb` |
-| S16–S18 | | Not started | |
+| S16 | Guest save through sign-in or sign-up | Done | `1b6fc36` red tests, `74847fe` |
+| S17–S18 | | Not started | |
+
+**Checks at the last commit (S16, 2026-10-11):** frontend lint, format and `ng build zamaro` are clean;
+`npx playwright test` passes 354 tests on win32; the Discover and profile states pass visual and a11y on
+win32 and in the Linux image with the guest hearts and Save. No component changed, so no perf run was
+due; the backend did not change.
+
+**S16 acceptance criteria (as tested):**
+- Given a guest on the Burlington lineup, then Hosanna Collective's heart is named "Save Hosanna
+  Collective to your saved artists"; pressing it opens `/sign-in?returnUrl={the lineup}`, and signing in
+  returns to the lineup with Hosanna pressed, "Saved Hosanna Collective" showing and "Saved 1 artists".
+- Given a guest who presses it, then creates an account, opens the verification link (which returns to
+  the lineup with "Email verified") and signs in from the header, then Hosanna is saved on the lineup.
+- Given a guest who presses Hosanna, goes back and presses Luz Viva, then after signing in only Luz Viva
+  is saved.
+- Given a guest on Abigail's profile, then Save leads through sign-in back to the profile reading "Saved".
 
 **Checks at the last commit (S15, 2026-10-11):** the backend Feature suite passes with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
@@ -667,6 +683,13 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S16 — The replay is in the store.** The design has `AuthService` ask `PendingIntentService` to
+  replay; the `api` library knows nothing of saved artists, so `SavedArtistsStore` replays once a booker's
+  ids load. The intent carries the name and pronoun for the toast.
+- **S16 — Registering ends in a sign-in.** Verifying signs no one in (S2), so "registering and
+  verifying" returns to the page as a guest with "Email verified", and the save lands at the sign-in.
+- **S16 — Scenarios unchanged.** Guests now see hearts on Discover; `LineupSaved` already measures
+  tickets with hearts, and `Lineup` stays the ticket composite without them.
 - **S15 — Saved by artist id.** Cards and profiles gain `id` (and cards `pronoun`) so the toggle and
   the toasts need no extra lookup; the routes are `/saved-artists/{{artistId}}` as the design has them.
 - **S15 — `firstSave` and `users.first_saved_at`.** The design shows "Saved artists are private" once,
