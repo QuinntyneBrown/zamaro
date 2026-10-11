@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\EncryptedField;
 use App\Enums\Role as RoleName;
+use App\Enums\ThemePreference;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -54,6 +55,7 @@ class User extends Authenticatable
             'two_factor_secret' => EncryptedField::class,
             'two_factor_confirmed_at' => 'immutable_datetime',
             'first_saved_at' => 'immutable_datetime',
+            'theme_preference' => ThemePreference::class,
         ];
     }
 

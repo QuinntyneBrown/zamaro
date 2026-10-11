@@ -19,9 +19,10 @@ use Illuminate\Support\Facades\Route;
 // /api/v1 routes that require a signed-in user. Anonymous routes belong in api_public.php.
 // Everything here may hold personal data, so nothing here is cached (L2-089.3).
 
-// Until the current terms are accepted, only /me, sign-out and the acceptance answer (L2-080.3).
+// Until the current terms are accepted, only /me, its theme, sign-out and the acceptance answer (L2-080.3).
 Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::class, EnsureCurrentTermsAccepted::class])->group(function () {
     Route::get('me', [MeController::class, 'show'])->name('me.show');
+    Route::patch('me/preferences', [MeController::class, 'updatePreferences'])->name('me.preferences');
     Route::delete('session', [SessionController::class, 'destroy'])->name('session.destroy');
 
     // Account settings (accounts/manage-account-settings, accounts/manage-church-profile).

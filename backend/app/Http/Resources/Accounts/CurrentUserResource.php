@@ -48,12 +48,11 @@ class CurrentUserResource extends JsonResource
                 'longitude' => $user->church->longitude,
             ],
             /**
-             * The theme chosen on any signed-in device, or null to follow the device. Always null
-             * until the account can store one (M2 S18).
+             * The theme chosen on any signed-in device, or null to follow the device (L2-104.2).
              *
              * @var 'light'|'dark'|null
              */
-            'themePreference' => null,
+            'themePreference' => $user->theme_preference?->value,
             /**
              * True when the current terms must be accepted before anything else (L2-080.3).
              *

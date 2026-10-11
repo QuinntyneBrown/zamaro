@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\UserExperience;
 
-use App\Models\User;
 use Database\Seeders\CastSeeder;
+use Database\Seeders\LegalDocumentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Tests\Concerns\AssertsOpenApiContract;
 use Tests\Concerns\UsesTheWebApp;
 use Tests\TestCase;
@@ -26,7 +27,7 @@ class ThemePreferenceTest extends TestCase
     {
         parent::setUp();
         $this->travelTo(Carbon::parse('2026-10-09 10:00', 'America/Toronto'));
-        $this->seed(CastSeeder::class);
+        $this->seed([LegalDocumentSeeder::class, CastSeeder::class]);
     }
 
     public function test_an_account_has_no_theme_until_one_is_chosen(): void
@@ -45,7 +46,7 @@ class ThemePreferenceTest extends TestCase
         $response->assertOk()->assertJsonPath('data.themePreference', 'dark')->assertJsonPath('data.email', self::NAOMI);
         $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
         $this->assertMatchesContract($response);
-        $this->assertSame('dark', User::where('email', self::NAOMI)->value('theme_preference'));
+        $this->assertSame('dark', DB::table('users')->where('email', self::NAOMI)->value('theme_preference'));
         $this->getJson('/api/v1/me')->assertJsonPath('data.themePreference', 'dark');
     }
 
@@ -57,7 +58,7 @@ class ThemePreferenceTest extends TestCase
         $this->patchJson('/api/v1/me/preferences', ['themePreference' => 'light'])->assertOk()->assertJsonPath('data.themePreference', 'light');
         $this->patchJson('/api/v1/me/preferences', ['themePreference' => null])->assertOk()->assertJsonPath('data.themePreference', null);
 
-        $this->assertNull(User::where('email', self::NAOMI)->value('theme_preference'));
+        $this->assertNull(DB::table('users')->where('email', self::NAOMI)->value('theme_preference'));
     }
 
     public function test_a_theme_that_is_not_light_or_dark_is_refused(): void
@@ -68,7 +69,15 @@ class ThemePreferenceTest extends TestCase
 
         $response->assertUnprocessable()->assertJsonValidationErrors('themePreference');
         $this->assertMatchesContract($response);
-        $this->assertNull(User::where('email', self::NAOMI)->value('theme_preference'));
+        $this->assertNull(DB::table('users')->where('email', self::NAOMI)->value('theme_preference'));
+    }
+
+    public function test_a_booker_who_must_accept_new_terms_can_still_save_a_theme(): void
+    {
+        $this->signIn('tomi.oduya@harvestpointchurch.ca')->assertOk();
+        $this->getJson('/api/v1/account/church')->assertStatus(409);
+
+        $this->patchJson('/api/v1/me/preferences', ['themePreference' => 'dark'])->assertOk()->assertJsonPath('data.themePreference', 'dark');
     }
 
     public function test_a_guest_has_no_preferences_to_save(): void

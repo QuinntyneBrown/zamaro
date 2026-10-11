@@ -15,8 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EnsureCurrentTermsAccepted
 {
-    /** Who is signed in, signing out, and accepting the terms. */
-    public const OPEN = ['me.show', 'session.destroy', 'account.consents.terms'];
+    /** Who is signed in and their theme, signing out, and accepting the terms. */
+    public const OPEN = ['me.show', 'me.preferences', 'session.destroy', 'account.consents.terms'];
 
     public function __construct(private readonly LegalDocumentRegistry $documents) {}
 
