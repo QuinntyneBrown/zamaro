@@ -68,6 +68,13 @@
   --btn-border: var(--color-bg-inverse);
 }
 
+.btn--danger {
+  --btn-bg: var(--color-danger-solid);
+  --btn-fg: var(--color-fg-on-danger);
+  --btn-border: var(--color-danger-solid);
+  --btn-bg-hover: var(--color-danger-solid-hover);
+}
+
 .btn--ghost {
   --btn-bg: transparent;
   --btn-border: transparent;

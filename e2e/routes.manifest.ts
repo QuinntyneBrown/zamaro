@@ -241,10 +241,12 @@ export const routes: RouteState[] = [
     app: 'zamaro',
     mock: 'mfa-challenge/default.html',
   },
-  // Naomi's settings with two-step sign-in on: "On", New recovery codes and Turn off.
+  // Naomi's settings with two-step sign-in on: "On", New recovery codes and Turn off. Opened without the
+  // mock's #two-step: at XS the jump reaches the page's end, where the nav marks the last section once
+  // its pause ends, so the row's scroll position would depend on when the capture is taken.
   {
     name: 'account-two-step-on',
-    path: '/account#two-step',
+    path: '/account',
     app: 'zamaro',
     mock: 'account/two-step-on.html',
     signedInAs: 'naomi',

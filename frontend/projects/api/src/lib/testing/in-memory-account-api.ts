@@ -122,6 +122,14 @@ export class InMemoryAccountApi implements AccountApi {
     return of(RECOVERY_CODES);
   }
 
+  turnOffTwoFactor(): Observable<void> {
+    return of(undefined);
+  }
+
+  newRecoveryCodes(): Observable<string[]> {
+    return of(RECOVERY_CODES);
+  }
+
   endSession(id: string): Observable<void> {
     this.devices = this.devices.filter((session) => session.id !== id);
     return of(undefined);

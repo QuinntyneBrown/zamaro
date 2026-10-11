@@ -292,7 +292,20 @@
                   {{ 'accounts.account.twoStep.offLead' | transloco }}</span
                 >
               }
-              @if (!user()?.mfaEnabled) {
+              @if (user()?.mfaEnabled) {
+                <div class="cluster">
+                  <zm-button (click)="manageTwoStep('codes')"
+                    ><zm-icon name="key" />{{
+                      'accounts.account.twoStep.newCodes' | transloco
+                    }}</zm-button
+                  >
+                  <zm-button (click)="manageTwoStep('off')"
+                    ><zm-icon name="lock-open" />{{
+                      'accounts.account.twoStep.turnOff' | transloco
+                    }}</zm-button
+                  >
+                </div>
+              } @else {
                 <div class="cluster">
                   <zm-button-link link="/account/security/mfa"
                     ><zm-icon name="lock" />{{

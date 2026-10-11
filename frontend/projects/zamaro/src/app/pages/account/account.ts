@@ -41,6 +41,10 @@ import {
   SettingsNav,
 } from 'components';
 import { firstValueFrom, forkJoin, of } from 'rxjs';
+import {
+  openTwoStepCodeDialog,
+  type TwoStepCodeMode,
+} from '../../dialogs/two-step-code/two-step-code';
 import { PageMeta } from '../../shared/page-meta';
 
 type Load = 'loading' | 'ready' | 'error';
@@ -312,6 +316,16 @@ export class Account {
       if (error instanceof Refused) this.showErrors(error.errors, wasInvalid);
       else this.status.set('failed');
     }
+  }
+
+  /** "Turn off" and "New recovery codes": a dialog asks for a code first (L2-072.5). */
+  protected manageTwoStep(mode: TwoStepCodeMode): void {
+    openTwoStepCodeDialog(this.injector, {
+      mode,
+      email: this.user()?.email ?? '',
+    }).closed.subscribe((result) => {
+      if (result === 'off') this.auth.load();
+    });
   }
 
   /** End session: that device is signed out at once, with no confirmation (L2-025.3). */

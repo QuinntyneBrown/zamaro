@@ -44,6 +44,10 @@ export interface AccountApi {
   beginTwoFactor(): Observable<TwoFactorKey>;
   /** The first code turns two-step sign-in on; answers the 10 recovery codes, once. */
   confirmTwoFactor(code: string): Observable<string[]>;
+  /** Needs a current code or an unused recovery code (L2-072.5). */
+  turnOffTwoFactor(code: string): Observable<void>;
+  /** Needs a current code or an unused recovery code; 10 new codes replace every earlier one. */
+  newRecoveryCodes(code: string): Observable<string[]>;
 }
 
 export const ACCOUNT_API = new InjectionToken<AccountApi>('AccountApi');
@@ -113,6 +117,20 @@ export class HttpAccountApi implements AccountApi {
       .post<{
         data: { recoveryCodes: string[] };
       }>('/api/v1/account/two-factor/confirm', { code })
+      .pipe(map((response) => response.data.recoveryCodes));
+  }
+
+  turnOffTwoFactor(code: string): Observable<void> {
+    return this.http
+      .delete('/api/v1/account/two-factor', { body: { code } })
+      .pipe(map(() => undefined));
+  }
+
+  newRecoveryCodes(code: string): Observable<string[]> {
+    return this.http
+      .post<{
+        data: { recoveryCodes: string[] };
+      }>('/api/v1/account/two-factor/recovery-codes', { code })
       .pipe(map((response) => response.data.recoveryCodes));
   }
 

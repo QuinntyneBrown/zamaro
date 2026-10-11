@@ -136,4 +136,22 @@ return [
 
         $test->as($owner)->getJson('/api/v1/me')->assertJsonPath('data.mfaEnabled', false);
     },
+
+    'DELETE api/v1/account/two-factor' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $key = str_replace(' ', '', $test->as($owner)->postJson('/api/v1/account/two-factor')->json('data.key'));
+        $test->as($owner)->postJson('/api/v1/account/two-factor/confirm', ['code' => (new Google2FA)->getCurrentOtp($key)])->assertOk();
+
+        $test->as($intruder)->deleteJson('/api/v1/account/two-factor', ['code' => (new Google2FA)->getCurrentOtp($key)])->assertNotFound();
+
+        $test->as($owner)->getJson('/api/v1/me')->assertJsonPath('data.mfaEnabled', true);
+    },
+
+    'POST api/v1/account/two-factor/recovery-codes' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $key = str_replace(' ', '', $test->as($owner)->postJson('/api/v1/account/two-factor')->json('data.key'));
+        $codes = $test->as($owner)->postJson('/api/v1/account/two-factor/confirm', ['code' => (new Google2FA)->getCurrentOtp($key)])->json('data.recoveryCodes');
+
+        $test->as($intruder)->postJson('/api/v1/account/two-factor/recovery-codes', ['code' => $codes[0]])->assertNotFound();
+
+        $test->as($owner)->deleteJson('/api/v1/account/two-factor', ['code' => $codes[0]])->assertNoContent();
+    },
 ];

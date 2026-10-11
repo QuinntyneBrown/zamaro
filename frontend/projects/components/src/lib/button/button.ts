@@ -6,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 
-export type ButtonVariant = 'secondary' | 'primary' | 'ghost' | 'ink';
+export type ButtonVariant = 'secondary' | 'primary' | 'ghost' | 'ink' | 'danger';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 /** The `btn` classes both button components render. */

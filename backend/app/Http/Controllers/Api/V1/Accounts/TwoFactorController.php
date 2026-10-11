@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\V1\Accounts;
 
 use App\Actions\Accounts\EnableTwoFactor;
+use App\Actions\Accounts\ManageTwoFactor;
+use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Accounts\TwoFactorCodeRequest;
+use App\Http\Requests\Accounts\TwoFactorProofRequest;
 use App\Services\Accounts\TotpVerifier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,6 +50,42 @@ class TwoFactorController extends Controller
         abort_if($user->mfa_enabled || $user->two_factor_secret === null, 404);
 
         return response($totp->qrSvg($totp->uri($user, $user->two_factor_secret)), 200, ['Content-Type' => 'image/svg+xml']);
+    }
+
+    /**
+     * Turn off two-step sign-in.
+     *
+     * Needs a current code or an unused recovery code; the key and every recovery code go, and the
+     * owner is emailed (L2-072.5). 404 when it is not on.
+     *
+     * @throws SignInPaused 429 `sign-in-paused` after 5 wrong codes or passwords in 15 minutes
+     */
+    public function destroy(TwoFactorProofRequest $request, ManageTwoFactor $manage): Response
+    {
+        abort_unless($request->user()->mfa_enabled, 404);
+        $manage->turnOff($request->user(), $request->validated('code'));
+
+        return response()->noContent();
+    }
+
+    /**
+     * New recovery codes.
+     *
+     * Needs a current code or an unused recovery code; 10 new codes replace every earlier one and are
+     * answered once (L2-072.5). 404 when two-step sign-in is not on.
+     *
+     * @throws SignInPaused 429 `sign-in-paused` after 5 wrong codes or passwords in 15 minutes
+     */
+    public function recoveryCodes(TwoFactorProofRequest $request, ManageTwoFactor $manage): JsonResponse
+    {
+        abort_unless($request->user()->mfa_enabled, 404);
+
+        return response()->json([
+            'data' => [
+                /** @var list<string> */
+                'recoveryCodes' => $manage->newRecoveryCodes($request->user(), $request->validated('code')),
+            ],
+        ]);
     }
 
     /**

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { Icon } from '../icon/icon';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { Icon, type IconName } from '../icon/icon';
 
 /**
  * The dialog frame (docs/design-system/components/dialog): header with an optional kicker, the
@@ -15,15 +15,38 @@ import { Icon } from '../icon/icon';
     class: 'dialog',
     '[class.dialog--drawer]': "variant() === 'drawer'",
     '[class.dialog--menu]': "variant() === 'menu'",
+    '[class.dialog--danger]': 'danger()',
+    '[attr.aria-busy]': "busy() ? 'true' : null",
   },
   template: `<div class="dialog__header">
+      @if (icon(); as name) {
+        <div
+          class="dialog__icon"
+          [class.dialog__icon--danger]="iconTone() === 'danger'"
+          [class.dialog__icon--info]="iconTone() === 'info'"
+          aria-hidden="true"
+        >
+          <zm-icon [name]="name" />
+        </div>
+      }
       <div>
         @if (kicker()) {
           <span class="dialog__kicker">{{ kicker() }}</span>
         }
         <h2 class="dialog__title" [id]="titleId()">{{ heading() }}</h2>
+        @if (description()) {
+          <p class="dialog__description" [id]="descriptionId() || titleId() + '-desc'">
+            {{ description() }}
+          </p>
+        }
       </div>
-      <button class="close" type="button" [attr.aria-label]="closeLabel()" (click)="closed.emit()">
+      <button
+        class="close"
+        type="button"
+        [attr.aria-label]="closeLabel()"
+        [disabled]="busy()"
+        (click)="closed.emit()"
+      >
         <zm-icon name="close" size="sm" />
       </button>
     </div>
@@ -102,6 +125,32 @@ import { Icon } from '../icon/icon';
       min-width: 0;
     }
 
+    :host(.dialog--danger) .dialog__header {
+      border-top: var(--border-width-poster) solid var(--color-danger-solid);
+    }
+    .dialog__icon {
+      display: grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      flex: none;
+      border: var(--border-width-thick) solid currentColor;
+    }
+    .dialog__icon--info {
+      color: var(--color-info-icon);
+      background: var(--color-info-bg);
+    }
+    .dialog__icon--danger {
+      color: var(--color-danger-icon);
+      background: var(--color-danger-bg);
+    }
+    .dialog__description {
+      margin-top: var(--space-1);
+      color: var(--color-fg-muted);
+    }
+    :host([aria-busy='true']) .dialog__body {
+      opacity: 0.6;
+    }
     .dialog__kicker {
       display: block;
       margin-bottom: var(--space-1);
@@ -214,6 +263,17 @@ export class Dialog {
   /** The context above the title: "Abigail Mensah · Photos". */
   readonly kicker = input('');
   readonly variant = input<'default' | 'drawer' | 'menu'>('default');
+  /** The consequence under the title, which names the dialog's description. */
+  readonly description = input('');
+  /** The description's `id`; defaults to `{titleId}-desc`. */
+  readonly descriptionId = input('');
+  /** An icon in the framed square before the title. */
+  readonly icon = input<IconName | null>(null);
+  readonly iconTone = input<'info' | 'danger'>('info');
+  /** The red rule across the top: an action that cannot be undone. */
+  readonly danger = input(false, { transform: booleanAttribute });
+  /** A request is out: the body dims and the close button is disabled. */
+  readonly busy = input(false, { transform: booleanAttribute });
 
   readonly closed = output<void>();
 }

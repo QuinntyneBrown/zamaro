@@ -23,6 +23,7 @@ export const scenarios: Record<string, Scenario> = {
   DarkTheme: () => import('./DarkTheme'),
   DescriptionList: () => import('./DescriptionList'),
   Dialog: () => import('./Dialog'),
+  DialogDanger: () => import('./DialogDanger'),
   EmptyState: () => import('./EmptyState'),
   ErrorPage: () => import('./ErrorPage'),
   ErrorSummary: () => import('./ErrorSummary'),

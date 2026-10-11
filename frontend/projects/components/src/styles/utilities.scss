@@ -58,6 +58,11 @@
 }
 
 // The dimmed page behind a modal dialog (CDK overlay backdrop).
+// A form wrapping a dialog's frame adds no box (dialog CRD D-4).
+.dialog__form {
+  display: contents;
+}
+
 .zm-backdrop {
   background: var(--color-bg-backdrop);
 }

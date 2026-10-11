@@ -1,0 +1,89 @@
+<form class="dialog__form" novalidate [formGroup]="form" (ngSubmit)="submit()">
+  <zm-dialog
+    [danger]="off"
+    [icon]="off ? 'lock-open' : 'key'"
+    [iconTone]="off ? 'danger' : 'info'"
+    [kicker]="t('kicker')"
+    [heading]="status() === 'done' ? t('codesTitle') : off ? t('offTitle') : t('newCodesTitle')"
+    [titleId]="titleId"
+    [description]="status() === 'done' ? t('codesDescription') : t('description')"
+    [descriptionId]="descriptionId"
+    [closeLabel]="t('close')"
+    [busy]="busy()"
+    (closed)="close()"
+  >
+    @if (status() === 'done') {
+      <zm-list
+        variant="grid"
+        ordered
+        [label]="t('codesLabel', { count: codes().length })"
+        [items]="codeItems()"
+      />
+      <div class="cluster">
+        <zm-button (click)="download()"><zm-icon name="download" />{{ t('download') }}</zm-button>
+        <zm-button (click)="copy()"
+          ><zm-icon name="copy" />{{ copied() ? t('copied') : t('copy') }}</zm-button
+        >
+      </div>
+    } @else {
+      @if (status() === 'invalid') {
+        <zm-error-summary
+          summaryId="tsc-summary"
+          [headingLevel]="3"
+          [heading]="t('invalidTitle')"
+          [items]="summaryItems()"
+        />
+      }
+      @if (status() === 'failed') {
+        <zm-alert variant="danger" [heading]="off ? t('offFailedTitle') : t('codesFailedTitle')">
+          <p>{{ off ? t('offFailedText') : t('codesFailedText') }}</p>
+        </zm-alert>
+      }
+      @if (off) {
+        <ul class="consequences">
+          <li>{{ t('offPasswordOnly') }}</li>
+          <li>{{ t('offCodesStop') }}</li>
+          <li>{{ t('offEmail', { email: data.email }) }}</li>
+        </ul>
+      } @else {
+        <p>{{ t('newCodesText') }}</p>
+      }
+      <zm-form-field
+        #field
+        fieldId="tsc-code"
+        formControlName="code"
+        autocomplete="one-time-code"
+        [label]="t('code')"
+        [requiredMarker]="'accounts.required' | transloco"
+        [help]="t('codeHelp')"
+        [error]="status() === 'invalid' ? t('wrong') : null"
+        [readonly]="busy()"
+      />
+    }
+    @if (status() === 'done') {
+      <zm-button slot="footer" id="two-step-saved" variant="primary" (click)="dialogRef.close()">{{
+        t('saved')
+      }}</zm-button>
+    }
+    @if (status() !== 'done') {
+      <zm-button slot="footer" id="two-step-back" [disabled]="busy()" (click)="close()">{{
+        off ? t('keepOn') : t('cancel')
+      }}</zm-button>
+    }
+    @if (status() !== 'done') {
+      <zm-button slot="footer" type="submit" [variant]="off ? 'danger' : 'primary'" [busy]="busy()"
+        ><zm-icon [name]="status() === 'failed' ? 'refresh' : off ? 'lock-open' : 'key'" />{{
+          busy()
+            ? off
+              ? t('turningOff')
+              : t('gettingCodes')
+            : status() === 'failed'
+              ? t('tryAgain')
+              : off
+                ? t('turnOff')
+                : t('getCodes')
+        }}</zm-button
+      >
+    }
+  </zm-dialog>
+</form>

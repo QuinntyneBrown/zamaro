@@ -27,6 +27,8 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
     Route::post('account/two-factor', [TwoFactorController::class, 'begin'])->name('account.two-factor.begin');
     Route::get('account/two-factor/qr', [TwoFactorController::class, 'qr'])->name('account.two-factor.qr');
     Route::post('account/two-factor/confirm', [TwoFactorController::class, 'confirm'])->name('account.two-factor.confirm');
+    Route::delete('account/two-factor', [TwoFactorController::class, 'destroy'])->name('account.two-factor.destroy');
+    Route::post('account/two-factor/recovery-codes', [TwoFactorController::class, 'recoveryCodes'])->name('account.two-factor.recovery-codes');
     Route::get('account/sessions', [AccountSessionController::class, 'index'])->name('account.sessions.index');
     Route::delete('account/sessions/{session}', [AccountSessionController::class, 'destroy'])->name('account.sessions.destroy');
     Route::middleware('role:booker')->group(function () {
