@@ -160,6 +160,19 @@ export class AccountPage {
     return this.section(name).locator('.form-section__lead');
   }
 
+  /**
+   * For captures: the Password lead as if there were two other devices, since how many there are
+   * depends on which other specs signed in as the same cast member.
+   */
+  async fixPasswordLeadCount(): Promise<void> {
+    await this.sectionLead('Password').evaluate((lead) => {
+      lead.textContent = (lead.textContent ?? '').replace(
+        /A new one signs you out on your other.*$/,
+        'A new one signs you out on your other 2 devices.',
+      );
+    });
+  }
+
   yourName(): Locator {
     return this.section('Profile').getByRole('textbox', { name: /^Your name/ });
   }

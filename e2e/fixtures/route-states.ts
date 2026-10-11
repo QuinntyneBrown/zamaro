@@ -101,10 +101,13 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.masks === 'devices') {
     // Other specs signed in as the same cast member add rows: keep this device (always first) so the
     // page's height does not depend on them, and mask its line and the count in the Password lead.
+    // The lead is masked, but its count would still change how it wraps at 320 px, so it is given one
+    // fixed count first.
     await page.addStyleTag({
       content: '.device-list > li:not(:first-child) { display: none !important; }',
     });
     const account = new AccountPage(page);
+    await account.fixPasswordLeadCount();
     return [account.deviceList(), account.sectionLead('Password')];
   }
   return state.masks === 'session-ended-line' ? [new SignInPage(page).sessionEndedDetail()] : [];
