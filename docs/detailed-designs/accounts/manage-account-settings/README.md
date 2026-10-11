@@ -159,7 +159,7 @@ change link is `<TO SUPPLY>`.
   encrypted (ADR-0020), and never on the public profile.
 - **Status line:** empty until something is saved. The mock's "Saved 2 min ago" needs a saved time the
   frozen e2e clock cannot give.
-- **Not yet:** Signed-in devices (S11), Two-step sign-in (S12), Email
+- **Not yet:** Two-step sign-in (S12), Email
   preferences (S14); Your data and Delete account wait for M9 (M2 D23). The loading state announces
   "Loading your settings…" without the skeleton sections until `zm-form-section-skeleton` is built.
 
@@ -197,6 +197,29 @@ change link is `<TO SUPPLY>`.
   in with {email}. …" and "Change email again" (`/account#email`). On success it goes to `/account`, where
   the shell shows "Email changed" with "You now sign in with {email}." for one page.
 
+**As built in M2 (S11)**
+
+- **Endpoints:** `GET /api/v1/account/sessions` (`AccountSessionController@index`) answers
+  `SessionResource`s for the sessions whose last activity is within the idle lifetime: this browser's
+  first, then the most recently active. `id` is the registry key (the SHA-256 of the session ID), never
+  the ID itself; no IP address is returned. `DELETE /api/v1/account/sessions/{id}` ends one at once
+  (204; its payload is destroyed, so its next request gets 401); a key that is not the caller's is the
+  same 404 as an unknown one (L2-074.2).
+- **Registry:** `SessionRegistry::register` stores the device label (`App\Support\DeviceLabel`: "Chrome
+  on Windows", "Safari on iPhone", "Firefox on Mac", "Edge on Windows", "Chrome on Android", "Safari on
+  iPad", "Chrome on Linux", else "Unknown device") and the approximate city from the `IpLocator` port
+  (M2 D13: `FakeIpLocator` places loopback, 172.16/12 and 192.168/16 in Burlington, 10/8 in Hamilton,
+  anything else nowhere). `TrackSessionActivity` runs on every `api.php` route and moves
+  `last_active_at` at most every 5 minutes (M2 D12). Times in queries keep their offset.
+- **Page:** the Signed-in devices section follows the form (it acts at once, outside the save bar):
+  `zm-list variant="device"`, this device first with "{city} · This device · active now" and the "This
+  device" badge, the others with "{city} · Last active {just now | n min ago | n hours ago | Tue 6 Oct}"
+  (`FormatService.ago`) and "End session" (named "End session on {device}"), which removes the row with
+  no confirmation. The help line reads "Cities are approximate, from each device’s network. Ending a
+  session signs that device out at once." The Password lead counts the others: "…your other device." or
+  "…your other 2 devices."; a password change reloads the list.
+
+## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from
 `docs/specs/L2.md`.

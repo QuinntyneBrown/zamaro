@@ -17,13 +17,35 @@
 | S8 | Lockout and password reset | Done | `9c18620` red tests, `e5d3f3d` |
 | S9 | Account settings: profile, church and contact phone | Done | `68008cd` red tests, `a23b482` (ADR-0020) |
 | S10 | Change email and password | Done | `06caf7a` red tests, `06f77d8` |
-| S11–S18 | | Not started | |
+| S11 | Signed-in devices | Done | `119f81a` red tests, `2265bb0` |
+| S12–S18 | | Not started | |
 
-**Checks at the last commit (S10, 2026-10-11):** 285 backend Feature tests pass with the contract
+**Checks at the last commit (S11, 2026-10-11):** 293 backend Feature tests pass with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
-lint, format and `ng build zamaro` are clean; `npx playwright test` passes 302 tests on win32
-and the account and confirm-email states pass visual and a11y in the Linux image. The perf run against
-the S9 build flagged no row (ButtonLink 181.9 → 189.6 ms with `fragment`).
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 304 tests on win32 and the
+account states pass visual and a11y in the Linux image. The perf run against the S10 build flagged no
+row (`List` is new at 259 ms).
+
+**S11 acceptance criteria (as tested):**
+- Given a booker signed in from Firefox on a Mac (10.0.0.7), then Safari on an iPhone an hour later, then
+  Chrome on Windows (127.0.0.1), when the last asks for its sessions, then "Chrome on Windows", "Safari on
+  iPhone", "Firefox on Mac", `isCurrent` only on the first, cities Burlington, Burlington, Hamilton, and
+  the iPhone's `lastActiveAt` is 11:00; the answer holds no session cookie value and no IP address. An
+  address the locator does not know has no city.
+- Given "End session" on another device, then 204, that browser's `/me` gets 401 and the list has one
+  row; another person's key or an unknown one gets the 404 problem and their session keeps working.
+- Given a request 4 minutes after sign-in, then `last_active_at` is unchanged; after 6 minutes it moves to
+  that time. A session idle past the lifetime is not listed.
+- Given the user agents of Edge on Windows, Chrome on Android, Safari on iPad and on a Mac, headless Chrome
+  on Linux and curl, then the labels name them, and curl is "Unknown device".
+- Given a booker signed in from this browser and an iPhone, then the page lists "Chrome on …" first with
+  "This device" and "Burlington, ON · This device · active now", then "Safari on iPhone" with "Burlington,
+  ON · Last active just now", and the help line. "End session on Safari on iPhone" removes the row at once
+  and the phone's `/me` gets 401.
+- Given one other session, then the Password lead ends "…your other device."; the nav lists "Signed-in
+  devices".
+- Route states `account-default` and `account-artist` show only this device and mask its line and the
+  Password lead, which other specs signed in as the same cast member change.
 
 **S10 acceptance criteria (as tested):**
 - Given a booker with their password, when they ask for a new email, then 202 with the address in lower
@@ -536,6 +558,17 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S11 — The device list is `zm-list variant="device"`**, as the list CRD specifies it; the plan's
+  `zm-device-list` and `DeviceList.ts` are its `List` scenario.
+- **S11 — Session keys.** The list's `id` is the registry key (the SHA-256 of the session ID), which is
+  not the session ID and cannot be turned back into one.
+- **S11 — Captures pin the device rows.** Every spec signing in as Naomi or Abigail adds a session, so
+  the account route states hide all rows but this device's and mask its line and the Password lead's
+  count; the rows are proven in the settings spec with fresh bookers.
+- **S11 — Times in query bindings keep their offset.** Laravel formats a Carbon binding without one, so
+  the timestamptz comparison read Toronto times as UTC; `SessionRegistry` passes ISO 8601 strings.
+- **S11 — Copy without a mock.** "Last active just now", "{n} min ago", "Unknown device", and the
+  Password lead with no other session ("Leave these empty to keep your password.").
 - **S10 — The confirm endpoint is public**, like email verification: the token is the proof and it
   signs no one in, so the link works in any browser. It shares the reset endpoints' limit (30 a minute
   per address). A guest who confirms goes to `/account`, signs in, and sees "Email changed" there.
@@ -703,8 +736,8 @@ shown and are recorded in the slice's ADR or the design.
 | D9 | "Your session ended" line before drafts exist (M5) | "Sign in again to carry on. Nothing you typed is lost." | OK (accepted default, 2026-10-10); built in S3 |
 | D10 | Problem types for 401, 419 and the new cases | `unauthenticated`, `csrf-token-mismatch`, `link-expired` (410), `payload-too-large`, `unsupported-media-type`, `saved-artist-limit`, `terms-acceptance-required`, `sign-in-paused` (429). Bad credentials: 422 with `errors.credentials` | OK (accepted default, 2026-10-10); `unauthenticated` and `errors.credentials` built in S1, `csrf-token-mismatch` in S3 |
 | D11 | Email-change link lifetime (manage-account-settings) | 24 hours, like the verification link | OK |
-| D12 | `TrackSessionActivity` interval (manage-account-settings) | 5 minutes | |
-| D13 | Source of the approximate city (manage-account-settings) | `Contracts/IpLocator` with a fake table; unknown IPs show no city | |
+| D12 | `TrackSessionActivity` interval (manage-account-settings) | 5 minutes | OK (accepted default, 2026-10-10); built in S11 |
+| D13 | Source of the approximate city (manage-account-settings) | `Contracts/IpLocator` with a fake table; unknown IPs show no city | OK (accepted default, 2026-10-10); built in S11 |
 | D14 | Most recent search date: per browser or per account (view-saved-artists) | Per browser: `LastSearch` writes `localStorage['zamaro.lastSearchDate']` | OK |
 | D15 | Does a new privacy-policy version trigger the terms gate? (record-consent) | No. Only Terms do (L2-080.3); the privacy version is recorded at registration | OK |
 | D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK (accepted default, 2026-10-10); built in S5 (ADR-0019) |
