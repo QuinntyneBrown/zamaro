@@ -107,7 +107,7 @@ zamaro/
 │   │   │       │   ├── pages/     # routed screens, one folder per docs/mocks/pages entry
 │   │   │       │   │   ├── discover/  artist/  book/  saved/  bookings/  booking-detail/
 │   │   │       │   │   ├── sign-in/  sign-up/  verify-email/  forgot-password/  reset-password/  account/
-│   │   │       │   │   ├── confirm-email/  mfa-setup/  mfa-challenge/
+│   │   │       │   │   ├── confirm-email/  mfa-setup/  mfa-challenge/  accept-terms/
 │   │   │       │   │   ├── apply/  dashboard/  requests/  request-detail/  availability/
 │   │   │       │   │   ├── edit-profile/  earnings/
 │   │   │       │   │   └── not-found/  server-error/  offline/

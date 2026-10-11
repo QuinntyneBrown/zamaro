@@ -115,6 +115,27 @@ version 2026-10, from Thu 8 Oct 2026"). A new privacy policy version does not
 trigger the terms gate; its version is recorded at registration (M2 D15). The
 retention period for consent records after account deletion is `<TO SUPPLY>`.
 
+**As built in M2 (S14)**
+
+- **The gate:** `LegalDocumentRegistry::termsAcceptanceRequired()` compares the person's latest granted
+  terms record with the current version (no terms published: nothing to accept).
+  `EnsureCurrentTermsAccepted` runs on every `api.php` route except `/me`, sign-out and the accept
+  endpoint and answers the 409 `terms-acceptance-required` problem; the OpenAPI document lists it on
+  each gated operation. `/me` reports `termsAcceptanceRequired`.
+- **Endpoints:** `POST /api/v1/account/consents/terms` (`ConsentController@acceptTerms`,
+  `AcceptCurrentTerms`) takes `termsVersion`; a version no longer current is the 409
+  `legal-document-outdated` and nothing is written; otherwise one terms record with source
+  `terms-update`, and the answer is the person. `GET` and `POST /api/v1/account/consents/marketing` read
+  the latest marketing record and append a `settings` one (`{ granted }`).
+- **Frontend:** `termsGuard` (after `signedInGuard`) on `/account` and `/account/security/mfa`, and
+  `termsInterceptor` for any stopped call, send the person to `pages/accept-terms/AcceptTerms` with the
+  page as `returnUrl`. The page shows the three changes from `summaryOfChanges`, "Full terms of use",
+  "Accept and continue" (focused; "Accepting…"), "Sign out", the fine print with the version and its date
+  ("Thu 8 Oct 2026", `FormatService.shortDateWithYear`), loading skeletons and "We couldn’t save your
+  answer"; a 409 reloads the documents. The marketing box is in account settings' Email preferences.
+- **Seed and e2e:** Abigail joins Naomi on the October terms; Tomi stays on March. `cast:booker` records
+  the current terms (or `--terms=2026-03`) and privacy policy and no marketing, as a registration would.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

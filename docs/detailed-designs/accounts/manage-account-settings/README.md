@@ -219,6 +219,12 @@ change link is `<TO SUPPLY>`.
   session signs that device out at once." The Password lead counts the others: "…your other device." or
   "…your other 2 devices."; a password change reloads the list.
 
+**As built in M2 (S14):** the Email preferences section joins the form after Password: "Email me
+about", "Bookings and payments" ("Requests, bookings and payouts" for an artist), always on and disabled,
+and for a booker "New artists near my church", which Save changes sends as a marketing record
+(`privacy/record-consent`). The event reminder and review prompt boxes wait for M7 (M2 D23). `/account`
+and the setup page are behind `termsGuard`.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

@@ -20,14 +20,37 @@
 | S11 | Signed-in devices | Done | `119f81a` red tests, `2265bb0` |
 | S12 | Two-step sign-in: turn on and sign in with a code | Done | `51c4e93` red tests, `137843b` (ADR-0021) |
 | S13 | Two-step sign-in: turn off and new recovery codes | Done | `2305396` red tests, `5612167` |
-| S14–S18 | | Not started | |
+| S14 | Accept updated terms, and the marketing choice | Done | `166d8dd` red tests, `74d36d5` |
+| S15–S18 | | Not started | |
 
-**Checks at the last commit (S13, 2026-10-11):** 315 backend Feature tests pass with the contract
+**Checks at the last commit (S14, 2026-10-11):** 325 backend Feature tests pass with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
-lint, format and `ng build zamaro` are clean (`button.scss` is 879 bytes over its 4 kB warning);
-`npx playwright test` passes 332 tests on win32 and the account states pass visual and a11y in the
-Linux image. The perf run against the S12 build flagged no row (Dialog 173.8 → 149.0 ms, Button 143.4 →
-153.4 ms; `DialogDanger` is new at 228 ms).
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 343 tests on win32 and the
+account and accept-terms states pass visual and a11y in the Linux image. No `zm-*` component changed, so
+no perf run.
+
+**S14 acceptance criteria (as tested):**
+- Given Tomi (Terms 2026-03), then sign-in and `/me` say `termsAcceptanceRequired`; Naomi's do not. His
+  other signed-in calls get the 409 `terms-acceptance-required` problem; sign-out still works.
+- Given he accepts 2026-10, then 200 with the person no longer stopped, one more record (terms 2026-10,
+  granted, source `terms-update`, with the address), and his church answers again. Accepting 2026-03 gets
+  409 `legal-document-outdated` and writes nothing. Before Thu 8 Oct nobody is stopped, and a new privacy
+  policy alone stops no one.
+- Given Naomi, then her marketing choice reads false; ticking it appends a `settings` record (no version)
+  and keeps the earlier ones, and unticking appends another; "maybe" gets 422.
+- Given a booker on the March terms opening `/account`, then `/account/accept-terms?returnUrl=%2Faccount`
+  shows "We’ve updated our terms", "Accept them to keep using Zamaro. Here’s what changed:", the three
+  changes, "Full terms of use" to `https://zamaro.ca/legal/terms`, the fine print "Terms of use, version
+  2026-10, from Thu 8 Oct 2026. …" and focus on "Accept and continue"; accepting returns to `/account`.
+  `/account/security/mfa` sends them there too.
+- Given a failure, then "We couldn’t save your answer" and "Zamaro didn’t answer. Nothing was recorded;
+  try again in a minute."; while accepting, "Accepting…" is busy and "Sign out" disabled. "Sign out"
+  signs out.
+- Given a booker's Email preferences, then "Bookings and payments" is ticked and disabled and "New
+  artists near my church" unticked; ticking it and saving shows "Saved just now" and it stays ticked
+  after a reload.
+- Route state `accept-terms` (Tomi) matches `accept-terms/default.html` in both themes at every width
+  with no axe violations.
 
 **S13 acceptance criteria (as tested):**
 - Given two-step sign-in on, when a current code or an unused recovery code is sent to turn it off,
@@ -618,6 +641,18 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S14 — Abigail accepts the October terms in the seed**, as Naomi does; without a record the gate
+  would stop her. `cast:booker` records the current terms unless `--terms` names another (D19).
+- **S14 — A read for the marketing choice.** `GET /account/consents/marketing` joins the design's two
+  POSTs, so the settings box can show the latest record.
+- **S14 — The gate's routes.** `termsGuard` is on `/account` and `/account/security/mfa`, the private
+  pages so far; `termsInterceptor` covers any other signed-in call. Discover and profiles are public and
+  stay open.
+- **S14 — The Email preferences section** arrives with the marketing box (the plan put it in S9); M7's
+  reminder and review boxes stay hidden (D23).
+- **S13 — The two-step-on state opens `/account`, not `/account#two-step`**: at XS the jump reaches the
+  page's end, where the nav marks the last section once its pause ends, so the capture depended on
+  timing.
 - **S13 — One action, one field.** `ManageTwoFactor` holds the design's `DisableTwoFactor` and
   `RegenerateRecoveryCodes`; both endpoints take `code`, which is a TOTP code when it is six digits and
   a recovery code otherwise, as the dialog's one field asks.
@@ -824,7 +859,7 @@ shown and are recorded in the slice's ADR or the design.
 | D12 | `TrackSessionActivity` interval (manage-account-settings) | 5 minutes | OK (accepted default, 2026-10-10); built in S11 |
 | D13 | Source of the approximate city (manage-account-settings) | `Contracts/IpLocator` with a fake table; unknown IPs show no city | OK (accepted default, 2026-10-10); built in S11 |
 | D14 | Most recent search date: per browser or per account (view-saved-artists) | Per browser: `LastSearch` writes `localStorage['zamaro.lastSearchDate']` | OK |
-| D15 | Does a new privacy-policy version trigger the terms gate? (record-consent) | No. Only Terms do (L2-080.3); the privacy version is recorded at registration | OK |
+| D15 | Does a new privacy-policy version trigger the terms gate? (record-consent) | No. Only Terms do (L2-080.3); the privacy version is recorded at registration | OK; built in S14 |
 | D16 | Sending domain and From address (send-transactional-emails) | `Zamaro <hello@zamaro.ca>` on `zamaro.ca`; DNS in M10 | OK (accepted default, 2026-10-10); built in S5 (ADR-0019) |
 | D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | OK (accepted default, 2026-10-10); built in S6 |
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
