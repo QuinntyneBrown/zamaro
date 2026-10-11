@@ -1,6 +1,6 @@
-import { expect, type Locator, type Page } from '@playwright/test';
-import { freezeClock } from '../fixtures/clock';
-import { Shell } from './shell';
+import { expect, type Locator, type Page } from "@playwright/test";
+import { freezeClock } from "../fixtures/clock";
+import { Shell } from "./shell";
 
 /**
  * Choose a new password at `/reset-password/{token}` (docs/mocks/pages/reset-password): "Checking
@@ -16,7 +16,8 @@ export class ResetPasswordPage {
   /** Opens a link from an email, which names the e2e site, and waits for the check's answer. */
   async openLink(link: string): Promise<void> {
     const answered = this.page.waitForResponse(
-      (response) => new URL(response.url()).pathname === '/api/v1/password/reset/check',
+      (response) =>
+        new URL(response.url()).pathname === "/api/v1/password/reset/check",
     );
     await this.startLink(link);
     await answered;
@@ -31,7 +32,7 @@ export class ResetPasswordPage {
   /** The check never answers, so the card keeps checking. */
   async holdCheck(): Promise<void> {
     await this.page.route(
-      '**/api/v1/password/reset/check',
+      "**/api/v1/password/reset/check",
       () => new Promise<void>(() => undefined),
     );
   }
@@ -45,32 +46,32 @@ export class ResetPasswordPage {
   }
 
   heading(): Locator {
-    return this.page.getByRole('heading', { level: 1 });
+    return this.page.getByRole("heading", { level: 1 });
   }
 
   // "Checking your reset link…" (docs/mocks/pages/reset-password/loading)
 
   private checkingCard(): Locator {
-    return this.page.getByRole('region', { name: 'Choose a new password' });
+    return this.page.getByRole("region", { name: "Choose a new password" });
   }
 
   checkingStatus(): Locator {
-    return this.checkingCard().getByRole('status');
+    return this.checkingCard().getByRole("status");
   }
 
   checkingButton(): Locator {
-    return this.checkingCard().getByRole('button');
+    return this.checkingCard().getByRole("button");
   }
 
   // The form (docs/mocks/pages/reset-password/default and invalid)
 
   private form(): Locator {
-    return this.page.getByRole('form', { name: 'Choose a new password' });
+    return this.page.getByRole("form", { name: "Choose a new password" });
   }
 
   /** "For naomi.fraser@riversidecc.ca. Saving signs you out on every other device." */
   lead(): Locator {
-    return this.form().locator('.lead');
+    return this.form().locator(".lead");
   }
 
   password(): Locator {
@@ -82,55 +83,59 @@ export class ResetPasswordPage {
   }
 
   submitButton(): Locator {
-    return this.form().getByRole('button');
+    return this.form().getByRole("button");
   }
 
   errorSummaryTitle(): Locator {
-    return this.form().locator('.error-summary').getByRole('heading');
+    return this.form().locator(".error-summary").getByRole("heading");
   }
 
   errorSummaryLinks(): Locator {
-    return this.form().locator('.error-summary').getByRole('link');
+    return this.form().locator(".error-summary").getByRole("link");
   }
 
   passwordError(): Locator {
-    return this.form().locator('#new-password-error');
+    return this.form().locator("#new-password-error");
   }
 
   confirmationError(): Locator {
-    return this.form().locator('#confirm-password-error');
+    return this.form().locator("#confirm-password-error");
   }
 
   // "Password changed" (docs/mocks/pages/reset-password/success)
 
   private changedCard(): Locator {
-    return this.page.getByRole('region', { name: 'Password changed' });
+    return this.page.getByRole("region", { name: "Password changed" });
   }
 
   changedLead(): Locator {
-    return this.changedCard().locator('.lead');
+    return this.changedCard().locator(".lead");
   }
 
   changedFinePrint(): Locator {
-    return this.changedCard().locator('.stub__fine');
+    return this.changedCard().locator(".stub__fine");
   }
 
   // "This link has expired" (docs/mocks/pages/reset-password/expired)
 
   private expiredCard(): Locator {
-    return this.page.getByRole('region', { name: 'This link has expired' });
+    return this.page.getByRole("region", { name: "This link has expired" });
   }
 
   expiredText(): Locator {
-    return this.expiredCard().locator('p').filter({ hasText: 'Reset links work once' });
+    return this.expiredCard()
+      .locator("p")
+      .filter({ hasText: "Reset links work once" });
   }
 
   expiredFinePrint(): Locator {
-    return this.expiredCard().locator('.stub__fine');
+    return this.expiredCard().locator(".stub__fine");
   }
 
   sendNewLinkButton(): Locator {
-    return this.expiredCard().getByRole('button', { name: /^(Send a new link|Sent)$/ });
+    return this.expiredCard().getByRole("button", {
+      name: /^(Send a new link|Sent)$/,
+    });
   }
 
   async sendNewLink(): Promise<void> {

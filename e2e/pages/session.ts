@@ -1,6 +1,6 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
-const PROBLEM = { 'Content-Type': 'application/problem+json' };
+const PROBLEM = { "Content-Type": "application/problem+json" };
 
 /**
  * The browser's session with the API, and the answers the API gives it
@@ -11,9 +11,12 @@ export class Session {
   private readonly signOutStatuses: number[] = [];
 
   constructor(private readonly page: Page) {
-    page.on('response', (response) => {
+    page.on("response", (response) => {
       const request = response.request();
-      if (request.method() === 'DELETE' && new URL(request.url()).pathname === '/api/v1/session') {
+      if (
+        request.method() === "DELETE" &&
+        new URL(request.url()).pathname === "/api/v1/session"
+      ) {
         this.signOutStatuses.push(response.status());
       }
     });
@@ -22,23 +25,29 @@ export class Session {
   /** Replaces the CSRF token the browser holds with one the API never issued. */
   async spoilCsrfToken(): Promise<void> {
     const context = this.page.context();
-    const cookie = (await context.cookies()).find((each) => each.name === 'XSRF-TOKEN');
-    if (!cookie) throw new Error('The browser holds no XSRF-TOKEN cookie to spoil.');
-    await context.addCookies([{ ...cookie, value: 'not-a-token-the-api-issued' }]);
+    const cookie = (await context.cookies()).find(
+      (each) => each.name === "XSRF-TOKEN",
+    );
+    if (!cookie)
+      throw new Error("The browser holds no XSRF-TOKEN cookie to spoil.");
+    await context.addCookies([
+      { ...cookie, value: "not-a-token-the-api-issued" },
+    ]);
   }
 
   /** Every sign-out is refused as a CSRF mismatch, however often it is tried. */
   async refuseSignOutAsCsrfMismatch(): Promise<void> {
-    await this.page.route('**/api/v1/session', (route) =>
-      route.request().method() === 'DELETE'
+    await this.page.route("**/api/v1/session", (route) =>
+      route.request().method() === "DELETE"
         ? route.fulfill({
             status: 419,
             headers: PROBLEM,
             body: JSON.stringify({
-              type: 'https://zamaro.ca/problems/csrf-token-mismatch',
-              title: 'The page’s security token didn’t match',
+              type: "https://zamaro.ca/problems/csrf-token-mismatch",
+              title: "The page’s security token didn’t match",
               status: 419,
-              detail: 'Fetch /sanctum/csrf-cookie, then repeat the request with X-XSRF-TOKEN.',
+              detail:
+                "Fetch /sanctum/csrf-cookie, then repeat the request with X-XSRF-TOKEN.",
             }),
           })
         : route.fallback(),
@@ -47,15 +56,15 @@ export class Session {
 
   /** The session ends on the server: from now on every API call answers 401. */
   async endOnServer(): Promise<void> {
-    await this.page.route('**/api/v1/**', (route) =>
+    await this.page.route("**/api/v1/**", (route) =>
       route.fulfill({
         status: 401,
         headers: PROBLEM,
         body: JSON.stringify({
-          type: 'https://zamaro.ca/problems/unauthenticated',
-          title: 'Sign in to continue',
+          type: "https://zamaro.ca/problems/unauthenticated",
+          title: "Sign in to continue",
           status: 401,
-          detail: 'This needs a signed-in account.',
+          detail: "This needs a signed-in account.",
         }),
       }),
     );
@@ -63,7 +72,7 @@ export class Session {
 
   /** The API answers again as itself. */
   async answerNormally(): Promise<void> {
-    await this.page.unrouteAll({ behavior: 'ignoreErrors' });
+    await this.page.unrouteAll({ behavior: "ignoreErrors" });
   }
 
   /** The statuses of every sign-out request so far, in order. */
