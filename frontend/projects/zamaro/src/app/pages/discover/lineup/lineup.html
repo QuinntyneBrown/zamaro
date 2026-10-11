@@ -122,7 +122,7 @@
           [badge]="headliner.badge"
           [profileLabel]="headliner.profileLabel"
         >
-          @if (saved.enabled()) {
+          @if (saved.shown()) {
             <zm-save-toggle
               [artistName]="headliner.card.name"
               [saved]="saved.has(headliner.card.id)"
@@ -151,7 +151,7 @@
                 [ratingNew]="'common.rating.new' | transloco"
                 [artVariant]="artVariant(ticket.card)"
               >
-                @if (saved.enabled()) {
+                @if (saved.shown()) {
                   <zm-save-toggle
                     [artistName]="ticket.card.name"
                     [saved]="saved.has(ticket.card.id)"

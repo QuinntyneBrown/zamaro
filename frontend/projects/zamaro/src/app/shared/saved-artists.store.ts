@@ -3,7 +3,9 @@ import { computed, effect, inject, Injectable, signal, untracked } from '@angula
 import { TranslocoService } from '@jsverse/transloco';
 import { AuthService, SAVED_ARTISTS_API } from 'api';
 import { ToastService } from 'components';
+import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+import { PendingIntentService } from './pending-intent.service';
 
 /** An artist as a heart or a Save button knows them. */
 export interface SavableArtist {
@@ -23,6 +25,8 @@ export class SavedArtistsStore {
   private readonly auth = inject(AuthService);
   private readonly toasts = inject(ToastService);
   private readonly transloco = inject(TranslocoService);
+  private readonly router = inject(Router);
+  private readonly intents = inject(PendingIntentService);
 
   private readonly ids = signal<ReadonlySet<number>>(new Set());
   private readonly busyIds = signal<ReadonlySet<number>>(new Set());
@@ -38,11 +42,43 @@ export class SavedArtistsStore {
     return roles.includes('booker') && !roles.includes('artist') && !user?.termsAcceptanceRequired;
   });
 
+  /**
+   * Hearts and the profile's Save show to guests too, whose press starts sign-in (L2-026.3), but not
+   * to artists or administrators.
+   */
+  readonly shown = computed(() => {
+    const user = this.auth.currentUser();
+    return !user || (user.roles.includes('booker') && !user.roles.includes('artist'));
+  });
+
   constructor() {
     effect(() => {
       const enabled = this.enabled();
       untracked(() => (enabled ? this.load() : this.reset()));
     });
+    // Someone who signed in and cannot save drops a guest's held Save.
+    effect(() => {
+      if (this.auth.currentUser() && !this.shown()) untracked(() => this.intents.take());
+    });
+  }
+
+  /**
+   * A heart or the profile's Save pressed. A guest's press is held and they go to sign in, coming back
+   * here (L2-026.3).
+   */
+  press(artist: SavableArtist, save: boolean): void {
+    if (!this.auth.currentUser()) {
+      const returnUrl = this.router.url;
+      this.intents.hold({
+        kind: 'save-artist',
+        artistId: artist.id,
+        ...this.named(artist),
+        returnUrl,
+      });
+      void this.router.navigate(['/sign-in'], { queryParams: { returnUrl } });
+      return;
+    }
+    void this.toggle(artist, save).catch(() => undefined);
   }
 
   has(id: number): boolean {
@@ -150,9 +186,24 @@ export class SavedArtistsStore {
       next: ({ artistIds, count }) => {
         this.ids.set(new Set(artistIds));
         this.count.set(count);
+        this.replay();
       },
       error: () => undefined,
     });
+  }
+
+  /** A Save the booker pressed as a guest, now that they are signed in. */
+  private replay(): void {
+    const intent = this.intents.take();
+    if (!intent) return;
+    void this.toggle(
+      { id: intent.artistId, name: intent.name, pronoun: intent.pronoun },
+      true,
+    ).catch(() => undefined);
+  }
+
+  private named(artist: SavableArtist): Pick<SavableArtist, 'name' | 'pronoun'> {
+    return { name: artist.name, pronoun: artist.pronoun };
   }
 
   private reset(): void {

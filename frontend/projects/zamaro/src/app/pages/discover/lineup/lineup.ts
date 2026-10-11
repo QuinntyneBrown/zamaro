@@ -248,8 +248,6 @@ export class Lineup {
 
   /** A heart pressed on a ticket or the headliner (accounts/save-artist). */
   protected toggle(card: LineupCard, save: boolean): void {
-    void this.saved
-      .toggle({ id: card.id, name: card.name, pronoun: card.pronoun }, save)
-      .catch(() => undefined);
+    this.saved.press({ id: card.id, name: card.name, pronoun: card.pronoun }, save);
   }
 }

@@ -259,6 +259,7 @@ test.describe("A guest saving an artist", () => {
         "/verify-email",
       ),
     );
+    await expect(discover.shell.banner('Email verified').text()).toBeVisible();
     expect(discover.address()).toBe(lineup);
 
     await discover.shell.signInFromHeader();

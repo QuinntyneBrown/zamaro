@@ -486,12 +486,10 @@ export class ArtistPage {
   /** "Save" / "Saved" in the header (L2-026). */
   protected toggleSave(): void {
     const profile = this.store.profile()!;
-    void this.saved
-      .toggle(
-        { id: profile.id, name: profile.displayName, pronoun: profile.pronoun },
-        !this.saved.has(profile.id),
-      )
-      .catch(() => undefined);
+    this.saved.press(
+      { id: profile.id, name: profile.displayName, pronoun: profile.pronoun },
+      !this.saved.has(profile.id),
+    );
   }
 
   protected book(): void {
