@@ -1,8 +1,8 @@
 # Milestone 2 plan: accounts and sessions
 
-**Status:** In progress on `feat/m2-accounts-and-sessions`, cut from the finished M1 branch.
+**Status:** Done (2026-10-11) on `feat/m2-accounts-and-sessions`, cut from `main` after M1 merged (PR #13): S0–S18 and the end-of-milestone checks below. Not pushed; no pull request yet.
 
-## Current status (2026-10-10)
+## Current status (2026-10-11)
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -1566,3 +1566,38 @@ In the browser, the `BOT_CHALLENGE` fake resolves `pass`. A fake bound in produc
    8. Choose dark, then reload a second browser signed in as Naomi.
    9. Stop Mailpit, send an email, and find the failed job in Horizon after 6 attempts.
    10. Check each signed-in page at 320 px.
+
+### Result (2026-10-11, at `fa9389e`)
+
+1. All 346 backend Feature tests pass, including the contract assertions and `CrossUserAccessTest`.
+2. `scramble:export --fail-on-unknown` exports with no warnings; `i18n:check` passes; Pint and Larastan are
+   clean.
+3. Running `php artisan db:seed` twice leaves the row count of all 33 tables unchanged.
+4. `npm run lint`, `npm run format:check`, `npx ng build zamaro` and `NG_BUILD_MANGLE=0 npx ng build
+   perf-test` are clean. `button.scss` is still over its 4 kB warning budget (under the 8 kB error).
+5. `npx playwright test` passes 377 tests on win32 (specs, visual in both themes, a11y, perf). In the Linux
+   image, `visual` and `a11y` passed 173 of 174. The one failure, `account-artist` at XS, was the masked
+   Password lead wrapping differently as Abigail's session count changed. `fa9389e` fixes the lead's
+   count before the capture, and the three account states pass on both platforms.
+6. Against `main` (`c7555d6`, the merge base), every scenario ran with `--fail-on-regression`. The first
+   run flagged `Artwork` 102.5 → 113.7, `FormField` 147.5 → 183.3 and `Rating` 109.3 → 129.2 ms. The one
+   allowed re-run of those three flagged nothing: 110.3 → 121.7, 162.6 → 182.9 and 120.9 → 128.0 ms. The
+   new scenarios are AuthCard, ErrorSummary, AvatarButton, TopBarSignedIn, MenuAccount, Toast,
+   ToastStack, Checkbox, Banner, InlineMessage, DescriptionList, FormSection, FormActions, SettingsNav,
+   List, DialogDanger, SaveToggle, LineupSaved, TicketSkeleton and SavedLineup. In place of the plan's
+   names: the save bar is `FormActions` and the device list is `List` (device variant); recovery codes
+   have no component of their own. `FormField` rose 12–24% across M2: it gained its `tel`,
+   `number`, help and live inputs. It is worth profiling before it is next changed.
+7. The manual walkthrough was not done by hand in this run; the automated suites cover each step:
+   1. `register-booker.spec.ts` (link, Email verified banner);
+   2. `sign-in-and-recover-access.spec.ts` (returnUrl back to the profile);
+   3. `save-artist.spec.ts` and `view-saved-artists.spec.ts`;
+   4. `manage-church-profile.spec.ts` (Ottawa refused, Burlington pre-filled);
+   5. `manage-account-settings.spec.ts` (password change ends other sessions);
+   6. `two-step-sign-in.spec.ts`;
+   7. `record-consent.spec.ts` (Tomi);
+   8. `switch-theme.spec.ts` (a second browser follows dark);
+   9. `Feature/Notifications` and the S6 job tests (6 attempts, then a failed job);
+   10. the XS captures in `visual/` and `a11y/`.
+   A person should still walk through it once before the pull request.
+
