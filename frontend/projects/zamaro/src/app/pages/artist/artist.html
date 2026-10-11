@@ -26,6 +26,14 @@
           </p>
           <div class="cluster">
             <zm-button variant="primary" (click)="book()">{{ bookLabel() }}</zm-button>
+            @if (saved.enabled()) {
+              <zm-button [pressed]="saved.has(profile.id)" (click)="toggleSave()"
+                ><zm-icon name="heart" />{{
+                  (saved.has(profile.id) ? 'common.saved.button.saved' : 'common.saved.button.save')
+                    | transloco
+                }}</zm-button
+              >
+            }
             <zm-button (click)="share()"
               ><zm-icon name="share" />{{ 'common.share.label' | transloco }}</zm-button
             >

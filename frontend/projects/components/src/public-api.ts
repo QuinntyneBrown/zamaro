@@ -35,6 +35,8 @@ export * from './lib/menu/menu';
 export * from './lib/poster/poster';
 export * from './lib/rating/rating';
 export * from './lib/review/review';
+export * from './lib/save-toggle/save-toggle';
+export * from './lib/save-toggle/save-toggle-text';
 export * from './lib/setlist/setlist';
 export * from './lib/sidebar-navigation/settings-nav';
 export * from './lib/skeleton/skeleton';

@@ -8,6 +8,7 @@ export const scenarioIterations = {
   DarkTheme: 60,
   Footer: 100,
   Lineup: 25,
+  LineupSaved: 18,
   Menu: 90,
   Stamp: 240,
   TopBar: 120,

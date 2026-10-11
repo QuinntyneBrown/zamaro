@@ -3,6 +3,7 @@
 namespace App\Support\OpenApi;
 
 use App\Actions\Accounts\LinkExpired;
+use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\ArtistProfiles\ArtistMoved;
@@ -48,7 +49,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
         }
         $validation = $type->isInstanceOf(ValidationException::class);
         $status = match (true) {
-            $validation => 422,
+            $validation, $type->isInstanceOf(SavedArtistLimit::class) => 422,
             $type->isInstanceOf(AuthenticationException::class) => 401,
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
             $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,

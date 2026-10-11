@@ -43,6 +43,8 @@ export interface ProfileVideo {
 
 /** `GET /api/v1/artists/{slug}`: public fields only (L2-083). */
 export interface ArtistProfile {
+  /** For the Save button (accounts/save-artist). */
+  id: number;
   slug: string;
   displayName: string;
   /** A solo act's first name, or a group's whole name: "Songs Abigail leads". */

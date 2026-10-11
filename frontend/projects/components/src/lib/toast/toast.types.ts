@@ -18,12 +18,26 @@ export interface ToastOptions {
   text?: string;
   /** Overrides the variant's icon. */
   icon?: IconName;
+  /** Up to two actions: "Undo", "Try again", a link such as "View saved". */
+  actions?: readonly ToastAction[];
   /** The close button's name: "Dismiss: Link copied". */
   dismissLabel: string;
   /** A toast with the same key as a visible one replaces it in place and restarts its timer. */
   key?: string;
   /** Where focus returns if the toast closes with focus inside it; `document.activeElement` by default. */
   origin?: HTMLElement | null;
+}
+
+/** A button or link in a toast (toast CRD). */
+export interface ToastAction {
+  /** One verb: "Undo", "Try again", "View saved". */
+  label: string;
+  /** Extends the label and starts with it: "Undo save Luz Viva". */
+  ariaLabel?: string;
+  /** A route: the toast closes as it navigates. */
+  link?: string | readonly unknown[];
+  /** A callback; a promise keeps the button busy until it settles, and a rejection keeps the toast. */
+  run?: () => void | Promise<unknown>;
 }
 
 /** A shown toast, as its caller holds it. */

@@ -26,14 +26,18 @@ import {
   HttpDiscoveryApi,
   HttpFeaturesApi,
   HttpReviewsApi,
+  HttpSavedArtistsApi,
   isTransferCacheable,
   provideI18n,
   REVIEWS_API,
+  SAVED_ARTISTS_API,
   sessionExpiredInterceptor,
   termsInterceptor,
   withApiXsrf,
 } from 'api';
+import { SAVE_TOGGLE_TEXT } from 'components';
 import { routes } from './app.routes';
+import { saveToggleText } from './shared/save-toggle-text';
 import { csrfRefusedToast } from './shared/session-notices';
 
 export const appConfig: ApplicationConfig = {
@@ -66,6 +70,8 @@ export const appConfig: ApplicationConfig = {
     { provide: FEATURES_API, useClass: HttpFeaturesApi },
     { provide: AUTH_API, useClass: HttpAuthApi },
     { provide: CONSENT_API, useClass: HttpConsentApi },
+    { provide: SAVED_ARTISTS_API, useClass: HttpSavedArtistsApi },
+    { provide: SAVE_TOGGLE_TEXT, useFactory: saveToggleText },
     { provide: ACCOUNT_API, useClass: HttpAccountApi },
     // The bot check's vendor is chosen in M10 (M2 D2); until then every check passes.
     { provide: BOT_CHALLENGE, useClass: FakeBotChallenge },

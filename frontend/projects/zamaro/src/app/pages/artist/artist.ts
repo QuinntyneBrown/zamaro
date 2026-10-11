@@ -50,6 +50,7 @@ import {
 } from 'components';
 import { map } from 'rxjs';
 import { LastSearch } from '../../shared/last-search';
+import { SavedArtistsStore } from '../../shared/saved-artists.store';
 import { PageMeta } from '../../shared/page-meta';
 import { ShareLink } from '../../shared/share-link';
 import { ArtistNotFoundPage } from '../not-found/artist-not-found';
@@ -104,6 +105,7 @@ const REVIEWS_PER_PAGE = 10;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistPage {
+  protected readonly saved = inject(SavedArtistsStore);
   protected readonly store = inject(ArtistProfileStore);
   protected readonly reviewsStore = inject(ProfileReviewsStore);
   protected readonly dates = inject(BookingDateStore);
@@ -481,6 +483,17 @@ export class ArtistPage {
   }
 
   /** Moves focus to the booking stub's date field, scrolling the stub into view (L2-012.3, L2-019.5). */
+  /** "Save" / "Saved" in the header (L2-026). */
+  protected toggleSave(): void {
+    const profile = this.store.profile()!;
+    void this.saved
+      .toggle(
+        { id: profile.id, name: profile.displayName, pronoun: profile.pronoun },
+        !this.saved.has(profile.id),
+      )
+      .catch(() => undefined);
+  }
+
   protected book(): void {
     this.document.getElementById('book-date')?.focus();
   }

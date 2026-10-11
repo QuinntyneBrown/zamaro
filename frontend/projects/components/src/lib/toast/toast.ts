@@ -9,7 +9,10 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { Button } from '../button/button';
+import { ButtonLink } from '../button/button-link';
 import { Icon } from '../icon/icon';
+import type { ToastAction } from './toast.types';
 import type { ToastContent } from './toast.service';
 
 /**
@@ -18,7 +21,7 @@ import type { ToastContent } from './toast.service';
  */
 @Component({
   selector: 'zm-toast',
-  imports: [Icon],
+  imports: [Button, ButtonLink, Icon],
   host: {
     '[class]': "'toast toast--' + toast().variant",
     '[attr.data-state]': 'state()',
@@ -38,6 +41,25 @@ import type { ToastContent } from './toast.service';
       <p class="toast__title">{{ toast().title }}</p>
       @if (toast().text; as text) {
         <p class="toast__text">{{ text }}</p>
+      }
+      @if (toast().actions.length) {
+        <div class="toast__actions">
+          @for (action of toast().actions; track action.label; let i = $index) {
+            @if (action.link) {
+              <zm-button-link size="sm" [link]="$any(action.link)" (click)="acted.emit()">{{
+                action.label
+              }}</zm-button-link>
+            } @else {
+              <zm-button
+                size="sm"
+                [label]="action.ariaLabel"
+                [busy]="busyAction() === i"
+                (click)="activate(action, i)"
+                >{{ action.label }}</zm-button
+              >
+            }
+          }
+        </div>
       }
     </div>
     <button
@@ -123,6 +145,12 @@ import type { ToastContent } from './toast.service';
       font: var(--text-body-sm);
     }
 
+    .toast__actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+    }
+
     .close {
       display: grid;
       place-items: center;
@@ -197,6 +225,28 @@ export class Toast {
   readonly held = output<boolean>();
   /** The leaving transition ended. */
   readonly left = output<void>();
+  /** An action was taken and the toast should close. */
+  readonly acted = output<void>();
+
+  /** The index of a `run` action whose promise has not settled. */
+  protected readonly busyAction = signal<number | null>(null);
+
+  protected activate(action: ToastAction, index: number): void {
+    if (this.busyAction() !== null || !action.run) return;
+    const result = action.run();
+    if (!(result instanceof Promise)) {
+      this.acted.emit();
+      return;
+    }
+    this.busyAction.set(index);
+    result.then(
+      () => {
+        this.busyAction.set(null);
+        this.acted.emit();
+      },
+      () => this.busyAction.set(null),
+    );
+  }
 
   protected readonly hover = signal(false);
   protected readonly focused = signal(false);

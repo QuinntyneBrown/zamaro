@@ -9,7 +9,13 @@ import {
   type WritableSignal,
 } from '@angular/core';
 import type { IconName } from '../icon/icon';
-import type { ToastDismissal, ToastOptions, ToastRef, ToastVariant } from './toast.types';
+import type {
+  ToastAction,
+  ToastDismissal,
+  ToastOptions,
+  ToastRef,
+  ToastVariant,
+} from './toast.types';
 
 /** How long a timed toast stays while nothing pauses it (L2-109). */
 export const TOAST_DURATION_MS = 5000;
@@ -31,6 +37,7 @@ export interface ToastContent {
   title: string;
   kind: string | null;
   text: string | null;
+  actions: readonly ToastAction[];
   dismissLabel: string;
   /** Leaves after 5 seconds with a timer bar; danger toasts stay until dismissed. */
   timed: boolean;
@@ -120,6 +127,7 @@ export class ToastService implements OnDestroy {
       title: options.title,
       kind: options.kind ?? null,
       text: options.text ?? null,
+      actions: (options.actions ?? []).slice(0, 2),
       dismissLabel: options.dismissLabel,
       timed: variant !== 'danger',
     };

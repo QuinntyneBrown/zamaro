@@ -23,7 +23,11 @@ class LineupCardResource extends JsonResource
         $distance = $this->resource->distance;
 
         return [
+            /** For the save toggle (accounts/save-artist). */
+            'id' => $artist->id,
             'slug' => $artist->slug,
+            /** @var 'she'|'he'|'they' */
+            'pronoun' => $artist->pronoun->value,
             'name' => $artist->display_name,
             /** @var 'solo'|'duo'|'band'|'choir' */
             'actType' => $artist->act_type->value,

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Artist;
 use App\Models\User;
 use PragmaRX\Google2FA\Google2FA;
 use Tests\Feature\Security\CrossUserAccessTest;
@@ -171,5 +172,30 @@ return [
         $test->as($intruder)->postJson('/api/v1/account/consents/marketing', ['granted' => true])->assertOk();
 
         $test->as($owner)->getJson('/api/v1/account/consents/marketing')->assertJsonPath('data.granted', false);
+    },
+
+    'GET api/v1/saved-artists/ids' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $artist = Artist::where('status', 'approved')->value('id') ?? $test->makeArtist(User::factory()->create())->id;
+        $test->as($owner)->putJson("/api/v1/saved-artists/{$artist}")->assertOk();
+
+        $test->as($intruder)->getJson('/api/v1/saved-artists/ids')->assertOk()->assertJsonPath('data.count', 0);
+    },
+
+    'PUT api/v1/saved-artists/{artist}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $artist = $test->makeArtist(User::factory()->create())->id;
+        $test->as($owner)->putJson("/api/v1/saved-artists/{$artist}")->assertOk();
+
+        $test->as($intruder)->putJson("/api/v1/saved-artists/{$artist}")->assertOk()->assertJsonPath('data.savedCount', 1);
+
+        $test->as($owner)->getJson('/api/v1/saved-artists/ids')->assertJsonPath('data.count', 1);
+    },
+
+    'DELETE api/v1/saved-artists/{artist}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $artist = $test->makeArtist(User::factory()->create())->id;
+        $test->as($owner)->putJson("/api/v1/saved-artists/{$artist}")->assertOk();
+
+        $test->as($intruder)->deleteJson("/api/v1/saved-artists/{$artist}")->assertOk()->assertJsonPath('data.savedCount', 0);
+
+        $test->as($owner)->getJson('/api/v1/saved-artists/ids')->assertJsonPath('data.artistIds', [$artist]);
     },
 ];

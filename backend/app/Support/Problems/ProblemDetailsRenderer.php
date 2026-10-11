@@ -3,6 +3,7 @@
 namespace App\Support\Problems;
 
 use App\Actions\Accounts\LinkExpired;
+use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\ArtistProfiles\ArtistMoved;
@@ -75,6 +76,10 @@ class ProblemDetailsRenderer
         if ($e instanceof LegalDocumentOutdated) {
             return ProblemDetails::of(ProblemType::LegalDocumentOutdated, 'Fetch /legal-documents/current, show the new versions, then submit again.', $requestId)
                 ->toResponse();
+        }
+
+        if ($e instanceof SavedArtistLimit) {
+            return ProblemDetails::of(ProblemType::SavedArtistLimit, 'Remove a saved artist to make room.', $requestId)->toResponse();
         }
 
         if ($e instanceof TwoFactorAlreadyOn) {

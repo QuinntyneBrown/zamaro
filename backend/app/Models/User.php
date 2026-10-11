@@ -53,6 +53,7 @@ class User extends Authenticatable
             // The TOTP key, encrypted with the field key (ADR-0020).
             'two_factor_secret' => EncryptedField::class,
             'two_factor_confirmed_at' => 'immutable_datetime',
+            'first_saved_at' => 'immutable_datetime',
         ];
     }
 

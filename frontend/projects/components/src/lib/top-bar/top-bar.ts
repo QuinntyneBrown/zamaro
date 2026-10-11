@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { type Params, RouterLink, RouterLinkActive } from '@angular/router';
 import { AvatarButton } from '../avatar/avatar-button';
+import { Badge } from '../badge/badge';
 import type { AvatarKind } from '../avatar/avatar-initials';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
@@ -20,6 +21,18 @@ export interface TopBarAccount {
   kind?: AvatarKind;
 }
 
+/** The Saved link and its count, for a signed-in booker (top-bar CRD). */
+export interface TopBarSaved {
+  /** "Saved". */
+  label: string;
+  /** "/saved". */
+  link: string | readonly unknown[];
+  /** 0 renders no badge. */
+  count: number;
+  /** Visually hidden after the count: "artists". */
+  countLabel: string;
+}
+
 /** The link for someone signed out: "Sign in", or "Create account" shortened to "Sign up". */
 export interface TopBarAuth {
   label: string;
@@ -37,7 +50,7 @@ export interface TopBarAuth {
  */
 @Component({
   selector: 'zm-top-bar',
-  imports: [AvatarButton, Button, Icon, RouterLink, RouterLinkActive],
+  imports: [AvatarButton, Badge, Button, Icon, RouterLink, RouterLinkActive],
   template: `<header class="topbar">
     <zm-button
       class="topbar__menu"
@@ -67,6 +80,20 @@ export interface TopBarAuth {
       }
     </nav>
     <span class="topbar__spacer"></span>
+    @if (saved(); as s) {
+      <a
+        class="nav-link topbar__saved"
+        [routerLink]="s.link"
+        routerLinkActive
+        ariaCurrentWhenActive="page"
+        ><zm-icon name="heart" /><span class="nav-link__text">{{ s.label }}</span>
+        @if (s.count > 0) {
+          <zm-badge variant="count"
+            >{{ s.count }}<span class="visually-hidden"> {{ s.countLabel }}</span></zm-badge
+          >
+        }
+      </a>
+    }
     <zm-button
       class="topbar__theme"
       variant="ghost"
@@ -153,6 +180,32 @@ export interface TopBarAuth {
 
     .topbar__spacer {
       flex: 1;
+    }
+
+    .topbar__saved {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    /* Below LG the Saved link is the heart and the count; its name stays for assistive technology. */
+    .topbar__saved .nav-link__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    @media (min-width: 62rem) {
+      .topbar__saved .nav-link__text {
+        position: static;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip: auto;
+      }
     }
 
     .topbar__menu {
@@ -251,6 +304,8 @@ export class TopBar {
   readonly themePressed = input(false);
   /** Signed in: the avatar button. Null shows `auth` instead. */
   readonly account = input<TopBarAccount | null>(null);
+  /** The Saved link, signed-in bookers only. */
+  readonly saved = input<TopBarSaved | null>(null);
   /** The avatar's `aria-expanded`: true while the account menu is open. */
   readonly accountExpanded = input(false);
   /** Id of the account menu the avatar opens. */

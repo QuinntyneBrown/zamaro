@@ -121,7 +121,16 @@
           [attribution]="headliner.attribution"
           [badge]="headliner.badge"
           [profileLabel]="headliner.profileLabel"
-        />
+        >
+          @if (saved.enabled()) {
+            <zm-save-toggle
+              [artistName]="headliner.card.name"
+              [saved]="saved.has(headliner.card.id)"
+              [busy]="saved.pending(headliner.card.id)"
+              (savedChange)="toggle(headliner.card, $event)"
+            />
+          }
+        </zm-headliner>
       }
       @if (tickets().length) {
         <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
@@ -141,7 +150,16 @@
                 [ratingCount]="ticket.ratingCount"
                 [ratingNew]="'common.rating.new' | transloco"
                 [artVariant]="artVariant(ticket.card)"
-              />
+              >
+                @if (saved.enabled()) {
+                  <zm-save-toggle
+                    [artistName]="ticket.card.name"
+                    [saved]="saved.has(ticket.card.id)"
+                    [busy]="saved.pending(ticket.card.id)"
+                    (savedChange)="toggle(ticket.card, $event)"
+                  />
+                }
+              </zm-ticket>
             </li>
           }
         </ol>

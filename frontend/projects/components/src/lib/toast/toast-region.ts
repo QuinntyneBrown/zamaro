@@ -21,6 +21,7 @@ import { ToastService } from './toast.service';
       (closed)="toasts.close(toast, 'close')"
       (held)="toasts.hold(toast, $event)"
       (left)="toasts.remove(toast)"
+      (acted)="toasts.close(toast, 'action')"
     />
   }`,
   styles: `

@@ -23,9 +23,11 @@ import {
   type TopBarAccount,
   type TopBarAuth,
   type TopBarLink,
+  type TopBarSaved,
 } from 'components';
 import { filter, map, timer } from 'rxjs';
 import { EmailChangedNotice } from '../shared/email-changed-notice';
+import { SavedArtistsStore } from '../shared/saved-artists.store';
 import { VerifiedNotice } from '../shared/verified-notice';
 import { ThemeService } from './theme.service';
 
@@ -153,6 +155,22 @@ export class Shell {
   private readonly accountLabel = translateSignal(
     'common.account.open',
     computed(() => ({ name: this.auth.currentUser()?.name ?? '' })),
+  );
+
+  private readonly saved = inject(SavedArtistsStore);
+  private readonly savedLabel = translateSignal('common.saved.link');
+  private readonly savedCountLabel = translateSignal('common.saved.countLabel');
+
+  /** "Saved" and the count, for a signed-in booker (L2-026). */
+  protected readonly savedLink = computed<TopBarSaved | null>(() =>
+    this.saved.enabled()
+      ? {
+          label: this.savedLabel(),
+          link: '/saved',
+          count: this.saved.count(),
+          countLabel: this.savedCountLabel(),
+        }
+      : null,
   );
 
   protected readonly account = computed<TopBarAccount | null>(() => {

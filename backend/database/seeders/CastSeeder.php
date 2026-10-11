@@ -271,6 +271,7 @@ class CastSeeder extends Seeder
             $this->accounts();
             $this->consents();
             $this->churches();
+            $this->savedArtists();
         });
     }
 
@@ -358,6 +359,23 @@ class CastSeeder extends Seeder
         }
 
         Artist::where('slug', 'abigail-mensah')->firstOrFail()->update(['contact_phone' => '+19055550148']);
+    }
+
+    /**
+     * Naomi's saved artists, newest first on the list (accounts/view-saved-artists): Abigail on Wed 7
+     * Oct, Hosanna Collective on Sun 27 Sep and Luz Viva on Sat 12 Sep.
+     */
+    private function savedArtists(): void
+    {
+        $naomi = User::where('email', 'naomi.fraser@riversidecc.ca')->firstOrFail();
+        $saved = ['abigail-mensah' => '2026-10-07 20:14:00', 'hosanna-collective' => '2026-09-27 15:40:00', 'luz-viva' => '2026-09-12 11:05:00'];
+        foreach ($saved as $slug => $at) {
+            DB::table('saved_artists')->insertOrIgnore([
+                'user_id' => $naomi->id, 'artist_id' => Artist::where('slug', $slug)->value('id'),
+                'created_at' => Carbon::parse($at, 'America/Toronto')->toIso8601String(),
+            ]);
+        }
+        $naomi->forceFill(['first_saved_at' => Carbon::parse('2026-09-12 11:05:00', 'America/Toronto')])->save();
     }
 
     /**

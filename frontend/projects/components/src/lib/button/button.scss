@@ -220,3 +220,19 @@
   outline-color: var(--color-border-on-accent);
   box-shadow: none;
 }
+
+/* In a toast: outlined on the inverse slip, in ink on a danger toast (design system, toast). */
+:host-context(.toast) .btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-fg-inverse);
+  --btn-border: var(--color-fg-inverse);
+  --btn-bg-hover: var(--color-bg-inverse);
+  --btn-shadow-hover: none;
+  --btn-transform-hover: none;
+}
+
+:host-context(.toast--danger) .btn {
+  --btn-fg: var(--color-fg-default);
+  --btn-border: var(--color-border-strong);
+  --btn-bg-hover: var(--color-danger-bg);
+}

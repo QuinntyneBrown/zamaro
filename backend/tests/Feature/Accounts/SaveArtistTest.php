@@ -129,7 +129,7 @@ class SaveArtistTest extends TestCase
         $profile->assertOk()->assertJsonPath('data.id', $this->idOf('abigail-mensah'))->assertJsonPath('data.pronoun', 'she');
         $search = $this->getJson('/api/v1/search?date=2026-11-14&kind=worship-night&lat=43.325&lng=-79.799&radius=120');
         $search->assertOk();
-        $card = collect($search->json('data.cards'))->firstWhere('slug', 'elijah-park');
+        $card = collect($search->json('data'))->firstWhere('slug', 'elijah-park');
         $this->assertSame($this->idOf('elijah-park'), $card['id']);
         $this->assertSame('he', $card['pronoun']);
         $this->assertMatchesContract($search);

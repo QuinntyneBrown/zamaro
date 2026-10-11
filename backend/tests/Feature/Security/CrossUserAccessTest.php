@@ -98,7 +98,7 @@ class CrossUserAccessTest extends TestCase
             'user_id' => $user->id, 'slug' => "artist-{$user->id}", 'ticket_number' => "ACT-9{$user->id}",
             'display_name' => $user->name, 'act_type' => ActType::Solo, 'base_city' => 'Brampton',
             'base_latitude' => 43.7315, 'base_longitude' => -79.7624, 'max_drive_km' => 80,
-            'from_price_cents' => 50000, 'status' => ArtistStatus::Approved,
+            'from_price_cents' => 50000, 'status' => ArtistStatus::Approved, 'published_at' => now(),
         ]);
     }
 

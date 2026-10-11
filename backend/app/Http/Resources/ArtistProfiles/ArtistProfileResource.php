@@ -50,6 +50,8 @@ class ArtistProfileResource extends JsonResource
         $artist = $this->resource;
 
         return [
+            /** For the Save button (accounts/save-artist). */
+            'id' => $artist->id,
             'slug' => $artist->slug,
             'displayName' => $artist->display_name,
             /** A solo act's first name, or a group's whole name, for "Songs Abigail leads". */

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Accounts\AccountSessionController;
 use App\Http\Controllers\Api\V1\Accounts\ArtistContactController;
 use App\Http\Controllers\Api\V1\Accounts\ChurchController;
 use App\Http\Controllers\Api\V1\Accounts\MeController;
+use App\Http\Controllers\Api\V1\Accounts\SavedArtistController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
 use App\Http\Controllers\Api\V1\Privacy\ConsentController;
@@ -40,6 +41,11 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
     Route::middleware('role:booker')->group(function () {
         Route::get('account/church', [ChurchController::class, 'show'])->name('account.church.show');
         Route::put('account/church', [ChurchController::class, 'update'])->name('account.church.update');
+    });
+    Route::middleware('role:booker')->group(function () {
+        Route::get('saved-artists/ids', [SavedArtistController::class, 'ids'])->name('saved-artists.ids');
+        Route::put('saved-artists/{artist}', [SavedArtistController::class, 'update'])->whereNumber('artist')->name('saved-artists.update');
+        Route::delete('saved-artists/{artist}', [SavedArtistController::class, 'destroy'])->whereNumber('artist')->name('saved-artists.destroy');
     });
     Route::middleware('role:artist')->group(function () {
         Route::get('account/contact-phone', [ArtistContactController::class, 'show'])->name('account.contact-phone.show');
