@@ -638,6 +638,12 @@ close.
 
 ## Implementation notes
 
+**As built in M2 (S13):** `description`, `descriptionId`, `icon`, `iconTone`, `danger` and `busy` are
+built (the body dims and the close button is disabled while busy; the consumer holds Escape with the
+CDK's `disableClose`), with the `.dialog__form` utility and the `DialogDanger` scenario (228 ms at 200
+iterations; `Dialog` re-measured 173.8 → 149.0 ms). Still to do: `size`, `dirty`, `bodyLabel`,
+`dismissed` in place of `closed`, `openDialog()`, the short-viewport rule and `DialogConfirm`.
+
 Built in M2 S2: the `menu` variant (`.dialog--menu`), with `closeLabel`
 optional. It is made of styles only (D-17): the header and body wrappers are
 `display: contents`, the title is visually hidden, and the close button and

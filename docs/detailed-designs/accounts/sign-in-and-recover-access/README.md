@@ -296,6 +296,27 @@ design describes; see `security/manage-sessions-and-csrf`.
   `returnUrl`. Account settings gains the Two-step sign-in section ("Off" or "On", "Turn on two-step
   sign-in"); turning off and new codes are S13.
 
+**As built in M2 (S13, turning two-step sign-in off, and new recovery codes)**
+
+- **Endpoints:** `DELETE /api/v1/account/two-factor` (204) and `POST
+  /api/v1/account/two-factor/recovery-codes` (200, the 10 new codes once) both take `code`: a current
+  6-digit code or an unused recovery code, which is used up. `ManageTwoFactor` (the design's
+  `DisableTwoFactor` and `RegenerateRecoveryCodes`, as one action) refuses a wrong one with "That code
+  is wrong or has expired. Enter the code your app shows now, or an unused recovery code." and counts it
+  toward the sign-in pause (429 once paused). Turning off clears the key and every recovery code; new
+  codes replace all ten. Each is audited (`auth.two_factor_disabled`, `auth.recovery_codes_replaced`) and
+  emailed (M2 D21: "Two-step sign-in is off for your Zamaro account", "New recovery codes for your Zamaro
+  account"). With two-step sign-in off, both are 404. The administrators' refusal joins with M3's admin
+  role.
+- **Dialog:** `dialogs/two-step-code/TwoStepCode`, a CDK dialog on `zm-dialog` (danger rule and
+  `lock-open` icon to turn off, `key` icon for codes), described by "Enter a code to show it’s you.":
+  the consequences or "You get 10 new codes. …", the Code field ("The 6 digits your app shows now, or one
+  unused recovery code like 7kq4-m2xd."), "Keep it on" / "Cancel" before "Turn off" / "Get new codes";
+  invalid ("Check the code", "That code didn’t work"), busy ("Turning off…", "Getting codes…", the way
+  back and Escape held), failed (the alert, "Try again", focus on the way back) and, for codes, "Save
+  your new recovery codes" with the grid list, Download, Copy and "I’ve saved them". Focus returns to
+  the button that opened it. Account settings shows "On" with New recovery codes and Turn off.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

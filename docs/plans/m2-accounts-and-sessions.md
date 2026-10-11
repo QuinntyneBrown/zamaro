@@ -19,13 +19,40 @@
 | S10 | Change email and password | Done | `06caf7a` red tests, `06f77d8` |
 | S11 | Signed-in devices | Done | `119f81a` red tests, `2265bb0` |
 | S12 | Two-step sign-in: turn on and sign in with a code | Done | `51c4e93` red tests, `137843b` (ADR-0021) |
-| S13–S18 | | Not started | |
+| S13 | Two-step sign-in: turn off and new recovery codes | Done | `2305396` red tests, `5612167` |
+| S14–S18 | | Not started | |
 
-**Checks at the last commit (S12, 2026-10-11):** 308 backend Feature tests pass with the contract
-assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; `composer
-audit` finds nothing; frontend lint, format and `ng build zamaro` are clean; `npx playwright test`
-passes 322 tests on win32 and the account and two-step states pass visual and a11y in the Linux
-image. The perf run against the S11 build flagged no row (Badge 75.8 → 72.3 ms, Icon 78.7 → 82.9 ms).
+**Checks at the last commit (S13, 2026-10-11):** 315 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
+lint, format and `ng build zamaro` are clean (`button.scss` is 879 bytes over its 4 kB warning);
+`npx playwright test` passes 332 tests on win32 and the account states pass visual and a11y in the
+Linux image. The perf run against the S12 build flagged no row (Dialog 173.8 → 149.0 ms, Button 143.4 →
+153.4 ms; `DialogDanger` is new at 228 ms).
+
+**S13 acceptance criteria (as tested):**
+- Given two-step sign-in on, when a current code or an unused recovery code is sent to turn it off,
+  then 204: the key and every recovery code are gone, `auth.two_factor_disabled` is audited, "Two-step
+  sign-in is off for your Zamaro account" is emailed and sign-in needs the password only. A wrong code
+  gets "That code is wrong or has expired. Enter the code your app shows now, or an unused recovery
+  code." and changes nothing; the 6th wrong try in 15 minutes is paused (429) even with the right code.
+- Given a code or an unused recovery code, when new codes are asked for, then 10 codes unlike the old
+  ones, `auth.recovery_codes_replaced` audited and "New recovery codes for your Zamaro account" emailed;
+  the old codes stop working and the new ones work. With two-step sign-in off, both routes are 404.
+- Given "On" in account settings, when "Turn off" is pressed, then "Turn off two-step sign-in?",
+  described by "Enter a code to show it’s you.", lists the three consequences with the address, shows
+  "Keep it on" then "Turn off", and focuses the code. A wrong code shows "Check the code", "That code
+  didn’t work" and the field's message; the right code closes the dialog, the section reads "Off" and
+  the email arrives.
+- Given the dialog open, when Escape is pressed, then it closes, focus is back on "Turn off" and nothing
+  changed.
+- Given "New recovery codes", then "Get new recovery codes?" with "Cancel" then "Get new codes"; a
+  recovery code shows "Save your new recovery codes" with 10 codes none of which is old, the email
+  arrives, and "I’ve saved them" closes it with focus back on "New recovery codes".
+- Given a failure, then "We couldn’t turn off two-step sign-in", "Nothing changed; it’s still on. …",
+  "Try again" and focus on "Keep it on"; while a request is out, "Turning off…" is busy, "Keep it on" is
+  disabled and the code read-only.
+- Route state `account-two-step-on` (Naomi, `/me` saying it is on) matches `account/two-step-on.html` in
+  both themes at every width with no axe violations.
 
 **S12 acceptance criteria (as tested):**
 - Given a booker, when they begin, then 200 with a base32 key in groups of four and an
@@ -591,6 +618,16 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S13 — One action, one field.** `ManageTwoFactor` holds the design's `DisableTwoFactor` and
+  `RegenerateRecoveryCodes`; both endpoints take `code`, which is a TOTP code when it is six digits and
+  a recovery code otherwise, as the dialog's one field asks.
+- **S13 — The two-step-on state is reached in the browser**: no cast member has two-step sign-in on, so
+  the route state answers `/me` with `mfaEnabled: true` (`setup: 'two-step-on'`).
+- **S13 — Copy without a mock.** "We couldn’t get new recovery codes" and "Nothing changed; your codes
+  still work. …" (the new-codes mock says its failed state matches Turn off's), and "Close" for the
+  dialog's close button.
+- **S13 — Components.** `zm-dialog` gains `description`, `icon`, `iconTone`, `danger` and `busy`, with the
+  `DialogDanger` scenario; `zm-button` gains `danger`; `zm-icon` gains `key` and `lock-open` (their CRDs).
 - **S12 — The QR code is an image from the API** (ADR-0021): the lint rules ban inserting markup, so
   `GET /account/two-factor/qr` serves the SVG for an `<img>`.
 - **S12 — `zm-recovery-codes` is `zm-list variant="grid" ordered`**, as the list CRD specifies it; no

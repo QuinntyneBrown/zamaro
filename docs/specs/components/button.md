@@ -499,6 +499,7 @@ this CRD:
 - Add `iconOnly`, `label` and `describedBy` to `zm-button-link` and
   `zm-button-anchor`; add `describedBy` to `zm-button`.
 - Accept `type="reset"`.
+- Add the `danger` variant (built in M2 S13, for "Turn off"; Button 143.4 → 153.4 ms, not flagged).
 - Add `fragment` (built in M2 S10, for "Change email again") and `disabled` to `zm-button-link`; add `newTab` and `disabled`
   to `zm-button-anchor`.
 - Make `disabled` lose to `busy`: `[disabled]="disabled() && !busy()"`.
