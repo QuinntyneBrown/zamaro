@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import { AccountPage } from '../pages/account.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
 import { SignInPage } from '../pages/sign-in.page';
@@ -64,6 +65,7 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.shows === 'sold-out') await expect(discover.lineup.soldOut().root()).toBeVisible();
   if (state.shows === 'link-expired')
     await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
+  if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
   await discover.shell.settle();
   return state.masks === 'session-ended-line' ? [new SignInPage(page).sessionEndedDetail()] : [];
 }

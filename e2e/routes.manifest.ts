@@ -28,10 +28,10 @@ export interface RouteState {
   signedInAs?: CastMember;
   /**
    * What the page must show before it is captured, when the browser may still be fetching it after
-   * the network went quiet: the lineup's cards, the sold-out panel, or an emailed link's "This link
-   * has expired" card.
+   * the network went quiet: the lineup's cards, the sold-out panel, an emailed link's "This link
+   * has expired" card, or the account settings form.
    */
-  shows?: 'lineup' | 'sold-out' | 'link-expired';
+  shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form';
   /** Copy that will change with a later slice, masked in captures: the session-ended line (M5 drafts). */
   masks?: 'session-ended-line';
 }
@@ -181,5 +181,25 @@ export const routes: RouteState[] = [
     app: 'zamaro',
     mock: 'verify-email/expired.html',
     shows: 'link-expired',
+  },
+  // Naomi's account settings: Profile and Church, with the sticky save bar. Email, Password,
+  // Email preferences, Two-step sign-in and Signed-in devices join with their slices (M2 S10–S14);
+  // Your data and Delete account wait for M9 (D23). The status is empty until something is saved.
+  {
+    name: 'account-default',
+    path: '/account',
+    app: 'zamaro',
+    mock: 'account/default.html',
+    signedInAs: 'naomi',
+    shows: 'account-form',
+  },
+  // Abigail's: Contact, with her private phone, in place of Church.
+  {
+    name: 'account-artist',
+    path: '/account',
+    app: 'zamaro',
+    mock: 'account/artist.html',
+    signedInAs: 'abigail',
+    shows: 'account-form',
   },
 ];

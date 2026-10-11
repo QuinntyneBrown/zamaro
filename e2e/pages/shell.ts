@@ -103,6 +103,11 @@ export class Shell {
       .getByRole('listitem');
   }
 
+  /** The entries of the footer's last column: "Your account", or the signed-in person's. */
+  accountFooterColumn(): Locator {
+    return this.footer().locator('ul').last().getByRole('listitem');
+  }
+
   /** How many of each landmark and level-one heading the page renders. */
   async landmarkCounts(): Promise<Record<'banner' | 'main' | 'contentinfo' | 'h1', number>> {
     return {
