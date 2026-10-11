@@ -15,7 +15,122 @@
 | S6 | Email delivery rules and failed jobs | Done | `cd08f71` red tests, `dc02dc1` |
 | S7 | Verify the email address | Done | `fdc2b5b` red tests, `257d4c3` |
 | S8 | Lockout and password reset | Done | `9c18620` red tests, `e5d3f3d` |
-| S9–S18 | | Not started | |
+| S9 | Account settings: profile, church and contact phone | Done | `68008cd` red tests, `a23b482` (ADR-0020) |
+| S10–S18 | | Not started | |
+
+**Checks at the last commit (S9, 2026-10-11):** 270 backend Feature tests pass with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 287 tests on win32 and the
+account and Naomi states pass visual and a11y in the Linux image. The perf run against the S8 build
+flagged no row (FormField 138.1 → 142.3 ms; FormSection 239, FormActions 149 and SettingsNav 168 ms
+are new).
+
+**S9 acceptance criteria (as tested):**
+- Given Naomi signed in, when she reads `GET /account/church`, then she gets Riverside (2150 Lakeshore
+  Road, Burlington, ON, L7R 1A3, 905-555-0123, Non-denominational, 350), privately; a booker without a
+  church gets `{ data: null }`, an artist 404 and a guest 401.
+- Given a Burlington address, when it is saved, then it is geocoded (43.325, -79.799) and stored once
+  per booker (a second save replaces it, 200), with the postal code as "L7R 1A3" and the phone as `v1:`
+  ciphertext that reads back "905-555-0199". An Ottawa address gets 422 on `serviceArea` ("Zamaro serves
+  churches within 200 km of Toronto.") and an unknown one 422 on `streetAddress` ("We couldn’t find that
+  address. Check the street and postal code."), and nothing changes. A short postal code, a one-letter
+  name, a non-NANP phone or 0 attendance get their 422 before any lookup.
+- Given `/me`, then it carries `church` (name, city, point) for a booker.
+- Given a new name, then `PUT /account/profile` answers the person with new initials ("RO"); a blank
+  name gets "Enter your name." Abigail reads and saves her contact phone (`905-555-0148`; stored
+  `+14165550190` as `v1:`), a non-NANP or blank one gets 422, a booker gets 404, and the phone is never
+  on her public profile.
+- Given the field key changes to v2 with v1 kept as a previous key, then old values read and new ones are
+  `v2:`; with v1 dropped, reading fails (500) rather than returning ciphertext.
+- Given every new route, then another booker or artist gets none of the owner's church, name or phone.
+- Given `/account` signed in as Naomi, then "Account settings", "Naomi Fraser · Riverside Community
+  Church", the nav "Profile, Church" (Profile current), her name with "Artists see it on your requests.",
+  and the Church section filled in under its lead. A guest goes to `/sign-in?returnUrl=%2Faccount`.
+- Given a fresh booker saving Riverside, then "Saved just now", the "Saved" banner (dismissible), the
+  values after a reload, Riverside in the footer and the menu, and Discover pre-filled with Burlington at
+  120 km. An Ottawa address shows "Your church wasn’t saved" (focused) with the service-area link, the
+  message at Street address, City and Postal code invalid, "Church address outside the area · not saved"
+  and every value kept; after a reload nothing was stored. An unknown address shows its message and
+  "Church address not found · not saved".
+- Given "L7R 1A", then "Fix 1 thing before saving", "Enter a full postal code" (which focuses the field),
+  "Enter a postal code like L7R 1A3, with six characters.", "1 field to fix · not saved", and nothing
+  is sent; a bad phone names "Enter a North American phone number, like 905-555-0123."
+- Given a new name, then "Saved just now" and the header's "RO" for "Ruth Okafor". Discard restores the
+  saved values. While saving: "Saving…" (busy), Discard disabled, fields read-only, the form
+  `aria-busy`. A 500: "We couldn’t save your changes", "Not saved · try again", values kept. A failed
+  load: "We couldn’t load your settings", Back to Discover, and Try again loads them.
+- Given Abigail, then "Abigail Mensah · Artist", the nav "Profile, Contact", no Church section, her phone
+  with "Churches see it only once a booking is confirmed. It’s never on your public profile.", and a
+  save shows "Saved just now".
+- Route states `account-default` (Naomi) and `account-artist` (Abigail) match their mocks' sections in
+  both themes at every width with no axe violations; Naomi's Discover states now show her church.
+
+**S8 acceptance criteria (as tested):**
+- Given 5 failed sign-ins for one address within 15 minutes, in any case, when a 6th arrives, even with
+  the right password, then it gets the 429 `sign-in-paused` problem with `pausedUntil` and `Retry-After`,
+  and the owner gets one "Sign-in to your Zamaro account is paused" email per pause, naming the time and
+  offering a reset. An address with no account is paused the same way and nobody is emailed; other
+  addresses are not paused; failures more than 15 minutes apart do not add up; sign-in resumes after 15
+  minutes; a successful sign-in starts the count again.
+- Given the pause on `/sign-in`, then the card shows "Sign-in is paused for 15 minutes", "There were too
+  many tries for this email. Try again after 10:15 a.m., or reset your password now.", "Reset your
+  password" (to `/forgot-password`) and "If this wasn’t you, the account owner has been emailed.", and
+  keeps the email.
+- Given `/forgot-password` with any address, then it ends on "Check your email" and "If that email has
+  an account, we’ve sent a reset link."; an account gets "Reset your Zamaro password" with a link that
+  works once, for 60 minutes, and a new link stops the earlier one. A bad address is named before
+  anything is sent, a failed bot check says so and keeps the email, and the 6th link in an hour from one
+  address or for one email gets 429.
+- Given a reset link, then `reset/check` names the account and when the link runs out without using it;
+  saving a new password signs this browser in with a new session, ends every other session, uses the
+  link and emails "Your Zamaro password was changed". Passwords follow `PasswordPolicy` and must match
+  ("The two passwords don’t match. Type the new one again."); the 31st reset or check in a minute from
+  one address gets 429.
+- Given a used, run-out or unknown link, then 410 `link-expired`; one that existed names its account and
+  when it was sent, and the page shows "This link has expired" with "Send a new link".
+- Given each session, then `user_sessions` holds it by the SHA-256 of its ID; signing out removes it.
+- Route state `forgot-password` matches `forgot-password/default.html` in both themes at every width, with
+  no axe violations.
+
+**S9 acceptance criteria (as tested):**
+- Given Naomi signed in, when she reads `GET /account/church`, then she gets Riverside (2150 Lakeshore
+  Road, Burlington, ON, L7R 1A3, 905-555-0123, Non-denominational, 350), privately; a booker without a
+  church gets `{ data: null }`, an artist 404 and a guest 401.
+- Given a Burlington address, when it is saved, then it is geocoded (43.325, -79.799) and stored once
+  per booker (a second save replaces it, 200), with the postal code as "L7R 1A3" and the phone as `v1:`
+  ciphertext that reads back "905-555-0199". An Ottawa address gets 422 on `serviceArea` ("Zamaro serves
+  churches within 200 km of Toronto.") and an unknown one 422 on `streetAddress` ("We couldn’t find that
+  address. Check the street and postal code."), and nothing changes. A short postal code, a one-letter
+  name, a non-NANP phone or 0 attendance get their 422 before any lookup.
+- Given `/me`, then it carries `church` (name, city, point) for a booker.
+- Given a new name, then `PUT /account/profile` answers the person with new initials ("RO"); a blank
+  name gets "Enter your name." Abigail reads and saves her contact phone (`905-555-0148`; stored
+  `+14165550190` as `v1:`), a non-NANP or blank one gets 422, a booker gets 404, and the phone is never
+  on her public profile.
+- Given the field key changes to v2 with v1 kept as a previous key, then old values read and new ones are
+  `v2:`; with v1 dropped, reading fails (500) rather than returning ciphertext.
+- Given every new route, then another booker or artist gets none of the owner's church, name or phone.
+- Given `/account` signed in as Naomi, then "Account settings", "Naomi Fraser · Riverside Community
+  Church", the nav "Profile, Church" (Profile current), her name with "Artists see it on your requests.",
+  and the Church section filled in under its lead. A guest goes to `/sign-in?returnUrl=%2Faccount`.
+- Given a fresh booker saving Riverside, then "Saved just now", the "Saved" banner (dismissible), the
+  values after a reload, Riverside in the footer and the menu, and Discover pre-filled with Burlington at
+  120 km. An Ottawa address shows "Your church wasn’t saved" (focused) with the service-area link, the
+  message at Street address, City and Postal code invalid, "Church address outside the area · not saved"
+  and every value kept; after a reload nothing was stored. An unknown address shows its message and
+  "Church address not found · not saved".
+- Given "L7R 1A", then "Fix 1 thing before saving", "Enter a full postal code" (which focuses the field),
+  "Enter a postal code like L7R 1A3, with six characters.", "1 field to fix · not saved", and nothing
+  is sent; a bad phone names "Enter a North American phone number, like 905-555-0123."
+- Given a new name, then "Saved just now" and the header's "RO" for "Ruth Okafor". Discard restores the
+  saved values. While saving: "Saving…" (busy), Discard disabled, fields read-only, the form
+  `aria-busy`. A 500: "We couldn’t save your changes", "Not saved · try again", values kept. A failed
+  load: "We couldn’t load your settings", Back to Discover, and Try again loads them.
+- Given Abigail, then "Abigail Mensah · Artist", the nav "Profile, Contact", no Church section, her phone
+  with "Churches see it only once a booking is confirmed. It’s never on your public profile.", and a
+  save shows "Saved just now".
+- Route states `account-default` (Naomi) and `account-artist` (Abigail) match their mocks' sections in
+  both themes at every width with no axe violations; Naomi's Discover states now show her church.
 
 **S8 acceptance criteria (as tested):**
 - Given 5 failed sign-ins for one address within 15 minutes, in any case, when a 6th arrives, even with
@@ -384,6 +499,30 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S9 — Sections arrive with their slices.** `/account` has Profile and Church (or Contact) and the
+  save bar. Email and Password join in S10, Signed-in devices in S11, Two-step sign-in in S12 and Email
+  preferences (with the marketing box) in S14, each with the backend it needs; the plan listed the
+  preferences, two-step and devices sections in S9. The nav lists only the sections on the page.
+- **S9 — The save bar starts empty.** "Saved 2 min ago" needs a stored save time the frozen e2e clock
+  cannot make sense of; the bar shows nothing until a save (form-layout CRD allows an empty status).
+- **S9 — `serviceArea`, not `streetAddress`, for an address outside the area**, so the page can tell
+  "outside the area" from "not found"; both show at Street address.
+- **S9 — Which sections a save sends.** The name when it changed; the church when one was saved before
+  or anything was typed into it; the contact phone likewise. A fresh booker can rename without a church.
+- **S9 — `zm-save-bar` is `zm-form-actions`**, the form-layout CRD's name, with its `FormActions`
+  scenario. `zm-form-section-skeleton` is not built yet: the loading state announces "Loading your
+  settings…" without skeleton sections.
+- **S9 — The "Saved" banner is the page's**, above the page head, not in the shell's banner region;
+  an artist's reads only "Your settings are up to date."
+- **S9 — Copy without a mock.** "Church address not found · not saved", the per-field summary lines
+  ("Enter the church name", "Enter a full phone number", "Enter the typical attendance") and their
+  messages, and "Enter your name."
+- **S9 — Harvest Point's address** (8150 Main Street East, Milton, L9T 1A1, 905-555-0177, about 220
+  people) is not in the mocks; Milton joins `CastRoutes`.
+- **S9 — `AuthService.whenKnown()` and `signedInGuard`.** The first private route waits for the first
+  `/me` (shared with the shell's), and `RenderMode.Client` lands with it (ADR-0017). `replace()` swaps in
+  the renamed person.
+- **S9 — The page heading's id is `settings-title`**: `account-title` is the account menu's.
 - **S8 — The 410 names the link's account.** The expired reset mock says when the link was sent and
   where a new one goes, so `link-expired` gains `email` and `sentAt` for a reset link that existed; an
   unknown token names no one and the page offers only "Find who’s free" and sign-in. A guest's "Send a

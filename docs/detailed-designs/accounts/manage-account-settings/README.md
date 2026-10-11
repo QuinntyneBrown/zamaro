@@ -136,6 +136,33 @@ The device label is derived from the user-agent string. The approximate city com
 from an IP geolocation lookup whose source is `<TO SUPPLY>`. The lifetime of an email
 change link is `<TO SUPPLY>`.
 
+**As built in M2 (S9)**
+
+- **Page:** `pages/account/Account` at `/account`, rendered in the browser only (`RenderMode.Client`,
+  ADR-0017) behind `signedInGuard`, which waits for `/me` and sends a guest to
+  `/sign-in?returnUrl=/account`. The head reads "Account settings" over "Naomi Fraser · Riverside
+  Community Church" ("Abigail Mensah · Artist" for an artist). `zm-settings-nav` ("Settings sections")
+  lists the sections built so far; one reactive form holds Profile ("Your name", help "Artists see it on
+  your requests." or, for an artist, "Your account name. Churches see the display name from Edit
+  profile.") and Church or Contact, with `zm-form-actions` (Discard, Save changes).
+- **Saving:** Save changes checks the sections it will send, then sends each one: the name when it
+  changed (`PUT /api/v1/account/profile`, `AccountProfileController`, answering `CurrentUserResource`,
+  so the initials follow), the church when it was saved before or typed into, the contact phone when it
+  was saved before or typed into. While saving the bar reads "Saving…", fields are read-only and
+  Discard is disabled; after it "Saved just now" and a dismissible "Saved" banner ("Your settings are
+  up to date. Bookings already sent keep the church address they were made with."). A failure keeps
+  every value: "We couldn’t save your changes" and "Not saved · try again". Invalid fields get a
+  summary ("Fix 1 thing before saving") and "1 field to fix · not saved". A failed load shows "We
+  couldn’t load your settings" with Try again and Back to Discover.
+- **Contact phone:** `GET` and `PUT /api/v1/account/contact-phone` (`role:artist`; a booker gets 404,
+  not the design's 403, per L2-074.1) answer `{ data: { contactPhone } }`; the phone is stored in E.164,
+  encrypted (ADR-0020), and never on the public profile.
+- **Status line:** empty until something is saved. The mock's "Saved 2 min ago" needs a saved time the
+  frozen e2e clock cannot give.
+- **Not yet:** Email and Password (S10), Signed-in devices (S11), Two-step sign-in (S12), Email
+  preferences (S14); Your data and Delete account wait for M9 (M2 D23). The loading state announces
+  "Loading your settings…" without the skeleton sections until `zm-form-section-skeleton` is built.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

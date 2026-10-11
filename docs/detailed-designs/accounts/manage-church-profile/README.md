@@ -115,6 +115,33 @@ they were made with (L2-024).
 Denomination is free text, as in the mocks. The geocoding provider vendor and the
 type-ahead source are `<TO SUPPLY>`.
 
+**As built in M2 (S9)**
+
+- **Endpoints (`role:booker`, private, no-store):** `GET /api/v1/account/church` answers `{ data: null }`
+  until a church is saved; `PUT` creates or replaces it and always answers 200 with `ChurchResource`
+  (`name`, `streetAddress`, `city`, `province`, `postalCode`, `phone` as "905-555-0123", `denomination`,
+  `typicalAttendance`). An artist gets 404 (L2-074.1).
+- **Validation before the lookup (`SaveChurchRequest`):** name 2–120, street and city required, a
+  Canadian postal code with or without the space ("Enter a postal code like L7R 1A3, with six
+  characters."), `NorthAmericanPhone` ("Enter a North American phone number, like 905-555-0123."),
+  attendance a whole number above 0. The postal code is stored as "L7R 1A3" and the phone in E.164,
+  encrypted (ADR-0020).
+- **`SaveChurch`:** geocodes "{street}, {city}, ON {postal code}". No match is a 422 on `streetAddress`
+  ("We couldn’t find that address. Check the street and postal code."); outside 200 km by road is a
+  422 on **`serviceArea`** ("Zamaro serves churches within 200 km of Toronto."), a key of its own so the
+  page can tell the two apart. Nothing is stored in either case.
+- **`FakeGeocoder`** knows the cast's church addresses (2150 Lakeshore Road, Burlington; 180 Elgin
+  Street, Ottawa; 8150 Main Street East, Milton) and no other street address; Milton joins `CastRoutes`.
+- **`CurrentUserResource.church`** is `{ name, city, latitude, longitude }` or null: the menu's who line
+  and the footer show the name, and Discover starts from the city and point at 120 km when the address
+  names no place (L2-004.1). The page refreshes `/me` after a save.
+- **Page:** the Church section of `/account` (`pages/account/Account`), saved by Save changes when the
+  booker already has a church or typed into it. A refused address shows "Your church wasn’t saved" with
+  the message as its one link, the message under Street address, City and Postal code invalid and
+  described by it, and "Church address outside the area · not saved" (or "Church address not found ·
+  not saved", copy without a mock) in the bar; every value stays.
+- **Not yet:** the add-church dialog and the booking snapshot come with requests (M5).
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

@@ -549,6 +549,11 @@ Nothing animates. Errors, help and success appear without a transition; under
 
 ## Implementation notes
 
+**Interim additions in M2 (S9), before the split:** account settings needed a phone and a whole
+number, so `type` gained `tel` and `number` (the text-field CRD's types); `number` adds
+`inputmode="numeric"`, and `min` applies to it. The `FormField` scenario was re-measured against the
+S8 build: 138.1 → 142.3 ms, not flagged.
+
 **Interim additions in M2 (S1), before the split:** for the sign-in card the monolithic field gained
 `type="email"` and `type="password"`, `requiredMarker` (renders `.field__required` and sets `required`),
 `readonly` (the dashed sunken look of the design system), `invalid` (ORs `aria-invalid` with `error`,

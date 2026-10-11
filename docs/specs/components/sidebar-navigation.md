@@ -501,6 +501,16 @@ Activating a settings link scrolls smoothly, except under
 
 ## Implementation notes
 
+**As built in M2 (S9):** `zm-settings-nav` is built in `lib/sidebar-navigation/settings-nav.ts` with
+the inputs and model above. Links are plain `href`s to the page's path and fragment; a click scrolls the
+section into view (smoothly unless reduced motion), focuses it (adding `tabindex="-1"`), sets `current`
+and replaces the URL's fragment through `Location`. The current section is tracked by one
+`IntersectionObserver` (thresholds every 10 %) that reads each section's top against the top-bar line,
+with the last section current at the page's end; tracking pauses for a second after a click. The row
+reserves the focus ring's width inside its scroll box (AC-18). Its scenario `SettingsNav` renders nine
+sections in 168 ms at 200 iterations. `zm-sidebar-nav` and `SidebarNav` wait for the artist dashboard
+(M4).
+
 Planned. To build it:
 
 - Folder `frontend/projects/components/src/lib/sidebar-navigation/` with

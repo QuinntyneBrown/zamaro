@@ -132,6 +132,12 @@ encryption is on are `<TO SUPPLY>`.
 The slice changes the column type of the encrypted fields to `text`. It adds no
 tables. Secrets never appear in the database, the repository, the image or the logs.
 
+**As built in M2 (S9):** `FieldEncrypter` and `EncryptedField` as described, on `churches.phone` and
+`artists.contact_phone` (ADR-0020). The key settings are `security.field_encryption.{version, key,
+previous_keys}` from `FIELD_ENCRYPTION_KEY_VERSION`, `FIELD_ENCRYPTION_KEY` and
+`FIELD_ENCRYPTION_PREVIOUS_KEYS`; a value under an unknown version fails to decrypt rather than being
+read as text. Rotation stays `<TO SUPPLY>` until M10.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements; each refines the level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.
