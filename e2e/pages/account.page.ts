@@ -220,6 +220,15 @@ export class AccountPage {
     return this.page.getByRole('status').filter({ hasText: /^Email changed/ });
   }
 
+  /** "Off" or "On", the badge in the Two-step sign-in section. */
+  twoStepStatus(): Locator {
+    return this.section('Two-step sign-in').locator('.form-section__lead .badge');
+  }
+
+  turnOnTwoStepLink(): Locator {
+    return this.section('Two-step sign-in').getByRole('link', { name: 'Turn on two-step sign-in' });
+  }
+
   /** The Signed-in devices list (docs/specs/components/list, device variant). */
   deviceList(): Locator {
     return this.section('Signed-in devices').locator('.device-list');

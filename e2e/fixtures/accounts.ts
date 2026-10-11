@@ -6,6 +6,7 @@ import {
 } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
+import { totp } from './totp';
 
 /**
  * The cast members who can sign in (M2 plan D28). The e2e API seeds them with this password;
@@ -136,6 +137,31 @@ export async function meStatusIn(context: BrowserContext): Promise<number> {
     headers: { Referer: `${SITE}/`, Accept: 'application/json' },
   });
   return response.status();
+}
+
+/**
+ * Turns on two-step sign-in for the person signed in on `request`, as the setup page does: asks for a
+ * key, then confirms it with the current code. Answers the key and the 10 recovery codes.
+ */
+export async function turnOnTwoFactor(
+  request: APIRequestContext,
+): Promise<{ secret: string; recoveryCodes: string[] }> {
+  const headers = {
+    Referer: `${SITE}/`,
+    Accept: 'application/json',
+    'X-XSRF-TOKEN': await xsrfToken(request),
+  };
+  const begun = await request.post('/api/v1/account/two-factor', { headers });
+  if (!begun.ok()) throw new Error(`Beginning two-step sign-in got ${begun.status()}.`);
+  const secret = ((await begun.json()) as { data: { key: string } }).data.key.replace(/\s/g, '');
+  const confirmed = await request.post('/api/v1/account/two-factor/confirm', {
+    headers: { ...headers, 'X-XSRF-TOKEN': await xsrfToken(request) },
+    data: { code: totp(secret) },
+  });
+  if (!confirmed.ok()) throw new Error(`Confirming two-step sign-in got ${confirmed.status()}.`);
+  const { recoveryCodes } = ((await confirmed.json()) as { data: { recoveryCodes: string[] } })
+    .data;
+  return { secret, recoveryCodes };
 }
 
 async function xsrfToken(request: APIRequestContext): Promise<string> {

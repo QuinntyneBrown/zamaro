@@ -2,6 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 import { AccountPage } from '../pages/account.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
+import { MfaSetupPage } from '../pages/mfa-setup.page';
 import { SignInPage } from '../pages/sign-in.page';
 import { VerifyEmailPage } from '../pages/verify-email.page';
 import type { RouteState } from '../routes.manifest';
@@ -66,7 +67,12 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.shows === 'link-expired')
     await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
   if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
+  if (state.shows === 'mfa-key') await expect(new MfaSetupPage(page).key()).toBeVisible();
   await discover.shell.settle();
+  if (state.masks === 'mfa-key') {
+    const setup = new MfaSetupPage(page);
+    return [setup.qrCode(), setup.key()];
+  }
   if (state.masks === 'devices') {
     // Other specs signed in as the same cast member add rows: keep this device (always first) so the
     // page's height does not depend on them, and mask its line and the count in the Password lead.

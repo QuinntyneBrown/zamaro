@@ -31,13 +31,13 @@ export interface RouteState {
    * the network went quiet: the lineup's cards, the sold-out panel, an emailed link's "This link
    * has expired" card, or the account settings form.
    */
-  shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form';
+  shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form' | 'mfa-key';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
    * devices (only this device is shown) with the Password lead's count of the others, which every spec
    * signing in as the same cast member changes.
    */
-  masks?: 'session-ended-line' | 'devices';
+  masks?: 'session-ended-line' | 'devices' | 'mfa-key';
 }
 
 /** Naomi's search: Burlington, Sat 14 Nov, a worship night, within 120 km (docs/mocks/README.md). */
@@ -217,5 +217,22 @@ export const routes: RouteState[] = [
     mock: 'confirm-email/expired.html',
     signedInAs: 'naomi',
     shows: 'link-expired',
+  },
+  // Turn on two-step sign-in, Naomi: the QR code and key, which are new each time, are masked.
+  {
+    name: 'mfa-setup',
+    path: '/account/security/mfa',
+    app: 'zamaro',
+    mock: 'mfa-setup/default.html',
+    signedInAs: 'naomi',
+    shows: 'mfa-key',
+    masks: 'mfa-key',
+  },
+  // The code step of signing in, opened directly: "Enter your code".
+  {
+    name: 'mfa-challenge',
+    path: '/account/sign-in/verify',
+    app: 'zamaro',
+    mock: 'mfa-challenge/default.html',
   },
 ];
