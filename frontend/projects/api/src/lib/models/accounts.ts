@@ -10,6 +10,8 @@ export interface CurrentUser {
   initials: string;
   roles: Role[];
   emailVerified: boolean;
+  /** A new address asked for and not yet confirmed from its link (L2-025.1), or null. */
+  pendingEmail: string | null;
   /** A booker's church, for the menu, the footer and Discover's starting point; null otherwise. */
   church: ChurchSummary | null;
   /** The theme chosen on any signed-in device, or null to follow the device. */
@@ -52,6 +54,13 @@ export interface Church {
   phone: string;
   denomination: string | null;
   typicalAttendance: number | null;
+}
+
+/** `PUT /api/v1/account/password` (L2-025.2). */
+export interface PasswordChange {
+  currentPassword: string;
+  password: string;
+  passwordConfirmation: string;
 }
 
 export interface SignInCredentials {

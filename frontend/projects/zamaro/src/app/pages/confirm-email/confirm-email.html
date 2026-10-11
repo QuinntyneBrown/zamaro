@@ -1,0 +1,75 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    @if (status() === 'expired') {
+      <zm-booking-form
+        class="auth-form"
+        variant="auth"
+        landmark
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.confirmEmail.expiredTitle' | transloco"
+        [stamp]="'accounts.confirmEmail.expiredStamp' | transloco"
+      >
+        <p>
+          <zm-stamp status="expired" size="lg">{{
+            'accounts.confirmEmail.expiredWord' | transloco
+          }}</zm-stamp>
+        </p>
+        <p>
+          {{
+            currentEmail()
+              ? ('accounts.confirmEmail.expiredText' | transloco: { email: currentEmail() })
+              : ('accounts.confirmEmail.expiredTextGuest' | transloco)
+          }}
+        </p>
+        <div class="actions">
+          <zm-button-link link="/account" fragment="email" variant="primary" size="lg" block>{{
+            'accounts.confirmEmail.changeAgain' | transloco
+          }}</zm-button-link>
+        </div>
+      </zm-booking-form>
+    } @else {
+      <zm-booking-form
+        class="auth-form"
+        variant="auth"
+        landmark
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.confirmEmail.title' | transloco"
+        [stamp]="'accounts.confirmEmail.stamp' | transloco"
+        [busy]="status() === 'confirming'"
+      >
+        @if (status() === 'error') {
+          <zm-alert
+            variant="danger"
+            compact
+            [heading]="'accounts.confirmEmail.errorTitle' | transloco"
+          >
+            <p>{{ 'accounts.confirmEmail.errorText' | transloco }}</p>
+          </zm-alert>
+          <div class="actions">
+            <zm-button variant="primary" size="lg" block [busy]="retrying()" (click)="tryAgain()"
+              ><zm-icon name="refresh" />{{
+                'accounts.confirmEmail.tryAgain' | transloco
+              }}</zm-button
+            >
+            <zm-button-link link="/account" block>{{
+              'accounts.confirmEmail.backToAccount' | transloco
+            }}</zm-button-link>
+          </div>
+        } @else {
+          <p class="checking" role="status">
+            {{
+              pendingEmail()
+                ? ('accounts.confirmEmail.switching' | transloco: { email: pendingEmail() })
+                : ('accounts.confirmEmail.switchingYours' | transloco)
+            }}
+          </p>
+          @if (currentEmail(); as email) {
+            <p class="lead">{{ 'accounts.confirmEmail.until' | transloco: { email } }}</p>
+          }
+        }
+      </zm-booking-form>
+    }
+  </div>
+</div>

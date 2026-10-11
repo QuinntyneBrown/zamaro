@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Accounts\AccountEmailController;
+use App\Http\Controllers\Api\V1\Accounts\AccountPasswordController;
 use App\Http\Controllers\Api\V1\Accounts\AccountProfileController;
 use App\Http\Controllers\Api\V1\Accounts\ArtistContactController;
 use App\Http\Controllers\Api\V1\Accounts\ChurchController;
@@ -17,6 +19,8 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class])->group(function () {
 
     // Account settings (accounts/manage-account-settings, accounts/manage-church-profile).
     Route::put('account/profile', [AccountProfileController::class, 'update'])->name('account.profile.update');
+    Route::put('account/email', [AccountEmailController::class, 'update'])->name('account.email.update');
+    Route::put('account/password', [AccountPasswordController::class, 'update'])->name('account.password.update');
     Route::middleware('role:booker')->group(function () {
         Route::get('account/church', [ChurchController::class, 'show'])->name('account.church.show');
         Route::put('account/church', [ChurchController::class, 'update'])->name('account.church.update');

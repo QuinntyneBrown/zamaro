@@ -72,4 +72,26 @@ return [
 
         $test->as($owner)->getJson('/api/v1/account/contact-phone')->assertJsonPath('data.contactPhone', '905-555-0111');
     },
+
+    'PUT api/v1/account/email' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->putJson('/api/v1/account/email', [
+            'email' => 'intruder-new@example.ca', 'currentPassword' => config('zamaro.cast_password'),
+        ])->assertStatus(202);
+
+        $test->as($owner)->getJson('/api/v1/me')
+            ->assertJsonPath('data.email', $owner->email)
+            ->assertJsonPath('data.pendingEmail', null);
+    },
+
+    'PUT api/v1/account/password' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($owner)->getJson('/api/v1/me')->assertOk();
+
+        $test->as($intruder)->putJson('/api/v1/account/password', [
+            'currentPassword' => config('zamaro.cast_password'),
+            'password' => 'a-song-of-ascents-121',
+            'passwordConfirmation' => 'a-song-of-ascents-121',
+        ])->assertNoContent();
+
+        $test->as($owner)->getJson('/api/v1/me')->assertOk()->assertJsonPath('data.email', $owner->email);
+    },
 ];

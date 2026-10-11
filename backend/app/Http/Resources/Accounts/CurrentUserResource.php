@@ -32,6 +32,8 @@ class CurrentUserResource extends JsonResource
             /** @var list<'booker'|'artist'|'admin'> */
             'roles' => array_map(fn (Role $role) => $role->value, $user->roleNames()),
             'emailVerified' => $user->email_verified_at !== null,
+            /** A new address asked for and not yet confirmed from its link (L2-025.1), or null. */
+            'pendingEmail' => $user->pending_email,
             /**
              * A booker's church, for the header's menu, the footer and Discover's starting point
              * (L2-024.2, L2-004.1); null for an artist or a booker without one.

@@ -42,7 +42,13 @@ type Field =
   | 'postalCode'
   | 'churchPhone'
   | 'attendance'
-  | 'contactPhone';
+  | 'contactPhone'
+  | 'newEmail'
+  | 'emailPassword'
+  | 'currentPassword'
+  | 'newPassword';
+type Section = 'profile' | 'church' | 'contact' | 'email' | 'password';
+type Errors = Partial<Record<Field, FieldError>>;
 
 interface FieldError {
   message: string;
@@ -52,7 +58,7 @@ interface FieldError {
 /** A refused church address: one the lookup could not find, or one outside the service area. */
 type AddressProblem = 'not-found' | 'outside' | null;
 
-/** The control `id` each field's error summary link focuses, as in the mock. */
+/** The control `id` each field's error summary link focuses, as in the mock; in page order. */
 const FIELD_IDS: Record<Field, string> = {
   name: 'full-name',
   churchName: 'church-name',
@@ -62,9 +68,16 @@ const FIELD_IDS: Record<Field, string> = {
   churchPhone: 'church-phone',
   attendance: 'attendance',
   contactPhone: 'contact-phone',
+  newEmail: 'new-email',
+  emailPassword: 'email-password',
+  currentPassword: 'current-password',
+  newPassword: 'new-password',
 };
 
 const POSTAL_CODE = /^[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d$/;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PASSWORD_MIN = 12;
+const PASSWORD_MAX = 128;
 
 /** A North American number: ten digits with or without a leading 1, area code and exchange from 2. */
 function isNorthAmericanPhone(value: string): boolean {
@@ -74,13 +87,20 @@ function isNorthAmericanPhone(value: string): boolean {
   return /^[2-9]\d{2}[2-9]\d{6}$/.test(digits);
 }
 
+/** A save the API refused, already turned into field errors. */
+class Refused extends Error {
+  constructor(readonly errors: Errors) {
+    super('refused');
+  }
+}
+
 /**
  * Account settings at `/account` (accounts/manage-account-settings, docs/mocks/pages/account): one
  * form of sections saved together from the sticky save bar. A booker keeps their church here
- * (accounts/manage-church-profile), an artist their private contact phone (L2-025.4). Save changes
- * sends each section that changed, or was saved before, to its own endpoint; an invalid or failed
- * save keeps every value (L2-108). Email, Password, Email preferences, Two-step sign-in and
- * Signed-in devices join with their slices.
+ * (accounts/manage-church-profile), an artist their private contact phone (L2-025.4); anyone can ask
+ * for a new email (L2-025.1) or set a new password (L2-025.2). Save changes sends each section that
+ * changed to its own endpoint, in page order; an invalid or failed save keeps every value (L2-108).
+ * Email preferences, Two-step sign-in and Signed-in devices join with their slices.
  */
 @Component({
   selector: 'zm-account',
@@ -108,10 +128,11 @@ export class Account {
   private readonly transloco = inject(TranslocoService);
   private readonly injector = inject(Injector);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly fb = inject(NonNullableFormBuilder);
 
-  protected readonly form = inject(NonNullableFormBuilder).group({
+  protected readonly form = this.fb.group({
     name: [''],
-    church: inject(NonNullableFormBuilder).group({
+    church: this.fb.group({
       name: [''],
       streetAddress: [''],
       city: [''],
@@ -121,17 +142,21 @@ export class Account {
       typicalAttendance: [''],
     }),
     contactPhone: [''],
+    email: this.fb.group({ newEmail: [''], currentPassword: [''] }),
+    password: this.fb.group({ currentPassword: [''], newPassword: [''] }),
   });
 
   protected readonly load = signal<Load>('loading');
   protected readonly status = signal<SaveStatus>('idle');
-  protected readonly errors = signal<Partial<Record<Field, FieldError>>>({});
+  protected readonly errors = signal<Errors>({});
   protected readonly addressProblem = signal<AddressProblem>(null);
   protected readonly bannerShown = signal(false);
   protected readonly section = signal('profile');
   /** The church as last saved; null until the booker saves one. */
   private readonly savedChurch = signal<Church | null>(null);
   private savedContactPhone: string | null = null;
+  /** The new address a link was sent to, until it is opened (L2-025.1). */
+  protected readonly pendingEmail = signal<string | null>(null);
   private readonly summary = viewChild(ErrorSummary);
 
   protected readonly user = this.auth.currentUser;
@@ -147,10 +172,12 @@ export class Account {
   });
 
   protected readonly sections = computed<SettingsSection[]>(() => [
-    { id: 'profile', label: this.transloco.translate('accounts.account.profile.title') },
+    { id: 'profile', label: this.t('profile.title') },
     this.isArtist()
-      ? { id: 'contact', label: this.transloco.translate('accounts.account.contact.title') }
-      : { id: 'church', label: this.transloco.translate('accounts.account.church.title') },
+      ? { id: 'contact', label: this.t('contact.title') }
+      : { id: 'church', label: this.t('church.title') },
+    { id: 'email', label: this.t('email.title') },
+    { id: 'password', label: this.t('password.title') },
   ]);
 
   protected readonly summaryItems = computed<ErrorSummaryItem[]>(() =>
@@ -192,8 +219,8 @@ export class Account {
 
   constructor() {
     inject(PageMeta).set({
-      title: this.transloco.translate('accounts.account.pageTitle'),
-      description: this.transloco.translate('accounts.account.pageTitle'),
+      title: this.t('pageTitle'),
+      description: this.t('pageTitle'),
       path: '/account',
     });
     this.fetch();
@@ -212,6 +239,7 @@ export class Account {
         next: ({ church, contactPhone }) => {
           this.savedChurch.set(church);
           this.savedContactPhone = contactPhone;
+          this.pendingEmail.set(this.user()?.pendingEmail ?? null);
           this.reset();
           this.load.set('ready');
         },
@@ -223,10 +251,8 @@ export class Account {
     if (this.saving()) return;
     const wasInvalid = this.status() === 'invalid';
     this.addressProblem.set(null);
-    const sendChurch = !this.isArtist() && this.churchChanged();
-    const sendContact =
-      this.isArtist() && (this.savedContactPhone !== null || this.contactChanged());
-    const errors = this.check(sendChurch, sendContact);
+    const sending = this.sectionsToSend();
+    const errors = this.check(sending);
     if (Object.keys(errors).length) {
       this.showErrors(errors, wasInvalid);
       return;
@@ -236,22 +262,13 @@ export class Account {
     this.bannerShown.set(false);
     this.status.set('saving');
     try {
-      const { name, contactPhone } = this.form.getRawValue();
-      if (name.trim() !== this.user()?.name) {
-        this.auth.replace(await firstValueFrom(this.api.updateProfile(name)));
-      }
-      if (sendChurch) {
-        this.savedChurch.set(await firstValueFrom(this.api.saveChurch(this.churchDetails())));
-        this.auth.load();
-      }
-      if (sendContact) {
-        this.savedContactPhone = await firstValueFrom(this.api.saveContactPhone(contactPhone));
-      }
+      for (const section of sending) await this.send(section);
       this.reset();
       this.status.set('saved');
       this.bannerShown.set(true);
     } catch (error) {
-      this.failed(error, wasInvalid);
+      if (error instanceof Refused) this.showErrors(error.errors, wasInvalid);
+      else this.status.set('failed');
     }
   }
 
@@ -271,39 +288,101 @@ export class Account {
     return this.addressProblem() !== null;
   }
 
-  private failed(error: unknown, wasInvalid: boolean): void {
-    const serverErrors =
-      error instanceof HttpErrorResponse && error.status === 422
-        ? ((error.error?.errors ?? {}) as Record<string, string[]>)
-        : null;
-    if (!serverErrors) {
-      this.status.set('failed');
-      return;
+  /** The sections with something to send, in page order. */
+  private sectionsToSend(): Section[] {
+    const value = this.form.getRawValue();
+    const sections: Section[] = [];
+    if (value.name.trim() !== this.user()?.name) sections.push('profile');
+    if (this.isArtist()) {
+      if (this.savedContactPhone !== null || value.contactPhone.trim()) sections.push('contact');
+    } else if (this.savedChurch() || Object.values(value.church).some((field) => field.trim())) {
+      sections.push('church');
     }
-    const errors: Partial<Record<Field, FieldError>> = {};
-    if (serverErrors['serviceArea']) {
-      this.addressProblem.set('outside');
-      errors.streetAddress = this.addressError('outside');
-    } else if (serverErrors['streetAddress']) {
-      this.addressProblem.set('not-found');
-      errors.streetAddress = this.addressError('notFound');
-    }
-    const fields: Record<string, Field> = {
-      name: 'name',
-      postalCode: 'postalCode',
-      phone: 'churchPhone',
-      typicalAttendance: 'attendance',
-      contactPhone: 'contactPhone',
-      city: 'city',
-    };
-    for (const [key, field] of Object.entries(fields)) {
-      if (serverErrors[key]) errors[field] = this.error(this.checkKey(field));
-    }
-    if (serverErrors['name'] && !errors.name) errors.name = this.error('nameMissing');
-    this.showErrors(errors, wasInvalid);
+    if (value.email.newEmail.trim()) sections.push('email');
+    if (value.password.newPassword || value.password.currentPassword) sections.push('password');
+    return sections;
   }
 
-  private showErrors(errors: Partial<Record<Field, FieldError>>, wasInvalid: boolean): void {
+  /** Sends one section; a 422 becomes `Refused` with that section's field errors. */
+  private async send(section: Section): Promise<void> {
+    const value = this.form.getRawValue();
+    try {
+      switch (section) {
+        case 'profile':
+          this.auth.replace(await firstValueFrom(this.api.updateProfile(value.name)));
+          break;
+        case 'church':
+          this.savedChurch.set(await firstValueFrom(this.api.saveChurch(this.churchDetails())));
+          this.auth.load();
+          break;
+        case 'contact':
+          this.savedContactPhone = await firstValueFrom(
+            this.api.saveContactPhone(value.contactPhone),
+          );
+          break;
+        case 'email':
+          this.pendingEmail.set(
+            await firstValueFrom(
+              this.api.requestEmailChange(value.email.newEmail, value.email.currentPassword),
+            ),
+          );
+          this.form.controls.email.reset();
+          break;
+        case 'password':
+          await firstValueFrom(
+            this.api.changePassword({
+              currentPassword: value.password.currentPassword,
+              password: value.password.newPassword,
+              passwordConfirmation: value.password.newPassword,
+            }),
+          );
+          this.form.controls.password.reset();
+          break;
+      }
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 422) {
+        throw new Refused(this.fromServer(section, error.error?.errors ?? {}));
+      }
+      throw error;
+    }
+  }
+
+  /** The API's 422 for one section, as the page's own copy. */
+  private fromServer(section: Section, serverErrors: Record<string, string[]>): Errors {
+    const errors: Errors = {};
+    const has = (key: string): boolean => !!serverErrors[key];
+    if (section === 'profile' && has('name')) errors.name = this.error('nameMissing');
+    if (section === 'church') {
+      if (has('serviceArea')) {
+        this.addressProblem.set('outside');
+        errors.streetAddress = this.addressError('outside');
+      } else if (has('streetAddress')) {
+        this.addressProblem.set('not-found');
+        errors.streetAddress = this.addressError('notFound');
+      }
+      if (has('name')) errors.churchName = this.error('churchName');
+      if (has('city')) errors.city = this.error('cityMissing');
+      if (has('postalCode')) errors.postalCode = this.error('postalCode');
+      if (has('phone')) errors.churchPhone = this.error('phone');
+      if (has('typicalAttendance')) errors.attendance = this.error('attendance');
+    }
+    if (section === 'contact' && has('contactPhone')) errors.contactPhone = this.error('phone');
+    if (section === 'email') {
+      if (has('email')) errors.newEmail = this.error('emailInvalid');
+      if (has('currentPassword')) errors.emailPassword = this.error('wrongPassword');
+    }
+    if (section === 'password') {
+      if (has('currentPassword')) errors.currentPassword = this.error('wrongPassword');
+      if (has('password')) {
+        errors.newPassword =
+          this.passwordLengthError(this.form.getRawValue().password.newPassword) ??
+          this.error('passwordBreached');
+      }
+    }
+    return errors;
+  }
+
+  private showErrors(errors: Errors, wasInvalid: boolean): void {
     this.errors.set(errors);
     this.status.set('invalid');
     // A summary already on screen is not created again, so it does not take focus itself.
@@ -311,11 +390,11 @@ export class Account {
   }
 
   /** What the form can tell before sending, for the sections that will be sent. */
-  private check(church: boolean, contact: boolean): Partial<Record<Field, FieldError>> {
+  private check(sections: Section[]): Errors {
     const value = this.form.getRawValue();
-    const errors: Partial<Record<Field, FieldError>> = {};
+    const errors: Errors = {};
     if (!value.name.trim()) errors.name = this.error('nameMissing');
-    if (church) {
+    if (sections.includes('church')) {
       const c = value.church;
       const name = c.name.trim().length;
       if (name < 2 || name > 120) errors.churchName = this.error('churchName');
@@ -327,24 +406,28 @@ export class Account {
       if (attendance && !/^[1-9]\d*$/.test(attendance))
         errors.attendance = this.error('attendance');
     }
-    if (contact && !isNorthAmericanPhone(value.contactPhone)) {
+    if (sections.includes('contact') && !isNorthAmericanPhone(value.contactPhone)) {
       errors.contactPhone = this.error('phone');
+    }
+    if (sections.includes('email')) {
+      if (!EMAIL.test(value.email.newEmail.trim())) errors.newEmail = this.error('emailInvalid');
+      if (!value.email.currentPassword) errors.emailPassword = this.error('passwordNeeded');
+    }
+    if (sections.includes('password')) {
+      if (!value.password.currentPassword) {
+        errors.currentPassword = this.error('passwordNeeded');
+      }
+      const length = this.passwordLengthError(value.password.newPassword);
+      if (length) errors.newPassword = length;
     }
     return errors;
   }
 
-  private checkKey(field: Field): string {
-    const keys: Record<Field, string> = {
-      name: 'nameMissing',
-      churchName: 'churchName',
-      streetAddress: 'streetMissing',
-      city: 'cityMissing',
-      postalCode: 'postalCode',
-      churchPhone: 'phone',
-      attendance: 'attendance',
-      contactPhone: 'phone',
-    };
-    return keys[field];
+  private passwordLengthError(password: string): FieldError | null {
+    const count = [...password].length;
+    if (count < PASSWORD_MIN) return this.error('passwordShort', { count });
+    if (count > PASSWORD_MAX) return this.error('passwordLong', { count });
+    return null;
   }
 
   private churchDetails(): ChurchDetails {
@@ -361,17 +444,7 @@ export class Account {
     };
   }
 
-  /** The church is sent when it was saved before or anything in it was typed. */
-  private churchChanged(): boolean {
-    if (this.savedChurch()) return true;
-    return Object.values(this.form.getRawValue().church).some((value) => value.trim() !== '');
-  }
-
-  private contactChanged(): boolean {
-    return this.form.getRawValue().contactPhone.trim() !== '';
-  }
-
-  /** The form as last saved. */
+  /** The form as last saved; the email and password fields start empty. */
   private reset(): void {
     const church = this.savedChurch();
     this.form.reset({
@@ -396,8 +469,11 @@ export class Account {
     return { message, summary: message };
   }
 
-  private error(key: string): FieldError {
-    return { message: this.t(`errors.${key}`), summary: this.t(`errors.${key}Summary`) };
+  private error(key: string, params: Record<string, unknown> = {}): FieldError {
+    return {
+      message: this.t(`errors.${key}`, params),
+      summary: this.t(`errors.${key}Summary`, params),
+    };
   }
 
   private t(key: string, params: Record<string, unknown> = {}): string {

@@ -42,6 +42,16 @@
     >{{ 'common.banner.verified.body' | transloco: { name } }}</zm-banner
   >
 }
+@if (emailChanged.email(); as email) {
+  <zm-banner
+    variant="success"
+    dismissible
+    [label]="'common.banner.emailChanged.label' | transloco"
+    [dismissLabel]="'common.banner.emailChanged.dismiss' | transloco"
+    (dismissed)="emailChanged.dismiss()"
+    >{{ 'common.banner.emailChanged.body' | transloco: { email } }}</zm-banner
+  >
+}
 <main id="main" tabindex="-1">
   <router-outlet />
 </main>

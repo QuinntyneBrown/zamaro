@@ -33,6 +33,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
   },
   {
+    path: 'account/email/confirm',
+    loadComponent: () => import('./pages/confirm-email/confirm-email').then((m) => m.ConfirmEmail),
+  },
+  {
     path: 'account',
     canActivate: [signedInGuard],
     loadComponent: () => import('./pages/account/account').then((m) => m.Account),

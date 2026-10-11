@@ -22,7 +22,7 @@ test.describe('Account settings', () => {
 
     await expect(account.heading()).toHaveText('Account settings');
     await expect(account.subtitle()).toHaveText('Naomi Fraser · Riverside Community Church');
-    await expect(account.settingsNavLinks()).toHaveText(['Profile', 'Church']);
+    await expect(account.settingsNavLinks()).toHaveText(['Profile', 'Church', 'Email', 'Password']);
     await expect(account.settingsNavLinks().first()).toHaveAttribute('aria-current', 'true');
     await expect(account.yourName()).toHaveValue('Naomi Fraser');
     expect(await account.descriptionOf(account.yourName())).toBe(
@@ -133,7 +133,12 @@ test.describe('An artist’s account settings', () => {
     await account.open();
 
     await expect(account.subtitle()).toHaveText('Abigail Mensah · Artist');
-    await expect(account.settingsNavLinks()).toHaveText(['Profile', 'Contact']);
+    await expect(account.settingsNavLinks()).toHaveText([
+      'Profile',
+      'Contact',
+      'Email',
+      'Password',
+    ]);
     await expect(account.section('Church')).toHaveCount(0);
     await expect(account.contactPhone()).toHaveValue('905-555-0148');
     expect(await account.descriptionOf(account.contactPhone())).toBe(
@@ -215,9 +220,7 @@ test.describe('Changing the email', () => {
 
     await confirm.openLink(link);
 
-    await expect(account.emailChangedBanner()).toContainText(
-      `Email changed. You now sign in with ${moved}.`,
-    );
+    await expect(account.emailChangedBanner()).toContainText(`You now sign in with ${moved}.`);
     expect(confirm.path()).toBe('/account');
     await expect(account.sectionLead('Email')).toContainText(`You sign in with ${moved}.`);
   });

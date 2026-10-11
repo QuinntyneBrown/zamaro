@@ -189,6 +189,78 @@
                 </div>
               </zm-form-section>
             }
+            <zm-form-section
+              id="email"
+              headingId="email-title"
+              formGroupName="email"
+              [heading]="'accounts.account.email.title' | transloco"
+            >
+              <span slot="lead">{{
+                'accounts.account.email.lead' | transloco: { email: user()?.email }
+              }}</span>
+              <div class="form-grid">
+                <zm-form-field
+                  formControlName="newEmail"
+                  type="email"
+                  autocomplete="email"
+                  [fieldId]="ids.newEmail"
+                  [label]="'accounts.account.email.newEmail' | transloco"
+                  [optionalMarker]="'accounts.optional' | transloco"
+                  [error]="fieldError('newEmail')"
+                  [readonly]="saving()"
+                />
+                <zm-form-field
+                  formControlName="currentPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  [fieldId]="ids.emailPassword"
+                  [label]="'accounts.account.currentPassword' | transloco"
+                  [optionalMarker]="'accounts.optional' | transloco"
+                  [help]="'accounts.account.email.passwordHelp' | transloco"
+                  [error]="fieldError('emailPassword')"
+                  [readonly]="saving()"
+                />
+              </div>
+              <p class="pending" role="status">
+                @if (pendingEmail(); as pending) {
+                  {{
+                    'accounts.account.email.pending'
+                      | transloco: { email: pending, current: user()?.email }
+                  }}
+                }
+              </p>
+            </zm-form-section>
+            <zm-form-section
+              id="password"
+              headingId="password-title"
+              formGroupName="password"
+              [heading]="'accounts.account.password.title' | transloco"
+            >
+              <span slot="lead">{{ 'accounts.account.password.lead' | transloco }}</span>
+              <div class="form-grid">
+                <zm-form-field
+                  formControlName="currentPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  [fieldId]="ids.currentPassword"
+                  [label]="'accounts.account.currentPassword' | transloco"
+                  [optionalMarker]="'accounts.optional' | transloco"
+                  [error]="fieldError('currentPassword')"
+                  [readonly]="saving()"
+                />
+                <zm-form-field
+                  formControlName="newPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  [fieldId]="ids.newPassword"
+                  [label]="'accounts.account.password.newPassword' | transloco"
+                  [optionalMarker]="'accounts.optional' | transloco"
+                  [help]="'accounts.account.password.help' | transloco"
+                  [error]="fieldError('newPassword')"
+                  [readonly]="saving()"
+                />
+              </div>
+            </zm-form-section>
             <zm-form-actions [status]="statusText()" [statusTone]="statusTone()">
               <zm-button [disabled]="saving()" (click)="discard($event)">{{
                 'accounts.account.discard' | transloco

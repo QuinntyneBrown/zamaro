@@ -48,4 +48,16 @@ export class InMemoryAccountApi implements AccountApi {
     this.phone = contactPhone;
     return of(contactPhone);
   }
+
+  requestEmailChange(email: string): Observable<string> {
+    return of(email.trim().toLowerCase());
+  }
+
+  confirmEmailChange(): Observable<string> {
+    return of(this.user.email);
+  }
+
+  changePassword(): Observable<void> {
+    return of(undefined);
+  }
 }

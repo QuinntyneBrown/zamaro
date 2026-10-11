@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Accounts\AccountEmailController;
 use App\Http\Controllers\Api\V1\Accounts\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Accounts\PasswordResetController;
 use App\Http\Controllers\Api\V1\Accounts\RegistrationController;
@@ -42,4 +43,6 @@ Route::post('email/verification-notification', [EmailVerificationController::cla
 Route::post('password/forgot', [PasswordResetController::class, 'forgot'])->middleware(['throttle:forgot-password', 'bot-challenge:forgot-password', SetCachePolicy::class])->name('password.forgot');
 Route::post('password/reset/check', [PasswordResetController::class, 'check'])->middleware(['throttle:password-reset', SetCachePolicy::class])->name('password.check');
 Route::post('password/reset', [PasswordResetController::class, 'reset'])->middleware(['throttle:password-reset', SetCachePolicy::class])->name('password.reset');
+// An email change link: anyone holding it may open it, so it signs no one in (L2-025.1).
+Route::post('account/email/confirm', [AccountEmailController::class, 'confirm'])->middleware(['throttle:password-reset', SetCachePolicy::class])->name('account.email.confirm');
 Route::get('legal-documents/current', [LegalDocumentController::class, 'current'])->name('legal-documents.current');

@@ -104,7 +104,7 @@ export class ConfirmEmailPage {
   expiredText(): Locator {
     return this.expiredCard()
       .locator('p')
-      .filter({ hasText: /^Nothing changed/ });
+      .filter({ hasText: 'Nothing changed' });
   }
 
   changeAgainLink(): Locator {

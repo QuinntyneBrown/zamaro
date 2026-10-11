@@ -18,6 +18,7 @@ export const NAOMI: CurrentUser = {
   initials: 'NF',
   roles: ['booker'],
   emailVerified: true,
+  pendingEmail: null,
   church: {
     name: 'Riverside Community Church',
     city: 'Burlington',

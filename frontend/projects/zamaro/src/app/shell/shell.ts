@@ -25,6 +25,7 @@ import {
   type TopBarLink,
 } from 'components';
 import { filter, map, timer } from 'rxjs';
+import { EmailChangedNotice } from '../shared/email-changed-notice';
 import { VerifiedNotice } from '../shared/verified-notice';
 import { ThemeService } from './theme.service';
 
@@ -60,6 +61,7 @@ export class Shell {
   private readonly toasts = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly verified = inject(VerifiedNotice);
+  protected readonly emailChanged = inject(EmailChangedNotice);
   protected readonly resending = signal(false);
   protected readonly resent = signal(false);
 
@@ -85,7 +87,10 @@ export class Shell {
         filter((event) => event instanceof NavigationEnd),
         takeUntilDestroyed(),
       )
-      .subscribe(() => this.verified.pageChanged());
+      .subscribe(() => {
+        this.verified.pageChanged();
+        this.emailChanged.pageChanged();
+      });
   }
 
   /** "Resend email": a new link, which revokes the earlier ones; "Sent" for a minute. */

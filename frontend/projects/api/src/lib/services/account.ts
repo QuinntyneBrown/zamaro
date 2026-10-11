@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
-import { map, type Observable } from 'rxjs';
-import type { Church, ChurchDetails, CurrentUser } from '../models/accounts';
+import { map, type Observable, switchMap } from 'rxjs';
+import type { Church, ChurchDetails, CurrentUser, PasswordChange } from '../models/accounts';
 
 /**
  * Account settings (accounts/manage-account-settings, accounts/manage-church-profile): the account
@@ -20,6 +20,15 @@ export interface AccountApi {
   /** The artist's contact phone, "905-555-0148", or null. */
   contactPhone(): Observable<string | null>;
   saveContactPhone(contactPhone: string): Observable<string | null>;
+  /**
+   * Asks for a new account email, confirmed with the current password; answers the new address. The
+   * answer is the same when another account uses it. A wrong password is a 422 on `currentPassword`.
+   */
+  requestEmailChange(email: string, currentPassword: string): Observable<string>;
+  /** Opens an email change link; answers the address the account now signs in with. 410 when spent. */
+  confirmEmailChange(token: string): Observable<string>;
+  /** A new password: every other session ends and this one gets a new ID (L2-025.2). */
+  changePassword(change: PasswordChange): Observable<void>;
 }
 
 export const ACCOUNT_API = new InjectionToken<AccountApi>('AccountApi');
@@ -50,6 +59,26 @@ export class HttpAccountApi implements AccountApi {
     return this.http
       .get<{ data: { contactPhone: string | null } }>('/api/v1/account/contact-phone')
       .pipe(map((response) => response.data.contactPhone));
+  }
+
+  requestEmailChange(email: string, currentPassword: string): Observable<string> {
+    return this.http
+      .put<{ data: { email: string } }>('/api/v1/account/email', { email, currentPassword })
+      .pipe(map((response) => response.data.email));
+  }
+
+  /** The link is often opened in another browser, so the CSRF cookie is fetched first. */
+  confirmEmailChange(token: string): Observable<string> {
+    return this.http.get('/sanctum/csrf-cookie').pipe(
+      switchMap(() =>
+        this.http.post<{ data: { email: string } }>('/api/v1/account/email/confirm', { token }),
+      ),
+      map((response) => response.data.email),
+    );
+  }
+
+  changePassword(change: PasswordChange): Observable<void> {
+    return this.http.put('/api/v1/account/password', change).pipe(map(() => undefined));
   }
 
   saveContactPhone(contactPhone: string): Observable<string | null> {
