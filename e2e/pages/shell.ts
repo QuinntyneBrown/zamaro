@@ -76,6 +76,35 @@ export class Shell {
     await this.themeToggle().click();
   }
 
+  /** The theme kept on this device, as the boot script reads it. */
+  async deviceTheme(): Promise<string | null> {
+    return this.page.evaluate(() => localStorage.getItem('zamaro.theme'));
+  }
+
+  /** The theme the next `PATCH /api/v1/me/preferences` saves to the account, once it is answered. */
+  async nextThemeSave(): Promise<string | null> {
+    const response = await this.page.waitForResponse(
+      (candidate) =>
+        new URL(candidate.url()).pathname === '/api/v1/me/preferences' &&
+        candidate.request().method() === 'PATCH',
+    );
+    return (response.request().postDataJSON() as { themePreference: string | null })
+      .themePreference;
+  }
+
+  /** Counts the theme saves this page sends from now on. */
+  countThemeSaves(): () => number {
+    let count = 0;
+    this.page.on('request', (request) => {
+      if (
+        new URL(request.url()).pathname === '/api/v1/me/preferences' &&
+        request.method() === 'PATCH'
+      )
+        count++;
+    });
+    return () => count;
+  }
+
   /** The colour scheme the page is painted in. */
   async paintedTheme(): Promise<Theme> {
     return this.page.evaluate(

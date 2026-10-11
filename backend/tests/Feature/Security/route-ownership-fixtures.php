@@ -27,6 +27,14 @@ return [
         $test->assertHoldsNothingOf($owner, $response);
     },
 
+    'PATCH api/v1/me/preferences' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($owner)->patchJson('/api/v1/me/preferences', ['themePreference' => 'light'])->assertOk();
+
+        $test->as($intruder)->patchJson('/api/v1/me/preferences', ['themePreference' => 'dark'])->assertOk()->assertJsonPath('data.email', $intruder->email);
+
+        $test->as($owner)->getJson('/api/v1/me')->assertJsonPath('data.themePreference', 'light');
+    },
+
     'DELETE api/v1/session' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
         $test->as($intruder)->deleteJson('/api/v1/session')->assertNoContent();
 

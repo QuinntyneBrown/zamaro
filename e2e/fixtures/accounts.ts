@@ -189,6 +189,14 @@ export async function saveArtist(request: APIRequestContext, slug: string): Prom
   if (!saved.ok()) throw new Error(`Saving ${slug} got ${saved.status()}.`);
 }
 
+/** The theme saved on the account signed in on `request`, from `/me`. */
+export async function accountTheme(request: APIRequestContext): Promise<string | null> {
+  const me = await request.get('/api/v1/me', {
+    headers: { Referer: `${SITE}/`, Accept: 'application/json' },
+  });
+  return ((await me.json()) as { data: { themePreference: string | null } }).data.themePreference;
+}
+
 async function xsrfToken(request: APIRequestContext): Promise<string> {
   const { cookies } = await request.storageState();
   const cookie = cookies.find((candidate) => candidate.name === 'XSRF-TOKEN');
