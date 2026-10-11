@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedField;
 use App\Enums\ActType;
 use App\Enums\ArtistStatus;
 use App\Enums\Pronoun;
@@ -27,6 +28,8 @@ class Artist extends Model
             'published_at' => 'immutable_datetime',
             'pronoun' => Pronoun::class,
             'languages' => 'array',
+            // Private, encrypted, in E.164 (L2-025.4, L2-079.2).
+            'contact_phone' => EncryptedField::class,
         ];
     }
 

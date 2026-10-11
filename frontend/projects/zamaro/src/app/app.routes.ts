@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { signedInGuard } from 'api';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,11 @@ export const routes: Routes = [
   {
     path: 'verify-email',
     loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+  },
+  {
+    path: 'account',
+    canActivate: [signedInGuard],
+    loadComponent: () => import('./pages/account/account').then((m) => m.Account),
   },
   {
     path: '**',

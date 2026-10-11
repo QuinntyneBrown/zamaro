@@ -36,7 +36,9 @@ export interface FieldOption {
 export class FormField implements ControlValueAccessor {
   readonly label = input.required<string>();
   readonly fieldId = input.required<string>();
-  readonly type = input<'text' | 'email' | 'password' | 'date' | 'select' | 'textarea'>('text');
+  readonly type = input<
+    'text' | 'email' | 'password' | 'tel' | 'number' | 'date' | 'select' | 'textarea'
+  >('text');
   readonly options = input<readonly FieldOption[]>([]);
   readonly error = input<string | null>(null);
   readonly min = input<string>();

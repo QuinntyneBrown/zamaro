@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Security;
 
+use App\Enums\ActType;
+use App\Enums\ArtistStatus;
 use App\Enums\Role;
+use App\Models\Artist;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
@@ -84,6 +87,19 @@ class CrossUserAccessTest extends TestCase
         }
 
         return $this->asANewRequest()->fromTheWebApp()->withCookie('zamaro_session', $this->sessions[$user->id]);
+    }
+
+    /** Makes a signed-up person an artist with a profile of their own, for `role:artist` routes. */
+    public function makeArtist(User $user): Artist
+    {
+        $user->grantRoles([Role::Artist]);
+
+        return Artist::create([
+            'user_id' => $user->id, 'slug' => "artist-{$user->id}", 'ticket_number' => "ACT-9{$user->id}",
+            'display_name' => $user->name, 'act_type' => ActType::Solo, 'base_city' => 'Brampton',
+            'base_latitude' => 43.7315, 'base_longitude' => -79.7624, 'max_drive_km' => 80,
+            'from_price_cents' => 50000, 'status' => ArtistStatus::Approved,
+        ]);
     }
 
     /** The answer carries none of the owner's personal values. */

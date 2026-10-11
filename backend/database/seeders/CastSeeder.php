@@ -24,6 +24,7 @@ use App\Models\ArtistVideo;
 use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
+use App\Models\Church;
 use App\Models\ConsentRecord;
 use App\Models\Review;
 use App\Models\ReviewReply;
@@ -269,6 +270,7 @@ class CastSeeder extends Seeder
             $this->media();
             $this->accounts();
             $this->consents();
+            $this->churches();
         });
     }
 
@@ -322,6 +324,36 @@ class CastSeeder extends Seeder
                 ]);
             }
         }
+    }
+
+    /**
+     * The churches of the bookers who sign in (accounts/manage-church-profile), and Abigail's private
+     * contact phone (L2-025.4). Phones are encrypted by the models' casts (L2-079.2). Harvest Point's
+     * street is not in the mocks; it is a Milton address the fake geocoder knows.
+     */
+    private function churches(): void
+    {
+        $churches = [
+            'naomi.fraser@riversidecc.ca' => [
+                'name' => 'Riverside Community Church', 'street_address' => '2150 Lakeshore Road', 'city' => 'Burlington',
+                'postal_code' => 'L7R 1A3', 'phone' => '+19055550123', 'denomination' => 'Non-denominational',
+                'typical_attendance' => 350, 'town' => 'Burlington',
+            ],
+            'tomi.oduya@harvestpointchurch.ca' => [
+                'name' => 'Harvest Point Church', 'street_address' => '8150 Main Street East', 'city' => 'Milton',
+                'postal_code' => 'L9T 1A1', 'phone' => '+19055550177', 'denomination' => null,
+                'typical_attendance' => 220, 'town' => 'Milton',
+            ],
+        ];
+        foreach ($churches as $email => $church) {
+            $point = CastRoutes::anchor($church['town']);
+            unset($church['town']);
+            Church::updateOrCreate(['booker_id' => User::where('email', $email)->value('id')], [
+                ...$church, 'province' => 'ON', 'latitude' => $point->latitude, 'longitude' => $point->longitude,
+            ]);
+        }
+
+        Artist::where('slug', 'abigail-mensah')->firstOrFail()->update(['contact_phone' => '+19055550148']);
     }
 
     /**

@@ -1,0 +1,42 @@
+// The settings page's own layout (docs/mocks/pages/account): the page head, then the settings nav
+// beside the form from LG.
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+  padding-block: var(--space-12) var(--space-8);
+}
+
+.page-head__title {
+  font: var(--text-h1);
+  text-transform: uppercase;
+}
+
+.page-head__sub {
+  font: var(--text-stub);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin-top: var(--space-3);
+}
+
+.page-body {
+  display: grid;
+  gap: var(--space-8);
+  padding-bottom: var(--space-20);
+}
+
+.settings-layout {
+  display: grid;
+  gap: var(--space-10);
+  align-items: start;
+}
+
+@media (min-width: 62rem) {
+  .settings-layout {
+    grid-template-columns: 14rem minmax(0, 1fr);
+    gap: var(--space-16);
+  }
+}

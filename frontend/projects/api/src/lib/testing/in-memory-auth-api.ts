@@ -18,6 +18,12 @@ export const NAOMI: CurrentUser = {
   initials: 'NF',
   roles: ['booker'],
   emailVerified: true,
+  church: {
+    name: 'Riverside Community Church',
+    city: 'Burlington',
+    latitude: 43.325,
+    longitude: -79.799,
+  },
   themePreference: null,
   termsAcceptanceRequired: false,
 };

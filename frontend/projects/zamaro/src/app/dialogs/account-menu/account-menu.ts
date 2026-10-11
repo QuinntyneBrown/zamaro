@@ -38,8 +38,8 @@ export function openAccountMenuDialog(
 }
 
 /**
- * Who is signed in, then Account settings and Sign out. Your bookings and Saved artists join when
- * their screens exist (M2 plan D23, S17); the church joins the who line with the church profile (S9).
+ * Who is signed in (name, church, email), then Account settings and Sign out. Your bookings and Saved
+ * artists join when their screens exist (M2 plan D23, S17).
  */
 @Component({
   selector: 'zm-account-menu-dialog',
@@ -62,7 +62,11 @@ export class AccountMenuDialog {
   protected readonly whoId = ACCOUNT_MENU_WHO_ID;
 
   protected readonly title = translateSignal('common.account.open', { name: this.user.name });
-  protected readonly who: MenuWho = { name: this.user.name, note: this.user.email };
+  protected readonly who: MenuWho = {
+    name: this.user.name,
+    detail: this.user.church?.name,
+    note: this.user.email,
+  };
   private readonly settings = translateSignal('common.account.settings');
   private readonly signOut = translateSignal('common.account.signOut');
 

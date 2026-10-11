@@ -33,6 +33,16 @@ class CurrentUserResource extends JsonResource
             'roles' => array_map(fn (Role $role) => $role->value, $user->roleNames()),
             'emailVerified' => $user->email_verified_at !== null,
             /**
+             * A booker's church, for the header's menu, the footer and Discover's starting point
+             * (L2-024.2, L2-004.1); null for an artist or a booker without one.
+             */
+            'church' => $user->church === null ? null : [
+                'name' => $user->church->name,
+                'city' => $user->church->city,
+                'latitude' => $user->church->latitude,
+                'longitude' => $user->church->longitude,
+            ],
+            /**
              * The theme chosen on any signed-in device, or null to follow the device. Always null
              * until the account can store one (M2 S18).
              *

@@ -6,6 +6,7 @@ use App\Enums\Role as RoleName;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -47,6 +48,12 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /** A booker's one church (accounts/manage-church-profile). @return HasOne<Church, $this> */
+    public function church(): HasOne
+    {
+        return $this->hasOne(Church::class, 'booker_id');
     }
 
     /** @return BelongsToMany<Role, $this> */

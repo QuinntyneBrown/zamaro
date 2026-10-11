@@ -1,9 +1,17 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, PLATFORM_ID } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  PLATFORM_ID,
+  untracked,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { FormatService } from 'api';
+import { AuthService, FormatService } from 'api';
 import { Band, Marquee, Poster } from 'components';
 import { HowBookingWorks } from './how-booking-works/how-booking-works';
 import { Lineup } from './lineup/lineup';
@@ -75,6 +83,22 @@ export class Discover {
         const back = router.currentNavigation()?.trigger === 'popstate';
         if (!(browser && back && this.store.restore(state))) this.store.load(state, browser);
       });
+    // A booker with a saved church starts from it (L2-004.1), unless the address names a place.
+    const auth = inject(AuthService);
+    effect(() => {
+      const church = auth.currentUser()?.church;
+      if (!church) return;
+      untracked(() => {
+        const state = this.store.state();
+        if (state.place || state.lat !== null) return;
+        this.store.state.set({
+          ...state,
+          place: church.city,
+          lat: church.latitude,
+          lng: church.longitude,
+        });
+      });
+    });
   }
 
   protected readonly posterDate = computed(() => {

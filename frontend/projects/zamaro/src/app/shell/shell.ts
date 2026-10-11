@@ -201,13 +201,13 @@ export class Shell {
   ]);
 
   /**
-   * Signed out: Sign in and Create an account. Signed in: the person's name; their
-   * church (S9) and Saved artists (S15) join it.
+   * Signed out: Sign in and Create an account. Signed in: the person's name and their church;
+   * Saved artists (S15) joins it.
    */
   private accountColumn(): FooterColumn {
     const user = this.auth.currentUser();
     return user
-      ? { heading: user.name, items: [] }
+      ? { heading: user.name, items: user.church ? [{ label: user.church.name }] : [] }
       : {
           heading: this.yourAccount(),
           items: [

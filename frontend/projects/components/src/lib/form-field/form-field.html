@@ -53,6 +53,7 @@
         [attr.min]="min()"
         [attr.max]="max()"
         [attr.autocomplete]="autocomplete()"
+        [attr.inputmode]="type() === 'number' ? 'numeric' : null"
         [attr.placeholder]="placeholder()"
         [attr.aria-invalid]="isInvalid() ? 'true' : null"
         [attr.aria-describedby]="descriptions()"

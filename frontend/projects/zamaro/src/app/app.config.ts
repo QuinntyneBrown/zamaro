@@ -7,6 +7,7 @@ import {
 } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
+  ACCOUNT_API,
   ARTIST_AVAILABILITY_API,
   ARTIST_PROFILES_API,
   AUTH_API,
@@ -17,6 +18,7 @@ import {
   DISCOVERY_API,
   FakeBotChallenge,
   FEATURES_API,
+  HttpAccountApi,
   HttpArtistAvailabilityApi,
   HttpArtistProfilesApi,
   HttpAuthApi,
@@ -63,6 +65,7 @@ export const appConfig: ApplicationConfig = {
     { provide: FEATURES_API, useClass: HttpFeaturesApi },
     { provide: AUTH_API, useClass: HttpAuthApi },
     { provide: CONSENT_API, useClass: HttpConsentApi },
+    { provide: ACCOUNT_API, useClass: HttpAccountApi },
     // The bot check's vendor is chosen in M10 (M2 D2); until then every check passes.
     { provide: BOT_CHALLENGE, useClass: FakeBotChallenge },
   ],

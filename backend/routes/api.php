@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Accounts\AccountProfileController;
+use App\Http\Controllers\Api\V1\Accounts\ArtistContactController;
+use App\Http\Controllers\Api\V1\Accounts\ChurchController;
 use App\Http\Controllers\Api\V1\Accounts\MeController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Middleware\SetCachePolicy;
@@ -11,4 +14,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum', SetCachePolicy::class])->group(function () {
     Route::get('me', [MeController::class, 'show'])->name('me.show');
     Route::delete('session', [SessionController::class, 'destroy'])->name('session.destroy');
+
+    // Account settings (accounts/manage-account-settings, accounts/manage-church-profile).
+    Route::put('account/profile', [AccountProfileController::class, 'update'])->name('account.profile.update');
+    Route::middleware('role:booker')->group(function () {
+        Route::get('account/church', [ChurchController::class, 'show'])->name('account.church.show');
+        Route::put('account/church', [ChurchController::class, 'update'])->name('account.church.update');
+    });
+    Route::middleware('role:artist')->group(function () {
+        Route::get('account/contact-phone', [ArtistContactController::class, 'show'])->name('account.contact-phone.show');
+        Route::put('account/contact-phone', [ArtistContactController::class, 'update'])->name('account.contact-phone.update');
+    });
 });

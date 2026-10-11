@@ -10,10 +10,48 @@ export interface CurrentUser {
   initials: string;
   roles: Role[];
   emailVerified: boolean;
+  /** A booker's church, for the menu, the footer and Discover's starting point; null otherwise. */
+  church: ChurchSummary | null;
   /** The theme chosen on any signed-in device, or null to follow the device. */
   themePreference: 'light' | 'dark' | null;
   /** The current terms must be accepted before anything else. */
   termsAcceptanceRequired: boolean;
+}
+
+/** The church as `/me` gives it (L2-024.2, L2-004.1). */
+export interface ChurchSummary {
+  name: string;
+  /** "Burlington". */
+  city: string;
+  latitude: number;
+  longitude: number;
+}
+
+/** `PUT /api/v1/account/church`: what the church form sends (L2-024.1). */
+export interface ChurchDetails {
+  name: string;
+  streetAddress: string;
+  city: string;
+  /** "L7R 1A3", with or without the space. */
+  postalCode: string;
+  /** A North American number in any common format. */
+  phone: string;
+  denomination?: string | null;
+  typicalAttendance?: number | null;
+}
+
+/** `GET /api/v1/account/church`: the booker's church, for its owner only. */
+export interface Church {
+  name: string;
+  streetAddress: string;
+  city: string;
+  /** "ON". */
+  province: string;
+  postalCode: string;
+  /** "905-555-0123". */
+  phone: string;
+  denomination: string | null;
+  typicalAttendance: number | null;
 }
 
 export interface SignInCredentials {

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, map, type Observable, of, tap, throwError } from 'rxjs';
+import { catchError, map, type Observable, of, shareReplay, tap, throwError } from 'rxjs';
 import type {
   CurrentUser,
   PasswordReset,
@@ -24,18 +24,40 @@ export class AuthService {
   /** Bumped by every sign-in and sign-out, so a slow `/me` never overwrites a newer answer. */
   private changes = 0;
 
+  /** The first answer from `/me` in this browser, shared by the shell and the route guards. */
+  private first?: Observable<CurrentUser | null>;
+
   /** The signed-in person, or null for a guest. */
   readonly currentUser = this.user.asReadonly();
 
   /** Asks the API who holds this browser's session. Call it in the browser only. */
   load(): void {
+    (this.changes === 0 ? this.whenKnown() : this.ask()).subscribe();
+  }
+
+  /**
+   * Who is signed in, once known: at once after a sign-in, sign-out or earlier answer, else after the
+   * first `/me` (which this starts). Call it in the browser only.
+   */
+  whenKnown(): Observable<CurrentUser | null> {
+    if (this.changes > 0) return of(this.user());
+    this.first ??= this.ask().pipe(shareReplay(1));
+    return this.first;
+  }
+
+  /** The person after a change made elsewhere, such as a new name (accounts/manage-account-settings). */
+  replace(user: CurrentUser): void {
+    this.set(user);
+  }
+
+  private ask(): Observable<CurrentUser | null> {
     const asked = this.changes;
-    this.api
-      .me()
-      .pipe(catchError(() => of(null)))
-      .subscribe((user) => {
-        if (asked === this.changes) this.user.set(user);
-      });
+    return this.api.me().pipe(
+      catchError(() => of(null)),
+      tap((user) => {
+        if (asked === this.changes) this.set(user);
+      }),
+    );
   }
 
   signIn(credentials: SignInCredentials): Observable<CurrentUser> {
