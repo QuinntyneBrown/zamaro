@@ -22,7 +22,13 @@ test.describe('Account settings', () => {
 
     await expect(account.heading()).toHaveText('Account settings');
     await expect(account.subtitle()).toHaveText('Naomi Fraser · Riverside Community Church');
-    await expect(account.settingsNavLinks()).toHaveText(['Profile', 'Church', 'Email', 'Password']);
+    await expect(account.settingsNavLinks()).toHaveText([
+      'Profile',
+      'Church',
+      'Email',
+      'Password',
+      'Signed-in devices',
+    ]);
     await expect(account.settingsNavLinks().first()).toHaveAttribute('aria-current', 'true');
     await expect(account.yourName()).toHaveValue('Naomi Fraser');
     expect(await account.descriptionOf(account.yourName())).toBe(
@@ -138,6 +144,7 @@ test.describe('An artist’s account settings', () => {
       'Contact',
       'Email',
       'Password',
+      'Signed-in devices',
     ]);
     await expect(account.section('Church')).toHaveCount(0);
     await expect(account.contactPhone()).toHaveValue('905-555-0148');
@@ -355,7 +362,7 @@ test.describe('Changing the password', () => {
     await signIn(page.request, booker.email);
     await account.open();
     await expect(account.sectionLead('Password')).toHaveText(
-      'Leave these empty to keep your password. A new one signs you out on your other devices.',
+      'Leave these empty to keep your password. A new one signs you out on your other device.',
     );
 
     await account.currentPassword().fill(CAST_PASSWORD);
@@ -392,5 +399,51 @@ test.describe('Changing the password', () => {
     await expect(account.errorFor(account.currentPassword())).toHaveText(
       'That password isn’t right. Check it and try again.',
     );
+  });
+});
+
+// L2-025.3 and L2-074.2: every signed-in session, and ending one at once.
+test.describe('Signed-in devices', () => {
+  const IPHONE =
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1';
+
+  test('the list starts with this device, then the others', async ({ page, browser }) => {
+    const account = new AccountPage(page);
+    const booker = createBooker();
+    const phone = await browser.newContext({ userAgent: IPHONE });
+    await signIn(phone.request, booker.email);
+    await signIn(page.request, booker.email);
+
+    await account.open();
+
+    await expect(account.deviceNames()).toHaveText([/^Chrome on /, 'Safari on iPhone']);
+    const first = account.deviceList().getByRole('listitem').first();
+    await expect(first).toContainText('This device');
+    await expect(first.locator('.text-muted')).toHaveText(
+      'Burlington, ON · This device · active now',
+    );
+    await expect(account.deviceDetail('Safari on iPhone')).toHaveText(
+      'Burlington, ON · Last active just now',
+    );
+    await expect(account.section('Signed-in devices')).toContainText(
+      'Cities are approximate, from each device’s network. Ending a session signs that device out at once.',
+    );
+    await phone.close();
+  });
+
+  test('End session signs that device out at once, without asking', async ({ page, browser }) => {
+    const account = new AccountPage(page);
+    const booker = createBooker();
+    const phone = await browser.newContext({ userAgent: IPHONE });
+    await signIn(phone.request, booker.email);
+    await signIn(page.request, booker.email);
+    await account.open();
+
+    await account.endSessionButton('Safari on iPhone').click();
+
+    await expect(account.deviceRow('Safari on iPhone')).toHaveCount(0);
+    expect(await meStatusIn(phone)).toBe(401);
+    await expect(account.deviceNames()).toHaveCount(1);
+    await phone.close();
   });
 });

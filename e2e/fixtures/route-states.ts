@@ -67,5 +67,6 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
   if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
   await discover.shell.settle();
+  if (state.masks === 'devices') return [new AccountPage(page).deviceList()];
   return state.masks === 'session-ended-line' ? [new SignInPage(page).sessionEndedDetail()] : [];
 }

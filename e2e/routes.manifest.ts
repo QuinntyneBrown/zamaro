@@ -32,8 +32,11 @@ export interface RouteState {
    * has expired" card, or the account settings form.
    */
   shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form';
-  /** Copy that will change with a later slice, masked in captures: the session-ended line (M5 drafts). */
-  masks?: 'session-ended-line';
+  /**
+   * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
+   * devices, which every spec signing in as the same cast member adds to.
+   */
+  masks?: 'session-ended-line' | 'devices';
 }
 
 /** Naomi's search: Burlington, Sat 14 Nov, a worship night, within 120 km (docs/mocks/README.md). */
@@ -192,6 +195,7 @@ export const routes: RouteState[] = [
     mock: 'account/default.html',
     signedInAs: 'naomi',
     shows: 'account-form',
+    masks: 'devices',
   },
   // Abigail's: Contact, with her private phone, in place of Church.
   {
@@ -201,6 +205,7 @@ export const routes: RouteState[] = [
     mock: 'account/artist.html',
     signedInAs: 'abigail',
     shows: 'account-form',
+    masks: 'devices',
   },
   // An email change link that was used, ran out or never existed, opened by Naomi: "This link has
   // expired" with the Expired stamp, her address and "Change email again".

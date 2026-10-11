@@ -220,6 +220,34 @@ export class AccountPage {
     return this.page.getByRole('status').filter({ hasText: /^Email changed/ });
   }
 
+  /** The Signed-in devices list (docs/specs/components/list, device variant). */
+  deviceList(): Locator {
+    return this.section('Signed-in devices').locator('.device-list');
+  }
+
+  /** Each device's name, in list order: "Chrome on Windows". */
+  deviceNames(): Locator {
+    return this.deviceList().locator('li strong');
+  }
+
+  /** The line under a device: "Burlington, ON · This device · active now". */
+  deviceDetail(device: string): Locator {
+    return this.deviceRow(device).locator('.text-muted');
+  }
+
+  deviceRow(device: string): Locator {
+    return this.deviceList()
+      .getByRole('listitem')
+      .filter({ has: this.page.locator('strong', { hasText: device }) });
+  }
+
+  /** "End session on Safari on iPhone". */
+  endSessionButton(device: string): Locator {
+    return this.section('Signed-in devices').getByRole('button', {
+      name: `End session on ${device}`,
+    });
+  }
+
   contactPhone(): Locator {
     return this.section('Contact').getByRole('textbox', { name: /^Contact phone/ });
   }
