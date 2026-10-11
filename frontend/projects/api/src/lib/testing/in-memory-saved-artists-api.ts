@@ -1,5 +1,6 @@
 import { type Observable, of } from 'rxjs';
-import type { SavedArtistsApi, SavedArtistState } from '../services/saved-artists';
+import type { CalendarDate } from '../i18n/calendar-date';
+import type { SavedArtistList, SavedArtistsApi, SavedArtistState } from '../services/saved-artists';
 
 /** In-memory SavedArtistsApi for scenarios and component tests. */
 export class InMemorySavedArtistsApi implements SavedArtistsApi {
@@ -8,6 +9,10 @@ export class InMemorySavedArtistsApi implements SavedArtistsApi {
 
   constructor(ids: number[] = []) {
     this.saved = new Set(ids);
+  }
+
+  list(date: CalendarDate | null = null): Observable<SavedArtistList> {
+    return of({ artists: [], total: 0, date });
   }
 
   ids(): Observable<{ artistIds: number[]; count: number }> {

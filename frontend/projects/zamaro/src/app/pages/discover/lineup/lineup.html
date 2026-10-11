@@ -137,7 +137,7 @@
           @for (ticket of tickets(); track ticket.card.slug) {
             <li>
               <zm-ticket
-                [positionLabel]="ticket.positionLabel"
+                [kicker]="ticket.positionLabel"
                 [name]="ticket.card.name"
                 [link]="'/artists/' + ticket.card.slug"
                 [queryParams]="{ date: store.query()!.date }"

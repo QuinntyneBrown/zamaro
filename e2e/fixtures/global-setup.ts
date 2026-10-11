@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { createBooker, RUTH } from './accounts';
 import { clearMailbox } from './mailbox';
 
 // The e2e database is reset and seeded once per run, and Mailpit starts empty. Specs that change
@@ -23,5 +24,6 @@ export default async function globalSetup(): Promise<void> {
     ],
     { cwd: new URL('../..', import.meta.url), stdio: 'inherit' },
   );
+  createBooker(RUTH);
   await clearMailbox();
 }

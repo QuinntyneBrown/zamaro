@@ -27,6 +27,23 @@ execFileSync(
   ],
   { cwd: root, stdio: 'inherit' },
 );
+// Ruth Adeyemi, the fresh-booker route state's booker (fixtures/accounts.ts), made once per run.
+execFileSync(
+  'docker',
+  [
+    'compose',
+    '--profile',
+    'e2e',
+    'exec',
+    '-T',
+    'api-e2e',
+    'php',
+    'artisan',
+    'cast:booker',
+    'ruth-adeyemi@example.ca',
+  ],
+  { cwd: root, stdio: 'inherit' },
+);
 execFileSync(
   'docker',
   [

@@ -43,6 +43,7 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
         Route::put('account/church', [ChurchController::class, 'update'])->name('account.church.update');
     });
     Route::middleware('role:booker')->group(function () {
+        Route::get('saved-artists', [SavedArtistController::class, 'index'])->name('saved-artists.index');
         Route::get('saved-artists/ids', [SavedArtistController::class, 'ids'])->name('saved-artists.ids');
         Route::put('saved-artists/{artist}', [SavedArtistController::class, 'update'])->whereNumber('artist')->name('saved-artists.update');
         Route::delete('saved-artists/{artist}', [SavedArtistController::class, 'destroy'])->whereNumber('artist')->name('saved-artists.destroy');

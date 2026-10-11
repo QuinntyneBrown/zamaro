@@ -26,6 +26,13 @@ export const accounts = {
 export type CastMember = keyof typeof accounts;
 
 /**
+ * A booker with no church and nothing saved, made once per run right after the seed (global-setup,
+ * run-in-docker), so the header always reads "Ruth Adeyemi". Making her again would change her
+ * password hash and end every session she has.
+ */
+export const RUTH = 'ruth-adeyemi@example.ca';
+
+/**
  * An address no other spec, worker or run uses, so specs that change data never meet. Mailpit
  * lookups filter by it too.
  */
@@ -164,6 +171,22 @@ export async function turnOnTwoFactor(
   const { recoveryCodes } = ((await confirmed.json()) as { data: { recoveryCodes: string[] } })
     .data;
   return { secret, recoveryCodes };
+}
+
+/** Saves an artist for the person signed in on `request`, as a heart would (accounts/save-artist). */
+export async function saveArtist(request: APIRequestContext, slug: string): Promise<void> {
+  const profile = await request.get(`/api/v1/artists/${slug}`, {
+    headers: { Accept: 'application/json' },
+  });
+  const id = ((await profile.json()) as { data: { id: number } }).data.id;
+  const saved = await request.put(`/api/v1/saved-artists/${id}`, {
+    headers: {
+      Referer: `${SITE}/`,
+      Accept: 'application/json',
+      'X-XSRF-TOKEN': await xsrfToken(request),
+    },
+  });
+  if (!saved.ok()) throw new Error(`Saving ${slug} got ${saved.status()}.`);
 }
 
 async function xsrfToken(request: APIRequestContext): Promise<string> {

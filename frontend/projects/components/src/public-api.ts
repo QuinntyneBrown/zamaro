@@ -44,6 +44,7 @@ export * from './lib/skip-link/skip-link';
 export * from './lib/stamp/stamp';
 export * from './lib/steps/steps';
 export * from './lib/ticket/ticket';
+export * from './lib/ticket/ticket-skeleton';
 export * from './lib/toast/toast-region';
 export * from './lib/toast/toast.service';
 export * from './lib/toast/toast.types';

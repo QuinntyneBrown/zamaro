@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1\Accounts;
 
+use App\Actions\Accounts\ListSavedArtists;
 use App\Actions\Accounts\SaveArtist;
 use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\UnsaveArtist;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Accounts\ListSavedArtistsRequest;
+use App\Http\Resources\Accounts\SavedArtistListResource;
 use App\Http\Resources\Accounts\SavedArtistStateResource;
 use App\Services\Accounts\SavedArtistState;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +19,22 @@ use Illuminate\Support\Facades\DB;
 /** A booker's saved artists (L2-026, accounts/save-artist); bookers only. */
 class SavedArtistController extends Controller
 {
+    /**
+     * List saved artists.
+     *
+     * Newest save first, each `free` or `booked` on `date` when one is given. Artists who are no
+     * longer visible are left out and not counted.
+     */
+    public function index(ListSavedArtistsRequest $request, ListSavedArtists $list): SavedArtistListResource
+    {
+        $date = $request->validated('date');
+
+        return new SavedArtistListResource($list->handle(
+            $request->user(),
+            $date === null ? null : CarbonImmutable::createFromFormat('Y-m-d', $date, 'America/Toronto')->startOfDay(),
+        ));
+    }
+
     /**
      * The saved artists' ids.
      *

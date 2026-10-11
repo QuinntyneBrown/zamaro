@@ -9,6 +9,8 @@ import type { CastMember } from './fixtures/accounts';
  * - `profile-pending` and `profile-fails`: the profile is opened from `from` in the browser, since
  *   the server renders a profile it can reach, and its request never answers or fails.
  * - `two-step-on`: `/me` says two-step sign-in is on, as no seeded cast member has it on.
+ * - `last-search`: this browser's most recent search was Naomi's, Sat 14 Nov (D14).
+ * - `fresh-booker`: Ruth Adeyemi, a booker with no church and nothing saved, is signed in.
  */
 export type RouteSetup =
   | 'search-pending'
@@ -16,7 +18,9 @@ export type RouteSetup =
   | 'search-limited'
   | 'profile-pending'
   | 'profile-fails'
-  | 'two-step-on';
+  | 'two-step-on'
+  | 'last-search'
+  | 'fresh-booker';
 
 export interface RouteState {
   /** Names the state in screenshots and test titles. */
@@ -37,7 +41,15 @@ export interface RouteState {
    * the network went quiet: the lineup's cards, the sold-out panel, an emailed link's "This link
    * has expired" card, or the account settings form.
    */
-  shows?: 'lineup' | 'sold-out' | 'link-expired' | 'account-form' | 'mfa-key' | 'accept-terms';
+  shows?:
+    | 'lineup'
+    | 'sold-out'
+    | 'link-expired'
+    | 'account-form'
+    | 'mfa-key'
+    | 'accept-terms'
+    | 'saved-list'
+    | 'saved-empty';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
    * devices (only this device is shown) with the Password lead's count of the others, which every spec
@@ -262,5 +274,24 @@ export const routes: RouteState[] = [
     mock: 'accept-terms/default.html',
     signedInAs: 'tomi',
     shows: 'accept-terms',
+  },
+  // Naomi's saved artists on her last search date: Abigail, Hosanna Collective and Luz Viva, all free.
+  {
+    name: 'saved-default',
+    path: '/saved',
+    app: 'zamaro',
+    mock: 'saved/default.html',
+    signedInAs: 'naomi',
+    setup: 'last-search',
+    shows: 'saved-list',
+  },
+  // A booker who has saved no one: "No saved artists yet" and "Find who’s free".
+  {
+    name: 'saved-empty',
+    path: '/saved',
+    app: 'zamaro',
+    mock: 'saved/empty.html',
+    setup: 'fresh-booker',
+    shows: 'saved-empty',
   },
 ];

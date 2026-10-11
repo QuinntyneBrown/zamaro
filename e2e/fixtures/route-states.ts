@@ -4,10 +4,11 @@ import { AccountPage } from '../pages/account.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
 import { MfaSetupPage } from '../pages/mfa-setup.page';
+import { SavedPage } from '../pages/saved.page';
 import { SignInPage } from '../pages/sign-in.page';
 import { VerifyEmailPage } from '../pages/verify-email.page';
 import type { RouteState } from '../routes.manifest';
-import { signInAs } from './accounts';
+import { RUTH, signIn, signInAs } from './accounts';
 import { freezeClock } from './clock';
 
 /** The wait the rate-limited state is given, as `Retry-After`, as in docs/mocks/pages/discover/limited. */
@@ -62,6 +63,16 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();
       break;
+    case 'last-search':
+      await page.addInitScript(() => localStorage.setItem('zamaro.lastSearchDate', '2026-11-14'));
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.main()).toBeVisible();
+      break;
+    case 'fresh-booker':
+      await signIn(page.context().request, RUTH);
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.accountButton()).toBeVisible();
+      break;
     default:
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();
@@ -78,6 +89,8 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
   if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
   if (state.shows === 'mfa-key') await expect(new MfaSetupPage(page).key()).toBeVisible();
+  if (state.shows === 'saved-list') await expect(new SavedPage(page).cards()).toHaveCount(3);
+  if (state.shows === 'saved-empty') await expect(new SavedPage(page).emptyTitle()).toBeVisible();
   if (state.shows === 'accept-terms')
     await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
   await discover.shell.settle();

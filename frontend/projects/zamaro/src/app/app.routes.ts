@@ -56,6 +56,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/account/account').then((m) => m.Account),
   },
   {
+    path: 'saved',
+    canActivate: [signedInGuard, termsGuard],
+    loadComponent: () => import('./pages/saved/saved').then((m) => m.SavedPage),
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFoundPage),
   },
