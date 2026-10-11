@@ -24,7 +24,23 @@
 | S15 | Save an artist | Done | `8df925f` red tests, `a515feb` |
 | S16 | Guest save through sign-in or sign-up | Done | `1b6fc36` red tests, `74847fe` |
 | S17 | Saved artists list | Done | `462965c` red tests, `e590e85` |
-| S18 | | Not started | |
+| S18 | Theme saved to the account | Done | `fac5499` red tests, `d126ab4` |
+
+**Checks at the last commit (S18, 2026-10-11):** the backend Feature suite passes with the contract
+assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 377 tests on win32. No
+component changed, so no perf run was due.
+
+**S18 acceptance criteria (as tested):**
+- Given Naomi, then `/me` has `themePreference: null`; `PATCH /me/preferences` with `dark` answers her with
+  `dark`, privately, stores it and `/me` reads it back; `light` replaces it and `null` clears it; `blue` is
+  422 and changes nothing; a guest gets 401. Tomi, held by the terms gate, can still save a theme. Another
+  person's save never changes hers.
+- Given a fresh booker on a light system who chooses dark, then `dark` is saved; a second browser signed in
+  as them, also light, turns dark once `/me` answers, keeps `dark` on its device and is dark after a reload.
+- Given a booker whose device already holds dark and whose account holds nothing, then signing in saves
+  `dark` to the account.
+- Given a guest who chooses dark, then it is kept on the device and nothing is sent.
 
 **Checks at the last commit (S17, 2026-10-11):** 340 backend Feature tests pass with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
@@ -713,6 +729,11 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S18 — Open to the terms gate.** `PATCH /me/preferences` joins `/me` among the routes a booker
+  held by new terms can use, so matching the theme at start-up never meets the 409.
+- **S18 — Matched once per person.** `ThemeService` matches the device with the account the first time it
+  knows who is signed in (start-up or a sign-in); later changes to the same person (a new name) do not
+  replay an older theme.
 - **S17 — `saved_artists.id`.** The e2e clock is frozen, so two saves share an instant; a new
   additive migration gives the table an identity that keeps them in the order they were made.
 - **S17 — Copy without a mock.** "{n} saved · free or booked on {date}" after Check date, "{n} saved ·
@@ -967,12 +988,12 @@ shown and are recorded in the slice's ADR or the design.
 | D17 | Backoff intervals (email and jobs designs) | `tries = 6`; delays of 10, 30, 90, 270 and 810 s, ±10% jitter | OK (accepted default, 2026-10-10); built in S6 |
 | D18 | Queue names and process counts (run-background-jobs) | `high`, `notifications`, `default`; one process each locally | OK (accepted default, 2026-10-10) |
 | D19 | How e2e specs that change data get users | `cast:booker {email} [--church] [--saved=…] [--terms=…]`: refused in production, run through `docker compose exec`. Registration is still tested through the UI | OK (accepted default, 2026-10-10); `{email}` built in S1, the options join with their slices |
-| D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | |
+| D20 | Toast when saving the theme fails (switch-theme) | None. The device keeps the choice, and the next toggle reconciles | OK (accepted default, 2026-10-10); built in S18 |
 | D21 | Email on two-step changes (mocks say "We emailed…"; the design is silent) | Add `TwoStepSignInChangedNotification` for on, off and new codes; update the design | OK; built in S12 (on), S13 (off, new codes) |
 | D22 | M2 actions call `RecordAuditEntry`, which is M3 | Add the append-only `audit_entries` table and the action in S1; the viewer stays in M3 | OK (accepted default, 2026-10-10) |
 | D23 | Mock parts that belong to later screens | Hide `#data` and `#delete` (M9), the reminder and review boxes (M7), "Your bookings" (M5), and the artist's Dashboard item and request count (M4/M5). Visual tests mask them | OK |
 | D24 | The saved card's "Request" link (`/book` is M5) | Until M5 it links to `/artists/{slug}?date=…` | OK |
-| D25 | Street-address type-ahead source (manage-church-profile) | A plain field until the geocoder vendor (M10) | |
+| D25 | Street-address type-ahead source (manage-church-profile) | A plain field until the geocoder vendor (M10) | OK (accepted default, 2026-10-10); built in S9 |
 | D26 | Cross-user suite fails on a route with no fixture (L2-074.3), against "no architecture tests" | Keep it: L2-074.3 and the AGENTS.md tree both name it, and every case asserts behaviour | OK (accepted default, 2026-10-10); built in S4 |
 | D27 | Raw-SQL lint tool (authorise-and-validate) | Larastan with a custom PHPStan rule against non-literal `DB::raw`, `select`, `statement` and `*Raw` | OK (accepted default, 2026-10-10); built in S4 at level 0 |
 | D28 | Cast sign-in password | `ZAMARO_CAST_PASSWORD` for Naomi, Abigail and Tomi, seeded only in `local`, `testing` and `e2e` | OK (accepted default, 2026-10-10) |
