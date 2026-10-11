@@ -17,6 +17,18 @@ export class Lineup {
     return this.section().getByRole('listitem');
   }
 
+  /** The heart on an artist's ticket: "Save Elijah Park to your saved artists". */
+  saveToggle(artist: string): Locator {
+    return this.section().getByRole('button', {
+      name: new RegExp(`^(Save ${artist} to|Remove ${artist} from) your saved artists$`),
+    });
+  }
+
+  /** Every heart in the lineup, headliner included. */
+  saveToggles(): Locator {
+    return this.section().locator('.save');
+  }
+
   ticketNames(): Locator {
     return this.tickets().getByRole('heading', { level: 3 });
   }
@@ -171,6 +183,10 @@ export class Headliner {
 
   profileLink(): Locator {
     return this.card.getByRole('link', { name: /^See / });
+  }
+
+  saveToggle(): Locator {
+    return this.card.locator('.save');
   }
 
   /** Opens the profile from the headliner's name. */

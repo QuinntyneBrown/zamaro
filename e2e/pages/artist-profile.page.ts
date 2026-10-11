@@ -100,6 +100,11 @@ export class ArtistProfilePage {
 
   // Share (L2-113)
 
+  /** "Save" or "Saved" in the profile header (L2-026). */
+  saveButton(): Locator {
+    return this.page.getByRole('main').getByRole('button', { name: /^(Save|Saved)$/ });
+  }
+
   shareButton(): Locator {
     return this.page.locator('.artist-poster').getByRole('button', { name: 'Share' });
   }

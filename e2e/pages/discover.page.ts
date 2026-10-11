@@ -120,6 +120,36 @@ export class DiscoverPage {
     return this.page.locator(':focus');
   }
 
+  /** Saving fails on the server's side until unrouted. */
+  async failSaves(): Promise<void> {
+    await this.page.route('**/api/v1/saved-artists/*', (route) =>
+      route.request().method() === 'PUT'
+        ? route.fulfill({
+            status: 500,
+            headers: { 'Content-Type': 'application/problem+json' },
+            body: JSON.stringify({ title: 'Something went wrong', status: 500 }),
+          })
+        : route.fallback(),
+    );
+  }
+
+  /** Saving is refused as over the 200-artist limit. */
+  async limitSaves(): Promise<void> {
+    await this.page.route('**/api/v1/saved-artists/*', (route) =>
+      route.request().method() === 'PUT'
+        ? route.fulfill({
+            status: 422,
+            headers: { 'Content-Type': 'application/problem+json' },
+            body: JSON.stringify({
+              type: 'https://zamaro.ca/problems/saved-artist-limit',
+              title: 'You can save up to 200 artists',
+              status: 422,
+            }),
+          })
+        : route.fallback(),
+    );
+  }
+
   async open(): Promise<void> {
     await this.page.goto('/');
   }

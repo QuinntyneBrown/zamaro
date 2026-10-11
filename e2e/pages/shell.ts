@@ -48,6 +48,11 @@ export class Shell {
       .getByRole('button', { name: /^Account menu for/, includeHidden: true });
   }
 
+  /** The header's Saved link, named "Saved 3 artists" with its count (L2-026). */
+  savedLink(): Locator {
+    return this.page.getByRole('banner').locator('.topbar__saved');
+  }
+
   /** The header's link for someone signed out. */
   signInLink(): Locator {
     return this.page.getByRole('banner').getByRole('link', { name: 'Sign in' });
