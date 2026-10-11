@@ -234,6 +234,37 @@ library is `<TO SUPPLY>`. The breached-password service vendor is `<TO SUPPLY>`.
 
 **As built in M2 (S3):** the `expired` state ("Your session ended", `?ended=1`) is built as the sessions
 design describes; see `security/manage-sessions-and-csrf`.
+
+**As built in M2 (S8, lockout and password reset)**
+
+- **Lockout:** `SignInThrottle` counts failures in the cache (Redis) by the SHA-256 of the address in
+  lower case. The 5th failure within 15 minutes clears the count and stores the pause's end for 15
+  minutes. `AttemptSignIn` asks first: while paused, every try (right password or not) is audited
+  `auth.sign_in_failed` (denied, `reason: paused`) and refused with the 429 `sign-in-paused` problem
+  ("Sign-in is paused for 15 minutes", `pausedUntil` in Toronto time, `Retry-After`). The first refusal
+  of a pause queues `AccountLockedNotification` when the address has an account (a cache `add`, so once
+  per pause). A successful sign-in clears the count.
+- **Session registry:** `user_sessions` keys each row by the SHA-256 of the session ID and keeps the ID
+  encrypted only so `endAll` can destroy its payload. `StartSession` registers, `SignOut` forgets.
+  The device label and city columns are filled in S11.
+- **Endpoints (all public, `Cache-Control: private, no-store`):** `POST /password/forgot` (bot
+  challenge `forgot-password`, M2 D6: 5 an hour per address and per email typed) answers 202 `{ data:
+  { email } }` for any address, and a new link marks the earlier ones used. `POST /password/reset/check`
+  answers `{ data: { email, expiresAt } }` without using the link. `POST /password/reset` (both 30 a
+  minute per address) uses it, applies `PasswordPolicy` and the confirmation, ends every session, audits
+  `auth.password_reset`, queues `PasswordChangedNotification` and answers with `CurrentUserResource` for
+  a new session in this browser. A used, run-out or unknown link is the 410 `link-expired` problem; one
+  that existed adds `email` and `sentAt`, which the expired card shows. The two-factor branch joins in
+  S12.
+- **Pages:** `pages/forgot-password/ForgotPassword` (default, invalid, sending, challenge failed, error,
+  "Check your email" with "Send it again") and `pages/reset-password/ResetPassword` at
+  `/reset-password/:token` (checking, form, invalid, saving, error, "Password changed", expired with "Send
+  a new link" when the link named its account). The sign-in card gains "Forgot your password?", and its
+  paused state shows "Sign-in is paused for 15 minutes" with the end time, "Reset your password" and "If
+  this wasn’t you, the account owner has been emailed." The duplicate sign-up email links to
+  `/forgot-password`.
+- **Times** in pages and emails read "10:57 a.m." (`FormatService.time`, `format.time`).
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

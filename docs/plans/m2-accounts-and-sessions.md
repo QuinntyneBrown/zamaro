@@ -14,14 +14,40 @@
 | S5 | Register a booker, with consent | Done | `690da3b` red tests, `c6902ed` (ADR-0019) |
 | S6 | Email delivery rules and failed jobs | Done | `cd08f71` red tests, `dc02dc1` |
 | S7 | Verify the email address | Done | `fdc2b5b` red tests, `257d4c3` |
-| S8–S18 | | Not started | |
+| S8 | Lockout and password reset | Done | `9c18620` red tests, `e5d3f3d` |
+| S9–S18 | | Not started | |
 
-**Checks at the last commit (S7, 2026-10-10):** 221 backend Feature tests pass with the contract
+**S8 acceptance criteria (as tested):**
+- Given 5 failed sign-ins for one address within 15 minutes, in any case, when a 6th arrives, even with
+  the right password, then it gets the 429 `sign-in-paused` problem with `pausedUntil` and `Retry-After`,
+  and the owner gets one "Sign-in to your Zamaro account is paused" email per pause, naming the time and
+  offering a reset. An address with no account is paused the same way and nobody is emailed; other
+  addresses are not paused; failures more than 15 minutes apart do not add up; sign-in resumes after 15
+  minutes; a successful sign-in starts the count again.
+- Given the pause on `/sign-in`, then the card shows "Sign-in is paused for 15 minutes", "There were too
+  many tries for this email. Try again after 10:15 a.m., or reset your password now.", "Reset your
+  password" (to `/forgot-password`) and "If this wasn’t you, the account owner has been emailed.", and
+  keeps the email.
+- Given `/forgot-password` with any address, then it ends on "Check your email" and "If that email has
+  an account, we’ve sent a reset link."; an account gets "Reset your Zamaro password" with a link that
+  works once, for 60 minutes, and a new link stops the earlier one. A bad address is named before
+  anything is sent, a failed bot check says so and keeps the email, and the 6th link in an hour from one
+  address or for one email gets 429.
+- Given a reset link, then `reset/check` names the account and when the link runs out without using it;
+  saving a new password signs this browser in with a new session, ends every other session, uses the
+  link and emails "Your Zamaro password was changed". Passwords follow `PasswordPolicy` and must match
+  ("The two passwords don’t match. Type the new one again."); the 31st reset or check in a minute from
+  one address gets 429.
+- Given a used, run-out or unknown link, then 410 `link-expired`; one that existed names its account and
+  when it was sent, and the page shows "This link has expired" with "Send a new link".
+- Given each session, then `user_sessions` holds it by the SHA-256 of its ID; signing out removes it.
+- Route state `forgot-password` matches `forgot-password/default.html` in both themes at every width, with
+  no axe violations.
+
+**Checks at the last commit (S8, 2026-10-11):** 246 backend Feature tests pass with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
-lint, format and `ng build zamaro` are clean; `npx playwright test` passes 242 tests on win32 and
-`npm run test:docker -- visual a11y` passes 114 in the Linux image (no timeout on
-`discover-results-naomi`). The perf run against the S6 build flagged no row (Banner 180 ms and Stamp
-104 ms at 240 iterations are new).
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 259 tests on win32 and the
+sign-in and forgot-password states pass in the Linux image. No `zm-*` component changed, so no perf run.
 
 **S7 acceptance criteria (as tested):**
 - Given a link issued less than 24 hours ago, when it is opened, then the address is verified, the
@@ -358,6 +384,16 @@ lint, format and `ng build zamaro` are clean; `npx playwright test` passes 242 t
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S8 — The 410 names the link's account.** The expired reset mock says when the link was sent and
+  where a new one goes, so `link-expired` gains `email` and `sentAt` for a reset link that existed; an
+  unknown token names no one and the page offers only "Find who’s free" and sign-in. A guest's "Send a
+  new link" there posts the named email to `/password/forgot`.
+- **S8 — `pausedUntil` on the 429.** The sign-in card shows when sign-in resumes, so `sign-in-paused`
+  carries it (Toronto time) beside `Retry-After`. Every try during a pause is audited as a denied sign-in.
+- **S8 — Tests use another browser.** `UsesTheWebApp::withoutCookies()` drops the cookies a test set, so
+  "every other session ends" signs in from a second browser instead of reusing the first one's cookie.
+- **S8 — Reset limits** are `ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR` and
+  `ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE`, raised on `api-e2e`.
 - **S6 — `failed_jobs` already existed** with the `uuid` column and the `database-uuids` driver from
   Laravel's skeleton, so no migration was needed. Horizon's supervisors keep `tries => 1`, which only
   applies to a job that sets none; `RetriesWithBackoff` sets 6 on every job and email.
