@@ -642,6 +642,11 @@ drawer's slide is the dialog's.
 
 ## Implementation notes
 
+**As built in M2 (S15):** the `saved` input (`TopBarSaved`: label, link, count, countLabel) renders the
+Saved link after the spacer: heart, the label (visually hidden below LG) and the count badge with a
+visually hidden "artists"; it is current on `/saved`. `TopBar` 308.6 → 337.3 ms and `TopBarSignedIn`
+343.5 → 374.4 ms on a busy machine, not flagged.
+
 Built in M2 S2: `account` (without `'loading'`, which comes with the first
 private route), `accountExpanded`, `accountControls`, `auth` (with
 `queryParams`, D-14, and the short and long labels at 30 rem) and the

@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-save-toggle` |
 | Library path | `frontend/projects/components/src/lib/save-toggle/` |
-| Status | planned |
+| Status | built |
 | Traces to | L2-006, L2-021, L2-026, L2-027, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 |
 | Design system | [`save-toggle.html`](../../design-system/components/save-toggle.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`pages/saved/default`](../../mocks/pages/saved/default.html), [`pages/not-found/artist`](../../mocks/pages/not-found/artist.html), [`notifications/saved-toast/with-action`](../../mocks/notifications/saved-toast/with-action.html), [`notifications/saved-toast/danger`](../../mocks/notifications/saved-toast/danger.html), and the dialogs and notifications drawn over Discover (see Usage) |
@@ -400,7 +400,14 @@ full opacity while `aria-busy` and the toast carry the meaning (D-6).
 
 ## Implementation notes
 
-The component is planned. To build it:
+**As built in M2 (S15):** built in `lib/save-toggle/` as specified (inputs, `savedChange`, the
+`SAVE_TOGGLE_TEXT` token with `common.saved.toggle.*` and `common.and`, busy and disabled), with its
+styles inline in the component. The `heart` icon is added. Discover's tickets and headliner project it for
+signed-in bookers; the `SaveToggle` scenario renders in 120 ms at 200 iterations, and the new
+`LineupSaved` composite (24 tickets with hearts, 18 iterations) measures the signed-in lineup. The
+existing `Lineup`, `Ticket` and `Headliner` scenarios stay the guest view until guests get hearts (S16).
+
+The component was planned. To build it:
 
 - Folder `frontend/projects/components/src/lib/save-toggle/`, files
   `save-toggle.ts` (class `SaveToggle`, selector `zm-save-toggle`),

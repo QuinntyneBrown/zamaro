@@ -458,6 +458,8 @@ rotation) stop or skip the animation under `prefers-reduced-motion: reduce`.
 
 ## Implementation notes
 
+**As built in M2 (S15):** `heart` joins the set for the save toggle, the Saved link and the Save button.
+
 **As built in M2 (S13):** `key` and `lock-open` join the set for the two-step code dialog.
 
 **As built in M2 (S12):** `copy`, `download` and `lock` join the set, with the mocks' paths, for the

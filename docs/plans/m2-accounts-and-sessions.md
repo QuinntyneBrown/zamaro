@@ -21,13 +21,39 @@
 | S12 | Two-step sign-in: turn on and sign in with a code | Done | `51c4e93` red tests, `137843b` (ADR-0021) |
 | S13 | Two-step sign-in: turn off and new recovery codes | Done | `2305396` red tests, `5612167` |
 | S14 | Accept updated terms, and the marketing choice | Done | `166d8dd` red tests, `74d36d5` |
-| S15–S18 | | Not started | |
+| S15 | Save an artist | Done | `8df925f` red tests, `a515feb` |
+| S16–S18 | | Not started | |
 
-**Checks at the last commit (S14, 2026-10-11):** 325 backend Feature tests pass with the contract
+**Checks at the last commit (S15, 2026-10-11):** the backend Feature suite passes with the contract
 assertions; `scramble:export --fail-on-unknown`, `i18n:check`, Pint and Larastan are clean; frontend
-lint, format and `ng build zamaro` are clean; `npx playwright test` passes 343 tests on win32 and the
-account and accept-terms states pass visual and a11y in the Linux image. No `zm-*` component changed, so
-no perf run.
+lint, format and `ng build zamaro` are clean; `npx playwright test` passes 350 tests on win32 and the
+signed-in booker states pass visual and a11y in the Linux image. The perf run against the S14 build
+flagged no row: `Button` was flagged once on a loaded machine (127.0 → 170.7 ms) and passed the one
+re-run (131.6 → 127.3 ms); `SaveToggle` (120 ms) and `LineupSaved` (18 iterations) are new.
+
+**S15 acceptance criteria (as tested):**
+- Given Naomi, then `GET /saved-artists/ids` lists Abigail, Hosanna Collective and Luz Viva, count 3,
+  privately. Saving Elijah answers `saved`, count 4, not a first save; saving again keeps 4; removing
+  answers 3 and removing again keeps 3.
+- Given a fresh booker, then their first save says `firstSave`, and a later one does not. At 200 saved the
+  201st is the 422 `saved-artist-limit` problem and nothing changes. A suspended or unknown artist is
+  404; an artist gets 404; a guest 401. Cards and the profile carry `id` and `pronoun`.
+- Given every new route, then another booker's saves are untouched and their ids unseen.
+- Given Naomi's Burlington lineup, then Luz Viva's heart is pressed and named "Remove Luz Viva from your
+  saved artists", Elijah's is not ("Save Elijah Park to your saved artists"), the headliner's names
+  Abigail, and the header reads "Saved 3 artists".
+- Given a fresh booker saving Elijah, then the heart fills, the header reads "Saved 1 artists", "Saved
+  Elijah Park" says "Your saved count is now 1." with Undo, and "Saved artists are private" says "Only
+  you see who you save. …" with "View saved" to `/saved`; Undo empties the heart and the count. Removing
+  says "Removed Elijah Park" and "He’s off your saved list. Your count is now 0." with Undo.
+- Given a failed save, then the heart empties again and "Couldn’t save Elijah Park. Try again." ("Failed",
+  "Your connection dropped, so his heart is empty again.", no timer) stays; Try again saves and closes it.
+  At the limit, "You can save up to 200 artists." ("Heads up", "Remove someone from your saved list to
+  make room for Elijah Park.", "Open saved artists") and the heart stays empty.
+- Given Abigail's profile, then "Save" (not pressed) turns to "Saved" (pressed). Given Abigail signed in
+  as an artist, then the lineup has no hearts and the header no Saved link.
+- Naomi's Discover states now show her hearts and the Saved link; every signed-in booker state shows the
+  Saved link.
 
 **S14 acceptance criteria (as tested):**
 - Given Tomi (Terms 2026-03), then sign-in and `/me` say `termsAcceptanceRequired`; Naomi's do not. His
@@ -641,6 +667,17 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
 - **S7 — `api-e2e` serves PHP as it is on disk.** Opcache is off for the CLI server, so a PHP edit
   made during an e2e run changes the API under it (ADR-0019 says it keeps its code; only
   `worker-e2e` does). Don't edit PHP while the suite runs.
+- **S15 — Saved by artist id.** Cards and profiles gain `id` (and cards `pronoun`) so the toggle and
+  the toasts need no extra lookup; the routes are `/saved-artists/{{artistId}}` as the design has them.
+- **S15 — `firstSave` and `users.first_saved_at`.** The design shows "Saved artists are private" once,
+  on a booker's first save; the API says when that is.
+- **S15 — Scenarios.** `zm-ticket` and `zm-headliner` already had their slots, so they did not change;
+  the existing `Lineup`, `Ticket` and `Headliner` scenarios stay the guest view, and `LineupSaved` is the
+  signed-in lineup. The plan's "re-measure Ticket, Headliner, Lineup and Badge" ran with no flag.
+- **S15 — Copy without a mock.** "Undo save {{name}}", "Couldn’t remove {{name}}. Try again." and "Your
+  connection dropped, so {{she’s | he’s | they’re}} still saved.".
+- **S15 — Seen, not changed:** at LG, the two-column ticket grid breaks long names mid-word ("MARCU S
+  BELL TRIO") for guests and bookers alike; it predates M2 and is left for the ticket CRD's layout.
 - **S14 — Abigail accepts the October terms in the seed**, as Naomi does; without a record the gate
   would stop her. `cast:booker` records the current terms unless `--terms` names another (D19).
 - **S14 — A read for the marketing choice.** `GET /account/consents/marketing` joins the design's two

@@ -570,6 +570,13 @@ leaves after 5 seconds and still pauses.
 
 ## Implementation notes
 
+**As built in M2 (S15):** `actions` (up to two): `link` renders `zm-button-link size="sm"` and closes the
+toast as it navigates; `run` renders `zm-button size="sm"`; a promise keeps it busy and a rejection keeps
+the toast. Buttons in a toast use the design system's outline on the inverse slip and ink on a danger one
+(`:host-context(.toast)` in `button.scss`). `busyLabel`, `queryParams`, `fragment`, `persistent`,
+`update()`, the stack of three and the queue are still to do. `Toast` re-measured 400.9 → 334.0 ms.
+
+
 The library has no toast yet. To build it:
 
 - Folder `frontend/projects/components/src/lib/toast/` with `toast.ts`
