@@ -41,6 +41,18 @@ class Artist extends Model
         return $this->hasMany(SetlistSong::class)->orderBy('position');
     }
 
+    /** Every photo in the artist's order, whatever its status. */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(ArtistPhoto::class)->orderBy('position');
+    }
+
+    /** Every video in the artist's order, whatever its status. */
+    public function videos(): HasMany
+    {
+        return $this->hasMany(ArtistVideo::class)->orderBy('position');
+    }
+
     /** Shown to the public: approved, payout set up and published (L2-005.4, L2-048.3). */
     public function scopeVisible(Builder $query): void
     {

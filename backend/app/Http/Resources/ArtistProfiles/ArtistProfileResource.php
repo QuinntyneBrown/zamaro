@@ -3,8 +3,11 @@
 namespace App\Http\Resources\ArtistProfiles;
 
 use App\Models\Artist;
+use App\Models\ArtistPhoto;
 use App\Models\ArtistStyle;
+use App\Models\ArtistVideo;
 use App\Models\SetlistSong;
+use App\Services\ArtistProfiles\MediaUrlSigner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +25,7 @@ class ArtistProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         $artist = $this->resource;
+        $media = app(MediaUrlSigner::class);
 
         return [
             'slug' => $artist->slug,
@@ -55,6 +59,46 @@ class ArtistProfileResource extends JsonResource
                 /** A key such as `B-flat` or `E-minor`, or `any`. */
                 'key' => $song->key->value,
             ])->values()->all(),
+            /** Live photos in the artist's order, each in WebP widths from the media domain (L2-015). */
+            'photos' => $artist->photos->map(fn (ArtistPhoto $photo) => $this->photo($photo, $media))->values()->all(),
+            /** Live videos only, in the artist's order (L2-014). */
+            'videos' => $artist->videos->map(fn (ArtistVideo $video) => $this->video($video, $media))->values()->all(),
+        ];
+    }
+
+    private function photo(ArtistPhoto $photo, MediaUrlSigner $media): array
+    {
+        $image = $media->image($photo->renditions);
+
+        return [
+            'id' => (string) $photo->id,
+            // The artist's alt text (5–150 characters).
+            'alt' => (string) $photo->alt_text,
+            'src' => $image['src'],
+            'srcset' => $image['srcset'],
+            'width' => $image['width'],
+            'height' => $image['height'],
+            // AVIF widths arrive with uploads (M4).
+            'avifSrcset' => null,
+        ];
+    }
+
+    private function video(ArtistVideo $video, MediaUrlSigner $media): array
+    {
+        return [
+            'id' => (string) $video->id,
+            // Song and setting: "Way Maker — live at Bethel Pentecostal, Hamilton".
+            'title' => (string) $video->title,
+            'durationSeconds' => (int) $video->duration_seconds,
+            // The HLS manifest of the adaptive renditions.
+            'stream' => $media->url((string) $video->manifest_key),
+            // The poster frame in WebP widths, or null before one exists.
+            'poster' => $video->poster_renditions === [] ? null : $media->image($video->poster_renditions),
+            // The artist's WebVTT file, or null when they supplied none.
+            'captions' => $video->captions_key === null ? null : [
+                'src' => $media->url($video->captions_key),
+                'language' => (string) $video->captions_language,
+            ],
         ];
     }
 }

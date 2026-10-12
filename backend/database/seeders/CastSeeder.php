@@ -6,6 +6,7 @@ use App\Enums\ActType;
 use App\Enums\ArtistStatus;
 use App\Enums\BookingStatus;
 use App\Enums\GatheringKind;
+use App\Enums\MediaStatus;
 use App\Enums\MusicalKey;
 use App\Enums\OverrideState;
 use App\Enums\Pronoun;
@@ -13,7 +14,9 @@ use App\Enums\Style;
 use App\Enums\VscStatus;
 use App\Integrations\Routing\CastRoutes;
 use App\Models\Artist;
+use App\Models\ArtistPhoto;
 use App\Models\ArtistRating;
+use App\Models\ArtistVideo;
 use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
@@ -24,6 +27,7 @@ use App\Models\VulnerableSectorCheck;
 use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -134,6 +138,43 @@ class CastSeeder extends Seeder
         'Codrington Praise Band', 'Victoria Village Voices', 'Lampman Lane Worship',
     ];
 
+    /**
+     * slug => photos [sample, alt text], videos [title, seconds, status, captions]
+     * (docs/mocks/pages/artist, docs/mocks/pages/edit-profile/video-processing). Each photo is one of
+     * the sample renditions in database/seeders/media, and every video plays the sample stream.
+     */
+    private const MEDIA = [
+        'abigail-mensah' => [
+            [
+                [1, 'Abigail at the microphone during a Sunday service'],
+                [2, 'Abigail rehearsing with a church volunteer band'],
+                [3, 'Portrait of Abigail smiling in a kente scarf'],
+                [4, 'Abigail leading a youth night from the floor, not the stage'],
+            ],
+            [
+                ['Way Maker — live at Bethel Pentecostal, Hamilton', 372, MediaStatus::Live, true],
+                ['Great Is Thy Faithfulness — acoustic', 280, MediaStatus::Live, true],
+                ['Twi praise medley — Harvest Sunday 2025', 485, MediaStatus::Live, false],
+                ['Goodness of God — women’s retreat, Muskoka', 330, MediaStatus::Live, true],
+                ['Jireh — live at Living Waters, Brampton', 462, MediaStatus::Processing, false],
+            ],
+        ],
+        'miriam-haile' => [
+            [
+                [5, 'Miriam at the piano during a Sunday evening service'],
+                [6, 'Portrait of Miriam in a white netela shawl'],
+            ],
+            [],
+        ],
+    ];
+
+    /** The sample photos' widths at 4:3, and the poster frame's at 16:9. */
+    private const PHOTO_WIDTHS = [400, 800, 1200, 1600];
+
+    private const POSTER_WIDTHS = [400, 800, 1200];
+
+    private const SAMPLE_STREAM = ['sample.m3u8', 'sample-init.mp4', 'sample-0.m4s', 'sample-1.m4s', 'sample.en.vtt'];
+
     private const ABIGAIL_UNAVAILABLE = ['2026-11-26', '2026-11-27', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-31'];
 
     public function run(): void
@@ -148,7 +189,55 @@ class CastSeeder extends Seeder
             $this->supportingCast();
             $this->christmasChoirs();
             $this->profiles();
+            $this->media();
         });
+    }
+
+    /** Photo and video rows, and their files on the media disk; files are overwritten in place. */
+    private function media(): void
+    {
+        $disk = Storage::disk(config('zamaro.media.disk'));
+        $samples = database_path('seeders/media');
+        foreach (self::SAMPLE_STREAM as $file) {
+            $disk->put("videos/{$file}", file_get_contents("{$samples}/{$file}"));
+        }
+        $poster = [];
+        foreach (self::POSTER_WIDTHS as $width) {
+            $disk->put("videos/poster-{$width}.webp", file_get_contents("{$samples}/poster-{$width}.webp"));
+            $poster[] = ['width' => $width, 'height' => intdiv($width * 9, 16), 'format' => 'webp', 'key' => "videos/poster-{$width}.webp"];
+        }
+
+        foreach (self::MEDIA as $slug => [$photos, $videos]) {
+            $artist = Artist::where('slug', $slug)->firstOrFail();
+            foreach ($photos as $index => [$sample, $alt]) {
+                $renditions = [];
+                foreach (self::PHOTO_WIDTHS as $width) {
+                    $key = sprintf('photos/%s-%d-%d.webp', $slug, $index + 1, $width);
+                    $disk->put($key, file_get_contents("{$samples}/photo-{$sample}-{$width}.webp"));
+                    $renditions[] = ['width' => $width, 'height' => intdiv($width * 3, 4), 'format' => 'webp', 'key' => $key];
+                }
+                ArtistPhoto::updateOrCreate(['artist_id' => $artist->id, 'position' => $index + 1], [
+                    'is_primary' => $index === 0,
+                    'alt_text' => $alt,
+                    'status' => MediaStatus::Live,
+                    'renditions' => $renditions,
+                    'width' => 1600,
+                    'height' => 1200,
+                ]);
+            }
+            foreach ($videos as $index => [$title, $seconds, $status, $captions]) {
+                $live = $status === MediaStatus::Live;
+                ArtistVideo::updateOrCreate(['artist_id' => $artist->id, 'position' => $index + 1], [
+                    'title' => $title,
+                    'status' => $status,
+                    'manifest_key' => $live ? 'videos/sample.m3u8' : null,
+                    'poster_renditions' => $live ? $poster : [],
+                    'captions_key' => $captions ? 'videos/sample.en.vtt' : null,
+                    'captions_language' => $captions ? 'en' : null,
+                    'duration_seconds' => $seconds,
+                ]);
+            }
+        }
     }
 
     private function profiles(): void

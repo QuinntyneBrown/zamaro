@@ -22,6 +22,7 @@ class ViewArtistProfileTest extends TestCase
     private const PUBLIC_FIELDS = [
         'slug', 'displayName', 'firstName', 'pronoun', 'actType', 'headline', 'aboutHeading', 'bio',
         'baseCity', 'maxDriveKm', 'fromPrice', 'ticketNumber', 'rating', 'reviewCount', 'styles', 'setlist',
+        'photos', 'videos',
     ];
 
     protected function setUp(): void
