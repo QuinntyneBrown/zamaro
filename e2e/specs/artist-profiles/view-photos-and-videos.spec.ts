@@ -97,4 +97,82 @@ test.describe('Photos and videos on a profile', () => {
     await expect(viewer.dialog()).toHaveCount(0);
     await expect(profile.photo(2)).toBeFocused();
   });
+
+  test('"Watch her lead" shows each video with its poster, stamp and caption, and nothing plays', async () => {
+    const mediaRequests = profile.watchMediaRequests();
+    await profile.setViewport(1024);
+    await profile.open(cast.artists.headliner.slug, cast.search.date);
+
+    await expect(profile.videosHeading()).toHaveText('Watch her lead');
+    await expect(profile.videoButtons()).toHaveCount(4);
+    const wayMaker = profile.videoCard('Way Maker — live at Bethel Pentecostal, Hamilton');
+    await expect(wayMaker.playButton()).toHaveAccessibleName(
+      'Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds',
+    );
+    await expect(wayMaker.stamp()).toHaveText('Play · 6:12');
+    await expect(profile.videoCard('Twi praise medley').stamp()).toHaveText('Play · 8:05');
+    // The first is featured across the row; the rest sit three across under it (L2-098.2).
+    const first = await wayMaker.box();
+    const second = await profile.videoCard('Great Is Thy Faithfulness').box();
+    expect(first.width).toBeGreaterThan(second.width * 2.5);
+    await expect(profile.players()).toHaveCount(0);
+    expect(mediaRequests()).toBe(0);
+  });
+
+  test('a video plays in place with controls and captions when it is pressed', async () => {
+    await profile.open(cast.artists.headliner.slug, cast.search.date);
+    const wayMaker = profile.videoCard('Way Maker — live at Bethel Pentecostal, Hamilton');
+    const before = await wayMaker.box();
+
+    await wayMaker.play();
+
+    expect(await wayMaker.isPlaying()).toBe(true);
+    await expect(wayMaker.player()).toHaveAttribute('controls', '');
+    await expect(wayMaker.player()).not.toHaveAttribute('autoplay');
+    await expect(wayMaker.player()).toBeFocused();
+    await expect(wayMaker.playButton()).toHaveCount(0);
+    await expect(wayMaker.captionsTrack()).toHaveAttribute('srclang', 'en');
+    expect(await wayMaker.captionsMode()).toBe('showing');
+    expect(await wayMaker.box()).toEqual(before);
+  });
+
+  test('a video without captions has no captions track, and only one video plays at a time', async () => {
+    await profile.open(cast.artists.headliner.slug, cast.search.date);
+    const wayMaker = profile.videoCard('Way Maker');
+    const medley = profile.videoCard('Twi praise medley');
+
+    await wayMaker.play();
+    expect(await wayMaker.isPlaying()).toBe(true);
+    await medley.play();
+
+    expect(await medley.isPlaying()).toBe(true);
+    await expect(medley.captionsTrack()).toHaveCount(0);
+    expect(await wayMaker.isPaused()).toBe(true);
+  });
+
+  test('a stream that fails to load says so, and pressing play tries again', async () => {
+    await profile.failStreams();
+    await profile.open(cast.artists.headliner.slug, cast.search.date);
+    const wayMaker = profile.videoCard('Way Maker');
+
+    await wayMaker.play();
+
+    await expect(wayMaker.failure()).toHaveText(
+      'This video didn’t load. Press play to try again.',
+    );
+    await expect(wayMaker.playButton()).not.toHaveAttribute('aria-busy');
+    await expect(wayMaker.playButton()).toBeFocused();
+    await expect(profile.players()).toHaveCount(0);
+  });
+
+  test('with no videos, the section keeps its place and says so', async () => {
+    await profile.open('miriam-haile');
+
+    await expect(profile.videosHeading()).toHaveText('Watch her lead');
+    await expect(profile.videosEmpty()).toContainText('No videos yet');
+    await expect(profile.videosEmpty()).toContainText(
+      'Miriam hasn’t added a video yet. Until then, ask her for a recording in your request.',
+    );
+    await expect(profile.videoButtons()).toHaveCount(0);
+  });
 });

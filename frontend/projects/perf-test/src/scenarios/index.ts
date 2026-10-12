@@ -30,6 +30,7 @@ export const scenarios: Record<string, Scenario> = {
   Icon: () => import('./Icon'),
   Lineup: () => import('./Lineup'),
   Marquee: () => import('./Marquee'),
+  MediaGrid: () => import('./MediaGrid'),
   Menu: () => import('./Menu'),
   Poster: () => import('./Poster'),
   Rating: () => import('./Rating'),
@@ -39,4 +40,5 @@ export const scenarios: Record<string, Scenario> = {
   Ticket: () => import('./Ticket'),
   TicketSkeleton: () => import('./TicketSkeleton'),
   TopBar: () => import('./TopBar'),
+  VideoCard: () => import('./VideoCard'),
 };

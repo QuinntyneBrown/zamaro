@@ -15,4 +15,5 @@ export const scenarioIterations = {
   Menu: 90,
   TicketSkeleton: 400,
   TopBar: 120,
+  VideoCard: 400,
 };
