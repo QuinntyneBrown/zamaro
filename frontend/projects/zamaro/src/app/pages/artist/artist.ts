@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Injector } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
@@ -20,6 +20,7 @@ import {
   Skeleton,
 } from 'components';
 import { map } from 'rxjs';
+import { openPhotoViewer } from '../../dialogs/photo-viewer/photo-viewer';
 import { LastSearch } from '../../shared/last-search';
 import { ArtistProfileStore } from './artist-profile.store';
 
@@ -63,6 +64,7 @@ export class ArtistPage {
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
   private readonly route = inject(ActivatedRoute);
+  private readonly injector = inject(Injector);
 
   /** The search date carried from Discover, when it is a real date. */
   private readonly date = toSignal(
@@ -186,7 +188,7 @@ export class ArtistPage {
     this.store.profile()!.actType === 'solo' ? ('solo' as const) : ('group' as const),
   );
 
-  /** The gallery: each photo links to its largest rendition. */
+  /** The gallery: each photo opens the viewer, and links to its largest rendition without script. */
   protected readonly photos = computed(() => {
     const photos = this.store.profile()!.photos;
     return photos.map((photo, index) => ({
@@ -200,6 +202,18 @@ export class ArtistPage {
       image: { ...photo, sizes: GALLERY_SIZES } satisfies ArtworkPhoto,
     }));
   });
+
+  /** Opens the photo viewer at this photo (L2-015.2); a modified click still follows the link. */
+  protected openPhoto(event: MouseEvent, index: number): void {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
+    const profile = this.store.profile()!;
+    openPhotoViewer(this.injector, {
+      artistName: profile.displayName,
+      photos: profile.photos,
+      index,
+    });
+  }
 
   /** Moves focus to the booking stub's date field (L2-012.3); the stub arrives with tour dates. */
   protected book(): void {
