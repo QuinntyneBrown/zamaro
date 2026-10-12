@@ -29,6 +29,11 @@ class Review extends Model
         $query->whereNull('hidden_at');
     }
 
+    public function artist(): BelongsTo
+    {
+        return $this->belongsTo(Artist::class);
+    }
+
     public function booker(): BelongsTo
     {
         return $this->belongsTo(User::class, 'booker_id');

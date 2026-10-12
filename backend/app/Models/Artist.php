@@ -111,4 +111,10 @@ class Artist extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    /** Every review of the artist, hidden ones included; use the `visible` scope to show them. */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
 }
