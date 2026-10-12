@@ -4,10 +4,10 @@ This is the working plan for building Zamaro, with Milestone 1 in detail. The cu
 first; the full plan follows, including the notes on what changed while implementing. Later
 milestones get their own plan in this folder when they start.
 
-## Current status (2026-10-09)
+## Current status (2026-10-12)
 
-**Branch:** `feat/m1-foundations-and-browse`, opened as a pull request against `main`. M1 is about
-two-thirds done: S0–S11 are built; S12–S16 remain.
+**Branch:** S0–S11 merged to `main`; S12 is on `claude/friendly-fermat-l3coak`. M1 is about
+three-quarters done: S0–S12 are built; S13–S16 remain.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -24,21 +24,20 @@ two-thirds done: S0–S11 are built; S12–S16 remain.
 | S10 | Sold-out alternatives | Done | `929af7f`, `c6adc9a`, `b8a3ad1` |
 | S11 | Artist profile: header, About, setlist, loading and error | Done | `31dcbf4`, `9e7f58f`, `f48451c`, `a10df34` (ADR-0008) |
 | — | e2e API gets its own database, clock, limits and cache keys | Done | `331a03f` |
-| S12 | Photos and videos (local disk, no object storage in M1) | **Next** | ADR-0009 (hls.js) |
-| S13 | Reviews on the profile | To do | |
+| S12 | Photos and videos (local disk, no object storage in M1) | Done | `d94392c`, `b01aeca`, `818c9e7`, `1c172c1` (ADR-0009) |
+| S13 | Reviews on the profile | **Next** | |
 | S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | To do | |
 | S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0010 |
 | S16 | Index and share (optional, last) | To do | |
 
-**Checks at the last commit:**
-- Backend: 70 Feature tests pass, with OpenAPI contract assertions.
-- Frontend: lint and `format:check` are clean.
-- e2e: 39 Playwright tests pass in Chromium against a freshly seeded e2e database. Since 2026-10-09 e2e mocks the backend with a stub API (`e2e/fixtures/stub-api/`) and needs no Docker or database.
-- Perf: `--fail-on-regression` against the base build flags no rows. `Breadcrumb` and `Setlist` are new scenarios.
+**Checks at the last commit (S12):**
+- Backend: 76 Feature tests pass, with OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean.
+- Frontend: lint and `format:check` are clean; `zamaro`, `admin` and `perf-test` build.
+- e2e: 49 of 50 Playwright tests pass in Chromium against the stub API. The one failure, "a date less than three days away is refused before searching", fails the same way on the base commit when the whole suite runs and passes alone: `SearchForm.errorFor` reads `aria-describedby` without waiting for it.
+- Perf: `--fail-on-regression` against the base build flags no rows. `ArtworkPhoto`, `VideoCard` and `MediaGrid` are new scenarios.
 
 **Open items carried forward:**
 - **L2-009.2:** Back restores the Discover results but not the scroll position yet.
-- **S12:** serve the seeded photos and videos from the API's local disk; object storage waits for M4 (user decision).
 - **S13:** seed 38 distinct-church reviews for Abigail, or the rating recalculation will change her 4.9/38.
 - **S14:**
   - Miriam's seeded ticket number is ACT-0041; the mocks say ACT-0154.
@@ -46,6 +45,10 @@ two-thirds done: S0–S11 are built; S12–S16 remain.
 - **S15:** settle `ArtistSlugResolver` (change-profile-address) against `ResolveArtistSlug` (view-artist-profile).
 - **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest already lists four route states.
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
+- **S14:** the "Ask {first name} for a recording" action in the empty videos section (L2-020.1) opens the booking stub with its message pre-filled.
+- **M4:** object storage, the CDN and AVIF renditions replace S12's local `media` disk; the video card's manage mode arrives with Edit profile.
+- **Not yet used:** the poster, headliner and tickets still show the halftone placeholder; passing the primary photo to them is not in any M1 slice's L2.
+- **Artwork perf scenario:** `Artwork` renders in about 31 ms at 200 iterations, under the 100–300 ms band; raise its iterations in a separate change.
 
 ---
 
@@ -220,6 +223,20 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - **No object storage in M1.** S12 serves the seeded photos and videos from the API's local disk in dev and e2e. Object storage arrives with uploads in M4, with its own ADR.
   - **The S14 book button stays hidden until M5.** The stub and date picking ship; the submit sits behind a `bookingRequests` flag that is off. There is no placeholder route.
 - **ADR renumbering (current):** 0008 went to S11, as S5 needed no ADR. S12 takes 0009 and S15 takes 0010.
+- **S12 is done** (d94392c API, b01aeca gallery, 818c9e7 viewer, 1c172c1 videos and ADR-0009).
+  - **Media:** a local `media` disk served by `MediaController` at `/media/{key}`, in place of the
+    CDN; `CastSeeder` copies small synthetic samples from `database/seeders/media` (4-second VP9 HLS
+    in fMP4, which Chromium plays through hls.js without proprietary codecs). The stub API serves
+    the same files.
+  - **Schema:** `artist_photos` and `artist_videos` with the columns the profile reads;
+    `poster_renditions` (jsonb) replaces upload-videos' single `poster_key`. Upload columns come in M4.
+  - **Components:** `zm-artwork` gains `ratio`, `photo` and `priority`; `zm-dialog` gains `kicker` and
+    the footer slot; `zm-icon` gains `arrow-left`; `zm-video-card` is new (play mode only).
+  - **Photo viewer:** `dialogs/photo-viewer`, opened from gallery links that fall back to the largest
+    rendition without script.
+  - **The no-photos e2e case uses Elijah Park:** `page.route` cannot change the server render, and
+    Miriam has photos.
+  - **Local runs** need Node 22.22.3 or later for the Angular CLI.
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
