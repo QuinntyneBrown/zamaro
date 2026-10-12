@@ -27,3 +27,42 @@
     gap: var(--space-16);
   }
 }
+
+// The videos (components.css .media-grid): one per row, then from MD the first across the row and
+// the rest three across (L2-014.1, L2-098.2).
+.media-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 48rem) {
+  .media-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .media-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+// The gallery (components.css .photo-grid): 2 across below MD, 4 from MD (L2-015.1, L2-098).
+.photo-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+}
+
+.photo-grid a {
+  display: block;
+}
+
+@media (min-width: 48rem) {
+  .photo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

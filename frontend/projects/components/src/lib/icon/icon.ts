@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 
 /** 24-unit stroke paths from docs/design-system/foundations/iconography.html. Add one when a screen needs it. */
 const ICONS = {
+  'arrow-left': 'M20 12H5M11 6l-6 6 6 6',
   'arrow-right': 'M4 12h15M13 6l6 6-6 6',
   close: 'M6 6l12 12M18 6 6 18',
   compass: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M15 9l-2 5-4 1 2-5z',

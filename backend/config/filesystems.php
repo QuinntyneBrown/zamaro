@@ -47,6 +47,15 @@ return [
             'report' => false,
         ],
 
+        // Photos, posters, streams and captions (L2-088). Local in M1, served by MediaController in
+        // place of the CDN; object storage replaces it with uploads in M4.
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('app/media'),
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

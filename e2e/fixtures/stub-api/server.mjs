@@ -16,6 +16,7 @@ import {
   ARTISTS,
   CITY_HALL,
   HEADLINER_QUOTES,
+  MEDIA,
   geocode,
   roadDistance,
 } from "./cast.mjs";
@@ -25,6 +26,20 @@ const CATALOGUES = fileURLToPath(
   new URL("../../../backend/resources/i18n/", import.meta.url),
 );
 const PROBLEMS = "http://localhost/problems";
+/** The seeded sample media, served under /media as the API serves its media disk in M1. */
+const SAMPLE_MEDIA = fileURLToPath(
+  new URL("../../../backend/database/seeders/media/", import.meta.url),
+);
+const MEDIA_BASE = `http://localhost:${PORT}/media`;
+const PHOTO_WIDTHS = [400, 800, 1200, 1600];
+const POSTER_WIDTHS = [400, 800, 1200];
+const MEDIA_TYPES = {
+  webp: "image/webp",
+  m3u8: "application/vnd.apple.mpegurl",
+  mp4: "video/mp4",
+  m4s: "video/iso.segment",
+  vtt: "text/vtt",
+};
 
 /** Fri 9 Oct 2026 in Toronto (docs/mocks/README.md). */
 const TODAY = "2026-10-09";
@@ -261,6 +276,60 @@ function lineupCard({ artist, distance }) {
   };
 }
 
+const srcset = (url, widths) =>
+  widths.map((width) => `${url(width)} ${width}w`).join(", ");
+
+/** ArtistProfileResource's photos and videos (MediaUrlSigner builds the URLs). */
+function media(slug) {
+  const { photos = [], videos = [] } = MEDIA[slug] ?? {};
+  return {
+    photos: photos.map(([, alt], index) => {
+      const url = (width) =>
+        `${MEDIA_BASE}/photos/${slug}-${index + 1}-${width}.webp`;
+      return {
+        id: `${slug}-photo-${index + 1}`,
+        alt,
+        src: url(800),
+        srcset: srcset(url, PHOTO_WIDTHS),
+        avifSrcset: null,
+        width: 800,
+        height: 600,
+      };
+    }),
+    videos: videos.map(([title, durationSeconds, captions], index) => {
+      const poster = (width) => `${MEDIA_BASE}/videos/poster-${width}.webp`;
+      return {
+        id: `${slug}-video-${index + 1}`,
+        title,
+        durationSeconds,
+        stream: `${MEDIA_BASE}/videos/sample.m3u8`,
+        poster: {
+          src: poster(800),
+          srcset: srcset(poster, POSTER_WIDTHS),
+          width: 800,
+          height: 450,
+        },
+        captions: captions
+          ? { src: `${MEDIA_BASE}/videos/sample.en.vtt`, language: "en" }
+          : null,
+      };
+    }),
+  };
+}
+
+/** A seeded media file, or null: photos map to their sample, videos are the samples themselves. */
+function mediaFile(path) {
+  const photo = path.match(/^photos\/([a-z-]+)-(\d+)-(\d+)\.webp$/);
+  if (photo) {
+    const sample = MEDIA[photo[1]]?.photos[Number(photo[2]) - 1]?.[0];
+    return sample && PHOTO_WIDTHS.includes(Number(photo[3]))
+      ? `photo-${sample}-${photo[3]}.webp`
+      : null;
+  }
+  const video = path.match(/^videos\/([\w.-]+)$/);
+  return video ? video[1] : null;
+}
+
 function profile(artist) {
   return {
     data: {
@@ -286,6 +355,7 @@ function profile(artist) {
         writer,
         key,
       })),
+      ...media(artist.slug),
     },
   };
 }
@@ -463,6 +533,24 @@ function respond(url) {
 }
 
 createServer((request, response) => {
+  const url = new URL(request.url ?? "/", `http://localhost:${PORT}`);
+  if (url.pathname.startsWith("/media/")) {
+    const file = mediaFile(url.pathname.slice("/media/".length));
+    const type = MEDIA_TYPES[file?.split(".").pop() ?? ""];
+    let body = null;
+    try {
+      body = file && type ? readFileSync(join(SAMPLE_MEDIA, file)) : null;
+    } catch {
+      body = null;
+    }
+    response.writeHead(body ? 200 : 404, {
+      "Content-Type": body ? type : "text/plain",
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "public, max-age=31536000, immutable",
+    });
+    response.end(body ?? "Not found");
+    return;
+  }
   const result = respond(
     new URL(request.url ?? "/", `http://localhost:${PORT}`),
   );

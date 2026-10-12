@@ -97,6 +97,105 @@ export class ArtistProfilePage {
     return this.page.locator('[aria-labelledby="songs-title"]').getByRole('listitem');
   }
 
+  /** The "Photos" section (docs/mocks/pages/artist): one link per photo, or the illustration. */
+  photosSection(): Locator {
+    return this.page.locator('[aria-labelledby="photos-title"]');
+  }
+
+  /** The gallery's photo links, named "Open photo 1 of 4: {alt text}". */
+  photoLinks(): Locator {
+    return this.photosSection().getByRole('link', { name: /^Open photo/ });
+  }
+
+  photo(position: number): Locator {
+    return this.photosSection().getByRole('link', { name: new RegExp(`^Open photo ${position} of`) });
+  }
+
+  /** The act-type illustration that stands in for an empty gallery (L2-020.3). */
+  galleryIllustration(): Locator {
+    return this.photosSection().getByRole('img');
+  }
+
+  /** How many columns the gallery lays its items out in. */
+  async galleryColumns(): Promise<number> {
+    return this.photosSection()
+      .locator('.photo-grid > *')
+      .evaluateAll(
+        (items) => new Set(items.map((item) => Math.round(item.getBoundingClientRect().left))).size,
+      );
+  }
+
+  /** Images on the whole page that failed to load (a broken image icon). */
+  async brokenImages(): Promise<number> {
+    return this.page
+      .locator('img')
+      .evaluateAll(
+        (images) =>
+          (images as HTMLImageElement[]).filter((image) => image.complete && image.naturalWidth === 0)
+            .length,
+      );
+  }
+
+  /** Waits until every photo in the gallery has decoded, and returns how many have. */
+  async loadedPhotos(): Promise<number> {
+    const images = this.photosSection().locator('img');
+    await images.evaluateAll((all) =>
+      Promise.all((all as HTMLImageElement[]).map((image) => image.decode().catch(() => undefined))),
+    );
+    return images.evaluateAll(
+      (all) => (all as HTMLImageElement[]).filter((image) => image.naturalWidth > 0).length,
+    );
+  }
+
+  async setViewport(width: number): Promise<void> {
+    await this.page.setViewportSize({ width, height: 900 });
+  }
+
+  /** The "Watch her lead" section (docs/mocks/pages/artist). */
+  videosSection(): Locator {
+    return this.page.locator('[aria-labelledby="videos-title"]');
+  }
+
+  videosHeading(): Locator {
+    return this.page.locator('#videos-title');
+  }
+
+  /** The play buttons, named "Play Way Maker, live at …, 6 minutes 12 seconds". */
+  videoButtons(): Locator {
+    return this.videosSection().getByRole('button', { name: /^Play / });
+  }
+
+  /** A video card by its caption, "Way Maker — live at Bethel Pentecostal, Hamilton". */
+  videoCard(caption: string): VideoCardPart {
+    return new VideoCardPart(
+      this.videosSection().locator('zm-video-card').filter({ hasText: caption }),
+    );
+  }
+
+  /** The `<video>` players on the page; none exist until a video is played. */
+  players(): Locator {
+    return this.page.locator('video');
+  }
+
+  /** The "No videos yet" empty state. */
+  videosEmpty(): Locator {
+    return this.videosSection().getByRole('status');
+  }
+
+  /** Answers requests for video streams with a 404, as a stream that failed would. */
+  async failStreams(): Promise<void> {
+    await this.page.route('**/*.m3u8', (route) => route.fulfill({ status: 404, body: '' }));
+  }
+
+  /** How many stream manifests or caption files the page has requested so far. */
+  watchMediaRequests(): () => number {
+    let count = 0;
+    this.page.on('request', (request) => {
+      if (/\.(m3u8|m4s|vtt)$/.test(new URL(request.url()).pathname)) count++;
+    });
+    return () => count;
+  }
+
   /** The loading region and its status line. */
   busyRegion(): Locator {
     return this.page.locator('[aria-busy="true"]');
@@ -121,5 +220,76 @@ export class ArtistProfilePage {
   /** True when a script in the page set `window.zmPwned`. */
   async scriptRan(): Promise<boolean> {
     return this.page.evaluate(() => 'zmPwned' in window);
+  }
+}
+
+/** One video card in the videos section. */
+export class VideoCardPart {
+  constructor(private readonly root: Locator) {}
+
+  playButton(): Locator {
+    return this.root.locator('button.video');
+  }
+
+  stamp(): Locator {
+    return this.root.locator('.video__play');
+  }
+
+  caption(): Locator {
+    return this.root.locator('.video__caption');
+  }
+
+  player(): Locator {
+    return this.root.locator('video.video__player');
+  }
+
+  captionsTrack(): Locator {
+    return this.player().locator('track[kind="captions"]');
+  }
+
+  failure(): Locator {
+    return this.root.getByRole('status');
+  }
+
+  async play(): Promise<void> {
+    await this.playButton().click();
+  }
+
+  /** Resolves once the player has advanced past the start. */
+  async isPlaying(): Promise<boolean> {
+    return this.player().evaluate(
+      (video: HTMLVideoElement) =>
+        new Promise<boolean>((resolve) => {
+          const check = () => {
+            if (!video.paused && video.currentTime > 0) resolve(true);
+            else setTimeout(check, 50);
+          };
+          check();
+        }),
+    );
+  }
+
+  async isPaused(): Promise<boolean> {
+    return this.player().evaluate((video: HTMLVideoElement) => video.paused);
+  }
+
+  /** The mode of the player's captions track: "showing" when captions are on. */
+  async captionsMode(): Promise<string> {
+    return this.player().evaluate(
+      (video: HTMLVideoElement) => video.textTracks[0]?.mode ?? 'none',
+    );
+  }
+
+  /** The card's box in page coordinates, so scrolling does not change it. */
+  async box(): Promise<{ x: number; y: number; width: number; height: number }> {
+    return this.root.evaluate((card) => {
+      const rect = card.getBoundingClientRect();
+      return {
+        x: rect.left + window.scrollX,
+        y: rect.top + window.scrollY,
+        width: rect.width,
+        height: rect.height,
+      };
+    });
   }
 }

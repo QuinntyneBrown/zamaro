@@ -19,7 +19,8 @@ export const routes: RouteState[] = [
     app: 'zamaro',
     mock: 'discover/default.html',
   },
-  // Abigail's profile opened from that search; photos, videos, reviews and the stub join later.
+  // Abigail's profile opened from that search, with her videos and photos; reviews and the stub
+  // join later.
   {
     path: '/artists/abigail-mensah?date=2026-11-14',
     app: 'zamaro',

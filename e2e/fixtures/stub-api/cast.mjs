@@ -533,3 +533,33 @@ export const HEADLINER_QUOTES = {
     city: "Oshawa",
   },
 };
+
+/**
+ * Photos and videos (CastSeeder::MEDIA). Each photo is one of the sample renditions in
+ * backend/database/seeders/media (photo-{sample}-{width}.webp); every live video plays the sample
+ * stream. Processing videos are left out, as the API leaves them out (L2-014.3).
+ */
+export const MEDIA = {
+  "abigail-mensah": {
+    photos: [
+      [1, "Abigail at the microphone during a Sunday service"],
+      [2, "Abigail rehearsing with a church volunteer band"],
+      [3, "Portrait of Abigail smiling in a kente scarf"],
+      [4, "Abigail leading a youth night from the floor, not the stage"],
+    ],
+    // [title, seconds, captions]
+    videos: [
+      ["Way Maker — live at Bethel Pentecostal, Hamilton", 372, true],
+      ["Great Is Thy Faithfulness — acoustic", 280, true],
+      ["Twi praise medley — Harvest Sunday 2025", 485, false],
+      ["Goodness of God — women’s retreat, Muskoka", 330, true],
+    ],
+  },
+  "miriam-haile": {
+    photos: [
+      [5, "Miriam at the piano during a Sunday evening service"],
+      [6, "Portrait of Miriam in a white netela shawl"],
+    ],
+    videos: [],
+  },
+};

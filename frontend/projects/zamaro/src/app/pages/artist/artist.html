@@ -30,6 +30,77 @@
           }
         </div>
       </section>
+      <section class="section" aria-labelledby="videos-title">
+        <div class="section__head">
+          <div>
+            <p class="overline section__kicker">{{ 'artist.videos.kicker' | transloco }}</p>
+            <h2 id="videos-title">{{ t('artist.videos.title', { pronoun: profile.pronoun }) }}</h2>
+          </div>
+        </div>
+        @if (videos().length) {
+          <ul class="media-grid" role="list">
+            @for (video of videos(); track video.id) {
+              <li>
+                <zm-video-card
+                  [caption]="video.title"
+                  [stampText]="video.stamp"
+                  [label]="video.label"
+                  [artVariant]="artVariant()"
+                  [artLabel]="video.title"
+                  [poster]="video.poster"
+                  [stream]="video.stream"
+                  [captions]="video.captions"
+                  [errorText]="'artist.videos.failed' | transloco"
+                />
+              </li>
+            }
+          </ul>
+        } @else {
+          <zm-empty-state
+            [quiet]="true"
+            [stamp]="'artist.videos.empty.stamp' | transloco"
+            [heading]="'artist.videos.empty.title' | transloco"
+          >
+            <p>
+              {{
+                t('artist.videos.empty.body', { name: profile.firstName, pronoun: profile.pronoun })
+              }}
+            </p>
+          </zm-empty-state>
+        }
+      </section>
+      <section class="section" aria-labelledby="photos-title">
+        <div class="section__head">
+          <div>
+            <p class="overline section__kicker">{{ 'artist.photos.kicker' | transloco }}</p>
+            <h2 id="photos-title">{{ 'artist.photos.title' | transloco }}</h2>
+          </div>
+        </div>
+        @if (photos().length) {
+          <ul class="photo-grid" role="list">
+            @for (photo of photos(); track photo.id; let i = $index) {
+              <li>
+                <a
+                  [href]="photo.full"
+                  [attr.aria-label]="photo.label"
+                  (click)="openPhoto($event, i)"
+                  ><zm-artwork ratio="square" [variant]="artVariant()" [photo]="photo.image"
+                /></a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="photo-grid">
+            <zm-artwork
+              ratio="square"
+              [variant]="artVariant()"
+              [label]="
+                t('artist.photos.illustration', { act: profile.actType, name: profile.firstName })
+              "
+            />
+          </div>
+        }
+      </section>
       <section class="section" aria-labelledby="songs-title">
         <div class="section__head">
           <div>

@@ -1,48 +1,62 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Injector } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { type CalendarDate, FormatService, type MusicalKey } from 'api';
 import {
   ArtistPoster,
+  Artwork,
+  type ArtworkPhoto,
   ArtistPosterSkeleton,
   Breadcrumb,
   Button,
   ButtonLink,
   type Crumb,
+  EmptyState,
   ErrorStage,
   Icon,
   Marquee,
   Setlist,
   Skeleton,
+  VideoCard,
 } from 'components';
 import { map } from 'rxjs';
+import { openPhotoViewer } from '../../dialogs/photo-viewer/photo-viewer';
 import { LastSearch } from '../../shared/last-search';
 import { ArtistProfileStore } from './artist-profile.store';
 
 /** Songs shown in the strip under the header (L2-012.1). */
 const STRIP_SONGS = 5;
 
+/** The featured video spans the row; the rest are a third of it from MD (artwork CRD sizes). */
+const FEATURED_VIDEO_SIZES = '100vw';
+const VIDEO_SIZES = '(min-width: 48rem) 33vw, 100vw';
+/** The gallery's rendered width per breakpoint: 2 across, 4 from MD. */
+const GALLERY_SIZES = '(min-width: 48rem) 25vw, 50vw';
+
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
- * of songs, About and the setlist. A `?date=` carried from Discover names the date on the back
- * link and the Book button (L2-012.2). Photos, videos, reviews and the booking stub join later.
+ * of songs, About, the videos, the photos and the setlist. A `?date=` carried from Discover names
+ * the date on the back link and the Book button (L2-012.2). Reviews and the booking stub join later.
  */
 @Component({
   selector: 'zm-artist-page',
   imports: [
     ArtistPoster,
+    Artwork,
     ArtistPosterSkeleton,
     Breadcrumb,
     Button,
     ButtonLink,
+    EmptyState,
     ErrorStage,
     Icon,
     Marquee,
     Setlist,
     Skeleton,
     TranslocoPipe,
+    VideoCard,
   ],
   providers: [ArtistProfileStore],
   host: { '[attr.aria-busy]': "store.showSkeletons() ? 'true' : null" },
@@ -57,6 +71,7 @@ export class ArtistPage {
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
   private readonly route = inject(ActivatedRoute);
+  private readonly injector = inject(Injector);
 
   /** The search date carried from Discover, when it is a real date. */
   private readonly date = toSignal(
@@ -174,6 +189,68 @@ export class ArtistPage {
       key: this.keyLabel(song.key),
     })),
   );
+
+  /** The live videos, with the stamp "Play · 6:12" and the label read for the button (L2-014). */
+  protected readonly videos = computed(() =>
+    this.store.profile()!.videos.map((video, index) => {
+      const minutes = Math.floor(video.durationSeconds / 60);
+      const seconds = video.durationSeconds % 60;
+      return {
+        id: video.id,
+        title: video.title,
+        stamp: this.t('artist.videos.stamp', {
+          duration: `${minutes}:${String(seconds).padStart(2, '0')}`,
+        }),
+        label: this.t('artist.videos.label', {
+          title: video.title.replace(' — ', ', '),
+          minutes,
+          seconds,
+        }),
+        poster: video.poster && {
+          ...video.poster,
+          sizes: index === 0 ? FEATURED_VIDEO_SIZES : VIDEO_SIZES,
+        },
+        stream: video.stream,
+        captions: video.captions && {
+          src: video.captions.src,
+          srclang: video.captions.language,
+          label: this.t('artist.videos.captions', { language: video.captions.language }),
+        },
+      };
+    }),
+  );
+
+  /** Duos, bands and choirs get the group silhouette (L2-020.3). */
+  protected readonly artVariant = computed(() =>
+    this.store.profile()!.actType === 'solo' ? ('solo' as const) : ('group' as const),
+  );
+
+  /** The gallery: each photo opens the viewer, and links to its largest rendition without script. */
+  protected readonly photos = computed(() => {
+    const photos = this.store.profile()!.photos;
+    return photos.map((photo, index) => ({
+      id: photo.id,
+      label: this.t('artist.photos.open', {
+        position: index + 1,
+        total: photos.length,
+        alt: photo.alt,
+      }),
+      full: photo.srcset.split(', ').at(-1)?.split(' ')[0] ?? photo.src,
+      image: { ...photo, sizes: GALLERY_SIZES } satisfies ArtworkPhoto,
+    }));
+  });
+
+  /** Opens the photo viewer at this photo (L2-015.2); a modified click still follows the link. */
+  protected openPhoto(event: MouseEvent, index: number): void {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
+    const profile = this.store.profile()!;
+    openPhotoViewer(this.injector, {
+      artistName: profile.displayName,
+      photos: profile.photos,
+      index,
+    });
+  }
 
   /** Moves focus to the booking stub's date field (L2-012.3); the stub arrives with tour dates. */
   protected book(): void {

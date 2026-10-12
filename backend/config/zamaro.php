@@ -15,6 +15,12 @@ return [
         'search_per_minute' => (int) env('ZAMARO_SEARCH_LIMIT_PER_MINUTE', 30),
     ],
 
+    'media' => [
+        // The disk that holds media files, and the public URL they are served from (L2-088).
+        'disk' => env('ZAMARO_MEDIA_DISK', 'media'),
+        'base_url' => env('ZAMARO_MEDIA_URL', rtrim(env('APP_URL', 'http://localhost'), '/').'/media'),
+    ],
+
     'i18n' => [
         // One directory per locale, one JSON file per namespace (L2-111).
         'path' => env('ZAMARO_I18N_PATH', resource_path('i18n')),

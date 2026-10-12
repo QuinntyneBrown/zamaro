@@ -168,8 +168,10 @@ busy (46% uploaded, on the design-system progress bar), invalid (an AVI file and
 
 - `artist_videos` — `id` (UUID), `artist_id`, `position`, `title`, `status`,
   `failure_reason`, `size_bytes`, `source_key`, `upload_id`, `processor_job_id`
-  (unique), `manifest_key`, `poster_key`, `captions_key`, `duration_seconds`,
-  `max_height`, timestamps.
+  (unique), `manifest_key`, `poster_renditions` (`jsonb` list of width, height, format and
+  key, like a photo's renditions), `captions_key`, `captions_language`, `duration_seconds`,
+  `max_height`, timestamps. The profile slice (S12) created the table with the columns it reads;
+  the upload columns are added by this feature.
 - Object storage holds a private quarantine bucket for sources and the media bucket
   for renditions, posters and caption files, served through the CDN.
 

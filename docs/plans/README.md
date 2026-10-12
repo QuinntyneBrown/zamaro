@@ -17,7 +17,7 @@ changes in the plan as you go, the way M1's "Changes made while implementing" se
 
 | Milestone | Plan | Status |
 |---|---|---|
-| M1 | [Foundations and public browse](m1-foundations-and-browse.md) | In progress: S0–S11 done, S12 next |
+| M1 | [Foundations and public browse](m1-foundations-and-browse.md) | In progress: S0–S12 done, S13 next |
 | M2 | [Accounts and sessions](m2-accounts-and-sessions.md) | Not started |
 | M3 | [Artist onboarding and admin app](m3-artist-onboarding-and-admin.md) | Not started |
 | M4 | [Artist workspace and availability](m4-artist-workspace-and-availability.md) | Not started |
