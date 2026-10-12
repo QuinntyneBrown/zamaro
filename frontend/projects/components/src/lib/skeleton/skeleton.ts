@@ -10,7 +10,8 @@ export type SkeletonShape =
   | 'portrait'
   | 'wide'
   | 'target'
-  | 'block';
+  | 'block'
+  | 'strip';
 export type SkeletonWidth = 'short' | 'medium' | 'long' | 'full';
 
 /**
@@ -94,6 +95,12 @@ export type SkeletonWidth = 'short' | 'medium' | 'long' | 'full';
     :host(.skeleton--block) {
       height: 100%;
       min-height: 6rem;
+    }
+
+    /* The marquee strip's height, so nothing jumps when the songs land. */
+    :host(.skeleton--strip) {
+      width: 100%;
+      height: calc(var(--font-size-xl) + 2 * var(--space-3) + 2 * var(--border-width-thick));
     }
 
     :host(.skeleton--short) {

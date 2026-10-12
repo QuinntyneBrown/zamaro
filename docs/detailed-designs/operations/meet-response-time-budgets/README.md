@@ -51,7 +51,7 @@ The load test also requires an error rate below 0.1%.
 
 **Frontend (Zamaro Web)**
 
-- **`ArtistProfilePage`** — routed page for `/artists/:slug`. It asks `ArtistsApi` for
+- **`ArtistPage`** — routed page for `/artists/:slug`. It asks `ArtistsApi` for
   the profile and renders it.
 - **`ArtistsApi`** — typed client for `GET /api/v1/artists/{slug}`. It adds no cache
   logic of its own. The browser HTTP cache stores the response, sends `If-None-Match`

@@ -17,7 +17,7 @@ skinparam package {
 participant "Hosting platform\nload balancer" as lb
 participant "Uptime monitor" as uptime
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "SSR server\n(DiscoverPage, ArtistProfilePage)" as ssr
+  participant "SSR server\n(Discover, ArtistPage)" as ssr
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "HealthController" as health

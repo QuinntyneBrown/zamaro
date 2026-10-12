@@ -6,12 +6,12 @@ title Components — View an artist profile
 Person(visitor, "Booker or guest", "Considers an artist")
 System_Ext(cdn, "CDN", "Serves images and video")
 Container_Boundary(web, "Zamaro Web") {
-  Component(page, "ArtistProfilePage", "Angular page", "Route /artists/:slug; two-column layout from LG")
-  Component(store, "ArtistProfileStore", "Signal store", "Profile, carried date, status, stub draft")
-  Component(client, "ArtistProfileApi", "Typed HTTP client", "GET /api/v1/artists/{slug}")
-  Component(header, "ProfileHeaderComponent", "Angular component", "Name, rating, city, range, setlist strip, actions")
-  Component(sections, "About, Videos, Gallery, Setlist", "Angular components", "Section content and empty states")
-  Component(err, "ProfileErrorComponent", "Angular component", "Server or network error state")
+  Component(page, "ArtistPage", "Angular page", "Route /artists/:slug; About, setlist and error state in its template")
+  Component(store, "ArtistProfileStore", "Signal store", "Profile, status, skeleton flag")
+  Component(client, "ArtistProfilesApi", "Typed HTTP client", "GET /api/v1/artists/{slug}")
+  Component(header, "zm-artist-poster", "Library component", "Name, rating, city, range, Book; loaded, error and loading")
+  Component(sections, "zm-marquee, zm-setlist; VideosSection, PhotoGallery (S12)", "Library and page components", "Strip, sections and empty states")
+  Component(err, "zm-alert", "Library component", "Server or network error state")
 }
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "ArtistProfileController", "Laravel controller", "show(slug)")

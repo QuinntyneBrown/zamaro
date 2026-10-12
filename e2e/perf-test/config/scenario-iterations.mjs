@@ -6,12 +6,17 @@ export const defaultIterations = 200;
 export const scenarioIterations = {
   BookingStub: 150,
   DarkTheme: 60,
+  DateSwap: 400,
+  ErrorSummary: 450,
   Footer: 100,
+  FormField: 300,
+  HeadlinerSkeleton: 500,
   Lineup: 25,
   LineupSaved: 18,
   Menu: 90,
   SavedLineup: 1,
   Stamp: 240,
+  TicketSkeleton: 400,
   TopBar: 120,
   TopBarSignedIn: 110,
 };

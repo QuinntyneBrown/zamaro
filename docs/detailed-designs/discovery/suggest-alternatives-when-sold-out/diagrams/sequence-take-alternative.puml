@@ -16,11 +16,11 @@ skinparam package {
 }
 actor "Booker or guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "SoldOutComponent" as soldout
+  participant "SoldOut" as soldout
   participant "SearchStore" as store
-  participant "SearchQueryCodec" as codec
-  participant "DiscoverPage" as page
-  participant "SearchApi" as client
+  participant "search-query-codec" as codec
+  participant "Discover" as page
+  participant "DiscoveryApi" as client
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "SearchController" as controller
@@ -31,27 +31,27 @@ end box
 
 alt nearby date activated
   actor -> soldout : Activate "Sun 20 Dec · 2 choirs free"
-  soldout -> store : pickNearbyDate(2026-12-20)
+  soldout -> store : navigate({ date: 2026-12-20 }, { replace: false })
   store -> codec : toParams(state with date = 2026-12-20)
 else wider radius activated
   actor -> soldout : Activate "Search within 120 km · 2 free"
-  soldout -> store : widenRadius(120)
+  soldout -> store : navigate({ radius: 120 }, { replace: false })
   store -> codec : toParams(state with radius = 120)
 else "Show all styles" activated
   actor -> soldout : Activate "Show all styles"
-  soldout -> store : clearFilters()
+  soldout -> store : navigate({ styles: [], under800: false }, { replace: true })
   store -> codec : toParams(state with no styles and no price chip) (L2-011)
 end
 codec --> store : Params; other inputs unchanged
 store -> page : Router navigates with new query params
 page -> page : Update date field and poster headline (L2-011)
-page -> store : restoreOrSearch(state)
-store -> client : search(criteria)
+page -> store : load(state)
+store -> client : search(query)
 client -> controller : GET /api/v1/search
 controller -> action : handle(SearchCriteria)
 action --> controller : Lineup
-controller --> client : 200 LineupResource
-client --> store : Lineup
+controller --> client : 200 tickets, headliner and meta
+client --> store : SearchResult
 store --> page : Render lineup and summary line
 page --> actor : Lineup for the chosen alternative
 @enduml

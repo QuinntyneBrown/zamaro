@@ -16,9 +16,9 @@ skinparam package {
 }
 actor "Keyboard and screen-reader user" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "SkipLinkComponent" as skip
+  participant "zm-skip-link" as skip
   participant "Router" as router
-  participant "ArtistProfilePage" as page
+  participant "ArtistPage" as page
   participant "ZamaroTitleStrategy" as title
   participant "RouteFocusService" as focus
 end box
@@ -38,7 +38,7 @@ router -> page : Activate /artists/{slug}
 page -> ctrl : GET /api/v1/artists/{slug}
 ctrl -> db : Artist, rating aggregate
 db --> ctrl : Row
-ctrl --> page : 200 ArtistResource (rating, reviewCount as numbers)
+ctrl --> page : 200 ArtistProfileResource (rating, reviewCount as numbers)
 router -> title : updateTitle()
 title -> title : document.title = "{artist} · Zamaro" (L2-101)
 router -> focus : NavigationEnd

@@ -14,9 +14,8 @@ skinparam class {
 title Class structure — Meet accessibility standards
 
 package "Zamaro Web (Angular)" {
-  class SkipLinkComponent {
-    +target: string = '#main'
-    +activate(): void
+  class "zm-skip-link" as SkipLink <<library>> {
+    +target: string = 'main'
   }
   class RouteFocusService {
     -router: Router
@@ -34,10 +33,9 @@ package "Zamaro Web (Angular)" {
     -live: LiveAnnouncer
     +polite(message: string): Promise<void>
   }
-  class FieldErrorDirective {
-    +control: NgControl
-    +errorId: string
-    -sync(): void
+  class "zm-form-field" as FormField <<library>> {
+    +error: InputSignal<string | null>
+    +errorId: Signal<string>
   }
   class ProblemDetailsMapper {
     +applyTo(form: FormGroup, problem: ProblemDetails): string | null
@@ -49,10 +47,10 @@ package "Zamaro Web (Angular)" {
     +detail: string
     +errors?: Record<string, string[]>
   }
-  class RatingComponent {
-    +rating: InputSignal<number | null>
-    +reviewCount: InputSignal<number>
-    +label: Signal<string>
+  class "zm-rating" as Rating <<library>> {
+    +score: InputSignal<number | null>
+    +label: InputSignal<string>
+    +countText: InputSignal<string>
   }
   class MotionService {
     +reducedMotion: Signal<boolean>
@@ -63,7 +61,7 @@ package "Zamaro API (Laravel)" {
   class ProblemDetailsRenderer {
     +render(e: ValidationException): JsonResponse
   }
-  class ArtistResource {
+  class ArtistProfileResource {
     +toArray(request: Request): array
   }
 }
@@ -71,8 +69,8 @@ package "Zamaro API (Laravel)" {
 RouteFocusService ..> ZamaroTitleStrategy : runs after the title update
 DialogService ..> MotionService : skips open animation when reduced
 ProblemDetailsMapper ..> ProblemDetails : reads
-ProblemDetailsMapper ..> FieldErrorDirective : sets control errors shown by
+ProblemDetailsMapper ..> FormField : sets control errors shown by
 ProblemDetailsRenderer ..> ProblemDetails : produces (JSON)
-RatingComponent ..> ArtistResource : rating, reviewCount
-SkipLinkComponent ..> RouteFocusService : shares main target
+Rating ..> ArtistProfileResource : rating, reviewCount
+SkipLink ..> RouteFocusService : shares main target
 @enduml

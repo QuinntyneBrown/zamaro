@@ -5,13 +5,11 @@ title Components — Sort and filter results
 
 Person(booker, "Booker or guest", "Narrows and orders the lineup")
 Container_Boundary(web, "Zamaro Web") {
-  Component(page, "DiscoverPage", "Angular page", "Hosts controls and lineup; reacts to query params")
-  Component(sort, "SortControlComponent", "Angular component", "Closest first, Highest rated, Price, low to high")
-  Component(chips, "StyleFilterComponent", "Angular component", "Style and price chips with aria-pressed")
-  Component(summary, "SummaryLineComponent", "Angular component", "Summary line announced politely")
-  Component(codec, "SearchQueryCodec", "Angular service", "SearchState to query params and back, with defaults")
-  Component(store, "SearchStore", "Signal store", "Runs searches; caches lineup by query key")
-  Component(client, "SearchApi", "Typed HTTP client", "GET /api/v1/search")
+  Component(page, "Discover", "Angular page", "Hosts the poster and lineup; reacts to query params")
+  Component(lineup, "Lineup", "Angular component", "Sort select (zm-form-field), style and price chips (zm-chip), summary line announced politely")
+  Component(codec, "search-query-codec", "Pure functions", "SearchState to query params and back, with defaults")
+  Component(store, "SearchStore", "Signal store", "Holds the state; navigates and runs searches")
+  Component(client, "DiscoveryApi", "Typed HTTP client", "GET /api/v1/search")
 }
 Container_Boundary(api, "Zamaro API") {
   Component(req, "SearchArtistsRequest", "FormRequest", "Validates sort, styles and price")
@@ -20,11 +18,10 @@ Container_Boundary(api, "Zamaro API") {
   Component(sorter, "LineupSorter", "Domain service", "One comparator per SearchSort")
   ComponentDb(db, "Zamaro database", "PostgreSQL 16", "artists, artist_styles, reviews")
 }
-Rel(booker, page, "Toggles chips, picks sort", "HTTPS")
-Rel(page, sort, "Contains")
-Rel(page, chips, "Contains")
-Rel(page, summary, "Contains")
-Rel(page, store, "Calls applySort() and toggleFilter()")
+Rel(booker, lineup, "Toggles chips, picks sort", "HTTPS")
+Rel(page, lineup, "Contains")
+Rel(lineup, store, "Calls navigate() with the changed part")
+Rel(page, store, "Hands each decoded state to load()")
 Rel(store, codec, "Encodes and decodes state with")
 Rel(store, client, "Searches with")
 Rel(client, req, "GET /api/v1/search", "JSON/HTTPS")

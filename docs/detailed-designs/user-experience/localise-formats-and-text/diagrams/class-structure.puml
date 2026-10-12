@@ -25,7 +25,7 @@ package "Zamaro Web (Angular)" {
     +money(cents: number): string
     +distance(km: number, approximate: boolean): string
   }
-  class ZMoneyPipe {
+  class MoneyPipe <<added when first needed>> {
     +transform(cents: number): string
   }
   class TranslocoService {
@@ -72,7 +72,7 @@ package "Zamaro API and Worker (Laravel)" {
   }
 }
 
-ZMoneyPipe --> FormatService
+MoneyPipe --> FormatService
 FormatService --> TranslocoService : format patterns
 TranslocoService --> CatalogueLoader
 CatalogueLoader ..> TranslationCatalogueController : GET /api/v1/i18n/{locale}

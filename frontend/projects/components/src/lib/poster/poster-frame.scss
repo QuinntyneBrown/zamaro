@@ -1,0 +1,40 @@
+// The tour-poster frame on the charcoal stage (docs/design-system/components/poster), shared by the
+// Discover hero and the artist's header.
+
+.poster {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-12) var(--space-16);
+}
+
+/* Screen-print halftone corner. */
+.poster::after {
+  content: '';
+  position: absolute;
+  inset: auto -4rem -4rem auto;
+  width: 22rem;
+  height: 22rem;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--color-accent-on-stage) 22%, transparent 24%) 0 0 /
+    0.85rem 0.85rem;
+  mask-image: radial-gradient(circle at 100% 100%, currentColor 0, transparent 70%);
+  opacity: 0.35;
+}
+
+.poster > * {
+  position: relative;
+  z-index: var(--z-raised);
+}
+
+.poster__kicker {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+  color: var(--color-accent-on-stage);
+}
+
+@media (min-width: 62rem) {
+  .poster {
+    padding-block: var(--space-16) var(--space-20);
+  }
+}

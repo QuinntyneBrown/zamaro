@@ -116,7 +116,7 @@ folders. Each row is one distinct configuration; the API below builds every row.
 Host: `zm-form-field` is the `.field` element itself (`display: flex`, column,
 `min-width: 0`). It carries the BEM class so the page objects and the form-grid
 rules find it; it renders no wrapper `<div>`. Classes a parent puts on the host
-(for example `sort` or `span-all`) stay on the host.
+(for example `sort` or `span-full`) stay on the host.
 
 ## API
 

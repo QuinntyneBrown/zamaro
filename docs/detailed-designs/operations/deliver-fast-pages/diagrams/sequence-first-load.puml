@@ -17,7 +17,7 @@ skinparam package {
 actor "Guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "SSR server" as ssr
-  participant "ArtistProfilePage" as page
+  participant "ArtistPage" as page
   participant "MediaImageComponent" as img
   participant "WebVitalsReporter" as vitals
 end box

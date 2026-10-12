@@ -6,10 +6,10 @@ title Components — Adapt layout to screens
 Person(user, "Guest, booker, artist or administrator", "Any screen size")
 Container(api, "Zamaro API", "Laravel", "MeController, GET /api/v1/me")
 Container_Boundary(web, "Zamaro Web") {
-  Component(shell, "AppShellComponent", "Angular component", "Skip link, header, main, footer")
+  Component(shell, "Shell", "Angular component", "zm-skip-link, zm-top-bar, main, zm-footer")
   Component(bp, "BreakpointService", "Angular service", "Viewport class and isCompact signals from L2 breakpoints")
-  Component(topbar, "TopBarComponent", "Angular component", "Full header from LG (artist shell from XL), compact below")
-  Component(drawer, "NavDrawerComponent", "Angular component", "Primary links behind the menu button")
+  Component(topbar, "zm-top-bar", "Library component", "Full header from LG (artist shell from XL), compact below")
+  Component(drawer, "MenuDialog", "CDK Dialog", "Primary links and theme toggle behind the menu button")
   Component(dialogs, "DialogService", "CDK Dialog wrapper", "Full-screen panel class at XS")
   Component(user_store, "CurrentUserStore", "Signal store", "Initials and Saved count")
   Component(css, "Layout styles", "SCSS", "breakpoints.scss, layout.scss, touch-target rules")

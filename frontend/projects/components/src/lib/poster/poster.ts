@@ -10,7 +10,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   template: `<section class="poster on-stage" [attr.aria-labelledby]="headingId()">
     <div class="container poster__grid">
       <div class="stack">
-        <p class="poster__kicker">{{ kicker() }}</p>
+        <p class="overline poster__kicker">{{ kicker() }}</p>
         <h1 class="poster__title" [id]="headingId()">
           {{ heading() }}
           <span class="poster__date">
@@ -25,39 +25,8 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       <ng-content />
     </div>
   </section>`,
+  styleUrl: './poster-frame.scss',
   styles: `
-    .poster {
-      position: relative;
-      overflow: hidden;
-      padding-block: var(--space-12) var(--space-16);
-    }
-
-    /* Screen-print halftone corner. */
-    .poster::after {
-      content: '';
-      position: absolute;
-      inset: auto -4rem -4rem auto;
-      width: 22rem;
-      height: 22rem;
-      pointer-events: none;
-      background: radial-gradient(circle, var(--color-accent-on-stage) 22%, transparent 24%) 0 0 /
-        0.85rem 0.85rem;
-      mask-image: radial-gradient(circle at 100% 100%, currentColor 0, transparent 70%);
-      opacity: 0.35;
-    }
-
-    .poster > * {
-      position: relative;
-      z-index: var(--z-raised);
-    }
-
-    .poster__kicker {
-      font: var(--text-overline);
-      letter-spacing: var(--letter-spacing-stamp);
-      text-transform: uppercase;
-      color: var(--color-accent-on-stage);
-    }
-
     .poster__title {
       font: var(--text-h1);
       text-transform: uppercase;
@@ -87,10 +56,6 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
     }
 
     @media (min-width: 62rem) {
-      .poster {
-        padding-block: var(--space-16) var(--space-20);
-      }
-
       .poster__grid {
         grid-template-columns: 1.15fr 1fr;
         align-items: end;

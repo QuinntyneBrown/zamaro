@@ -566,6 +566,12 @@ and `FormActions` (149 ms) at the default 200 iterations. Account settings uses 
 `zm-form-section-skeleton` and its scenario (the account page's loading state announces itself without
 skeletons until then), and replacing Discover's hand-written summary.
 
+**After merging main (drift cleanup, PR #16):** `zm-error-summary` moved to
+`lib/form-layout/error-summary.ts`, beside the other form-layout components, as the design system
+names the folder. It keeps the M2 behaviour above (`role="group"`, underlined links). Discover's
+search form now uses it (`headingLevel` 3, `autoFocus` false), so its hand-written summary is gone.
+Still to do: `zm-form-section-skeleton` and its scenario.
+
 Planned. Build it in `frontend/projects/components/src/lib/form-layout/`:
 
 - `form-section.ts` (`FormSection`, `zm-form-section`), host classes

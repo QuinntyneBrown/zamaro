@@ -16,9 +16,9 @@ skinparam package {
 }
 actor "Booker or guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "PhotoGalleryComponent" as gallery
-  participant "PhotoViewerDialogComponent" as viewer
-  participant "VideoPlayerComponent" as player
+  participant "PhotoGallery (S12)" as gallery
+  participant "PhotoViewerDialog (S12)" as viewer
+  participant "VideoPlayer (S12)" as player
 end box
 box "Backend — Zamaro Infrastructure" #FFF4E5
   participant "CDN" as cdn

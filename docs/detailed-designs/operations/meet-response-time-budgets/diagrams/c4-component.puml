@@ -3,7 +3,7 @@
 LAYOUT_WITH_LEGEND()
 title Components — Meet response-time budgets
 
-Container(web, "Zamaro Web", "Angular", "ArtistProfilePage, ArtistsApi, ProfileEditorPage")
+Container(web, "Zamaro Web", "Angular", "ArtistPage, ArtistsApi, ProfileEditorPage")
 System_Ext(cdn, "CDN", "Shared cache; s-maxage 60 s")
 System_Ext(metrics, "Metrics and alerting service", "p95 per request class")
 Container_Boundary(api, "Zamaro API") {

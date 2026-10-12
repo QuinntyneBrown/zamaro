@@ -54,7 +54,7 @@ export class AcceptTermsPage {
   }
 
   lead(): Locator {
-    return this.page.locator('.lead');
+    return this.page.locator('p.text-muted');
   }
 
   /** What changed, one item each. */

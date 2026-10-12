@@ -18,14 +18,15 @@ package "Zamaro Web (Angular)" {
     +preference: WritableSignal<ThemePreference | null>
     +system: Signal<'light'|'dark'>
     +effective: Signal<'light'|'dark'>
+    +isDark: Signal<boolean>
     +toggle(): void
     +reconcile(account: ThemePreference | null): void
     -writeDevice(value: ThemePreference): void
   }
-  class ThemeToggleComponent {
-    +pressed: Signal<boolean>
-    +label: Signal<string>
-    +onClick(): void
+  class "zm-top-bar" as TopBar <<library>> {
+    +themeLabel: InputSignal<string>
+    +themePressed: InputSignal<boolean>
+    +themeToggled: OutputEmitterRef<void>
   }
   class PreferencesApi {
     +update(body: PreferencesUpdate): Observable<Me>
@@ -67,7 +68,7 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-ThemeToggleComponent --> ThemeService
+TopBar ..> ThemeService : Shell binds isDark() and toggle()
 ThemeService --> PreferencesApi
 ThemeService --> TsPref
 CurrentUserStore ..> ThemeService : reconcile(account)

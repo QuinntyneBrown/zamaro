@@ -35,10 +35,6 @@
   max-width: var(--layout-auth-width);
 }
 
-.lead {
-  color: var(--color-fg-muted);
-}
-
 // "Your session ended" and what is kept (docs/mocks/pages/sign-in/expired).
 .message {
   display: grid;

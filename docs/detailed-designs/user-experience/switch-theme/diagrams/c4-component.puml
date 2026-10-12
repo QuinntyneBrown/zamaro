@@ -8,7 +8,7 @@ System_Ext(browser, "Browser", "prefers-color-scheme, localStorage")
 Container_Boundary(web, "Zamaro Web") {
   Component(boot, "theme-boot.js", "Inline head script", "Applies stored preference before first paint")
   Component(service, "ThemeService", "Angular service", "preference, system and effective theme signals")
-  Component(toggle, "ThemeToggleComponent", "Angular component", "aria-pressed toggle in the top bar (drawer when compact)")
+  Component(toggle, "zm-top-bar / zm-menu toggle", "Library components", "aria-pressed toggle in the top bar (drawer item when compact)")
   Component(prefapi, "PreferencesApi", "Typed HTTP client", "PATCH /api/v1/me/preferences")
   Component(users, "CurrentUserStore", "Signal store", "Loads GET /api/v1/me")
 }

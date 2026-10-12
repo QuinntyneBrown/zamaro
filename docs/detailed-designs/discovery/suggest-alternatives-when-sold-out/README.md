@@ -33,32 +33,30 @@ endpoint to the Zamaro API. The main search stays unchanged, so its response tim
 target of a 500 ms 95th percentile (L2-085) is not spent on alternatives that most
 searches never need.
 
-**Frontend (Zamaro Web, `features/discover`)**
+**Frontend (Zamaro Web, `pages/discover`; locations per ADR-0007)**
 
-- **`SoldOutComponent`** — presentational component built on the design system
-  empty-state pattern. It shows the "Sold out" eyebrow, the headline "Nobody's free
-  {date description} within {radius} km", the explanation sentence, the list of
-  nearby dates with their counts, the "Search within {radius} km · {n} free" button
-  and, when filters are applied, the "Show all styles" button. While alternatives load,
-  the panel shows the headline with skeleton rows in place of the ways forward.
+- **`SoldOut`** (`pages/discover/sold-out`) — the lineup area's sold-out panel, built from the
+  library's `zm-empty-state` and `zm-date-swap`. It shows the "Sold out" stamp, the headline
+  "Nobody's free {date description} within {radius} km", the explanation sentence, the
+  nearby dates with their counts, the "Search within {radius} km · {n} free" button and, when
+  filters are applied, the "Show all styles" button. Its `pickDate()`, `widen()` and
+  `showAllStyles()` each change one part of the search through `SearchStore.navigate()`.
 - **`SearchStore`** (extended) — when a search returns a total of 0, it calls
-  `SearchApi.alternatives()` with the same criteria and stores the result in an
-  `alternatives` signal. Its three methods `pickNearbyDate()`, `widenRadius()` and
-  `clearFilters()` each change one part of the search state and navigate through
-  `SearchQueryCodec`. The URL change re-runs the search, so the date field and the
+  `DiscoveryApi.alternatives()` with the same criteria and stores the result in an
+  `alternatives` signal. `navigate()` writes the changed search to the address bar through
+  the search query codec. The URL change re-runs the search, so the date field and the
   poster headline follow the new date (L2-011).
-- **`SearchApi`** (extended) — adds `alternatives(criteria)` for
+- **`DiscoveryApi`** (extended) — adds `alternatives(query)` for
   `GET /api/v1/search/alternatives`.
-- **`DateDescriptionPipe`** — turns a date into its date description through
-  `FormatService` and the translation catalogue. The named days are the catalogue keys
+- **`FormatService.dateDescription()`** — turns a date into its date description through
+  the translation catalogue. The named days are the catalogue keys
   `common.namedDay.{MM-DD}`:
   - Christmas Eve (12-24)
   - Christmas Day (12-25)
   - New Year's Eve (12-31)
   - New Year's Day (01-01)
 
-  Every other date uses the short date. In M1 this is `FormatService.dateDescription()`; no pipe
-  is needed yet.
+  Every other date uses the short date.
 
 **Backend (Zamaro API)**
 
@@ -66,25 +64,24 @@ searches never need.
   `GET /api/v1/search/alternatives`, behind the same search rate limiter (L2-077). It
   reuses `SearchArtistsRequest` for validation, ignoring the cursor.
 - **`FindSearchAlternatives`** — action that computes the alternatives in one pass.
-  1. It loads the filtered candidates inside the bounding box of the largest wider
-     radius, or of the current radius when no wider one exists.
-  2. It measures each candidate once with `DistanceService`. Distance does not depend
-     on the date, so the measurements serve every date and radius below.
-  3. It asks `AvailabilityService::freeArtistIdsByDate()` which candidates are free on
-     each date from 7 days before to 7 days after the searched date. Dates outside the
-     bookable window of 3 days to 18 months from today are skipped (L2-004).
-  4. For each date it counts candidates that pass the travel match at the current
-     radius. It keeps dates with a count above 0, orders them by distance in days from
-     the searched date and takes the first 3. Of two dates the same number of days away,
-     the earlier comes first.
+  1. `CandidateFinder::measured()` loads the filtered candidates inside the bounding box of
+     the largest wider radius, or of the current radius when no wider one exists, and
+     measures each one once with `DistanceService`. Distance does not depend on the date, so
+     the measurements serve every date and radius below.
+  2. It walks the dates from 1 to 7 days either side of the searched date, closest first and
+     the earlier of two dates the same number of days away first. Dates outside the bookable
+     window of 3 days to 18 months from today are skipped (L2-004).
+  3. For each date it asks `AvailabilityService::freeArtistIds()` which candidates are free
+     and counts those that pass the travel match at the current radius
+     (`CandidateFinder::travels()`). It keeps dates with a count above 0 and stops at 3.
   5. For each wider radius in ascending order it counts candidates that pass the
      travel match on the searched date, and returns the first radius with a count above 0.
-- **`AvailabilityService`** (extended) — adds `freeArtistIdsByDate(ids, dates)`, which
-  reads rules, overrides, Confirmed bookings and, for Youth events, VSC records for the
-  whole date range in one query per table.
-- **`SoldOutExplainer`** — picks the explanation sentence from catalogue templates. It
-  uses the gathering kind, the filter set, the location label and the best alternative,
-  as in "Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby
+- **`AvailabilityService`** — unchanged: `freeArtistIds(ids, date, kind)` reads rules,
+  overrides, Confirmed bookings and, for Youth events, VSC records for one date, and the action
+  calls it once per date, at most 14 times.
+- **Explanation sentence** — built by `SoldOut` from catalogue templates; there is no
+  `SoldOutExplainer` class. It uses the gathering kind, the filter set, the location label
+  and the best alternative, as in "Every gospel choir near Burlington is booked for Christmas Eve. Try a nearby
   date, or widen the radius: 2 choirs are free within 120 km."
   - **Built on the frontend:** in M1 the API returns only the structured
     `{nearbyDates:[{date,count}], widerRadius:{km,count}|null, filtersApplied}`. The sold-out
@@ -100,8 +97,10 @@ searches never need.
     `gospel_choir` and the like.
   - **Fixtures:** `CastSeeder::christmasChoirs()` holds the mock's fixtures. Each choir is free
     only on its listed dates.
-- **`SearchAlternativesResource`** — serialises `nearbyDates` (date and count),
-  `widerRadius` (km and count, or null), `filtersApplied` and `explanation`.
+- **Response** — `SearchAlternativesController` returns
+  `{"data":{"nearbyDates":[{date,count}],"widerRadius":{km,count}|null,"filtersApplied":bool}}`
+  straight from the `SearchAlternatives` value object; there is no resource class and no
+  `explanation`.
 
 **Mocks**
 
@@ -142,17 +141,17 @@ Zamaro API reads availability for 15 dates from the database and distances from 
 
 ### Components
 
-`FindSearchAlternatives` measures distances once through `DistanceService` and asks
-`AvailabilityService` about the whole date range. `SoldOutExplainer` then words
-the explanation.
+`FindSearchAlternatives` measures distances once through `CandidateFinder` and
+`DistanceService`, and asks `AvailabilityService` about each date in the range. `SoldOut`
+then words the explanation on the frontend.
 
 ![C4 component view for suggesting alternatives when sold out](diagrams/c4-component.png)
 
 ### Class structure
 
-`SearchAlternatives` holds up to 3 `NearbyDate` entries, an optional `WiderRadius`
-and the explanation. On the frontend, `SoldOutComponent` renders it and `SearchStore`
-turns each choice into a new search state.
+`SearchAlternatives` holds up to 3 nearby dates (date and count), an optional wider
+radius (km and count) and whether filters applied. On the frontend, `SoldOut` renders it
+and `SearchStore.navigate()` turns each choice into a new search state.
 
 ![Class diagram for suggesting alternatives when sold out](diagrams/class-structure.png)
 

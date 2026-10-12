@@ -60,7 +60,9 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
   wraps Laravel's `cursorPaginate()` and overrides `paginationInformation()` to emit
   `meta.perPage`, `meta.nextCursor` and `meta.prevCursor`. `nextCursor` is `null` on the
   last page. No list returns a total count unless its requirement asks for one, as the
-  search summary line does.
+  search summary line does. Not built in M1: search ranks in memory after measuring
+  distances, so `SearchController` writes the same `meta` (`total`, `perPage`, `nextCursor`)
+  from its own `PageCursor`. The base class arrives with the first list paged in the database.
 - **Ordering rule** — every paginated query orders by its business key followed by `id`,
   so the ordering is unique and the cursor is stable while rows are inserted. A
   composite index covers each ordering, for example `bookings (booker_id, event_date, id)`.
@@ -97,6 +99,8 @@ The slice spans Zamaro Web, the Zamaro API, PostgreSQL and the CI/CD pipeline.
 
 - **`ApiProblemInterceptor`** — Angular HTTP interceptor that parses any
   `application/problem+json` error into an `ApiProblem` before the calling store sees it.
+  Not built in M1: `SearchStore` reads the `HttpErrorResponse` status (429 and
+  `Retry-After`) directly; the interceptor arrives with the first form that sends data.
 - **`FormErrorMapper`** — sets each entry of `ApiProblem.errors` as a server error on
   the matching reactive-form control, so the form shows inline errors and keeps every
   value (L2-108).

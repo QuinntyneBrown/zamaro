@@ -3,16 +3,16 @@
 LAYOUT_WITH_LEGEND()
 title Components — Search available artists
 
-Container(web, "Zamaro Web", "Angular", "DiscoverPage, SearchStore, SearchApi")
+Container(web, "Zamaro Web", "Angular", "Discover, SearchForm, Lineup, SearchStore, DiscoveryApi")
 System_Ext(routing, "Routing provider", "Driving distance and drive time")
 Container_Boundary(api, "Zamaro API") {
   Component(ctrl, "SearchController", "Laravel controller", "Exposes GET /api/v1/search")
-  Component(req, "SearchArtistsRequest", "FormRequest", "Validates date window, kind, location, radius, page")
+  Component(req, "SearchArtistsRequest", "FormRequest", "Validates date window, kind, location, radius, cursor")
   Component(action, "SearchAvailableArtists", "Action", "Selects free, travel-matching artists and builds the lineup")
   Component(avail, "AvailabilityService", "Domain service", "Applies the Free definition and VSC rule")
   Component(dist, "DistanceService", "Domain service", "Road distance with cache and straight-line fallback")
   Component(router, "RoutingProvider", "Interface + adapter", "Calls the routing provider")
-  Component(res, "LineupResource", "API resource", "Serialises result cards and the summary line")
+  Component(res, "LineupCardResource and HeadlinerResource", "API resources", "Serialise the tickets, the headliner and the paging meta")
   ComponentDb(db, "Zamaro database", "PostgreSQL 16", "Artists, rules, overrides, bookings, reviews")
   ComponentDb(cache, "Cache and queue", "Redis", "Distance cache entries for 30 days")
 }

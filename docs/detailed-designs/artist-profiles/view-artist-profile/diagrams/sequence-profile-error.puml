@@ -16,26 +16,26 @@ skinparam package {
 }
 actor "Booker or guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ArtistProfilePage" as page
+  participant "ArtistPage" as page
   participant "ArtistProfileStore" as store
-  participant "ArtistProfileApi" as client
-  participant "ProfileErrorComponent" as err
-  participant "SearchStore" as search
+  participant "ArtistProfilesApi" as client
+  participant "zm-alert" as err
+  participant "LastSearch" as search
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "ArtistProfileController" as controller
 end box
 
 actor -> page : Open /artists/abigail-mensah?date=2026-11-14
-page -> store : load(slug, carried date)
+page -> store : load(slug)
 store -> client : get(slug)
 client -> controller : GET /api/v1/artists/abigail-mensah
 controller --> client : 5xx problem details or network error
 client --> store : Error
 store --> page : status = error
-page -> search : lastDiscoverUrl()
-search --> page : /?date=2026-11-14&kind=...&radius=120
-page -> err : Show error with lineup URL
+page -> search : search()
+search --> page : Params of the last lineup: date, kind, place, radius, ...
+page -> err : Show error under zm-artist-poster ("Show postponed") with the lineup link
 err --> actor : "We couldn't reach the artist's page", Try again, "Back to the lineup" (L2-107)
 alt Try again
   actor -> err : Activate Try again

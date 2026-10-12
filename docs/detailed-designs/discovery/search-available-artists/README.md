@@ -38,11 +38,13 @@ Zamaro API, the Zamaro database and the routing provider.
 
 **Frontend (Zamaro Web, `app/pages/discover`; locations per ADR-0007)**
 
-The page, form and lineup map to `Discover`, `pages/discover/search-form/SearchForm` and
+The page, form and lineup are `Discover`, `pages/discover/search-form/SearchForm` and
 `pages/discover/lineup/Lineup`. `SearchStore` lives in `pages/discover/search.store.ts`, and
-`SearchApi` is the `api` library's `DiscoveryApi` (token `DISCOVERY_API`). The presentational
-pieces are `zm-poster`, `zm-booking-form`, `zm-form-field`, `zm-chip`, `zm-ticket`,
-`zm-rating`, `zm-artwork` and `zm-marquee`.
+the API client is the `api` library's `DiscoveryApi` (token `DISCOVERY_API`). The presentational
+pieces are `zm-poster`, `zm-booking-form`, `zm-form-field`, `zm-filter-group`, `zm-chip`,
+`zm-error-summary`, `zm-headliner`, `zm-ticket`, `zm-rating`, `zm-artwork`, `zm-alert` and
+`zm-marquee`, all in the `components` library; while the lineup loads it shows
+`zm-headliner-skeleton` and `zm-ticket-skeleton`.
 
 **Church location.** The location field resolves through `GET /api/v1/places?q=`
 (`PlaceController` and the `Geocoder` port). The endpoint fills a gap in the original design.
@@ -66,29 +68,29 @@ pieces are `zm-poster`, `zm-booking-form`, `zm-form-field`, `zm-chip`, `zm-ticke
 
 Until the headliner lands (S6), the tickets start at "No. 01".
 
-- **`DiscoverPage`** — routed page component for `/`. It hosts the poster headline,
+- **`Discover`** — routed page component for `/`. It hosts the poster headline,
   the search form and the lineup region. The radius starts at 120 km for everyone. It
   pre-fills the church location for a booker with a saved church, and leaves location
   and date empty for a guest (L2-004).
-- **`SearchFormComponent`** — reactive form with event date, kind of gathering,
-  church location (address search, or for a guest one of 11 quick-pick city chips) and radius
-  (40, 80, 120 or 200 km). It enforces the 3-day minimum and 18-month maximum,
+- **`SearchForm`** — reactive form, projected into `zm-poster` and laid out by
+  `zm-booking-form`, with event date, kind of gathering, church location (address search, or
+  for a guest one of 11 quick-pick city chips) and radius (40, 80, 120 or 200 km). It enforces the 3-day minimum and 18-month maximum,
   marks each empty required field and moves focus to the first invalid one.
 - **`SearchStore`** — signal-based store holding the criteria, the current
-  `Lineup`, a status (`idle`, `loading`, `loaded`, `error`) and a consecutive-failure
+  result, a status (`idle`, `loading`, `loaded`, `error`, `limited`) and a consecutive-failure
   count. It sets `aria-busy` and shows skeletons when a search takes longer than
   300 ms.
-- **`SearchApi`** — typed client for `GET /api/v1/search`. It passes the cursor for
-  the next page of 24.
-- **`LineupComponent`**, **`HeadlinerCardComponent`**, **`TicketCardComponent`** —
-  presentational components from the design system. They render position, name,
+- **`DiscoveryApi`** — contract and token in the `api` library, bound to `HttpDiscoveryApi`, a
+  typed client for `GET /api/v1/search`. It passes the cursor for the next page of 24.
+- **`Lineup`** with the library's **`zm-headliner`** and **`zm-ticket`** — `Lineup` maps the
+  result to card views; the two library components render position, name,
   act type and styles ("Band · Acoustic, Hymns"), base city, distance ("44 km", "about
   44 km" when the `Distance` is approximate, "Under 1 km" below 1 km; L2-002), rating or
   "New", "From" price, and for the headliner the kicker "Most booked this {season}",
   the primary photo, the latest 5-star quote and "Free {date}" (L2-006). The headliner is "No. 01"; the tickets
   follow from "No. 02" in the active sort order.
   Each card links to `/artists/{slug}` with the search date carried forward.
-- **`SearchErrorComponent`** — the "We lost the signal" state with Try again, the
+- **Error state** — the "We lost the signal" state with Try again, the
   team email link and, after the third consecutive failure, the status-page link
   (L2-106). The status link is "Check status.zamaro.ca" (`https://status.zamaro.ca`). It is
   rendered in `pages/discover/lineup` with `zm-alert`, as is the rate-limited state. In the
@@ -154,8 +156,8 @@ row from LG.
 - **`RoutingProvider`** — interface with one adapter for the routing provider
   (vendor `<TO SUPPLY>`). Until then `FakeRoutingProvider` reproduces the mocks' road
   distances from `CastRoutes` (ADR-0002).
-- **`LineupResource`** — API resource that serialises the cards, the total and the
-  next cursor: `{"data":[card…],"meta":{"total":7}}`. Each card is
+- **`LineupCardResource`** and **`HeadlinerResource`** — API resources that `SearchController`
+  assembles into the cards, the headliner, the total and the next cursor: `{"data":[card…],"meta":{"total":7}}`. Each card is
   `{slug, name, actType, styles[], city, distance:{km, driveMinutes, approximate},
   rating|null, reviewCount, fromPrice:{cents, currency:"CAD"}}`.
   - The headliner (S6) is a top-level `headliner` object.

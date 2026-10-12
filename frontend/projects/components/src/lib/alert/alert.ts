@@ -15,12 +15,11 @@ import { Icon } from '../icon/icon';
     [class.alert--compact]="compact()"
     role="alert"
   >
-    <span class="alert__icon"
-      ><zm-icon
-        [name]="variant() === 'danger' ? 'warning' : 'info'"
-        [size]="compact() ? 'md' : 'lg'"
-    /></span>
-    <div class="alert__body">
+    <zm-icon
+      [name]="variant() === 'danger' ? 'warning' : 'info'"
+      [size]="compact() ? 'md' : 'lg'"
+    />
+    <div class="stack stack--sm">
       <p class="alert__title">{{ heading() }}</p>
       <ng-content />
     </div>
@@ -56,15 +55,8 @@ import { Icon } from '../icon/icon';
       font: var(--text-h4);
     }
 
-    .alert__icon {
-      display: inline-flex;
+    .alert > zm-icon {
       color: var(--alert-icon);
-    }
-
-    .alert__body {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
     }
 
     .alert__title {

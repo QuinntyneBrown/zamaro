@@ -14,7 +14,10 @@ export type RatingVariant = 'inline' | 'summary';
     @if (score() === null) {
       {{ newText() }}
     } @else {
-      {{ glyphs() }} {{ scoreText() }} · {{ countText() }}
+      {{ glyphs() }} {{ scoreText() }}
+      @if (countText()) {
+        · {{ countText() }}
+      }
     }
   </span>`,
   styles: `

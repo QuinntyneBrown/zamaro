@@ -556,6 +556,57 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
   and the email and password are kept.
 - Passwords are stored as Argon2id; `cast:booker` makes a verified booker and refuses production.
 
+## Merging main (2026-10-12)
+
+`main` moved on while M2 was built: PR #16 (drift cleanup) and PR #18 (M1's S12, photos and videos).
+Main was merged into this branch, not rebased onto, so the slice commits above keep their SHAs.
+
+- **e2e keeps the real backend.** PR #16 replaced `api-e2e` with a stub API and made "the backend is
+  mocked in e2e" an AGENTS.md rule; it also dropped `ZAMARO_FROZEN_NOW` and rewrote the M2–M10 plans for
+  the stub. Every M2 spec signs in, registers and reads mail against `api-e2e`, `worker-e2e` and Mailpit
+  (ADR-0015, ADR-0019), so the merge keeps them and leaves out that part of PR #16: the stub server,
+  the AGENTS.md rule, the frozen-clock removal, the ADR-0002 and plan rewrites. Moving e2e onto a stub
+  is a change of its own, made after this branch lands.
+- **This branch's S12 stays.** PR #18 built S12 a second time, with different models, routes, components
+  and an ADR-0009 for hls.js that collides with this branch's ADR-0009 (Laravel 13). S13–S16 and all of
+  M2 build on this branch's S12 (ADR-0010), so the merge keeps it and drops PR #18's code and docs.
+- **The rest of PR #16 is in.** Components moved into the design system's folders and page markup
+  became shared components: `zm-artist-poster`, `zm-artist-poster-skeleton`, `zm-error-stage`,
+  `zm-headliner-skeleton`, `zm-chip-group` and `zm-date-swap`, the global section and type utilities,
+  and the aligned designs. Where both sides built the same thing, M2's behaviour won:
+  - `zm-error-summary` lives in `lib/form-layout/` with M2's `role="group"`.
+  - `zm-ticket-skeleton` keeps M2's host classes and stub. Discover's loading lineup now uses it.
+  - `zm-alert` takes PR #16's markup (the icon as a direct child, `.stack.stack--sm`) and keeps
+    `compact`.
+  - `zm-rating` keeps M2's `summary` variant and drops the count when it is empty.
+  - `zm-form-field` keeps M2's inputs and gains `inline`.
+  The artist page keeps every M2 addition (Save, Share, videos, photos, dates, reviews, the stub) on
+  the shared poster, error stage and skeletons.
+- **What the global utilities changed.** PR #16 made `.lead`, `.text-muted`, `.overline`, `.stack--sm`,
+  `.stack--lg` and the `.section*` classes global, with the design system's values.
+  - The auth pages used a local `.lead` for their muted intro line, which the mocks mark
+    `text-muted`. They now use `text-muted`, and the "sent" leads keep `lead`.
+  - `HowBookingWorks` drops its local copies of the section classes, as PR #16 did for the other
+    Discover sections, so it matches the mock.
+  - Discover, the profile and the missing-artist page gain the design system's spacing (`stack--lg` at
+    `--space-10`, `.section__head` with its `--space-8` margin). Discover's loading state shows the
+    framed ticket and headliner skeletons. Their `-linux` baselines were made again in the Playwright
+    image; the `-win32` ones still need `npx playwright test visual --update-snapshots` on Windows.
+  - Discover's page object finds `zm-error-summary` by its class, now that it is a group rather
+    than an alert, and waits for a field's `aria-describedby` before reading it.
+
+**Checks after the merge (2026-10-12, Linux).**
+- 346 backend Feature tests pass; the backend is unchanged by the merge.
+- Frontend `lint`, `format:check`, `ng build zamaro` and `NG_BUILD_MANGLE=0 ng build perf-test` are
+  clean.
+- Playwright: specs and perf pass 204 of 204; in the Playwright image, visual passes 58 of 58 and
+  a11y 116 of 116.
+- `perf-test --fail-on-regression` against `main` (`1e4665d`) flags nothing. The scenarios both sides
+  share stay in range (median ms, main → merged): `Alert` 58.3 → 64.4, `ErrorSummary` 72.6 → 78.1,
+  `FormField` 79.3 → 76.4, `Rating` 30.8 → 31.1, `ArtistPoster` 70.0 → 75.8, `ErrorStage` 68.9 → 67.0,
+  `TicketSkeleton` 69.5 → 65.9 and `Lineup` 139.6 → 151.3. `Ticket` rose 93.3 → 118.9 with
+  overlapping runs, in line with the rise S17 recorded in the ticket CRD (its rating and heading level).
+
 ## Changes made while implementing
 
 - **S0 — Mailpit host ports.** Mailpit listens on 1025 and 8025 inside Compose, but its host ports are
@@ -577,8 +628,8 @@ sign-in and forgot-password states pass in the Linux image. No `zm-*` component 
   password, `requiredMarker`, `readonly`, `invalid` and `describedBy` (recorded in the form-field
   CRD). `zm-alert` gained `compact`.
 - **S1 — `zm-error-summary` has `role="group"`.** Its `aria-labelledby` needs a role to name; the CRD
-  forbids `role="alert"`. Recorded in the form-layout CRD. Discover keeps its hand-written summary
-  for now.
+  forbids `role="alert"`. Recorded in the form-layout CRD. Discover uses it too since main's drift
+  cleanup was merged in (see "Merging main" below).
 - **S1 — Entry points.** The card's "Forgot your password?" and "Create an account" links, the
   header's "Sign up" and the footer's "Your account" column join when their pages exist (S8, S5) and
   with the signed-in shell (S2), as M1 did for links to later screens. The `/sign-in` baselines show

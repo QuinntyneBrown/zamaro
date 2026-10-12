@@ -27,7 +27,8 @@ import {
   torontoToday,
 } from 'api';
 import {
-  Alert,
+  ArtistPoster,
+  ArtistPosterSkeleton,
   Artwork,
   BookingForm,
   Breadcrumb,
@@ -35,6 +36,7 @@ import {
   ButtonLink,
   type Crumb,
   EmptyState,
+  ErrorStage,
   type FieldOption,
   FormField,
   Icon,
@@ -76,14 +78,16 @@ const REVIEWS_PER_PAGE = 10;
 @Component({
   selector: 'zm-artist-page',
   imports: [
-    Alert,
     ArtistNotFoundPage,
+    ArtistPoster,
+    ArtistPosterSkeleton,
     Artwork,
     BookingForm,
     Breadcrumb,
     Button,
     ButtonLink,
     EmptyState,
+    ErrorStage,
     FormField,
     Icon,
     InlineMessage,
@@ -255,6 +259,15 @@ export class ArtistPage {
       rating: profile.rating?.toFixed(1),
       count: profile.reviewCount,
     });
+  });
+
+  /** The base city and the driving range, after the rating on the header's facts line. */
+  protected readonly facts = computed(() => {
+    const profile = this.store.profile()!;
+    return [
+      this.t('artist.facts.city', { city: profile.baseCity }),
+      this.t('artist.facts.drives', { km: profile.maxDriveKm }),
+    ];
   });
 
   protected readonly bookLabel = computed(() => {

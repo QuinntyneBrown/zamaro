@@ -14,44 +14,42 @@ skinparam class {
 title Class structure — View an artist profile
 
 package "Zamaro Web (Angular)" {
-  class ArtistProfilePage {
-    +slug: InputSignal<string>
-    +date: InputSignal<string | null>
-    +onBook(): void
+  class ArtistPage <<page>> {
+    -date: Signal<CalendarDate | null>
+    #book(): void
   }
   class ArtistProfileStore {
     +profile: Signal<ArtistProfile | null>
-    +carriedDate: Signal<string | null>
     +status: Signal<'loading'|'loaded'|'error'>
-    +selectedDate: WritableSignal<string | null>
-    +messageDraft: WritableSignal<string>
-    +load(slug: string, date: string | null): void
+    +showSkeletons: Signal<boolean>
+    +load(slug: string): void
     +retry(): void
-    +askForRecording(): void
   }
-  class ArtistProfileApi {
+  interface ArtistProfilesApi {
     +get(slug: string): Observable<ArtistProfile>
   }
-  class PhotoViewerDialogComponent {
+  class "zm-artist-poster" as ArtistPoster <<library>> {
+    +name: InputSignal<string>
+    +art: InputSignal<'solo'|'group'|null>
+    +loading: InputSignal<boolean>
+  }
+  class "zm-alert" as Alert <<library>>
+  class PhotoViewerDialog <<S12>> {
     +photos: ProfilePhoto[]
     +index: WritableSignal<number>
     +previous(): void
     +next(): void
   }
-  class ProfileErrorComponent {
-    +lineupUrl: InputSignal<string>
-    +retry: OutputEmitterRef<void>
-  }
 }
 
 package "Zamaro API (Laravel)" {
   class ArtistProfileController {
-    +show(slug: string): ArtistProfileResource
+    +show(request: Request, profiles: ShowArtistProfile, slug: string): JsonResponse
   }
   class ShowArtistProfile <<action>> {
-    +handle(artist: Artist): ArtistProfile
+    +handle(slug: string): Artist
   }
-  class ArtistProfile <<value object>> {
+  class ArtistProfileResource <<API resource>> {
     +string slug
     +string displayName
     +string firstName
@@ -67,8 +65,7 @@ package "Zamaro API (Laravel)" {
     +?float rating
     +int reviewCount
     +Style[] styles
-  }
-  class ArtistProfileResource {
+    +SetlistSong[] setlist
     +toArray(request: Request): array
   }
   class ProfilePhoto <<value object>> {
@@ -109,15 +106,16 @@ package "Zamaro API (Laravel)" {
   }
 }
 
-ArtistProfilePage --> ArtistProfileStore
-ArtistProfileStore --> ArtistProfileApi
-ArtistProfilePage ..> PhotoViewerDialogComponent : opens
-ArtistProfilePage ..> ProfileErrorComponent : shows on error
-ArtistProfileApi ..> ArtistProfileController : GET /api/v1/artists/{slug}
+ArtistPage --> ArtistProfileStore
+ArtistPage --> ArtistPoster
+ArtistPage ..> Alert : shows on error
+ArtistPage ..> PhotoViewerDialog : opens (S12)
+ArtistProfileStore --> ArtistProfilesApi
+ArtistProfilesApi ..> ArtistProfileController : GET /api/v1/artists/{slug}
 ArtistProfileController --> ShowArtistProfile
 ShowArtistProfile ..> Artist : reads
-ShowArtistProfile ..> ArtistProfile : builds
 ArtistProfileController ..> ArtistProfileResource : returns
+ArtistProfileResource ..> Artist : serialises public fields
 ArtistProfileResource ..> ArtistProfile : serialises public fields
 ArtistProfileResource --> MediaUrlSigner
 ArtistProfile "1" *-- "0..12" ProfilePhoto

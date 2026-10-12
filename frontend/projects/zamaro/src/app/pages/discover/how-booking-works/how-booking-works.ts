@@ -14,7 +14,7 @@ import { DescriptionList, type DescriptionItem, type StepItem, Steps } from 'com
     <div class="container stack stack--lg">
       <div class="section__head">
         <div>
-          <p class="section__kicker">{{ 'discover.how.kicker' | transloco }}</p>
+          <p class="overline section__kicker">{{ 'discover.how.kicker' | transloco }}</p>
           <h2 id="how-title">{{ 'discover.how.title' | transloco }}</h2>
         </div>
         <p class="text-muted">{{ 'discover.how.note' | transloco }}</p>
@@ -27,30 +27,6 @@ import { DescriptionList, type DescriptionItem, type StepItem, Steps } from 'com
     </div>
   </section>`,
   styles: `
-    .stack--lg {
-      gap: var(--space-8);
-    }
-
-    .section__head {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: end;
-      justify-content: space-between;
-      gap: var(--space-4) var(--space-8);
-    }
-
-    .section__kicker {
-      display: inline-block;
-      margin-bottom: var(--space-2);
-      font: var(--text-overline);
-      letter-spacing: var(--letter-spacing-stamp);
-      text-transform: uppercase;
-    }
-
-    .text-muted {
-      color: var(--color-fg-muted);
-    }
-
     h3 {
       font: var(--text-h3);
       text-transform: uppercase;

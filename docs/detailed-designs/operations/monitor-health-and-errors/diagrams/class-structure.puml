@@ -26,7 +26,7 @@ package "Zamaro Web (Angular)" {
     -release: string
     +handleError(error: unknown): void
   }
-  class ErrorReferenceComponent {
+  class ErrorReference {
     +requestId: input<string | null>
   }
 }
@@ -39,7 +39,7 @@ package "Zamaro API (Laravel)" {
   class LogRequest <<middleware>> {
     +terminate(request: Request, response: Response): void
   }
-  class JsonLogFormatter {
+  class "Monolog JsonFormatter" as JsonLogFormatter {
     +format(record: LogRecord): string
   }
   class RedactSensitiveFields <<processor>> {
@@ -93,7 +93,7 @@ package "Zamaro API (Laravel)" {
 
 RequestIdInterceptor --> RequestIdTracker : records
 ErrorTrackingErrorHandler --> RequestIdTracker : reads
-ErrorReferenceComponent ..> RequestIdTracker : shows
+ErrorReference ..> RequestIdTracker : shows
 LogRequest ..> JsonLogFormatter
 JsonLogFormatter ..> RedactSensitiveFields
 HealthController --> ReadinessChecker

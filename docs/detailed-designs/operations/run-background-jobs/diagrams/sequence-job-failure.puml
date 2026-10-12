@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "Booker" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ArtistProfilePage\nBookingStubComponent" as page
+  participant "ArtistPage\nBookingStubComponent" as page
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "BookingsController" as controller

@@ -5,27 +5,14 @@
     [stamp]="'discover.form.stamp' | transloco"
   >
     @if (errorCount()) {
-      <div class="error-summary span-all" role="alert" aria-labelledby="error-summary-title">
-        <h3 id="error-summary-title" class="error-summary__title">
-          {{ 'discover.errors.summary' | transloco: { count: errorCount() } }}
-        </h3>
-        <ul>
-          @if (errors().date) {
-            <li>
-              <a href="#find-date" (click)="focusField($event, 'date')">{{
-                summaryItem('date')
-              }}</a>
-            </li>
-          }
-          @if (errors().location) {
-            <li>
-              <a href="#find-place" (click)="focusField($event, 'location')">{{
-                summaryItem('location')
-              }}</a>
-            </li>
-          }
-        </ul>
-      </div>
+      <zm-error-summary
+        class="span-full"
+        summaryId="error-summary"
+        [headingLevel]="3"
+        [autoFocus]="false"
+        [heading]="'discover.errors.summary' | transloco: { count: errorCount() }"
+        [items]="summaryItems()"
+      />
     }
     <zm-form-field
       #dateField
@@ -59,16 +46,15 @@
       [label]="'discover.form.radius' | transloco"
       [options]="radii"
     />
-    <fieldset class="filters span-all">
-      <legend>{{ 'discover.form.cities' | transloco }}</legend>
+    <zm-chip-group class="span-full" [legend]="'discover.form.cities' | transloco">
       @for (city of cities; track city) {
         <zm-chip size="sm" [pressed]="place()?.city === city" (click)="pickCity(city)">{{
           city
         }}</zm-chip>
       }
-    </fieldset>
+    </zm-chip-group>
     <zm-button
-      class="span-all"
+      class="span-full"
       variant="primary"
       size="lg"
       type="submit"

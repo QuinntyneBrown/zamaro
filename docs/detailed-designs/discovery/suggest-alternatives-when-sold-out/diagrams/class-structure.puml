@@ -14,72 +14,68 @@ skinparam class {
 title Class structure — Suggest alternatives when sold out
 
 package "Zamaro Web (Angular)" {
-  class SoldOutComponent {
-    +alternatives: InputSignal<SearchAlternatives | null>
-    +dateDescription: InputSignal<string>
-    +radiusKm: InputSignal<number>
-    +nearbyDatePicked: OutputEmitterRef<string>
-    +widenRadius: OutputEmitterRef<number>
-    +showAllStyles: OutputEmitterRef<void>
+  class SoldOut {
+    +title: Signal<string>
+    +explanation: Signal<string>
+    +nearbyDates: Signal<DateSwapOption[]>
+    +wider: Signal<{ km, label } | null>
+    #pickDate(date: string): void
+    #widen(km: RadiusKm): void
+    #showAllStyles(): void
+  }
+  class "zm-empty-state" as EmptyState <<library>>
+  class "zm-date-swap" as DateSwap <<library>> {
+    +options: InputSignal<DateSwapOption[]>
+    +pick: OutputEmitterRef<string>
   }
   class SearchStore {
     +alternatives: Signal<SearchAlternatives | null>
-    +loadAlternatives(): void
-    +pickNearbyDate(date: string): void
-    +widenRadius(km: number): void
-    +clearFilters(): void
+    +navigate(change: Partial<SearchState>, options): void
   }
-  class SearchApi {
-    +alternatives(criteria: SearchCriteria): Observable<SearchAlternatives>
+  interface DiscoveryApi {
+    +alternatives(query: SearchQuery): Observable<SearchAlternatives>
   }
-  class DateDescriptionPipe {
-    +transform(date: string): string
+  class FormatService {
+    +dateDescription(date: CalendarDate): string
   }
 }
 
 package "Zamaro API (Laravel)" {
   class SearchAlternativesController {
-    +__invoke(request: SearchArtistsRequest): SearchAlternativesResource
+    +__invoke(request: SearchArtistsRequest, find: FindSearchAlternatives): JsonResponse
   }
   class FindSearchAlternatives <<action>> {
     +handle(criteria: SearchCriteria): SearchAlternatives
-    -nearbyDates(criteria: SearchCriteria): NearbyDate[]
-    -widerRadius(criteria: SearchCriteria): ?WiderRadius
+    -nearbyDates(criteria, candidates, ids): array
+    -widerRadius(criteria, candidates, ids, wider): ?array
+    -countFree(candidates, ids, date, criteria, radiusKm): int
+  }
+  class CandidateFinder {
+    +measured(criteria: SearchCriteria, boxRadiusKm: int): LineupCard[]
+    +{static} travels(card: LineupCard, radiusKm: int): bool
   }
   class AvailabilityService {
-    +freeArtistIdsByDate(ids: array, dates: CarbonImmutable[]): array<string, int[]>
+    +freeArtistIds(artistIds: array, date: CarbonImmutable, kind: GatheringKind): array
   }
   class DistanceService {
-    +between(from: Coordinates, to: Coordinates): Distance
-  }
-  class SoldOutExplainer {
-    +explain(criteria: SearchCriteria, alternatives: SearchAlternatives): string
+    +fromOrigin(origin: Coordinates, destinations: array): Distance[]
   }
   class SearchAlternatives <<value object>> {
-    +NearbyDate[] nearbyDates
-    +?WiderRadius widerRadius
+    +array nearbyDates: {date, count}[0..3]
+    +?array widerRadius: {km, count}
     +bool filtersApplied
-    +string explanation
-  }
-  class NearbyDate <<value object>> {
-    +CarbonImmutable date
-    +int freeCount
-  }
-  class WiderRadius <<value object>> {
-    +int radiusKm
-    +int freeCount
   }
 }
 
-SoldOutComponent ..> SearchStore : emits choices to
-SearchStore --> SearchApi
-SoldOutComponent ..> DateDescriptionPipe : uses
-SearchApi ..> SearchAlternativesController : GET /api/v1/search/alternatives
+SoldOut --> EmptyState
+SoldOut --> DateSwap
+SoldOut ..> SearchStore : navigate()
+SoldOut ..> FormatService : uses
+SearchStore --> DiscoveryApi
+DiscoveryApi ..> SearchAlternativesController : GET /api/v1/search/alternatives
 SearchAlternativesController --> FindSearchAlternatives
+FindSearchAlternatives --> CandidateFinder
 FindSearchAlternatives --> AvailabilityService
-FindSearchAlternatives --> DistanceService
-FindSearchAlternatives --> SoldOutExplainer
+CandidateFinder --> DistanceService
 FindSearchAlternatives ..> SearchAlternatives : builds
-SearchAlternatives "1" *-- "0..3" NearbyDate
-SearchAlternatives "1" *-- "0..1" WiderRadius
 @enduml

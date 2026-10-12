@@ -20,7 +20,7 @@
         </zm-alert>
       }
       @if (documents(); as docs) {
-        <p class="lead">{{ 'accounts.acceptTerms.lead' | transloco }}</p>
+        <p class="text-muted">{{ 'accounts.acceptTerms.lead' | transloco }}</p>
         <ul class="changes">
           @for (change of docs.terms.summaryOfChanges; track change) {
             <li>{{ change }}</li>

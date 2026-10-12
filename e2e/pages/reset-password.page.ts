@@ -70,7 +70,7 @@ export class ResetPasswordPage {
 
   /** "For naomi.fraser@riversidecc.ca. Saving signs you out on every other device." */
   lead(): Locator {
-    return this.form().locator('.lead');
+    return this.form().locator('p.text-muted');
   }
 
   password(): Locator {

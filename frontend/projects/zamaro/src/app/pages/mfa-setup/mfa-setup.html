@@ -10,7 +10,7 @@
         [heading]="'accounts.mfaSetup.codesTitle' | transloco"
         [stamp]="'accounts.mfaSetup.codesStamp' | transloco"
       >
-        <p class="lead">{{ 'accounts.mfaSetup.codesLead' | transloco }}</p>
+        <p class="text-muted">{{ 'accounts.mfaSetup.codesLead' | transloco }}</p>
         <zm-list
           variant="grid"
           ordered
@@ -66,7 +66,7 @@
               </zm-alert>
             }
             @default {
-              <p class="lead">{{ 'accounts.mfaSetup.lead' | transloco }}</p>
+              <p class="text-muted">{{ 'accounts.mfaSetup.lead' | transloco }}</p>
             }
           }
           @if (status() === 'loading') {

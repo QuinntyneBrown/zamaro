@@ -18,7 +18,7 @@ actor "Screen-reader user" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
   participant "Feature form page" as page
   participant "ProblemDetailsMapper" as mapper
-  participant "FieldErrorDirective" as fielderr
+  participant "zm-form-field" as fielderr
   participant "AnnouncerService" as announcer
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF

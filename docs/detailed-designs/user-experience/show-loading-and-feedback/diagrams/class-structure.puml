@@ -24,7 +24,7 @@ package "Zamaro Web (Angular)" {
     +skeleton: TemplateRef<unknown>
     +busy: Signal<boolean>
   }
-  class SubmitButtonComponent {
+  class "zm-button" as SubmitButton <<library>> {
     +busy: InputSignal<boolean>
     +busyLabel: InputSignal<string>
   }
@@ -82,7 +82,7 @@ package "Zamaro API (Laravel)" {
 }
 
 BusyRegionDirective ..> LoadState : reads status
-FormSubmitter --> SubmitButtonComponent : sets busy
+FormSubmitter --> SubmitButton : sets busy
 FormSubmitter --> IdempotencyKeyStore
 FormSubmitter ..> ToastService : success toast
 ToastService "1" *-- "0..3" Toast : visible

@@ -80,6 +80,6 @@ export class MfaChallengePage {
   }
 
   lead(): Locator {
-    return this.page.locator('.lead');
+    return this.page.locator('p.text-muted');
   }
 }
