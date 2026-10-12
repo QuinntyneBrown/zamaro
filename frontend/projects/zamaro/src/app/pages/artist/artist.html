@@ -30,6 +30,35 @@
           }
         </div>
       </section>
+      <section class="section" aria-labelledby="photos-title">
+        <div class="section__head">
+          <div>
+            <p class="overline section__kicker">{{ 'artist.photos.kicker' | transloco }}</p>
+            <h2 id="photos-title">{{ 'artist.photos.title' | transloco }}</h2>
+          </div>
+        </div>
+        @if (photos().length) {
+          <ul class="photo-grid" role="list">
+            @for (photo of photos(); track photo.id) {
+              <li>
+                <a [href]="photo.full" [attr.aria-label]="photo.label"
+                  ><zm-artwork ratio="square" [variant]="artVariant()" [photo]="photo.image"
+                /></a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="photo-grid">
+            <zm-artwork
+              ratio="square"
+              [variant]="artVariant()"
+              [label]="
+                t('artist.photos.illustration', { act: profile.actType, name: profile.firstName })
+              "
+            />
+          </div>
+        }
+      </section>
       <section class="section" aria-labelledby="songs-title">
         <div class="section__head">
           <div>

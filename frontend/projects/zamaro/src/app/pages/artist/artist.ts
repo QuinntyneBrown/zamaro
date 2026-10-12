@@ -6,6 +6,8 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { type CalendarDate, FormatService, type MusicalKey } from 'api';
 import {
   ArtistPoster,
+  Artwork,
+  type ArtworkPhoto,
   ArtistPosterSkeleton,
   Breadcrumb,
   Button,
@@ -24,15 +26,19 @@ import { ArtistProfileStore } from './artist-profile.store';
 /** Songs shown in the strip under the header (L2-012.1). */
 const STRIP_SONGS = 5;
 
+/** The gallery's rendered width per breakpoint: 2 across, 4 from MD. */
+const GALLERY_SIZES = '(min-width: 48rem) 25vw, 50vw';
+
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
- * of songs, About and the setlist. A `?date=` carried from Discover names the date on the back
- * link and the Book button (L2-012.2). Photos, videos, reviews and the booking stub join later.
+ * of songs, About, the photos and the setlist. A `?date=` carried from Discover names the date on
+ * the back link and the Book button (L2-012.2). Videos, reviews and the booking stub join later.
  */
 @Component({
   selector: 'zm-artist-page',
   imports: [
     ArtistPoster,
+    Artwork,
     ArtistPosterSkeleton,
     Breadcrumb,
     Button,
@@ -174,6 +180,26 @@ export class ArtistPage {
       key: this.keyLabel(song.key),
     })),
   );
+
+  /** Duos, bands and choirs get the group silhouette (L2-020.3). */
+  protected readonly artVariant = computed(() =>
+    this.store.profile()!.actType === 'solo' ? ('solo' as const) : ('group' as const),
+  );
+
+  /** The gallery: each photo links to its largest rendition. */
+  protected readonly photos = computed(() => {
+    const photos = this.store.profile()!.photos;
+    return photos.map((photo, index) => ({
+      id: photo.id,
+      label: this.t('artist.photos.open', {
+        position: index + 1,
+        total: photos.length,
+        alt: photo.alt,
+      }),
+      full: photo.srcset.split(', ').at(-1)?.split(' ')[0] ?? photo.src,
+      image: { ...photo, sizes: GALLERY_SIZES } satisfies ArtworkPhoto,
+    }));
+  });
 
   /** Moves focus to the booking stub's date field (L2-012.3); the stub arrives with tour dates. */
   protected book(): void {

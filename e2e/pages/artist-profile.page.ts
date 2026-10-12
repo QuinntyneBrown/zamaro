@@ -97,6 +97,60 @@ export class ArtistProfilePage {
     return this.page.locator('[aria-labelledby="songs-title"]').getByRole('listitem');
   }
 
+  /** The "Photos" section (docs/mocks/pages/artist): one link per photo, or the illustration. */
+  photosSection(): Locator {
+    return this.page.locator('[aria-labelledby="photos-title"]');
+  }
+
+  /** The gallery's photo links, named "Open photo 1 of 4: {alt text}". */
+  photoLinks(): Locator {
+    return this.photosSection().getByRole('link', { name: /^Open photo/ });
+  }
+
+  photo(position: number): Locator {
+    return this.photosSection().getByRole('link', { name: new RegExp(`^Open photo ${position} of`) });
+  }
+
+  /** The act-type illustration that stands in for an empty gallery (L2-020.3). */
+  galleryIllustration(): Locator {
+    return this.photosSection().getByRole('img');
+  }
+
+  /** How many columns the gallery lays its items out in. */
+  async galleryColumns(): Promise<number> {
+    return this.photosSection()
+      .locator('.photo-grid > *')
+      .evaluateAll(
+        (items) => new Set(items.map((item) => Math.round(item.getBoundingClientRect().left))).size,
+      );
+  }
+
+  /** Images on the whole page that failed to load (a broken image icon). */
+  async brokenImages(): Promise<number> {
+    return this.page
+      .locator('img')
+      .evaluateAll(
+        (images) =>
+          (images as HTMLImageElement[]).filter((image) => image.complete && image.naturalWidth === 0)
+            .length,
+      );
+  }
+
+  /** Waits until every photo in the gallery has decoded, and returns how many have. */
+  async loadedPhotos(): Promise<number> {
+    const images = this.photosSection().locator('img');
+    await images.evaluateAll((all) =>
+      Promise.all((all as HTMLImageElement[]).map((image) => image.decode().catch(() => undefined))),
+    );
+    return images.evaluateAll(
+      (all) => (all as HTMLImageElement[]).filter((image) => image.naturalWidth > 0).length,
+    );
+  }
+
+  async setViewport(width: number): Promise<void> {
+    await this.page.setViewportSize({ width, height: 900 });
+  }
+
   /** The loading region and its status line. */
   busyRegion(): Locator {
     return this.page.locator('[aria-busy="true"]');

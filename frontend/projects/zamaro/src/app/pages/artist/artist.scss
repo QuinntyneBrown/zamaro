@@ -27,3 +27,22 @@
     gap: var(--space-16);
   }
 }
+
+// The gallery (components.css .photo-grid): 2 across below MD, 4 from MD (L2-015.1, L2-098).
+.photo-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  padding: 0;
+}
+
+.photo-grid a {
+  display: block;
+}
+
+@media (min-width: 48rem) {
+  .photo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

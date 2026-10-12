@@ -8,6 +8,7 @@ export const scenarios: Record<string, Scenario> = {
   ArtistPoster: () => import('./ArtistPoster'),
   ArtistPosterSkeleton: () => import('./ArtistPosterSkeleton'),
   Artwork: () => import('./Artwork'),
+  ArtworkPhoto: () => import('./ArtworkPhoto'),
   Badge: () => import('./Badge'),
   BookingForm: () => import('./BookingForm'),
   Breadcrumb: () => import('./Breadcrumb'),
