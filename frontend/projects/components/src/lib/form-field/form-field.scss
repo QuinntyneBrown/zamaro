@@ -127,3 +127,23 @@
   min-height: 6rem;
   resize: vertical;
 }
+
+/* The label row with a counter (CRD anatomy 2, 5). */
+.field__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.field__counter {
+  font: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-muted);
+  white-space: nowrap;
+}
+
+.field__counter[data-over='true'] {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger-fg);
+}

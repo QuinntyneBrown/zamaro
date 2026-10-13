@@ -290,6 +290,14 @@ return [
         $test->as($intruder)->putJson('/api/v1/admin/artist-applications/1/references/1/verification', ['verified' => true])->assertNotFound();
     },
 
+    'POST api/v1/admin/artist-applications/{application}/approval' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->postJson('/api/v1/admin/artist-applications/1/approval')->assertNotFound();
+    },
+
+    'POST api/v1/admin/artist-applications/{application}/rejection' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->postJson('/api/v1/admin/artist-applications/1/rejection', ['reason' => 'other'])->assertNotFound();
+    },
+
     'GET api/v1/admin/artists' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
         $test->as($intruder)->getJson('/api/v1/admin/artists')->assertNotFound();
     },

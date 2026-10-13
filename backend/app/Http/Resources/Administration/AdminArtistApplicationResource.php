@@ -80,7 +80,7 @@ class AdminArtistApplicationResource extends JsonResource
                 /** `YYYY-MM-DD` once verified, or null. */
                 'expiresOn' => $check->expires_on?->toDateString(),
             ],
-            /** Null while Submitted; the decision comes with approve and reject. */
+            /** Null while Submitted. */
             'decision' => $application->decided_at === null ? null : [
                 /**
                  * Toronto time.
@@ -89,7 +89,23 @@ class AdminArtistApplicationResource extends JsonResource
                  */
                 'decidedAt' => $application->decided_at->setTimezone(config('app.timezone'))->toIso8601String(),
                 'decidedBy' => $application->decider === null ? null : ['name' => $application->decider->name],
+                /** @var 'references-unconfirmed'|'videos-not-worship'|'outside-service-area'|'incomplete-or-inaccurate'|'other'|null */
                 'rejectionReason' => $application->rejection_reason,
+                /**
+                 * The note sent with a rejection, or null.
+                 *
+                 * @var string|null
+                 */
+                'rejectionNote' => $application->rejection_note,
+            ],
+            /** The artist an approval created, hidden until payout setup; null otherwise. */
+            'artist' => $application->artist === null ? null : [
+                'id' => $application->artist->id,
+                /** "tobi-adeyemi": the profile's address once published. */
+                'slug' => $application->artist->slug,
+                /** "ACT-0027". */
+                'ticketNumber' => $application->artist->ticket_number,
+                'payoutReady' => (bool) $application->artist->payout_ready,
             ],
         ];
     }

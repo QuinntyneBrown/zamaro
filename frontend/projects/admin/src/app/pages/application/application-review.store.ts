@@ -23,6 +23,10 @@ export class ApplicationReviewStore {
   readonly saving = signal<number | null>(null);
   /** The last tick that failed, for the toast. */
   readonly tickFailed = signal<AdminApplicationReference | null>(null);
+  /** Approve is on its way. */
+  readonly approving = signal(false);
+  /** The last approval that failed, with what the API said, for the toast. */
+  readonly approveFailed = signal<{ detail: string | null } | null>(null);
 
   readonly verifiedCount = computed(
     () =>
@@ -80,5 +84,33 @@ export class ApplicationReviewStore {
           this.application.update((current) => current && { ...current });
         },
       });
+  }
+
+  /** Approve: the API grants the role and creates the hidden artist (L2-048.1). */
+  approve(): void {
+    const application = this.application();
+    if (!application || this.approving() || !this.canApprove()) return;
+    this.approving.set(true);
+    this.approveFailed.set(null);
+    this.api
+      .approve(application.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (approved) => {
+          this.approving.set(false);
+          this.application.set(approved);
+        },
+        error: (failure: { error?: { detail?: string; errors?: Record<string, string[]> } }) => {
+          this.approving.set(false);
+          this.approveFailed.set({
+            detail: failure.error?.errors?.['references']?.[0] ?? failure.error?.detail ?? null,
+          });
+        },
+      });
+  }
+
+  /** The reject dialog closed with the decided application. */
+  decided(application: AdminApplication): void {
+    this.application.set(application);
   }
 }

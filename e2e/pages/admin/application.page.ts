@@ -83,7 +83,9 @@ export class ApplicationPage {
   }
 
   async isBusy(): Promise<boolean> {
-    return (await this.page.locator('main zm-application-page').getAttribute('aria-busy')) === 'true';
+    return (
+      (await this.page.locator('main zm-application-page').getAttribute('aria-busy')) === 'true'
+    );
   }
 
   /** A panel by its heading: panel('Applicant'). */
@@ -187,6 +189,36 @@ export class ApplicationPage {
 
   decisionFine(): Locator {
     return this.decision().locator('.stub__fine');
+  }
+
+  /** Ticks a reference unless it already is, waiting for the API when a tick is sent. */
+  async ensureReferenceTick(index: 1 | 2): Promise<void> {
+    if (!(await this.referenceTick(index).isChecked())) await this.setReferenceTick(index, true);
+  }
+
+  // The decision (M3 S14).
+
+  /** Presses Approve and waits for the API's answer. */
+  async approve(): Promise<number> {
+    const decided = this.page.waitForResponse(
+      (response) => response.request().method() === 'POST' && response.url().endsWith('/approval'),
+    );
+    await this.approveButton().click();
+    return (await decided).status();
+  }
+
+  /** The success or danger alert over the panels once the application is decided. */
+  decisionAlert(): Locator {
+    return this.page.locator('main .detail-layout .stack--lg > zm-alert').first();
+  }
+
+  decisionAlertTitle(): Locator {
+    return this.decisionAlert().locator('.alert__title');
+  }
+
+  /** A row of the Decision panel once decided: decisionDetail('Artist role'). */
+  decisionDetail(term: string): Locator {
+    return this.definition(this.decision(), term);
   }
 
   // The error state.

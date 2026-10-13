@@ -4,6 +4,7 @@ import {
   computed,
   effect,
   inject,
+  Injector,
   untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -27,6 +28,7 @@ import {
   VideoCard,
 } from 'components';
 import { map } from 'rxjs';
+import { openRejectApplicationDialog } from '../../dialogs/reject-application/reject-application';
 import { PageTitle } from '../../shared/page-title';
 import { ApplicationReviewStore } from './application-review.store';
 
@@ -72,6 +74,7 @@ export class ApplicationPage {
   private readonly format = inject(FormatService);
   private readonly toasts = inject(ToastService);
   private readonly pageTitle = inject(PageTitle);
+  private readonly injector = inject(Injector);
 
   private readonly id = toSignal(
     inject(ActivatedRoute).paramMap.pipe(map((params) => Number(params.get('id')))),
@@ -232,6 +235,41 @@ export class ApplicationPage {
     }),
   );
 
+  /** The Decision panel once decided: who and when, then what approval granted or why it was rejected. */
+  protected readonly decisionItems = computed<DescriptionItem[]>(() => {
+    const application = this.application();
+    const decision = application?.decision;
+    if (!application || !decision) return [];
+    const t = (key: string, params?: Record<string, unknown>) =>
+      this.transloco.translate(`admin.application.decision.${key}`, params);
+    const when = {
+      date: this.format.shortDate(decision.decidedAt.slice(0, 10) as CalendarDate),
+      time: this.format.time(decision.decidedAt),
+      name: decision.decidedBy?.name ?? '',
+    };
+    if (application.status === 'approved') {
+      return [
+        { id: 'decision', term: t('decision'), value: t('approvedBy', when) },
+        { id: 'role', term: t('role'), value: t('roleGranted') },
+        { id: 'profile', term: t('profile'), value: t('profileHidden') },
+      ];
+    }
+    const items: DescriptionItem[] = [
+      { id: 'decision', term: t('decision'), value: t('rejectedBy', when) },
+      {
+        id: 'reason',
+        term: t('reasonTerm'),
+        value: decision.rejectionReason
+          ? this.transloco.translate(`admin.application.reasons.${decision.rejectionReason}`)
+          : '',
+      },
+    ];
+    if (decision.rejectionNote) {
+      items.push({ id: 'note', term: t('noteTerm'), value: decision.rejectionNote });
+    }
+    return items;
+  });
+
   /** "Waiting for verification · issued Fri 25 Sep 2026". */
   protected readonly checkSummary = computed(() => {
     const check = this.application()?.vulnerableSectorCheck;
@@ -259,6 +297,20 @@ export class ApplicationPage {
       if (application) this.pageTitle.setText(application.name);
     });
     effect(() => {
+      const failed = this.store.approveFailed();
+      if (!failed) return;
+      const title = this.transloco.translate('admin.application.decision.approveFailed', {
+        name: this.firstName(),
+      });
+      this.toasts.show({
+        variant: 'danger',
+        title,
+        text:
+          failed.detail ?? this.transloco.translate('admin.application.decision.approveFailedText'),
+        dismissLabel: this.transloco.translate('common.toast.dismiss', { title }),
+      });
+    });
+    effect(() => {
       const failed = this.store.tickFailed();
       if (!failed) return;
       const title = this.transloco.translate('admin.application.references.tickFailed');
@@ -273,6 +325,24 @@ export class ApplicationPage {
 
   protected retry(): void {
     this.store.load(this.id());
+  }
+
+  protected approve(): void {
+    this.store.approve();
+  }
+
+  /** Reject… opens the dialog; focus returns to the button when it closes (L2-101). */
+  protected reject(): void {
+    const application = this.application();
+    if (!application) return;
+    openRejectApplicationDialog(this.injector, {
+      application,
+      firstName: this.firstName(),
+    })
+      .closed.pipe()
+      .subscribe((decided) => {
+        if (decided) this.store.decided(decided);
+      });
   }
 
   protected tick(referenceId: number, verified: boolean): void {

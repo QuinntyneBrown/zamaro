@@ -123,6 +123,11 @@ across all artists, so two artists racing for one slug cannot both succeed. The
 losing write receives a unique violation, which `ChangeArtistSlug` reports as
 "taken" and `GenerateArtistSlug` retries with the next suffix. Error copy for a taken or malformed slug is `<TO SUPPLY>`.
 
+**Settled in M3 S14 (D4):** approval generates the slug (`GenerateArtistSlug`: the name's slug, then
+`-2`, `-3`, … against `artists`, `slug_histories` and the reserved words) and writes the first
+`slug_histories` row, but does not publish: `published_at` is stamped by payout setup (M6), so an
+approved artist's address answers 404 until then.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the level-1

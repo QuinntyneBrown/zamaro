@@ -6,6 +6,7 @@ import {
   ElementRef,
   forwardRef,
   input,
+  numberAttribute,
   signal,
   viewChild,
 } from '@angular/core';
@@ -68,10 +69,32 @@ export class FormField implements ControlValueAccessor {
   readonly live = input(false, { transform: booleanAttribute });
   /** Sits in a row beside other content, such as the lineup's sort, at a usable minimum width. */
   readonly inline = input(false);
+  /** Shows "used / limit" on the label row (CRD: counter); needs `maxLength`. */
+  readonly counter = input(false, { transform: booleanAttribute });
+  /** The control's `maxlength`, and the counter's limit. */
+  readonly maxLength = input<number | null, number | string | null | undefined>(null, {
+    transform: (value) =>
+      value === null || value === undefined || value === '' ? null : Number(value),
+  });
+  /** Textarea rows. */
+  readonly rows = input(4, { transform: numberAttribute });
 
   protected readonly value = signal('');
   protected readonly disabled = signal(false);
   protected readonly errorId = computed(() => `${this.fieldId()}-error`);
+  protected readonly countId = computed(() => `${this.fieldId()}-count`);
+  /** How many characters the value holds, as people count them. */
+  protected readonly used = computed(() => [...this.value()].length);
+  protected readonly over = computed(() => {
+    const max = this.maxLength();
+    return max !== null && this.used() > max;
+  });
+  /** "125 / 1,000". */
+  protected readonly counterText = computed(() => {
+    const max = this.maxLength();
+    const format = (n: number) => n.toLocaleString('en-CA');
+    return max === null ? format(this.used()) : `${format(this.used())} / ${format(max)}`;
+  });
 
   /**
    * The `id` of the message in `[slot=message]` while it is shown. An input rather than a content
@@ -96,6 +119,7 @@ export class FormField implements ControlValueAccessor {
         this.messageId(),
         this.error() ? this.errorId() : null,
         ...this.helpLines().map((line) => line.id),
+        this.counter() ? this.countId() : null,
         this.describedBy(),
       ]
         .filter(Boolean)

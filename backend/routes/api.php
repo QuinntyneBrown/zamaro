@@ -91,6 +91,8 @@ Route::prefix('admin')->name('admin.')
         Route::get('artist-applications/{application}', [AdminArtistApplicationsController::class, 'show'])->whereNumber('application')->name('artist-applications.show');
         Route::put('artist-applications/{application}/references/{reference}/verification', [AdminApplicationReferencesController::class, 'update'])
             ->whereNumber('application')->whereNumber('reference')->name('artist-applications.references.verification');
+        Route::post('artist-applications/{application}/approval', [AdminArtistApplicationsController::class, 'approve'])->whereNumber('application')->name('artist-applications.approve');
+        Route::post('artist-applications/{application}/rejection', [AdminArtistApplicationsController::class, 'reject'])->whereNumber('application')->name('artist-applications.reject');
         Route::get('artists', [AdminArtistsController::class, 'index'])->name('artists.index');
         Route::get('artists/{artist}', [AdminArtistsController::class, 'show'])->whereNumber('artist')->name('artists.show');
     });

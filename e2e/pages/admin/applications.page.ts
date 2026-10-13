@@ -127,7 +127,9 @@ export class ApplicationsPage {
   }
 
   async isBusy(): Promise<boolean> {
-    return (await this.page.locator('main zm-applications-page').getAttribute('aria-busy')) === 'true';
+    return (
+      (await this.page.locator('main zm-applications-page').getAttribute('aria-busy')) === 'true'
+    );
   }
 
   async waitForRows(): Promise<void> {

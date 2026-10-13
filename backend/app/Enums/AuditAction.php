@@ -19,4 +19,6 @@ enum AuditAction: string
     case VscVerified = 'vsc.verified';
     case ApplicationViewed = 'application.viewed';
     case ReferenceVerified = 'application_reference.verified';
+    case ApplicationApproved = 'application.approved';
+    case ApplicationRejected = 'application.rejected';
 }

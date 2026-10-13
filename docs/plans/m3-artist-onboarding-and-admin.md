@@ -21,7 +21,7 @@
 | S11 | Apply as an artist: the form and a sent application | Done | `453ab1f` (API), see below (web) |
 | S12 | Apply: refusals and retries | Done | see below |
 | S13 | Application queue, review screen and reference verification | Done | see below |
-| S14 | | Not started | |
+| S14 | Approve or reject | Done | see below |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -56,6 +56,35 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S14.**
+  - API: `POST /api/v1/admin/artist-applications/{id}/approval` and `…/rejection` on
+    `AdminArtistApplicationsController`. `ApproveArtistApplication` locks the row, needs both references
+    verified (422 on `references` with the review screen's copy), resolves the account per D3 (the one
+    that applied signed in, else the one with the address, else a new one with a random password whose
+    approval email carries a set-password link from `IssuePasswordResetToken`, its email marked
+    verified), grants Artist through `GrantRole`, creates the artist from the application (`approved_at`,
+    `payout_ready` false, `published_at` null, the next `ACT-` number under an advisory lock, a free slug
+    from `GenerateArtistSlug` with the reserved words `apply`, `new`, `search`, `saved`, `me`, a
+    `slug_histories` row, the styles, an empty rating row) and moves the videos; it is audited as
+    `application.approved`. `RejectArtistApplication` stores the reason (`ApplicationRejectionReason`)
+    and the trimmed note (`rejection_note`, new column with `artist_id`), audited as
+    `application.rejected`. Both dispatch events that `SendApplicationDecisionEmail` turns into
+    `ApplicationApprovedNotification` and `ApplicationRejectedNotification`. The application resource
+    gained `decision.rejectionNote` and `artist` (id, slug, ticket number, payout readiness).
+  - Web: Approve calls the API and the page shows the approved mock's alert (`zm-alert` gained the CRD's
+    `success` and `warning` variants, `icon` and `live`; info keeps `role="alert"`, which the M2 pages'
+    tests rely on, so only success and warning are `status`) and the Decision panel's rows. Reject… opens
+    `dialogs/reject-application` (CDK, danger, focus back to the button) whose note uses `zm-form-field`'s
+    new `counter` and `maxLength` (the CRD's live-region warnings are still planned); a 422 on the
+    reason shows at the field, anything else is the failed state with Try again. A rejected application
+    has no mock: the page shows the danger alert "{name}’s application is rejected" and a Decision panel
+    with the time, the reason and the note, in the approved mock's layout.
+  - Seed: re-seeding undoes an earlier approval of a seeded applicant (their artist row goes, the
+    videos return to the application), so the admin-mutations project can run again on the same
+    database; the account and the audit trail stay.
+  - e2e: three cases in `review-artist-application.mutation.spec.ts` with `reject-application.dialog.ts`:
+    approving Tobi (then the search and the slug route leave him out), rejecting Kezia & Mark through the
+    dialog (reason required, note counted), and Ebenezer's cancel, failed save and Try again.
 - **S13.**
   - API: `GET /api/v1/admin/artist-applications` (Submitted, oldest first, `meta.waiting` and
     `meta.lastDecidedAt` for the empty state's "The last one was decided Mon 5 Oct"), `GET …/{id}`

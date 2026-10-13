@@ -36,6 +36,12 @@ class ArtistApplication extends Model
         return $this->belongsTo(User::class);
     }
 
+    /** @return BelongsTo<Artist, $this> */
+    public function artist(): BelongsTo
+    {
+        return $this->belongsTo(Artist::class);
+    }
+
     /** @return BelongsTo<User, $this> */
     public function decider(): BelongsTo
     {

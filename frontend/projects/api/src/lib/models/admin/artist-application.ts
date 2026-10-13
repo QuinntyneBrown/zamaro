@@ -52,11 +52,36 @@ export interface AdminApplicationCheck {
   expiresOn: string | null;
 }
 
-/** The decision, once made (M3 S14). */
+/** The fixed list a rejection picks from (L2-048.2). */
+export type ApplicationRejectionReason =
+  | 'references-unconfirmed'
+  | 'videos-not-worship'
+  | 'outside-service-area'
+  | 'incomplete-or-inaccurate'
+  | 'other';
+
+export const APPLICATION_REJECTION_REASONS: readonly ApplicationRejectionReason[] = [
+  'references-unconfirmed',
+  'videos-not-worship',
+  'outside-service-area',
+  'incomplete-or-inaccurate',
+  'other',
+];
+
+/** The decision, once made. */
 export interface AdminApplicationDecision {
   decidedAt: string;
   decidedBy: { name: string } | null;
-  rejectionReason: string | null;
+  rejectionReason: ApplicationRejectionReason | null;
+  rejectionNote: string | null;
+}
+
+/** The artist an approval created, hidden until payout setup. */
+export interface AdminApplicationArtist {
+  id: number;
+  slug: string;
+  ticketNumber: string;
+  payoutReady: boolean;
 }
 
 /** An application as the administrator reviews it (pages/admin-application). */
@@ -78,4 +103,5 @@ export interface AdminApplication {
   references: AdminApplicationReference[];
   vulnerableSectorCheck: AdminApplicationCheck | null;
   decision: AdminApplicationDecision | null;
+  artist: AdminApplicationArtist | null;
 }

@@ -1,0 +1,8 @@
+/* The dialog's form is the dialog box itself (design-system dialog): the body stacks the fields. */
+:host {
+  display: contents;
+}
+
+.dialog__form {
+  display: contents;
+}

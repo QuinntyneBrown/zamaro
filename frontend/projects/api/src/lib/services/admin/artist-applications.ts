@@ -6,6 +6,7 @@ import type {
   AdminApplicationQueue,
   AdminApplicationReference,
   AdminApplicationRow,
+  ApplicationRejectionReason,
 } from '../../models/admin/artist-application';
 
 /** The application queue and review screen (review-artist-application, L2-067.1, L2-048.1). */
@@ -20,6 +21,14 @@ export interface AdminArtistApplicationsApi {
     referenceId: number,
     verified: boolean,
   ): Observable<AdminApplicationReference>;
+  /** Approves it: 422 on `references` until both are verified, 409 once decided. */
+  approve(applicationId: number): Observable<AdminApplication>;
+  /** Rejects it with a reason from the list and an optional note of up to 1,000 characters. */
+  reject(
+    applicationId: number,
+    reason: ApplicationRejectionReason,
+    note: string | null,
+  ): Observable<AdminApplication>;
 }
 
 export const ADMIN_ARTIST_APPLICATIONS_API = new InjectionToken<AdminArtistApplicationsApi>(
@@ -62,6 +71,28 @@ export class HttpAdminArtistApplicationsApi implements AdminArtistApplicationsAp
       }>(
         `/api/v1/admin/artist-applications/${applicationId}/references/${referenceId}/verification`,
         { verified },
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  approve(applicationId: number): Observable<AdminApplication> {
+    return this.http
+      .post<{ data: AdminApplication }>(
+        `/api/v1/admin/artist-applications/${applicationId}/approval`,
+        {},
+      )
+      .pipe(map((response) => response.data));
+  }
+
+  reject(
+    applicationId: number,
+    reason: ApplicationRejectionReason,
+    note: string | null,
+  ): Observable<AdminApplication> {
+    return this.http
+      .post<{ data: AdminApplication }>(
+        `/api/v1/admin/artist-applications/${applicationId}/rejection`,
+        { reason, note },
       )
       .pipe(map((response) => response.data));
   }

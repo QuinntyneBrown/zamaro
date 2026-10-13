@@ -1,19 +1,36 @@
 <div class="field">
-  <label class="field__label" [for]="fieldId()"
-    >{{ label() }}
-    @if (requiredMarker()) {
-      <span class="field__required">{{ requiredMarker() }}</span>
-    } @else if (optionalMarker()) {
-      <span class="field__optional">{{ optionalMarker() }}</span>
-    }
-  </label>
+  @if (counter()) {
+    <div class="field__row">
+      <label class="field__label" [for]="fieldId()"
+        >{{ label() }}
+        @if (requiredMarker()) {
+          <span class="field__required">{{ requiredMarker() }}</span>
+        } @else if (optionalMarker()) {
+          <span class="field__optional">{{ optionalMarker() }}</span>
+        }
+      </label>
+      <span class="field__counter" [id]="countId()" [attr.data-over]="over() ? 'true' : null">{{
+        counterText()
+      }}</span>
+    </div>
+  } @else {
+    <label class="field__label" [for]="fieldId()"
+      >{{ label() }}
+      @if (requiredMarker()) {
+        <span class="field__required">{{ requiredMarker() }}</span>
+      } @else if (optionalMarker()) {
+        <span class="field__optional">{{ optionalMarker() }}</span>
+      }
+    </label>
+  }
   @switch (type()) {
     @case ('select') {
       <select
         #control
         class="select"
         [id]="fieldId()"
-        [disabled]="disabled()"
+        [disabled]="disabled() || readonly()"
+        [required]="!!requiredMarker()"
         [attr.aria-invalid]="isInvalid() ? 'true' : null"
         [attr.aria-describedby]="descriptions()"
         (change)="changed($any($event.target).value)"
@@ -33,6 +50,9 @@
         [id]="fieldId()"
         [value]="value()"
         [disabled]="disabled()"
+        [readOnly]="readonly()"
+        [rows]="rows()"
+        [attr.maxlength]="maxLength()"
         [attr.placeholder]="placeholder()"
         [attr.aria-invalid]="isInvalid() ? 'true' : null"
         [attr.aria-describedby]="descriptions()"
@@ -52,6 +72,7 @@
         [required]="!!requiredMarker()"
         [attr.min]="min()"
         [attr.max]="max()"
+        [attr.maxlength]="maxLength()"
         [attr.autocomplete]="autocomplete()"
         [attr.inputmode]="type() === 'number' ? 'numeric' : null"
         [attr.placeholder]="placeholder()"

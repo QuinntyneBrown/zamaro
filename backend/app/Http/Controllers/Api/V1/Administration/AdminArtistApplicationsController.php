@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1\Administration;
 
+use App\Actions\ArtistOnboarding\ApplicationAlreadyDecided;
+use App\Actions\ArtistOnboarding\ApproveArtistApplication;
+use App\Actions\ArtistOnboarding\RejectArtistApplication;
 use App\Actions\Audit\RecordAuditEntry;
+use App\Enums\ApplicationRejectionReason;
 use App\Enums\ApplicationStatus;
 use App\Enums\AuditAction;
 use App\Enums\AuditOutcome;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Administration\RejectArtistApplicationRequest;
 use App\Http\Resources\Administration\AdminArtistApplicationResource;
 use App\Http\Resources\Administration\AdminArtistApplicationRowResource;
 use App\Models\ArtistApplication;
@@ -54,6 +59,40 @@ class AdminArtistApplicationsController extends Controller
     {
         $audit->handle($request->user(), AuditAction::ApplicationViewed, $application, AuditOutcome::Succeeded, ['application_number' => $application->number]);
 
-        return new AdminArtistApplicationResource($application->load(['videos', 'references.verifier', 'decider']));
+        return new AdminArtistApplicationResource($application->load(['videos', 'references.verifier', 'decider', 'artist']));
+    }
+
+    /**
+     * Approve an application.
+     *
+     * Both references must be verified (422 on `references` otherwise). The applicant gains the Artist
+     * role, an Approved artist is created and stays hidden until payout setup (L2-048.1, L2-048.3), and
+     * the next-step email follows. Audited (L2-069.1).
+     *
+     * @throws ApplicationAlreadyDecided 409 `application-already-decided` once approved or rejected
+     */
+    public function approve(Request $request, ArtistApplication $application, ApproveArtistApplication $approve): AdminArtistApplicationResource
+    {
+        return new AdminArtistApplicationResource($approve->handle($application, $request->user()));
+    }
+
+    /**
+     * Reject an application.
+     *
+     * A reason from the fixed list and an optional note of up to 1,000 characters, both emailed to the
+     * applicant (L2-048.2). Audited (L2-069.1).
+     *
+     * @throws ApplicationAlreadyDecided 409 `application-already-decided` once approved or rejected
+     */
+    public function reject(RejectArtistApplicationRequest $request, ArtistApplication $application, RejectArtistApplication $reject): AdminArtistApplicationResource
+    {
+        $note = $request->validated('note');
+
+        return new AdminArtistApplicationResource($reject->handle(
+            $application,
+            ApplicationRejectionReason::from($request->validated('reason')),
+            is_string($note) ? $note : null,
+            $request->user(),
+        ));
     }
 }

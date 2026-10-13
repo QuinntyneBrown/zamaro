@@ -64,6 +64,27 @@
       @if (application(); as application) {
         <div class="detail-layout detail-layout--flush">
           <div class="stack stack--lg">
+            @if (application.status === 'approved') {
+              <zm-alert
+                variant="success"
+                [heading]="
+                  'admin.application.approved.title' | transloco: { name: application.name }
+                "
+              >
+                {{ 'admin.application.approved.text' | transloco: { email: application.email } }}
+              </zm-alert>
+            } @else if (application.status === 'rejected') {
+              <zm-alert
+                variant="danger"
+                [heading]="
+                  'admin.application.rejectedAlert.title' | transloco: { name: application.name }
+                "
+              >
+                {{
+                  'admin.application.rejectedAlert.text' | transloco: { email: application.email }
+                }}
+              </zm-alert>
+            }
             <section class="panel" aria-labelledby="applicant-title">
               <div class="panel__head">
                 <h2 id="applicant-title" class="panel__title">
@@ -170,33 +191,48 @@
                 </h2>
                 <span class="stub__code">{{ application.number }}</span>
               </div>
-              <p
-                class="inline-msg"
-                [class.inline-msg--info]="!store.canApprove()"
-                [class.inline-msg--success]="store.canApprove()"
-                id="approve-help"
-              >
-                {{
-                  (store.canApprove()
-                    ? 'admin.application.decision.bothVerified'
-                    : 'admin.application.decision.verifyFirst'
-                  ) | transloco
-                }}
-              </p>
-              <zm-button
-                variant="primary"
-                size="lg"
-                block
-                [disabled]="!store.canApprove()"
-                describedBy="approve-help"
-                >{{
-                  'admin.application.decision.approve' | transloco: { name: firstName() }
-                }}</zm-button
-              >
-              <zm-button block>{{ 'admin.application.decision.reject' | transloco }}</zm-button>
-              <p class="stub__fine">
-                {{ 'admin.application.decision.fine' | transloco: { name: firstName() } }}
-              </p>
+              @if (application.status === 'submitted') {
+                <p
+                  class="inline-msg"
+                  [class.inline-msg--info]="!store.canApprove()"
+                  [class.inline-msg--success]="store.canApprove()"
+                  id="approve-help"
+                >
+                  {{
+                    (store.canApprove()
+                      ? 'admin.application.decision.bothVerified'
+                      : 'admin.application.decision.verifyFirst'
+                    ) | transloco
+                  }}
+                </p>
+                <zm-button
+                  variant="primary"
+                  size="lg"
+                  block
+                  [disabled]="!store.canApprove()"
+                  [busy]="store.approving()"
+                  describedBy="approve-help"
+                  (click)="approve()"
+                  >{{
+                    (store.approving()
+                      ? 'admin.application.decision.approving'
+                      : 'admin.application.decision.approve'
+                    ) | transloco: { name: firstName() }
+                  }}</zm-button
+                >
+                <zm-button
+                  block
+                  id="reject-button"
+                  [disabled]="store.approving()"
+                  (click)="reject()"
+                  >{{ 'admin.application.decision.reject' | transloco }}</zm-button
+                >
+                <p class="stub__fine">
+                  {{ 'admin.application.decision.fine' | transloco: { name: firstName() } }}
+                </p>
+              } @else {
+                <zm-description-list [items]="decisionItems()" />
+              }
             </div>
           </aside>
         </div>

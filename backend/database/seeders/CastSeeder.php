@@ -763,6 +763,15 @@ class CastSeeder extends Seeder
         ];
 
         foreach ($applications as [$number, $name, $email, $act, $city, $at, $styles, $bio, $dollars, $km, $submitted, $key, $references, $videos]) {
+            // An earlier run may have approved this applicant: their artist goes, so the application is
+            // Submitted again with its videos; the account and the audit trail stay.
+            $approvedUser = User::whereRaw('lower(email) = ?', [strtolower($email)])->first();
+            $approvedArtist = $approvedUser === null ? null : Artist::where('user_id', $approvedUser->id)->first();
+            if ($approvedArtist !== null) {
+                ArtistVideo::where('artist_id', $approvedArtist->id)->whereNotNull('artist_application_id')->update(['artist_id' => null]);
+                SlugHistory::where('artist_id', $approvedArtist->id)->delete();
+                $approvedArtist->delete();
+            }
             $application = ArtistApplication::updateOrCreate(['number' => $number], [
                 'user_id' => null,
                 'name' => $name,
@@ -781,6 +790,8 @@ class CastSeeder extends Seeder
                 'decided_at' => null,
                 'decided_by' => null,
                 'rejection_reason' => null,
+                'rejection_note' => null,
+                'artist_id' => null,
             ]);
             ApplicationReference::where('artist_application_id', $application->id)->delete();
             foreach ($references as [$referenceName, $church, $contact]) {

@@ -549,6 +549,13 @@ Nothing animates. Errors, help and success appear without a transition; under
 
 ## Implementation notes
 
+**Interim additions in M3 (S14), before the split:** the reject-application dialog's note needed the
+counter, so the monolithic field gained `counter` (the `.field__row` label row with `.field__counter`
+`{fieldId}-count`, "used / limit" in `en-CA` figures, `data-over` past the limit, listed in
+`aria-describedby`), `maxLength` (the control's `maxlength` and the counter's limit), `rows` for the
+textarea, and `readonly` on the textarea and the select (a read-only select is disabled, as the busy
+dialog mock shows). `counterWarning` and `counterOver` (the live-region announcements) are still planned.
+
 **Interim additions in M2 (S9), before the split:** account settings needed a phone and a whole
 number, so `type` gained `tel` and `number` (the text-field CRD's types); `number` adds
 `inputmode="numeric"`, and `min` applies to it. The `FormField` scenario was re-measured against the

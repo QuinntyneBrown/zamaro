@@ -176,6 +176,10 @@ review slice resolves the account on approval.
   (`FakeVideoTranscoder` until M10). The video is `Uploading` while chunks arrive, `Processing` from the
   last chunk to the transcode, then `Live` or `Failed` with its reason.
 
+**Settled in M3 S14 (D3, applicants without an account):** approval finds the account by the
+application's `user_id` or `lower(email)`, or creates one with a random password and emails a
+set-password link; `artist_applications.user_id` is set at approval when it was null.
+
 **As built in M3 S12 (refusals and retries)**
 
 - The request's video rule lets a retry carrying the same `Idempotency-Key` reuse the videos the first

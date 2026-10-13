@@ -524,6 +524,13 @@ its `Banner.ts` perf scenario ("Verify your email" with "Resend email"), and the
 email" and "Email verified" banners. A disabled button action reads in `--color-fg-muted`. The banner
 logs no dev-mode error for `dismissible` with `persistent`; the close button is simply not rendered.
 
+**As built in M3 (S14):** `variant` is the full `'info' | 'success' | 'warning' | 'danger'` with the
+success and warning token sets, `icon` overrides the variant's icon (info `info`, success `check`,
+warning and danger `warning`), and `live` sets the role: success and warning are `status`, danger is
+`alert`, and info stays `alert` too (the M2 pages' tests read it by that role; moving it to `status` is
+for their next change), `off` sets none. Built for the approved review screen's "Tobi Adeyemi is
+approved". Still planned: `focusOnRender`, `dismissible`, `dismissLabel`, `dismissed` and `--alert-fg`.
+
 **As built in M2 (S1):** `compact` (`.alert--compact`: `--space-4` padding, `--text-h4` title and a
 20 px icon), for the sign-in card's "We couldn’t sign you in".
 

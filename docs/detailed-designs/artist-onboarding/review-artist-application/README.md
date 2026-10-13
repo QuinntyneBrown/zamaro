@@ -141,6 +141,19 @@ The slice writes `artist_applications` (`status`, `decided_at`, `decided_by`,
 application to artist) and `audit_entries`. It reads `vulnerable_sector_checks` for
 the applicant's user.
 
+**As built in M3 S14 (approve or reject)**
+
+- `ApproveArtistApplication` and `RejectArtistApplication` are as designed, with these settled points:
+  the applicant without an account (D3) gets one with a random password, a verified email and a
+  set-password link in the approval email; the slug comes from `GenerateArtistSlug` (D4: base,
+  base-2, … against artists, retired slugs and the reserved words) and `published_at` stays null until
+  payout setup; the ticket number is the next `ACT-` under an advisory lock; the videos move to the
+  artist by `artist_id` and keep their application; `artist_applications.artist_id` links the two. The
+  decision emails are `ApplicationApprovedNotification` and `ApplicationRejectedNotification`, sent by
+  one queued listener for both events.
+- The admin page's Decision panel and the reject dialog are as the mocks show; the rejected state,
+  which has no mock, reuses the approved layout with a danger alert and the reason and note rows.
+
 **As built in M3 S13 (the queue, the review screen and reference verification)**
 
 - `AdminArtistApplicationsController` serves the queue (Submitted, oldest first, with `meta.waiting`

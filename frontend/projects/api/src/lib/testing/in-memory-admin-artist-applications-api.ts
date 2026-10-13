@@ -3,6 +3,7 @@ import type {
   AdminApplication,
   AdminApplicationQueue,
   AdminApplicationReference,
+  ApplicationRejectionReason,
 } from '../models/admin/artist-application';
 import type { AdminArtistApplicationsApi } from '../services/admin/artist-applications';
 
@@ -58,5 +59,46 @@ export class InMemoryAdminArtistApplicationsApi implements AdminArtistApplicatio
     reference.verifiedAt = verified ? new Date().toISOString() : null;
     reference.verifiedBy = verified ? { name: this.verifier } : null;
     return of({ ...reference });
+  }
+
+  approve(applicationId: number): Observable<AdminApplication> {
+    const application = this.applications.find((candidate) => candidate.id === applicationId);
+    if (!application) return throwError(() => new Error('not found'));
+    if (application.status !== 'submitted') return throwError(() => new Error('already decided'));
+    if (application.references.some((reference) => reference.verifiedAt === null)) {
+      return throwError(() => new Error('references'));
+    }
+    application.status = 'approved';
+    application.decision = {
+      decidedAt: new Date().toISOString(),
+      decidedBy: { name: this.verifier },
+      rejectionReason: null,
+      rejectionNote: null,
+    };
+    application.artist = {
+      id: applicationId,
+      slug: application.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      ticketNumber: `ACT-${String(applicationId).padStart(4, '0')}`,
+      payoutReady: false,
+    };
+    return of(structuredClone(application));
+  }
+
+  reject(
+    applicationId: number,
+    reason: ApplicationRejectionReason,
+    note: string | null,
+  ): Observable<AdminApplication> {
+    const application = this.applications.find((candidate) => candidate.id === applicationId);
+    if (!application) return throwError(() => new Error('not found'));
+    if (application.status !== 'submitted') return throwError(() => new Error('already decided'));
+    application.status = 'rejected';
+    application.decision = {
+      decidedAt: new Date().toISOString(),
+      decidedBy: { name: this.verifier },
+      rejectionReason: reason,
+      rejectionNote: note,
+    };
+    return of(structuredClone(application));
   }
 }
