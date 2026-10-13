@@ -10,8 +10,11 @@ use App\Http\Controllers\Api\V1\Accounts\MeController;
 use App\Http\Controllers\Api\V1\Accounts\SavedArtistController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
+use App\Http\Controllers\Api\V1\Administration\AdminOverviewController;
 use App\Http\Controllers\Api\V1\Privacy\ConsentController;
+use App\Http\Middleware\EnsureAdministrator;
 use App\Http\Middleware\EnsureCurrentTermsAccepted;
+use App\Http\Middleware\EnsureMfaVerified;
 use App\Http\Middleware\SetCachePolicy;
 use App\Http\Middleware\TrackSessionActivity;
 use Illuminate\Support\Facades\Route;
@@ -54,3 +57,13 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
         Route::put('account/contact-phone', [ArtistContactController::class, 'update'])->name('account.contact-phone.update');
     });
 });
+
+// The admin API (administration/secure-admin-access). EnsureAdministrator runs first, ahead of
+// authentication, so a guest, a booker, an artist and an administrator who has given only their
+// password all get the same 404 as an unknown address (L2-066.1, L2-074.1). The terms gate is not
+// here: the admin application has no page to accept them on, and administrators are the Zamaro team.
+Route::prefix('admin')->name('admin.')
+    ->middleware([EnsureAdministrator::class, 'auth:sanctum', EnsureMfaVerified::class, SetCachePolicy::class, TrackSessionActivity::class])
+    ->group(function () {
+        Route::get('overview', [AdminOverviewController::class, 'show'])->name('overview');
+    });

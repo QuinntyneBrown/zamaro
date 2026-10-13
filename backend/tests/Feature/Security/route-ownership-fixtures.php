@@ -213,4 +213,11 @@ return [
 
         $test->as($owner)->getJson('/api/v1/saved-artists/ids')->assertJsonPath('data.artistIds', [$artist]);
     },
+
+    // The admin API conceals itself from everyone but an administrator who signed in with a code
+    // (L2-066.1); AdminRoutesConcealedTest proves the body matches an unknown address.
+    'GET api/v1/admin/overview' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/overview')->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
 ];

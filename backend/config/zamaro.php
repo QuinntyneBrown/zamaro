@@ -20,6 +20,11 @@ return [
     // local, testing and e2e; anywhere else, and when it is empty, their passwords stay random.
     'cast_password' => env('ZAMARO_CAST_PASSWORD'),
 
+    'admin' => [
+        // Minutes without a request after which an administrator's session ends (L2-066.2).
+        'idle_timeout_minutes' => (int) env('ZAMARO_ADMIN_IDLE_TIMEOUT_MINUTES', 30),
+    ],
+
     'problems' => [
         // Base of the RFC 9457 problem `type` URIs, e.g. {base}/not-found (ADR-0005).
         'base_uri' => env('ZAMARO_PROBLEM_BASE_URI', rtrim(env('APP_URL', 'http://localhost'), '/').'/problems'),

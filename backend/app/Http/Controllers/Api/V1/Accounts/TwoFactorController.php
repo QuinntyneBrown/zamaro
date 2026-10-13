@@ -6,10 +6,12 @@ use App\Actions\Accounts\EnableTwoFactor;
 use App\Actions\Accounts\ManageTwoFactor;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
+use App\Actions\Accounts\TwoFactorRequired;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Accounts\TwoFactorCodeRequest;
 use App\Http\Requests\Accounts\TwoFactorProofRequest;
 use App\Services\Accounts\TotpVerifier;
+use App\Services\Administration\AdminSession;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -58,6 +60,7 @@ class TwoFactorController extends Controller
      * Needs a current code or an unused recovery code; the key and every recovery code go, and the
      * owner is emailed (L2-072.5). 404 when it is not on.
      *
+     * @throws TwoFactorRequired 409 `two-factor-required`: an administrator cannot turn it off (L2-066.2)
      * @throws SignInPaused 429 `sign-in-paused` after 5 wrong codes or passwords in 15 minutes
      */
     public function destroy(TwoFactorProofRequest $request, ManageTwoFactor $manage): Response
@@ -92,13 +95,15 @@ class TwoFactorController extends Controller
      * Turn on two-step sign-in.
      *
      * The first code from the app turns it on; the answer holds the 10 recovery codes, shown only
-     * this once. The owner is emailed.
+     * this once. The owner is emailed. The code also counts as this session's code step, so an
+     * administrator who has just turned it on reaches the admin API without signing in again (L2-066.2).
      *
      * @throws TwoFactorAlreadyOn 409 when two-step sign-in is already on
      */
-    public function confirm(TwoFactorCodeRequest $request, EnableTwoFactor $enable): JsonResponse
+    public function confirm(TwoFactorCodeRequest $request, EnableTwoFactor $enable, AdminSession $session): JsonResponse
     {
         $codes = $enable->confirm($request->user(), $request->validated('code'));
+        $session->markMfaVerified($request);
 
         return response()->json([
             'data' => [

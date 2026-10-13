@@ -6,6 +6,7 @@ use App\Actions\Accounts\LinkExpired;
 use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
+use App\Actions\Accounts\TwoFactorRequired;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -84,6 +85,10 @@ class ProblemDetailsRenderer
 
         if ($e instanceof TwoFactorAlreadyOn) {
             return ProblemDetails::of(ProblemType::TwoFactorAlreadyOn, 'Turn it off first to set up a new key.', $requestId)->toResponse();
+        }
+
+        if ($e instanceof TwoFactorRequired) {
+            return ProblemDetails::of(ProblemType::TwoFactorRequired, 'An administrator signs in with a code every time; two-step sign-in cannot be turned off.', $requestId)->toResponse();
         }
 
         if ($e instanceof LinkExpired) {

@@ -8,8 +8,9 @@
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
-| S1 | Audit entries: record them, refuse changes | In progress | (ADR-0022) |
-| S2–S14 | | Not started | |
+| S1 | Audit entries: record them, refuse changes | Done | `64b3624`, `65356bb` (ADR-0022) |
+| S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, see below |
+| S3–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -44,6 +45,37 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S2.**
+  - There is no `TwoFactorEnrolmentRequired` (D6). An administrator without two-step sign-in signs in
+    as anyone does (200, `mfaEnabled: false`); only the admin API stays 404 until they turn it on.
+    Confirming the first code marks the current session as having passed the code step, so they reach
+    the admin API without signing in again. An administrator cannot turn two-step sign-in off: `DELETE
+    /account/two-factor` answers 409 `two-factor-required`.
+  - The code-step mark and the last request time live in the session (`Services/Administration/
+    AdminSession`), written by `TwoFactorChallenge::complete`, `TwoFactorController::confirm` and
+    `EnforceAdminIdleTimeout`. `StartSession` is unchanged.
+  - `EnsureAdministrator` reads the `sanctum` guard and is put ahead of `auth:sanctum` in the middleware
+    priority list, because Laravel otherwise runs authentication first and a guest would get 401.
+    `SubstituteBindings` also runs ahead of route middleware; a missing record and a hidden route both
+    render the same `not-found` problem body, so the design's "before route-model binding" holds in
+    effect.
+  - `EnforceAdminIdleTimeout` runs on the whole api group, after the 30-day limit, for anyone holding
+    the Administrator role: any request is activity, including `/me`, and `null` for a session never
+    stamped means "stamp now", not "ended".
+  - The admin group does not carry `EnsureCurrentTermsAccepted`: the admin application has no page to
+    accept the terms on, and administrators are the Zamaro team.
+  - `AuditAdminRequests` waits for the first state-changing admin route (S8, Verify), where a test can
+    prove it; S2 has only `GET /admin/overview`.
+  - The overview answers only `checksWaiting` so far; `applicationsWaiting` joins with S13, when
+    applications exist.
+  - The command is `Console/Commands/GrantAdministratorCommand` (`zamaro:admin:grant {email}`), and a
+    second grant succeeds without a second audit entry (`GrantRole` is idempotent).
+  - **Local environment (cloud session).** The egress proxy allows `api.github.com` only for this
+    repository, so Composer cannot download other packages' zipballs; `git clone` of public repositories
+    works. The dependencies were installed by syncing each package's git mirror into Composer's VCS
+    cache (`--prefer-source`), building each locked zip from its mirror into the file cache with
+    `git archive`, then `composer install --prefer-dist` offline. `phpstan/phpstan` is dist-only and was
+    mirrored by hand at its locked commit. Postgres 16 and Redis run locally rather than in compose.
 
 ## Context
 

@@ -51,7 +51,7 @@ store in Redis and the audit log.
   response status to 404 through Angular SSR's response-init token, so `/admin`
   returns a real 404 to a non-administrator (L2-066).
 - **`SignInPage`** (`features/account`) — owned by `accounts/sign-in-and-recover-access` (L2-023). When
-  the sign-in result has status `TwoFactorRequired`, it routes to `MfaChallengePage`
+  the sign-in answer is 202 `twoFactorRequired: true`, it routes to `MfaChallengePage`
   without completing sign-in.
 - **`MfaChallengePage`** — routed page for `/account/sign-in/verify`, owned by
   `accounts/sign-in-and-recover-access`. It takes a 6-digit code or a recovery code,
@@ -84,31 +84,49 @@ warning is [`notifications/session-toast`](../../../mocks/notifications/session-
 **Backend (Zamaro API)**
 
 - **`routes/api.php` admin group** — every route under `/api/v1/admin` carries the
-  middleware stack `auth:sanctum`, `EnsureAdministrator`, `EnsureMfaVerified`,
-  `EnforceAdminIdleTimeout`.
+  middleware stack `EnsureAdministrator`, `auth:sanctum`, `EnsureMfaVerified`,
+  `SetCachePolicy`, `TrackSessionActivity`; `EnforceAdminIdleTimeout` runs on the whole
+  api group (below). The group does not carry the terms gate (`EnsureCurrentTermsAccepted`):
+  the admin application has no page to accept the terms on, and administrators are the
+  Zamaro team. The first route is `GET /api/v1/admin/overview` (`AdminOverviewController`),
+  which answers the counts the shell shows beside its sections (`checksWaiting`; M3 D17) and
+  doubles as the "Stay signed in" request.
 - **`EnsureAdministrator`** — middleware that calls `abort(404)` when the user is
-  missing or lacks `Role::Administrator`. It runs before route-model binding, so a
-  valid ID and an invalid ID return the same 404 (L2-066, L2-074).
-- **`EnsureMfaVerified`** — middleware that requires the session flag
-  `mfa_verified_at`. Without it the response is 404 as well, so a half-signed-in
-  session reveals nothing.
-- **`EnforceAdminIdleTimeout`** — middleware registered globally for authenticated
-  requests. For an administrator it compares now with the session's
-  `last_activity_at`. Beyond 30 minutes it invalidates the session and returns 401;
-  otherwise it stamps `last_activity_at`. Requests from the background polling of
-  open admin pages do not count as activity (`<TO SUPPLY>`: list of polling
-  endpoints).
+  missing or lacks `Role::Administrator`. It reads the `sanctum` guard itself and is
+  placed ahead of authentication in the middleware priority list, so a guest gets 404,
+  never 401. Route-model binding (`SubstituteBindings`) runs ahead of route middleware
+  in Laravel; a missing record and a hidden route render the same `not-found` problem
+  body, so a valid ID and an invalid ID still return the same 404 (L2-066, L2-074).
+- **`EnsureMfaVerified`** — middleware that requires the session mark
+  `admin.mfa_verified_at` (`Services/Administration/AdminSession`). Without it the
+  response is 404 as well, so a half-signed-in session reveals nothing.
+- **`EnforceAdminIdleTimeout`** — middleware on the api group, after the 30-day limit, for
+  any signed-in request by someone holding the Administrator role. It compares now with
+  the session's `admin.last_activity_at`. Beyond 30 minutes it signs the session out and
+  returns 401 (`unauthenticated`); otherwise it stamps `admin.last_activity_at`. Every
+  request counts as activity, `/me` included; a session never stamped is stamped, not
+  ended. M3 admin pages do not poll, so no endpoint is exempt (M3 D9).
 - **`SessionController`** — owned by `accounts/sign-in-and-recover-access`.
   `POST /api/v1/session` calls `AttemptSignIn`, which after the password check
-  returns status `TwoFactorRequired` for a user with MFA enabled or with the
-  Administrator role. The session then holds only the pending-challenge marker
-  `pending_mfa_user_id`.
+  answers 202 `twoFactorRequired: true` for a user with MFA enabled. The session then
+  holds only the pending-challenge marker (`TwoFactorChallenge::begin`). An
+  administrator who has not turned two-step sign-in on signs in as anyone does (200);
+  the admin API stays 404 to them until they turn it on (M3 D6, as built).
 - **`SessionController::twoFactor`** — `POST /api/v1/session/two-factor`. It calls
-  `CompleteTwoFactorChallenge`, which checks the code with `TotpVerifier` (allowing
+  `TwoFactorChallenge::complete`, which checks the code with `TotpVerifier` (allowing
   one 30-second step of clock drift) or consumes a recovery code. On success
-  `StartSession` regenerates the session ID (L2-073) and logs the user in; for an
-  administrator the action also sets `mfa_verified_at`. Failed codes count toward the
-  account lockout in L2-072.
+  `StartSession` regenerates the session ID (L2-073) and logs the user in, and the
+  action marks the new session as having passed the code step
+  (`AdminSession::markMfaVerified`). Failed codes count toward the account lockout in
+  L2-072.
+- **`TwoFactorController::confirm`** — turning two-step sign-in on also marks the current
+  session as having passed the code step, so an administrator who has just enrolled reaches
+  the admin API without signing in again. **`TwoFactorController::destroy`** answers 409
+  `two-factor-required` (`ManageTwoFactor::turnOff`) for an administrator: their role
+  requires it (L2-066.2).
+- **`zamaro:admin:grant {email}`** (`GrantAdministratorCommand`) — the only way to make an
+  administrator (M3 D6). It grants the role through `GrantRole`, which records
+  `user.role_changed` with no actor (the system).
 - **`TotpVerifier`** — interface in `App\Services\Auth\` with one adapter over a
   TOTP library (library `<TO SUPPLY>`). The TOTP secret is encrypted at the
   application level (L2-079).
@@ -120,8 +138,10 @@ warning is [`notifications/session-toast`](../../../mocks/notifications/session-
 - `users` — `mfa_enabled`, `two_factor_secret` (encrypted),
   `two_factor_confirmed_at`; `recovery_codes` holds the hashed recovery codes. Both
   belong to `accounts/sign-in-and-recover-access`.
-- Redis sessions — `pending_mfa_user_id`, `mfa_verified_at`, `last_activity_at`.
-- `config/zamaro.php` — `admin.idle_timeout_minutes = 30`.
+- Redis sessions — the pending-challenge marker (`auth.two_factor`),
+  `admin.mfa_verified_at`, `admin.last_activity_at`.
+- `config/zamaro.php` — `admin.idle_timeout_minutes = 30`
+  (`ZAMARO_ADMIN_IDLE_TIMEOUT_MINUTES`).
 
 ## Requirements
 
@@ -153,7 +173,7 @@ state in Redis.
 
 The admin route group runs three middleware in order: role, MFA, idle timeout.
 `SessionController` completes a two-step sign-in through
-`CompleteTwoFactorChallenge` and records each outcome in the audit log.
+`TwoFactorChallenge::complete` and records each outcome in the audit log.
 
 ![C4 component view for secure administrator access](diagrams/c4-component.png)
 

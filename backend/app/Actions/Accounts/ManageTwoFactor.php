@@ -5,6 +5,7 @@ namespace App\Actions\Accounts;
 use App\Actions\Audit\RecordAuditEntry;
 use App\Enums\AuditAction;
 use App\Enums\AuditOutcome;
+use App\Enums\Role;
 use App\Models\RecoveryCode;
 use App\Models\User;
 use App\Notifications\AccountLockedNotification;
@@ -32,11 +33,15 @@ class ManageTwoFactor
     ) {}
 
     /**
+     * @throws TwoFactorRequired when the person is an administrator (L2-066.2)
      * @throws SignInPaused
      * @throws ValidationException on `code` when it is wrong
      */
     public function turnOff(User $user, string $code): void
     {
+        if (in_array(Role::Administrator, $user->roleNames(), true)) {
+            throw new TwoFactorRequired;
+        }
         $this->prove($user, $code);
 
         DB::transaction(function () use ($user) {

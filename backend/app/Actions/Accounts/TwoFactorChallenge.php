@@ -10,6 +10,7 @@ use App\Notifications\AccountLockedNotification;
 use App\Services\Accounts\RecoveryCodes;
 use App\Services\Accounts\SignInThrottle;
 use App\Services\Accounts\TotpVerifier;
+use App\Services\Administration\AdminSession;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -31,6 +32,7 @@ class TwoFactorChallenge
         private readonly SignInThrottle $throttle,
         private readonly StartSession $startSession,
         private readonly RecordAuditEntry $audit,
+        private readonly AdminSession $adminSession,
     ) {}
 
     /** The password was right and two-step sign-in is on: ask for a code before signing in. */
@@ -84,6 +86,10 @@ class TwoFactorChallenge
         $this->audit->handle($user, AuditAction::MfaChallenge, $user, AuditOutcome::Succeeded, ['method' => $recovery ? 'recovery_code' : 'code']);
         $this->audit->handle($user, AuditAction::SignIn, $user, AuditOutcome::Succeeded, ['two_factor' => $recovery ? 'recovery_code' : 'code']);
 
-        return $this->startSession->handle($user, $request);
+        $signedIn = $this->startSession->handle($user, $request);
+        // The new session passed the code step; the admin route group requires that mark (L2-066.2).
+        $this->adminSession->markMfaVerified($request);
+
+        return $signedIn;
     }
 }
