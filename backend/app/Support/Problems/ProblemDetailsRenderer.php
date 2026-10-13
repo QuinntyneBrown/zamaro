@@ -7,6 +7,7 @@ use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\Accounts\TwoFactorRequired;
+use App\Actions\ArtistOnboarding\UploadOffsetMismatch;
 use App\Actions\ArtistOnboarding\VscAlreadyDecided;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
@@ -98,6 +99,11 @@ class ProblemDetailsRenderer
 
         if ($e instanceof VscAlreadyDecided) {
             return ProblemDetails::of(ProblemType::VscAlreadyDecided, 'Another administrator decided this check first. Reload the queue.', $requestId)->toResponse();
+        }
+
+        if ($e instanceof UploadOffsetMismatch) {
+            return ProblemDetails::of(ProblemType::UploadOffsetMismatch, 'Ask HEAD for Upload-Offset and send the next chunk from there.', $requestId)
+                ->toResponse($e->getHeaders());
         }
 
         if ($e instanceof LinkExpired) {

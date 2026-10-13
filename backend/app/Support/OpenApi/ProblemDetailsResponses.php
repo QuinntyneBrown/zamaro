@@ -7,6 +7,7 @@ use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\Accounts\TwoFactorRequired;
+use App\Actions\ArtistOnboarding\UploadOffsetMismatch;
 use App\Actions\ArtistOnboarding\VscAlreadyDecided;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
@@ -55,7 +56,7 @@ class ProblemDetailsResponses extends HttpExceptionToResponseExtension
             $type->isInstanceOf(AuthenticationException::class) => 401,
             $type->isInstanceOf(RecordsNotFoundException::class), $type->isInstanceOf(NotFoundHttpException::class) => 404,
             $type->isInstanceOf(TooManyRequestsHttpException::class) => 429,
-            $type->isInstanceOf(LegalDocumentOutdated::class), $type->isInstanceOf(TwoFactorAlreadyOn::class), $type->isInstanceOf(TwoFactorRequired::class), $type->isInstanceOf(VscAlreadyDecided::class), $type->isInstanceOf(TermsAcceptanceRequired::class) => 409,
+            $type->isInstanceOf(LegalDocumentOutdated::class), $type->isInstanceOf(TwoFactorAlreadyOn::class), $type->isInstanceOf(TwoFactorRequired::class), $type->isInstanceOf(VscAlreadyDecided::class), $type->isInstanceOf(TermsAcceptanceRequired::class), $type->isInstanceOf(UploadOffsetMismatch::class) => 409,
             $type->isInstanceOf(LinkExpired::class) => 410,
             default => parent::toResponse($type)?->code,
         };

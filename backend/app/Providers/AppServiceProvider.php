@@ -10,6 +10,7 @@ use App\Contracts\IpLocator;
 use App\Contracts\MediaScanner;
 use App\Contracts\OnCallAlerter;
 use App\Contracts\RoutingProvider;
+use App\Contracts\VideoTranscoder;
 use App\Integrations\Alerting\FakeOnCallAlerter;
 use App\Integrations\BotChallenge\FakeBotChallenge;
 use App\Integrations\BreachedPasswords\FakeBreachedPasswordChecker;
@@ -18,6 +19,7 @@ use App\Integrations\Geocoding\FakeGeocoder;
 use App\Integrations\IpLocation\FakeIpLocator;
 use App\Integrations\Routing\FakeRoutingProvider;
 use App\Integrations\Scanning\FakeMediaScanner;
+use App\Integrations\Video\FakeVideoTranscoder;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Support\Carbon;
@@ -40,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         OnCallAlerter::class => FakeOnCallAlerter::class,
         IpLocator::class => FakeIpLocator::class,
         MediaScanner::class => FakeMediaScanner::class,
+        VideoTranscoder::class => FakeVideoTranscoder::class,
     ];
 
     public function register(): void

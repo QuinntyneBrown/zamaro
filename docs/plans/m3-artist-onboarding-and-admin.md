@@ -17,7 +17,8 @@
 | S7 | Signed links to private documents | Done | `fafb6fe` |
 | S8 | Admin VSC queue, verification and the Artists list | Done | see below |
 | S9 | VSC renewal reminders | Done | see below |
-| S10–S14 | | Not started | |
+| S10 | Application video upload | Done | see below |
+| S11–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -52,6 +53,28 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S10.**
+  - The protocol is ADR-0026: `POST /api/v1/artist-applications/videos` (JSON `title`, `fileName`,
+    `size`) → 201 with the 64-hex token and `Location`; `PATCH …/{token}` with `Upload-Offset` and an
+    `application/offset+octet-stream` chunk of up to 8 MB → 204 with the new `Upload-Offset`, 409
+    `upload-offset-mismatch` (carrying the real `Upload-Offset`) when it does not start where the upload
+    ends, 413 over 8 MB, 415 for any other body type; `GET`/`HEAD …/{token}` → `Upload-Offset` and
+    `Upload-Length`, the body saying uploading, processing, live or failed. The public token route pattern
+    is `[0-9a-f]+` so the CSRF sweep reaches it; an unknown token is 404.
+  - Parts are `video-parts/{token}/{offset}` on the quarantine disk; the last chunk joins them into one
+    quarantined object, types it from its first bytes (`ContentTypeDetector::detectBytes`), creates an
+    `Upload` with no user and queues `ScanUpload`. `PromoteUpload` hands a clean video to
+    `ProcessApplicationVideo` (over 15 minutes: "This video is 16 minutes long. Videos can be up to 15
+    minutes."); `RejectInfectedUpload` fails it with "This file failed our malware scan and was deleted.
+    Choose another video."; a non-video or markup fails at completion with the purpose's message.
+  - `Contracts/VideoTranscoder` (`probe`, `transcode`) with `Integrations/Video/FakeVideoTranscoder`
+    (a `ZAMARO-DURATION=<seconds>` marker in the bytes sets the length, else 5:48; it writes the seeders'
+    sample stream and a one-pixel poster under `applications/videos/{id}/`).
+  - `uploads.user_id` and `artist_videos.artist_id` are nullable; `artist_videos` gained
+    `artist_application_id` (its foreign key comes with the table in S11), `upload_token`, `upload_id`,
+    `file_name`, `size_bytes`, `uploaded_bytes`, `original_key` and `failure_reason`. Application videos
+    are created at position 1; S11 numbers them when the application is submitted.
+  - `uploads:prune-unattached` runs daily at 04:00 (D7: 24 hours).
 - **S9.**
   - `vsc:send-renewal-reminders` (`Console/Commands/SendVscRenewalRemindersCommand`) runs daily at
     09:00 Toronto. It picks verified checks with no reminder stamp whose expiry is between today and

@@ -16,11 +16,16 @@ class ContentTypeDetector
     /** The detected type, or null when the file is refused outright. */
     public function detect(string $path): ?string
     {
-        $head = (string) file_get_contents($path, length: 512);
+        return $this->detectBytes((string) file_get_contents($path, length: 4096));
+    }
+
+    /** The same, from a file's first bytes (at least a few hundred), for a file that is not on this machine. */
+    public function detectBytes(string $head): ?string
+    {
         if ($this->looksLikeMarkup($head)) {
             return null;
         }
-        $mime = (new finfo(FILEINFO_MIME_TYPE))->file($path) ?: 'application/octet-stream';
+        $mime = (new finfo(FILEINFO_MIME_TYPE))->buffer($head) ?: 'application/octet-stream';
 
         return in_array($mime, self::REFUSED, true) ? null : $mime;
     }

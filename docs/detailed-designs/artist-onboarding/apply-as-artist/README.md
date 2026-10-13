@@ -164,6 +164,18 @@ review slice resolves the account on approval.
 - `artist_videos` — shared with profile management; `artist_application_id` links
   an application video until approval moves it to the artist.
 
+**As built in M3 S10 (video upload)**
+
+- The chunked-upload protocol is ADR-0026: `POST /api/v1/artist-applications/videos` starts an upload
+  and answers its token; `PATCH …/{token}` appends an 8 MB chunk at `Upload-Offset`; `GET`/`HEAD
+  …/{token}` answer the offset and the video's state. Unattached videos are deleted after 24 hours by
+  `uploads:prune-unattached` (D7).
+- `ApplicationVideoUploadsController` does not scan or type the file itself: the last chunk hands the
+  joined file to the S6 pipeline (`ScanUpload`, `PromoteUpload`), which then dispatches
+  `ProcessApplicationVideo` for the length check and the transcode through the `VideoTranscoder` port
+  (`FakeVideoTranscoder` until M10). The video is `Uploading` while chunks arrive, `Processing` from the
+  last chunk to the transcode, then `Live` or `Failed` with its reason.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

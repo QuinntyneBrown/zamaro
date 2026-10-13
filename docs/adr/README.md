@@ -34,3 +34,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0023](0023-admin-application-served-behind-a-server-side-404-gate.md) | The admin application is served behind a server-side 404 gate, and the two applications share their session services | Accepted |
 | [0024](0024-upload-storage-on-local-disks-until-object-storage.md) | Upload storage on local disks behind Laravel's filesystem ports until object storage | Accepted |
 | [0025](0025-private-document-envelope-encryption.md) | Private documents are encrypted per file with a wrapped data key | Accepted |
+| [0026](0026-resumable-application-video-uploads.md) | Application videos are uploaded in chunks with a small tus-style protocol | Accepted |
