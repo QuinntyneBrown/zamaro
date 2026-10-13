@@ -131,6 +131,21 @@ exception with `audit:prune`), the `AuditEntry` model, the `AuditAction` enum (`
 timestamp is the database's (`occurred_at` defaults to `now()`); the address is the request's, or null
 in a queued job. `LogRedactor` arrives with log redaction (M2 S4); until then no caller passes a
 secret in `context`. The viewer, `ImmutableAuditEntry` and retention stay in M3.
+
+**As built in M3 S1 (ADR-0022)**
+
+- `AuditEntry` throws `ImmutableAuditEntry` on update and delete. The trigger lets `DELETE` through
+  only for `zamaro_audit_retention`, which a migration creates (not the init script) and which holds
+  `SELECT` and `DELETE` but no `UPDATE`.
+- `RecordAuditEntry` redacts `context` with `App\Logging\RedactSensitiveData`, the log redactor this
+  design calls `LogRedactor`.
+- The address is the client's as `TRUSTED_PROXIES` reports it; the SSR server forwards it.
+- A code sign-in writes `auth.mfa_challenge`, then `auth.sign_in`. A wrong code writes
+  `auth.mfa_challenge` with outcome `failed`.
+- `App\Actions\Accounts\GrantRole` grants a role and writes `user.role_changed` (no actor when the
+  system grants it). There is no `RoleChanged` event or `AuditAuthenticationEvents` subscriber: the
+  actions call `RecordAuditEntry` themselves, as M2's do.
+- A failed sign-in keeps the attempted address in `context.email`, not `context.attempted_email`.
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the level-1

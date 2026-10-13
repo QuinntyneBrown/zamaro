@@ -17,6 +17,7 @@ use App\Integrations\Geocoding\FakeGeocoder;
 use App\Integrations\IpLocation\FakeIpLocator;
 use App\Integrations\Routing\FakeRoutingProvider;
 use Carbon\CarbonImmutable;
+use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
@@ -49,6 +50,12 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->environment('production')) {
             throw new LogicException('Fake vendor adapters are bound in production: '.implode(', ', array_keys(self::FAKES)));
+        }
+
+        // Only these callers may name the client's address in X-Forwarded-For: the load balancer and the
+        // web app's server (record-audit-log, limit-request-rates). Anyone else's header is ignored.
+        if ($proxies = config('zamaro.trusted_proxies')) {
+            TrustProxies::at($proxies);
         }
 
         // The e2e API runs on the mocks' "today" so date rules match the frozen browser clock.

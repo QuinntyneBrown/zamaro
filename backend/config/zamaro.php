@@ -12,6 +12,10 @@ return [
     // reaches it, because it refuses to boot with fake adapters.
     'frozen_now' => env('ZAMARO_FROZEN_NOW'),
 
+    // Callers trusted to report the client's address in X-Forwarded-For (comma-separated IPs or CIDR
+    // ranges): the load balancer and the web app's server. Empty trusts no one (record-audit-log).
+    'trusted_proxies' => array_values(array_filter(array_map('trim', explode(',', (string) env('TRUSTED_PROXIES', ''))))),
+
     // The password Naomi, Abigail and Tomi sign in with (M2 D28). The cast seeder uses it only in
     // local, testing and e2e; anywhere else, and when it is empty, their passwords stay random.
     'cast_password' => env('ZAMARO_CAST_PASSWORD'),

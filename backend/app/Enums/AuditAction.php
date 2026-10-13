@@ -13,4 +13,6 @@ enum AuditAction: string
     case TwoFactorEnabled = 'auth.two_factor_enabled';
     case TwoFactorDisabled = 'auth.two_factor_disabled';
     case RecoveryCodesReplaced = 'auth.recovery_codes_replaced';
+    case MfaChallenge = 'auth.mfa_challenge';
+    case RoleChanged = 'user.role_changed';
 }

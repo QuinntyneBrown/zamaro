@@ -13,6 +13,13 @@ class AuditEntry extends Model
 
     protected $guarded = [];
 
+    /** No operation in the application changes or deletes an entry (L2-069.2); only audit:prune deletes, in SQL. */
+    protected static function booted(): void
+    {
+        static::updating(fn () => throw ImmutableAuditEntry::refuse('update'));
+        static::deleting(fn () => throw ImmutableAuditEntry::refuse('delete'));
+    }
+
     protected function casts(): array
     {
         return [
