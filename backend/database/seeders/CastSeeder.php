@@ -101,6 +101,16 @@ class CastSeeder extends Seeder
         'tomi-oduya' => 'tomi.oduya@harvestpointchurch.ca',
     ];
 
+    /**
+     * Priya Nair, the Zamaro team's administrator (docs/mocks/pages/admin-*). She exists only where the
+     * cast can sign in, with two-step sign-in on and this key, so the admin e2e specs compute her codes
+     * (e2e/fixtures/accounts.ts holds the same key). Production administrators are made by
+     * `zamaro:admin:grant` (M3 D6).
+     */
+    public const PRIYA_EMAIL = 'priya@zamaro.ca';
+
+    public const PRIYA_TOTP_SECRET = 'ZAMAROADMINPRIYANAIRTOTPKEY23456';
+
     /** booking number => [replied at, text]: Abigail's replies (docs/mocks/pages/artist-reviews). */
     private const REPLIES = [
         'ZAM-0078' => ['2026-10-08 11:20', 'Thank you, Tomi! Your volunteers were ready for everything I threw at them. See you on Sun 1 Nov.'],
@@ -269,6 +279,7 @@ class CastSeeder extends Seeder
             $this->profiles();
             $this->media();
             $this->accounts();
+            $this->administrators();
             $this->consents();
             $this->churches();
             $this->savedArtists();
@@ -283,7 +294,7 @@ class CastSeeder extends Seeder
     {
         $roleIds = DB::table('roles')->pluck('id', 'name');
         $artistUserIds = Artist::pluck('user_id');
-        DB::table('role_user')->insertOrIgnore(User::pluck('id')->map(fn (int $id) => [
+        DB::table('role_user')->insertOrIgnore(User::where('email', '!=', self::PRIYA_EMAIL)->pluck('id')->map(fn (int $id) => [
             'user_id' => $id,
             'role_id' => $roleIds[$artistUserIds->contains($id) ? Role::Artist->value : Role::Booker->value],
         ])->all());
@@ -296,6 +307,28 @@ class CastSeeder extends Seeder
                 'password' => Hash::make($canSignIn ? $password : Str::random(40)),
             ]);
         }
+    }
+
+    /**
+     * Priya Nair: an Administrator and nothing else, with two-step sign-in on (L2-066.2). Seeded only
+     * where the cast can sign in, with the cast password and a fixed key.
+     */
+    private function administrators(): void
+    {
+        $password = config('zamaro.cast_password');
+        if (blank($password) || ! app()->environment(['local', 'testing', 'e2e'])) {
+            return;
+        }
+        $priya = User::firstOrNew(['email' => self::PRIYA_EMAIL]);
+        $priya->forceFill([
+            'name' => 'Priya Nair',
+            'password' => Hash::make($password),
+            'email_verified_at' => '2026-09-01 12:00:00',
+            'mfa_enabled' => true,
+            'two_factor_secret' => self::PRIYA_TOTP_SECRET,
+            'two_factor_confirmed_at' => '2026-09-01 12:05:00',
+        ])->save();
+        $priya->grantRoles([Role::Administrator]);
     }
 
     /**

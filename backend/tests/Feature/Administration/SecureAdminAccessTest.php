@@ -65,6 +65,20 @@ class SecureAdminAccessTest extends TestCase
         $this->assertSame(0, AuditEntry::where('action', AuditAction::RoleChanged)->count());
     }
 
+    public function test_the_seeded_administrator_priya_signs_in_with_her_seeded_key(): void
+    {
+        $pending = $this->asANewRequest()->withoutCookies()->signIn('priya@zamaro.ca')->assertStatus(202)
+            ->assertJsonPath('data.email', 'priya@zamaro.ca')
+            ->getCookie('zamaro_session')->getValue();
+
+        $signedIn = $this->asANewRequest()->withoutCookies()->fromTheWebApp()->withCookie('zamaro_session', $pending)
+            ->postJson('/api/v1/session/two-factor', ['code' => (new Google2FA)->getCurrentOtp(CastSeeder::PRIYA_TOTP_SECRET)]);
+
+        $signedIn->assertOk()->assertJsonPath('data.name', 'Priya Nair')->assertJsonPath('data.roles', ['admin']);
+        $this->session = $signedIn->getCookie('zamaro_session')->getValue();
+        $this->asAdministrator()->getJson(self::OVERVIEW)->assertOk();
+    }
+
     public function test_an_administrator_signed_in_with_a_code_sees_the_overview(): void
     {
         $this->makeAdministratorWithTwoStep();
