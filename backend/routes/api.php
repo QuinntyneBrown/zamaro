@@ -10,7 +10,9 @@ use App\Http\Controllers\Api\V1\Accounts\MeController;
 use App\Http\Controllers\Api\V1\Accounts\SavedArtistController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
+use App\Http\Controllers\Api\V1\Administration\AdminArtistsController;
 use App\Http\Controllers\Api\V1\Administration\AdminOverviewController;
+use App\Http\Controllers\Api\V1\Administration\AdminVulnerableSectorChecksController;
 use App\Http\Controllers\Api\V1\Administration\AuditEntriesController;
 use App\Http\Controllers\Api\V1\ArtistOnboarding\DocumentLinksController;
 use App\Http\Controllers\Api\V1\ArtistOnboarding\VulnerableSectorChecksController;
@@ -77,4 +79,9 @@ Route::prefix('admin')->name('admin.')
         // The audit log is read only: no PATCH, PUT or DELETE route exists, so they answer 405 (L2-069.2).
         Route::get('audit-entries', [AuditEntriesController::class, 'index'])->name('audit-entries.index');
         Route::get('audit-entries/{entry}', [AuditEntriesController::class, 'show'])->whereNumber('entry')->name('audit-entries.show');
+        // The Vulnerable Sector Check queue (L2-049.2) and the read-only Artists section (L2-067, M3 D18).
+        Route::get('vulnerable-sector-checks', [AdminVulnerableSectorChecksController::class, 'index'])->name('vulnerable-sector-checks.index');
+        Route::post('vulnerable-sector-checks/{check}/verification', [AdminVulnerableSectorChecksController::class, 'verify'])->whereNumber('check')->name('vulnerable-sector-checks.verify');
+        Route::get('artists', [AdminArtistsController::class, 'index'])->name('artists.index');
+        Route::get('artists/{artist}', [AdminArtistsController::class, 'show'])->whereNumber('artist')->name('artists.show');
     });

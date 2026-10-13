@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\VscStatus;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -24,6 +25,12 @@ class VulnerableSectorCheck extends Model
             'verified_at' => 'immutable_datetime',
             'renewal_reminder_sent_at' => 'immutable_datetime',
         ];
+    }
+
+    /** Verified, and still valid on `$date`: a check counts for 3 years from its issue date (L2-049.2). */
+    public function isCurrentOn(CarbonInterface $date): bool
+    {
+        return $this->status === VscStatus::Verified && $this->expires_on !== null && ! $date->startOfDay()->isAfter($this->expires_on);
     }
 
     /** @return BelongsTo<User, $this> */

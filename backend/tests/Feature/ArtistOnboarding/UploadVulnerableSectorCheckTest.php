@@ -78,8 +78,9 @@ class UploadVulnerableSectorCheckTest extends TestCase
 
         $this->workNextJob('uploads');
 
-        $check = VulnerableSectorCheck::where('status', VscStatus::Pending)->sole();
         $upload = Upload::sole();
+        $check = VulnerableSectorCheck::where('upload_id', $upload->id)->sole();
+        $this->assertSame(VscStatus::Pending, $check->status);
         $this->assertSame(UploadStatus::Clean, $upload->status);
         $this->assertMatchesRegularExpression('/^[0-9a-f]{32}$/', $check->storage_key);
         $this->assertSame('application/pdf', $check->mime_type);

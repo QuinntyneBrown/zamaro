@@ -91,8 +91,9 @@ class SecureAdminAccessTest extends TestCase
         $this->signInWithCode();
         $response = $this->asAdministrator()->getJson(self::OVERVIEW);
 
+        // Two waiting from the seed (Elijah's and Abigail's) plus the two above.
         $response->assertOk()
-            ->assertExactJson(['data' => ['checksWaiting' => 2]])
+            ->assertExactJson(['data' => ['checksWaiting' => 4]])
             ->assertHeader('Cache-Control', 'no-store, private');
         $this->assertMatchesContract($response);
     }

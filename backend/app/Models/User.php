@@ -59,6 +59,12 @@ class User extends Authenticatable
         ];
     }
 
+    /** The artist profile this account owns, if any. @return HasOne<Artist, $this> */
+    public function artist(): HasOne
+    {
+        return $this->hasOne(Artist::class);
+    }
+
     /** A booker's one church (accounts/manage-church-profile). @return HasOne<Church, $this> */
     public function church(): HasOne
     {

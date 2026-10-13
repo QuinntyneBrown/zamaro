@@ -16,4 +16,5 @@ enum AuditAction: string
     case MfaChallenge = 'auth.mfa_challenge';
     case RoleChanged = 'user.role_changed';
     case VscDocumentViewed = 'vsc_document.viewed';
+    case VscVerified = 'vsc.verified';
 }

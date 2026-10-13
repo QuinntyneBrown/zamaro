@@ -23,13 +23,14 @@ class DocumentVault
     public function __construct(private readonly FieldEncrypter $keys) {}
 
     /**
-     * Encrypts and stores `$plaintext` under a new random name.
+     * Encrypts and stores `$plaintext` under a new random name, or under `$key` (32 hex) when the caller
+     * must rewrite the same object, as the seeder does.
      *
      * @return array{key: string, wrappedDataKey: string}
      */
-    public function store(string $plaintext): array
+    public function store(string $plaintext, ?string $key = null): array
     {
-        $key = bin2hex(random_bytes(16));
+        $key ??= bin2hex(random_bytes(16));
         $dataKey = random_bytes(32);
         $iv = random_bytes(self::IV_BYTES);
         $ciphertext = openssl_encrypt($plaintext, self::CIPHER, $dataKey, OPENSSL_RAW_DATA, $iv, $tag, '', self::TAG_BYTES);

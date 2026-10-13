@@ -263,4 +263,22 @@ return [
         $test->as($intruder)->getJson("/api/v1/vulnerable-sector-checks/{$check}/document-link")->assertNotFound()
             ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
     },
+
+    // The admin routes conceal themselves from everyone but an administrator who signed in with a code
+    // (L2-066.1); AdminRoutesConcealedTest proves the body matches an unknown address.
+    'GET api/v1/admin/vulnerable-sector-checks' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/vulnerable-sector-checks')->assertNotFound();
+    },
+
+    'POST api/v1/admin/vulnerable-sector-checks/{check}/verification' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->postJson('/api/v1/admin/vulnerable-sector-checks/1/verification')->assertNotFound();
+    },
+
+    'GET api/v1/admin/artists' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/artists')->assertNotFound();
+    },
+
+    'GET api/v1/admin/artists/{artist}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/artists/1')->assertNotFound();
+    },
 ];

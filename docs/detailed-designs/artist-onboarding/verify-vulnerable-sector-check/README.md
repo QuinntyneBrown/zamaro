@@ -174,6 +174,16 @@ exposes its existence beyond Youth event eligibility.
   with server-set type, name and headers. An altered or expired link is 404, as is the path on the API
   host.
 
+**As built in M3 S8 (API)**
+
+- `GET /api/v1/admin/vulnerable-sector-checks` lists the checks waiting, oldest upload first, each with
+  the artist, the dates and the verified check it replaces; `POST …/{check}/verification`
+  (`VerifyVulnerableSectorCheck`) sets `Verified`, `verified_at`, `verified_by` and `expires_on`, audits
+  `vsc.verified`, refuses a check issued more than 3 years ago on `issuedOn` ("This check was issued more
+  than 3 years ago. Ask the artist for a newer one.") and answers 409 `vsc-already-decided` to a second
+  decision. `VulnerableSectorCheck::isCurrentOn()` exists; the search's youth rule compares the event date
+  with `expires_on` in SQL.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

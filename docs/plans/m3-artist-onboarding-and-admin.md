@@ -14,8 +14,9 @@
 | S4 | Idle warning toast | Done | `3435a83` |
 | S5 | Audit log viewer and retention | Done | `2557169` |
 | S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | `dea2b67` (ADR-0024, ADR-0025) |
-| S7 | Signed links to private documents | Done | see below |
-| S8–S14 | | Not started | |
+| S7 | Signed links to private documents | Done | `fafb6fe` |
+| S8 | Admin VSC queue, verification and the Artists list | In progress: API and seed done, admin pages next | see below |
+| S9–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -50,6 +51,22 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S8 (API and seed).**
+  - The seed adds Elijah's first check (issued Fri 25 Sep, uploaded Wed 7 Oct 4:10 p.m.) and
+    Abigail's newer one (issued Mon 5 Oct, uploaded Fri 9 Oct 9:52 a.m.), each with a stand-in PDF
+    the vault rewrites under a fixed name; `artists.approved_at` (Marcus: Mon 2 Mar 2026 as the mock,
+    everyone else their publish date); and Marcus's mock address. The other artists keep their cast
+    addresses: the mocks name no others.
+  - The seed's Artists list is the whole cast (the eight, Selah Brooks suspended, and the supporting
+    cast), so the page reads the real counts, not the mock's "8 artists · 8 approved · 0 suspended".
+  - The search matches a word start in the name, base city or account email, so "Tobi" does not
+    match Etobicoke (the no-results mock).
+  - `POST /admin/vulnerable-sector-checks/{check}/verification`: a check issued more than 3 years
+    ago is 422 on `issuedOn` with D11's copy; a second decision is 409 `vsc-already-decided`.
+    `VulnerableSectorCheck::isCurrentOn()` joins the model; the youth-event query already compares
+    the event date with `expires_on`.
+  - `GET /admin/artists/{artist}` carries `upcomingBookings` (requested, accepted and confirmed from
+    today) and an always-empty `suspensions` until M8.
 - **S7.**
   - `routes/media.php` holds the one media-host route, `documents/{key}` (`documents.show`), behind
     Laravel's `signed` middleware and `Route::domain(config('zamaro.media_host'))`; the API host has

@@ -32,6 +32,7 @@ use App\Models\SetlistSong;
 use App\Models\SlugHistory;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
+use App\Services\ArtistOnboarding\DocumentVault;
 use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -99,6 +100,19 @@ class CastSeeder extends Seeder
         'naomi-fraser' => 'naomi.fraser@riversidecc.ca',
         'abigail-mensah' => 'abigail@abigailmensah.ca',
         'tomi-oduya' => 'tomi.oduya@harvestpointchurch.ca',
+    ];
+
+    /**
+     * Artists whose account address the admin mocks show (pages/admin-artist); everyone else keeps
+     * `{account}@cast.zamaro.test`. Tobi Adeyemi's arrives with his application (S11).
+     */
+    private const MOCK_EMAILS = [
+        'marcus-bell-trio' => 'marcus@marcusbelltrio.ca',
+    ];
+
+    /** slug => when the application was approved, where the mocks say (pages/admin-artist); else the publish date. */
+    private const APPROVED = [
+        'marcus-bell-trio' => '2026-03-02 09:00:00',
     ];
 
     /**
@@ -280,6 +294,7 @@ class CastSeeder extends Seeder
             $this->media();
             $this->accounts();
             $this->administrators();
+            $this->pendingChecks();
             $this->consents();
             $this->churches();
             $this->savedArtists();
@@ -418,7 +433,7 @@ class CastSeeder extends Seeder
     private function castUser(string $account, string $name): User
     {
         $cast = "{$account}@cast.zamaro.test";
-        $email = self::SIGN_IN[$account] ?? $cast;
+        $email = self::SIGN_IN[$account] ?? self::MOCK_EMAILS[$account] ?? $cast;
         $user = User::whereIn('email', array_unique([$email, $cast]))->orderByRaw('email = ? desc', [$email])->first()
             ?? User::create(['email' => $email, 'name' => $name, 'password' => Str::random(40)]);
         $user->update(['email' => $email, 'name' => $name]);
@@ -673,6 +688,7 @@ class CastSeeder extends Seeder
             'status' => ArtistStatus::Approved,
             'payout_ready' => true,
             'published_at' => $published.' 09:00:00',
+            'approved_at' => Carbon::parse(self::APPROVED[$slug] ?? $published.' 09:00:00', 'America/Toronto')->utc(),
         ]);
         SlugHistory::updateOrCreate(['slug' => $slug], ['artist_id' => $artist->id, 'retired_at' => null]);
 
@@ -700,5 +716,36 @@ class CastSeeder extends Seeder
             ['user_id' => $abigail->user_id, 'issued_on' => '2025-03-03'],
             ['expires_on' => '2028-03-03', 'status' => VscStatus::Verified, 'verified_at' => '2025-03-05 11:00:00'],
         );
+    }
+
+    /**
+     * The admin verification queue (pages/admin-checks): Elijah's first check and a newer one from
+     * Abigail, each with a stand-in document on the documents disk under a fixed name, so running the
+     * seeder again rewrites the same two objects.
+     */
+    private function pendingChecks(): void
+    {
+        $vault = app(DocumentVault::class);
+        $pending = [
+            ['elijah-park', '2026-09-25', '2026-10-07 16:10:00'],
+            ['abigail-mensah', '2026-10-05', '2026-10-09 09:52:00'],
+        ];
+        foreach ($pending as [$slug, $issuedOn, $uploadedAt]) {
+            $artist = Artist::where('slug', $slug)->firstOrFail();
+            $check = VulnerableSectorCheck::firstOrNew(['user_id' => $artist->user_id, 'issued_on' => $issuedOn]);
+            if ($check->exists && $check->status !== VscStatus::Pending) {
+                continue;
+            }
+            $stored = $vault->store("%PDF-1.4\n% Stand-in Vulnerable Sector Check for {$artist->display_name}\n%%EOF\n", md5("vsc-{$slug}"));
+            $check->forceFill([
+                'status' => VscStatus::Pending,
+                'storage_key' => $stored['key'],
+                'wrapped_data_key' => $stored['wrappedDataKey'],
+                'mime_type' => 'application/pdf',
+                'size_bytes' => 64,
+                'created_at' => Carbon::parse($uploadedAt, 'America/Toronto'),
+                'updated_at' => Carbon::parse($uploadedAt, 'America/Toronto'),
+            ])->save();
+        }
     }
 }
