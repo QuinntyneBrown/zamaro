@@ -84,7 +84,7 @@ export class ApplyPage {
   }
 
   stepTitle(): Locator {
-    return this.form().getByRole('heading', { level: 2 }).first();
+    return this.form().locator('#step-title');
   }
 
   /** "Step 1 of 4 · Saved on this device". */
@@ -257,6 +257,76 @@ export class ApplyPage {
     );
     await this.sendButton().click();
     return (await answered).status();
+  }
+
+  // Refusals and retries (M3 S12).
+
+  /** The "Fix n things to continue" summary over the step. */
+  errorSummary(): Locator {
+    return this.form().locator('.error-summary');
+  }
+
+  errorSummaryTitle(): Locator {
+    return this.errorSummary().locator('.error-summary__title');
+  }
+
+  errorSummaryItems(): Locator {
+    return this.errorSummary().getByRole('link');
+  }
+
+  /** A field's own error line: fieldError('base-city'). */
+  fieldError(fieldId: string): Locator {
+    return this.form().locator(`#${fieldId}-error`);
+  }
+
+  /** The danger alert over the review step: in review, the bot check, or Zamaro not answering. */
+  alert(): Locator {
+    return this.form().getByRole('alert');
+  }
+
+  alertTitle(): Locator {
+    return this.alert().locator('.alert__title');
+  }
+
+  /** Forgets the draft on this device and opens the form again, as a new applicant would. */
+  async startOver(): Promise<void> {
+    await this.page.evaluate(() => sessionStorage.clear());
+    await this.open();
+  }
+
+  /** Records the Idempotency-Key of every send from now on. */
+  recordSends(): string[] {
+    const keys: string[] = [];
+    this.page.on('request', (request) => {
+      if (
+        request.method() === 'POST' &&
+        new URL(request.url()).pathname === '/api/v1/artist-applications'
+      ) {
+        keys.push(request.headers()['idempotency-key'] ?? '');
+      }
+    });
+    return keys;
+  }
+
+  /** The next send reaches Zamaro, but its answer is lost on the way back, once. */
+  async loseTheNextAnswer(): Promise<void> {
+    await this.page.route(
+      (url) => url.pathname === '/api/v1/artist-applications',
+      async (route) => {
+        await route.fetch();
+        await route.abort('connectionfailed');
+      },
+      { times: 1 },
+    );
+  }
+
+  /** Presses Send application when no answer will come back. */
+  async sendIntoTheVoid(): Promise<void> {
+    const failed = this.page.waitForEvent('requestfailed', (request) =>
+      request.url().endsWith('/api/v1/artist-applications'),
+    );
+    await this.sendButton().click();
+    await failed;
   }
 
   // Application received.

@@ -17,6 +17,7 @@
   "status.review": "Step 4 of 4 · Nothing is public yet",
   "status.invalid": "Not sent · {count, plural, one {# thing} other {# things}} to fix",
   "status.sending": "Sending…",
+  "status.notSent": "Not sent · answers kept",
   "required": "(required)",
   "optional": "(optional)",
   "continue": "Continue",

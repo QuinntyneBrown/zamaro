@@ -19,7 +19,8 @@
 | S9 | VSC renewal reminders | Done | see below |
 | S10 | Application video upload | Done | see below |
 | S11 | Apply as an artist: the form and a sent application | Done | `453ab1f` (API), see below (web) |
-| S12–S14 | | Not started | |
+| S12 | Apply: refusals and retries | Done | see below |
+| S13–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -54,6 +55,27 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S12.**
+  - Most refusals were already in S11's code; S12 added their acceptance tests (six API cases, four
+    e2e cases) and fixed what they found:
+    - A retry with the same `Idempotency-Key` carried the same video tokens, which the earlier send
+      had attached to the application, so the request's video rule refused the retry with 422 before
+      the action could replay it. The rule now accepts a video attached by the application that holds
+      the request's key (when the header is a UUID).
+    - A race the duplicate check cannot see (two sends from one email landing together) hit the
+      partial unique index and answered 500; the action now turns
+      `UniqueConstraintViolationException` into the 409 `application-in-review` answer. The test
+      stages the race from the model's `creating` hook.
+    - The web page's `artists/apply` and `artists/apply/:step` were two routes, so a 422 that sent the
+      applicant back to step 1 re-created the page and lost the server's errors; they are one route
+      through a `UrlMatcher` now, and the page instance is reused across steps. A step is "done" when
+      its answers pass, wherever the applicant is, as the `outside-area` mock shows; the status line
+      reads "Not sent · answers kept" after a refusal or a lost answer.
+  - The e2e in-review case sends an application and then starts over with the same email in upper
+    case, since the seed gets Tobi's A-0219 only in S13. The lost-answer case lets the request reach
+    the API and drops the response, then asserts the retry is 200 with the same key.
+  - No `FakeGeocoder` change was needed: Ottawa is a cast town already, and an unknown town
+    ("Atlantis") is the "couldn't find that address" case.
 - **S11.**
   - API: `POST /api/v1/artist-applications` behind `throttle:register`, the bot challenge (action
     `artist-application`, matching the api library's `BotChallengeAction`) and `SetCachePolicy`. The

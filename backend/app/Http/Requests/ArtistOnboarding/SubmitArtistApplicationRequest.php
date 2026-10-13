@@ -5,10 +5,12 @@ namespace App\Http\Requests\ArtistOnboarding;
 use App\Enums\ActType;
 use App\Enums\Style;
 use App\Enums\VideoStatus;
+use App\Models\ArtistApplication;
 use App\Models\ArtistVideo;
 use App\Rules\NorthAmericanPhone;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -53,7 +55,13 @@ class SubmitArtistApplicationRequest extends FormRequest
             /** The tokens of at least one uploaded video, in the order they should show. */
             'videos' => ['required', 'array', 'min:1', 'max:8'],
             'videos.*' => ['string', 'distinct', function (string $attribute, mixed $value, Closure $fail) {
-                $video = is_string($value) ? ArtistVideo::where('upload_token', $value)->whereNull('artist_application_id')->first() : null;
+                // A video is the applicant's while unattached, or once attached by an earlier send that
+                // carried this same Idempotency-Key, so the retry passes (L2-047.5).
+                $key = (string) $this->header('Idempotency-Key');
+                $video = is_string($value) ? ArtistVideo::where('upload_token', $value)
+                    ->where(fn ($query) => $query->whereNull('artist_application_id')
+                        ->when(Str::isUuid($key), fn ($query) => $query->orWhereIn('artist_application_id', ArtistApplication::query()->where('idempotency_key', $key)->select('id'))))
+                    ->first() : null;
                 if ($video === null || ! in_array($video->status, [VideoStatus::Live, VideoStatus::Processing], true)) {
                     $fail('Upload at least one video, and wait for each one to finish.');
                 }

@@ -176,6 +176,18 @@ review slice resolves the account on approval.
   (`FakeVideoTranscoder` until M10). The video is `Uploading` while chunks arrive, `Processing` from the
   last chunk to the transcode, then `Live` or `Failed` with its reason.
 
+**As built in M3 S12 (refusals and retries)**
+
+- The request's video rule lets a retry carrying the same `Idempotency-Key` reuse the videos the first
+  send attached, so the action's replay answers 200 with the one application (L2-047.5). A duplicate
+  that slips past the pre-check and hits the partial unique index is answered as the same 409
+  `application-in-review` (L2-047.3), never a 500.
+- The web form keeps one page instance across its steps (one route through a `UrlMatcher`), so a
+  422 on `baseCity` opens "About you" with the server's message in the error summary and at the
+  field, the other steps still done and linked, and every answer kept (L2-001.3, L2-001.4,
+  L2-108.3). A 409 or a lost answer shows its alert over the review step with "Not sent · answers
+  kept", and Send stays enabled for the retry.
+
 **As built in M3 S11 (the form and a sent application)**
 
 - `POST /api/v1/artist-applications` runs `throttle:register`, `bot-challenge:artist-application` and

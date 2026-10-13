@@ -1,18 +1,23 @@
-import { Routes } from '@angular/router';
+import { type Routes, type UrlMatcher, type UrlSegment } from '@angular/router';
 import { signedInGuard, termsGuard } from 'api';
+
+/** `artists/apply` and `artists/apply/:step`, as one route. */
+const applyMatcher: UrlMatcher = (segments: UrlSegment[]) => {
+  if (segments.length < 2 || segments.length > 3) return null;
+  if (segments[0].path !== 'artists' || segments[1].path !== 'apply') return null;
+  const posParams: Record<string, UrlSegment> = segments[2] ? { step: segments[2] } : {};
+  return { consumed: segments, posParams };
+};
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/discover/discover').then((m) => m.Discover),
   },
-  // Apply as an artist sits before the profiles, so "apply" is never read as a slug (L2-087).
+  // Apply as an artist sits before the profiles, so "apply" is never read as a slug (L2-087). Its
+  // four steps share one route, so the page is reused between them and keeps the server's answers.
   {
-    path: 'artists/apply',
-    loadComponent: () => import('./pages/apply/apply').then((m) => m.ApplyPage),
-  },
-  {
-    path: 'artists/apply/:step',
+    matcher: applyMatcher,
     loadComponent: () => import('./pages/apply/apply').then((m) => m.ApplyPage),
   },
   {

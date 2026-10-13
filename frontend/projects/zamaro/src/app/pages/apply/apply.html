@@ -322,7 +322,7 @@
         <zm-form-actions
           placement="static"
           [status]="statusLine()"
-          [statusTone]="summaryItems().length > 0 ? 'danger' : 'neutral'"
+          [statusTone]="summaryItems().length > 0 || notSent() ? 'danger' : 'neutral'"
         >
           @if (backPath(); as back) {
             <zm-button-link [link]="back"

@@ -216,10 +216,11 @@ export class ApplyPage {
   protected readonly stepperSteps = computed<StepperStep[]>(() => {
     const sent = this.status() === 'sent';
     const errors = this.errors();
-    return STEPS.map((step, index) => {
+    return STEPS.map((step) => {
       const invalid = !sent && FIELDS.some((field) => field.step === step.key && errors[field.id]);
-      const done =
-        sent || (index < this.currentIndex() && this.check(step.key, this.values()).size === 0);
+      // Done is a step whose answers pass, wherever the applicant is: after the server sends them
+      // back to step 1, the three steps they finished stay done and linked (apply/outside-area).
+      const done = sent || this.check(step.key, this.values()).size === 0;
       return {
         title: this.transloco.translate(`apply.steps.${step.key}`),
         current: !sent && step.key === this.current(),
@@ -241,10 +242,16 @@ export class ApplyPage {
     ),
   );
 
+  /** The send was refused or lost: the answers stay on this device (L2-108.3). */
+  protected readonly notSent = computed(() =>
+    ['challenge', 'inReview', 'error'].includes(this.status()),
+  );
+
   protected readonly statusLine = computed(() => {
     if (this.busy()) return this.transloco.translate('apply.status.sending');
     const count = this.summaryItems().length;
     if (count > 0) return this.transloco.translate('apply.status.invalid', { count });
+    if (this.notSent()) return this.transloco.translate('apply.status.notSent');
     return this.current() === 'references'
       ? this.transloco.translate('apply.status.review')
       : this.transloco.translate('apply.status.step', { step: this.currentIndex() + 1 });
@@ -397,7 +404,9 @@ export class ApplyPage {
     }
     const next = STEPS[this.currentIndex() + 1];
     if (next) {
-      void this.router.navigateByUrl(next.path).then(() => this.focusFirstField());
+      void this.router
+        .navigateByUrl(next.path)
+        .then(() => afterNextRender(() => this.focusFirstField(), { injector: this.injector }));
     }
   }
 

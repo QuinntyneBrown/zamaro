@@ -129,6 +129,102 @@ class SubmitArtistApplicationTest extends TestCase
         $this->flushHeaders()->fromTheWebApp()->postJson(self::APPLICATIONS, $this->tobi())->assertStatus(422)->assertJsonValidationErrors(['idempotencyKey']);
     }
 
+    // M3 S12: refusals and retries (L2-001.3, L2-001.4, L2-047.2, L2-047.3, L2-047.5, L2-075.1, L2-108.3).
+
+    public function test_a_reference_without_a_contact_and_a_reference_that_is_the_applicant_are_named_together(): void
+    {
+        $tobi = $this->tobi();
+        $tobi['references'][0]['contact'] = '';
+        $tobi['references'][1]['contact'] = 'Tobi@TobiAdeyemi.ca';
+
+        $response = $this->submit($tobi, (string) Str::uuid());
+
+        $response->assertStatus(422);
+        $errors = $response->json('errors');
+        $this->assertSame(['Add a phone number or email so we can reach them.'], $errors['references.0.contact']);
+        $this->assertSame(['References must be someone other than you.'], $errors['references.1.contact']);
+        $this->assertSame(0, ArtistApplication::count());
+    }
+
+    public function test_a_base_city_outside_the_service_area_is_refused_and_nothing_is_stored(): void
+    {
+        $tobi = $this->tobi(['baseCity' => 'Ottawa']);
+        $token = $tobi['videos'][0];
+
+        $this->submit($tobi, (string) Str::uuid())->assertStatus(422)
+            ->assertJsonPath('errors.baseCity.0', 'Zamaro serves churches within 200 km of Toronto.');
+
+        $this->assertSame(0, ArtistApplication::count());
+        $this->assertSame(0, ApplicationReference::count());
+        // The video stays the applicant's to send again.
+        $this->assertNull(ArtistVideo::where('upload_token', $token)->sole()->artist_application_id);
+        Notification::assertNothingSent();
+    }
+
+    public function test_a_base_city_that_cannot_be_found_is_refused(): void
+    {
+        $this->submit($this->tobi(['baseCity' => 'Atlantis']), (string) Str::uuid())->assertStatus(422)
+            ->assertJsonPath('errors.baseCity.0', 'We couldn’t find that address. Check the street and postal code.');
+        $this->assertSame(0, ArtistApplication::count());
+    }
+
+    public function test_a_second_pending_application_from_the_same_email_is_refused_ignoring_case(): void
+    {
+        $this->submit($this->tobi(), (string) Str::uuid())->assertCreated();
+
+        $response = $this->submit($this->tobi(['email' => 'TOBI@TobiAdeyemi.ca', 'name' => 'T. Adeyemi']), (string) Str::uuid());
+
+        $response->assertStatus(409)
+            ->assertHeader('Content-Type', 'application/problem+json')
+            ->assertJsonPath('type', fn (string $type) => str_ends_with($type, '/problems/application-in-review'))
+            ->assertJsonPath('title', 'You already have an application in review')
+            ->assertJsonPath('detail', 'We’re reviewing the one you sent from tobi@tobiadeyemi.ca and will reply there. Your answers here are kept.')
+            ->assertJsonPath('email', 'tobi@tobiadeyemi.ca');
+        $this->assertSame(1, ArtistApplication::count());
+        // A decided application does not block a new one.
+        ArtistApplication::query()->update(['status' => ApplicationStatus::Rejected]);
+        $this->submit($this->tobi(), (string) Str::uuid())->assertCreated()->assertJsonPath('data.number', 'A-0218');
+    }
+
+    public function test_a_retry_with_the_same_idempotency_key_answers_the_application_it_created(): void
+    {
+        $key = (string) Str::uuid();
+        $tobi = $this->tobi();
+        $first = $this->submit($tobi, $key)->assertCreated();
+
+        // The same payload again, videos included (they now belong to the application): the retry runs
+        // before the duplicate-email check, so it is 200, not 409 or 422, and sends no second email.
+        $retry = $this->submit($tobi, $key);
+
+        $retry->assertOk()->assertJsonPath('data.number', $first->json('data.number'))->assertJsonPath('data.replyBy', '2026-10-15');
+        $this->assertMatchesContract($retry);
+        $this->assertSame(1, ArtistApplication::count());
+        Notification::assertSentTimes(ApplicationReceivedNotification::class, 1);
+    }
+
+    public function test_two_concurrent_sends_from_one_email_create_one_application(): void
+    {
+        // The other send lands between this one's duplicate check and its insert: the partial unique
+        // index on lower(email) where submitted refuses the second row, and the applicant reads 409.
+        ArtistApplication::creating(function (): void {
+            if (ArtistApplication::count() === 0) {
+                DB::table('artist_applications')->insert([
+                    'number' => 'A-0300', 'name' => 'Tobi Adeyemi', 'email' => 'Tobi@tobiadeyemi.ca', 'act_type' => 'solo',
+                    'base_city' => 'Scarborough', 'base_latitude' => 43.77, 'base_longitude' => -79.25, 'styles' => '["hymns"]',
+                    'bio' => str_repeat('x', 100), 'from_price_cents' => 40000, 'max_drive_km' => 80, 'status' => 'submitted',
+                    'idempotency_key' => (string) Str::uuid(), 'submitted_at' => now(), 'created_at' => now(), 'updated_at' => now(),
+                ]);
+            }
+        });
+
+        $this->submit($this->tobi(), $key = (string) Str::uuid())->assertStatus(409)->assertJsonPath('type', fn (string $type) => str_ends_with($type, '/problems/application-in-review'));
+
+        // This send stored nothing (the other send's row rolls back with the test's transaction here).
+        $this->assertSame(0, ArtistApplication::where('idempotency_key', $key)->count());
+        $this->assertSame(0, ApplicationReference::count());
+        Notification::assertNothingSent();
+    }
+
     /** A video the applicant uploaded and the transcoder finished (M3 S10). */
     private function liveVideo(string $title): ArtistVideo
     {

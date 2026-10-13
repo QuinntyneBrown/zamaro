@@ -9,7 +9,9 @@ use App\Models\ArtistApplication;
 use App\Models\ArtistVideo;
 use App\Models\User;
 use App\Rules\NorthAmericanPhone;
+use App\Services\Discovery\GeocodedAddress;
 use App\Services\Discovery\ServiceArea;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -47,7 +49,25 @@ class SubmitArtistApplication
         }
         $place = $this->serviceArea->locate(Str::squish($data['baseCity']), 'baseCity');
 
-        $application = DB::transaction(function () use ($data, $idempotencyKey, $applicant, $email, $place): ArtistApplication {
+        try {
+            $application = $this->store($data, $idempotencyKey, $applicant, $email, $place);
+        } catch (UniqueConstraintViolationException) {
+            // Another send from the same email landed between the check above and this insert: the
+            // partial unique index on lower(email) where submitted kept one (L2-047.3).
+            throw new ApplicationInReview($email);
+        }
+
+        ArtistApplicationSubmitted::dispatch($application->id);
+
+        return ['application' => $application, 'created' => true];
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private function store(array $data, string $idempotencyKey, ?User $applicant, string $email, GeocodedAddress $place): ArtistApplication
+    {
+        return DB::transaction(function () use ($data, $idempotencyKey, $applicant, $email, $place): ArtistApplication {
             // Numbers never skip: the next is one past the last, read under a transaction-wide lock.
             DB::statement("select pg_advisory_xact_lock(hashtext('artist_applications.number'))");
             $last = (int) substr((string) ArtistApplication::max('number'), 2);
@@ -86,8 +106,5 @@ class SubmitArtistApplication
 
             return $application;
         });
-        ArtistApplicationSubmitted::dispatch($application->id);
-
-        return ['application' => $application, 'created' => true];
     }
 }
