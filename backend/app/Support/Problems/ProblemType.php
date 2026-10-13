@@ -21,6 +21,7 @@ enum ProblemType: string
     case TwoFactorRequired = 'two-factor-required';
     case VscAlreadyDecided = 'vsc-already-decided';
     case UploadOffsetMismatch = 'upload-offset-mismatch';
+    case ApplicationInReview = 'application-in-review';
     case SavedArtistLimit = 'saved-artist-limit';
     case TooManyRequests = 'too-many-requests';
     case SignInPaused = 'sign-in-paused';
@@ -40,7 +41,7 @@ enum ProblemType: string
             self::ValidationFailed, self::SavedArtistLimit => 422,
             self::PayloadTooLarge => 413,
             self::UnsupportedMediaType => 415,
-            self::LegalDocumentOutdated, self::TwoFactorAlreadyOn, self::TwoFactorRequired, self::VscAlreadyDecided, self::TermsAcceptanceRequired, self::UploadOffsetMismatch => 409,
+            self::LegalDocumentOutdated, self::TwoFactorAlreadyOn, self::TwoFactorRequired, self::VscAlreadyDecided, self::TermsAcceptanceRequired, self::UploadOffsetMismatch, self::ApplicationInReview => 409,
             self::LinkExpired => 410,
             self::TooManyRequests, self::SignInPaused => 429,
             self::ServerError => 500,
@@ -64,6 +65,7 @@ enum ProblemType: string
             self::TwoFactorRequired => 'Administrators keep two-step sign-in on',
             self::VscAlreadyDecided => 'This check was already decided',
             self::UploadOffsetMismatch => 'The upload is further along than this chunk',
+            self::ApplicationInReview => 'You already have an application in review',
             self::SavedArtistLimit => 'You can save up to 200 artists',
             self::TooManyRequests => 'Too many requests',
             self::SignInPaused => 'Sign-in is paused for 15 minutes',

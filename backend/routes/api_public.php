@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Accounts\PasswordResetController;
 use App\Http\Controllers\Api\V1\Accounts\RegistrationController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\ArtistOnboarding\ApplicationVideoUploadsController;
+use App\Http\Controllers\Api\V1\ArtistOnboarding\ArtistApplicationsController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\SitemapController;
@@ -57,3 +58,5 @@ Route::prefix('artist-applications/videos')->name('artist-applications.videos.')
     Route::patch('{token}', [ApplicationVideoUploadsController::class, 'append'])->where('token', '[0-9a-f]+')->middleware('uploads:8192')->name('append');
     Route::get('{token}', [ApplicationVideoUploadsController::class, 'show'])->where('token', '[0-9a-f]+')->name('show');
 });
+// Applying as an artist (apply-as-artist, L2-047): the bot check runs before validation (L2-077.4).
+Route::post('artist-applications', [ArtistApplicationsController::class, 'store'])->middleware(['throttle:register', 'bot-challenge:apply', SetCachePolicy::class])->name('artist-applications.store');
