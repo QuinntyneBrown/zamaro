@@ -54,6 +54,7 @@ class SubmitArtistApplicationTest extends TestCase
             ->assertJsonPath('data.email', 'tobi@tobiadeyemi.ca')
             ->assertJsonPath('data.submittedAt', '2026-10-09T10:00:00-04:00')
             ->assertJsonPath('data.replyBy', '2026-10-15')
+            ->assertJsonPath('data.skippedHolidays', [['date' => '2026-10-12', 'name' => 'Thanksgiving']])
             ->assertJsonPath('data.videos.0.title', 'Way Maker, live at Cornerstone')
             ->assertJsonPath('data.references.0.name', 'Pastor Samuel Osei')
             ->assertJsonPath('data.references.0.church', 'Cornerstone Baptist, Scarborough')
@@ -106,7 +107,8 @@ class SubmitArtistApplicationTest extends TestCase
 
         // Thu 24 Dec: Christmas and Boxing Day (observed Mon 28 Dec) are skipped: Tue 29, Wed 30, Thu 31.
         $this->travelTo(Carbon::parse('2026-12-24 09:00', 'America/Toronto'));
-        $this->submit($this->tobi(['email' => 'dec@example.ca']), (string) Str::uuid())->assertCreated()->assertJsonPath('data.replyBy', '2026-12-31');
+        $this->submit($this->tobi(['email' => 'dec@example.ca']), (string) Str::uuid())->assertCreated()->assertJsonPath('data.replyBy', '2026-12-31')
+            ->assertJsonPath('data.skippedHolidays.*.name', ['Christmas Day', 'Boxing Day']);
 
         // Sat 10 Oct: the count starts on the next business day: Tue 13, Wed 14, Thu 15.
         $this->travelTo(Carbon::parse('2026-10-10 11:00', 'America/Toronto'));

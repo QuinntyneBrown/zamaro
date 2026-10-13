@@ -36,18 +36,20 @@ export default defineConfig({
     {
       name: 'zamaro',
       testMatch: [
-        'specs/!(administration|artist-onboarding)/**/*.spec.ts',
+        'specs/!(administration)/**/*.spec.ts',
         'visual/visual.spec.ts',
         'a11y/a11y.spec.ts',
         'perf/**/*.spec.ts',
       ],
+      // A subsystem's admin screens sit under specs/{subsystem}/admin/ and run in the admin project.
+      testIgnore: 'specs/*/admin/**',
       use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'admin',
       testMatch: [
         'specs/administration/**/*.spec.ts',
-        'specs/artist-onboarding/**/*.spec.ts',
+        'specs/*/admin/**/*.spec.ts',
         'visual/admin.spec.ts',
         'a11y/admin.spec.ts',
       ],

@@ -1,0 +1,378 @@
+<div class="container">
+  <div class="page-head">
+    <div>
+      <p class="overline">
+        {{ (status() === 'sent' ? 'apply.overlineDone' : 'apply.overline') | transloco }}
+      </p>
+      <h1 #pageTitle class="page-head__title" tabindex="-1">
+        {{ (status() === 'sent' ? 'apply.doneTitle' : 'apply.title') | transloco }}
+      </h1>
+      <p class="page-head__sub">{{ subtitle() }}</p>
+    </div>
+  </div>
+  <zm-stepper
+    [label]="'apply.steps.label' | transloco"
+    [doneSuffix]="'apply.steps.done' | transloco"
+    [invalidSuffix]="'apply.steps.invalid' | transloco"
+    [steps]="stepperSteps()"
+  />
+  <div class="detail-layout">
+    @if (sentApplication(); as sent) {
+      <section class="panel panel--raised" aria-labelledby="done-title">
+        <div class="panel__head">
+          <h2 id="done-title" class="panel__title">
+            {{ 'apply.done.thanks' | transloco: { name: firstName() } }}
+          </h2>
+          <zm-stamp size="lg">{{ 'apply.done.stamp' | transloco }}</zm-stamp>
+        </div>
+        <p class="lead">
+          {{ 'apply.done.lead' | transloco: { email: sent.email, replyBy: replyBy() } }}
+        </p>
+        <zm-description-list
+          variant="receipt"
+          [label]="'apply.doneSubtitle' | transloco: { name: sent.name, number: sent.number }"
+          [items]="receipt()"
+          [fine]="receiptFine()"
+        />
+        <h3>{{ 'apply.done.nextTitle' | transloco }}</h3>
+        <ol class="timeline">
+          <li data-state="done">
+            <div>
+              <p class="timeline__title">{{ 'apply.done.timeline.submitted' | transloco }}</p>
+              <p class="timeline__meta">
+                {{ 'apply.done.timeline.submittedMeta' | transloco: { email: sent.email } }}
+              </p>
+            </div>
+          </li>
+          <li aria-current="step">
+            <div>
+              <p class="timeline__title">{{ 'apply.done.timeline.references' | transloco }}</p>
+              <p class="timeline__meta">
+                {{
+                  'apply.done.timeline.referencesMeta'
+                    | transloco
+                      : { first: sent.references[0]?.name, second: sent.references[1]?.name }
+                }}
+              </p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <p class="timeline__title">{{ 'apply.done.timeline.review' | transloco }}</p>
+              <p class="timeline__meta">
+                {{ 'apply.done.timeline.reviewMeta' | transloco: { replyBy: replyBy() } }}
+              </p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <p class="timeline__title">{{ 'apply.done.timeline.payouts' | transloco }}</p>
+              <p class="timeline__meta">{{ 'apply.done.timeline.payoutsMeta' | transloco }}</p>
+            </div>
+          </li>
+        </ol>
+        <div class="cluster">
+          <zm-button-link variant="primary" link="/"
+            >{{ 'apply.done.browse' | transloco }} <zm-icon name="arrow-right"
+          /></zm-button-link>
+        </div>
+      </section>
+      <aside aria-labelledby="help-title">
+        <div class="panel">
+          <div class="panel__head">
+            <h2 id="help-title" class="panel__title">{{ 'apply.done.questions' | transloco }}</h2>
+          </div>
+          <p>
+            {{
+              'apply.done.questionsText'
+                | transloco: { email: 'hello@zamaro.ca', number: sent.number }
+            }}
+          </p>
+          <p class="stub__fine">{{ 'apply.fine' | transloco }}</p>
+        </div>
+      </aside>
+    } @else {
+      <form
+        class="form-stack"
+        novalidate
+        aria-labelledby="step-title"
+        [formGroup]="form"
+        [attr.aria-busy]="busy() ? 'true' : null"
+        (ngSubmit)="current() === 'references' ? send() : continue()"
+      >
+        @if (summaryItems().length > 0) {
+          <zm-error-summary
+            summaryId="error-summary"
+            [heading]="'apply.invalid.title' | transloco: { count: summaryItems().length }"
+            [items]="summaryItems()"
+            (itemActivated)="summaryItemActivated($event)"
+          />
+        }
+        @switch (status()) {
+          @case ('challenge') {
+            <zm-alert variant="danger" compact [heading]="'apply.error.challengeTitle' | transloco">
+              <p>{{ 'apply.error.challengeText' | transloco }}</p>
+            </zm-alert>
+          }
+          @case ('inReview') {
+            <zm-alert variant="danger" compact [heading]="'apply.error.inReviewTitle' | transloco">
+              <p>{{ 'apply.error.inReviewText' | transloco: { email: inReviewEmail() } }}</p>
+            </zm-alert>
+          }
+          @case ('error') {
+            <zm-alert variant="danger" compact [heading]="'apply.error.title' | transloco">
+              <p>{{ 'apply.error.text' | transloco }}</p>
+            </zm-alert>
+          }
+        }
+
+        @switch (current()) {
+          @case ('about') {
+            <zm-form-section
+              formGroupName="about"
+              headingId="step-title"
+              [heading]="'apply.about.title' | transloco"
+            >
+              <ng-container slot="lead">{{ 'apply.about.lead' | transloco }}</ng-container>
+              <div class="form-grid">
+                <zm-form-field
+                  fieldId="full-name"
+                  formControlName="name"
+                  autocomplete="name"
+                  [label]="'apply.about.name' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [help]="'apply.about.nameHelp' | transloco"
+                  [readonly]="busy()"
+                  [error]="error('full-name')"
+                />
+                <zm-form-field
+                  fieldId="email"
+                  type="email"
+                  formControlName="email"
+                  autocomplete="email"
+                  [label]="'apply.about.email' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [help]="'apply.about.emailHelp' | transloco"
+                  [readonly]="busy()"
+                  [error]="error('email')"
+                />
+                <zm-form-field
+                  class="field--full"
+                  fieldId="base-city"
+                  formControlName="city"
+                  autocomplete="address-level2"
+                  [label]="'apply.about.city' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [help]="'apply.about.cityHelp' | transloco"
+                  [readonly]="busy()"
+                  [error]="error('base-city')"
+                />
+                <zm-radio-group
+                  #actGroup
+                  class="field--full"
+                  name="act"
+                  layout="inline"
+                  formControlName="act"
+                  [legend]="'apply.about.act' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [error]="error('act')"
+                >
+                  @for (act of actOptions; track act) {
+                    <zm-radio [value]="act">{{ 'common.act.' + act | transloco }}</zm-radio>
+                  }
+                </zm-radio-group>
+              </div>
+            </zm-form-section>
+          }
+          @case ('music') {
+            <zm-form-section
+              formGroupName="music"
+              headingId="step-title"
+              [heading]="'apply.music.title' | transloco"
+            >
+              <ng-container slot="lead">{{ 'apply.music.lead' | transloco }}</ng-container>
+              <div class="form-grid">
+                <zm-checkbox-group
+                  #stylesGroup
+                  id="styles"
+                  name="styles"
+                  layout="inline"
+                  formControlName="styles"
+                  [legend]="'apply.music.styles' | transloco"
+                  [requiredMarker]="'apply.music.stylesRequired' | transloco"
+                  [error]="error('styles')"
+                >
+                  @for (style of styleOptions; track style) {
+                    <zm-checkbox [value]="style" [id]="'style-' + style">{{
+                      'common.style.' + style | transloco
+                    }}</zm-checkbox>
+                  }
+                </zm-checkbox-group>
+                <zm-form-field
+                  class="field--full"
+                  fieldId="bio"
+                  type="textarea"
+                  formControlName="bio"
+                  [label]="'apply.music.bio' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [help]="bioHelp()"
+                  [readonly]="busy()"
+                  [error]="error('bio')"
+                />
+              </div>
+            </zm-form-section>
+            <zm-form-section headingId="videos-title" [heading]="'apply.videos.title' | transloco">
+              <ng-container slot="lead">{{ 'apply.videos.lead' | transloco }}</ng-container>
+              <zm-application-video-upload [error]="error('videos')" [readonly]="busy()" />
+            </zm-form-section>
+          }
+          @case ('price') {
+            <zm-form-section
+              formGroupName="price"
+              headingId="step-title"
+              [heading]="'apply.price.title' | transloco"
+            >
+              <ng-container slot="lead">{{ 'apply.price.lead' | transloco }}</ng-container>
+              <div class="form-grid">
+                <zm-form-field
+                  fieldId="price"
+                  type="number"
+                  formControlName="price"
+                  min="100"
+                  max="20000"
+                  [label]="'apply.price.price' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [help]="priceHelp()"
+                  [readonly]="busy()"
+                  [error]="error('price')"
+                />
+                <zm-form-field
+                  fieldId="distance"
+                  type="select"
+                  formControlName="distance"
+                  [options]="distanceOptions"
+                  [label]="'apply.price.distance' | transloco"
+                  [requiredMarker]="'apply.required' | transloco"
+                  [help]="distanceHelp()"
+                  [readonly]="busy()"
+                  [error]="error('distance')"
+                />
+              </div>
+            </zm-form-section>
+          }
+          @case ('references') {
+            <zm-form-section
+              headingId="step-title"
+              [heading]="'apply.references.title' | transloco"
+            >
+              <ng-container slot="lead">{{ 'apply.references.lead' | transloco }}</ng-container>
+              <zm-reference-fieldset
+                [index]="1"
+                [group]="referenceGroup(0)"
+                [errors]="referenceErrors(1)"
+                [readonly]="busy()"
+              />
+              <zm-reference-fieldset
+                [index]="2"
+                [group]="referenceGroup(1)"
+                [errors]="referenceErrors(2)"
+                [readonly]="busy()"
+              />
+            </zm-form-section>
+            <p class="lead">{{ 'apply.review.lead' | transloco }}</p>
+            <section class="panel" aria-labelledby="review-1">
+              <div class="panel__head">
+                <h2 id="review-1" class="panel__title">{{ 'apply.steps.about' | transloco }}</h2>
+                <a routerLink="/artists/apply"
+                  >{{ 'apply.review.edit' | transloco
+                  }}<span class="visually-hidden">
+                    {{ 'apply.review.editAbout' | transloco }}</span
+                  ></a
+                >
+              </div>
+              <zm-description-list [columns]="2" [items]="aboutReview()" />
+            </section>
+            <section class="panel" aria-labelledby="review-2">
+              <div class="panel__head">
+                <h2 id="review-2" class="panel__title">{{ 'apply.steps.music' | transloco }}</h2>
+                <a routerLink="/artists/apply/music"
+                  >{{ 'apply.review.edit' | transloco
+                  }}<span class="visually-hidden">
+                    {{ 'apply.review.editMusic' | transloco }}</span
+                  ></a
+                >
+              </div>
+              <zm-description-list [columns]="2" [items]="musicReview()" />
+            </section>
+            <section class="panel" aria-labelledby="review-3">
+              <div class="panel__head">
+                <h2 id="review-3" class="panel__title">{{ 'apply.steps.price' | transloco }}</h2>
+                <a routerLink="/artists/apply/price"
+                  >{{ 'apply.review.edit' | transloco
+                  }}<span class="visually-hidden">
+                    {{ 'apply.review.editPrice' | transloco }}</span
+                  ></a
+                >
+              </div>
+              <zm-description-list [columns]="2" [items]="priceReview()" />
+            </section>
+          }
+        }
+
+        <zm-form-actions
+          placement="static"
+          [status]="statusLine()"
+          [statusTone]="summaryItems().length > 0 ? 'danger' : 'neutral'"
+        >
+          @if (backPath(); as back) {
+            <zm-button-link [link]="back"
+              ><zm-icon name="arrow-left" />{{ 'apply.back' | transloco }}</zm-button-link
+            >
+          }
+          <zm-button variant="primary" type="submit" [busy]="busy()">{{
+            (current() === 'references'
+              ? busy()
+                ? 'apply.sending'
+                : 'apply.send'
+              : 'apply.continue'
+            ) | transloco
+          }}</zm-button>
+        </zm-form-actions>
+      </form>
+      <aside aria-labelledby="next-title">
+        <div class="panel">
+          <div class="panel__head">
+            <h2 id="next-title" class="panel__title">{{ 'apply.next.title' | transloco }}</h2>
+          </div>
+          <ol class="timeline">
+            <li>
+              <div>
+                <p class="timeline__title">{{ 'apply.next.references' | transloco }}</p>
+                <p class="timeline__meta">{{ 'apply.next.referencesMeta' | transloco }}</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <p class="timeline__title">{{ 'apply.next.review' | transloco }}</p>
+                <p class="timeline__meta">{{ 'apply.next.reviewMeta' | transloco }}</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <p class="timeline__title">{{ 'apply.next.payouts' | transloco }}</p>
+                <p class="timeline__meta">{{ 'apply.next.payoutsMeta' | transloco }}</p>
+              </div>
+            </li>
+            <li>
+              <div>
+                <p class="timeline__title">{{ 'apply.next.live' | transloco }}</p>
+                <p class="timeline__meta">{{ 'apply.next.liveMeta' | transloco }}</p>
+              </div>
+            </li>
+          </ol>
+          <p class="stub__fine">{{ 'apply.fine' | transloco }}</p>
+        </div>
+      </aside>
+    }
+  </div>
+</div>

@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
-import { signInAsAdministrator } from '../../fixtures/admin-session';
-import { apiJson } from '../../fixtures/api';
-import { ArtistPage } from '../../pages/admin/artist.page';
-import { ArtistsPage } from '../../pages/admin/artists.page';
-import { ChecksPage } from '../../pages/admin/checks.page';
+import { signInAsAdministrator } from '../../../fixtures/admin-session';
+import { apiJson } from '../../../fixtures/api';
+import { ArtistPage } from '../../../pages/admin/artist.page';
+import { ArtistsPage } from '../../../pages/admin/artists.page';
+import { ChecksPage } from '../../../pages/admin/checks.page';
 
 // Seeded ids (CastSeeder inserts the cast in a fixed order after migrate:fresh).
 const ABIGAIL_ID = 1;

@@ -1,0 +1,108 @@
+:host {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* The files already attached (design-system text-field, upload list). */
+.upload-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.upload-list__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg-surface-sunken);
+  border: var(--border-width-thick) dashed var(--color-border-strong);
+}
+
+.upload-list__item zm-icon {
+  color: var(--color-success-icon);
+}
+
+.upload-list__text {
+  flex: 1;
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  font: var(--text-body-sm);
+}
+
+.upload-list__text span {
+  color: var(--color-fg-muted);
+  overflow-wrap: anywhere;
+}
+
+/* The file field keeps the form field's rhythm (design-system form-field, text-field). */
+.form-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.field__label {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+  color: var(--color-fg-default);
+}
+
+.field__optional {
+  color: var(--color-fg-muted);
+}
+
+.field__help {
+  font: var(--text-caption);
+  color: var(--color-fg-muted);
+}
+
+.field__error {
+  display: block;
+  font: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger-fg);
+}
+
+.input {
+  width: 100%;
+  min-height: var(--target-comfortable);
+  padding: var(--space-2) var(--space-3);
+  font: var(--text-body);
+  color: var(--color-fg-default);
+  background: var(--color-bg-surface);
+  border: var(--border-width-thick) solid var(--color-border-strong);
+  cursor: pointer;
+}
+
+.input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.input:disabled {
+  background: var(--color-bg-subtle);
+  color: var(--color-fg-disabled);
+  cursor: not-allowed;
+}
+
+@media (min-width: 36rem) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-grid > .field--full {
+    grid-column: 1 / -1;
+  }
+}

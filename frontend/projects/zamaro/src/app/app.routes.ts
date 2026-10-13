@@ -6,6 +6,15 @@ export const routes: Routes = [
     path: '',
     loadComponent: () => import('./pages/discover/discover').then((m) => m.Discover),
   },
+  // Apply as an artist sits before the profiles, so "apply" is never read as a slug (L2-087).
+  {
+    path: 'artists/apply',
+    loadComponent: () => import('./pages/apply/apply').then((m) => m.ApplyPage),
+  },
+  {
+    path: 'artists/apply/:step',
+    loadComponent: () => import('./pages/apply/apply').then((m) => m.ApplyPage),
+  },
   {
     path: 'artists/:slug',
     loadComponent: () => import('./pages/artist/artist').then((m) => m.ArtistPage),

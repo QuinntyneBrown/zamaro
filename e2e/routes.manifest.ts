@@ -182,6 +182,13 @@ export const routes: RouteState[] = [
     app: 'zamaro',
     mock: 'sign-in/default.html',
   },
+  // Apply as an artist: step 1 of 4, "About you", under the stepper, with the full name focused.
+  {
+    name: 'apply',
+    path: '/artists/apply',
+    app: 'zamaro',
+    mock: 'apply/default.html',
+  },
   // Sign up: the "Admit one · New account" card with the required terms box and the separate,
   // unticked news box.
   {

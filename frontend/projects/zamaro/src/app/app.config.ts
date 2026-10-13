@@ -8,6 +8,7 @@ import {
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
   ACCOUNT_API,
+  ARTIST_APPLICATIONS_API,
   ARTIST_AVAILABILITY_API,
   ARTIST_PROFILES_API,
   AUTH_API,
@@ -19,6 +20,7 @@ import {
   FakeBotChallenge,
   FEATURES_API,
   HttpAccountApi,
+  HttpArtistApplicationsApi,
   HttpArtistAvailabilityApi,
   HttpArtistProfilesApi,
   HttpAuthApi,
@@ -76,6 +78,7 @@ export const appConfig: ApplicationConfig = {
     { provide: PREFERENCES_API, useClass: HttpPreferencesApi },
     { provide: SAVE_TOGGLE_TEXT, useFactory: saveToggleText },
     { provide: ACCOUNT_API, useClass: HttpAccountApi },
+    { provide: ARTIST_APPLICATIONS_API, useClass: HttpArtistApplicationsApi },
     // The bot check's vendor is chosen in M10 (M2 D2); until then every check passes.
     { provide: BOT_CHALLENGE, useClass: FakeBotChallenge },
   ],

@@ -18,7 +18,8 @@
 | S8 | Admin VSC queue, verification and the Artists list | Done | see below |
 | S9 | VSC renewal reminders | Done | see below |
 | S10 | Application video upload | Done | see below |
-| S11–S14 | | Not started | |
+| S11 | Apply as an artist: the form and a sent application | Done | `453ab1f` (API), see below (web) |
+| S12–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -53,6 +54,43 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S11.**
+  - API: `POST /api/v1/artist-applications` behind `throttle:register`, the bot challenge (action
+    `artist-application`, matching the api library's `BotChallengeAction`) and `SetCachePolicy`. The
+    number is `A-` plus a four-digit counter from 217 under an advisory lock (the seed holds A-0217 and
+    A-0218 for S13, so Tobi's e2e application is A-0219 on a fresh database). `BusinessDayCalendar`
+    knows the Ontario statutory holidays; the resource answers `replyBy` and `skippedHolidays`
+    (`[{date, name}]`) so the page can write "3 business days. Monday 12 Oct is Thanksgiving." A
+    second pending application from the same email is 409 `application-in-review` with the email in
+    an extension; the confirmation email goes from the `ArtistApplicationSubmitted` listener on the
+    `notifications` queue.
+  - Web: `pages/apply/` is one routed component (`artists/apply` and `artists/apply/:step`, declared
+    before `artists/:slug`, so no reserved-slug list was needed on the API) with `ApplicationStore`
+    (the draft in `sessionStorage` under `zamaro.application`, the `Idempotency-Key` minted once per
+    draft), `VideoUpload` (chunks of 8 MB through `appendVideoChunk`, then a 1.5 s poll of
+    `videoStatus` until live or failed) and `ReferenceFieldset`. The bio summary on the review step
+    is "326 characters, starts “…Scarborough…”": the mock's 336 counts a longer draft of the same bio.
+  - Components built with their scenarios: `zm-stepper` (steps CRD; an overflowing row is a tab stop
+    so axe's `scrollable-region-focusable` passes on phones, see D-7), `zm-radio-group` and `zm-radio`,
+    `zm-checkbox-group` (and `value` plus the group token on `zm-checkbox`), `zm-progress-bar`, and the
+    `stack`, `horizontal`, `receipt`, `stub`, `label`, `fine` and `loading` features of
+    `zm-description-list`. Not built yet, kept as page-level markup in `apply.html` until their CRDs
+    land: the upload list (`.upload-list`), the file input, and the "what happens next" `.timeline`
+    (`zm-timeline` comes with bookings in M5). `zm-upload-progress` from the plan is `zm-progress-bar`
+    inside the upload row. `zm-error-summary` already existed (M2).
+  - e2e: the Playwright projects are rescoped so every subsystem's admin screens live under
+    `specs/{subsystem}/admin/` (the S8 VSC specs moved there); the `zamaro` project ignores that folder
+    and the `admin` project matches it. The confirmation-email case needs Mailpit, which the backend
+    test also covers.
+  - **Perf note for the maintainer.** The `DescriptionList` scenario (three definition rows) mounts
+    slower than on the base branch: about 37–40 ms there against 55–62 ms here across five runs, flagged
+    in three of them and within the base's spread in the others. The profile is flat (no hot
+    function): the component now carries the variant stylesheet (stack, horizontal, receipt, mark,
+    skeleton), which Angular adds and removes on every mount, and a `[class]` binding on the `<dl>`.
+    Per-row work was cut (rows precomputed once per change of `items`, a static span for a plain
+    value, boolean class bindings instead of a class map) without closing the gap, so the rest is the
+    variants the CRD asks for. If the pipeline flags it, this is the "intended cost" case of
+    AGENTS.md: a maintainer decides whether to accept it with `perf-regression-accepted`.
 - **S10.**
   - The protocol is ADR-0026: `POST /api/v1/artist-applications/videos` (JSON `title`, `fileName`,
     `size`) → 201 with the 64-hex token and `Location`; `PATCH …/{token}` with `Upload-Offset` and an

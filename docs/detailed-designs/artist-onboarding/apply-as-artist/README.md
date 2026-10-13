@@ -176,6 +176,22 @@ review slice resolves the account on approval.
   (`FakeVideoTranscoder` until M10). The video is `Uploading` while chunks arrive, `Processing` from the
   last chunk to the transcode, then `Live` or `Failed` with its reason.
 
+**As built in M3 S11 (the form and a sent application)**
+
+- `POST /api/v1/artist-applications` runs `throttle:register`, `bot-challenge:artist-application` and
+  `SetCachePolicy`; `SubmitArtistApplicationRequest` validates the fields and both references, and
+  `SubmitArtistApplication` replays a known `Idempotency-Key`, refuses a second pending application
+  from the same email (409 `application-in-review`, naming that email), locates the base city with
+  `ServiceArea`, and numbers the application (`A-0217` onward, under an advisory lock) in one
+  transaction. `BusinessDayCalendar` gives the reply-by date and the holidays it skipped, which the
+  resource answers as `replyBy` and `skippedHolidays`.
+- The confirmation email is `ApplicationReceivedNotification`, sent by the
+  `SendApplicationReceivedEmail` listener of `ArtistApplicationSubmitted` on the `notifications` queue.
+- The web form is `pages/apply/` with `ApplicationStore` (the draft in `sessionStorage`, one
+  `Idempotency-Key` per draft), `VideoUpload` over the S10 protocol and `ReferenceFieldset`, routed at
+  `artists/apply` and `artists/apply/:step` ahead of `artists/:slug`. Server-side 422 and 409 answers
+  are mapped to steps in S12.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

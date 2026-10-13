@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { signInAsAdministrator } from '../../fixtures/admin-session';
-import { apiJson } from '../../fixtures/api';
-import { ChecksPage } from '../../pages/admin/checks.page';
+import { signInAsAdministrator } from '../../../fixtures/admin-session';
+import { apiJson } from '../../../fixtures/api';
+import { ChecksPage } from '../../../pages/admin/checks.page';
 
 /** Burlington, as the Discover quick-pick chip sends it. */
 const BURLINGTON = { lat: '43.325', lng: '-79.799' };

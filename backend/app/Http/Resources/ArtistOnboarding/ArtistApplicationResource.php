@@ -23,6 +23,8 @@ class ArtistApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         $application = $this->resource;
+        $calendar = app(BusinessDayCalendar::class);
+        $replyBy = $calendar->businessDaysAfter($application->submitted_at, 3);
 
         return [
             'id' => $application->id,
@@ -43,7 +45,10 @@ class ArtistApplicationResource extends JsonResource
              *
              * @var string
              */
-            'replyBy' => app(BusinessDayCalendar::class)->businessDaysAfter($application->submitted_at, 3)->toDateString(),
+            'replyBy' => $replyBy->toDateString(),
+            /** The statutory holidays the 3 business days skipped: "Monday 12 Oct is Thanksgiving". */
+            'skippedHolidays' => collect($calendar->holidaysBetween($application->submitted_at, $replyBy))
+                ->map(fn (string $name, string $date) => ['date' => $date, 'name' => $name])->values()->all(),
             /** The videos, in order. */
             'videos' => $application->videos->map(fn (ArtistVideo $video) => [
                 /** @var string */

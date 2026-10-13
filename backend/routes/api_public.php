@@ -59,4 +59,4 @@ Route::prefix('artist-applications/videos')->name('artist-applications.videos.')
     Route::get('{token}', [ApplicationVideoUploadsController::class, 'show'])->where('token', '[0-9a-f]+')->name('show');
 });
 // Applying as an artist (apply-as-artist, L2-047): the bot check runs before validation (L2-077.4).
-Route::post('artist-applications', [ArtistApplicationsController::class, 'store'])->middleware(['throttle:register', 'bot-challenge:apply', SetCachePolicy::class])->name('artist-applications.store');
+Route::post('artist-applications', [ArtistApplicationsController::class, 'store'])->middleware(['throttle:register', 'bot-challenge:artist-application', SetCachePolicy::class])->name('artist-applications.store');

@@ -28,43 +28,65 @@ class BusinessDayCalendar
 
     public function isBusinessDay(CarbonInterface $date): bool
     {
-        return ! $date->isWeekend() && ! in_array($date->toDateString(), $this->holidays((int) $date->year), true);
+        return ! $date->isWeekend() && ! array_key_exists($date->toDateString(), $this->holidays((int) $date->year));
     }
 
     /**
-     * Ontario's statutory holidays for a year, as observed, `YYYY-MM-DD`.
+     * The holidays skipped between `$from` and `$until` (exclusive, inclusive): the ones the success
+     * page names ("Monday 12 Oct is Thanksgiving").
      *
-     * @return list<string>
+     * @return array<string, string> `YYYY-MM-DD` => name
+     */
+    public function holidaysBetween(CarbonInterface $from, CarbonInterface $until): array
+    {
+        $start = CarbonImmutable::instance($from)->setTimezone(config('app.timezone'))->startOfDay();
+        $end = CarbonImmutable::instance($until)->setTimezone(config('app.timezone'))->startOfDay();
+        $skipped = [];
+        for ($year = (int) $start->year; $year <= (int) $end->year; $year++) {
+            foreach ($this->holidays($year) as $date => $name) {
+                if ($date > $start->toDateString() && $date <= $end->toDateString()) {
+                    $skipped[$date] = $name;
+                }
+            }
+        }
+
+        return $skipped;
+    }
+
+    /**
+     * Ontario's statutory holidays for a year, as observed, `YYYY-MM-DD` => name, in date order.
+     *
+     * @return array<string, string>
      */
     public function holidays(int $year): array
     {
         $easter = $this->easter($year);
         $fixed = [
-            CarbonImmutable::create($year, 1, 1),   // New Year's Day
-            CarbonImmutable::create($year, 7, 1),   // Canada Day
-            CarbonImmutable::create($year, 12, 25), // Christmas Day
-            CarbonImmutable::create($year, 12, 26), // Boxing Day
+            'New Year’s Day' => CarbonImmutable::create($year, 1, 1),
+            'Canada Day' => CarbonImmutable::create($year, 7, 1),
+            'Christmas Day' => CarbonImmutable::create($year, 12, 25),
+            'Boxing Day' => CarbonImmutable::create($year, 12, 26),
         ];
         $floating = [
-            $easter->subDays(2),                                     // Good Friday
-            CarbonImmutable::create($year, 2, 1)->nthOfMonth(3, CarbonInterface::MONDAY), // Family Day
-            $this->victoriaDay($year),
-            CarbonImmutable::create($year, 9, 1)->nthOfMonth(1, CarbonInterface::MONDAY),  // Labour Day
-            CarbonImmutable::create($year, 10, 1)->nthOfMonth(2, CarbonInterface::MONDAY), // Thanksgiving
+            'Good Friday' => $easter->subDays(2),
+            'Family Day' => CarbonImmutable::create($year, 2, 1)->nthOfMonth(3, CarbonInterface::MONDAY),
+            'Victoria Day' => $this->victoriaDay($year),
+            'Labour Day' => CarbonImmutable::create($year, 9, 1)->nthOfMonth(1, CarbonInterface::MONDAY),
+            'Thanksgiving' => CarbonImmutable::create($year, 10, 1)->nthOfMonth(2, CarbonInterface::MONDAY),
         ];
 
         $observed = [];
-        foreach ($fixed as $holiday) {
+        foreach ($fixed as $name => $holiday) {
             $date = $holiday;
-            while ($date->isWeekend() || in_array($date->toDateString(), $observed, true)) {
+            while ($date->isWeekend() || array_key_exists($date->toDateString(), $observed)) {
                 $date = $date->addDay();
             }
-            $observed[] = $date->toDateString();
+            $observed[$date->toDateString()] = $name;
         }
-        foreach ($floating as $holiday) {
-            $observed[] = $holiday->toDateString();
+        foreach ($floating as $name => $holiday) {
+            $observed[$holiday->toDateString()] = $name;
         }
-        sort($observed);
+        ksort($observed);
 
         return $observed;
     }
