@@ -22,6 +22,8 @@ export interface ToastOptions {
   actions?: readonly ToastAction[];
   /** The close button's name: "Dismiss: Link copied". */
   dismissLabel: string;
+  /** No timer and no bar: the toast stays until acted on or dismissed. Only for the idle-session warning (L2-066). */
+  persistent?: boolean;
   /** A toast with the same key as a visible one replaces it in place and restarts its timer. */
   key?: string;
   /** Where focus returns if the toast closes with focus inside it; `document.activeElement` by default. */

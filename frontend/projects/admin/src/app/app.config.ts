@@ -3,6 +3,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
   ADMIN_OVERVIEW_API,
+  adminSessionExpiredInterceptor,
   AUTH_API,
   csrfRecoveryInterceptor,
   HttpAdminOverviewApi,
@@ -13,6 +14,7 @@ import {
   withApiXsrf,
 } from 'api';
 import { routes } from './app.routes';
+import { idleActivityInterceptor } from './shell/idle-session';
 
 /**
  * The admin application's composition root (ADR-0001, ADR-0023). It renders in the browser only: the
@@ -27,8 +29,17 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }),
     ),
     // State-changing calls repeat the API's CSRF cookie in a header (ADR-0015); a refused token is
-    // fetched again once.
-    provideHttpClient(withFetch(), withApiXsrf(), withInterceptors([csrfRecoveryInterceptor])),
+    // fetched again once. A 401 means the administrator's session ended: they leave to sign in
+    // again (L2-066.2). Every answer restarts the idle warning's timer (L2-066.3).
+    provideHttpClient(
+      withFetch(),
+      withApiXsrf(),
+      withInterceptors([
+        adminSessionExpiredInterceptor,
+        csrfRecoveryInterceptor,
+        idleActivityInterceptor,
+      ]),
+    ),
     provideI18n(),
     { provide: AUTH_API, useClass: HttpAuthApi },
     { provide: PREFERENCES_API, useClass: HttpPreferencesApi },

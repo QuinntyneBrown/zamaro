@@ -10,8 +10,9 @@
 |---|---|---|---|
 | S1 | Audit entries: record them, refuse changes | Done | `64b3624`, `65356bb` (ADR-0022) |
 | S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, `6009cc6` |
-| S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), see below (ADR-0023) |
-| S4–S14 | | Not started | |
+| S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), `9b6b4e9` (ADR-0023) |
+| S4 | Idle warning toast | Done | see below |
+| S5–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -46,6 +47,18 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S4.**
+  - `ToastOptions.persistent` (toast CRD, now built) makes a toast with no timer and no bar;
+    `ToastService` already runs an action's promise and closes the toast when it settles, so the
+    warning needs nothing else from the component.
+  - The timer lives in the admin app's `shell/idle-session.ts` (`IdleSession`): every API answer
+    restarts it through `idleActivityInterceptor`, matching the API, which counts every request as
+    activity. The warning is shown by key, so a second firing replaces rather than stacks.
+  - The admin variant of the session-expired interceptor is `adminSessionExpiredInterceptor` in
+    `api/lib/auth/`: a 401 leaves with a full navigation to `/sign-in?returnUrl=/admin…&ended=1`.
+    The sign-in page's "Your session ended" notice needs no change.
+  - The e2e spec proves the 30-minute end by answering 401 from Playwright (the frozen API clock
+    cannot age a session); `SecureAdminAccessTest` proves when the API gives it.
 - **S3 (ADR-0023).**
   - Priya Nair (`priya@zamaro.ca`) is seeded by `CastSeeder` with the Administrator role alone and
     two-step sign-in on, with a fixed key (`CastSeeder::PRIYA_TOTP_SECRET`, mirrored in

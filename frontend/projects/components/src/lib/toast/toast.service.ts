@@ -39,7 +39,7 @@ export interface ToastContent {
   text: string | null;
   actions: readonly ToastAction[];
   dismissLabel: string;
-  /** Leaves after 5 seconds with a timer bar; danger toasts stay until dismissed. */
+  /** Leaves after 5 seconds with a timer bar; danger and persistent toasts stay until dismissed. */
   timed: boolean;
 }
 
@@ -129,7 +129,7 @@ export class ToastService implements OnDestroy {
       text: options.text ?? null,
       actions: (options.actions ?? []).slice(0, 2),
       dismissLabel: options.dismissLabel,
-      timed: variant !== 'danger',
+      timed: variant !== 'danger' && !options.persistent,
     };
     const same = options.key
       ? this.toasts().find((toast) => toast.key === options.key && toast.state() === 'visible')

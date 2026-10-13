@@ -64,10 +64,16 @@ store in Redis and the audit log.
 - **`MfaEnrolmentPage`** — routed page for `/account/security/mfa`, reused from
   L2-072. An administrator without MFA is sent here before any admin page loads;
   it shows the QR code, confirms one code and lists the 10 recovery codes.
-- **`AuthService`** — holds the current user signal from `GET /api/v1/me`. On a 401
-  from any request, `SessionExpiredInterceptor` (`security/manage-sessions-and-csrf`)
-  clears the user and routes to `SignInPage` with the return URL, which handles the
-  idle timeout.
+- **`AuthService`** — holds the current user signal from `GET /api/v1/me`. In the public
+  application, a 401 from any request makes `sessionExpiredInterceptor`
+  (`security/manage-sessions-and-csrf`) clear the user and route to `SignInPage` with the
+  return URL. In the admin application, `adminSessionExpiredInterceptor` (`api/lib/auth`)
+  leaves for `/sign-in?returnUrl=/admin…&ended=1` with a full navigation, which handles the
+  idle timeout (ADR-0023).
+- **`IdleSession`** (`projects/admin/src/app/shell/idle-session.ts`) — the admin
+  application's idle clock: `idleActivityInterceptor` restarts it on every API answer, and
+  28 minutes after the last one it shows the persistent warning toast with "Stay signed in",
+  whose action asks for the overview and so counts as activity on both sides (L2-066.3).
 - **`Shell`** (`projects/admin/src/app/shell`) — layout for `/admin/*`: the design-system
   workspace top bar (`zm-top-bar variant="workspace"`) with an "Admin" role tag, the admin
   sections built so far (Applications, Artists, Audit log; Bookings and Reviews join with M7

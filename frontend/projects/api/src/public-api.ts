@@ -2,6 +2,7 @@
  * Public API Surface of api
  */
 
+export * from './lib/auth/admin-session-expired.interceptor';
 export * from './lib/auth/admin.guard';
 export * from './lib/auth/auth-api';
 export * from './lib/auth/auth.service';
