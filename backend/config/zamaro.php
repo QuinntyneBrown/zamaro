@@ -54,6 +54,15 @@ return [
         'breached_passwords' => ['password1234', 'qwertyuiop123', 'iloveyou1234'],
     ],
 
+    'uploads' => [
+        // Which disk plays which part of the upload pipeline (scan-and-serve-uploads, ADR-0024).
+        'disks' => [
+            'quarantine' => env('ZAMARO_QUARANTINE_DISK', 'quarantine'),
+            'documents' => env('ZAMARO_DOCUMENTS_DISK', 'documents'),
+            'originals' => env('ZAMARO_ORIGINALS_DISK', 'originals'),
+        ],
+    ],
+
     'media' => [
         // The disk holding photo renditions, posters, streams and captions. M1 has no object
         // storage: the local `media` disk is served under /media. M4 switches it to object storage.

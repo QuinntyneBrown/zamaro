@@ -152,6 +152,16 @@ administrator verification queue is
 The document is never part of any public response, and no public profile field
 exposes its existence beyond Youth event eligibility.
 
+**As built in M3 S6**
+
+- `UploadVulnerableSectorCheck` calls `ReceiveUpload` (scan-and-serve-uploads) and creates the check as
+  `Scanning` with `upload_id`; `ScanUpload`, not a `ScanVulnerableSectorCheck` job, promotes it to
+  `Pending` through `DocumentVault` or blocks it. `expires_on` is nullable until verification.
+- `GET /api/v1/artist/vulnerable-sector-checks/current` answers `{verified, latest}`.
+- Copy (M3 D11): wrong type "This file isn't a PDF, JPEG or PNG. Choose a scan of the whole check.";
+  over 10 MB "This file is 14 MB. Choose a PDF, JPEG or PNG up to 10 MB."; missing date "Enter the
+  issue date printed on the check."; future date "The issue date can't be after today."
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

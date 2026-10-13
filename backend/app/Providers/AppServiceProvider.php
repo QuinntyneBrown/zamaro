@@ -7,6 +7,7 @@ use App\Contracts\BreachedPasswordChecker;
 use App\Contracts\ErrorReporter;
 use App\Contracts\Geocoder;
 use App\Contracts\IpLocator;
+use App\Contracts\MediaScanner;
 use App\Contracts\OnCallAlerter;
 use App\Contracts\RoutingProvider;
 use App\Integrations\Alerting\FakeOnCallAlerter;
@@ -16,6 +17,7 @@ use App\Integrations\ErrorTracking\FakeErrorReporter;
 use App\Integrations\Geocoding\FakeGeocoder;
 use App\Integrations\IpLocation\FakeIpLocator;
 use App\Integrations\Routing\FakeRoutingProvider;
+use App\Integrations\Scanning\FakeMediaScanner;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Middleware\TrustProxies;
 use Illuminate\Support\Carbon;
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
         ErrorReporter::class => FakeErrorReporter::class,
         OnCallAlerter::class => FakeOnCallAlerter::class,
         IpLocator::class => FakeIpLocator::class,
+        MediaScanner::class => FakeMediaScanner::class,
     ];
 
     public function register(): void

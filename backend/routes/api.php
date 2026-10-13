@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
 use App\Http\Controllers\Api\V1\Administration\AdminOverviewController;
 use App\Http\Controllers\Api\V1\Administration\AuditEntriesController;
+use App\Http\Controllers\Api\V1\ArtistOnboarding\VulnerableSectorChecksController;
 use App\Http\Controllers\Api\V1\Privacy\ConsentController;
 use App\Http\Middleware\EnsureAdministrator;
 use App\Http\Middleware\EnsureCurrentTermsAccepted;
@@ -56,6 +57,9 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
     Route::middleware('role:artist')->group(function () {
         Route::get('account/contact-phone', [ArtistContactController::class, 'show'])->name('account.contact-phone.show');
         Route::put('account/contact-phone', [ArtistContactController::class, 'update'])->name('account.contact-phone.update');
+        // The check is a multipart upload: a 32 MB hard cap, and the request's own 10 MB rule with its copy (L2-049.1).
+        Route::post('artist/vulnerable-sector-checks', [VulnerableSectorChecksController::class, 'store'])->middleware('uploads:32768')->name('artist.vulnerable-sector-checks.store');
+        Route::get('artist/vulnerable-sector-checks/current', [VulnerableSectorChecksController::class, 'current'])->name('artist.vulnerable-sector-checks.current');
     });
 });
 

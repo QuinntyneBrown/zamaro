@@ -227,7 +227,7 @@ return [
         ],
         'supervisor-default' => [
             'connection' => 'redis',
-            'queue' => ['default'],
+            'queue' => ['uploads', 'default'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,

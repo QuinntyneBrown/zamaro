@@ -59,6 +59,30 @@ return [
             'report' => false,
         ],
 
+        // Uploads (scan-and-serve-uploads, ADR-0024): quarantine until the scan, private documents as
+        // ciphertext, and originals for processing. Local disks until object storage (M4); nothing here
+        // is served directly. `zamaro.uploads.disks` names which disk plays which part.
+        'quarantine' => [
+            'driver' => 'local',
+            'root' => storage_path('app/quarantine'),
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'documents' => [
+            'driver' => 'local',
+            'root' => storage_path('app/documents'),
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'originals' => [
+            'driver' => 'local',
+            'root' => storage_path('app/originals'),
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

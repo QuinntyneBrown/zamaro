@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AcceptsUpload;
 use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnforceAbsoluteSessionLifetime;
 use App\Http\Middleware\EnforceAdminIdleTimeout;
@@ -46,7 +47,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn () => null);
         // role:artist, role:admin: anyone without the role gets 404 (L2-074.1).
         // bot-challenge:{action}: the forms that send email to any address need a passing bot check (L2-077.4).
-        $middleware->alias(['role' => EnsureUserHasRole::class, 'bot-challenge' => VerifyBotChallenge::class]);
+        // uploads:{kilobytes}: a multipart body up to that size instead of the 1 MB JSON limit (L2-075.4).
+        $middleware->alias(['role' => EnsureUserHasRole::class, 'bot-challenge' => VerifyBotChallenge::class, 'uploads' => AcceptsUpload::class]);
         // Laravel runs authentication ahead of a route's own middleware; on the admin routes the role
         // check comes first, so a guest gets the same 404 as everyone without the role (L2-066.1).
         $middleware->prependToPriorityList(AuthenticatesRequests::class, EnsureAdministrator::class);

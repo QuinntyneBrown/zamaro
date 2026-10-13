@@ -2,6 +2,7 @@
 
 use App\Models\Artist;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use PragmaRX\Google2FA\Google2FA;
 use Tests\Feature\Security\CrossUserAccessTest;
 
@@ -229,5 +230,26 @@ return [
     'GET api/v1/admin/audit-entries/{entry}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
         $test->as($intruder)->getJson('/api/v1/admin/audit-entries/1')->assertNotFound()
             ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
+
+    'POST api/v1/artist/vulnerable-sector-checks' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->makeArtist($owner);
+
+        // A booker: the artist-only route is concealed (L2-074.1).
+        $test->as($intruder)->post('/api/v1/artist/vulnerable-sector-checks', [], ['Accept' => 'application/json'])->assertNotFound();
+    },
+
+    'GET api/v1/artist/vulnerable-sector-checks/current' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->makeArtist($owner);
+        $test->makeArtist($intruder);
+        DB::table('vulnerable_sector_checks')->insert([
+            'user_id' => $owner->id, 'issued_on' => '2025-03-03', 'expires_on' => '2028-03-03', 'status' => 'verified',
+            'verified_at' => now(), 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $response = $test->as($intruder)->getJson('/api/v1/artist/vulnerable-sector-checks/current')->assertOk()
+            ->assertJsonPath('data.verified', null)->assertJsonPath('data.latest', null);
+
+        $test->assertHoldsNothingOf($owner, $response);
     },
 ];

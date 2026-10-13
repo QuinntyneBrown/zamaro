@@ -12,8 +12,9 @@
 | S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, `6009cc6` |
 | S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), `9b6b4e9` (ADR-0023) |
 | S4 | Idle warning toast | Done | `3435a83` |
-| S5 | Audit log viewer and retention | Done | see below |
-| S6–S14 | | Not started | |
+| S5 | Audit log viewer and retention | Done | `2557169` |
+| S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | see below (ADR-0024, ADR-0025) |
+| S7–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -48,6 +49,24 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S6 (ADR-0024, ADR-0025).**
+  - The `uploads` "middleware group" is a route mark, `uploads:{kilobytes}` (`AcceptsUpload`), read by
+    `LimitRequestBodySize` and `EnsureJsonRequest`, which run before any route middleware. The check
+    route's hard cap is 32 MB (413), so a 14 MB file reaches the request's 10 MB rule and its copy.
+  - `MediaScanner::scan()` takes a stream and answers a `ScanResult` (`ScanVerdict` plus the
+    signature). `FakeMediaScanner`: EICAR is malware, `SCANNER-UNAVAILABLE` is an error, else clean.
+  - `ScanUpload` uses `RetriesWithBackoff` (one attempt and 5 retries, M2 D17); an error throws and
+    the file stays quarantined. `ReceiveUpload` dispatches it `afterCommit`.
+  - `GET /artist/vulnerable-sector-checks/current` answers `{verified, latest}`: the most recent
+    verified check and the newest of any status, so a blocked or pending newer check never hides the
+    one that counts.
+  - `PromoteUpload` handles the check (encrypt into the documents disk, check `Pending`); other
+    purposes move to the originals disk and wait for M4's processing jobs.
+  - The `security` log channel is JSON on stderr (`LOG_SECURITY_STREAM`); the tests push a Monolog
+    `TestHandler` on it. The e2e worker command gains the `uploads` queue; Horizon's default
+    supervisor takes it too.
+  - `php artisan serve` keeps PHP's 2 MB `upload_max_filesize`: the e2e upload dialog (M4) needs the
+    ini raised in the API's command or image.
 - **S5.**
   - `audit:prune` runs `Jobs/Administration/PruneAuditEntries` synchronously: each batch of 1,000 is
     its own transaction with `SET LOCAL ROLE zamaro_audit_retention` (ADR-0022) and `RESET ROLE`;
