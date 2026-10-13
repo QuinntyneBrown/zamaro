@@ -2,10 +2,26 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Admin</title>
-    <base href="/" />
+    <!-- Paint a stored theme choice from the first frame (L2-104.3). Keep the key in step with
+         ThemeService; with nothing stored, tokens.css follows prefers-color-scheme. -->
+    <script>
+      try {
+        var theme = localStorage.getItem('zamaro.theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <title>Zamaro admin</title>
+    <base href="/admin/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link
+      rel="preload"
+      href="/admin/fonts/bebas-neue-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
   </head>
   <body>
     <zm-root></zm-root>

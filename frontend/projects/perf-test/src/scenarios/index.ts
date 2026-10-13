@@ -66,6 +66,7 @@ export const scenarios: Record<string, Scenario> = {
   ToastStack: () => import('./ToastStack'),
   TopBar: () => import('./TopBar'),
   TopBarSignedIn: () => import('./TopBarSignedIn'),
+  TopBarWorkspace: () => import('./TopBarWorkspace'),
   TourDates: () => import('./TourDates'),
   VideoCard: () => import('./VideoCard'),
 };

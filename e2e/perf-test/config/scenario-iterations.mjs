@@ -19,4 +19,5 @@ export const scenarioIterations = {
   TicketSkeleton: 400,
   TopBar: 120,
   TopBarSignedIn: 110,
+  TopBarWorkspace: 100,
 };

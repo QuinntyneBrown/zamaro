@@ -9,8 +9,9 @@
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
 | S1 | Audit entries: record them, refuse changes | Done | `64b3624`, `65356bb` (ADR-0022) |
-| S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, see below |
-| S3–S14 | | Not started | |
+| S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, `6009cc6` |
+| S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), see below (ADR-0023) |
+| S4–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -45,6 +46,44 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S3 (ADR-0023).**
+  - Priya Nair (`priya@zamaro.ca`) is seeded by `CastSeeder` with the Administrator role alone and
+    two-step sign-in on, with a fixed key (`CastSeeder::PRIYA_TOTP_SECRET`, mirrored in
+    `e2e/fixtures/accounts.ts`), only where the cast can sign in. `signIn()` in the e2e fixtures
+    completes the code step for anyone with a known key, so `signedInAs: 'priya'` works in route
+    states; `fixtures/admin-session.ts` wraps it.
+  - The gate is `app.use('/admin', …)` in `server.ts`, before the static files and the Angular
+    handler. It serves `dist/admin/browser` (or `ADMIN_DIST`) on 200 from the overview, and falls
+    through to the public application's not-found page otherwise. The admin build has
+    `baseHref: /admin/`.
+  - `ThemeService` moved to `api/lib/theme/` so both applications bind it; `isAdminUrl()` joins
+    `api/lib/auth/return-url.ts`, and the sign-in and code-step pages leave with `location.assign`
+    for an admin `returnUrl`. There is no admin variant of `SessionExpiredInterceptor` yet (S4): the
+    admin `app.config.ts` binds only the CSRF recovery interceptor.
+  - The admin shell lists Applications, Artists and Audit log (D17) from the first slice, so the
+    Artists and Audit log links reach the admin not-found route until S5 and S8 build their pages.
+    The Applications page shows its empty state ("No applications waiting") until S13 lists real
+    applications; the overview carries no `applicationsWaiting` yet, so the link has no count.
+  - `zm-top-bar` gained `variant`, `role`, `shortcut`, `TopBarLinkBase`, and `count`/`countLabel`
+    on `TopBarLink`; it keeps `routerLinkActive` for the current link rather than the CRD's
+    `current` input, as the public bar already did. `zm-menu` link items gained `count`/`countLabel`.
+    `TopBarWorkspace` is the new scenario (about 210 ms); `TopBar` and `Menu` measured OK against
+    the base branch.
+  - The admin app's account menu is its own dialog (name, "Zamaro team", email, Sign out), and sign
+    out leaves for `/`. Admin copy lives in `backend/resources/i18n/en/admin.json` under `admin.*`.
+  - Playwright: an `admin` project (`specs/administration`, `specs/artist-onboarding`,
+    `visual/admin.spec.ts`, `a11y/admin.spec.ts`); the visual and a11y loops are shared functions
+    taking the application. `fixtures/artisan.ts` runs artisan through compose, or through
+    `E2E_ARTISAN` ("php artisan") in `E2E_ARTISAN_CWD` for machines without Docker; the caller then
+    exports the e2e API's environment too. The `admin-mutations` project waits for the first
+    mutating admin spec (S8).
+  - "The zamaro build contains no admin code" is guaranteed by the separate build (ADR-0001) and is
+    not asserted by a test (AGENTS.md: no architecture tests).
+  - The admin not-found baselines were captured in this container's Chromium rather than the official
+    Playwright image; the Windows baselines are still to be captured on the Windows host.
+  - The dev container has no Docker daemon and its GD lacks AVIF, so the e2e API ran from
+    `php artisan serve --port=8001` with compose's e2e environment, seeded with `LegalDocumentSeeder`
+    and `CastSeeder` only (no `MediaSeeder`), and specs that read Mailpit were not runnable here.
 - **S2.**
   - There is no `TwoFactorEnrolmentRequired` (D6). An administrator without two-step sign-in signs in
     as anyone does (200, `mfaEnabled: false`); only the admin API stays 404 until they turn it on.

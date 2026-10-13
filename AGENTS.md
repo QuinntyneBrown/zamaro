@@ -130,6 +130,7 @@ zamaro/
 │   │   │       ├── lib/http/      # HTTP plumbing: the SSR API-origin backend (ADR-0007)
 │   │   │       ├── lib/models/    # request and response types (models/admin/ for admin endpoints)
 │   │   │       ├── lib/auth/      # session, CSRF, interceptors, and route guards for both applications
+│   │   │       ├── lib/theme/     # the light/dark theme service both applications bind (ADR-0023)
 │   │   │       ├── lib/i18n/      # translation catalogues; date, money, and distance formatting
 │   │   │       ├── lib/testing/   # in-memory fakes of each contract
 │   │   │       └── public-api.ts

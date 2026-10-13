@@ -10,6 +10,9 @@ import { join } from 'node:path';
 import { robotsTxt, type SitemapProfile, sitemapXml } from './crawler-files';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+/** The admin application's build, served under /admin to administrators only (ADR-0023). */
+const adminDistFolder =
+  process.env['ADMIN_DIST'] ?? join(import.meta.dirname, '../../admin/browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
@@ -37,6 +40,46 @@ if (apiOrigin) {
 function siteOrigin(req: express.Request): string {
   return `${req.protocol}://${req.get('host')}`;
 }
+
+/**
+ * The /admin gate (L2-066.1, ADR-0023). The admin application is a separate, client-rendered build,
+ * so this server decides who gets it: it asks the API, with the browser's cookies, whether the
+ * session is an administrator's who signed in with a code (`GET /api/v1/admin/overview`). On 200 the
+ * admin build is served, never cached; on anything else the request falls through to the public
+ * application, whose wildcard renders the not-found page with a real 404, so a guest, a booker and
+ * an artist learn nothing from the address.
+ */
+const adminApp = express.static(adminDistFolder, {
+  index: false,
+  redirect: false,
+  fallthrough: false,
+});
+app.use('/admin', async (req, res, next) => {
+  try {
+    const headers: Record<string, string> = {
+      accept: 'application/json',
+      // Sanctum starts the cookie session only for requests from the site's own origin (ADR-0015).
+      referer: `${siteOrigin(req)}/`,
+      'x-forwarded-for': req.ip ?? '',
+    };
+    if (req.headers.cookie) headers['cookie'] = req.headers.cookie;
+    const answer = await fetch(`${apiOrigin ?? 'http://localhost:8000'}/api/v1/admin/overview`, {
+      headers,
+    });
+    if (answer.status !== 200) {
+      next();
+      return;
+    }
+    res.set('Cache-Control', 'private, no-store');
+    if (/\.[a-z0-9]+$/i.test(req.path)) {
+      adminApp(req, res, next);
+      return;
+    }
+    res.sendFile(join(adminDistFolder, 'index.html'));
+  } catch (error) {
+    next(error);
+  }
+});
 
 /** What crawlers may index (L2-112.4). */
 app.get('/robots.txt', (req, res) => {

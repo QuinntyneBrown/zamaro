@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   afterNextRender,
@@ -12,7 +13,7 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { afterSignIn, AuthService, FormatService, safeReturnUrl } from 'api';
+import { afterSignIn, AuthService, FormatService, isAdminUrl, safeReturnUrl } from 'api';
 import {
   Alert,
   BookingForm,
@@ -59,6 +60,7 @@ export class MfaChallenge {
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
   private readonly injector = inject(Injector);
+  private readonly document = inject(DOCUMENT);
   private readonly returnUrl = safeReturnUrl(
     inject(ActivatedRoute).snapshot.queryParamMap.get('returnUrl'),
   );
@@ -112,8 +114,11 @@ export class MfaChallenge {
     this.auth
       .completeTwoFactor(this.mode() === 'code' ? { code: value } : { recoveryCode: value })
       .subscribe({
+        // The admin application is served separately, so it is a full navigation (ADR-0023).
         next: (user) =>
-          void this.router.navigateByUrl(afterSignIn(this.router, user, this.returnUrl)),
+          isAdminUrl(this.returnUrl)
+            ? this.document.location.assign(this.returnUrl)
+            : void this.router.navigateByUrl(afterSignIn(this.router, user, this.returnUrl)),
         error: (error: unknown) => {
           if (!(error instanceof HttpErrorResponse)) {
             this.status.set('error');

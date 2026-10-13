@@ -4,8 +4,8 @@ import {
   type Cookie,
   request,
 } from '@playwright/test';
-import { execFileSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
+import { artisan } from './artisan';
 import { totp } from './totp';
 
 /**
@@ -21,7 +21,19 @@ export const accounts = {
   naomi: { name: 'Naomi Fraser', email: 'naomi.fraser@riversidecc.ca' },
   abigail: { name: 'Abigail Mensah', email: 'abigail@abigailmensah.ca' },
   tomi: { name: 'Tomi Oduya', email: 'tomi.oduya@harvestpointchurch.ca' },
+  priya: { name: 'Priya Nair', email: 'priya@zamaro.ca' },
 } as const;
+
+/**
+ * Priya's two-step sign-in key, as CastSeeder::PRIYA_TOTP_SECRET seeds it (M3 S3): the admin specs
+ * compute her codes from it. Only the e2e, local and testing databases hold it.
+ */
+export const PRIYA_TOTP_SECRET = 'ZAMAROADMINPRIYANAIRTOTPKEY23456';
+
+/** The keys of the cast members who sign in with a code (L2-066.2). */
+const TOTP_SECRETS: Record<string, string> = {
+  [accounts.priya.email]: PRIYA_TOTP_SECRET,
+};
 
 export type CastMember = keyof typeof accounts;
 
@@ -63,6 +75,22 @@ export async function signIn(
       `Signing in ${email} failed with ${response.status()}: ${await response.text()}`,
     );
   }
+  // An administrator's password only begins the sign-in; the code completes it (L2-066.2).
+  if (response.status() === 202) {
+    const secret = TOTP_SECRETS[email.toLowerCase()];
+    if (!secret) throw new Error(`${email} needs a code to sign in, and no key is known for them.`);
+    const completed = await request.post('/api/v1/session/two-factor', {
+      headers: {
+        ...fromSite,
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': await xsrfToken(request),
+      },
+      data: { code: totp(secret) },
+    });
+    if (!completed.ok()) {
+      throw new Error(`The code step for ${email} failed with ${completed.status()}.`);
+    }
+  }
 }
 
 /**
@@ -79,7 +107,11 @@ export async function failSignIns(
   const token = await xsrfToken(request);
   for (let i = 0; i < times; i++) {
     const response = await request.post('/api/v1/session', {
-      headers: { ...fromSite, Accept: 'application/json', 'X-XSRF-TOKEN': token },
+      headers: {
+        ...fromSite,
+        Accept: 'application/json',
+        'X-XSRF-TOKEN': token,
+      },
       data: { email, password: 'not-the-right-password' },
     });
     if (response.status() !== 422) {
@@ -103,24 +135,12 @@ export function createBooker(
   email: string = uniqueEmail(),
   { verified = true, terms }: { verified?: boolean; terms?: string } = {},
 ): { email: string; password: string } {
-  execFileSync(
-    'docker',
-    [
-      'compose',
-      '--profile',
-      'e2e',
-      'exec',
-      '-T',
-      'api-e2e',
-      'php',
-      'artisan',
-      'cast:booker',
-      email,
-      ...(verified ? [] : ['--unverified']),
-      ...(terms ? [`--terms=${terms}`] : []),
-    ],
-    { cwd: new URL('../..', import.meta.url), stdio: 'pipe' },
-  );
+  artisan([
+    'cast:booker',
+    email,
+    ...(verified ? [] : ['--unverified']),
+    ...(terms ? [`--terms=${terms}`] : []),
+  ]);
   return { email, password: CAST_PASSWORD };
 }
 

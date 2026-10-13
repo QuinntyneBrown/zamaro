@@ -39,24 +39,28 @@ store in Redis and the audit log.
 **Frontend (Zamaro Web)**
 
 > Per [ADR-0001](../../../adr/0001-admin-as-separate-application.md) the admin area is its own Angular
-> application (`frontend/projects/admin`, base href `/admin/`), not a lazy route of the public application.
-> Read "lazy `/admin` route" below as the admin application's root route; the guard and the API checks are
-> unchanged.
+> application (`frontend/projects/admin`, base href `/admin/`), not a lazy route of the public application,
+> and per [ADR-0023](../../../adr/0023-admin-application-served-behind-a-server-side-404-gate.md) the web
+> server decides who gets it. Read "lazy `/admin` route" below as the admin application's root route.
 
-- **`adminGuard`** (`core/auth`) — `CanMatchFn` on the lazy `/admin` route. It
-  reads `AuthService.currentUser()` and matches only for an MFA-verified
-  administrator. Otherwise the route does not match and the wildcard route renders
-  `NotFoundPage`.
-- **`NotFoundPage`** — the shared 404 page. During server-side rendering it sets the
-  response status to 404 through Angular SSR's response-init token, so `/admin`
-  returns a real 404 to a non-administrator (L2-066).
+- **The `/admin` gate** (`projects/zamaro/src/server.ts`) — for every request under `/admin`, the
+  web server asks the API `GET /api/v1/admin/overview` with the browser's cookies. On 200 it serves
+  the admin application, never cached; otherwise the request falls through to the public application,
+  whose wildcard renders `NotFoundPage` with a real 404 (L2-066). Admin code, even its scripts, never
+  reaches anyone else.
+- **`adminGuard`** (`api/lib/auth/admin.guard.ts`) — `CanMatchFn` on the admin application's root
+  route. It reads `AuthService` and matches only for a signed-in administrator; otherwise the
+  application's own not-found route renders. It is defence in depth behind the gate.
+- **`NotFoundPage`** — the shared 404 page of the public application. During server-side rendering it
+  sets the response status to 404, so `/admin` returns a real 404 to a non-administrator (L2-066).
 - **`SignInPage`** (`features/account`) — owned by `accounts/sign-in-and-recover-access` (L2-023). When
   the sign-in answer is 202 `twoFactorRequired: true`, it routes to `MfaChallengePage`
   without completing sign-in.
 - **`MfaChallengePage`** — routed page for `/account/sign-in/verify`, owned by
   `accounts/sign-in-and-recover-access`. It takes a 6-digit code or a recovery code,
   posts it through `AuthApi.completeTwoFactor()`, and on success navigates to the
-  original destination.
+  original destination; when that destination is under `/admin` (`isAdminUrl`), it is a
+  full navigation into the admin application, as the sign-in page does without a code.
 - **`MfaEnrolmentPage`** — routed page for `/account/security/mfa`, reused from
   L2-072. An administrator without MFA is sent here before any admin page loads;
   it shows the QR code, confirms one code and lists the 10 recovery codes.
@@ -64,10 +68,13 @@ store in Redis and the audit log.
   from any request, `SessionExpiredInterceptor` (`security/manage-sessions-and-csrf`)
   clears the user and routes to `SignInPage` with the return URL, which handles the
   idle timeout.
-- **`AdminShellPage`** — layout for `/admin/*`: the design-system workspace top bar
-  (`topbar--workspace`) with an "Admin" role tag, the admin sections (Applications,
-  Artists, Bookings, Reviews, Audit log) with their counts, and no public links. Below
-  XL (1200 px) the sections move into the menu drawer. It shows a warning toast with "Stay signed in" 2 minutes
+- **`Shell`** (`projects/admin/src/app/shell`) — layout for `/admin/*`: the design-system
+  workspace top bar (`zm-top-bar variant="workspace"`) with an "Admin" role tag, the admin
+  sections built so far (Applications, Artists, Audit log; Bookings and Reviews join with M7
+  and M8, M3 D17) with their counts from `GET /api/v1/admin/overview`, and no public links.
+  Below XL (1200 px) the sections move into the menu drawer. The account menu names the
+  administrator and "Zamaro team"; Sign out leaves for the public site. The theme is the
+  shared `ThemeService` (`api/lib/theme`). It shows a warning toast with "Stay signed in" 2 minutes
   before the idle timeout; unlike other warning toasts it does not time out (L2-066,
   L2-109).
 

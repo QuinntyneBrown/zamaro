@@ -1,0 +1,19 @@
+{
+  "pageTitle": "{page} · Zamaro admin",
+  "role": "Admin",
+  "nav.applications": "Applications",
+  "nav.applicationsCount": "waiting",
+  "nav.artists": "Artists",
+  "nav.auditLog": "Audit log",
+  "menu.description": "Your account stays in the top bar.",
+  "footer.admin": "Admin",
+  "footer.records": "Records",
+  "footer.team": "Zamaro team",
+  "applications.overline": "Admin · Artist onboarding",
+  "applications.title": "Applications",
+  "applications.nothingWaiting": "Nothing waiting",
+  "applications.empty.stamp": "All caught up",
+  "applications.empty.title": "No applications waiting",
+  "applications.empty.body": "New applications from the Apply as an artist form land here, oldest first.",
+  "applications.empty.openArtists": "Open artists"
+}

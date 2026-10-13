@@ -2,16 +2,11 @@ import { defineConfig, devices } from '@playwright/test';
 
 const WEB_PORT = 4000;
 
-// Chromium only (AGENTS.md). One Playwright project per application; the admin
-// project is added with the admin slice.
+// Chromium only (AGENTS.md). One Playwright project per application: `zamaro` for the public site
+// and `admin` for the admin application, whose specs sign Priya in with a code (M3 S3). The
+// `admin-mutations` project joins with the first admin spec that changes data (M3 S8).
 export default defineConfig({
   testDir: '.',
-  testMatch: [
-    'specs/**/*.spec.ts',
-    'visual/**/*.spec.ts',
-    'a11y/**/*.spec.ts',
-    'perf/**/*.spec.ts',
-  ],
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 1 : 0,
@@ -36,7 +31,31 @@ export default defineConfig({
     timezoneId: 'America/Toronto',
     trace: 'on-first-retry',
   },
-  projects: [{ name: 'zamaro', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'zamaro',
+      testMatch: [
+        'specs/!(administration|artist-onboarding)/**/*.spec.ts',
+        'visual/visual.spec.ts',
+        'a11y/a11y.spec.ts',
+        'perf/**/*.spec.ts',
+      ],
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'admin',
+      testMatch: [
+        'specs/administration/**/*.spec.ts',
+        'specs/artist-onboarding/**/*.spec.ts',
+        'visual/admin.spec.ts',
+        'a11y/admin.spec.ts',
+      ],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: `http://localhost:${WEB_PORT}/admin/`,
+      },
+    },
+  ],
   webServer: {
     command: 'node ../frontend/dist/zamaro/server/server.mjs',
     url: `http://localhost:${WEB_PORT}`,

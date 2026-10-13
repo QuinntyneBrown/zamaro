@@ -67,7 +67,12 @@ const BURLINGTON =
 export const routes: RouteState[] = [
   // Discover before a search: the poster asks for a date. The closest mock is the invalid state
   // without its field errors.
-  { name: 'discover-start', path: '/', app: 'zamaro', mock: 'discover/invalid.html' },
+  {
+    name: 'discover-start',
+    path: '/',
+    app: 'zamaro',
+    mock: 'discover/invalid.html',
+  },
   // Naomi's search: the headliner and six tickets, Closest first.
   {
     name: 'discover-results',
@@ -118,7 +123,12 @@ export const routes: RouteState[] = [
   },
   // Miriam, new to Zamaro, opened without a date: "Check dates", six free dates from Mon 12 Oct,
   // no videos and "No church reviews yet".
-  { name: 'artist-empty', path: '/artists/miriam-haile', app: 'zamaro', mock: 'artist/empty.html' },
+  {
+    name: 'artist-empty',
+    path: '/artists/miriam-haile',
+    app: 'zamaro',
+    mock: 'artist/empty.html',
+  },
   // A band with no photos or videos: the act-type illustration and "No videos yet".
   {
     name: 'artist-no-photos',
@@ -154,13 +164,28 @@ export const routes: RouteState[] = [
     mock: 'not-found/artist.html',
   },
   // Any address that is no page: "No show", served with a 404.
-  { name: 'not-found', path: '/no-such-page', app: 'zamaro', mock: 'not-found/default.html' },
+  {
+    name: 'not-found',
+    path: '/no-such-page',
+    app: 'zamaro',
+    mock: 'not-found/default.html',
+  },
   // Sign in: the "Admit one · Your account" card on the stage, with "Create account" in the header
   // and "Create an account" on the card. "Forgot your password?" joins with its page (M2 S8).
-  { name: 'sign-in', path: '/sign-in', app: 'zamaro', mock: 'sign-in/default.html' },
+  {
+    name: 'sign-in',
+    path: '/sign-in',
+    app: 'zamaro',
+    mock: 'sign-in/default.html',
+  },
   // Sign up: the "Admit one · New account" card with the required terms box and the separate,
   // unticked news box.
-  { name: 'sign-up', path: '/sign-up', app: 'zamaro', mock: 'sign-up/default.html' },
+  {
+    name: 'sign-up',
+    path: '/sign-up',
+    app: 'zamaro',
+    mock: 'sign-up/default.html',
+  },
   // A session that ended: "Your session ended" above the fields. Opened directly, the email is empty
   // (the app fills it in when it sends the person here). The line names the kept draft from M5.
   {
@@ -293,5 +318,14 @@ export const routes: RouteState[] = [
     mock: 'saved/empty.html',
     setup: 'fresh-booker',
     shows: 'saved-empty',
+  },
+  // The admin area hidden from a booker (L2-066.1): Naomi opens /admin/applications and the web
+  // server answers the public not-found page with a real 404 (M3 S3, ADR-0023).
+  {
+    name: 'admin-not-found-booker',
+    path: '/admin/applications',
+    app: 'admin',
+    mock: 'not-found/default.html',
+    signedInAs: 'naomi',
   },
 ];
