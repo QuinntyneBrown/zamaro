@@ -49,13 +49,14 @@ export interface RouteState {
     | 'mfa-key'
     | 'accept-terms'
     | 'saved-list'
-    | 'saved-empty';
+    | 'saved-empty'
+    | 'audit-rows';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
    * devices (only this device is shown) with the Password lead's count of the others, which every spec
    * signing in as the same cast member changes.
    */
-  masks?: 'session-ended-line' | 'devices' | 'mfa-key';
+  masks?: 'session-ended-line' | 'devices' | 'mfa-key' | 'audit-times';
 }
 
 /** Naomi's search: Burlington, Sat 14 Nov, a worship night, within 120 km (docs/mocks/README.md). */
@@ -327,5 +328,16 @@ export const routes: RouteState[] = [
     app: 'admin',
     mock: 'not-found/default.html',
     signedInAs: 'naomi',
+  },
+  // Priya's audit log: the week to Fri 9 Oct, newest first; her own sign-in heads it (M3 S5). The
+  // times and addresses are the suite's own, so they are masked.
+  {
+    name: 'admin-audit',
+    path: '/admin/audit',
+    app: 'admin',
+    mock: 'admin-audit/default.html',
+    signedInAs: 'priya',
+    shows: 'audit-rows',
+    masks: 'audit-times',
   },
 ];

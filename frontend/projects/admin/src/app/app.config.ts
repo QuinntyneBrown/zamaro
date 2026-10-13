@@ -2,10 +2,12 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import {
+  ADMIN_AUDIT_API,
   ADMIN_OVERVIEW_API,
   adminSessionExpiredInterceptor,
   AUTH_API,
   csrfRecoveryInterceptor,
+  HttpAdminAuditApi,
   HttpAdminOverviewApi,
   HttpAuthApi,
   HttpPreferencesApi,
@@ -44,5 +46,6 @@ export const appConfig: ApplicationConfig = {
     { provide: AUTH_API, useClass: HttpAuthApi },
     { provide: PREFERENCES_API, useClass: HttpPreferencesApi },
     { provide: ADMIN_OVERVIEW_API, useClass: HttpAdminOverviewApi },
+    { provide: ADMIN_AUDIT_API, useClass: HttpAdminAuditApi },
   ],
 };

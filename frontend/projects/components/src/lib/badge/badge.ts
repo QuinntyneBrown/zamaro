@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 /**
  * A status stamp (docs/design-system/components/badge). `free` is the yellow availability stamp;
- * `booked` is muted and struck through.
+ * `booked` is muted and struck through; `success`, `info`, `warning` and `danger` carry an outcome
+ * ("Succeeded", "Scheduled", "Held", "Failed"); `count` is the number after a navigation label.
  */
 @Component({
   selector: 'zm-badge',
@@ -11,6 +12,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     [class.badge--free]="variant() === 'free'"
     [class.badge--booked]="variant() === 'booked'"
     [class.badge--success]="variant() === 'success'"
+    [class.badge--info]="variant() === 'info'"
+    [class.badge--warning]="variant() === 'warning'"
+    [class.badge--danger]="variant() === 'danger'"
     [class.badge--count]="variant() === 'count'"
     ><ng-content
   /></span>`,
@@ -66,6 +70,24 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
       --badge-border: var(--color-success-border);
     }
 
+    .badge--info {
+      --badge-bg: var(--color-info-bg);
+      --badge-fg: var(--color-info-fg);
+      --badge-border: var(--color-info-border);
+    }
+
+    .badge--warning {
+      --badge-bg: var(--color-warning-bg);
+      --badge-fg: var(--color-warning-fg);
+      --badge-border: var(--color-warning-icon);
+    }
+
+    .badge--danger {
+      --badge-bg: var(--color-danger-bg);
+      --badge-fg: var(--color-danger-fg);
+      --badge-border: var(--color-danger-border);
+    }
+
     .badge--booked {
       --badge-fg: var(--color-fg-muted);
       text-decoration: line-through;
@@ -74,5 +96,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Badge {
-  readonly variant = input<'default' | 'free' | 'booked' | 'success' | 'count'>('default');
+  readonly variant = input<
+    'default' | 'free' | 'booked' | 'success' | 'info' | 'warning' | 'danger' | 'count'
+  >('default');
 }

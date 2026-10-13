@@ -220,4 +220,14 @@ return [
         $test->as($intruder)->getJson('/api/v1/admin/overview')->assertNotFound()
             ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
     },
+
+    'GET api/v1/admin/audit-entries' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/audit-entries')->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
+
+    'GET api/v1/admin/audit-entries/{entry}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/audit-entries/1')->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
 ];

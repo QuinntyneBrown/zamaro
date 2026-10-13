@@ -11,8 +11,9 @@
 | S1 | Audit entries: record them, refuse changes | Done | `64b3624`, `65356bb` (ADR-0022) |
 | S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, `6009cc6` |
 | S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), `9b6b4e9` (ADR-0023) |
-| S4 | Idle warning toast | Done | see below |
-| S5–S14 | | Not started | |
+| S4 | Idle warning toast | Done | `3435a83` |
+| S5 | Audit log viewer and retention | Done | see below |
+| S6–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -47,6 +48,26 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S5.**
+  - `audit:prune` runs `Jobs/Administration/PruneAuditEntries` synchronously: each batch of 1,000 is
+    its own transaction with `SET LOCAL ROLE zamaro_audit_retention` (ADR-0022) and `RESET ROLE`;
+    there is no `pgsql_audit_retention` connection. Scheduled daily at 03:30 (D14).
+  - `GET /api/v1/admin/audit-entries` filters by actor email (exact, any case), action code (any
+    code shaped `a.b_c`, not only the enum's, so a code no entry carries matches nothing), target
+    (a booking number, or part of an artist's or user's name or email), outcome and a Toronto date
+    range; 50 by cursor over `(occurred_at, id)`. `GET …/audit-entries/{entry}` exists so that
+    `PATCH`, `PUT` and `DELETE` on that address answer 405 (the plan's wording); nothing writes.
+  - `RecordAuditEntry` stamps `occurred_at` with the frozen "now" when the clock is frozen (the e2e
+    API and the tests), so the viewer shows what the mocks show; production keeps the database clock.
+  - `AuditEntryResource` adds `attemptedEmail` (from `context.email` of a failed sign-in with no
+    actor) and a target `{type, label}`; `AuditEntry` gains `actor()` and `target()` relations.
+  - `zm-table` is built in part: caption, columns, row header, fixed or button sort, dense, sticky
+    header and column, loading rows and `zmTableCell` templates. `selectable` and `zm-bulk-bar` wait
+    for the availability calendar (M4), their first use. `zm-select` is not a new component: the
+    form field's `type="select"` from M2 serves. `zm-badge` gains `info`, `warning` and `danger`,
+    and the icon set gains `search`.
+  - The default range is the eight days to today (Thu 1 Oct to Fri 9 Oct on the frozen clock, as the
+    mock). Scenarios `Table` (3 rows) and `AuditLogTable` (50 dense rows).
 - **S4.**
   - `ToastOptions.persistent` (toast CRD, now built) makes a toast with no timer and no bar;
     `ToastService` already runs an action's promise and closes the toast when it settles, so the

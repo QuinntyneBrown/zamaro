@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\V1\Accounts\SavedArtistController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
 use App\Http\Controllers\Api\V1\Administration\AdminOverviewController;
+use App\Http\Controllers\Api\V1\Administration\AuditEntriesController;
 use App\Http\Controllers\Api\V1\Privacy\ConsentController;
 use App\Http\Middleware\EnsureAdministrator;
 use App\Http\Middleware\EnsureCurrentTermsAccepted;
@@ -66,4 +67,7 @@ Route::prefix('admin')->name('admin.')
     ->middleware([EnsureAdministrator::class, 'auth:sanctum', EnsureMfaVerified::class, SetCachePolicy::class, TrackSessionActivity::class])
     ->group(function () {
         Route::get('overview', [AdminOverviewController::class, 'show'])->name('overview');
+        // The audit log is read only: no PATCH, PUT or DELETE route exists, so they answer 405 (L2-069.2).
+        Route::get('audit-entries', [AuditEntriesController::class, 'index'])->name('audit-entries.index');
+        Route::get('audit-entries/{entry}', [AuditEntriesController::class, 'show'])->whereNumber('entry')->name('audit-entries.show');
     });

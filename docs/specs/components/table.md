@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-table`, `zm-bulk-bar` |
 | Library path | `frontend/projects/components/src/lib/table/` |
-| Status | planned |
+| Status | built in part (M3 S5): caption, columns, row header, fixed and button sort, dense, sticky header and column, loading rows, cell templates; planned: `selectable` and `zm-bulk-bar` (M4) |
 | Traces to | L2-048, L2-049, L2-056, L2-067, L2-068, L2-069, L2-086, L2-087, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 |
 | Design system | [`table.html`](../../design-system/components/table.html) |
 | Source mocks | [`pages/admin-applications/default`](../../mocks/pages/admin-applications/default.html), [`pages/admin-applications/loading`](../../mocks/pages/admin-applications/loading.html), [`pages/admin-artists/default`](../../mocks/pages/admin-artists/default.html), [`pages/admin-bookings/default`](../../mocks/pages/admin-bookings/default.html), [`pages/admin-bookings/held`](../../mocks/pages/admin-bookings/held.html), [`pages/admin-booking/default`](../../mocks/pages/admin-booking/default.html), [`pages/admin-booking/held`](../../mocks/pages/admin-booking/held.html), [`pages/admin-audit/default`](../../mocks/pages/admin-audit/default.html), [`pages/admin-checks/default`](../../mocks/pages/admin-checks/default.html), [`pages/admin-checks/verified`](../../mocks/pages/admin-checks/verified.html), [`pages/availability/selected`](../../mocks/pages/availability/selected.html), and their loading states |

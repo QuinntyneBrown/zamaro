@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\AuditAction;
 use App\Enums\AuditOutcome;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 /** One line of the append-only audit log; written only by RecordAuditEntry. */
 class AuditEntry extends Model
@@ -18,6 +20,18 @@ class AuditEntry extends Model
     {
         static::updating(fn () => throw ImmutableAuditEntry::refuse('update'));
         static::deleting(fn () => throw ImmutableAuditEntry::refuse('delete'));
+    }
+
+    /** Who did it; null for the system or an unknown sign-in. @return BelongsTo<User, $this> */
+    public function actor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'actor_id');
+    }
+
+    /** What it acted on, if the record still exists. @return MorphTo<Model, $this> */
+    public function target(): MorphTo
+    {
+        return $this->morphTo('target', 'target_type', 'target_id');
     }
 
     protected function casts(): array

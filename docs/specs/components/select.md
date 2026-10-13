@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-select` |
 | Library path | `frontend/projects/components/src/lib/select/` |
-| Status | planned |
+| Status | served by `zm-form-field type="select"` (M2); a standalone `zm-select` is built when the setlist editor needs one (M4) |
 | Traces to | L2-004, L2-007, L2-019, L2-048, L2-050, L2-053, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 |
 | Design system | [`select.html`](../../design-system/components/select.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/bookings/loading`](../../mocks/pages/bookings/loading.html), [`pages/edit-profile/default`](../../mocks/pages/edit-profile/default.html), [`dialogs/add-song/default`](../../mocks/dialogs/add-song/default.html), [`dialogs/reject-application/invalid`](../../mocks/dialogs/reject-application/invalid.html), [`pages/admin-audit/default`](../../mocks/pages/admin-audit/default.html), and every other screen with a select (see Usage) |

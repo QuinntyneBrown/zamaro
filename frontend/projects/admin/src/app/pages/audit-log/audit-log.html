@@ -1,0 +1,130 @@
+<div class="container">
+  <header class="page-head">
+    <div>
+      <p class="overline">{{ 'admin.audit.overline' | transloco }}</p>
+      <h1 class="page-head__title">{{ 'admin.audit.title' | transloco }}</h1>
+      <p class="page-head__sub">{{ 'admin.audit.subtitle' | transloco }}</p>
+    </div>
+  </header>
+  <div class="page-body">
+    <form
+      class="form-grid"
+      role="search"
+      [formGroup]="form"
+      [attr.aria-label]="'admin.audit.filtersLabel' | transloco"
+      (ngSubmit)="apply()"
+    >
+      <zm-form-field
+        fieldId="actor"
+        type="email"
+        formControlName="actor"
+        autocomplete="off"
+        [label]="'admin.audit.filters.actor' | transloco"
+      />
+      <zm-form-field
+        fieldId="action"
+        type="select"
+        formControlName="action"
+        [options]="actionOptions"
+        [label]="'admin.audit.filters.action' | transloco"
+      />
+      <zm-form-field
+        fieldId="target"
+        type="text"
+        formControlName="target"
+        autocomplete="off"
+        [label]="'admin.audit.filters.target' | transloco"
+        [help]="'admin.audit.filters.targetHelp' | transloco"
+      />
+      <zm-form-field
+        fieldId="outcome"
+        type="select"
+        formControlName="outcome"
+        [options]="outcomeOptions"
+        [label]="'admin.audit.filters.outcome' | transloco"
+      />
+      <zm-form-field
+        fieldId="from"
+        type="date"
+        formControlName="from"
+        [label]="'admin.audit.filters.from' | transloco"
+      />
+      <zm-form-field
+        fieldId="to"
+        type="date"
+        formControlName="to"
+        [label]="'admin.audit.filters.to' | transloco"
+      />
+      <div class="cluster">
+        <zm-button variant="primary" type="submit"
+          ><zm-icon name="search" />{{ 'admin.audit.filter' | transloco }}</zm-button
+        >
+        <zm-button (click)="clear()">{{ 'admin.audit.clearFilters' | transloco }}</zm-button>
+      </div>
+    </form>
+
+    @switch (status()) {
+      @case ('error') {
+        <zm-alert variant="danger" [heading]="'admin.audit.error.title' | transloco">
+          {{ 'admin.audit.error.body' | transloco }}
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'admin.audit.error.tryAgain' | transloco }}</zm-button
+          >
+        </zm-alert>
+      }
+      @default {
+        @if (status() === 'loaded' && entries().length === 0) {
+          <zm-empty-state [quiet]="true" [heading]="'admin.audit.noResults.title' | transloco">
+            {{ 'admin.audit.noResults.body' | transloco }}
+            <zm-button slot="actions" variant="primary" (click)="clear()"
+              ><zm-icon name="close" />{{ 'admin.audit.clearFilters' | transloco }}</zm-button
+            >
+          </zm-empty-state>
+        } @else {
+          <zm-table
+            dense
+            [caption]="caption()"
+            [columns]="columns"
+            [rows]="entries()"
+            rowHeader="when"
+            [sort]="sort"
+            [loading]="status() === 'loading'"
+            [loadingLabel]="'admin.audit.loading' | transloco"
+          >
+            <ng-template zmTableCell="when" let-entry>{{ when(entry) }}</ng-template>
+            <ng-template zmTableCell="actor" let-entry>
+              @if (entry.actor) {
+                <span>{{ entry.actor.name }}</span
+                ><br /><span class="text-caption">{{ actorCaption(entry) }}</span>
+              } @else if (entry.attemptedEmail) {
+                <span class="text-muted">{{ 'admin.audit.unknown' | transloco }}</span
+                ><br /><span class="text-caption">{{
+                  'admin.audit.tried' | transloco: { email: entry.attemptedEmail }
+                }}</span>
+              } @else {
+                <span class="text-muted">{{ 'admin.audit.system' | transloco }}</span>
+              }
+            </ng-template>
+            <ng-template zmTableCell="action" let-entry
+              ><code>{{ entry.action }}</code></ng-template
+            >
+            <ng-template zmTableCell="target" let-entry>{{ target(entry) }}</ng-template>
+            <ng-template zmTableCell="address" let-entry>{{ entry.ipAddress ?? '—' }}</ng-template>
+            <ng-template zmTableCell="outcome" let-entry
+              ><zm-badge [variant]="outcomeVariant(entry)">{{
+                'admin.audit.outcome.' + entry.outcome | transloco
+              }}</zm-badge></ng-template
+            >
+          </zm-table>
+          @if (nextCursor()) {
+            <div>
+              <zm-button [busy]="loadingOlder()" (click)="showOlder()">{{
+                'admin.audit.showOlder' | transloco
+              }}</zm-button>
+            </div>
+          }
+        }
+      }
+    }
+  </div>
+</div>

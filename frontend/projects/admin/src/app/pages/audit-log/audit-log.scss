@@ -1,0 +1,33 @@
+@use '../../shared/page';
+
+.page-body {
+  gap: var(--space-8);
+}
+
+/* The filter fields: three to a row where they fit, one on phones (design system's form grid). */
+.form-grid {
+  display: grid;
+  gap: var(--space-4) var(--space-6);
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  align-items: end;
+}
+
+.form-grid .cluster {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.text-caption {
+  font: var(--text-caption);
+  color: var(--color-fg-muted);
+}
+
+.text-muted {
+  color: var(--color-fg-muted);
+}
+
+code {
+  font: var(--text-mono, inherit);
+}

@@ -54,6 +54,7 @@ export * from './lib/ticket/ticket-skeleton';
 export * from './lib/toast/toast-region';
 export * from './lib/toast/toast.service';
 export * from './lib/toast/toast.types';
+export * from './lib/table/table';
 export * from './lib/top-bar/top-bar';
 export * from './lib/tour-dates/tour-dates';
 export * from './lib/video-card/hls-loader';
