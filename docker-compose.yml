@@ -54,7 +54,7 @@ services:
     volumes:
       - pg-data:/var/lib/postgresql/data
       - ./backend/docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    ports: ["5432:5432"]
+    ports: ["${ZAMARO_POSTGRES_PORT:-5432}:5432"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U zamaro -d zamaro"]
       interval: 3s
@@ -79,7 +79,7 @@ services:
     command: php artisan serve --host=0.0.0.0 --port=8000
     environment:
       PHP_CLI_SERVER_WORKERS: "4"
-    ports: ["8000:8000"]
+    ports: ["${ZAMARO_API_PORT:-8000}:8000"]
     healthcheck:
       test: ["CMD", "curl", "-fs", "http://localhost:8000/health/ready"]
       interval: 5s

@@ -1,0 +1,2 @@
+# Local machine overrides for docker compose (not committed).
+.env
