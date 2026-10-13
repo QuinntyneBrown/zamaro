@@ -252,4 +252,15 @@ return [
 
         $test->assertHoldsNothingOf($owner, $response);
     },
+
+    'GET api/v1/vulnerable-sector-checks/{check}/document-link' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->makeArtist($owner);
+        $check = DB::table('vulnerable_sector_checks')->insertGetId([
+            'user_id' => $owner->id, 'issued_on' => '2026-10-05', 'status' => 'pending', 'storage_key' => str_repeat('a', 32),
+            'wrapped_data_key' => 'v1:none', 'mime_type' => 'application/pdf', 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $test->as($intruder)->getJson("/api/v1/vulnerable-sector-checks/{$check}/document-link")->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
 ];

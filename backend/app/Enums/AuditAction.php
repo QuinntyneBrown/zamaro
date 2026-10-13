@@ -15,4 +15,5 @@ enum AuditAction: string
     case RecoveryCodesReplaced = 'auth.recovery_codes_replaced';
     case MfaChallenge = 'auth.mfa_challenge';
     case RoleChanged = 'user.role_changed';
+    case VscDocumentViewed = 'vsc_document.viewed';
 }

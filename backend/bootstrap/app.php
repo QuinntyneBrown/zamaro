@@ -25,6 +25,8 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::middleware('api')->prefix('api/v1')->group(base_path('routes/api_public.php'));
             Route::group([], base_path('routes/health.php'));
+            // Signed links to private documents, on the media host only (ADR-0024).
+            Route::group([], base_path('routes/media.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware) {

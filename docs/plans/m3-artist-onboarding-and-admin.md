@@ -13,8 +13,9 @@
 | S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), `9b6b4e9` (ADR-0023) |
 | S4 | Idle warning toast | Done | `3435a83` |
 | S5 | Audit log viewer and retention | Done | `2557169` |
-| S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | see below (ADR-0024, ADR-0025) |
-| S7–S14 | | Not started | |
+| S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | `dea2b67` (ADR-0024, ADR-0025) |
+| S7 | Signed links to private documents | Done | see below |
+| S8–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -49,6 +50,19 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S7.**
+  - `routes/media.php` holds the one media-host route, `documents/{key}` (`documents.show`), behind
+    Laravel's `signed` middleware and `Route::domain(config('zamaro.media_host'))`; the API host has
+    no such path. `ZAMARO_MEDIA_HOST` defaults to `media.localhost`, so the link keeps the API's port.
+  - A policy's `denyAsNotFound()` and an altered or expired signature render the same `not-found`
+    problem as an unknown address: `ProblemDetailsRenderer` maps any 404 `HttpException` and
+    `InvalidSignatureException` to it.
+  - The link is on any signed-in route (`GET /api/v1/vulnerable-sector-checks/{check}/document-link`),
+    not under `/admin`: the policy admits the owner and administrators, and a check with no document
+    yet (scanning or blocked) is 404 too. Only a non-owner's request (an administrator's) writes
+    `vsc_document.viewed`.
+  - The document streams as `attachment; filename="vulnerable-sector-check.{pdf|jpg|png}"`, with
+    `Content-Length`, `private, no-store`, `nosniff` and `default-src 'none'; sandbox`.
 - **S6 (ADR-0024, ADR-0025).**
   - The `uploads` "middleware group" is a route mark, `uploads:{kilobytes}` (`AcceptsUpload`), read by
     `LimitRequestBodySize` and `EnsureJsonRequest`, which run before any route middleware. The check

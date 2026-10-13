@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
 use App\Http\Controllers\Api\V1\Administration\AdminOverviewController;
 use App\Http\Controllers\Api\V1\Administration\AuditEntriesController;
+use App\Http\Controllers\Api\V1\ArtistOnboarding\DocumentLinksController;
 use App\Http\Controllers\Api\V1\ArtistOnboarding\VulnerableSectorChecksController;
 use App\Http\Controllers\Api\V1\Privacy\ConsentController;
 use App\Http\Middleware\EnsureAdministrator;
@@ -44,6 +45,8 @@ Route::middleware(['auth:sanctum', SetCachePolicy::class, TrackSessionActivity::
     Route::post('account/consents/marketing', [ConsentController::class, 'saveMarketing'])->name('account.consents.marketing.save');
     Route::get('account/sessions', [AccountSessionController::class, 'index'])->name('account.sessions.index');
     Route::delete('account/sessions/{session}', [AccountSessionController::class, 'destroy'])->name('account.sessions.destroy');
+    // The owner and administrators only; the policy conceals everything else (L2-049.4, L2-074.2).
+    Route::get('vulnerable-sector-checks/{check}/document-link', [DocumentLinksController::class, 'show'])->whereNumber('check')->name('vulnerable-sector-checks.document-link');
     Route::middleware('role:booker')->group(function () {
         Route::get('account/church', [ChurchController::class, 'show'])->name('account.church.show');
         Route::put('account/church', [ChurchController::class, 'update'])->name('account.church.update');

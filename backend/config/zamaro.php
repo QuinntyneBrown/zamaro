@@ -54,6 +54,11 @@ return [
         'breached_passwords' => ['password1234', 'qwertyuiop123', 'iloveyou1234'],
     ],
 
+    // The separate host private documents are streamed from (L2-076.3, M3 D10): no Zamaro cookie reaches
+    // it, and a file served there cannot read Zamaro pages. Chromium resolves `*.localhost` to the
+    // loopback, so dev and e2e use media.localhost on the API's port; production's name is M10's.
+    'media_host' => env('ZAMARO_MEDIA_HOST', 'media.localhost'),
+
     'uploads' => [
         // Which disk plays which part of the upload pipeline (scan-and-serve-uploads, ADR-0024).
         'disks' => [

@@ -162,6 +162,18 @@ exposes its existence beyond Youth event eligibility.
   over 10 MB "This file is 14 MB. Choose a PDF, JPEG or PNG up to 10 MB."; missing date "Enter the
   issue date printed on the check."; future date "The issue date can't be after today."
 
+**As built in M3 S7**
+
+- `GET /api/v1/vulnerable-sector-checks/{check}/document-link` (`DocumentLinksController`) sits on the
+  signed-in routes; `VulnerableSectorCheckPolicy::view` admits the owner and administrators and
+  `denyAsNotFound()` to everyone else, rendered as the shared `not-found` problem. An administrator's
+  request writes `vsc_document.viewed`; the owner's does not.
+- `App\Support\PrivateDocumentUrl` signs `documents.show` for 5 minutes; `routes/media.php` binds it
+  to `ZAMARO_MEDIA_HOST` (`media.localhost` in dev and e2e) behind the `signed` middleware;
+  `Http\Controllers\Media\PrivateDocumentController` streams the decrypted document as an attachment
+  with server-set type, name and headers. An altered or expired link is 404, as is the path on the API
+  host.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

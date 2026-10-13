@@ -87,6 +87,7 @@ zamaro/
 │   │   ├── api.php                # /api/v1, authenticated by default
 │   │   ├── api_public.php         # intentional anonymous routes
 │   │   ├── health.php             # /health/live and /health/ready, outside /api/v1 (ADR-0005)
+│   │   ├── media.php              # signed links to private documents, on the media host (ADR-0024)
 │   │   └── console.php            # scheduled commands
 │   ├── tests/
 │   │   ├── Feature/{Subsystem}/   # integration tests against the API

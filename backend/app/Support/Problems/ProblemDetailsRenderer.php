@@ -15,6 +15,7 @@ use App\Http\Resources\Discovery\LineupCardResource;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +61,10 @@ class ProblemDetailsRenderer
                 ->toResponse();
         }
 
-        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
+        // A policy's denyAsNotFound() (L2-074), and a signed link that was altered or ran out (L2-076.3), are
+        // the same "nothing here" as an unknown address.
+        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException || $e instanceof InvalidSignatureException
+            || ($e instanceof HttpExceptionInterface && $e->getStatusCode() === 404)) {
             return ProblemDetails::of(ProblemType::NotFound, 'Nothing exists at this address.', $requestId)
                 ->toResponse();
         }
