@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-progress-bar`, `zm-meter` |
 | Library path | `frontend/projects/components/src/lib/progress-bar/` |
-| Status | planned |
+| Status | built (`zm-progress-bar`, M3 S11, for the application's video upload); planned (`zm-meter`) |
 | Traces to | L2-049, L2-051, L2-052, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-111 |
 | Design system | [`progress-bar.html`](../../design-system/components/progress-bar.html) |
 | Source mocks | [`dialogs/add-video/busy`](../../mocks/dialogs/add-video/busy.html), [`dialogs/add-photo/busy`](../../mocks/dialogs/add-photo/busy.html), [`dialogs/upload-check/busy`](../../mocks/dialogs/upload-check/busy.html), [`pages/dashboard/default`](../../mocks/pages/dashboard/default.html), [`pages/dashboard/empty`](../../mocks/pages/dashboard/empty.html), [`pages/edit-profile/default`](../../mocks/pages/edit-profile/default.html), [`pages/edit-profile/empty`](../../mocks/pages/edit-profile/empty.html), and every edit-profile state and dialog over it (see Usage) |
@@ -414,7 +414,9 @@ and the label says the task is still working. The meter never animates.
 
 ## Implementation notes
 
-Planned. To build it:
+**As built in M3 (S11):** `progress-bar/progress-bar.ts` (`ProgressBar`, `zm-progress-bar`) with `label`, `value` (null is indeterminate), `max`, `valueText`, `ariaValueText` and `variant`; the host carries `progress` and the modifier classes, the label id is `zm-progress-{n}` from a module counter, and the track is the `role="progressbar"` element with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` and `aria-valuetext`. The `ProgressBar` scenario renders "Uploading way-maker.mp4 · 46%". Still planned: `zm-meter` and the dev-mode errors.
+
+The remaining plan. To build it:
 
 - Folder `frontend/projects/components/src/lib/progress-bar/` with
   `progress-bar.ts` (`ProgressBar`, selector `zm-progress-bar`) and `meter.ts`

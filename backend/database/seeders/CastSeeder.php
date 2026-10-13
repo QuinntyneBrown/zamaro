@@ -32,6 +32,7 @@ use App\Models\SetlistSong;
 use App\Models\SlugHistory;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
+use App\Services\ArtistOnboarding\DocumentVault;
 use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -100,6 +101,29 @@ class CastSeeder extends Seeder
         'abigail-mensah' => 'abigail@abigailmensah.ca',
         'tomi-oduya' => 'tomi.oduya@harvestpointchurch.ca',
     ];
+
+    /**
+     * Artists whose account address the admin mocks show (pages/admin-artist); everyone else keeps
+     * `{account}@cast.zamaro.test`. Tobi Adeyemi's arrives with his application (S11).
+     */
+    private const MOCK_EMAILS = [
+        'marcus-bell-trio' => 'marcus@marcusbelltrio.ca',
+    ];
+
+    /** slug => when the application was approved, where the mocks say (pages/admin-artist); else the publish date. */
+    private const APPROVED = [
+        'marcus-bell-trio' => '2026-03-02 09:00:00',
+    ];
+
+    /**
+     * Priya Nair, the Zamaro team's administrator (docs/mocks/pages/admin-*). She exists only where the
+     * cast can sign in, with two-step sign-in on and this key, so the admin e2e specs compute her codes
+     * (e2e/fixtures/accounts.ts holds the same key). Production administrators are made by
+     * `zamaro:admin:grant` (M3 D6).
+     */
+    public const PRIYA_EMAIL = 'priya@zamaro.ca';
+
+    public const PRIYA_TOTP_SECRET = 'ZAMAROADMINPRIYANAIRTOTPKEY23456';
 
     /** booking number => [replied at, text]: Abigail's replies (docs/mocks/pages/artist-reviews). */
     private const REPLIES = [
@@ -269,6 +293,8 @@ class CastSeeder extends Seeder
             $this->profiles();
             $this->media();
             $this->accounts();
+            $this->administrators();
+            $this->pendingChecks();
             $this->consents();
             $this->churches();
             $this->savedArtists();
@@ -283,7 +309,7 @@ class CastSeeder extends Seeder
     {
         $roleIds = DB::table('roles')->pluck('id', 'name');
         $artistUserIds = Artist::pluck('user_id');
-        DB::table('role_user')->insertOrIgnore(User::pluck('id')->map(fn (int $id) => [
+        DB::table('role_user')->insertOrIgnore(User::where('email', '!=', self::PRIYA_EMAIL)->pluck('id')->map(fn (int $id) => [
             'user_id' => $id,
             'role_id' => $roleIds[$artistUserIds->contains($id) ? Role::Artist->value : Role::Booker->value],
         ])->all());
@@ -296,6 +322,28 @@ class CastSeeder extends Seeder
                 'password' => Hash::make($canSignIn ? $password : Str::random(40)),
             ]);
         }
+    }
+
+    /**
+     * Priya Nair: an Administrator and nothing else, with two-step sign-in on (L2-066.2). Seeded only
+     * where the cast can sign in, with the cast password and a fixed key.
+     */
+    private function administrators(): void
+    {
+        $password = config('zamaro.cast_password');
+        if (blank($password) || ! app()->environment(['local', 'testing', 'e2e'])) {
+            return;
+        }
+        $priya = User::firstOrNew(['email' => self::PRIYA_EMAIL]);
+        $priya->forceFill([
+            'name' => 'Priya Nair',
+            'password' => Hash::make($password),
+            'email_verified_at' => '2026-09-01 12:00:00',
+            'mfa_enabled' => true,
+            'two_factor_secret' => self::PRIYA_TOTP_SECRET,
+            'two_factor_confirmed_at' => '2026-09-01 12:05:00',
+        ])->save();
+        $priya->grantRoles([Role::Administrator]);
     }
 
     /**
@@ -385,7 +433,7 @@ class CastSeeder extends Seeder
     private function castUser(string $account, string $name): User
     {
         $cast = "{$account}@cast.zamaro.test";
-        $email = self::SIGN_IN[$account] ?? $cast;
+        $email = self::SIGN_IN[$account] ?? self::MOCK_EMAILS[$account] ?? $cast;
         $user = User::whereIn('email', array_unique([$email, $cast]))->orderByRaw('email = ? desc', [$email])->first()
             ?? User::create(['email' => $email, 'name' => $name, 'password' => Str::random(40)]);
         $user->update(['email' => $email, 'name' => $name]);
@@ -640,6 +688,7 @@ class CastSeeder extends Seeder
             'status' => ArtistStatus::Approved,
             'payout_ready' => true,
             'published_at' => $published.' 09:00:00',
+            'approved_at' => Carbon::parse(self::APPROVED[$slug] ?? $published.' 09:00:00', 'America/Toronto')->utc(),
         ]);
         SlugHistory::updateOrCreate(['slug' => $slug], ['artist_id' => $artist->id, 'retired_at' => null]);
 
@@ -667,5 +716,46 @@ class CastSeeder extends Seeder
             ['user_id' => $abigail->user_id, 'issued_on' => '2025-03-03'],
             ['expires_on' => '2028-03-03', 'status' => VscStatus::Verified, 'verified_at' => '2025-03-05 11:00:00'],
         );
+
+        // Daniel & Ruth Okonkwo's check runs out Mon 30 Nov 2026, 52 days from today: inside the
+        // renewal window, so the daily run has someone to remind (L2-049.3, M3 S9).
+        $daniel = Artist::where('slug', 'daniel-and-ruth-okonkwo')->firstOrFail();
+        VulnerableSectorCheck::updateOrCreate(
+            ['user_id' => $daniel->user_id, 'issued_on' => '2023-11-30'],
+            ['expires_on' => '2026-11-30', 'status' => VscStatus::Verified, 'verified_at' => '2023-12-04 15:00:00'],
+        );
+    }
+
+    /**
+     * The admin verification queue (pages/admin-checks): Elijah's first check and a newer one from
+     * Abigail, each with a stand-in document on the documents disk under a fixed name, so running the
+     * seeder again rewrites the same two objects. A seeded check that was verified since (the e2e
+     * suite verifies Elijah's) goes back to waiting, so the queue reads as the mocks show it after
+     * every run.
+     */
+    private function pendingChecks(): void
+    {
+        $vault = app(DocumentVault::class);
+        $pending = [
+            ['elijah-park', '2026-09-25', '2026-10-07 16:10:00'],
+            ['abigail-mensah', '2026-10-05', '2026-10-09 09:52:00'],
+        ];
+        foreach ($pending as [$slug, $issuedOn, $uploadedAt]) {
+            $artist = Artist::where('slug', $slug)->firstOrFail();
+            $check = VulnerableSectorCheck::firstOrNew(['user_id' => $artist->user_id, 'issued_on' => $issuedOn]);
+            $stored = $vault->store("%PDF-1.4\n% Stand-in Vulnerable Sector Check for {$artist->display_name}\n%%EOF\n", md5("vsc-{$slug}"));
+            $check->forceFill([
+                'status' => VscStatus::Pending,
+                'verified_at' => null,
+                'verified_by' => null,
+                'expires_on' => null,
+                'storage_key' => $stored['key'],
+                'wrapped_data_key' => $stored['wrappedDataKey'],
+                'mime_type' => 'application/pdf',
+                'size_bytes' => 64,
+                'created_at' => Carbon::parse($uploadedAt, 'America/Toronto'),
+                'updated_at' => Carbon::parse($uploadedAt, 'America/Toronto'),
+            ])->save();
+        }
     }
 }

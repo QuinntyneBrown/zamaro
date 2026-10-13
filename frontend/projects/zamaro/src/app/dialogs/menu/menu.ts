@@ -2,8 +2,8 @@ import { Dialog as CdkDialog, DialogRef } from '@angular/cdk/dialog';
 import { createGlobalPositionStrategy } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, Component, computed, inject, type Injector } from '@angular/core';
 import { translateSignal } from '@jsverse/transloco';
+import { ThemeService } from 'api';
 import { Dialog, Menu, type MenuItem } from 'components';
-import { ThemeService } from '../../shell/theme.service';
 
 export const MENU_TITLE_ID = 'menu-title';
 

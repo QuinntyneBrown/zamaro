@@ -5,38 +5,42 @@ import {
   computed,
   ElementRef,
   forwardRef,
+  inject,
   input,
   signal,
   viewChild,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CHECKBOX_GROUP } from './checkbox-group';
 
 let nextId = 0;
 
 /**
  * One native checkbox in its label (docs/specs/components/checkbox): a light choice row (`.choice`)
  * or a framed consent stub (`.choice--stub`), with its marker, description and own error. A boolean
- * control for reactive forms; consent is never pre-ticked, so the value starts `false`.
- * The drawn `check` variant and `zm-checkbox-group` join with their first screens.
+ * control for reactive forms; consent is never pre-ticked, so the value starts `false`. Inside a
+ * `zm-checkbox-group` with a `value`, its checked state is the group's and the group collects it.
+ * The drawn `check` variant joins with its first screen.
  */
 @Component({
   selector: 'zm-checkbox',
   providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => Checkbox), multi: true }],
   // The id belongs to the input; the host never repeats it, so the error summary's link finds the box.
   host: { '[class.full]': 'full()', '[attr.id]': 'null' },
-  template: `<label class="choice" [class.choice--stub]="variant() === 'stub'">
+  template: `<label class="choice" [class.choice--stub]="look() === 'stub'">
       <input
         #control
         type="checkbox"
         [id]="inputId()"
-        [attr.name]="name()"
-        [checked]="checked()"
+        [attr.name]="name() ?? group?.name()"
+        [attr.value]="value() ?? null"
+        [checked]="isChecked()"
         [disabled]="isDisabled()"
-        [required]="!!requiredMarker() || required()"
+        [required]="!grouped() && (!!requiredMarker() || required())"
         [attr.aria-invalid]="isInvalid() ? 'true' : null"
         [attr.aria-describedby]="descriptions()"
         (change)="toggled($any($event.target).checked)"
-        (blur)="onTouched()"
+        (blur)="blurred()"
       /><span class="choice__text"
         ><span
           ><ng-content />
@@ -166,8 +170,10 @@ let nextId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Checkbox implements ControlValueAccessor {
-  readonly variant = input<'choice' | 'stub'>('choice');
-  /** Native `name`. */
+  readonly variant = input<'choice' | 'stub'>();
+  /** The value the group collects; a child without one is standalone even inside a group. */
+  readonly value = input<string>();
+  /** Native `name`; the group's when inside one. */
   readonly name = input<string>();
   /** One sentence under the label, part of its name: "Optional. About once a month; unsubscribe any time." */
   readonly description = input<string>();
@@ -188,10 +194,16 @@ export class Checkbox implements ControlValueAccessor {
   /** Spans every column of a form grid. */
   readonly full = input(false, { transform: booleanAttribute });
 
+  protected readonly group = inject(CHECKBOX_GROUP, { optional: true });
   private readonly generatedId = `zm-checkbox-${nextId++}`;
   protected readonly inputId = computed(() => this.id() ?? this.generatedId);
   protected readonly errorId = computed(() => `${this.inputId()}-error`);
-  protected readonly isInvalid = computed(() => this.invalid() || !!this.error());
+  /** In a group with a value: the group owns the checked state and the error. */
+  protected readonly grouped = computed(() => this.group !== null && this.value() !== undefined);
+  protected readonly look = computed(() => this.variant() ?? this.group?.variant() ?? 'choice');
+  protected readonly isInvalid = computed(
+    () => this.invalid() || !!this.error() || (this.grouped() && !!this.group?.invalid()),
+  );
   protected readonly descriptions = computed(
     () =>
       [this.error() ? this.errorId() : null, this.describedBy()].filter(Boolean).join(' ') || null,
@@ -199,7 +211,12 @@ export class Checkbox implements ControlValueAccessor {
 
   protected readonly checked = signal(false);
   private readonly formDisabled = signal(false);
-  protected readonly isDisabled = computed(() => this.disabled() || this.formDisabled());
+  protected readonly isChecked = computed(() =>
+    this.grouped() ? !!this.group?.has(this.value() ?? '') : this.checked(),
+  );
+  protected readonly isDisabled = computed(
+    () => this.disabled() || this.formDisabled() || (this.grouped() && !!this.group?.disabled()),
+  );
 
   private readonly control = viewChild.required<ElementRef<HTMLInputElement>>('control');
   private onChange: (value: boolean) => void = () => undefined;
@@ -211,8 +228,17 @@ export class Checkbox implements ControlValueAccessor {
   }
 
   protected toggled(checked: boolean): void {
+    if (this.grouped()) {
+      this.group?.toggle(this.value() ?? '', checked);
+      return;
+    }
     this.checked.set(checked);
     this.onChange(checked);
+  }
+
+  protected blurred(): void {
+    if (this.grouped()) this.group?.touched();
+    else this.onTouched();
   }
 
   writeValue(value: boolean | null): void {

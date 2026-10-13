@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { type Params, RouterLink, RouterLinkActive } from '@angular/router';
 import { AvatarButton } from '../avatar/avatar-button';
 import { Badge } from '../badge/badge';
@@ -6,11 +6,23 @@ import type { AvatarKind } from '../avatar/avatar-initials';
 import { Button } from '../button/button';
 import { Icon } from '../icon/icon';
 
-export interface TopBarLink {
+/** A link in the bar: the primary links and the workspace shortcut (top-bar CRD). */
+export interface TopBarLinkBase {
   label: string;
-  link: string;
+  link: string | readonly unknown[];
   fragment?: string;
+  queryParams?: Params;
 }
+
+export interface TopBarLink extends TopBarLinkBase {
+  /** A count after the label; 0, null or undefined renders no badge. */
+  count?: number | null;
+  /** Visually hidden after the count: "awaiting reply", "waiting", "held", "reported". */
+  countLabel?: string;
+}
+
+/** Public: guests and bookers. Workspace: the artist area and the admin application (role tag, five links, compact until XL). */
+export type TopBarVariant = 'public' | 'workspace';
 
 /** The signed-in person behind the avatar button. */
 export interface TopBarAccount {
@@ -51,7 +63,7 @@ export interface TopBarAuth {
 @Component({
   selector: 'zm-top-bar',
   imports: [AvatarButton, Badge, Button, Icon, RouterLink, RouterLinkActive],
-  template: `<header class="topbar">
+  template: `<header class="topbar" [class.topbar--workspace]="variant() === 'workspace'">
     <zm-button
       class="topbar__menu"
       variant="ghost"
@@ -66,21 +78,39 @@ export interface TopBarAuth {
       <span class="brand-mark" aria-hidden="true"><zm-icon name="mic" size="sm" /></span
       >{{ brand() }}
     </a>
+    @if (role()) {
+      <span class="topbar__role">{{ role() }}</span>
+    }
     <nav class="topbar__nav" [attr.aria-label]="navLabel()">
       @for (item of links(); track item.label) {
         <a
           class="nav-link"
           [routerLink]="item.link"
           [fragment]="item.fragment"
+          [queryParams]="item.queryParams"
           routerLinkActive
           ariaCurrentWhenActive="page"
           [routerLinkActiveOptions]="exactMatch"
-          >{{ item.label }}</a
-        >
+          >{{ item.label }}
+          @if (item.count) {
+            <zm-badge variant="count"
+              >{{ item.count }}<span class="visually-hidden"> {{ item.countLabel }}</span></zm-badge
+            >
+          }
+        </a>
       }
     </nav>
     <span class="topbar__spacer"></span>
-    @if (saved(); as s) {
+    @if (shortcut(); as shortcut) {
+      <a
+        class="nav-link topbar__link"
+        [routerLink]="shortcut.link"
+        [fragment]="shortcut.fragment"
+        [queryParams]="shortcut.queryParams"
+        >{{ shortcut.label }}</a
+      >
+    }
+    @if (variant() === 'public' && saved(); as s) {
       <a
         class="nav-link topbar__saved"
         [routerLink]="s.link"
@@ -173,9 +203,26 @@ export interface TopBarAuth {
       color: var(--color-fg-on-accent);
     }
 
+    /* The workspace's role tag after the brand: "Artists", "Admin" (top-bar CRD). */
+    .topbar__role {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--space-0-5) var(--space-2);
+      border: var(--border-width-hairline) solid currentColor;
+      font: var(--text-overline);
+      letter-spacing: var(--letter-spacing-stamp);
+      text-transform: uppercase;
+      color: var(--color-fg-on-stage-muted);
+    }
+
     .topbar__nav {
       display: none;
       gap: var(--space-1);
+    }
+
+    /* The workspace shortcut ("View public profile") joins the bar only from 2XL. */
+    .topbar__link {
+      display: none;
     }
 
     .topbar__spacer {
@@ -285,29 +332,60 @@ export interface TopBarAuth {
       .topbar__theme {
         display: inline-flex;
       }
+
+      /* Five workspace links do not fit at LG: the workspace bar stays compact until XL. */
+      .topbar--workspace .topbar__nav {
+        display: none;
+      }
+
+      .topbar--workspace .topbar__menu {
+        display: inline-flex;
+      }
+    }
+
+    @media (min-width: 75rem) {
+      .topbar--workspace .topbar__nav {
+        display: flex;
+      }
+
+      .topbar--workspace .topbar__menu {
+        display: none;
+      }
+    }
+
+    @media (min-width: 96rem) {
+      .topbar--workspace .topbar__link {
+        display: inline-flex;
+      }
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TopBar {
+  /** `workspace` adds `.topbar--workspace`: the links collapse until XL and Saved never renders. */
+  readonly variant = input<TopBarVariant>('public');
   /** The brand name, which is also the home link's accessible name. */
   readonly brand = input.required<string>();
-  readonly homeLink = input('/');
+  readonly homeLink = input<string | readonly unknown[]>('/');
+  /** The role tag after the brand on a workspace bar: "Artists", "Admin". Empty renders none. */
+  readonly role = input('');
+  /** The workspace shortcut, shown from 2XL: "View public profile". */
+  readonly shortcut = input<TopBarLinkBase | null>(null);
   readonly navLabel = input.required<string>();
   readonly links = input.required<readonly TopBarLink[]>();
   readonly menuLabel = input.required<string>();
-  readonly menuExpanded = input(false);
+  readonly menuExpanded = input(false, { transform: booleanAttribute });
   /** Id of the drawer the menu button opens. */
   readonly menuControls = input<string>();
   /** The toggle's constant accessible name ("Dark theme"); its state is `themePressed`. */
   readonly themeLabel = input.required<string>();
-  readonly themePressed = input(false);
+  readonly themePressed = input(false, { transform: booleanAttribute });
   /** Signed in: the avatar button. Null shows `auth` instead. */
   readonly account = input<TopBarAccount | null>(null);
   /** The Saved link, signed-in bookers only. */
   readonly saved = input<TopBarSaved | null>(null);
   /** The avatar's `aria-expanded`: true while the account menu is open. */
-  readonly accountExpanded = input(false);
+  readonly accountExpanded = input(false, { transform: booleanAttribute });
   /** Id of the account menu the avatar opens. */
   readonly accountControls = input<string>();
   /** Signed out: "Sign in". Ignored while `account` is set. */

@@ -114,6 +114,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/admin/src/main.ts",
+            "baseHref": "/admin/",
             "tsConfig": "projects/admin/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

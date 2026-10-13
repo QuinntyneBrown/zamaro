@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   afterNextRender,
@@ -15,7 +16,9 @@ import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
   afterSignIn,
   AuthService,
+  type CurrentUser,
   FormatService,
+  isAdminUrl,
   safeReturnUrl,
   type SessionEndedState,
 } from 'api';
@@ -62,6 +65,7 @@ export class SignIn {
   private readonly transloco = inject(TranslocoService);
   private readonly injector = inject(Injector);
   private readonly format = inject(FormatService);
+  private readonly document = inject(DOCUMENT);
 
   protected readonly form = inject(NonNullableFormBuilder).group({ email: '', password: '' });
   protected readonly status = signal<Status>('idle');
@@ -109,7 +113,7 @@ export class SignIn {
               queryParams: returnUrl === '/' ? {} : { returnUrl },
               state: { email: result.email },
             })
-          : this.router.navigateByUrl(afterSignIn(this.router, result, returnUrl))),
+          : this.continueTo(result, returnUrl)),
       error: (error: unknown) => {
         if (
           error instanceof HttpErrorResponse &&
@@ -129,6 +133,15 @@ export class SignIn {
         }
       },
     });
+  }
+
+  /** Where a completed sign-in goes; the admin application is served separately, so it is a full navigation (ADR-0023). */
+  private continueTo(user: CurrentUser, returnUrl: string): Promise<boolean> | void {
+    if (isAdminUrl(returnUrl)) {
+      this.document.location.assign(returnUrl);
+      return;
+    }
+    return this.router.navigateByUrl(afterSignIn(this.router, user, returnUrl));
   }
 
   private returnQueryFrom(returnUrl: string | null): Record<string, string> {

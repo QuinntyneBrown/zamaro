@@ -26,6 +26,7 @@ class Artist extends Model
             'base_longitude' => 'float',
             'payout_ready' => 'boolean',
             'published_at' => 'immutable_datetime',
+            'approved_at' => 'immutable_datetime',
             'pronoun' => Pronoun::class,
             'languages' => 'array',
             // Private, encrypted, in E.164 (L2-025.4, L2-079.2).

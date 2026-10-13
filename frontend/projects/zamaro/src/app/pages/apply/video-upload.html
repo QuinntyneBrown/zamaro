@@ -1,0 +1,68 @@
+@if (videos().length > 0) {
+  <ul class="upload-list" role="list" [attr.aria-label]="'apply.videos.list' | transloco">
+    @for (video of videos(); track video.token) {
+      <li class="upload-list__item">
+        <zm-icon [name]="video.status === 'failed' ? 'warning' : 'check'" />
+        <div class="upload-list__text">
+          <strong>{{ video.title }}</strong
+          ><span>{{ facts(video) }}</span>
+          @if (video.status === 'uploading') {
+            <zm-progress-bar
+              [label]="'apply.videos.uploading' | transloco: { file: video.fileName }"
+              [value]="percent(video)"
+              [valueText]="'apply.videos.percent' | transloco: { percent: percent(video) }"
+            />
+          } @else if (video.status === 'processing') {
+            <zm-progress-bar
+              [label]="'apply.videos.processingLabel' | transloco: { title: video.title }"
+              [value]="null"
+              [valueText]="'apply.videos.processingValue' | transloco"
+            />
+          }
+        </div>
+        <zm-button
+          size="sm"
+          variant="ghost"
+          [label]="'apply.videos.removeNamed' | transloco: { title: video.title }"
+          [disabled]="readonly() || video.status === 'uploading'"
+          (click)="remove(video)"
+          >{{ 'apply.videos.remove' | transloco }}</zm-button
+        >
+      </li>
+    }
+  </ul>
+}
+@if (error()) {
+  <span class="field__error" id="videos-error">{{ error() }}</span>
+}
+<div class="form-grid">
+  <zm-form-field
+    class="field--full"
+    fieldId="video-title"
+    [formControl]="title"
+    [label]="'apply.videos.videoTitle' | transloco"
+    [requiredMarker]="'apply.videos.videoTitleRequired' | transloco"
+    [help]="'apply.videos.videoTitleHelp' | transloco"
+    [readonly]="readonly() || !!uploading()"
+    [error]="titleError()"
+  />
+  <div class="field field--full">
+    <label class="field__label" for="video-file"
+      >{{ 'apply.videos.file' | transloco }}
+      <span class="field__optional">{{ 'apply.optional' | transloco }}</span></label
+    >
+    <input
+      class="input"
+      type="file"
+      id="video-file"
+      accept="video/mp4,video/quicktime,video/webm"
+      aria-describedby="video-file-help"
+      [disabled]="readonly() || !!uploading()"
+      (change)="picked($event)"
+    />
+    @if (uploadError()) {
+      <span class="field__error" id="video-file-error">{{ uploadError() }}</span>
+    }
+    <span class="field__help" id="video-file-help">{{ 'apply.videos.fileHelp' | transloco }}</span>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+/* The list-page head and body under the workspace bar (design-system patterns, admin-* mocks). */
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-8);
+  padding-block: var(--space-12) var(--space-8);
+}
+
+.overline {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.page-head__title {
+  font: var(--text-h1);
+  text-transform: uppercase;
+}
+
+.page-head__sub {
+  font: var(--text-stub);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+  margin-top: var(--space-3);
+}
+
+.page-body {
+  display: grid;
+  gap: var(--space-8);
+  padding-bottom: var(--space-20);
+}

@@ -146,6 +146,20 @@ secret in `context`. The viewer, `ImmutableAuditEntry` and retention stay in M3.
   system grants it). There is no `RoleChanged` event or `AuditAuthenticationEvents` subscriber: the
   actions call `RecordAuditEntry` themselves, as M2's do.
 - A failed sign-in keeps the attempted address in `context.email`, not `context.attempted_email`.
+
+**As built in M3 S5**
+
+- `audit:prune` runs `App\Jobs\Administration\PruneAuditEntries` daily at 03:30 Toronto time: batches
+  of 1,000, each in its own transaction that switches to `zamaro_audit_retention` with `SET LOCAL ROLE`
+  (no separate connection). A second run deletes nothing; a missed day is caught up.
+- The viewer is `projects/admin/src/app/pages/audit-log` at `/admin/audit`, over
+  `GET /api/v1/admin/audit-entries` (`Admin\AuditEntriesController@index`,
+  `ListAuditEntriesRequest`, `Actions\Administration\ListAuditEntries`, `AuditEntryResource`): filters
+  for actor email, action, target, outcome and a date range, 50 entries by cursor, "Show older
+  entries". `GET …/audit-entries/{entry}` reads one entry, so `PATCH`, `PUT` and `DELETE` on it answer
+  405. Viewing the log is not audited (M3 D13).
+- On a frozen clock (e2e, tests) `RecordAuditEntry` stamps the frozen time instead of the database
+  clock, so the viewer matches the mocks' "today".
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the level-1

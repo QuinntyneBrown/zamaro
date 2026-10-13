@@ -152,6 +152,59 @@ administrator verification queue is
 The document is never part of any public response, and no public profile field
 exposes its existence beyond Youth event eligibility.
 
+**As built in M3 S6**
+
+- `UploadVulnerableSectorCheck` calls `ReceiveUpload` (scan-and-serve-uploads) and creates the check as
+  `Scanning` with `upload_id`; `ScanUpload`, not a `ScanVulnerableSectorCheck` job, promotes it to
+  `Pending` through `DocumentVault` or blocks it. `expires_on` is nullable until verification.
+- `GET /api/v1/artist/vulnerable-sector-checks/current` answers `{verified, latest}`.
+- Copy (M3 D11): wrong type "This file isn't a PDF, JPEG or PNG. Choose a scan of the whole check.";
+  over 10 MB "This file is 14 MB. Choose a PDF, JPEG or PNG up to 10 MB."; missing date "Enter the
+  issue date printed on the check."; future date "The issue date can't be after today."
+
+**As built in M3 S7**
+
+- `GET /api/v1/vulnerable-sector-checks/{check}/document-link` (`DocumentLinksController`) sits on the
+  signed-in routes; `VulnerableSectorCheckPolicy::view` admits the owner and administrators and
+  `denyAsNotFound()` to everyone else, rendered as the shared `not-found` problem. An administrator's
+  request writes `vsc_document.viewed`; the owner's does not.
+- `App\Support\PrivateDocumentUrl` signs `documents.show` for 5 minutes; `routes/media.php` binds it
+  to `ZAMARO_MEDIA_HOST` (`media.localhost` in dev and e2e) behind the `signed` middleware;
+  `Http\Controllers\Media\PrivateDocumentController` streams the decrypted document as an attachment
+  with server-set type, name and headers. An altered or expired link is 404, as is the path on the API
+  host.
+
+**As built in M3 S8 (API)**
+
+- `GET /api/v1/admin/vulnerable-sector-checks` lists the checks waiting, oldest upload first, each with
+  the artist, the dates and the verified check it replaces; `POST …/{check}/verification`
+  (`VerifyVulnerableSectorCheck`) sets `Verified`, `verified_at`, `verified_by` and `expires_on`, audits
+  `vsc.verified`, refuses a check issued more than 3 years ago on `issuedOn` ("This check was issued more
+  than 3 years ago. Ask the artist for a newer one.") and answers 409 `vsc-already-decided` to a second
+  decision. `VulnerableSectorCheck::isCurrentOn()` exists; the search's youth rule compares the event date
+  with `expires_on` in SQL.
+
+**As built in M3 S8 (admin pages)**
+
+- `VscQueuePage` is the admin application's `pages/checks` at `/admin/vulnerable-sector-checks`; the
+  Artists list links to it with the overview's count. A verified row stays on the page with "Verified
+  until {expiry} · by {name}", and the caption becomes "Checks uploaded since {date}, oldest first".
+- `VscDocumentComponent` is `shell/vsc-document-link` in the admin application. It opens the tab on the
+  click and sends it to the signed link once the API answers. The admin application reads the link from
+  `GET /api/v1/admin/vulnerable-sector-checks/{check}/document-link`, the same controller on the admin
+  group, because the signed-in route sits behind the terms gate (L2-080.3) and administrators are not
+  asked to accept the terms. The owner keeps the signed-in route.
+- `VulnerableSectorChecksApi` is `AdminVulnerableSectorChecksApi` (`api/lib/services/admin`) for the
+  admin side; the artist's upload client joins with the profile editor (M4).
+
+**As built in M3 S9**
+
+- `SendVscRenewalReminders` is `vsc:send-renewal-reminders`, scheduled daily at 09:00 Toronto in
+  `routes/console.php`. It reminds once per check (conditional update of `renewal_reminder_sent_at`
+  in a transaction, then the queued notification after commit), skips a check replaced by a newer
+  verified one, and leaves an expired check alone. `VscRenewalReminderNotification` is Markdown mail
+  (HTML and text) from the `emails.vscRenewal.*` catalogue, linking to `/artist/profile#check`.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

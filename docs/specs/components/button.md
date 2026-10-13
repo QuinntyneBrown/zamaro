@@ -261,7 +261,9 @@ parity. The `zm-icon` internals are free to change.
 - Height `--btn-height`, from the size. Side padding `--btn-padding`; block
   padding `--space-1`; icon gap `--space-2`.
 - Label `--text-label` at `--btn-font-size`, `--letter-spacing-wide`, uppercase,
-  centred, `text-wrap: balance`. No text decoration.
+  centred, `text-wrap-style: balance` with the wrap mode inherited (`text-wrap-mode: inherit`), so
+  the label keeps to one line where the parent says `nowrap` (a table's actions cell, the top bar).
+  No text decoration.
 - Rule `--border-width-thick` in `--btn-border`; radius `--radius-md` (square).
 - Hover shadow `--btn-shadow-hover` (`--shadow-1`, colour `--color-shadow`);
   hover transform `--btn-transform-hover` (`--transform-lift`).
@@ -330,7 +332,9 @@ is drawn in `currentColor`.
 - Labels never truncate. They wrap onto a balanced second line rather than
   overflow. In the booking stub at 360 px, "Request to book · Sat 14 Nov" wraps
   to two lines, as the design system predicts (booking-form CRD). The button
-  grows taller and stays inside the stub.
+  grows taller and stays inside the stub. In a `nowrap` context (the table's
+  actions cell: "View document", "Verify") the label stays on one line and the
+  column takes the width; the table scrolls sideways on phones.
 - Below SM (576 px) a form's submit button is `block`. The consumer sets
   `block` from the breakpoint or by layout; the button fills its container.
 - At XS, buttons in a `.dialog__footer` stretch to share the width.

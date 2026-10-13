@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-checkbox`, `zm-checkbox-group` |
 | Library path | `frontend/projects/components/src/lib/checkbox/` |
-| Status | partial: standalone `zm-checkbox` (choice and stub) built in M2 S5 |
+| Status | partial: standalone `zm-checkbox` (choice and stub) built in M2 S5; `zm-checkbox-group` with `value` and the group token built in M3 S11; the `check` variant is planned |
 | Traces to | L2-022, L2-037, L2-048, L2-050, L2-056, L2-065, L2-068, L2-080, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 |
 | Design system | [`checkbox.html`](../../design-system/components/checkbox.html) |
 | Source mocks | [`pages/sign-up/invalid`](../../mocks/pages/sign-up/invalid.html), [`pages/edit-profile/default`](../../mocks/pages/edit-profile/default.html), [`pages/account/default`](../../mocks/pages/account/default.html), [`dialogs/weekly-default/default`](../../mocks/dialogs/weekly-default/default.html), [`dialogs/pay-deposit/invalid`](../../mocks/dialogs/pay-deposit/invalid.html), [`pages/admin-application/default`](../../mocks/pages/admin-application/default.html), [`pages/admin-bookings/default`](../../mocks/pages/admin-bookings/default.html), and every other screen with a checkbox (see Usage) |
@@ -575,6 +575,15 @@ label slot is one `<ng-content>` because only the choice-row markup exists yet. 
 their first screens: the `check` variant with `indeterminate`, `controls`, `label` and `indent`
 (and its icons), `optionalMarker`, `value`, the group token, `zm-checkbox-group` and the
 `CheckboxGroup` scenario.
+
+**Built in M3 S11, for the application's styles:** `checkbox-group.ts` (`CheckboxGroup`,
+`zm-checkbox-group`), a `ControlValueAccessor` over a `readonly string[]`, with `legend`, `name`,
+`id` (default `zm-checkbox-group-{n}`), `requiredMarker`, `optionalMarker`, `help`, `error`,
+`variant`, `layout` and `legendStyle`. It provides itself under `CHECKBOX_GROUP`; `zm-checkbox`
+gained `value`, injects the group when there is one and then reads its checked state, name, variant,
+error and disabled state from it instead of acting as its own value accessor. The `CheckboxGroup`
+scenario renders the styles fieldset. Still to build: the `check` variant with `indeterminate`,
+`controls`, `label` and `indent`.
 
 To finish it:
 

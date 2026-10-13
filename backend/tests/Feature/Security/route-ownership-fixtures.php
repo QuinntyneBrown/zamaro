@@ -2,6 +2,7 @@
 
 use App\Models\Artist;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use PragmaRX\Google2FA\Google2FA;
 use Tests\Feature\Security\CrossUserAccessTest;
 
@@ -212,5 +213,76 @@ return [
         $test->as($intruder)->deleteJson("/api/v1/saved-artists/{$artist}")->assertOk()->assertJsonPath('data.savedCount', 0);
 
         $test->as($owner)->getJson('/api/v1/saved-artists/ids')->assertJsonPath('data.artistIds', [$artist]);
+    },
+
+    // The admin API conceals itself from everyone but an administrator who signed in with a code
+    // (L2-066.1); AdminRoutesConcealedTest proves the body matches an unknown address.
+    'GET api/v1/admin/overview' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/overview')->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
+
+    'GET api/v1/admin/audit-entries' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/audit-entries')->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
+
+    'GET api/v1/admin/audit-entries/{entry}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/audit-entries/1')->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
+
+    'POST api/v1/artist/vulnerable-sector-checks' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->makeArtist($owner);
+
+        // A booker: the artist-only route is concealed (L2-074.1).
+        $test->as($intruder)->post('/api/v1/artist/vulnerable-sector-checks', [], ['Accept' => 'application/json'])->assertNotFound();
+    },
+
+    'GET api/v1/artist/vulnerable-sector-checks/current' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->makeArtist($owner);
+        $test->makeArtist($intruder);
+        DB::table('vulnerable_sector_checks')->insert([
+            'user_id' => $owner->id, 'issued_on' => '2025-03-03', 'expires_on' => '2028-03-03', 'status' => 'verified',
+            'verified_at' => now(), 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $response = $test->as($intruder)->getJson('/api/v1/artist/vulnerable-sector-checks/current')->assertOk()
+            ->assertJsonPath('data.verified', null)->assertJsonPath('data.latest', null);
+
+        $test->assertHoldsNothingOf($owner, $response);
+    },
+
+    'GET api/v1/vulnerable-sector-checks/{check}/document-link' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->makeArtist($owner);
+        $check = DB::table('vulnerable_sector_checks')->insertGetId([
+            'user_id' => $owner->id, 'issued_on' => '2026-10-05', 'status' => 'pending', 'storage_key' => str_repeat('a', 32),
+            'wrapped_data_key' => 'v1:none', 'mime_type' => 'application/pdf', 'created_at' => now(), 'updated_at' => now(),
+        ]);
+
+        $test->as($intruder)->getJson("/api/v1/vulnerable-sector-checks/{$check}/document-link")->assertNotFound()
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/not-found');
+    },
+
+    // The admin routes conceal themselves from everyone but an administrator who signed in with a code
+    // (L2-066.1); AdminRoutesConcealedTest proves the body matches an unknown address.
+    'GET api/v1/admin/vulnerable-sector-checks' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/vulnerable-sector-checks')->assertNotFound();
+    },
+
+    'POST api/v1/admin/vulnerable-sector-checks/{check}/verification' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->postJson('/api/v1/admin/vulnerable-sector-checks/1/verification')->assertNotFound();
+    },
+
+    'GET api/v1/admin/vulnerable-sector-checks/{check}/document-link' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/vulnerable-sector-checks/1/document-link')->assertNotFound();
+    },
+
+    'GET api/v1/admin/artists' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/artists')->assertNotFound();
+    },
+
+    'GET api/v1/admin/artists/{artist}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/artists/1')->assertNotFound();
     },
 ];

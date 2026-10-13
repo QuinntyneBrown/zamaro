@@ -29,7 +29,10 @@
   letter-spacing: var(--letter-spacing-wide);
   text-decoration: none;
   text-align: center;
-  text-wrap: balance;
+  /* A label wraps onto a balanced second line (button CRD), except where the parent says nowrap (a
+     table's actions cell, the top bar): the mode is inherited, the style stays balanced. */
+  text-wrap-style: balance;
+  text-wrap-mode: inherit;
   color: var(--btn-fg);
   background: var(--btn-bg);
   border: var(--border-width-thick) solid var(--btn-border);

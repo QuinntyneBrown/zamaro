@@ -8,8 +8,19 @@
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
-| S1 | Audit entries: record them, refuse changes | In progress | (ADR-0022) |
-| S2–S14 | | Not started | |
+| S1 | Audit entries: record them, refuse changes | Done | `64b3624`, `65356bb` (ADR-0022) |
+| S2 | Admin API: concealed, MFA-only, idle after 30 minutes | Done | `7b67709`, `6009cc6` |
+| S3 | Admin application shell and the `/admin` 404 | Done | `26ca4a7` (Priya seeded), `9b6b4e9` (ADR-0023) |
+| S4 | Idle warning toast | Done | `3435a83` |
+| S5 | Audit log viewer and retention | Done | `2557169` |
+| S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | `dea2b67` (ADR-0024, ADR-0025) |
+| S7 | Signed links to private documents | Done | `fafb6fe` |
+| S8 | Admin VSC queue, verification and the Artists list | Done | see below |
+| S9 | VSC renewal reminders | Done | see below |
+| S10 | Application video upload | Done | see below |
+| S11 | Apply as an artist: the form and a sent application | Done | `453ab1f` (API), see below (web) |
+| S12 | Apply: refusals and retries | Done | see below |
+| S13–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -44,6 +55,274 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S12.**
+  - Most refusals were already in S11's code; S12 added their acceptance tests (six API cases, four
+    e2e cases) and fixed what they found:
+    - A retry with the same `Idempotency-Key` carried the same video tokens, which the earlier send
+      had attached to the application, so the request's video rule refused the retry with 422 before
+      the action could replay it. The rule now accepts a video attached by the application that holds
+      the request's key (when the header is a UUID).
+    - A race the duplicate check cannot see (two sends from one email landing together) hit the
+      partial unique index and answered 500; the action now turns
+      `UniqueConstraintViolationException` into the 409 `application-in-review` answer. The test
+      stages the race from the model's `creating` hook.
+    - The web page's `artists/apply` and `artists/apply/:step` were two routes, so a 422 that sent the
+      applicant back to step 1 re-created the page and lost the server's errors; they are one route
+      through a `UrlMatcher` now, and the page instance is reused across steps. A step is "done" when
+      its answers pass, wherever the applicant is, as the `outside-area` mock shows; the status line
+      reads "Not sent · answers kept" after a refusal or a lost answer.
+  - The e2e in-review case sends an application and then starts over with the same email in upper
+    case, since the seed gets Tobi's A-0219 only in S13. The lost-answer case lets the request reach
+    the API and drops the response, then asserts the retry is 200 with the same key.
+  - No `FakeGeocoder` change was needed: Ottawa is a cast town already, and an unknown town
+    ("Atlantis") is the "couldn't find that address" case.
+- **S11.**
+  - API: `POST /api/v1/artist-applications` behind `throttle:register`, the bot challenge (action
+    `artist-application`, matching the api library's `BotChallengeAction`) and `SetCachePolicy`. The
+    number is `A-` plus a four-digit counter from 217 under an advisory lock (the seed holds A-0217 and
+    A-0218 for S13, so Tobi's e2e application is A-0219 on a fresh database). `BusinessDayCalendar`
+    knows the Ontario statutory holidays; the resource answers `replyBy` and `skippedHolidays`
+    (`[{date, name}]`) so the page can write "3 business days. Monday 12 Oct is Thanksgiving." A
+    second pending application from the same email is 409 `application-in-review` with the email in
+    an extension; the confirmation email goes from the `ArtistApplicationSubmitted` listener on the
+    `notifications` queue.
+  - Web: `pages/apply/` is one routed component (`artists/apply` and `artists/apply/:step`, declared
+    before `artists/:slug`, so no reserved-slug list was needed on the API) with `ApplicationStore`
+    (the draft in `sessionStorage` under `zamaro.application`, the `Idempotency-Key` minted once per
+    draft), `VideoUpload` (chunks of 8 MB through `appendVideoChunk`, then a 1.5 s poll of
+    `videoStatus` until live or failed) and `ReferenceFieldset`. The bio summary on the review step
+    is "326 characters, starts “…Scarborough…”": the mock's 336 counts a longer draft of the same bio.
+  - Components built with their scenarios: `zm-stepper` (steps CRD; an overflowing row is a tab stop
+    so axe's `scrollable-region-focusable` passes on phones, see D-7), `zm-radio-group` and `zm-radio`,
+    `zm-checkbox-group` (and `value` plus the group token on `zm-checkbox`), `zm-progress-bar`, and the
+    `stack`, `horizontal`, `receipt`, `stub`, `label`, `fine` and `loading` features of
+    `zm-description-list`. Not built yet, kept as page-level markup in `apply.html` until their CRDs
+    land: the upload list (`.upload-list`), the file input, and the "what happens next" `.timeline`
+    (`zm-timeline` comes with bookings in M5). `zm-upload-progress` from the plan is `zm-progress-bar`
+    inside the upload row. `zm-error-summary` already existed (M2).
+  - e2e: the Playwright projects are rescoped so every subsystem's admin screens live under
+    `specs/{subsystem}/admin/` (the S8 VSC specs moved there); the `zamaro` project ignores that folder
+    and the `admin` project matches it. The confirmation-email case needs Mailpit, which the backend
+    test also covers.
+  - **Perf note for the maintainer.** The `DescriptionList` scenario (three definition rows) mounts
+    slower than on the base branch: about 37–40 ms there against 55–62 ms here across five runs, flagged
+    in three of them and within the base's spread in the others. The profile is flat (no hot
+    function): the component now carries the variant stylesheet (stack, horizontal, receipt, mark,
+    skeleton), which Angular adds and removes on every mount, and a `[class]` binding on the `<dl>`.
+    Per-row work was cut (rows precomputed once per change of `items`, a static span for a plain
+    value, boolean class bindings instead of a class map) without closing the gap, so the rest is the
+    variants the CRD asks for. If the pipeline flags it, this is the "intended cost" case of
+    AGENTS.md: a maintainer decides whether to accept it with `perf-regression-accepted`.
+- **S10.**
+  - The protocol is ADR-0026: `POST /api/v1/artist-applications/videos` (JSON `title`, `fileName`,
+    `size`) → 201 with the 64-hex token and `Location`; `PATCH …/{token}` with `Upload-Offset` and an
+    `application/offset+octet-stream` chunk of up to 8 MB → 204 with the new `Upload-Offset`, 409
+    `upload-offset-mismatch` (carrying the real `Upload-Offset`) when it does not start where the upload
+    ends, 413 over 8 MB, 415 for any other body type; `GET`/`HEAD …/{token}` → `Upload-Offset` and
+    `Upload-Length`, the body saying uploading, processing, live or failed. The public token route pattern
+    is `[0-9a-f]+` so the CSRF sweep reaches it; an unknown token is 404.
+  - Parts are `video-parts/{token}/{offset}` on the quarantine disk; the last chunk joins them into one
+    quarantined object, types it from its first bytes (`ContentTypeDetector::detectBytes`), creates an
+    `Upload` with no user and queues `ScanUpload`. `PromoteUpload` hands a clean video to
+    `ProcessApplicationVideo` (over 15 minutes: "This video is 16 minutes long. Videos can be up to 15
+    minutes."); `RejectInfectedUpload` fails it with "This file failed our malware scan and was deleted.
+    Choose another video."; a non-video or markup fails at completion with the purpose's message.
+  - `Contracts/VideoTranscoder` (`probe`, `transcode`) with `Integrations/Video/FakeVideoTranscoder`
+    (a `ZAMARO-DURATION=<seconds>` marker in the bytes sets the length, else 5:48; it writes the seeders'
+    sample stream and a one-pixel poster under `applications/videos/{id}/`).
+  - `uploads.user_id` and `artist_videos.artist_id` are nullable; `artist_videos` gained
+    `artist_application_id` (its foreign key comes with the table in S11), `upload_token`, `upload_id`,
+    `file_name`, `size_bytes`, `uploaded_bytes`, `original_key` and `failure_reason`. Application videos
+    are created at position 1; S11 numbers them when the application is submitted.
+  - `uploads:prune-unattached` runs daily at 04:00 (D7: 24 hours).
+- **S9.**
+  - `vsc:send-renewal-reminders` (`Console/Commands/SendVscRenewalRemindersCommand`) runs daily at
+    09:00 Toronto. It picks verified checks with no reminder stamp whose expiry is between today and
+    60 days out, skips a check the artist has since replaced with a newer verified one, claims each
+    with a conditional update of `renewal_reminder_sent_at` inside a transaction, and queues
+    `VscRenewalReminderNotification` after commit. An expired check gets no reminder: the editor reads
+    "Expired" and the artist is already out of Youth event searches.
+  - The email (`emails.vscRenewal.*`, view `emails/vsc-renewal`) reads "Renew your Vulnerable Sector
+    Check by Mon 30 Nov 2026", explains what the check counts for and until when, and links to
+    `/artist/profile#check` with "Upload a newer check".
+  - The seed gives Daniel & Ruth Okonkwo a check verified until Mon 30 Nov 2026, so they now appear
+    in a Youth event search on Sat 14 Nov beside Abigail; the Discovery test expects both.
+- **S8 (admin pages).**
+  - `zm-tour-dates` gained the CRD's `schedule` variant (`variant`, `title`, `titleLink`, the
+    `zmTourDateTrail` template, `.tour-dates--schedule` with its two-row phone layout) for the artist
+    page's "Upcoming bookings"; `pickingId`, `pickDisabled` and the body template wait for their M4
+    screens. `TourDatesSchedule` is its perf scenario. The `document` icon joined the icon set.
+  - `zm-button`'s `.btn` sets `text-wrap-style: balance` and `text-wrap-mode: inherit` instead of
+    `text-wrap: balance` (which forced the wrap mode back on), so in the table's `nowrap` actions cell
+    "View document" and "Verify" keep to one line as the mock shows, while a label in the booking stub
+    still wraps onto a balanced second line (button CRD).
+  - The admin application takes a check's document link from
+    `GET /api/v1/admin/vulnerable-sector-checks/{check}/document-link` (the same controller as the
+    signed-in route): the signed-in route sits behind the terms gate (L2-080.3), which stopped Priya,
+    who has accepted no terms, with 409; admin routes never do. `VscDocumentLink` opens the tab on the
+    click and sends it to the signed link once it arrives, so no popup rule stops it.
+  - The Artists list reads the whole seeded cast, so its subtitle is the seed's counts; its search
+    lives in the address (`/admin/artists?q=Tobi`). The no-results copy cannot name Tobi Adeyemi as an
+    applicant until applications exist (S11–S13), so it reads "Only approved and suspended artists are
+    listed here. Someone who has applied and is not approved yet is under Applications."
+  - The artist page's Standing panel is the badge and one sentence, with no Suspend or Reinstate
+    (D18); the subtitle lists the styles that add to the act type ("Band · Acoustic, Hymns"). Marcus
+    has one upcoming booking in the seed (ZAM-0097), not the mock's three.
+  - The check queue's caption turns to "Checks uploaded since {date}, oldest first" once a verified
+    row is on the page; a failed Verify or document link is a danger toast with the problem's detail.
+  - E2E: the Verify spec runs in the `admin-mutations` Playwright project (serial, after `admin`,
+    teardown `reseed` runs `db:seed`); `CastSeeder::pendingChecks()` now puts a seeded check that was
+    verified back to waiting, so the seed is the queue's fixture. Specs read the API through
+    `fixtures/api.ts`. Route states `admin-checks`, `admin-artists` and `admin-artist` (artist 2) joined
+    the manifest; their Linux baselines were captured here, the win32 ones need the Windows host.
+- **S8 (API and seed).**
+  - The seed adds Elijah's first check (issued Fri 25 Sep, uploaded Wed 7 Oct 4:10 p.m.) and
+    Abigail's newer one (issued Mon 5 Oct, uploaded Fri 9 Oct 9:52 a.m.), each with a stand-in PDF
+    the vault rewrites under a fixed name; `artists.approved_at` (Marcus: Mon 2 Mar 2026 as the mock,
+    everyone else their publish date); and Marcus's mock address. The other artists keep their cast
+    addresses: the mocks name no others.
+  - The seed's Artists list is the whole cast (the eight, Selah Brooks suspended, and the supporting
+    cast), so the page reads the real counts, not the mock's "8 artists · 8 approved · 0 suspended".
+  - The search matches a word start in the name, base city or account email, so "Tobi" does not
+    match Etobicoke (the no-results mock).
+  - `POST /admin/vulnerable-sector-checks/{check}/verification`: a check issued more than 3 years
+    ago is 422 on `issuedOn` with D11's copy; a second decision is 409 `vsc-already-decided`.
+    `VulnerableSectorCheck::isCurrentOn()` joins the model; the youth-event query already compares
+    the event date with `expires_on`.
+  - `GET /admin/artists/{artist}` carries `upcomingBookings` (requested, accepted and confirmed from
+    today) and an always-empty `suspensions` until M8.
+- **S7.**
+  - `routes/media.php` holds the one media-host route, `documents/{key}` (`documents.show`), behind
+    Laravel's `signed` middleware and `Route::domain(config('zamaro.media_host'))`; the API host has
+    no such path. `ZAMARO_MEDIA_HOST` defaults to `media.localhost`, so the link keeps the API's port.
+  - A policy's `denyAsNotFound()` and an altered or expired signature render the same `not-found`
+    problem as an unknown address: `ProblemDetailsRenderer` maps any 404 `HttpException` and
+    `InvalidSignatureException` to it.
+  - The link is on any signed-in route (`GET /api/v1/vulnerable-sector-checks/{check}/document-link`),
+    not under `/admin`: the policy admits the owner and administrators, and a check with no document
+    yet (scanning or blocked) is 404 too. Only a non-owner's request (an administrator's) writes
+    `vsc_document.viewed`.
+  - The document streams as `attachment; filename="vulnerable-sector-check.{pdf|jpg|png}"`, with
+    `Content-Length`, `private, no-store`, `nosniff` and `default-src 'none'; sandbox`.
+- **S6 (ADR-0024, ADR-0025).**
+  - The `uploads` "middleware group" is a route mark, `uploads:{kilobytes}` (`AcceptsUpload`), read by
+    `LimitRequestBodySize` and `EnsureJsonRequest`, which run before any route middleware. The check
+    route's hard cap is 32 MB (413), so a 14 MB file reaches the request's 10 MB rule and its copy.
+  - `MediaScanner::scan()` takes a stream and answers a `ScanResult` (`ScanVerdict` plus the
+    signature). `FakeMediaScanner`: EICAR is malware, `SCANNER-UNAVAILABLE` is an error, else clean.
+  - `ScanUpload` uses `RetriesWithBackoff` (one attempt and 5 retries, M2 D17); an error throws and
+    the file stays quarantined. `ReceiveUpload` dispatches it `afterCommit`.
+  - `GET /artist/vulnerable-sector-checks/current` answers `{verified, latest}`: the most recent
+    verified check and the newest of any status, so a blocked or pending newer check never hides the
+    one that counts.
+  - `PromoteUpload` handles the check (encrypt into the documents disk, check `Pending`); other
+    purposes move to the originals disk and wait for M4's processing jobs.
+  - The `security` log channel is JSON on stderr (`LOG_SECURITY_STREAM`); the tests push a Monolog
+    `TestHandler` on it. The e2e worker command gains the `uploads` queue; Horizon's default
+    supervisor takes it too.
+  - `php artisan serve` keeps PHP's 2 MB `upload_max_filesize`: the e2e upload dialog (M4) needs the
+    ini raised in the API's command or image.
+- **S5.**
+  - `audit:prune` runs `Jobs/Administration/PruneAuditEntries` synchronously: each batch of 1,000 is
+    its own transaction with `SET LOCAL ROLE zamaro_audit_retention` (ADR-0022) and `RESET ROLE`;
+    there is no `pgsql_audit_retention` connection. Scheduled daily at 03:30 (D14).
+  - `GET /api/v1/admin/audit-entries` filters by actor email (exact, any case), action code (any
+    code shaped `a.b_c`, not only the enum's, so a code no entry carries matches nothing), target
+    (a booking number, or part of an artist's or user's name or email), outcome and a Toronto date
+    range; 50 by cursor over `(occurred_at, id)`. `GET …/audit-entries/{entry}` exists so that
+    `PATCH`, `PUT` and `DELETE` on that address answer 405 (the plan's wording); nothing writes.
+  - `RecordAuditEntry` stamps `occurred_at` with the frozen "now" when the clock is frozen (the e2e
+    API and the tests), so the viewer shows what the mocks show; production keeps the database clock.
+  - `AuditEntryResource` adds `attemptedEmail` (from `context.email` of a failed sign-in with no
+    actor) and a target `{type, label}`; `AuditEntry` gains `actor()` and `target()` relations.
+  - `zm-table` is built in part: caption, columns, row header, fixed or button sort, dense, sticky
+    header and column, loading rows and `zmTableCell` templates. `selectable` and `zm-bulk-bar` wait
+    for the availability calendar (M4), their first use. `zm-select` is not a new component: the
+    form field's `type="select"` from M2 serves. `zm-badge` gains `info`, `warning` and `danger`,
+    and the icon set gains `search`.
+  - The default range is the eight days to today (Thu 1 Oct to Fri 9 Oct on the frozen clock, as the
+    mock). Scenarios `Table` (3 rows) and `AuditLogTable` (50 dense rows).
+- **S4.**
+  - `ToastOptions.persistent` (toast CRD, now built) makes a toast with no timer and no bar;
+    `ToastService` already runs an action's promise and closes the toast when it settles, so the
+    warning needs nothing else from the component.
+  - The timer lives in the admin app's `shell/idle-session.ts` (`IdleSession`): every API answer
+    restarts it through `idleActivityInterceptor`, matching the API, which counts every request as
+    activity. The warning is shown by key, so a second firing replaces rather than stacks.
+  - The admin variant of the session-expired interceptor is `adminSessionExpiredInterceptor` in
+    `api/lib/auth/`: a 401 leaves with a full navigation to `/sign-in?returnUrl=/admin…&ended=1`.
+    The sign-in page's "Your session ended" notice needs no change.
+  - The e2e spec proves the 30-minute end by answering 401 from Playwright (the frozen API clock
+    cannot age a session); `SecureAdminAccessTest` proves when the API gives it.
+- **S3 (ADR-0023).**
+  - Priya Nair (`priya@zamaro.ca`) is seeded by `CastSeeder` with the Administrator role alone and
+    two-step sign-in on, with a fixed key (`CastSeeder::PRIYA_TOTP_SECRET`, mirrored in
+    `e2e/fixtures/accounts.ts`), only where the cast can sign in. `signIn()` in the e2e fixtures
+    completes the code step for anyone with a known key, so `signedInAs: 'priya'` works in route
+    states; `fixtures/admin-session.ts` wraps it.
+  - The gate is `app.use('/admin', …)` in `server.ts`, before the static files and the Angular
+    handler. It serves `dist/admin/browser` (or `ADMIN_DIST`) on 200 from the overview, and falls
+    through to the public application's not-found page otherwise. The admin build has
+    `baseHref: /admin/`.
+  - `ThemeService` moved to `api/lib/theme/` so both applications bind it; `isAdminUrl()` joins
+    `api/lib/auth/return-url.ts`, and the sign-in and code-step pages leave with `location.assign`
+    for an admin `returnUrl`. There is no admin variant of `SessionExpiredInterceptor` yet (S4): the
+    admin `app.config.ts` binds only the CSRF recovery interceptor.
+  - The admin shell lists Applications, Artists and Audit log (D17) from the first slice, so the
+    Artists and Audit log links reach the admin not-found route until S5 and S8 build their pages.
+    The Applications page shows its empty state ("No applications waiting") until S13 lists real
+    applications; the overview carries no `applicationsWaiting` yet, so the link has no count.
+  - `zm-top-bar` gained `variant`, `role`, `shortcut`, `TopBarLinkBase`, and `count`/`countLabel`
+    on `TopBarLink`; it keeps `routerLinkActive` for the current link rather than the CRD's
+    `current` input, as the public bar already did. `zm-menu` link items gained `count`/`countLabel`.
+    `TopBarWorkspace` is the new scenario (about 210 ms); `TopBar` and `Menu` measured OK against
+    the base branch.
+  - The admin app's account menu is its own dialog (name, "Zamaro team", email, Sign out), and sign
+    out leaves for `/`. Admin copy lives in `backend/resources/i18n/en/admin.json` under `admin.*`.
+  - Playwright: an `admin` project (`specs/administration`, `specs/artist-onboarding`,
+    `visual/admin.spec.ts`, `a11y/admin.spec.ts`); the visual and a11y loops are shared functions
+    taking the application. `fixtures/artisan.ts` runs artisan through compose, or through
+    `E2E_ARTISAN` ("php artisan") in `E2E_ARTISAN_CWD` for machines without Docker; the caller then
+    exports the e2e API's environment too. The `admin-mutations` project waits for the first
+    mutating admin spec (S8).
+  - "The zamaro build contains no admin code" is guaranteed by the separate build (ADR-0001) and is
+    not asserted by a test (AGENTS.md: no architecture tests).
+  - The admin not-found baselines were captured in this container's Chromium rather than the official
+    Playwright image; the Windows baselines are still to be captured on the Windows host.
+  - The dev container has no Docker daemon and its GD lacks AVIF, so the e2e API ran from
+    `php artisan serve --port=8001` with compose's e2e environment, seeded with `LegalDocumentSeeder`
+    and `CastSeeder` only (no `MediaSeeder`), and specs that read Mailpit were not runnable here.
+- **S2.**
+  - There is no `TwoFactorEnrolmentRequired` (D6). An administrator without two-step sign-in signs in
+    as anyone does (200, `mfaEnabled: false`); only the admin API stays 404 until they turn it on.
+    Confirming the first code marks the current session as having passed the code step, so they reach
+    the admin API without signing in again. An administrator cannot turn two-step sign-in off: `DELETE
+    /account/two-factor` answers 409 `two-factor-required`.
+  - The code-step mark and the last request time live in the session (`Services/Administration/
+    AdminSession`), written by `TwoFactorChallenge::complete`, `TwoFactorController::confirm` and
+    `EnforceAdminIdleTimeout`. `StartSession` is unchanged.
+  - `EnsureAdministrator` reads the `sanctum` guard and is put ahead of `auth:sanctum` in the middleware
+    priority list, because Laravel otherwise runs authentication first and a guest would get 401.
+    `SubstituteBindings` also runs ahead of route middleware; a missing record and a hidden route both
+    render the same `not-found` problem body, so the design's "before route-model binding" holds in
+    effect.
+  - `EnforceAdminIdleTimeout` runs on the whole api group, after the 30-day limit, for anyone holding
+    the Administrator role: any request is activity, including `/me`, and `null` for a session never
+    stamped means "stamp now", not "ended".
+  - The admin group does not carry `EnsureCurrentTermsAccepted`: the admin application has no page to
+    accept the terms on, and administrators are the Zamaro team.
+  - `AuditAdminRequests` waits for the first state-changing admin route (S8, Verify), where a test can
+    prove it; S2 has only `GET /admin/overview`.
+  - The overview answers only `checksWaiting` so far; `applicationsWaiting` joins with S13, when
+    applications exist.
+  - The command is `Console/Commands/GrantAdministratorCommand` (`zamaro:admin:grant {email}`), and a
+    second grant succeeds without a second audit entry (`GrantRole` is idempotent).
+  - **Local environment (cloud session).** The egress proxy allows `api.github.com` only for this
+    repository, so Composer cannot download other packages' zipballs; `git clone` of public repositories
+    works. The dependencies were installed by syncing each package's git mirror into Composer's VCS
+    cache (`--prefer-source`), building each locked zip from its mirror into the file cache with
+    `git archive`, then `composer install --prefer-dist` offline. `phpstan/phpstan` is dist-only and was
+    mirrored by hand at its locked commit. Postgres 16 and Redis run locally rather than in compose.
 
 ## Context
 

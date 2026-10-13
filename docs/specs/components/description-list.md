@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-description-list` |
 | Library path | `frontend/projects/components/src/lib/description-list/` |
-| Status | built (`definition` with `columns`, M1 S14); planned (`stack`, `horizontal`, `receipt`, `stub`, `label`, `fine`, `loading` and the value template, with their screens) |
+| Status | built (`definition` with `columns`, M1 S14; `stack`, `horizontal`, `receipt`, `stub`, `label`, `fine`, `loading`, `muted`, `changed` and `total`, M3 S11); planned (the value template, with "The request" in M5) |
 | Traces to | L2-034, L2-037, L2-039, L2-044, L2-046, L2-047, L2-067, L2-068, L2-086, L2-096, L2-100, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 |
 | Design system | [`description-list.html`](../../design-system/components/description-list.html) |
 | Source mocks | [`pages/booking-detail/default`](../../mocks/pages/booking-detail/default.html) and every booking status, [`pages/request-detail/default`](../../mocks/pages/request-detail/default.html) and its states, [`pages/book/default`](../../mocks/pages/book/default.html), [`pages/apply/success`](../../mocks/pages/apply/success.html), [`pages/server-error/default`](../../mocks/pages/server-error/default.html), [`pages/admin-application/default`](../../mocks/pages/admin-application/default.html), [`pages/admin-artist/default`](../../mocks/pages/admin-artist/default.html), [`pages/admin-reviews/default`](../../mocks/pages/admin-reviews/default.html), [`dialogs/accept-request/default`](../../mocks/dialogs/accept-request/default.html), [`dialogs/cancel-booking/default`](../../mocks/dialogs/cancel-booking/default.html), [`dialogs/pay-deposit/default`](../../mocks/dialogs/pay-deposit/default.html), [`dialogs/issue-refund/default`](../../mocks/dialogs/issue-refund/default.html), [`dialogs/hide-review/default`](../../mocks/dialogs/hide-review/default.html) |
@@ -365,7 +365,9 @@ None. Loading skeletons stop shimmering under `prefers-reduced-motion`
 
 **As built in M1 (S14):** the `definition` variant with `items` and `columns`, used by the cancellation policy on Discover. The `DescriptionList` scenario renders that policy (three rows, two columns) until the value template exists for "The request"; `Receipt.ts` comes with the receipt variant.
 
-Planned. Build it as:
+**As built in M3 (S11):** `variant` (`stack`, `horizontal`, `definition`, `receipt`), `stub`, `label` (the host becomes `role="group"` with that name), `fine`, `loading` with `loadingLabel` (a `zm-skeleton` per value, `aria-busy` on the list), and the item fields `muted`, `changed` (the `.mark` highlighter) and `total`. Values split on `\n` render as text and `<br>` nodes; the component precomputes its rows once per change of `items` so the per-row work stays a plain interpolation (the first perf run flagged a per-row repeater). The `DescriptionListReceipt` scenario renders the application receipt with its fine print. Still planned: the `zmDescriptionValue` template and the dev-mode errors.
+
+The remaining plan. Build it as:
 
 - Folder `frontend/projects/components/src/lib/description-list/`:
   `description-list.ts` (`DescriptionList`, selector `zm-description-list`) and

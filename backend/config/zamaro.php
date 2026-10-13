@@ -20,6 +20,11 @@ return [
     // local, testing and e2e; anywhere else, and when it is empty, their passwords stay random.
     'cast_password' => env('ZAMARO_CAST_PASSWORD'),
 
+    'admin' => [
+        // Minutes without a request after which an administrator's session ends (L2-066.2).
+        'idle_timeout_minutes' => (int) env('ZAMARO_ADMIN_IDLE_TIMEOUT_MINUTES', 30),
+    ],
+
     'problems' => [
         // Base of the RFC 9457 problem `type` URIs, e.g. {base}/not-found (ADR-0005).
         'base_uri' => env('ZAMARO_PROBLEM_BASE_URI', rtrim(env('APP_URL', 'http://localhost'), '/').'/problems'),
@@ -47,6 +52,20 @@ return [
     'fakes' => [
         // Passwords FakeBreachedPasswordChecker reports as breached.
         'breached_passwords' => ['password1234', 'qwertyuiop123', 'iloveyou1234'],
+    ],
+
+    // The separate host private documents are streamed from (L2-076.3, M3 D10): no Zamaro cookie reaches
+    // it, and a file served there cannot read Zamaro pages. Chromium resolves `*.localhost` to the
+    // loopback, so dev and e2e use media.localhost on the API's port; production's name is M10's.
+    'media_host' => env('ZAMARO_MEDIA_HOST', 'media.localhost'),
+
+    'uploads' => [
+        // Which disk plays which part of the upload pipeline (scan-and-serve-uploads, ADR-0024).
+        'disks' => [
+            'quarantine' => env('ZAMARO_QUARANTINE_DISK', 'quarantine'),
+            'documents' => env('ZAMARO_DOCUMENTS_DISK', 'documents'),
+            'originals' => env('ZAMARO_ORIGINALS_DISK', 'originals'),
+        ],
     ],
 
     'media' => [

@@ -6,6 +6,10 @@ use App\Actions\Accounts\LinkExpired;
 use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
+use App\Actions\Accounts\TwoFactorRequired;
+use App\Actions\ArtistOnboarding\ApplicationInReview;
+use App\Actions\ArtistOnboarding\UploadOffsetMismatch;
+use App\Actions\ArtistOnboarding\VscAlreadyDecided;
 use App\Actions\ArtistProfiles\ArtistMoved;
 use App\Actions\ArtistProfiles\ArtistNotFound;
 use App\Actions\Privacy\LegalDocumentOutdated;
@@ -14,6 +18,7 @@ use App\Http\Resources\Discovery\LineupCardResource;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,7 +64,10 @@ class ProblemDetailsRenderer
                 ->toResponse();
         }
 
-        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException) {
+        // A policy's denyAsNotFound() (L2-074), and a signed link that was altered or ran out (L2-076.3), are
+        // the same "nothing here" as an unknown address.
+        if ($e instanceof NotFoundHttpException || $e instanceof ModelNotFoundException || $e instanceof InvalidSignatureException
+            || ($e instanceof HttpExceptionInterface && $e->getStatusCode() === 404)) {
             return ProblemDetails::of(ProblemType::NotFound, 'Nothing exists at this address.', $requestId)
                 ->toResponse();
         }
@@ -84,6 +92,24 @@ class ProblemDetailsRenderer
 
         if ($e instanceof TwoFactorAlreadyOn) {
             return ProblemDetails::of(ProblemType::TwoFactorAlreadyOn, 'Turn it off first to set up a new key.', $requestId)->toResponse();
+        }
+
+        if ($e instanceof TwoFactorRequired) {
+            return ProblemDetails::of(ProblemType::TwoFactorRequired, 'An administrator signs in with a code every time; two-step sign-in cannot be turned off.', $requestId)->toResponse();
+        }
+
+        if ($e instanceof VscAlreadyDecided) {
+            return ProblemDetails::of(ProblemType::VscAlreadyDecided, 'Another administrator decided this check first. Reload the queue.', $requestId)->toResponse();
+        }
+
+        if ($e instanceof ApplicationInReview) {
+            return ProblemDetails::of(ProblemType::ApplicationInReview, "We’re reviewing the one you sent from {$e->email} and will reply there. Your answers here are kept.", $requestId, extensions: ['email' => $e->email])
+                ->toResponse();
+        }
+
+        if ($e instanceof UploadOffsetMismatch) {
+            return ProblemDetails::of(ProblemType::UploadOffsetMismatch, 'Ask HEAD for Upload-Offset and send the next chunk from there.', $requestId)
+                ->toResponse($e->getHeaders());
         }
 
         if ($e instanceof LinkExpired) {

@@ -11,7 +11,7 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { translateSignal, TranslocoPipe } from '@jsverse/transloco';
-import { AuthService, safeReturnUrl } from 'api';
+import { AuthService, safeReturnUrl, ThemeService } from 'api';
 import {
   Banner,
   Footer,
@@ -29,7 +29,6 @@ import { filter, map, timer } from 'rxjs';
 import { EmailChangedNotice } from '../shared/email-changed-notice';
 import { SavedArtistsStore } from '../shared/saved-artists.store';
 import { VerifiedNotice } from '../shared/verified-notice';
-import { ThemeService } from './theme.service';
 
 const CONTACT_EMAIL = 'hello@zamaro.ca';
 

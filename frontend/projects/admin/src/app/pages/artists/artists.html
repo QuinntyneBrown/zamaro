@@ -1,0 +1,98 @@
+<div class="container">
+  <header class="page-head">
+    <div>
+      <p class="overline">{{ 'admin.artists.overline' | transloco }}</p>
+      <h1 class="page-head__title">{{ 'admin.artists.title' | transloco }}</h1>
+      @if (list()) {
+        <p class="page-head__sub">{{ subtitle() }}</p>
+      } @else if (status() === 'loading') {
+        <p class="page-head__sub" role="status">
+          <span class="visually-hidden">{{ 'admin.artists.loading' | transloco }}</span
+          ><zm-skeleton width="medium" />
+        </p>
+      }
+      @if (checksWaiting() !== null) {
+        <p>
+          <a class="link link--standalone" routerLink="/vulnerable-sector-checks"
+            >{{ 'admin.artists.checksLink' | transloco: { waiting: checksWaiting() }
+            }}<zm-icon name="arrow-right"
+          /></a>
+        </p>
+      }
+    </div>
+    <form class="page-head__search" role="search" [formGroup]="form" (ngSubmit)="submit()">
+      <zm-form-field
+        fieldId="artist-search"
+        type="text"
+        autocomplete="off"
+        formControlName="q"
+        [label]="'admin.artists.search.label' | transloco"
+        [help]="'admin.artists.search.help' | transloco"
+      />
+    </form>
+  </header>
+  <div class="page-body">
+    @switch (status()) {
+      @case ('error') {
+        <zm-alert variant="danger" [heading]="'admin.artists.error.title' | transloco">
+          {{ 'admin.artists.error.body' | transloco }}
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'admin.tryAgain' | transloco }}</zm-button
+          >
+        </zm-alert>
+      }
+      @default {
+        @if (status() === 'loaded' && artists().length === 0) {
+          <zm-empty-state
+            [quiet]="true"
+            [heading]="'admin.artists.noResults.title' | transloco: { query: applied() }"
+          >
+            {{ 'admin.artists.noResults.body' | transloco }}
+            <zm-button slot="actions" variant="primary" (click)="clearSearch()"
+              ><zm-icon name="close" />{{ 'admin.artists.noResults.clear' | transloco }}</zm-button
+            >
+            <zm-button-link slot="actions" link="/applications">{{
+              'admin.artists.noResults.openApplications' | transloco
+            }}</zm-button-link>
+          </zm-empty-state>
+        } @else {
+          <zm-table
+            [caption]="caption()"
+            [columns]="columns"
+            [rows]="artists()"
+            rowHeader="artist"
+            [loading]="status() === 'loading'"
+            [loadingRows]="4"
+            [loadingLabel]="'admin.artists.loading' | transloco"
+          >
+            <ng-template zmTableCell="artist" let-artist
+              ><a [routerLink]="['/artists', artist.id]">{{ artist.name }}</a></ng-template
+            >
+            <ng-template zmTableCell="act" let-artist>{{
+              'common.act.' + artist.actType | transloco
+            }}</ng-template>
+            <ng-template zmTableCell="city" let-artist>{{ city(artist) }}</ng-template>
+            <ng-template zmTableCell="rating" let-artist>
+              @if (artist.rating !== null) {
+                <zm-rating [score]="artist.rating" [label]="ratingLabel(artist)" />
+              } @else {
+                {{ 'admin.noReviews' | transloco }}
+              }
+            </ng-template>
+            <ng-template zmTableCell="status" let-artist
+              ><zm-badge [variant]="statusVariant(artist)">{{
+                'admin.status.' + artist.status | transloco
+              }}</zm-badge></ng-template
+            >
+            <ng-template zmTableCell="actions" let-artist
+              ><zm-button-link size="sm" [link]="'/artists/' + artist.id"
+                >{{ 'admin.artists.open' | transloco
+                }}<span class="visually-hidden"> {{ artist.name }}</span></zm-button-link
+              ></ng-template
+            >
+          </zm-table>
+        }
+      }
+    }
+  </div>
+</div>

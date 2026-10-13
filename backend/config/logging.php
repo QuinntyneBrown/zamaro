@@ -102,6 +102,20 @@ return [
             'processors' => [PsrLogMessageProcessor::class],
         ],
 
+        // Security events (L2-076.2, M3 D16): structured JSON lines, routed to people with M10's alerts.
+        'security' => [
+            'driver' => 'monolog',
+            'name' => 'security',
+            'tap' => [ApplyRedaction::class],
+            'level' => 'info',
+            'handler' => StreamHandler::class,
+            'formatter' => JsonFormatter::class,
+            'with' => [
+                'stream' => env('LOG_SECURITY_STREAM', 'php://stderr'),
+            ],
+            'processors' => [PsrLogMessageProcessor::class],
+        ],
+
         'stderr' => [
             'driver' => 'monolog',
             'tap' => [ApplyRedaction::class],

@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-toast`, `zm-toast-region` (and the `ToastService` that feeds them) |
 | Library path | `frontend/projects/components/src/lib/toast/` |
-| Status | built in part (M1 S16): timed and danger toasts, pause, replace by key, dismiss and focus return; planned: actions, the stack of three and its queue, `persistent`, `update()`, holding behind a dialog |
+| Status | built in part (M1 S16, M3 S4): timed, danger and persistent toasts, actions, pause, replace by key, dismiss and focus return; planned: the stack of three and its queue, `update()`, holding behind a dialog |
 | Traces to | L2-026, L2-066, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-109, L2-110, L2-111, L2-113, L2-114 |
 | Design system | [`toast.html`](../../design-system/components/toast.html) |
 | Source mocks | [`notifications/saved-toast`](../../mocks/notifications/saved-toast/success.html) (success, with-action, info, warning, danger), [`notifications/booking-toast`](../../mocks/notifications/booking-toast/success.html) (info, success, warning, danger, with-action, stacked), [`notifications/request-toast`](../../mocks/notifications/request-toast/info.html) (info, success, warning, danger, with-action, stacked), [`notifications/availability-toast`](../../mocks/notifications/availability-toast/success.html) (success, info, warning, danger, with-action), [`notifications/session-toast/warning`](../../mocks/notifications/session-toast/warning.html), [`notifications/share-toast/success`](../../mocks/notifications/share-toast/success.html), and the empty region on every page and dialog (see Usage) |

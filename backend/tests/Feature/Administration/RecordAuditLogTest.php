@@ -67,6 +67,16 @@ class RecordAuditLogTest extends TestCase
         }
     }
 
+    public function test_on_a_frozen_clock_an_entry_takes_the_frozen_time_so_the_viewer_matches_the_mocks(): void
+    {
+        $since = $this->lastEntryId();
+
+        $this->signInWithCode((new Google2FA)->getCurrentOtp($this->secret), self::PROXY)->assertOk();
+
+        $entry = AuditEntry::where('id', '>', $since)->orderByDesc('id')->firstOrFail();
+        $this->assertSame('2026-10-09T11:41:00-04:00', $entry->occurred_at->setTimezone('America/Toronto')->toIso8601String());
+    }
+
     public function test_a_forwarded_address_from_a_caller_that_is_not_a_trusted_proxy_is_ignored(): void
     {
         $since = $this->lastEntryId();

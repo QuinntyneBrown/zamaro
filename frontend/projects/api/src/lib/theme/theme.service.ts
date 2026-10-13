@@ -9,7 +9,9 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { AuthService, type CurrentUser, PREFERENCES_API } from 'api';
+import { AuthService } from '../auth/auth.service';
+import type { CurrentUser } from '../models/accounts';
+import { PREFERENCES_API } from '../services/preferences';
 
 export type Theme = 'light' | 'dark';
 
@@ -17,7 +19,7 @@ export type Theme = 'light' | 'dark';
 const STORAGE_KEY = 'zamaro.theme';
 
 /**
- * Light or dark (L2-104). With nothing stored the page follows the operating system through CSS; a
+ * Light or dark (L2-104), shared by the zamaro and admin applications (ADR-0023). With nothing stored the page follows the operating system through CSS; a
  * choice is kept on this device and, for someone signed in, on their account. When someone is known
  * to be signed in, the account's choice replaces the device's, or the device's is saved to an
  * account that has none. The inline boot script applies a stored choice before first paint, so on

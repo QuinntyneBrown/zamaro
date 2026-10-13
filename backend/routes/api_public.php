@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\V1\Accounts\EmailVerificationController;
 use App\Http\Controllers\Api\V1\Accounts\PasswordResetController;
 use App\Http\Controllers\Api\V1\Accounts\RegistrationController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
+use App\Http\Controllers\Api\V1\ArtistOnboarding\ApplicationVideoUploadsController;
+use App\Http\Controllers\Api\V1\ArtistOnboarding\ArtistApplicationsController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistAvailabilityController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\ArtistProfileController;
 use App\Http\Controllers\Api\V1\ArtistProfiles\SitemapController;
@@ -48,3 +50,13 @@ Route::post('session/two-factor', [SessionController::class, 'twoFactor'])->midd
 // An email change link: anyone holding it may open it, so it signs no one in (L2-025.1).
 Route::post('account/email/confirm', [AccountEmailController::class, 'confirm'])->middleware(['throttle:password-reset', SetCachePolicy::class])->name('account.email.confirm');
 Route::get('legal-documents/current', [LegalDocumentController::class, 'current'])->name('legal-documents.current');
+
+// An applicant's video upload, before any account exists (apply-as-artist, ADR-0026): chunks of up
+// to 8 MB; the token is the only key to the upload.
+Route::prefix('artist-applications/videos')->name('artist-applications.videos.')->middleware(SetCachePolicy::class)->group(function () {
+    Route::post('/', [ApplicationVideoUploadsController::class, 'store'])->name('store');
+    Route::patch('{token}', [ApplicationVideoUploadsController::class, 'append'])->where('token', '[0-9a-f]+')->middleware('uploads:8192')->name('append');
+    Route::get('{token}', [ApplicationVideoUploadsController::class, 'show'])->where('token', '[0-9a-f]+')->name('show');
+});
+// Applying as an artist (apply-as-artist, L2-047): the bot check runs before validation (L2-077.4).
+Route::post('artist-applications', [ArtistApplicationsController::class, 'store'])->middleware(['throttle:register', 'bot-challenge:artist-application', SetCachePolicy::class])->name('artist-applications.store');

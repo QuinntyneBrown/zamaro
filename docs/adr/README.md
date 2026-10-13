@@ -31,3 +31,7 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0020](0020-field-encryption-keys.md) | Field encryption with a versioned key that is not APP_KEY | Accepted |
 | [0021](0021-totp-library.md) | TOTP two-step sign-in with google2fa, and the QR code as an image from the API | Accepted |
 | [0022](0022-audit-log-immutability.md) | The audit log is append-only in the model, in a trigger, and through one retention role | Accepted |
+| [0023](0023-admin-application-served-behind-a-server-side-404-gate.md) | The admin application is served behind a server-side 404 gate, and the two applications share their session services | Accepted |
+| [0024](0024-upload-storage-on-local-disks-until-object-storage.md) | Upload storage on local disks behind Laravel's filesystem ports until object storage | Accepted |
+| [0025](0025-private-document-envelope-encryption.md) | Private documents are encrypted per file with a wrapped data key | Accepted |
+| [0026](0026-resumable-application-video-uploads.md) | Application videos are uploaded in chunks with a small tus-style protocol | Accepted |

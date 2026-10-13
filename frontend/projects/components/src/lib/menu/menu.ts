@@ -1,9 +1,20 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Badge } from '../badge/badge';
 import { Icon, type IconName } from '../icon/icon';
 
 export type MenuItem =
-  | { kind: 'link'; label: string; icon?: IconName; link: string; fragment?: string }
+  | {
+      kind: 'link';
+      label: string;
+      icon?: IconName;
+      link: string;
+      fragment?: string;
+      /** A count badge after the label (the admin drawer); 0 or undefined renders none. */
+      count?: number;
+      /** Visually hidden after the count: "waiting", "held", "reported". */
+      countLabel?: string;
+    }
   | { kind: 'action'; id: string; label: string; icon?: IconName }
   | { kind: 'toggle'; id: string; label: string; icon?: IconName; pressed: boolean }
   | { kind: 'separator' };
@@ -24,7 +35,7 @@ export interface MenuWho {
  */
 @Component({
   selector: 'zm-menu',
-  imports: [Icon, RouterLink, RouterLinkActive],
+  imports: [Badge, Icon, RouterLink, RouterLinkActive],
   template: `@if (who(); as who) {
       <div class="menu__who" [id]="whoId()">
         <strong>{{ who.name }}</strong>
@@ -53,8 +64,14 @@ export interface MenuWho {
                 @if (item.icon) {
                   <zm-icon [name]="item.icon" />
                 }
-                {{ item.label }}</a
-              >
+                {{ item.label }}
+                @if (item.count) {
+                  <zm-badge variant="count"
+                    >{{ item.count
+                    }}<span class="visually-hidden"> {{ item.countLabel }}</span></zm-badge
+                  >
+                }
+              </a>
             </li>
           }
           @case ('action') {

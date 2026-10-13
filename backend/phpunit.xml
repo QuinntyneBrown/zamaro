@@ -35,6 +35,7 @@
         <env name="DB_CONNECTION" value="pgsql" force="true"/>
         <server name="DB_CONNECTION" value="pgsql" force="true"/>
         <env name="LOG_CHANNEL" value="null" force="true"/>
+        <env name="LOG_SECURITY_STREAM" value="php://memory" force="true"/>
         <server name="LOG_CHANNEL" value="null" force="true"/>
         <env name="DB_DATABASE" value="zamaro_test" force="true"/>
         <server name="DB_DATABASE" value="zamaro_test" force="true"/>

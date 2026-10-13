@@ -1,4 +1,10 @@
 {
+  "applicationReceived.action": "Browse the lineup",
+  "applicationReceived.greeting": "Hi {name},",
+  "applicationReceived.intro": "Your application {number} is in. We review every one by hand and reply by {replyBy}, 3 business days from now.",
+  "applicationReceived.next": "First we call both of your references, then we read your application and watch your videos. Nothing is public until you’re approved.",
+  "applicationReceived.questions": "Questions? Reply to this email or write to hello@zamaro.ca and quote application {number}.",
+  "applicationReceived.subject": "We received your application, {number}",
   "confirmEmail.action": "Confirm your new email",
   "confirmEmail.expiry": "The link works for 24 hours, and only once.",
   "confirmEmail.greeting": "Hi {name},",
@@ -51,5 +57,11 @@
   "verify.greeting": "Hi {name},",
   "verify.ignore": "If you didn’t sign up for Zamaro, ignore this email and nothing will happen.",
   "verify.intro": "Confirm this is your address to finish signing up. Until you do, you can browse and save artists, but you can’t send a booking request.",
-  "verify.subject": "Verify your email for Zamaro"
+  "verify.subject": "Verify your email for Zamaro",
+  "vscRenewal.action": "Upload a newer check",
+  "vscRenewal.after": "Upload the new check from the check section of your profile editor and we’ll verify it. A verified check counts for 3 years from its issue date.",
+  "vscRenewal.greeting": "Hi {name},",
+  "vscRenewal.intro": "Your verified Vulnerable Sector Check counts for Youth event searches until {date}. After that, churches planning a youth event will no longer see you.",
+  "vscRenewal.renewBy": "Renew by {date}",
+  "vscRenewal.subject": "Renew your Vulnerable Sector Check by {date}"
 }

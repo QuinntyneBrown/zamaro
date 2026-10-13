@@ -2,16 +2,12 @@ import { defineConfig, devices } from '@playwright/test';
 
 const WEB_PORT = 4000;
 
-// Chromium only (AGENTS.md). One Playwright project per application; the admin
-// project is added with the admin slice.
+// Chromium only (AGENTS.md). One Playwright project per application: `zamaro` for the public site
+// and `admin` for the admin application, whose specs sign Priya in with a code (M3 S3). The admin
+// specs that change the seed (`*.mutation.spec.ts`) run one at a time in `admin-mutations`, after
+// the read-only admin suite, and its teardown seeds the database again (M3 S8).
 export default defineConfig({
   testDir: '.',
-  testMatch: [
-    'specs/**/*.spec.ts',
-    'visual/**/*.spec.ts',
-    'a11y/**/*.spec.ts',
-    'perf/**/*.spec.ts',
-  ],
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 1 : 0,
@@ -36,7 +32,49 @@ export default defineConfig({
     timezoneId: 'America/Toronto',
     trace: 'on-first-retry',
   },
-  projects: [{ name: 'zamaro', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    {
+      name: 'zamaro',
+      testMatch: [
+        'specs/!(administration)/**/*.spec.ts',
+        'visual/visual.spec.ts',
+        'a11y/a11y.spec.ts',
+        'perf/**/*.spec.ts',
+      ],
+      // A subsystem's admin screens sit under specs/{subsystem}/admin/ and run in the admin project.
+      testIgnore: 'specs/*/admin/**',
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'admin',
+      testMatch: [
+        'specs/administration/**/*.spec.ts',
+        'specs/*/admin/**/*.spec.ts',
+        'visual/admin.spec.ts',
+        'a11y/admin.spec.ts',
+      ],
+      testIgnore: '**/*.mutation.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: `http://localhost:${WEB_PORT}/admin/`,
+      },
+    },
+    {
+      name: 'admin-mutations',
+      testMatch: 'specs/**/*.mutation.spec.ts',
+      dependencies: ['admin'],
+      teardown: 'reseed',
+      fullyParallel: false,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: `http://localhost:${WEB_PORT}/admin/`,
+      },
+    },
+    {
+      name: 'reseed',
+      testMatch: 'fixtures/reseed.teardown.ts',
+    },
+  ],
   webServer: {
     command: 'node ../frontend/dist/zamaro/server/server.mjs',
     url: `http://localhost:${WEB_PORT}`,

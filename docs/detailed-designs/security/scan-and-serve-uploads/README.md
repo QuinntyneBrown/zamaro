@@ -144,6 +144,19 @@ The `uploads` table holds `id` (UUID), `user_id`, `purpose`, `detected_mime`,
 holds the `quarantine/`, `documents/` and `originals/` prefixes in the Canadian region
 (L2-084); the quarantine and documents prefixes allow no public access.
 
+**As built in M3 S6 (ADR-0024, ADR-0025)**
+
+- Namespaces follow AGENTS.md: `Actions\Security\{ReceiveUpload,PromoteUpload,RejectInfectedUpload,
+  RecordSecurityEvent}`, `Services\Security\ContentTypeDetector`, `Jobs\Security\ScanUpload`,
+  `Contracts\MediaScanner` (this design's `MalwareScanner`) with `Integrations\Scanning\FakeMediaScanner`.
+- Storage is three local disks (`quarantine`, `documents`, `originals`) behind `Storage::disk()`,
+  named in `zamaro.uploads.disks`, until object storage (M4).
+- The VSC upload is `POST /api/v1/artist/vulnerable-sector-checks` (verify-vulnerable-sector-check),
+  not `/artist/vsc`; it calls `ReceiveUpload` with `UploadPurpose::VscDocument`. Upload routes are marked
+  `uploads:{kilobytes}` rather than grouped; the check's hard cap is 32 MB and its rule 10 MB.
+- A clean check is encrypted by `DocumentVault` (envelope encryption, ADR-0025), not with the field key
+  directly. The scanner's answer is a `ScanResult` (verdict and signature).
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement; it refines the level-1 (L1) requirement shown, and the text is quoted from `docs/specs/L2.md`.

@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-radio-group`, `zm-radio` |
 | Library path | `frontend/projects/components/src/lib/radio-group/` |
-| Status | planned |
+| Status | built (M3 S11, for the application's act type) |
 | Traces to | L2-030, L2-047, L2-059, L2-062, L2-068, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111 |
 | Design system | [`radio-group.html`](../../design-system/components/radio-group.html) |
 | Source mocks | [`dialogs/decline-request/default`](../../mocks/dialogs/decline-request/default.html), [`pages/apply/default`](../../mocks/pages/apply/default.html), [`dialogs/write-review/default`](../../mocks/dialogs/write-review/default.html), [`dialogs/report-review/invalid`](../../mocks/dialogs/report-review/invalid.html), [`dialogs/resolve-hold/invalid`](../../mocks/dialogs/resolve-hold/invalid.html), and their busy, failed and invalid states (see Usage) |
@@ -544,7 +544,8 @@ change instantly.
 
 ## Implementation notes
 
-Planned. The library has no radio component.
+**As built in M3 (S11):** `radio-group/radio-group.ts` (`RadioGroup`, `zm-radio-group`) and `radio-group/radio.ts` (`Radio`, `zm-radio`). The group is the `ControlValueAccessor` with `legend`, `name`, `requiredMarker`, `optionalMarker`, `help`, `error`, `variant`, `layout` and `legendStyle`, a `focus()` that lands on the checked or first radio, and ids `{name}-help` and `{name}-error` for `aria-describedby`; it provides itself under `RADIO_GROUP`, and each radio registers under `RADIO_CHILD`. A radio has `value`, `description` and `disabled`, the id `{name}-{value}`, and renders the `choice`, `stub`, `radio` or `card` markup from the group's variant. The `RadioGroup` (act type) and `StarRating` scenarios are registered. The plan below is what it followed.
+
 
 - Folder `frontend/projects/components/src/lib/radio-group/` with
   `radio-group.ts` (class `RadioGroup`, selector `zm-radio-group`) and

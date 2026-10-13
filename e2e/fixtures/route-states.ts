@@ -1,5 +1,9 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { AcceptTermsPage } from '../pages/accept-terms.page';
+import { ArtistPage } from '../pages/admin/artist.page';
+import { ArtistsPage } from '../pages/admin/artists.page';
+import { AuditLogPage } from '../pages/admin/audit-log.page';
+import { ChecksPage } from '../pages/admin/checks.page';
 import { AccountPage } from '../pages/account.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
@@ -93,6 +97,14 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.shows === 'saved-empty') await expect(new SavedPage(page).emptyTitle()).toBeVisible();
   if (state.shows === 'accept-terms')
     await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
+  if (state.shows === 'audit-rows') await new AuditLogPage(page).waitForRows();
+  if (state.shows === 'checks-rows') await new ChecksPage(page).waitForRows();
+  if (state.shows === 'artists-rows') await new ArtistsPage(page).waitForRows();
+  if (state.shows === 'artist-details') {
+    const artist = new ArtistPage(page);
+    await expect(artist.bookings().first()).toBeVisible();
+    await expect(artist.standingBadge()).toBeVisible();
+  }
   await discover.shell.settle();
   if (state.masks === 'mfa-key') {
     const setup = new MfaSetupPage(page);
@@ -109,6 +121,15 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     const account = new AccountPage(page);
     await account.fixPasswordLeadCount();
     return [account.deviceList(), account.sectionLead('Password')];
+  }
+  if (state.masks === 'audit-times') {
+    // Other admin specs add rows and the suite's own clock and address fill them: keep the first
+    // two rows (Priya's sign-in) and mask their times and addresses.
+    await page.addStyleTag({
+      content: 'table.table tbody tr:nth-child(n + 3) { display: none !important; }',
+    });
+    const log = new AuditLogPage(page);
+    return [log.rows().locator('th[scope="row"]'), log.rows().locator('td').nth(3)];
   }
   return state.masks === 'session-ended-line' ? [new SignInPage(page).sessionEndedDetail()] : [];
 }

@@ -164,6 +164,46 @@ review slice resolves the account on approval.
 - `artist_videos` — shared with profile management; `artist_application_id` links
   an application video until approval moves it to the artist.
 
+**As built in M3 S10 (video upload)**
+
+- The chunked-upload protocol is ADR-0026: `POST /api/v1/artist-applications/videos` starts an upload
+  and answers its token; `PATCH …/{token}` appends an 8 MB chunk at `Upload-Offset`; `GET`/`HEAD
+  …/{token}` answer the offset and the video's state. Unattached videos are deleted after 24 hours by
+  `uploads:prune-unattached` (D7).
+- `ApplicationVideoUploadsController` does not scan or type the file itself: the last chunk hands the
+  joined file to the S6 pipeline (`ScanUpload`, `PromoteUpload`), which then dispatches
+  `ProcessApplicationVideo` for the length check and the transcode through the `VideoTranscoder` port
+  (`FakeVideoTranscoder` until M10). The video is `Uploading` while chunks arrive, `Processing` from the
+  last chunk to the transcode, then `Live` or `Failed` with its reason.
+
+**As built in M3 S12 (refusals and retries)**
+
+- The request's video rule lets a retry carrying the same `Idempotency-Key` reuse the videos the first
+  send attached, so the action's replay answers 200 with the one application (L2-047.5). A duplicate
+  that slips past the pre-check and hits the partial unique index is answered as the same 409
+  `application-in-review` (L2-047.3), never a 500.
+- The web form keeps one page instance across its steps (one route through a `UrlMatcher`), so a
+  422 on `baseCity` opens "About you" with the server's message in the error summary and at the
+  field, the other steps still done and linked, and every answer kept (L2-001.3, L2-001.4,
+  L2-108.3). A 409 or a lost answer shows its alert over the review step with "Not sent · answers
+  kept", and Send stays enabled for the retry.
+
+**As built in M3 S11 (the form and a sent application)**
+
+- `POST /api/v1/artist-applications` runs `throttle:register`, `bot-challenge:artist-application` and
+  `SetCachePolicy`; `SubmitArtistApplicationRequest` validates the fields and both references, and
+  `SubmitArtistApplication` replays a known `Idempotency-Key`, refuses a second pending application
+  from the same email (409 `application-in-review`, naming that email), locates the base city with
+  `ServiceArea`, and numbers the application (`A-0217` onward, under an advisory lock) in one
+  transaction. `BusinessDayCalendar` gives the reply-by date and the holidays it skipped, which the
+  resource answers as `replyBy` and `skippedHolidays`.
+- The confirmation email is `ApplicationReceivedNotification`, sent by the
+  `SendApplicationReceivedEmail` listener of `ArtistApplicationSubmitted` on the `notifications` queue.
+- The web form is `pages/apply/` with `ApplicationStore` (the draft in `sessionStorage`, one
+  `Idempotency-Key` per draft), `VideoUpload` over the S10 protocol and `ReferenceFieldset`, routed at
+  `artists/apply` and `artists/apply/:step` ahead of `artists/:slug`. Server-side 422 and 409 answers
+  are mapped to steps in S12.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

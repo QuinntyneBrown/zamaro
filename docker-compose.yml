@@ -104,7 +104,7 @@ services:
   worker-e2e:
     <<: *api
     profiles: [e2e]
-    command: php artisan queue:work --queue=high,notifications,default --sleep=1
+    command: php artisan queue:work --queue=high,uploads,notifications,default --sleep=1
     environment:
       <<: *e2e-environment
 

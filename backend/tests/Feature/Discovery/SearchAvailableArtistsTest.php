@@ -159,7 +159,8 @@ class SearchAvailableArtistsTest extends TestCase
 
         $response = $this->search(['date' => '2026-11-14', 'kind' => 'youth-event', 'radius' => 120])->assertOk();
 
-        $this->assertSame(['Abigail Mensah'], $this->lineupNames($response));
+        // Abigail (verified until 2028) and Daniel & Ruth (verified until Mon 30 Nov, still good on the 14th).
+        $this->assertSame(['Abigail Mensah', 'Daniel & Ruth Okonkwo'], $this->lineupNames($response));
     }
 
     /**
