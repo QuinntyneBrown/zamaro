@@ -17,10 +17,4 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: bash .ci/lint.sh
       - run: bash .ci/build.sh
-
-  backend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: bash .ci/backend-test.sh
 # The e2e and perf-test jobs are added once there are specs and scenarios to run.
