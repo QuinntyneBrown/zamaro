@@ -121,6 +121,16 @@ delete control.
 When an account is deleted (L2-082, `privacy/delete-account`), its audit entries keep `actor_id` and are
 removed only by retention. Whether that satisfies the erasure rule is `<TO SUPPLY>`.
 
+
+**As built early, in M2 (S1, M2 D22)**
+
+Sign-in needed the log before the admin slices, so S1 added the `audit_entries` table as specified
+above, with a trigger that refuses `UPDATE` and `DELETE` for every role (M3 adds the retention role's
+exception with `audit:prune`), the `AuditEntry` model, the `AuditAction` enum (`auth.sign_in`,
+`auth.sign_in_failed` so far) and `AuditOutcome`, and `App\Actions\Audit\RecordAuditEntry`. The
+timestamp is the database's (`occurred_at` defaults to `now()`); the address is the request's, or null
+in a queued job. `LogRedactor` arrives with log redaction (M2 S4); until then no caller passes a
+secret in `context`. The viewer, `ImmutableAuditEntry` and retention stay in M3.
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the level-1

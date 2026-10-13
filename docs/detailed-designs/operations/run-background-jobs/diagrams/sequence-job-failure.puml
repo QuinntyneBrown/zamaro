@@ -46,7 +46,7 @@ worker -> job : handle()
 job -> email : Send to artist
 email --> job : 503 Service unavailable
 job --> worker : Exception
-loop attempts 2 to 6, delay grows exponentially (base and factor <TO SUPPLY>)
+loop attempts 2 to 6, after about 10, 30, 90, 270 and 810 s (±10 %)
   worker -> redis : Release job with next backoff delay (L2-092)
   redis -> worker : Deliver job again
   worker -> job : handle()

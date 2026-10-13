@@ -552,6 +552,26 @@ submit's spinner is the button's (button CRD).
 
 ## Implementation notes
 
+**As built in M2 (S1):** `zm-error-summary` is built in `lib/error-summary/` (one folder per component,
+as the AGENTS.md tree has it) with every input, output and method above and the `ErrorSummary`
+scenario (200 iterations, about 205 ms). The host also has `role="group"`: a custom element has no
+role, so without one its `aria-labelledby` would name nothing (and axe forbids naming a generic
+element). The sign-in page uses it. Still to do: the other three components, the layout classes, and
+replacing Discover's hand-written summary.
+
+**As built in M2 (S9):** `zm-form-section` and `zm-form-actions` are built in `lib/form-layout/` with
+every input above, and `styles/form-layout.scss` holds every layout class and the sticky bar's
+`scroll-padding-bottom`, imported from `styles/index.scss`. Their scenarios are `FormSection` (239 ms)
+and `FormActions` (149 ms) at the default 200 iterations. Account settings uses both. Still to do:
+`zm-form-section-skeleton` and its scenario (the account page's loading state announces itself without
+skeletons until then), and replacing Discover's hand-written summary.
+
+**After merging main (drift cleanup, PR #16):** `zm-error-summary` moved to
+`lib/form-layout/error-summary.ts`, beside the other form-layout components, as the design system
+names the folder. It keeps the M2 behaviour above (`role="group"`, underlined links). Discover's
+search form now uses it (`headingLevel` 3, `autoFocus` false), so its hand-written summary is gone.
+Still to do: `zm-form-section-skeleton` and its scenario.
+
 Planned. Build it in `frontend/projects/components/src/lib/form-layout/`:
 
 - `form-section.ts` (`FormSection`, `zm-form-section`), host classes

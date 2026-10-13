@@ -8,7 +8,7 @@ System_Ext(email, "Email delivery service", "Transactional email with bounce web
 Container_Boundary(backend, "Zamaro API and Zamaro Worker") {
   Component(events, "Domain events", "Laravel events", "BookingRequested, RequestAccepted, RequestWithdrawn, BookingConfirmed, ...")
   Component(listeners, "SendBookingEmails", "Queued listeners", "Map each event to recipients and notification")
-  Component(base, "TransactionalNotification", "Abstract notification", "mail channel, notifications queue, 5 tries with backoff")
+  Component(base, "TransactionalNotification", "Abstract notification", "mail channel, notifications queue, 1 attempt plus 5 retries with backoff")
   Component(data, "BookingEmailData", "Value object", "Booking number, link, parties; no card data")
   Component(log, "EmailMessageLogger", "Listener", "Records queued, sent, failed, suppressed")
   Component(hook, "EmailWebhookController", "Laravel controller", "POST /api/v1/webhooks/email")

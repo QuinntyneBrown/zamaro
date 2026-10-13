@@ -1,0 +1,114 @@
+import { expect, type Locator, type Page } from '@playwright/test';
+import { AcceptTermsPage } from '../pages/accept-terms.page';
+import { AccountPage } from '../pages/account.page';
+import { ArtistProfilePage } from '../pages/artist-profile.page';
+import { DiscoverPage } from '../pages/discover.page';
+import { MfaSetupPage } from '../pages/mfa-setup.page';
+import { SavedPage } from '../pages/saved.page';
+import { SignInPage } from '../pages/sign-in.page';
+import { VerifyEmailPage } from '../pages/verify-email.page';
+import type { RouteState } from '../routes.manifest';
+import { RUTH, signIn, signInAs } from './accounts';
+import { freezeClock } from './clock';
+
+/** The wait the rate-limited state is given, as `Retry-After`, as in docs/mocks/pages/discover/limited. */
+const RETRY_AFTER_SECONDS = 40;
+
+/**
+ * Opens a manifest state on a page set to the frozen "today", and resolves once it has settled.
+ * Resolves with the parts a capture must mask: text the clock keeps changing.
+ */
+export async function openRouteState(page: Page, state: RouteState): Promise<Locator[]> {
+  const discover = new DiscoverPage(page);
+  const profile = new ArtistProfilePage(page);
+  const slug = new URL(state.path, 'http://zamaro').pathname.split('/')[2] ?? '';
+  await freezeClock(page);
+  if (state.signedInAs) await signInAs(page.context(), state.signedInAs);
+
+  switch (state.setup) {
+    case 'search-pending':
+      await discover.holdSearches();
+      await page.goto(state.path);
+      await expect(discover.lineup.skeletons().first()).toBeVisible();
+      break;
+    case 'search-fails':
+      await discover.failSearches();
+      await page.goto(state.path);
+      await expect(discover.lineup.alert()).toBeVisible();
+      break;
+    case 'search-limited':
+      await discover.limitSearches(RETRY_AFTER_SECONDS);
+      await page.goto(state.path);
+      await expect(discover.lineup.alert()).toBeVisible();
+      await discover.shell.settle();
+      // "Try again in 39 s" counts down every second.
+      return [discover.lineup.tryAgainButton()];
+    case 'profile-pending':
+    case 'profile-fails':
+      await page.goto(state.from!, { waitUntil: 'networkidle' });
+      await (state.setup === 'profile-pending'
+        ? profile.holdProfile(slug)
+        : profile.failProfile(slug));
+      await profile.shell.followLinkTo(state.path);
+      await expect(
+        state.setup === 'profile-pending' ? profile.busyRegion() : profile.errorAlert(),
+      ).toBeVisible();
+      break;
+    case 'two-step-on':
+      await page.route('**/api/v1/me', async (route) => {
+        const response = await route.fetch();
+        const body = (await response.json()) as { data: Record<string, unknown> };
+        await route.fulfill({ response, json: { data: { ...body.data, mfaEnabled: true } } });
+      });
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.main()).toBeVisible();
+      break;
+    case 'last-search':
+      await page.addInitScript(() => localStorage.setItem('zamaro.lastSearchDate', '2026-11-14'));
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.main()).toBeVisible();
+      break;
+    case 'fresh-booker':
+      await signIn(page.context().request, RUTH);
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.accountButton()).toBeVisible();
+      break;
+    default:
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(discover.shell.main()).toBeVisible();
+  }
+  // The browser asks who is signed in once it has taken over; the header changes when it answers.
+  if (state.signedInAs) await expect(discover.shell.accountButton()).toBeVisible();
+  // A slow start can begin the search after the network went quiet, so wait for its answer.
+  if (state.shows === 'lineup') {
+    await expect(discover.lineup.headliner().name()).toBeVisible();
+    await expect(discover.lineup.tickets()).not.toHaveCount(0);
+  }
+  if (state.shows === 'sold-out') await expect(discover.lineup.soldOut().root()).toBeVisible();
+  if (state.shows === 'link-expired')
+    await expect(new VerifyEmailPage(page).expiredCard()).toBeVisible();
+  if (state.shows === 'account-form') await expect(new AccountPage(page).form()).toBeVisible();
+  if (state.shows === 'mfa-key') await expect(new MfaSetupPage(page).key()).toBeVisible();
+  if (state.shows === 'saved-list') await expect(new SavedPage(page).cards()).toHaveCount(3);
+  if (state.shows === 'saved-empty') await expect(new SavedPage(page).emptyTitle()).toBeVisible();
+  if (state.shows === 'accept-terms')
+    await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
+  await discover.shell.settle();
+  if (state.masks === 'mfa-key') {
+    const setup = new MfaSetupPage(page);
+    return [setup.qrCode(), setup.key()];
+  }
+  if (state.masks === 'devices') {
+    // Other specs signed in as the same cast member add rows: keep this device (always first) so the
+    // page's height does not depend on them, and mask its line and the count in the Password lead.
+    // The lead is masked, but its count would still change how it wraps at 320 px, so it is given one
+    // fixed count first.
+    await page.addStyleTag({
+      content: '.device-list > li:not(:first-child) { display: none !important; }',
+    });
+    const account = new AccountPage(page);
+    await account.fixPasswordLeadCount();
+    return [account.deviceList(), account.sectionLead('Password')];
+  }
+  return state.masks === 'session-ended-line' ? [new SignInPage(page).sessionEndedDetail()] : [];
+}

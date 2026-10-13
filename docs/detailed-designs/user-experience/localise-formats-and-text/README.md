@@ -136,10 +136,14 @@ Worker, and CI checks on both codebases.
   and string literals passed to `ToastService.show`, `AnnouncerService.polite` and
   `Title.setTitle`. Brand names listed in `i18n-allowlist.json` (for example
   "Zamaro") are exempt.
-- **`php artisan i18n:check`** — `CheckTranslationsCommand` scans
-  `resources/views/emails` and `app/Notifications` for literal text outside `@t` or
-  `IcuTranslator`, and checks that every key used in either codebase exists in the
-  English catalogue.
+- **`php artisan i18n:check`** — `CheckTranslationsCommand` (built in M2 S6, run by
+  `.ci/lint.sh`) scans `resources/views/emails` and `app/Notifications`. In a view,
+  any letters left once Blade comments, echoes, directives, tags and entities are set
+  aside are hard-coded text; in a class, a literal passed to a `MailMessage` text
+  method (`subject`, `greeting`, `line`, `action`, `salutation`) or as the subject of
+  `email()` is. Every key read through `copy()` (the `emails` namespace), `message()`
+  or `@t` must exist in the English catalogue. Emails print only variables built from
+  the catalogue (ADR-0019), so no `@t` directive exists yet.
 - Either check fails the build with the file, line and offending text.
 
 ## Requirements

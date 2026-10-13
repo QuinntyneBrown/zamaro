@@ -2,15 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\MediaStatus;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * @property list<array{width: int, height: int, format: string, key: string}> $renditions
- */
 class ArtistPhoto extends Model
 {
     use HasUuids;
@@ -19,23 +13,19 @@ class ArtistPhoto extends Model
 
     protected function casts(): array
     {
-        return [
-            'position' => 'integer',
-            'is_primary' => 'boolean',
-            'status' => MediaStatus::class,
-            'renditions' => 'array',
-            'width' => 'integer',
-            'height' => 'integer',
-        ];
+        return ['position' => 'integer', 'renditions' => 'array', 'width' => 'integer', 'height' => 'integer'];
     }
 
-    public function artist(): BelongsTo
+    /**
+     * The renditions in one format, narrowest first.
+     *
+     * @return list<array{width: int, format: string, key: string}>
+     */
+    public function renditionsIn(string $format): array
     {
-        return $this->belongsTo(Artist::class);
-    }
+        $renditions = array_values(array_filter($this->renditions, fn (array $rendition) => $rendition['format'] === $format));
+        usort($renditions, fn (array $a, array $b) => $a['width'] <=> $b['width']);
 
-    public function scopeLive(Builder $query): void
-    {
-        $query->where('status', MediaStatus::Live);
+        return $renditions;
     }
 }

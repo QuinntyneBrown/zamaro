@@ -81,13 +81,16 @@ The sort select, the style chips and the summary line are part of `Lineup`
   - After each search, the summary line is announced through the CDK `LiveAnnouncer` (polite).
   - The sort select and the chips sit in the lineup section. The chips are disabled while a
     search loads.
-- **`Discover`** (extended) — subscribes to `ActivatedRoute.queryParamMap` and hands each
-  decoded state to `SearchStore.load()`. After Back from a profile the URL re-runs the search,
-  so the lineup returns.
-  - **Not built yet (open item, L2-009.2):** keeping the last lineup, with every page loaded
-    so far, keyed by the canonical query string so Back renders it at once, and restoring the
-    scroll position with `withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })`.
-    The router today enables only anchor scrolling.
+- **`Discover`** (extended) — subscribes to `ActivatedRoute.queryParamMap`. When
+  the decoded state matches the cached key, as it does after Back from a profile, it
+  renders the cached lineup at once. The router, configured with
+  `withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })`, then restores the
+  scroll position (L2-009).
+  - *As built (M1):* the cached lineup (`LastSearch`, with every loaded page) is used only on a
+    Back or Forward (a `popstate` navigation). Any other way to the same address, such as
+    "Discover · Sat 14 Nov" on a profile, searches afresh, so the cache never shows stale
+    results. Search, sort, chip and sold-out navigations pass `scroll: 'manual'`, so the page
+    stays where it is scrolled; every other forward navigation starts at the top.
 
 **Backend (Zamaro API)**
 

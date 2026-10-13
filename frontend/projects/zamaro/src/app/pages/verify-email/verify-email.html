@@ -1,0 +1,85 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    @if (status() === 'expired') {
+      <zm-booking-form
+        class="auth-form"
+        variant="auth"
+        landmark
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.verifyEmail.expiredTitle' | transloco"
+        [stamp]="'accounts.verifyEmail.expiredStamp' | transloco"
+      >
+        <p>
+          <zm-stamp status="expired" size="lg">{{
+            'accounts.verifyEmail.expiredWord' | transloco
+          }}</zm-stamp>
+        </p>
+        <p>{{ 'accounts.verifyEmail.expiredText' | transloco }}</p>
+        <div class="actions">
+          <zm-button
+            variant="primary"
+            size="lg"
+            block
+            [busy]="sending()"
+            [disabled]="sent()"
+            (click)="sendNewLink()"
+            ><zm-icon name="mail" />{{
+              (sent() ? 'accounts.verifyEmail.sent' : 'accounts.verifyEmail.sendNewLink')
+                | transloco
+            }}</zm-button
+          >
+          <zm-button-link link="/" block>{{
+            'accounts.verifyEmail.keepBrowsing' | transloco
+          }}</zm-button-link>
+        </div>
+        <p class="sent" role="status">
+          @if (sent()) {
+            {{ 'accounts.verifyEmail.sentText' | transloco }}
+          }
+        </p>
+        <span slot="fine">{{ 'accounts.verifyEmail.fine' | transloco }}</span>
+      </zm-booking-form>
+    } @else {
+      <zm-booking-form
+        class="auth-form"
+        variant="auth"
+        landmark
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.verifyEmail.checkingTitle' | transloco"
+        [stamp]="'accounts.verifyEmail.checkingStamp' | transloco"
+        [busy]="status() === 'checking'"
+      >
+        @if (status() === 'error') {
+          <zm-alert
+            variant="danger"
+            compact
+            [heading]="'accounts.verifyEmail.errorTitle' | transloco"
+          >
+            <p>{{ 'accounts.verifyEmail.errorText' | transloco }}</p>
+          </zm-alert>
+          <div class="actions">
+            <zm-button variant="primary" size="lg" block [busy]="retrying()" (click)="tryAgain()"
+              ><zm-icon name="refresh" />{{
+                'accounts.verifyEmail.tryAgain' | transloco
+              }}</zm-button
+            >
+            <zm-button-link link="/" block>{{
+              'accounts.verifyEmail.keepBrowsing' | transloco
+            }}</zm-button-link>
+          </div>
+        } @else {
+          <p class="checking" role="status">
+            {{
+              email()
+                ? ('accounts.verifyEmail.confirming' | transloco: { email: email() })
+                : ('accounts.verifyEmail.confirmingYours' | transloco)
+            }}
+          </p>
+          <p class="text-muted">{{ 'accounts.verifyEmail.keepOpen' | transloco }}</p>
+        }
+      </zm-booking-form>
+    }
+  </div>
+</div>

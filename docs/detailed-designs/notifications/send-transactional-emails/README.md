@@ -70,12 +70,19 @@ Other slices add notifications on the same base class: `ReceiptNotification`
   calls `notify()`. Events dispatch after the database transaction commits, so no
   email describes a rolled-back change.
 - **`TransactionalNotification`** — abstract base class in `App\Notifications`. Every
-  Zamaro email extends it.
+  Zamaro email extends it (ADR-0019; built in M2 S5 for the registration emails).
   - It uses the `mail` channel on the `notifications` queue, which Horizon runs with
-    dedicated workers to meet the 2-minute target (L2-063).
-  - It sets `tries = 5` with an exponential `backoff()` (intervals `<TO SUPPLY>`).
-    After the fifth failure, `failed()` marks the `EmailMessage` `Failed`, and the job
-    moves to the failed-jobs store and alerts (L2-065, L2-092).
+    dedicated workers to meet the 2-minute target (L2-063), and is queued
+    `afterCommit()`.
+  - `email($subject, $view, $data)` renders a Markdown view in
+    `resources/views/emails/` with Zamaro's header and footer; every word comes from
+    `resources/i18n/en/emails.json` through `Catalogue::message()`, and links use
+    `zamaro.web_url`. The sender is `Zamaro <hello@zamaro.ca>` (M2 D16).
+  - It uses `RetriesWithBackoff` from `operations/run-background-jobs`: `tries = 6`, one
+    attempt and up to 5 retries, after about 10, 30, 90, 270 and 810 seconds, each
+    ±10 % (M2 D17; built in M2 S6). After the sixth failure the job moves to the
+    failed-jobs store and `ReportFailedJob` reports and alerts (L2-065, L2-092); from
+    M5, `failed()` also marks the `EmailMessage` `Failed`.
   - `shouldSend()` returns false for an undeliverable address and records
     `Suppressed`. For the optional categories it also asks `NotificationPreferenceGate`
     from `notifications/manage-email-preferences`.

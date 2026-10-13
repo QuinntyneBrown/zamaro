@@ -89,7 +89,7 @@ The planned scope is set out in [`docs/specs/L1.md`](docs/specs/L1.md). In summa
 | Container | Technology | Responsibility |
 |---|---|---|
 | Zamaro Web | Angular with server-side rendering | The booker, artist and admin user interface |
-| Zamaro API | PHP 8.3, Laravel 11 | REST API; owns booking rules, persistence and authentication |
+| Zamaro API | PHP 8.3, Laravel 13 | REST API; owns booking rules, persistence and authentication |
 | Zamaro Worker | Laravel queue worker and scheduler | Email, payment events, deadlines and other background jobs |
 | Database | PostgreSQL 16 | System of record |
 | Cache | Redis | Sessions, cached distances and profiles, rate limits |

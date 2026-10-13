@@ -1,17 +1,28 @@
 <zm-artwork class="ticket__art" [variant]="artVariant()" />
 <div class="ticket__body">
   <span class="ticket__no"
-    >{{ positionLabel() }} ·
-    <zm-rating
-      [score]="rating()"
-      [label]="ratingLabel()"
-      [countText]="ratingCount()"
-      [newText]="ratingNew()"
-  /></span>
-  <h3 class="ticket__name">
-    <a [routerLink]="link()" [queryParams]="queryParams()">{{ name() }}</a>
-  </h3>
+    >{{ kicker() }}
+    @if (rating() !== undefined) {
+      ·
+      <zm-rating
+        [score]="rating() ?? null"
+        [label]="ratingLabel()"
+        [countText]="ratingCount()"
+        [newText]="ratingNew()"
+      />
+    }
+  </span>
+  @if (headingLevel() === 2) {
+    <h2 class="ticket__name">
+      <a [routerLink]="link()" [queryParams]="queryParams()">{{ name() }}</a>
+    </h2>
+  } @else {
+    <h3 class="ticket__name">
+      <a [routerLink]="link()" [queryParams]="queryParams()">{{ name() }}</a>
+    </h3>
+  }
   <p class="ticket__meta">{{ actLine() }}<br />{{ placeLine() }}</p>
+  <div class="ticket__actions"><ng-content select="[slot=actions]" /></div>
 </div>
 <div class="ticket__stub">
   <p class="ticket__price">

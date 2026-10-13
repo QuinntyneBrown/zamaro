@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-review`, `zm-review-skeleton` |
 | Library path | `frontend/projects/components/src/lib/review/` |
-| Status | planned |
+| Status | built (`zm-review`); planned (`zm-review-skeleton`, with the artist's Reviews page in M7) |
 | Traces to | L2-018, L2-059, L2-061, L2-062, L2-075, L2-086, L2-096, L2-098, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 |
 | Design system | [`review.html`](../../design-system/components/review.html) |
 | Source mocks | [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/artist/empty`](../../mocks/pages/artist/empty.html), [`pages/profile-preview/default`](../../mocks/pages/profile-preview/default.html), [`pages/artist-reviews/default`](../../mocks/pages/artist-reviews/default.html), [`pages/artist-reviews/loading`](../../mocks/pages/artist-reviews/loading.html), [`pages/admin-reviews/default`](../../mocks/pages/admin-reviews/default.html), [`dialogs/reply-review/default`](../../mocks/dialogs/reply-review/default.html), [`dialogs/reply-review/edit`](../../mocks/dialogs/reply-review/edit.html), [`dialogs/report-review/default`](../../mocks/dialogs/report-review/default.html), [`dialogs/hide-review/default`](../../mocks/dialogs/hide-review/default.html) |

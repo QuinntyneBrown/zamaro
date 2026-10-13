@@ -119,6 +119,10 @@ and server-rendered markup.
   fails the build on any violation with impact `serious` or `critical` (L2-100). A
   keyboard sub-suite checks the skip link, route focus and dialog focus return
   (L2-101).
+  - *As built (M1 close):* `e2e/a11y/a11y.spec.ts` runs the `wcag2a`, `wcag2aa`, `wcag21a`,
+    `wcag21aa`, `wcag22a` and `wcag22aa` tags on every manifest state, in both themes, at XS
+    (compact header) and XL, and fails on any violation, whatever its impact. The keyboard
+    checks live in the feature specs (skip link, menu focus return, toasts).
 - **Contrast check** — CI runs `check_contrast.py` against
   `docs/design-system/tokens/tokens.css`, which tests every pair in
   `contrast-pairs.json` in both themes: body text at least 4.5:1, large text at least

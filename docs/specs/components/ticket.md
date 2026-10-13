@@ -467,7 +467,17 @@ animating. Skeletons stop shimmering (skeleton CRD).
 
 ## Implementation notes
 
-The library has `zm-ticket`. To meet this CRD:
+**As built in M2 (S17):** `kicker` (renamed from `positionLabel`), optional `rating` and `ratingLabel`,
+`headingLevel`, `booked` and the host classes `ticket` / `ticket--booked` are in, with the
+`[slot=actions]` wrapper (hidden when empty, raised above the stretched link). `zm-ticket-skeleton`
+shares `ticket.scss` and does not lift. Saved artists is the first page to use them. After merging
+main (PR #16), Discover's loading lineup uses `zm-ticket-skeleton` too, in place of its own markup. Still to do: `artTilt`, `artYellow`, `artLabel`, `photo`, `artPriority`,
+`[slot=tags]`, `--zm-ticket-notch-bg` and D-8's `overflow-wrap`. Perf against the S16 build, twice:
+`Ticket` 181.6 → 213.5 ms and 179.1 → 207.8 ms, `Lineup` 241.9 → 289.9 and 243.6 → 270.4 ms, neither
+flagged (the runs overlap); the cost is the rating and heading-level branches. `TicketSkeleton` renders
+in 95–106 ms; `SavedLineup` (200 tickets, 1 iteration) in 244 ms.
+
+Before S17, the library had `zm-ticket`. To meet this CRD:
 
 - Rename `positionLabel` to `kicker`.
 - Make `rating` and `ratingLabel` optional, with `undefined` meaning no rating

@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-list` |
 | Library path | `frontend/projects/components/src/lib/list/` |
-| Status | planned |
+| Status | built (default, grid, device); planned (interactive) |
 | Traces to | L2-025, L2-067, L2-072, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-108, L2-111 |
 | Design system | [`list.html`](../../design-system/components/list.html) |
 | Source mocks | [`pages/account/default`](../../mocks/pages/account/default.html) and its states, [`pages/mfa-setup/codes`](../../mocks/pages/mfa-setup/codes.html), [`dialogs/two-step-code/codes`](../../mocks/dialogs/two-step-code/codes.html), [`dialogs/two-step-code/new-codes`](../../mocks/dialogs/two-step-code/new-codes.html), [`dialogs/delete-account/default`](../../mocks/dialogs/delete-account/default.html), [`dialogs/suspend-artist/default`](../../mocks/dialogs/suspend-artist/default.html) |
@@ -377,6 +377,14 @@ None. Loading skeletons stop shimmering under `prefers-reduced-motion`.
 - **AC-20** Given the `List` and `ListInteractive` scenarios, when the perf test runs against the base branch with `--fail-on-regression`, then neither is flagged as a possible regression and each renders in its tuned window. (L2-086)
 
 ## Implementation notes
+
+**As built in M2 (S11):** `zm-list` (`lib/list/list.ts`) and the `zmListTrail` directive
+(`lib/list/list-trail.ts`) are built with `items`, `variant` (`default`, `grid`, `device`), `divided`,
+`ordered`, `label`, `labelledBy`, `loading`, `loadingCount` and `loadingLabel`; the rules live in the
+component's styles. Account settings uses the device variant; its `List` scenario renders Naomi's three
+devices in 259 ms at 200 iterations. Still to do: the `interactive` variant with `activated`,
+`currentToken` and the dev-mode trail check, avatars (with `zm-avatar`), and the `ListInteractive`
+scenario.
 
 Planned. Build it as:
 

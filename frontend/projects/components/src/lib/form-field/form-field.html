@@ -1,40 +1,75 @@
 <div class="field">
-  <label class="field__label" [for]="fieldId()">{{ label() }}</label>
-  @if (type() === 'select') {
-    <select
-      #control
-      class="select"
-      [id]="fieldId()"
-      [disabled]="disabled()"
-      [attr.aria-invalid]="error() ? 'true' : null"
-      [attr.aria-describedby]="error() ? errorId() : null"
-      (change)="changed($any($event.target).value)"
-      (blur)="onTouched()"
-    >
-      @for (option of options(); track option.value) {
-        <option [value]="option.value" [selected]="option.value === value()">
-          {{ option.label }}
-        </option>
-      }
-    </select>
-  } @else {
-    <input
-      #control
-      class="input"
-      [type]="type()"
-      [id]="fieldId()"
-      [value]="value()"
-      [disabled]="disabled()"
-      [attr.min]="min()"
-      [attr.max]="max()"
-      [attr.autocomplete]="autocomplete()"
-      [attr.aria-invalid]="error() ? 'true' : null"
-      [attr.aria-describedby]="error() ? errorId() : null"
-      (input)="changed($any($event.target).value)"
-      (blur)="onTouched()"
-    />
+  <label class="field__label" [for]="fieldId()"
+    >{{ label() }}
+    @if (requiredMarker()) {
+      <span class="field__required">{{ requiredMarker() }}</span>
+    } @else if (optionalMarker()) {
+      <span class="field__optional">{{ optionalMarker() }}</span>
+    }
+  </label>
+  @switch (type()) {
+    @case ('select') {
+      <select
+        #control
+        class="select"
+        [id]="fieldId()"
+        [disabled]="disabled()"
+        [attr.aria-invalid]="isInvalid() ? 'true' : null"
+        [attr.aria-describedby]="descriptions()"
+        (change)="changed($any($event.target).value)"
+        (blur)="onTouched()"
+      >
+        @for (option of options(); track option.value) {
+          <option [value]="option.value" [selected]="option.value === value()">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+    }
+    @case ('textarea') {
+      <textarea
+        #control
+        class="textarea"
+        [id]="fieldId()"
+        [value]="value()"
+        [disabled]="disabled()"
+        [attr.placeholder]="placeholder()"
+        [attr.aria-invalid]="isInvalid() ? 'true' : null"
+        [attr.aria-describedby]="descriptions()"
+        (input)="changed($any($event.target).value)"
+        (blur)="onTouched()"
+      ></textarea>
+    }
+    @default {
+      <input
+        #control
+        class="input"
+        [type]="type()"
+        [id]="fieldId()"
+        [value]="value()"
+        [disabled]="disabled()"
+        [readOnly]="readonly()"
+        [required]="!!requiredMarker()"
+        [attr.min]="min()"
+        [attr.max]="max()"
+        [attr.autocomplete]="autocomplete()"
+        [attr.inputmode]="type() === 'number' ? 'numeric' : null"
+        [attr.placeholder]="placeholder()"
+        [attr.aria-invalid]="isInvalid() ? 'true' : null"
+        [attr.aria-describedby]="descriptions()"
+        (input)="changed($any($event.target).value)"
+        (blur)="onTouched()"
+      />
+    }
   }
   @if (error()) {
     <span class="field__error" [id]="errorId()">{{ error() }}</span>
+  }
+  @for (line of helpLines(); track line.id) {
+    <span class="field__help" [id]="line.id">{{ line.text }}</span>
+  }
+  <ng-content select="[slot=message]" />
+  @if (live()) {
+    <span class="visually-hidden" role="status" [id]="fieldId() + '-live'">{{ error() }}</span>
   }
 </div>

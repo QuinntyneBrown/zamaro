@@ -6,12 +6,17 @@ import {
   input,
 } from '@angular/core';
 
-export type ButtonVariant = 'secondary' | 'primary' | 'ghost' | 'ink';
-export type ButtonSize = 'md' | 'lg';
+export type ButtonVariant = 'secondary' | 'primary' | 'ghost' | 'ink' | 'danger';
+export type ButtonSize = 'sm' | 'md' | 'lg';
 
 /** The `btn` classes both button components render. */
-export function buttonClasses(variant: ButtonVariant, size: ButtonSize, iconOnly = false): string {
-  return `btn btn--${variant}${size === 'lg' ? ' btn--lg' : ''}${iconOnly ? ' btn--icon' : ''}`;
+export function buttonClasses(
+  variant: ButtonVariant,
+  size: ButtonSize,
+  iconOnly = false,
+  block = false,
+): string {
+  return `btn btn--${variant}${size === 'md' ? '' : ` btn--${size}`}${iconOnly ? ' btn--icon' : ''}${block ? ' btn--block' : ''}`;
 }
 
 /**
@@ -41,6 +46,8 @@ export class Button {
   readonly variant = input<ButtonVariant>('secondary');
   readonly size = input<ButtonSize>('md');
   readonly iconOnly = input(false, { transform: booleanAttribute });
+  /** Fills its container's width, as the booking stub's submit does. */
+  readonly block = input(false, { transform: booleanAttribute });
   readonly type = input<'button' | 'submit'>('button');
   /** Accessible name when the visible content is only an icon. */
   readonly label = input<string>();
@@ -53,6 +60,6 @@ export class Button {
   readonly disabled = input(false);
 
   protected readonly classes = computed(() =>
-    buttonClasses(this.variant(), this.size(), this.iconOnly()),
+    buttonClasses(this.variant(), this.size(), this.iconOnly(), this.block()),
   );
 }

@@ -25,7 +25,7 @@ const CAST = [
     @for (ticket of tickets; track $index) {
       <li>
         <zm-ticket
-          [positionLabel]="ticket.position"
+          [kicker]="ticket.position"
           [name]="ticket.name"
           link="/artists/abigail-mensah"
           [queryParams]="{ date: '2026-11-14' }"

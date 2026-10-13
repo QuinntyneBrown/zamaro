@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedField;
 use App\Enums\ActType;
 use App\Enums\ArtistStatus;
 use App\Enums\Pronoun;
@@ -27,6 +28,8 @@ class Artist extends Model
             'published_at' => 'immutable_datetime',
             'pronoun' => Pronoun::class,
             'languages' => 'array',
+            // Private, encrypted, in E.164 (L2-025.4, L2-079.2).
+            'contact_phone' => EncryptedField::class,
         ];
     }
 
@@ -41,13 +44,11 @@ class Artist extends Model
         return $this->hasMany(SetlistSong::class)->orderBy('position');
     }
 
-    /** Every photo in the artist's order, whatever its status. */
     public function photos(): HasMany
     {
         return $this->hasMany(ArtistPhoto::class)->orderBy('position');
     }
 
-    /** Every video in the artist's order, whatever its status. */
     public function videos(): HasMany
     {
         return $this->hasMany(ArtistVideo::class)->orderBy('position');
@@ -61,6 +62,23 @@ class Artist extends Model
             ->whereNotNull('published_at');
     }
 
+    /** The visible scope for an artist already loaded. */
+    public function isVisible(): bool
+    {
+        return $this->status === ArtistStatus::Approved && $this->payout_ready && $this->published_at !== null;
+    }
+
+    /** The first of the artist's styles in the chips' order: "solo vocalist" for Abigail (L2-021.1). */
+    public function primaryStyle(): ?Style
+    {
+        return $this->styles()->first()?->style;
+    }
+
+    public function slugHistories(): HasMany
+    {
+        return $this->hasMany(SlugHistory::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -69,9 +87,9 @@ class Artist extends Model
     /** In the chips' order (the Style enum), so every card and profile lists them alike. */
     public function styles(): HasMany
     {
-        $order = implode(',', array_map(fn (Style $style) => "'{$style->value}'", Style::cases()));
+        $order = '{'.implode(',', array_map(fn (Style $style) => $style->value, Style::cases())).'}';
 
-        return $this->hasMany(ArtistStyle::class)->orderByRaw("array_position(ARRAY[{$order}]::text[], style)");
+        return $this->hasMany(ArtistStyle::class)->orderByRaw('array_position(?::text[], style)', [$order]);
     }
 
     public function rating(): HasOne

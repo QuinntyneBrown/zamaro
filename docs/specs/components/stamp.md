@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-stamp` |
 | Library path | `frontend/projects/components/src/lib/stamp/` |
-| Status | planned |
+| Status | built (M2 S7) |
 | Traces to | L2-022, L2-029, L2-033, L2-034, L2-047, L2-068, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-111 |
 | Design system | [`stamp.html`](../../design-system/components/stamp.html) |
 | Source mocks | [`pages/bookings/default`](../../mocks/pages/bookings/default.html), [`pages/bookings/past`](../../mocks/pages/bookings/past.html), [`pages/booking-detail/default`](../../mocks/pages/booking-detail/default.html) and its other states, [`pages/requests/default`](../../mocks/pages/requests/default.html), [`pages/request-detail/default`](../../mocks/pages/request-detail/default.html), [`pages/admin-bookings/default`](../../mocks/pages/admin-bookings/default.html), [`pages/apply/success`](../../mocks/pages/apply/success.html), [`pages/verify-email/expired`](../../mocks/pages/verify-email/expired.html), and every other screen in Usage |
@@ -382,7 +382,11 @@ None. The tilt is static and nothing animates when the status changes, so
 
 ## Implementation notes
 
-The stamp is planned. To build it:
+**As built in M2 (S7):** `stamp.ts` as below, first used for the expired verification link's large
+"Expired" stamp; the `Stamp` scenario renders Luz Viva's "Accepted". `BookingList.ts` and
+`RequestsInboxRow.ts` come with their screens (M5, M4).
+
+The plan it was built to:
 
 - Folder `frontend/projects/components/src/lib/stamp/`, file `stamp.ts`, class
   `Stamp`, selector `zm-stamp`; export `Stamp` and `StampStatus` from

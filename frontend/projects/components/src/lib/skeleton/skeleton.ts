@@ -1,7 +1,17 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 export type SkeletonShape =
-  'text' | 'title' | 'poster' | 'figure' | 'portrait' | 'target' | 'block' | 'strip';
+  | 'text'
+  | 'title'
+  | 'poster'
+  | 'figure'
+  | 'control'
+  | 'control-lg'
+  | 'portrait'
+  | 'wide'
+  | 'target'
+  | 'block'
+  | 'strip';
 export type SkeletonWidth = 'short' | 'medium' | 'long' | 'full';
 
 /**
@@ -30,6 +40,17 @@ export type SkeletonWidth = 'short' | 'medium' | 'long' | 'full';
       animation: shimmer var(--duration-deliberate) linear infinite;
     }
 
+    /* A loading poster stays charcoal in both themes (skeleton CRD AC-10). */
+    :host-context(.on-stage) {
+      background: linear-gradient(
+          90deg,
+          var(--color-bg-stage-raised) 0 40%,
+          var(--color-bg-stage-raised-hover) 50%,
+          var(--color-bg-stage-raised) 60% 100%
+        )
+        0 0 / 300% 100%;
+    }
+
     :host(.skeleton--text) {
       height: 1rem;
       width: 70%;
@@ -50,8 +71,20 @@ export type SkeletonWidth = 'short' | 'medium' | 'long' | 'full';
       width: 50%;
     }
 
+    :host(.skeleton--control) {
+      height: var(--control-height-md);
+    }
+
+    :host(.skeleton--control-lg) {
+      height: var(--control-height-lg);
+    }
+
     :host(.skeleton--portrait) {
       aspect-ratio: 4 / 5;
+    }
+
+    :host(.skeleton--wide) {
+      aspect-ratio: 16 / 9;
     }
 
     :host(.skeleton--target) {

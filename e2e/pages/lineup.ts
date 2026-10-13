@@ -17,6 +17,18 @@ export class Lineup {
     return this.section().getByRole('listitem');
   }
 
+  /** The heart on an artist's ticket: "Save Elijah Park to your saved artists". */
+  saveToggle(artist: string): Locator {
+    return this.section().getByRole('button', {
+      name: new RegExp(`^(Save ${artist} to|Remove ${artist} from) your saved artists$`),
+    });
+  }
+
+  /** Every heart in the lineup, headliner included. */
+  saveToggles(): Locator {
+    return this.section().locator('.save');
+  }
+
   ticketNames(): Locator {
     return this.tickets().getByRole('heading', { level: 3 });
   }
@@ -92,7 +104,9 @@ export class Lineup {
   }
 
   ticket(name: string): Ticket {
-    return new Ticket(this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }));
+    return new Ticket(
+      this.tickets().filter({ has: this.page.getByRole('heading', { name, level: 3 }) }),
+    );
   }
 
   headliner(): Headliner {
@@ -170,6 +184,15 @@ export class Headliner {
   profileLink(): Locator {
     return this.card.getByRole('link', { name: /^See / });
   }
+
+  saveToggle(): Locator {
+    return this.card.locator('.save');
+  }
+
+  /** Opens the profile from the headliner's name. */
+  async openProfile(): Promise<void> {
+    await this.name().getByRole('link').click();
+  }
 }
 
 export class Ticket {
@@ -186,6 +209,16 @@ export class Ticket {
 
   link(): Locator {
     return this.card.getByRole('heading', { level: 3 }).getByRole('link');
+  }
+
+  /** Scrolls the page until the card is in view. */
+  async scrollIntoView(): Promise<void> {
+    await this.card.scrollIntoViewIfNeeded();
+  }
+
+  /** Opens the artist's profile from the card's name. */
+  async openProfile(): Promise<void> {
+    await this.link().click();
   }
 
   /** The act and styles line, then the place line ("Hamilton · 14 km from you"). */

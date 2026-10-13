@@ -638,6 +638,18 @@ close.
 
 ## Implementation notes
 
+**As built in M2 (S13):** `description`, `descriptionId`, `icon`, `iconTone`, `danger` and `busy` are
+built (the body dims and the close button is disabled while busy; the consumer holds Escape with the
+CDK's `disableClose`), with the `.dialog__form` utility and the `DialogDanger` scenario (228 ms at 200
+iterations; `Dialog` re-measured 173.8 → 149.0 ms). Still to do: `size`, `dirty`, `bodyLabel`,
+`dismissed` in place of `closed`, `openDialog()`, the short-viewport rule and `DialogConfirm`.
+
+Built in M2 S2: the `menu` variant (`.dialog--menu`), with `closeLabel`
+optional. It is made of styles only (D-17): the header and body wrappers are
+`display: contents`, the title is visually hidden, and the close button and
+footer are `display: none`. The account menu opens it with its own CDK config
+in `dialogs/account-menu/account-menu.ts` until `openDialog()` exists.
+
 The library has `zm-dialog` with `heading`, `titleId`, `closeLabel`, `variant`
 (`'default' | 'drawer'`) and a `closed` output; the shell opens the drawer with
 its own CDK config in `dialogs/menu/menu.ts`. To meet this CRD:
@@ -698,3 +710,4 @@ its own CDK config in `dialogs/menu/menu.ts`. To meet this CRD:
 - **D-14** *The design-system specimens use a ghost icon-only `.btn` for Close, the product mocks use `.close`. Which?* `.close`, as built and as in every mock; the design system's own "product dialogs" section names it the generic close button.
 - **D-15** *At XS, do footer buttons always share one row?* No. They stretch to fill the width and share a row when both labels fit; otherwise each takes a full row, the way back above the primary. The 360 px rendering shows "Keep booking" and "Cancel and lose $162.50" cannot share 312 px without clipping, and labels never truncate (button CRD). Source order (way back first) is kept, so focus order and reading order stay the same as on wider screens.
 - **D-16** *What if the viewport is too short for a fixed header?* Below 30 rem of height at XS (landscape phones, 400 % zoom on a laptop), the whole dialog scrolls as one column. The renderings show the late-cancellation header alone takes about 270 px at 360 px wide, so a fixed header would leave a 400 % zoomed viewport (about 180 CSS px tall) no body at all. The close button is at the top when the dialog opens, which keeps L2-099's "reachable without scrolling".
+- **D-17** *The Markup above gives the menu variant no header element and a `.dialog__content` wrapper. Built with control flow and `ngTemplateOutlet` (one content slot, two branches), the `Dialog` scenario went from 122 ms to 177 ms and was flagged. How is the variant built?* With styles alone: the same nodes render in every variant, the header and body become `display: contents`, the title is visually hidden, and the close button and footer are `display: none`, so they are neither seen nor reachable. The accessible result is the one the Markup describes, the wrapper classes are free to change, and the scenario stays at its base cost (M2 S2).

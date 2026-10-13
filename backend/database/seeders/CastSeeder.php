@@ -5,14 +5,18 @@ namespace Database\Seeders;
 use App\Enums\ActType;
 use App\Enums\ArtistStatus;
 use App\Enums\BookingStatus;
+use App\Enums\ConsentKind;
+use App\Enums\ConsentSource;
 use App\Enums\GatheringKind;
-use App\Enums\MediaStatus;
 use App\Enums\MusicalKey;
 use App\Enums\OverrideState;
 use App\Enums\Pronoun;
+use App\Enums\Role;
 use App\Enums\Style;
+use App\Enums\VideoStatus;
 use App\Enums\VscStatus;
 use App\Integrations\Routing\CastRoutes;
+use App\Jobs\Reviews\RecalculateArtistRating;
 use App\Models\Artist;
 use App\Models\ArtistPhoto;
 use App\Models\ArtistRating;
@@ -20,14 +24,19 @@ use App\Models\ArtistVideo;
 use App\Models\AvailabilityOverride;
 use App\Models\AvailabilityRule;
 use App\Models\Booking;
+use App\Models\Church;
+use App\Models\ConsentRecord;
 use App\Models\Review;
+use App\Models\ReviewReply;
 use App\Models\SetlistSong;
+use App\Models\SlugHistory;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
 use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -49,7 +58,7 @@ class CastSeeder extends Seeder
         'grace-tabernacle-mass-choir' => ['Grace Tabernacle Mass Choir', 'ACT-0008', ActType::Choir, [Style::GospelChoir], 'Scarborough', 120, 2400, 4.8, 26, '2024-05-13'],
         'daniel-and-ruth-okonkwo' => ['Daniel & Ruth Okonkwo', 'ACT-0022', ActType::Duo, [Style::Acoustic, Style::Hymns], 'Ajax', 120, 700, 4.9, 14, '2025-01-20'],
         // Drives up to 40 km; Riverside in Burlington is 48 km away, so she is not in Naomi's lineup.
-        'miriam-haile' => ['Miriam Haile', 'ACT-0041', ActType::Solo, [Style::SoloVocalist], 'Etobicoke', 40, 300, null, 0, '2026-10-05'],
+        'miriam-haile' => ['Miriam Haile', 'ACT-0154', ActType::Solo, [Style::SoloVocalist], 'Etobicoke', 40, 300, null, 0, '2026-10-05'],
     ];
 
     /**
@@ -78,8 +87,76 @@ class CastSeeder extends Seeder
     private const REVIEWS = [
         'ZAM-0089' => ['Rev. Janet Clarke', 'janet-clarke', 5, '2026-09-15 19:00', 'She had the whole congregation singing in three-part harmony by the last verse.'],
         'ZAM-0078' => ['Tomi Oduya', 'tomi-oduya', 5, '2026-08-18 20:00', 'She rehearsed with our volunteer band on Saturday and made them sound like pros on Sunday.'],
-        'ZAM-0061' => ['Naomi Fraser', 'naomi-fraser', 5, '2026-06-16 18:00', 'Our seniors asked for hymns and our youth asked for Jireh.'],
-        'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart.'],
+        'ZAM-0061' => ['Naomi Fraser', 'naomi-fraser', 5, '2026-06-16 18:00', 'Our seniors asked for hymns and our youth asked for Jireh. She gave both, and somehow it felt like one service.'],
+        'ZAM-0052' => ['Pastor Femi Adebayo', 'femi-adebayo', 4, '2026-05-12 17:00', 'Wonderful voice and a real pastor’s heart. Gracious about our tiny sound desk.'],
+    ];
+
+    /**
+     * The cast who can sign in (docs/mocks/README.md, M2 plan D28): account => their own address.
+     * Everyone else keeps a `{account}@cast.zamaro.test` address and a random password.
+     */
+    private const SIGN_IN = [
+        'naomi-fraser' => 'naomi.fraser@riversidecc.ca',
+        'abigail-mensah' => 'abigail@abigailmensah.ca',
+        'tomi-oduya' => 'tomi.oduya@harvestpointchurch.ca',
+    ];
+
+    /** booking number => [replied at, text]: Abigail's replies (docs/mocks/pages/artist-reviews). */
+    private const REPLIES = [
+        'ZAM-0078' => ['2026-10-08 11:20', 'Thank you, Tomi! Your volunteers were ready for everything I threw at them. See you on Sun 1 Nov.'],
+        'ZAM-0061' => ['2026-06-16 21:00', 'Riverside, you sang the roof off. Thank you for having me.'],
+    ];
+
+    /**
+     * [reviewer, church, city]: the other 34 churches behind Abigail's 4.9 from 38 churches. Their
+     * reviews are older than the four on her profile; every seventh gives 4 stars and the rest 5,
+     * so the 38 reviews sum to 185 stars, a mean of 4.87 (L2-060).
+     */
+    private const EARLIER_REVIEWERS = [
+        ['Pastor Samuel Osei', 'Cornerstone Baptist', 'Scarborough'],
+        ['Ruth Kim', 'Agincourt Community Church', 'Scarborough'],
+        ['Rev. Michael Grant', 'St. Jude’s Anglican', 'Oakville'],
+        ['Esther Mwale', 'Bethel Pentecostal', 'Hamilton'],
+        ['Pastor Daniel Ruiz', 'Iglesia La Roca', 'North York'],
+        ['Joy Asante', 'Victory Chapel', 'Brampton'],
+        ['Rev. Carol Henderson', 'Knox Presbyterian', 'Guelph'],
+        ['Pastor Kwame Boateng', 'Grace Assembly', 'Ajax'],
+        ['Linda Tran', 'Hope City Church', 'Markham'],
+        ['Rev. Paul Whitfield', 'St. Andrew’s United', 'Burlington'],
+        ['Deborah Osei-Bonsu', 'Calvary Gospel Church', 'Whitby'],
+        ['Pastor Mark Chen', 'Living Stones Church', 'Richmond Hill'],
+        ['Sarah MacLeod', 'Westminster Chapel', 'Mississauga'],
+        ['Pastor Tunde Bakare', 'House of Praise', 'Etobicoke'],
+        ['Rev. Anne Doucette', 'Trinity Anglican', 'Cambridge'],
+        ['Joseph Mensah', 'Mount Zion Church', 'Pickering'],
+        ['Pastor Grace Lee', 'New Hope Fellowship', 'Vaughan'],
+        ['Rev. David Ellis', 'Christ Church', 'Georgetown'],
+        ['Abena Owusu', 'Faith Tabernacle', 'Oshawa'],
+        ['Pastor James Wright', 'The Meeting House', 'Kitchener'],
+        ['Rev. Patricia Moore', 'St. Paul’s United', 'Milton'],
+        ['Pastor Emmanuel Nwosu', 'Redeemed Life Centre', 'Brampton'],
+        ['Hannah Schultz', 'Lakeview Baptist', 'Mississauga'],
+        ['Pastor Robert Singh', 'Fountain of Life', 'Malton'],
+        ['Rev. Elizabeth Ford', 'All Saints Anglican', 'Waterloo'],
+        ['Pastor Isaac Darko', 'Shiloh Worship Centre', 'Toronto'],
+        ['Miriam Goldberg', 'Emmanuel Church', 'Newmarket'],
+        ['Pastor Andrew Clarke', 'Harbour Light Church', 'Port Credit'],
+        ['Rev. Susan Bell', 'St. Mark’s Lutheran', 'Kitchener'],
+        ['Pastor Femi Ogunleye', 'Kingdom Hall of Praise', 'Scarborough'],
+        ['Catherine Wong', 'Pacific Grace Church', 'Richmond Hill'],
+        ['Pastor Peter Nkansah', 'Restoration Church', 'Bowmanville'],
+        ['Rev. Thomas Hughes', 'Grace United', 'Brantford'],
+        ['Adwoa Mensah-Bonsu', 'Bread of Life Church', 'Ajax'],
+    ];
+
+    /** Rotated through the earlier reviews. */
+    private const EARLIER_TEXTS = [
+        'Our whole congregation is still humming the songs she led.',
+        'She arrived early, rehearsed with our team and led with real humility.',
+        'Beautiful voice, clear communication before the day, and right on time.',
+        'She chose songs our older members knew and taught us two new ones.',
+        'A worship night our youth keep asking us to repeat.',
+        'She prayed with our team before the service. It set the tone for everything.',
     ];
 
     /**
@@ -127,6 +204,37 @@ class CastSeeder extends Seeder
             ['en'], [['Blessed Assurance', 'Fanny Crosby', MusicalKey::D], ['Goodness of God', 'Bethel Music', MusicalKey::A]]],
     ];
 
+    /** slug => alt text per photo, in order (docs/mocks/pages/artist). MediaSeeder writes the files. */
+    private const PHOTOS = [
+        'abigail-mensah' => [
+            'Abigail at the microphone during a Sunday service',
+            'Abigail rehearsing with a church volunteer band',
+            'Portrait of Abigail smiling in a kente scarf',
+            'Abigail leading a youth night from the floor, not the stage',
+        ],
+        'miriam-haile' => [
+            'Miriam at the piano during a Sunday evening service',
+            'Portrait of Miriam in a white netela shawl',
+        ],
+    ];
+
+    /**
+     * slug => [title, seconds, status, captioned] in order (docs/mocks/pages/artist,
+     * docs/mocks/pages/edit-profile/video-processing). Every live video plays the one sample stream.
+     */
+    private const VIDEOS = [
+        'abigail-mensah' => [
+            ['Way Maker — live at Bethel Pentecostal, Hamilton', 372, VideoStatus::Live, true],
+            ['Great Is Thy Faithfulness — acoustic', 280, VideoStatus::Live, false],
+            ['Twi praise medley — Harvest Sunday 2025', 485, VideoStatus::Live, true],
+            ['Goodness of God — women’s retreat, Muskoka', 330, VideoStatus::Live, true],
+            ['Jireh — live at Living Waters, Brampton', 462, VideoStatus::Processing, false],
+        ],
+    ];
+
+    /** Seeded photos are 4:3; renditions keep the ratio at each width (L2-051). */
+    private const PHOTO_WIDTHS = [400, 800, 1200, 1600];
+
     private const SUPPORTING_CAST = [
         'Kempenfelt Worship Collective', 'Allandale Gospel Singers', 'Simcoe Street Praise Band',
         'Minets Point Trio', 'Painswick Hymn Choir', 'Georgian Voices', 'Shanty Bay Strings',
@@ -138,44 +246,12 @@ class CastSeeder extends Seeder
         'Codrington Praise Band', 'Victoria Village Voices', 'Lampman Lane Worship',
     ];
 
-    /**
-     * slug => photos [sample, alt text], videos [title, seconds, status, captions]
-     * (docs/mocks/pages/artist, docs/mocks/pages/edit-profile/video-processing). Each photo is one of
-     * the sample renditions in database/seeders/media, and every video plays the sample stream.
-     */
-    private const MEDIA = [
-        'abigail-mensah' => [
-            [
-                [1, 'Abigail at the microphone during a Sunday service'],
-                [2, 'Abigail rehearsing with a church volunteer band'],
-                [3, 'Portrait of Abigail smiling in a kente scarf'],
-                [4, 'Abigail leading a youth night from the floor, not the stage'],
-            ],
-            [
-                ['Way Maker — live at Bethel Pentecostal, Hamilton', 372, MediaStatus::Live, true],
-                ['Great Is Thy Faithfulness — acoustic', 280, MediaStatus::Live, true],
-                ['Twi praise medley — Harvest Sunday 2025', 485, MediaStatus::Live, false],
-                ['Goodness of God — women’s retreat, Muskoka', 330, MediaStatus::Live, true],
-                ['Jireh — live at Living Waters, Brampton', 462, MediaStatus::Processing, false],
-            ],
-        ],
-        'miriam-haile' => [
-            [
-                [5, 'Miriam at the piano during a Sunday evening service'],
-                [6, 'Portrait of Miriam in a white netela shawl'],
-            ],
-            [],
-        ],
-    ];
-
-    /** The sample photos' widths at 4:3, and the poster frame's at 16:9. */
-    private const PHOTO_WIDTHS = [400, 800, 1200, 1600];
-
-    private const POSTER_WIDTHS = [400, 800, 1200];
-
-    private const SAMPLE_STREAM = ['sample.m3u8', 'sample-init.mp4', 'sample-0.m4s', 'sample-1.m4s', 'sample.en.vtt'];
-
     private const ABIGAIL_UNAVAILABLE = ['2026-11-26', '2026-11-27', '2026-12-24', '2026-12-25', '2026-12-26', '2026-12-31'];
+
+    /** retired slug => [artist, retired at]: old addresses that answer 301 (L2-021.3, L2-055.3). */
+    private const RETIRED_SLUGS = [
+        'abigail-sings' => ['abigail-mensah', '2026-03-02 12:00:00'],
+    ];
 
     public function run(): void
     {
@@ -188,53 +264,187 @@ class CastSeeder extends Seeder
             $this->reviews();
             $this->supportingCast();
             $this->christmasChoirs();
+            $this->suspendedVocalist();
+            $this->retiredSlugs();
             $this->profiles();
             $this->media();
+            $this->accounts();
+            $this->consents();
+            $this->churches();
+            $this->savedArtists();
         });
     }
 
-    /** Photo and video rows, and their files on the media disk; files are overwritten in place. */
-    private function media(): void
+    /**
+     * Who may do what: every church person is a Booker and every artist an Artist. Naomi, Abigail
+     * and Tomi have verified addresses and, outside production, sign in with ZAMARO_CAST_PASSWORD.
+     */
+    private function accounts(): void
     {
-        $disk = Storage::disk(config('zamaro.media.disk'));
-        $samples = database_path('seeders/media');
-        foreach (self::SAMPLE_STREAM as $file) {
-            $disk->put("videos/{$file}", file_get_contents("{$samples}/{$file}"));
-        }
-        $poster = [];
-        foreach (self::POSTER_WIDTHS as $width) {
-            $disk->put("videos/poster-{$width}.webp", file_get_contents("{$samples}/poster-{$width}.webp"));
-            $poster[] = ['width' => $width, 'height' => intdiv($width * 9, 16), 'format' => 'webp', 'key' => "videos/poster-{$width}.webp"];
-        }
+        $roleIds = DB::table('roles')->pluck('id', 'name');
+        $artistUserIds = Artist::pluck('user_id');
+        DB::table('role_user')->insertOrIgnore(User::pluck('id')->map(fn (int $id) => [
+            'user_id' => $id,
+            'role_id' => $roleIds[$artistUserIds->contains($id) ? Role::Artist->value : Role::Booker->value],
+        ])->all());
 
-        foreach (self::MEDIA as $slug => [$photos, $videos]) {
-            $artist = Artist::where('slug', $slug)->firstOrFail();
-            foreach ($photos as $index => [$sample, $alt]) {
-                $renditions = [];
-                foreach (self::PHOTO_WIDTHS as $width) {
-                    $key = sprintf('photos/%s-%d-%d.webp', $slug, $index + 1, $width);
-                    $disk->put($key, file_get_contents("{$samples}/photo-{$sample}-{$width}.webp"));
-                    $renditions[] = ['width' => $width, 'height' => intdiv($width * 3, 4), 'format' => 'webp', 'key' => $key];
-                }
-                ArtistPhoto::updateOrCreate(['artist_id' => $artist->id, 'position' => $index + 1], [
-                    'is_primary' => $index === 0,
-                    'alt_text' => $alt,
-                    'status' => MediaStatus::Live,
-                    'renditions' => $renditions,
-                    'width' => 1600,
-                    'height' => 1200,
+        $password = config('zamaro.cast_password');
+        $canSignIn = filled($password) && app()->environment(['local', 'testing', 'e2e']);
+        foreach (self::SIGN_IN as $email) {
+            User::where('email', $email)->update([
+                'email_verified_at' => '2026-09-01 12:00:00',
+                'password' => Hash::make($canSignIn ? $password : Str::random(40)),
+            ]);
+        }
+    }
+
+    /**
+     * What the cast agreed to (L2-080): Naomi and Abigail accepted the October terms and privacy policy
+     * and said no to marketing email; Tomi last accepted the March terms, so the terms gate stops him
+     * (M2 S14).
+     * Written once per person, as records are never changed.
+     */
+    private function consents(): void
+    {
+        $consents = [
+            'naomi.fraser@riversidecc.ca' => ['2026-10-08 09:30:00', [
+                [ConsentKind::Terms, '2026-10', true], [ConsentKind::PrivacyPolicy, '2026-10', true], [ConsentKind::MarketingEmail, null, false],
+            ]],
+            'abigail@abigailmensah.ca' => ['2026-10-08 12:00:00', [
+                [ConsentKind::Terms, '2026-10', true], [ConsentKind::PrivacyPolicy, '2026-10', true], [ConsentKind::MarketingEmail, null, false],
+            ]],
+            'tomi.oduya@harvestpointchurch.ca' => ['2026-03-04 19:15:00', [
+                [ConsentKind::Terms, '2026-03', true], [ConsentKind::PrivacyPolicy, '2026-03', true], [ConsentKind::MarketingEmail, null, false],
+            ]],
+        ];
+        foreach ($consents as $email => [$at, $items]) {
+            $user = User::where('email', $email)->firstOrFail();
+            if (ConsentRecord::where('user_id', $user->id)->exists()) {
+                continue;
+            }
+            foreach ($items as [$kind, $version, $granted]) {
+                ConsentRecord::create([
+                    'user_id' => $user->id, 'kind' => $kind, 'document_version' => $version, 'granted' => $granted,
+                    'recorded_at' => $at, 'source' => ConsentSource::Registration,
                 ]);
             }
-            foreach ($videos as $index => [$title, $seconds, $status, $captions]) {
-                $live = $status === MediaStatus::Live;
-                ArtistVideo::updateOrCreate(['artist_id' => $artist->id, 'position' => $index + 1], [
+        }
+    }
+
+    /**
+     * The churches of the bookers who sign in (accounts/manage-church-profile), and Abigail's private
+     * contact phone (L2-025.4). Phones are encrypted by the models' casts (L2-079.2). Harvest Point's
+     * street is not in the mocks; it is a Milton address the fake geocoder knows.
+     */
+    private function churches(): void
+    {
+        $churches = [
+            'naomi.fraser@riversidecc.ca' => [
+                'name' => 'Riverside Community Church', 'street_address' => '2150 Lakeshore Road', 'city' => 'Burlington',
+                'postal_code' => 'L7R 1A3', 'phone' => '+19055550123', 'denomination' => 'Non-denominational',
+                'typical_attendance' => 350, 'town' => 'Burlington',
+            ],
+            'tomi.oduya@harvestpointchurch.ca' => [
+                'name' => 'Harvest Point Church', 'street_address' => '8150 Main Street East', 'city' => 'Milton',
+                'postal_code' => 'L9T 1A1', 'phone' => '+19055550177', 'denomination' => null,
+                'typical_attendance' => 220, 'town' => 'Milton',
+            ],
+        ];
+        foreach ($churches as $email => $church) {
+            $point = CastRoutes::anchor($church['town']);
+            unset($church['town']);
+            Church::updateOrCreate(['booker_id' => User::where('email', $email)->value('id')], [
+                ...$church, 'province' => 'ON', 'latitude' => $point->latitude, 'longitude' => $point->longitude,
+            ]);
+        }
+
+        Artist::where('slug', 'abigail-mensah')->firstOrFail()->update(['contact_phone' => '+19055550148']);
+    }
+
+    /**
+     * Naomi's saved artists, newest first on the list (accounts/view-saved-artists): Abigail on Wed 7
+     * Oct, Hosanna Collective on Sun 27 Sep and Luz Viva on Sat 12 Sep.
+     */
+    private function savedArtists(): void
+    {
+        $naomi = User::where('email', 'naomi.fraser@riversidecc.ca')->firstOrFail();
+        $saved = ['abigail-mensah' => '2026-10-07 20:14:00', 'hosanna-collective' => '2026-09-27 15:40:00', 'luz-viva' => '2026-09-12 11:05:00'];
+        foreach ($saved as $slug => $at) {
+            DB::table('saved_artists')->insertOrIgnore([
+                'user_id' => $naomi->id, 'artist_id' => Artist::where('slug', $slug)->value('id'),
+                'created_at' => Carbon::parse($at, 'America/Toronto')->toIso8601String(),
+            ]);
+        }
+        $naomi->forceFill(['first_saved_at' => Carbon::parse('2026-09-12 11:05:00', 'America/Toronto')])->save();
+    }
+
+    /**
+     * A cast member's account, found by their own address or the cast one and moved to their own,
+     * so the seeder can run again on a database seeded before they could sign in.
+     */
+    private function castUser(string $account, string $name): User
+    {
+        $cast = "{$account}@cast.zamaro.test";
+        $email = self::SIGN_IN[$account] ?? $cast;
+        $user = User::whereIn('email', array_unique([$email, $cast]))->orderByRaw('email = ? desc', [$email])->first()
+            ?? User::create(['email' => $email, 'name' => $name, 'password' => Str::random(40)]);
+        $user->update(['email' => $email, 'name' => $name]);
+
+        return $user;
+    }
+
+    /**
+     * Selah Brooks, a solo vocalist suspended from Zamaro, for the not-found page (L2-021.2): her
+     * address answers the same 404 as one that never existed, suggesting free solo vocalists.
+     */
+    private function suspendedVocalist(): void
+    {
+        $this->artist('selah-brooks', 'Selah Brooks', 'ACT-0044', ActType::Solo, [Style::SoloVocalist, Style::Hymns], 'Mississauga', 120, 500, 4.4, 5, '2025-04-14');
+        Artist::where('slug', 'selah-brooks')->update(['status' => ArtistStatus::Suspended]);
+    }
+
+    private function retiredSlugs(): void
+    {
+        foreach (self::RETIRED_SLUGS as $slug => [$artist, $retiredAt]) {
+            SlugHistory::updateOrCreate(['slug' => $slug], [
+                'artist_id' => Artist::where('slug', $artist)->value('id'),
+                'retired_at' => $retiredAt,
+            ]);
+        }
+    }
+
+    /** Rows only; the keys point at files MediaSeeder writes to the media disk. */
+    private function media(): void
+    {
+        foreach (self::PHOTOS as $slug => $alts) {
+            $artistId = Artist::where('slug', $slug)->value('id');
+            foreach ($alts as $index => $alt) {
+                $position = $index + 1;
+                $renditions = [];
+                foreach (['avif', 'webp'] as $format) {
+                    foreach (self::PHOTO_WIDTHS as $width) {
+                        $renditions[] = ['width' => $width, 'format' => $format, 'key' => "artists/{$slug}/photos/{$position}-{$width}.{$format}"];
+                    }
+                }
+                ArtistPhoto::updateOrCreate(
+                    ['artist_id' => $artistId, 'position' => $position],
+                    ['alt_text' => $alt, 'renditions' => $renditions, 'width' => 1600, 'height' => 1200],
+                );
+            }
+        }
+
+        foreach (self::VIDEOS as $slug => $videos) {
+            $artistId = Artist::where('slug', $slug)->value('id');
+            foreach ($videos as $index => [$title, $seconds, $status, $captioned]) {
+                $position = $index + 1;
+                $live = $status === VideoStatus::Live;
+                ArtistVideo::updateOrCreate(['artist_id' => $artistId, 'position' => $position], [
                     'title' => $title,
                     'status' => $status,
-                    'manifest_key' => $live ? 'videos/sample.m3u8' : null,
-                    'poster_renditions' => $live ? $poster : [],
-                    'captions_key' => $captions ? 'videos/sample.en.vtt' : null,
-                    'captions_language' => $captions ? 'en' : null,
                     'duration_seconds' => $seconds,
+                    'manifest_key' => $live ? MediaSeeder::SAMPLE_STREAM : null,
+                    'captions_key' => $live && $captioned ? MediaSeeder::SAMPLE_CAPTIONS : null,
+                    'poster_key' => $live ? "artists/{$slug}/videos/{$position}-poster-800.webp" : null,
                 ]);
             }
         }
@@ -331,7 +541,7 @@ class CastSeeder extends Seeder
     private function reviews(): void
     {
         foreach (self::REVIEWS as $number => [$reviewer, $account, $stars, $writtenAt, $text]) {
-            $booker = User::firstOrCreate(['email' => "{$account}@cast.zamaro.test"], ['name' => $reviewer, 'password' => Str::random(40)]);
+            $booker = $this->castUser($account, $reviewer);
             $booking = Booking::where('number', $number)->firstOrFail();
             Review::updateOrCreate(['booking_id' => $booking->id], [
                 'artist_id' => $booking->artist_id,
@@ -341,6 +551,69 @@ class CastSeeder extends Seeder
                 'created_at' => $writtenAt,
             ]);
         }
+
+        foreach (self::REPLIES as $number => [$repliedAt, $text]) {
+            $review = Review::whereRelation('booking', 'number', $number)->firstOrFail();
+            ReviewReply::updateOrCreate(['review_id' => $review->id], [
+                'artist_id' => $review->artist_id,
+                'text' => $text,
+                'created_at' => $repliedAt,
+            ]);
+        }
+
+        $abigail = Artist::where('slug', 'abigail-mensah')->firstOrFail();
+        $this->earlierReviews($abigail);
+        // Her summary comes from the reviews, as the worker keeps it; the rest of the cast keeps
+        // the seeded summaries in ARTISTS, which have no reviews behind them yet.
+        RecalculateArtistRating::dispatchSync($abigail->id);
+    }
+
+    /**
+     * Abigail's older reviews, one per church, each behind a completed Sunday booking: the newest
+     * on Tue 5 May 2026, then a week apart. Bulk upserts on the natural keys keep reseeding (and
+     * every test's setup) quick.
+     */
+    private function earlierReviews(Artist $abigail): void
+    {
+        $now = now();
+        $lastSunday = Carbon::parse('2026-05-03');
+        $users = $bookings = $reviews = [];
+        foreach (self::EARLIER_REVIEWERS as $index => [$name, $church, $city]) {
+            $email = Str::slug($name).'@cast.zamaro.test';
+            $number = sprintf('ZAM-%04d', $index + 1);
+            $eventDate = $lastSunday->copy()->subWeeks($index);
+            $users[$email] = ['name' => $name, 'email' => $email, 'created_at' => $now, 'updated_at' => $now];
+            $bookings[$number] = [
+                'number' => $number, 'artist_id' => $abigail->id, 'status' => BookingStatus::Completed->value,
+                'event_date' => $eventDate->toDateString(), 'kind' => GatheringKind::SundayService->value,
+                'church_name' => $church, 'church_city' => $city, 'created_at' => $now, 'updated_at' => $now,
+            ];
+            $reviews[$number] = [
+                'email' => $email,
+                'stars' => $index % 7 === 6 ? 4 : 5,
+                'text' => self::EARLIER_TEXTS[$index % count(self::EARLIER_TEXTS)],
+                'created_at' => $eventDate->copy()->addDays(2)->setTime(19, 0),
+            ];
+        }
+
+        // Cast accounts cannot sign in: one random password, hashed once and never shown.
+        $password = Hash::make(Str::random(40));
+        DB::table('users')->upsert(
+            array_map(fn (array $user) => $user + ['password' => $password], array_values($users)),
+            ['email'], ['name', 'updated_at'],
+        );
+        DB::table('bookings')->upsert(array_values($bookings), ['number'], ['artist_id', 'status', 'event_date', 'kind', 'church_name', 'church_city', 'updated_at']);
+
+        $userIds = User::whereIn('email', array_keys($users))->pluck('id', 'email');
+        $bookingIds = Booking::whereIn('number', array_keys($bookings))->pluck('id', 'number');
+        DB::table('reviews')->upsert(array_map(fn (string $number) => [
+            'booking_id' => $bookingIds[$number],
+            'artist_id' => $abigail->id,
+            'booker_id' => $userIds[$reviews[$number]['email']],
+            'stars' => $reviews[$number]['stars'],
+            'text' => $reviews[$number]['text'],
+            'created_at' => $reviews[$number]['created_at'],
+        ], array_keys($reviews)), ['booking_id'], ['artist_id', 'booker_id', 'stars', 'text', 'created_at']);
     }
 
     /**
@@ -351,9 +624,7 @@ class CastSeeder extends Seeder
         int $maxDriveKm, int $fromDollars, ?float $rating, int $reviews, string $published,
         ?Coordinates $at = null,
     ): void {
-        // Cast accounts cannot sign in: the password is random and never shown.
-        $user = User::firstOrCreate(['email' => "{$slug}@cast.zamaro.test"], ['name' => $name, 'password' => Str::random(40)]);
-        $user->update(['name' => $name]);
+        $user = $this->castUser($slug, $name);
         $baseCoordinates = $at ?? CastRoutes::anchor($base);
 
         $artist = Artist::updateOrCreate(['slug' => $slug], [
@@ -370,6 +641,7 @@ class CastSeeder extends Seeder
             'payout_ready' => true,
             'published_at' => $published.' 09:00:00',
         ]);
+        SlugHistory::updateOrCreate(['slug' => $slug], ['artist_id' => $artist->id, 'retired_at' => null]);
 
         DB::table('artist_styles')->where('artist_id', $artist->id)->delete();
         DB::table('artist_styles')->insert(array_map(

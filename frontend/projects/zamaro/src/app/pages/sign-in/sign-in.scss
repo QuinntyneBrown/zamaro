@@ -1,0 +1,57 @@
+// The stage behind the card, with the screen-print halftone corner of the design system's poster.
+.stage {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-12) var(--space-16);
+}
+
+.stage::after {
+  content: '';
+  position: absolute;
+  inset: auto -4rem -4rem auto;
+  width: 22rem;
+  height: 22rem;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--color-accent-on-stage) 22%, transparent 24%) 0 0 /
+    0.85rem 0.85rem;
+  mask-image: radial-gradient(circle at 100% 100%, currentColor 0, transparent 70%);
+  opacity: 0.35;
+}
+
+.stage > * {
+  position: relative;
+  z-index: var(--z-raised);
+}
+
+@media (min-width: 62rem) {
+  .stage {
+    padding-block: var(--space-16) var(--space-20);
+  }
+}
+
+// The form wraps the card and is as wide as it.
+.auth-form {
+  width: 100%;
+  max-width: var(--layout-auth-width);
+}
+
+// "Your session ended" and what is kept (docs/mocks/pages/sign-in/expired).
+.message {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-bg-surface-sunken);
+  border-left: var(--border-width-poster) solid var(--color-accent);
+}
+
+.message__meta {
+  font: var(--text-stub);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.field__error {
+  font: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-danger-fg);
+}

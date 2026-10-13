@@ -2,7 +2,7 @@
   <zm-artist-poster
     [kicker]="kicker()"
     [name]="profile.displayName"
-    [artVariant]="profile.actType === 'solo' ? 'solo' : 'group'"
+    [artVariant]="artVariant()"
     [artYellow]="true"
     [rating]="profile.rating"
     [ratingLabel]="ratingLabel()"
@@ -17,6 +17,17 @@
       [label]="'artist.breadcrumb.label' | transloco"
     />
     <zm-button slot="actions" variant="primary" (click)="book()">{{ bookLabel() }}</zm-button>
+    @if (saved.shown()) {
+      <zm-button slot="actions" [pressed]="saved.has(profile.id)" (click)="toggleSave()"
+        ><zm-icon name="heart" />{{
+          (saved.has(profile.id) ? 'common.saved.button.saved' : 'common.saved.button.save')
+            | transloco
+        }}</zm-button
+      >
+    }
+    <zm-button slot="actions" (click)="share()"
+      ><zm-icon name="share" />{{ 'common.share.label' | transloco }}</zm-button
+    >
   </zm-artist-poster>
   <zm-marquee [items]="strip()" />
   <div class="container profile-layout">
@@ -39,13 +50,15 @@
         </div>
         @if (videos().length) {
           <ul class="media-grid" role="list">
-            @for (video of videos(); track video.id) {
+            @for (video of videos(); track video.id; let i = $index) {
               <li>
                 <zm-video-card
                   [caption]="video.title"
                   [stampText]="video.stamp"
                   [label]="video.label"
                   [artVariant]="artVariant()"
+                  [artTilt]="i % 4 === 2"
+                  [artYellow]="i % 4 === 3"
                   [artLabel]="video.title"
                   [poster]="video.poster"
                   [stream]="video.stream"
@@ -66,6 +79,9 @@
                 t('artist.videos.empty.body', { name: profile.firstName, pronoun: profile.pronoun })
               }}
             </p>
+            <zm-button slot="actions" (click)="askForRecording()">{{
+              t('artist.videos.empty.ask', { name: profile.firstName })
+            }}</zm-button>
           </zm-empty-state>
         }
       </section>
@@ -80,24 +96,20 @@
           <ul class="photo-grid" role="list">
             @for (photo of photos(); track photo.id; let i = $index) {
               <li>
-                <a
-                  [href]="photo.full"
-                  [attr.aria-label]="photo.label"
-                  (click)="openPhoto($event, i)"
-                  ><zm-artwork ratio="square" [variant]="artVariant()" [photo]="photo.image"
-                /></a>
+                <button
+                  class="photo-grid__open"
+                  type="button"
+                  [attr.aria-label]="photo.openLabel"
+                  (click)="openPhoto(i)"
+                >
+                  <zm-artwork ratio="square" [photo]="photo.image" />
+                </button>
               </li>
             }
           </ul>
         } @else {
           <div class="photo-grid">
-            <zm-artwork
-              ratio="square"
-              [variant]="artVariant()"
-              [label]="
-                t('artist.photos.illustration', { act: profile.actType, name: profile.firstName })
-              "
-            />
+            <zm-artwork ratio="square" [variant]="artVariant()" [label]="noPhotosLabel()" />
           </div>
         }
       </section>
@@ -111,8 +123,149 @@
         </div>
         <zm-setlist [songs]="songs()" />
       </section>
+      <section class="section" aria-labelledby="dates-title">
+        <div class="section__head">
+          <div>
+            <p class="overline section__kicker">{{ 'artist.dates.kicker' | transloco }}</p>
+            <h2 id="dates-title">{{ 'artist.dates.title' | transloco }}</h2>
+          </div>
+          @if (!dates.tourDatesLoading()) {
+            <p class="text-muted">{{ datesNote() }}</p>
+          }
+        </div>
+        <zm-tour-dates
+          labelledBy="dates-title"
+          [dates]="tourRows()"
+          [loading]="dates.tourDatesLoading()"
+          [loadingLabel]="'artist.dates.loading' | transloco"
+          [freeText]="'artist.dates.free' | transloco"
+          [bookedText]="'artist.dates.booked' | transloco"
+          [pickText]="'artist.dates.pick' | transloco"
+          (picked)="pick($event)"
+        />
+      </section>
+      <section class="section" aria-labelledby="reviews-title">
+        <div class="section__head">
+          <div>
+            <p class="overline section__kicker">{{ 'artist.reviews.kicker' | transloco }}</p>
+            <h2 id="reviews-title">{{ 'artist.reviews.title' | transloco }}</h2>
+          </div>
+          @if (reviews().length && profile.rating !== null) {
+            <p>
+              <zm-rating
+                variant="summary"
+                [score]="profile.rating"
+                [label]="ratingLabel()"
+                [countText]="ratingCount()"
+              />
+            </p>
+          }
+        </div>
+        @if (reviews().length) {
+          <ul class="reviews" role="list">
+            @for (review of reviews(); track review.id) {
+              <li tabindex="-1">
+                <zm-review
+                  [quote]="review.quote"
+                  [stars]="review.stars"
+                  [starsLabel]="review.starsLabel"
+                  [reviewer]="review.reviewer"
+                  [source]="review.source"
+                  [reply]="review.reply"
+                  [replyMeta]="review.replyMeta"
+                />
+              </li>
+            }
+          </ul>
+          @if (reviewsStore.nextCursor()) {
+            <div class="cluster reviews-more">
+              <zm-button [busy]="reviewsStore.loadingMore()" (click)="showMoreReviews()">{{
+                moreReviewsLabel()
+              }}</zm-button>
+            </div>
+          }
+        } @else {
+          <zm-empty-state
+            [quiet]="true"
+            [stamp]="'artist.reviews.empty.stamp' | transloco"
+            [heading]="'artist.reviews.empty.title' | transloco"
+          >
+            <p>{{ t('artist.reviews.empty.body', { name: profile.firstName }) }}</p>
+            <zm-button slot="actions" variant="primary" (click)="book()">{{
+              t('artist.reviews.empty.book', { pronoun: profile.pronoun })
+            }}</zm-button>
+          </zm-empty-state>
+        }
+      </section>
     </div>
+    <aside aria-labelledby="book-title">
+      <form novalidate aria-labelledby="book-title" [formGroup]="request">
+        <zm-booking-form
+          variant="stub"
+          headingId="book-title"
+          [heading]="t('artist.stub.title', { name: profile.firstName })"
+          [stamp]="t('artist.stub.code', { ticket: profile.ticketNumber })"
+          [price]="stubPrice()"
+          [priceNote]="'artist.stub.priceNote' | transloco"
+        >
+          <zm-form-field
+            fieldId="book-date"
+            type="date"
+            formControlName="date"
+            live
+            [messageId]="dateFree() ? 'date-help' : null"
+            [label]="'artist.stub.date' | transloco"
+            [min]="minDate"
+            [max]="maxDate"
+            [error]="dateError()"
+          >
+            @if (dateFree(); as free) {
+              <zm-inline-message slot="message" id="date-help" variant="success" live>{{
+                free
+              }}</zm-inline-message>
+            }
+          </zm-form-field>
+          <zm-form-field
+            fieldId="book-kind"
+            type="select"
+            formControlName="kind"
+            [label]="'artist.stub.kind' | transloco"
+            [options]="kinds"
+          />
+          <zm-form-field
+            fieldId="book-church"
+            formControlName="church"
+            autocomplete="organization"
+            [label]="'artist.stub.church' | transloco"
+          />
+          <zm-form-field
+            fieldId="book-message"
+            type="textarea"
+            formControlName="message"
+            [label]="'artist.stub.message' | transloco"
+            [optionalMarker]="'artist.stub.optional' | transloco"
+            [placeholder]="'artist.stub.messagePlaceholder' | transloco"
+          />
+          @if (flags.isOn('bookingRequests')) {
+            <zm-button variant="primary" size="lg" block type="submit" [disabled]="!!dateError()">{{
+              submitLabel()
+            }}</zm-button>
+          }
+          <span slot="fine"
+            >{{ t('artist.stub.fine', { name: profile.firstName }) }}
+            <a routerLink="/" fragment="how">{{ 'artist.stub.cancelFree' | transloco }}</a
+            >.</span
+          >
+        </zm-booking-form>
+      </form>
+    </aside>
   </div>
+} @else if (store.status() === 'missing' && store.similarArtists(); as similar) {
+  <zm-artist-not-found-page
+    [similar]="similar"
+    [place]="carriedPlace()"
+    [lineupParams]="lineupParams()"
+  />
 } @else if (store.status() === 'error') {
   <zm-error-stage
     [kicker]="'artist.error.kicker' | transloco"
@@ -154,10 +307,24 @@
       </div>
       <div class="stack">
         <zm-skeleton shape="title" width="short" />
+        <zm-skeleton shape="wide" />
+      </div>
+      <div class="stack">
+        <zm-skeleton shape="title" width="short" />
         <zm-skeleton />
         <zm-skeleton />
         <zm-skeleton />
       </div>
     </div>
+    <aside>
+      <div class="stub-skeleton">
+        <zm-skeleton shape="title" />
+        <zm-skeleton shape="figure" />
+        <zm-skeleton shape="control" />
+        <zm-skeleton shape="control" />
+        <zm-skeleton shape="block" />
+        <zm-skeleton shape="control-lg" />
+      </div>
+    </aside>
   </div>
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Icon } from '../icon/icon';
 
 /**
@@ -9,8 +9,16 @@ import { Icon } from '../icon/icon';
 @Component({
   selector: 'zm-alert',
   imports: [Icon],
-  template: `<div class="alert" [class.alert--danger]="variant() === 'danger'" role="alert">
-    <zm-icon [name]="variant() === 'danger' ? 'warning' : 'info'" size="lg" />
+  template: `<div
+    class="alert"
+    [class.alert--danger]="variant() === 'danger'"
+    [class.alert--compact]="compact()"
+    role="alert"
+  >
+    <zm-icon
+      [name]="variant() === 'danger' ? 'warning' : 'info'"
+      [size]="compact() ? 'md' : 'lg'"
+    />
     <div class="stack stack--sm">
       <p class="alert__title">{{ heading() }}</p>
       <ng-content />
@@ -36,6 +44,15 @@ import { Icon } from '../icon/icon';
       --alert-bg: var(--color-danger-bg);
       --alert-border: var(--color-danger-border);
       --alert-icon: var(--color-danger-icon);
+    }
+
+    .alert--compact {
+      gap: var(--space-2) var(--space-3);
+      padding: var(--space-4);
+    }
+
+    .alert--compact .alert__title {
+      font: var(--text-h4);
     }
 
     .alert > zm-icon {
@@ -70,4 +87,6 @@ import { Icon } from '../icon/icon';
 export class Alert {
   readonly heading = input.required<string>();
   readonly variant = input<'info' | 'danger'>('info');
+  /** Tighter padding and a smaller title: inside auth cards, dialogs, forms and cards. */
+  readonly compact = input(false, { transform: booleanAttribute });
 }

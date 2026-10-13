@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-09
 **Category:** backend
-**Status:** Accepted
+**Status:** Superseded by [ADR-0009](0009-upgrade-to-laravel-13.md)
 **Deciders:** Project owner
 
 ## Context

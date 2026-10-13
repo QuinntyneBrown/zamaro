@@ -1,8 +1,20 @@
-// The profile's layout from docs/design-system/assets/components.css (profile-layout). The poster,
-// setlist and breadcrumb style themselves; sections and type come from the global utilities.
+// The profile's layout from docs/design-system/assets/components.css (profile-layout, media and
+// photo grids). The poster, setlist and breadcrumb style themselves; sections and type come from the
+// global utilities.
 
 :host {
   display: block;
+}
+
+// The booking stub's card while the profile loads (docs/mocks/pages/artist/loading.html).
+.stub-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  background: var(--color-bg-surface);
+  border: var(--border-width-thick) solid var(--color-border-strong);
+  box-shadow: var(--shadow-3);
 }
 
 .profile-layout {
@@ -20,22 +32,44 @@
   padding-top: 0;
 }
 
-@media (min-width: 62rem) {
-  .profile-layout {
-    grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-width);
-    align-items: start;
-    gap: var(--space-16);
-  }
-}
-
-// The videos (components.css .media-grid): one per row, then from MD the first across the row and
-// the rest three across (L2-014.1, L2-098.2).
+// Videos: one per row below MD; from MD the first spans the row over three across (L2-098.2).
 .media-grid {
   display: grid;
-  gap: var(--space-6);
   grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
   list-style: none;
   padding: 0;
+}
+
+// Photos: two per row below MD, four from MD (L2-015.1).
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  list-style: none;
+  padding: 0;
+}
+
+.photo-grid__open {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+// Reviews: one per row below MD, two from MD; each item keeps its reply under its own card (L2-098).
+.reviews {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  list-style: none;
+  padding: 0;
+}
+
+.reviews-more {
+  margin-top: var(--space-6);
 }
 
 @media (min-width: 48rem) {
@@ -46,23 +80,26 @@
   .media-grid > :first-child {
     grid-column: 1 / -1;
   }
-}
 
-// The gallery (components.css .photo-grid): 2 across below MD, 4 from MD (L2-015.1, L2-098).
-.photo-grid {
-  display: grid;
-  gap: var(--space-4);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  list-style: none;
-  padding: 0;
-}
-
-.photo-grid a {
-  display: block;
-}
-
-@media (min-width: 48rem) {
   .photo-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .reviews {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 62rem) {
+  .profile-layout {
+    grid-template-columns: minmax(0, 1fr) var(--layout-sidebar-width);
+    align-items: start;
+    gap: var(--space-16);
+  }
+
+  // The stub stays pinned beside the profile as it scrolls (L2-019.4); below LG it follows the reviews.
+  .profile-layout > aside {
+    position: sticky;
+    top: calc(var(--layout-topbar-height) + var(--space-6));
   }
 }

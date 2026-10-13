@@ -31,13 +31,16 @@ export class SearchForm {
 
   /** The inline error a field points to with aria-describedby (L2-102.3). */
   async errorFor(field: Locator): Promise<Locator> {
+    // The link appears with the error, after the submit re-renders the form.
+    await expect(field).toHaveAttribute('aria-describedby', /\S/);
     const id = await field.getAttribute('aria-describedby');
     if (!id) throw new Error('The field has no aria-describedby, so no error is linked to it.');
     return this.page.locator(`[id="${id}"]`);
   }
 
+  /** zm-error-summary, a group named by its title (form-layout CRD D-2). */
   errorSummary(): Locator {
-    return this.form().getByRole('alert');
+    return this.form().locator('.error-summary');
   }
 
   async fill(search: { date?: string; kind?: string }): Promise<void> {

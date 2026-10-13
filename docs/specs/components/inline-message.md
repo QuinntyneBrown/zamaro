@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-inline-message` |
 | Library path | `frontend/projects/components/src/lib/inline-message/` |
-| Status | planned |
+| Status | built (M1 S14); planned (`busy`, which needs `zm-spinner`) |
 | Traces to | L2-019, L2-048, L2-081, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-110, L2-111 |
 | Design system | [`inline-message.html`](../../design-system/components/inline-message.html) |
 | Source mocks | [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/account/export-requested`](../../mocks/pages/account/export-requested.html), [`pages/account/export-ready`](../../mocks/pages/account/export-ready.html), [`pages/admin-application/default`](../../mocks/pages/admin-application/default.html), [`pages/admin-application/verified`](../../mocks/pages/admin-application/verified.html), [`dialogs/reject-application/default`](../../mocks/dialogs/reject-application/default.html), and the dialogs shown over these pages (see Usage) |
@@ -337,6 +337,8 @@ motion ([spinner](spinner.md)).
 - **AC-20** Given the `InlineMessage` scenario, when the perf test runs against the base branch with `--fail-on-regression`, then it is not flagged as a possible regression and renders in its tuned window. (L2-086)
 
 ## Implementation notes
+
+**As built in M1 (S14):** `variant`, `icon`, `block` and `live`. The icon sits in a `span.inline-msg__icon` (`zm-icon`'s host is `display: contents`, so it cannot take the nudge itself). `busy` waits for `zm-spinner`. The stub passes the message's id to the field with `messageId` ([form field](form-field.md) D-14).
 
 The inline message is planned. To build it:
 

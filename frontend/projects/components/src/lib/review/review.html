@@ -1,0 +1,22 @@
+<figure class="review">
+  <blockquote>
+    @for (paragraph of quoteParagraphs(); track $index) {
+      <p>{{ paragraph }}</p>
+    }
+  </blockquote>
+  <figcaption>
+    <span class="stars" role="img" [attr.aria-label]="starsLabel()">{{ starGlyphs() }}</span
+    >{{ reviewer() }}<span>{{ source() }}</span>
+  </figcaption>
+</figure>
+@if (reply() !== null) {
+  <div class="message">
+    <p class="message__meta">{{ replyMeta() }}</p>
+    <blockquote>
+      @for (paragraph of replyParagraphs(); track $index) {
+        <p>{{ paragraph }}</p>
+      }
+    </blockquote>
+  </div>
+}
+<div class="cluster"><ng-content select="[slot=actions]" /></div>

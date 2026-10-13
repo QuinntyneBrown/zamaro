@@ -75,6 +75,39 @@
   color: var(--color-fg-muted);
 }
 
+/* Badges and small buttons, above the name link's stretched target. */
+.ticket__actions {
+  position: relative;
+  z-index: var(--z-raised);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ticket__actions:empty {
+  display: none;
+}
+
+:host(.ticket--booked) {
+  --ticket-border: var(--color-border-default);
+}
+
+:host(.ticket--booked) .ticket__name,
+:host(.ticket--booked) .ticket__price {
+  color: var(--color-fg-muted);
+}
+
+:host(.ticket--loading),
+:host(.ticket--loading:hover) {
+  transform: none;
+  box-shadow: none;
+}
+
+:host(.ticket--loading) .ticket__art {
+  border-right-color: var(--ticket-border);
+}
+
 .ticket__stub {
   grid-area: stub;
   position: relative;

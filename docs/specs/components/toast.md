@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-toast`, `zm-toast-region` (and the `ToastService` that feeds them) |
 | Library path | `frontend/projects/components/src/lib/toast/` |
-| Status | planned |
+| Status | built in part (M1 S16): timed and danger toasts, pause, replace by key, dismiss and focus return; planned: actions, the stack of three and its queue, `persistent`, `update()`, holding behind a dialog |
 | Traces to | L2-026, L2-066, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-109, L2-110, L2-111, L2-113, L2-114 |
 | Design system | [`toast.html`](../../design-system/components/toast.html) |
 | Source mocks | [`notifications/saved-toast`](../../mocks/notifications/saved-toast/success.html) (success, with-action, info, warning, danger), [`notifications/booking-toast`](../../mocks/notifications/booking-toast/success.html) (info, success, warning, danger, with-action, stacked), [`notifications/request-toast`](../../mocks/notifications/request-toast/info.html) (info, success, warning, danger, with-action, stacked), [`notifications/availability-toast`](../../mocks/notifications/availability-toast/success.html) (success, info, warning, danger, with-action), [`notifications/session-toast/warning`](../../mocks/notifications/session-toast/warning.html), [`notifications/share-toast/success`](../../mocks/notifications/share-toast/success.html), and the empty region on every page and dialog (see Usage) |
@@ -570,6 +570,13 @@ leaves after 5 seconds and still pauses.
 
 ## Implementation notes
 
+**As built in M2 (S15):** `actions` (up to two): `link` renders `zm-button-link size="sm"` and closes the
+toast as it navigates; `run` renders `zm-button size="sm"`; a promise keeps it busy and a rejection keeps
+the toast. Buttons in a toast use the design system's outline on the inverse slip and ink on a danger one
+(`:host-context(.toast)` in `button.scss`). `busyLabel`, `queryParams`, `fragment`, `persistent`,
+`update()`, the stack of three and the queue are still to do. `Toast` re-measured 400.9 → 334.0 ms.
+
+
 The library has no toast yet. To build it:
 
 - Folder `frontend/projects/components/src/lib/toast/` with `toast.ts`
@@ -601,6 +608,23 @@ The library has no toast yet. To build it:
   leading icons); the [icon](icon.md) CRD owns them.
 - Add the `Toast.ts` and `ToastStack.ts` scenarios, export them from
   `scenarios/index.ts`, and add the stack to the `DarkTheme` composite.
+
+**Built in M1 S16:** `zm-toast-region`, `zm-toast` (internal) and `ToastService` in
+`frontend/projects/components/src/lib/toast/`, with the region last in the `zamaro` shell (the admin
+shell gets it with the admin app, M3). The first caller is Share on the profile ("Link copied", key
+`share`); `e2e/specs/artist-profiles/index-and-share-profile.spec.ts` covers AC-1, AC-5, AC-7, AC-8,
+AC-9, AC-18, AC-19, AC-21 and AC-25. Built: `variant`, `title`, `kind`, `text`, `icon`,
+`dismissLabel`, `key` and `origin`; `ToastRef.dismiss()` and `dismissed`; `dismissAll()`; the
+5-second timer paused by the pointer, focus and a hidden tab, with the CSS timer bar; danger toasts
+without a timer; replacing by key in place (the same element, so focus stays and the bar restarts);
+Escape and the dismiss button; focus back to the origin, else the main `h1`, else `main`; reduced
+motion hiding the bar. Not built yet, each waiting for its first caller: `actions` and `ToastAction`
+(M2's save toggle, so the `Toast` scenario has no Undo and `ToastStack` no Pay deposit), the stack of
+three and its queue (D-2), `persistent` (M3's admin session), `update()`, holding toasts behind a
+modal dialog (D-8; reading the CDK `Dialog` would pull it into the shell bundle, where it is kept
+lazy), and the region's height cap at 200 % zoom (D-13). The `Toast` (201 ms) and `ToastStack`
+(268 ms) scenarios render at the default 200 iterations. The stack has not joined the `DarkTheme`
+composite: that raises an existing scenario's cost, which needs a maintainer's review.
 
 ## Decisions
 

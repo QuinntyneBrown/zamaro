@@ -1,5 +1,5 @@
 // The video card from docs/design-system/assets/components.css (.video, .video__play,
-// .video__caption), with the player and failure message its CRD adds (D-4).
+// .video__caption), plus the player and failure message from the CRD (D-4, D-11).
 
 :host {
   display: block;
@@ -16,11 +16,6 @@
   text-align: left;
   cursor: pointer;
   font: inherit;
-}
-
-.video:focus-visible {
-  outline: var(--focus-ring-width) solid var(--color-focus-ring);
-  outline-offset: var(--focus-ring-offset);
 }
 
 .video__play {
@@ -53,10 +48,6 @@
   transform: none;
 }
 
-.video[aria-busy='true'] {
-  cursor: progress;
-}
-
 .video[aria-busy='true'] .video__play::after {
   content: '';
   width: 1em;
@@ -67,6 +58,7 @@
   animation: spin var(--duration-loop) linear infinite;
 }
 
+// The player takes exactly the thumbnail's box, so playing never moves the grid (L2-105).
 .video__player {
   display: block;
   width: 100%;
@@ -87,21 +79,25 @@
   color: var(--color-fg-muted);
 }
 
-.video__error {
-  margin-top: var(--space-2);
-}
-
-.video__error:empty {
-  display: none;
-}
-
+// Always present so its arrival is announced; it takes no space while empty.
 .inline-msg {
-  display: inline-flex;
+  display: flex;
   align-items: flex-start;
   gap: var(--space-1);
+  margin-top: var(--space-2);
   font: var(--text-caption);
   font-weight: var(--font-weight-bold);
   color: var(--color-danger-fg);
+}
+
+.inline-msg:empty {
+  margin-top: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -111,11 +107,5 @@
 
   .video[aria-busy='true'] .video__play::after {
     animation: none;
-  }
-}
-
-@keyframes spin {
-  to {
-    rotate: 1turn;
   }
 }

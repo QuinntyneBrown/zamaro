@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-booking-form`, `zm-booking-form-skeleton` |
 | Library path | `frontend/projects/components/src/lib/booking-form/` |
-| Status | built (`zm-booking-form`, bar only); planned (`stub` and `auth` variants, `zm-booking-form-skeleton`) |
+| Status | built (`bar` and `stub`, M1 S14); planned (`auth`, `busy`, `landmark`, `headingLevel` and `zm-booking-form-skeleton`) |
 | Traces to | L2-004, L2-019, L2-022, L2-023, L2-044, L2-086, L2-096, L2-097, L2-098, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-108, L2-110, L2-111 |
 | Design system | [`booking-form.html`](../../design-system/components/booking-form.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`pages/discover/loading`](../../mocks/pages/discover/loading.html), [`pages/discover/invalid`](../../mocks/pages/discover/invalid.html), [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/artist/booked-date`](../../mocks/pages/artist/booked-date.html), [`pages/artist/empty`](../../mocks/pages/artist/empty.html), [`pages/artist/loading`](../../mocks/pages/artist/loading.html), [`pages/profile-preview/default`](../../mocks/pages/profile-preview/default.html), [`pages/sign-in/default`](../../mocks/pages/sign-in/default.html), [`pages/sign-in/submitting`](../../mocks/pages/sign-in/submitting.html), [`pages/sign-in/invalid`](../../mocks/pages/sign-in/invalid.html), [`pages/sign-up/success`](../../mocks/pages/sign-up/success.html), [`pages/accept-terms/loading`](../../mocks/pages/accept-terms/loading.html), and every other auth page (see Usage) |
@@ -528,6 +528,15 @@ change in `--duration-fast`, which drops to near zero under
 - **AC-30** Given the `BookingForm`, `BookingStub`, `AuthCard` and `BookingFormSkeleton` scenarios, when the perf test runs against the base branch with `--fail-on-regression`, then none is flagged as a possible regression and each renders in its tuned 100–300 ms window. (L2-086)
 
 ## Implementation notes
+
+**As built in M2 (S1):** the `auth` variant (`.stub.auth-card`, stamp over an `h1` or `h2` per
+`headingLevel`, with `tabindex="-1"`), `busy` (host `aria-busy`, projected `.field`s at 60 % with no
+pointer input, styled through `:host ::ng-deep .field` because projected content carries the page's
+style scope), `landmark` and the `[slot=links]` wrapper (hidden when empty and outside `auth`) are
+built, with the `AuthCard` scenario (200 iterations, about 250 ms). The sign-in page uses it. Still to
+do: `.field--full` spanning, the skeleton and the `BookingFormSkeleton` scenario.
+
+**As built in M1 (S14):** `titleId` is now `headingId`; `variant` (`bar`, `stub`), optional `stamp`, `price`, `priceNote` and the `[slot=fine]` wrapper (hidden when empty) are built, with the stub title's `tabindex="-1"` and the `BookingStub` scenario (150 iterations). `auth`, `busy`, `landmark`, `headingLevel`, `.field--full` spanning, the `[slot=links]` wrapper, the skeleton and the `AuthCard` and `BookingFormSkeleton` scenarios are still to do.
 
 The library has `zm-booking-form`, the bar only, with `heading`, `stamp` and
 `titleId`. To meet this CRD:

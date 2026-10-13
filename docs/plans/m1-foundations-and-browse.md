@@ -4,10 +4,11 @@ This is the working plan for building Zamaro, with Milestone 1 in detail. The cu
 first; the full plan follows, including the notes on what changed while implementing. Later
 milestones get their own plan in this folder when they start.
 
-## Current status (2026-10-12)
+## Current status (2026-10-10)
 
-**Branch:** S0–S11 merged to `main`; S12 is on `claude/friendly-fermat-l3coak`. M1 is about
-three-quarters done: S0–S12 are built; S13–S16 remain.
+**Status: Done (2026-10-10).** Branch `feat/m1-foundations-and-browse`, opened as a pull request
+against `main`. S0–S16 are built, then the close: L2-009.2 scroll restoration, the visual-parity and
+axe suites (ADR-0014), Pint, and the end-of-M1 verification below.
 
 | Slice | Scope | Status | Commits |
 |---|---|---|---|
@@ -24,31 +25,36 @@ three-quarters done: S0–S12 are built; S13–S16 remain.
 | S10 | Sold-out alternatives | Done | `929af7f`, `c6adc9a`, `b8a3ad1` |
 | S11 | Artist profile: header, About, setlist, loading and error | Done | `31dcbf4`, `9e7f58f`, `f48451c`, `a10df34` (ADR-0008) |
 | — | e2e API gets its own database, clock, limits and cache keys | Done | `331a03f` |
-| S12 | Photos and videos (local disk, no object storage in M1) | Done | `d94392c`, `b01aeca`, `818c9e7`, `1c172c1` (ADR-0009) |
-| S13 | Reviews on the profile | **Next** | |
-| S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | To do | |
-| S15 | Missing artist, renamed slug, generic 404 | To do | ADR-0010 |
-| S16 | Index and share (optional, last) | To do | |
+| S12 | Photos and videos (local disk, no object storage in M1) | Done | `37d8f6c`, `263ee86`, `9c56457` (ADR-0010) |
+| S13 | Reviews on the profile | Done | `eb1853c`, `7724bea`, `d9ed059` |
+| S14 | Tour dates, booking stub, "How booking works" (submit hidden until M5) | Done | `b1e73c7`, `0dccb9e`, `ce741f7` (ADR-0012) |
+| S15 | Missing artist, renamed slug, generic 404 | Done | `511efcb`, `bf69dd7`, `f87ceb4` (ADR-0011) |
+| S16 | Index and share: page heads, ETags, robots and sitemap, Share and toasts | Done | `8fe4033`, `f4c2106`, `c963eb9` (ADR-0013) |
+| Close | L2-009.2 scroll restoration | Done | `e9546a6` red test, `5a54fed` |
+| Close | Visual-parity and axe suites, Bebas Neue self-hosted, parity fixes | Done | `f5b3c0f`, `9e14329`, `956564e` (ADR-0014) |
+| Close | Pint on the five flagged files (formatting only) | Done | `1fb681d` |
 
-**Checks at the last commit (S12):**
-- Backend: 76 Feature tests pass, with OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean.
-- Frontend: lint and `format:check` are clean; `zamaro`, `admin` and `perf-test` build.
-- e2e: 49 of 50 Playwright tests pass in Chromium against the stub API. The one failure, "a date less than three days away is refused before searching", fails the same way on the base commit when the whole suite runs and passes alone: `SearchForm.errorFor` reads `aria-describedby` without waiting for it.
-- Perf: `--fail-on-regression` against the base build flags no rows. `ArtworkPhoto`, `VideoCard` and `MediaGrid` are new scenarios.
+**Checks at the last commit (the end-of-M1 verification, 2026-10-10):**
+1. `docker compose --profile e2e up -d --wait`, then `php artisan test`: **119 Feature tests pass** (916 assertions) with the OpenAPI contract assertions; `scramble:export --fail-on-unknown` is clean; Pint passes on all 160 files.
+2. `php artisan db:seed` twice on the dev database: the row count of every table is the same after both runs (43 artists, 38 reviews, 48 bookings, 81 users, 44 slug histories, 6 photos, 5 videos, …).
+3. Frontend: `lint` and `format:check` are clean; `ng build zamaro` and `NG_BUILD_MANGLE=0 ng build perf-test` succeed.
+4. `npx playwright test`: **170 tests pass** in Chromium against a freshly seeded e2e database: 92 specs and `perf/`, 26 `visual/` tests (130 captures) and 52 `a11y/` tests. The visual suite also passed twice more with `--repeat-each=2`, and `npm run test:docker -- visual` and `-- a11y` pass in the Playwright image.
+5. Perf against the build of `7fbfee6` (the state before S12, built in a temporary worktree, since removed): the first run flagged **Artwork** (88.0 → 108.1 ms); the single permitted re-run did not flag it (89.3 → 112.1 ms, runs overlapping), and no other row was flagged. Skeleton (104.6 → 107.6) and Button (108.8 → 114.4) are unflagged after this close's changes. The Artwork cost is consistent at about +20 ms, so it is carried forward below rather than called noise. Fifteen scenarios are new since that base.
+6. Manual check, driven by a script against `npm start` and the compose `api`: the Burlington chip with Sat 14 Nov shows "Sat 14 Nov · 7 free · within 120 km"; Abigail's profile opens from the headliner; Pick sets the stub's date to 2026-11-14; the header toggle paints the dark theme; at 320 px the page does not scroll sideways; no console errors.
 
-**Open items carried forward:**
-- **L2-009.2:** Back restores the Discover results but not the scroll position yet.
-- **S13:** seed 38 distinct-church reviews for Abigail, or the rating recalculation will change her 4.9/38.
-- **S14:**
-  - Miriam's seeded ticket number is ACT-0041; the mocks say ACT-0154.
-  - The book submit stays behind the off `bookingRequests` flag (user decision).
-- **S15:** settle `ArtistSlugResolver` (change-profile-address) against `ResolveArtistSlug` (view-artist-profile).
-- **Not started yet:** the visual-parity (`e2e/visual/`) and axe (`e2e/a11y/`) suites over `routes.manifest.ts`. The manifest already lists four route states.
+**Open items carried forward (owner milestone):**
+- **M2:** `zm-ticket-skeleton` (ticket CRD D-5) with the saved list's loading state; it replaces the Discover lineup's page skeletons, which lack the ticket frame, notches and perforation, and whose status line sits under the filters instead of above them (recorded in `adapt-layout-to-screens`).
 - **M2:** CORS is still Laravel's default `*` and must be tightened.
-- **S14:** the "Ask {first name} for a recording" action in the empty videos section (L2-020.1) opens the booking stub with its message pre-filled.
-- **M4:** object storage, the CDN and AVIF renditions replace S12's local `media` disk; the video card's manage mode arrives with Edit profile.
-- **Not yet used:** the poster, headliner and tickets still show the halftone placeholder; passing the primary photo to them is not in any M1 slice's L2.
-- **Artwork perf scenario:** `Artwork` renders in about 31 ms at 200 iterations, under the 100–300 ms band; raise its iterations in a separate change.
+- **M2:** `PrivateNoStore` (`Cache-Control: private, no-store`, L2-089.3) arrives with the first route that returns personal data; M1 has none. Toasts gain actions with the save toggle, and the `Toast` scenario its Undo.
+- **M2:** the signed-in states join the routes manifest, the visual suite masks the signed-in top bar, and the booking form's `auth` variant is built. The browser-side move to a renamed slug is tested once the saved list links to one.
+- **M3:** the Discover band ships without "Apply as an artist"; the action joins with the application page. Toasts gain `persistent`; the stepper arrives with the application.
+- **M4:** object storage replaces the local `media` disk (`zamaro.media.disk`); the poster shows the primary photo; `zm-video-card` gains `manage` mode; `zm-tour-dates` gains `schedule`. `ArtistProfileUpdated`, `PurgeProfileCache` and the `CdnPurger` port (L2-089.2) arrive with profile editing; until then the 60-second `s-maxage` is the only bound, and the sitemap is not cached in Redis.
+- **M4:** profile the **Artwork** scenario before `zm-artwork` changes again (+20 ms since S12's `ratio`, `photo` and `priority`; see check 5).
+- **M5:** the stub's "Request to book" renders only when the `bookingRequests` flag is on (ADR-0012; off, a user decision). M5 adds the `/artists/:slug/book` route, hands the stub's values to it on submit, and turns the flag on in dev and e2e. The timeline arrives with the booking page.
+- **M7:** only Abigail's rating has reviews behind it; the rest of the cast keeps seeded summaries. `QueueRatingRecalculation` and the review events arrive with leaving and moderating reviews.
+- **M9:** `layout.spec.ts` from `adapt-layout-to-screens` (overflow, 44 px targets and 200 % zoom over the whole manifest); the forced-colours outline on `zm-skeleton`; `zm-error-stage`, the 500 page sending 500, and the offline page; the toast stack of three, its queue, `update()` and holding toasts behind a dialog.
+- **M10:** the CI e2e job, which runs `npm run test:docker` against the `-linux` baselines; `Cache-Control` and `ETag` on the server-rendered profile HTML (with the CDN); `security.allowedHosts` and trusted proxy headers for the public hosts (ADR-0013); secondary hosts redirect to the primary.
+- **With their screens (no fixed milestone):** `zm-inline-message` `busy` (needs `zm-spinner`), the other description-list variants, the `zm-form-field` split its CRD asks for, the remaining `zm-skeleton` shapes and `zm-button` surface mappings (band-on-stage ordering, D-9), and adding `ToastStack` to the `DarkTheme` composite (it raises an existing scenario's cost, so a maintainer must review it).
 
 ---
 
@@ -100,7 +106,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 
 **Test conventions:**
 - Backend tests are Feature tests against `/api/v1`, using an `AssertsOpenApiContract` trait.
-- e2e runs against an SSR build and a stub API that Playwright starts (`e2e/fixtures/stub-api/`), which answers from the seeded cast with today frozen at Fri 9 Oct 2026 10:00; the browser clock is frozen with `page.clock`. (Until 2026-10-09 it ran against the `api-e2e` compose service and a seeded database.)
+- e2e runs against an SSR build and the `api-e2e` compose service: database seeded once, clock frozen at Fri 9 Oct 2026 10:00 via `ZAMARO_FROZEN_NOW` and `page.clock`.
 - The seed data uses the mock cast.
 
 #### S0 — Scaffolding (infra and test-only, outside ATDD)
@@ -222,21 +228,59 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **Decided by the user (2026-10-09):**
   - **No object storage in M1.** S12 serves the seeded photos and videos from the API's local disk in dev and e2e. Object storage arrives with uploads in M4, with its own ADR.
   - **The S14 book button stays hidden until M5.** The stub and date picking ship; the submit sits behind a `bookingRequests` flag that is off. There is no placeholder route.
-- **ADR renumbering (current):** 0008 went to S11, as S5 needed no ADR. S12 takes 0009 and S15 takes 0010.
-- **S12 is done** (d94392c API, b01aeca gallery, 818c9e7 viewer, 1c172c1 videos and ADR-0009).
-  - **Media:** a local `media` disk served by `MediaController` at `/media/{key}`, in place of the
-    CDN; `CastSeeder` copies small synthetic samples from `database/seeders/media` (4-second VP9 HLS
-    in fMP4, which Chromium plays through hls.js without proprietary codecs). The stub API serves
-    the same files.
-  - **Schema:** `artist_photos` and `artist_videos` with the columns the profile reads;
-    `poster_renditions` (jsonb) replaces upload-videos' single `poster_key`. Upload columns come in M4.
-  - **Components:** `zm-artwork` gains `ratio`, `photo` and `priority`; `zm-dialog` gains `kicker` and
-    the footer slot; `zm-icon` gains `arrow-left`; `zm-video-card` is new (play mode only).
-  - **Photo viewer:** `dialogs/photo-viewer`, opened from gallery links that fall back to the largest
-    rendition without script.
-  - **The no-photos e2e case uses Elijah Park:** `page.route` cannot change the server render, and
-    Miriam has photos.
-  - **Local runs** need Node 22.22.3 or later for the Angular CLI.
+- **ADR renumbering (current):** 0008 went to S11, as S5 needed no ADR. S12 takes 0010 and S15 takes 0011 (0009 went to the Laravel 13 upgrade).
+- **S12 is done** (37d8f6c API and seed, 263ee86 red tests, 9c56457 page and components, then ADR-0010 and docs).
+  - **No object storage (user decision):** media keys live on a local `media` disk that Laravel serves under `/media` (`serve => true`); `App\Support\Media::url()` reads the disk from `zamaro.media.disk`, so M4 switches to object storage by config. The SSR server and the dev proxy forward `/media` like `/api`. Served files carry Laravel's `no-store` header, which is acceptable for dev and e2e only.
+  - **Seed:** `CastSeeder` writes `artist_photos` and `artist_videos` rows (Abigail's four photos, four live videos and a processing "Jireh"; Miriam's two photos). `MediaSeeder` (new, run by `DatabaseSeeder`) writes GD-drawn WebP and AVIF renditions and posters and copies one committed 6-second sample HLS stream with WebVTT captions (`database/seeders/media/sample-video`, about 300 kB) that every live video plays. Existing files are skipped, so reseeding is fast and idempotent. Ratings and distances are unchanged.
+  - **No `zm-video-player`:** the video card CRD makes the player part of `zm-video-card` (D-2 to D-4), so the plan's second component was not built. Only `play` mode is built; `manage` mode waits for M4.
+  - **Library changes:** `zm-artwork` gained `ratio`, `photo` (with fallback to the placeholder on error) and `priority`; `zm-dialog` gained `kicker` and the `[slot=footer]`; `zm-icon` gained `arrow-left`. Not flagged by the perf test; `Artwork`'s median moved within the runner's noise (it swung 98–188 ms on the base build alone).
+  - **ADR-0010 (OK, accepted default, 2026-10-10):** hls.js behind `ZM_HLS_LOADER`, lazy; native HLS first. Playwright's Chromium plays HLS natively, so a spec hides native HLS to cover the hls.js path.
+  - **Drift recorded in the design:** grid photos are buttons, not the mock's links (they open a dialog and there is no photo route); the video thumbnail's label is the title, as the API has no poster description; "No videos yet" ships without "Ask {first name} for a recording", which needs the S14 stub. With no photos, the label reads "{Solo vocalist|Duo|Band|Choir} illustration: {name} hasn't added photos yet".
+- **S13 is done** (eb1853c API, seed and backend tests, 7724bea red e2e tests, d9ed059 page and components, then docs).
+  - **API:** the profile carries `reviews: { total, items (4), nextCursor }`; `GET /api/v1/artists/{slug}/reviews?cursor=` pages 10 at a time with Laravel's cursor over `created_at` and `id` (an undecodable cursor is a 422). Reviews carry `attribution { reviewerName, churchName, city, month }` and `reply { text, artistName, month }`; `month` is `YYYY-MM` and the page formats it (`FormatService.monthYear`). `review_replies` landed here.
+  - **Rating:** `RecalculateArtistRating` is unique per artist on a new `high` queue (Horizon works it first). A church is the booking's name and city until churches have records (M2). No server cache to forget yet.
+  - **Seed (the S6 open item):** Abigail now has 38 reviews from 38 churches, her four mock reviews the newest (Naomi's and Femi's texts are now the mocks' full text), plus Tomi's and Naomi's replies; 185 stars, shown as 4.9. The seeder runs the job for her, bulk-upserting the 34 older reviews so test setup stays quick. Every other artist keeps its seeded summary with no reviews behind it, so search sorting and the headliner tests are unchanged (backing them would give Marcus a headliner quote).
+  - **Components:** `zm-review` (no `zm-review-skeleton` yet: its consumer is the artist's Reviews page, M7) and `zm-rating variant="summary"`. Per-review stars are drawn by `zm-review` (review CRD D-5), not a `stars` rating variant.
+  - **Drift recorded in the design:** after the first page the button reads "Show 10 more" ("Show 4 more" last), taken from the artist's Reviews page mock; "Be her first booking" is a button that focuses the booking date instead of the mock's `#book-title` link; a failed page is silent, as on Discover; Report waits for sign-in.
+- **S14 is done** (b1e73c7 API, flags and seed, 0dccb9e red e2e tests, ce741f7 page and components, then ADR-0012 and docs).
+  - **API:** `GET /api/v1/artists/{slug}/tour-dates?from=` (`ArtistAvailabilityController::tourDates`, `ListTourDates`) returns the next 6 free or booked days as `{ date, status, kind, city }`, from 3 days ahead when `from` is missing or sooner. `GET /api/v1/artists/{slug}/availability?date=` returns `{ date, free, freeCancellationUntil }`; the last field comes from `CancellationPolicy` (`Services/Bookings`, 14 days) so the policy is tested through the API from M1. Out-of-window dates are 422 with the search form's copy. `AvailabilityService` gained `isFree()` and `days()` (three reads, then a walk); `BookingWindow` holds the 3-day and 18-month bounds for the new code (search and alternatives still compute their own).
+  - **Feature flags (user decision; ADR-0012, OK, accepted default, 2026-10-10):** `config('zamaro.features.booking_requests')` from `ZAMARO_FEATURE_BOOKING_REQUESTS`, off by default, served by `GET /api/v1/features`; the frontend's root `FeatureFlags` reads it once (transfer-cached) and the stub renders "Request to book" only when it is on. No `/artists/:slug/book` route. ADR-0011 stays reserved for S15's slug history, so the flags took 0012.
+  - **Seed:** Miriam's ticket number is ACT-0154 (upserted on the slug, so reseeding is idempotent). No test asserted ACT-0041.
+  - **Page:** "Upcoming dates" and the stub are sections of `ArtistPage`, with `BookingDateStore` for the list, the stub's date and its check. "Your date" follows the stub's date (tour-dates CRD AC-12), so typing Sun 15 Nov stamps that row, unlike the booked-date mock. Pick needs no request and focuses the stub's date. The header's Book label follows the stub's date; the back link keeps the carried one. Kind of gathering comes from the remembered search when its date matches. The stub is sticky from LG and follows the reviews below it. "Ask {name} for a recording" writes the message into the stub and focuses it; "Be her first booking" focuses the date. The note beside the list reads "{name}'s calendar is wide open this {season}." when no listed date is booked.
+  - **Discover:** `pages/discover/how-booking-works` renders `#how` (three `zm-steps` and the `#policy` list in `zm-description-list`), and `#join` is a `zm-band` without "Apply as an artist" until M3. The stub's "Cancel free up to 14 days before" links to `/#how`.
+  - **Components:** `zm-tour-dates` (`public` variant, loading), `zm-inline-message` (no `busy` yet), `zm-steps` (no stepper or timeline), `zm-description-list` (`definition`), `zm-band`, and `zm-booking-form variant="stub"` (`titleId` renamed `headingId`). Also `zm-button` `size="sm"` and `block` and the band's stage skin, `zm-badge variant="booked"`, the `check` icon, and interim `zm-form-field` additions: a textarea, `placeholder`, `optionalMarker`, a live error region and `[slot=message]` named by a `messageId` input (form-field CRD D-14: a content query cost every field about 8 %). Each CRD records what is built.
+  - **Perf:** no rows flagged. New scenarios `TourDates`, `InlineMessage`, `Steps`, `DescriptionList`, `Band` and `BookingStub` (150 iterations). `FormField` rose about 9 % (120 to 131 ms) and `BookingForm` about 6–13 % with the textarea, marker and live region, within the overlap rule.
+  - **Tests:** `tests/Feature/ArtistProfiles/PickADateTest.php` (12), `tests/Feature/Operations/FeatureFlagsTest.php` (2) and `e2e/specs/artist-profiles/pick-a-date-and-start-booking.spec.ts` (13, including Discover's sections and the flag turned on by intercepting `/api/v1/features` after client-side navigation).
+- **S15 is done** (`511efcb` API, seed and backend tests, `bf69dd7` red e2e tests, `f87ceb4` pages and component, then ADR-0011 and docs).
+  - **ADR-0011 (OK, accepted default, 2026-10-10):** one resolver, `ResolveArtistSlug` (`ArtistSlugResolver` is retired as a name), used by all four `/api/v1/artists/{slug}` routes. It returns the viewable artist or throws `ArtistMoved` (rendered as a bodiless 301 to the same route under the current slug, relative `Location`, query string kept) or `ArtistNotFound` (the `artist-not-found` problem, "This artist isn’t on Zamaro"). `slug_histories` uses the change-profile-address columns `(artist_id, slug unique, retired_at)` and holds every current and retired slug; the migration backfills the current ones. Both designs and their diagrams are updated.
+  - **The design's `<TO SUPPLY>` items (accepted defaults, recorded in ADR-0011):** the primary style is the first of an artist's styles in the chips' order; a slug that never existed matches any style; without a carried location the suggestions are measured from Toronto City Hall, without a radius within 120 km, without a date inside the window on the first bookable day. The hidden artist's base is never used.
+  - **API:** the profile reads the carried search leniently from `date`, `kind`, `lat`, `lng`, `radius` (`ShowArtistProfileRequest`; a stale date is no error) and adds `similarArtists: { date, radiusKm, items }` (lineup tickets, up to 3, nearest first) from `SimilarArtistFinder` (`Services/Discovery`, for M5). Sub-resources return the problem without suggestions. `ProblemDetails` gained `extensions`.
+  - **Seed:** every artist's current slug in `slug_histories`, Abigail's retired `abigail-sings`, and Selah Brooks (ACT-0044), a suspended solo vocalist. No existing search, headliner or count changed.
+  - **SSR statuses:** a root `HttpStatus` sets `RESPONSE_INIT.status` on the server only. A missing artist sets 404; a `**` route renders `pages/not-found/not-found` and sets 404. For a move the API's 301 is followed by the fetch backend; when the profile comes back under another slug, `ArtistProfileStore` sets 301 and navigates with `replaceUrl` and the query kept, and Angular's SSR engine turns that into `301 Location: /artists/{current}?…`. The API returns the redirect itself rather than a target in a body. There is no server-error page yet, so nothing sends 500 (M9/M10 with the 500 and offline screens).
+  - **Hydration:** the HTTP transfer cache keeps successes only, so `HttpArtistProfilesApi` puts a 404's suggestions in the transfer state on the server; the browser shows the server's page without asking again (tested).
+  - **Carried search:** the profile request carries the last lineup's `date`, `kind`, `lat`, `lng` and `radius` when its date matches the profile's `date`, otherwise the date alone, so found profiles are cached per search for their 60 seconds. Opened without a search (any fresh load), the list reads "within 120 km of Toronto" and tickets "{city} · {km} from Toronto"; the mock's "within 120 km of Burlington" and "from you" appear after a Discover search.
+  - **Component:** `zm-error-page` (all inputs and slots) and the `ErrorPage` scenario (the 500 composition). The `h1` is named by `aria-label` when `posterSuffix` is set: Chrome reads a visually hidden span as "No show : page not found" (CRD notes). `zm-error-stage` is not built; the profile error stays page markup until the 500 and offline pages.
+  - **Drift recorded in the design:** the generic 404 has one action ("Your saved artists" waits for M2); suggestion tickets have no Save (M2); with no suggestions the lead keeps its first sentence and "Find who’s free" leads to Discover.
+  - **Tests:** `tests/Feature/ArtistProfiles/ResolveMissingArtistTest.php` (11) and `e2e/specs/artist-profiles/resolve-missing-artist.spec.ts` (7, asserting the 404, 301 and 200 statuses through `NotFoundPage`). The Discover-search case stands in for an artist hidden after the lineup listed them by rewriting the browser's profile request. `ArtistProfilePage`'s intercepts now match the profile URL with any query string.
+  - **Not covered end to end:** the browser-side move (an in-app link to a retired slug); no screen links to one until M2's saved list.
+- **S16 is done** (`8fe4033` red tests, `f4c2106` API, `c963eb9` pages, server and components, then ADR-0013 and docs).
+  - **API (L2-089.1, L2-112.3):** `cache.headers:etag` on the profile, tour-dates and availability routes gives a strong ETag of the body (Laravel's xxh128) and a bodiless 304 on a matching `If-None-Match`; a 404 or 301 has none. The profile keeps `public, max-age=0, s-maxage=60`; tour dates and the date check keep S14's headers rather than the design's `no-cache` (drift recorded in the design). `GET /api/v1/sitemap` (`SitemapController`, `ListPublishedProfiles`) returns `{ data: [{ slug, lastModified }] }` for the visible scope.
+  - **Heads (L2-112.1–2, L2-113.1):** `PageMeta` (`app/shared`) writes the title, description, robots, canonical link, Open Graph and Twitter tags and one JSON-LD block, and replaces all of it on each call. `ProfileSeo` (`pages/artist`) builds the profile's head: "{name} · Worship artist in {city} · Zamaro"; "{headline}. {bio}" cut at a word to **160 characters (the design's `<TO SUPPLY>`; OK, accepted default, 2026-10-10, recorded in the design)**; the primary photo's 1200 px rendition; and `Person` or `MusicGroup` with `aggregateRating` when `reviewCount > 0`. Discover ("Worship artists within driving distance of Toronto · Zamaro", canonical `/`), the generic 404, the missing artist and the profile error set their own; the last three are `noindex`.
+  - **ADR-0013 (OK, accepted default, 2026-10-10):** absolute URLs use the origin the request arrived at (Angular's `REQUEST` on the server, `document.location` in the browser), so e2e sees `http://localhost:4000/...`. `allowedHosts` guards it, and there is no `SITE_ORIGIN` setting.
+  - **robots.txt and sitemap.xml (L2-112.3–4):** Express routes in `server.ts` (`crawler-files.ts`). robots.txt adds `Allow: /artists/`, because `Disallow: /artist` alone would hide every profile by prefix. The sitemap lists `/` and every published profile with `lastmod`.
+  - **Share (L2-113.2–3):** a `zm-button` with the new `share` icon after Book, as in the mock (Save still waits for M2). `ShareLink` (`app/shared`) calls `navigator.share({ title, url })` with the page title and the canonical address. `AbortError` ends it there; any other failure, or no share sheet at all, copies the address with the CDK `Clipboard` and shows "Link copied" (kind "Shared", key `share`).
+  - **Components:** `zm-toast-region`, `zm-toast` (internal) and `ToastService` in the components library, with the region last in the shell. Built: timed and danger toasts, pausing on hover, focus and a hidden tab, replacing by key, and Escape and dismiss with focus return. The CRD records what waits for later callers. Perf: no rows flagged; `Toast` and `ToastStack` are new.
+  - **Lint:** `zamaro/no-hardcoded-text` now also flags string literals passed as toast text, to `Title.setTitle` and to `AnnouncerService.polite` (the call-site checks S2c deferred).
+  - **Tests:** `tests/Feature/ArtistProfiles/IndexAndShareProfileTest.php` (7) and `e2e/specs/artist-profiles/index-and-share-profile.spec.ts` (18). They use the `Crawler` page object (raw HTML parsed without running script, robots, sitemap), `readHead` for the live head, toasts on `Shell`, and `startClock` and `passTime` for the toast timer. The share sheet is stubbed on `Navigator.prototype`; the fallback deletes it and grants the clipboard permissions.
+  - **Not built (open items above):** `PrivateNoStore` (M2, since M1 serves no personal data), the CDN purge (M4), and cache headers on the server-rendered HTML (M10).
+- **M1 close (2026-10-10).**
+  - **L2-009.2** (`e9546a6` red, `5a54fed`): `LastSearch` keeps the lineup as last shown, with every loaded page and the sold-out ways forward. On a Back or Forward (`popstate`) to that search, Discover shows it without searching, and the router's `scrollPositionRestoration: 'enabled'` restores the position. Any other way to the same address searches afresh, so the cache is never stale (recorded in `sort-and-filter-results`). Search, sort, chip and sold-out navigations pass `scroll: 'manual'`; every other forward navigation starts at the top, so a profile opened from deep in the lineup opens at its top.
+  - **Visual and axe suites (ADR-0014, OK, accepted default, 2026-10-10 for M9 D22):** the manifest names 13 states (the six M1 had, plus Discover loading, error, rate-limited and sold out, and the profile's loading and error). `e2e/fixtures/route-states.ts` opens each through the page objects. `visual/` captures full pages at 320, 576, 768, 992 and 1200 px in both themes with `maxDiffPixelRatio: 0.001` and masks the rate-limit countdown; `a11y/` runs axe with the WCAG 2.0, 2.1 and 2.2 A and AA tags in both themes at XS and XL and fails on any violation. It found none.
+  - **Where the suites run (the risk below):** both locally on this Windows host and in `mcr.microsoft.com/playwright:v1.64.0-noble` through `npm run test:docker`, which seeds the e2e database on the host and points the container's web server at `host.docker.internal:8001`. Each platform keeps its own baselines (`-win32` and `-linux`, about 55 MB together); an intended design change regenerates both.
+  - **Bebas Neue** is self-hosted from `@fontsource/bebas-neue` (an asset glob copies the `woff2` files to `/fonts` in every app; the zamaro shell preloads the Latin file).
+  - **Parity bugs fixed** after reviewing the baselines against `docs/mocks/pages` (rendered with Playwright): the CDK live announcer's text printed under the footer (its visually-hidden style never reached the hydrated page; the CDK `a11y-prebuilt.css` is now global); Share on the profile's stage was a filled button instead of the paper outline (button CRD's `.on-stage` mapping); skeletons on the stage were paper-coloured (skeleton CRD AC-10); the profile's loading state lacked the video block and the stub card (new `control`, `control-lg` and `wide` shapes); the profile poster lacked the halftone corner. Perf: Skeleton and Button unflagged.
+  - **Deliberate differences** from the mocks are listed in `adapt-layout-to-screens` (display face, signed-out shell, M3 and M5 actions, no carried search in the manifest, seeded photos, editorial subtitles, the Discover loading tickets).
+  - **Pint** (`1fb681d`): imports instead of fully qualified names in the five files it flagged; formatting only.
 
 #### S1 — API foundation
 - **L2:** 090.2, 093.1, 095.1–3.
@@ -401,9 +445,9 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - Processing videos are hidden.
   - An artist with no photos gets the act-type illustration.
 - **Tests first:** `ProfileMediaTest.php`, e2e cases, `pages/photo-viewer.dialog.ts`.
-- **Build:** artist_videos migration; the seeder adds a sample HLS stream with VTT captions.
-- **ADR 0008:** hls.js as the player.
-- **Components:** `zm-video-card`, `zm-video-player`.
+- **Build:** artist_photos and artist_videos migrations; the seeder adds sample photos and a sample HLS stream with VTT captions on the local media disk.
+- **ADR 0010:** hls.js as the player.
+- **Components:** `zm-video-card` (its CRD includes the player, so there is no `zm-video-player`).
 
 #### S13 — Reviews on the profile
 - **L2:** 018, 020.2, 060.1–2, 083.2.
@@ -427,7 +471,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **Build:**
   - `ArtistAvailabilityController`, `ListTourDates`, `CancellationPolicy`.
   - `/#how` and `/#join` sections.
-  - A `/artists/:slug/book` placeholder behind the `bookingRequests` flag. **Needs your OK**, because no mock covers it.
+  - ~~A `/artists/:slug/book` placeholder behind the `bookingRequests` flag.~~ Decided by the user (2026-10-09): no placeholder route; the submit is hidden behind the off flag.
 - **Components:** `zm-tour-dates`, `zm-inline-message`, `zm-steps`, `zm-description-list`, `zm-band`, and a stub scenario for `zm-booking-form`.
 
 #### S15 — Missing artist, renamed slug, generic 404
@@ -438,7 +482,7 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
   - `/no-such-page` shows the generic 404.
 - **Tests first:** `ResolveMissingArtistTest.php` and `e2e/specs/artist-profiles/resolve-missing-artist.spec.ts` (asserts the HTTP status).
 - **Build:** `ResolveArtistSlug`, `ArtistNotFound` problem, `SimilarArtistFinder`, slug_histories, `pages/not-found/`, SSR `RESPONSE_INIT`.
-- **ADR 0009:** slug_histories uses the change-profile-address columns `(slug, retired_at)`.
+- **ADR 0011** (renumbered from 0009): slug_histories uses the change-profile-address columns `(slug, retired_at)`; the resolver is `ResolveArtistSlug`.
 - **Components:** `zm-error-page`.
 
 #### S16 — Index and share (optional, last)
@@ -473,15 +517,17 @@ Each slice also adds its route states to `e2e/routes.manifest.ts`.
 - **SSR transfer cache:** proved in S2. Responses with personal data must not be transfer-cached from M2 on.
 - **Visual parity:**
   - Run the visual and axe suites in the Playwright Docker image, with Bebas Neue self-hosted.
-  - Mask the signed-in top bar until M2.
+    *Resolved at the close (ADR-0014):* they run locally and in the image, with one baseline set per platform.
+  - Mask the signed-in top bar until M2. *M1 renders no signed-in state, so nothing is masked yet.*
   - Mock-only copy (for example Miriam's "filming her first live set") will cause diffs: update those mocks or mask them.
+    *As built:* baselines come from the app, so mock-only copy causes no diff; it is reviewed by hand and listed in `adapt-layout-to-screens`.
 - **Windows:** `MSYS_NO_PATHCONV=1`, LF line endings, `vendor/` in a volume, `PHP_CLI_SERVER_WORKERS` for e2e.
 - **Perf runner:** brand-new scenarios have no baseline and must not be flagged. CI builds the base branch from S2 on.
 - **PostGIS:** not needed for M1 (bounding box plus B-tree).
 - **Agents never add the `perf-regression-accepted` label.**
 
 ### Verification (end of M1)
-1. `docker compose up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including the OpenAPI contract assertions.
+1. `docker compose --profile e2e up -d --wait`, then `docker compose exec api php artisan test`. Every Feature test is green, including the OpenAPI contract assertions.
 2. `docker compose exec api php artisan db:seed` twice: row counts are unchanged.
 3. `cd frontend && npm run lint && npm run format:check && npx ng build zamaro && NG_BUILD_MANGLE=0 npx ng build perf-test`.
 4. `cd e2e && npx playwright test` passes all of these in Chromium: specs, `visual/`, `a11y/` (axe in light and dark), `perf/`.

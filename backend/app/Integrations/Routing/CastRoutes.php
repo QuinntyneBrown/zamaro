@@ -27,6 +27,8 @@ final class CastRoutes
         'Kitchener' => [43.4516, -80.4925],
         'Niagara' => [43.0896, -79.0849],
         'Ottawa' => [45.4215, -75.6972],
+        // Harvest Point Church, Tomi Oduya's (M2 S9); no mock shows a distance from it.
+        'Milton' => [43.5183, -79.8774],
     ];
 
     /** Towns the fake geocoder knows; Toronto resolves to City Hall. */

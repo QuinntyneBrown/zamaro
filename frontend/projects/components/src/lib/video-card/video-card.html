@@ -5,7 +5,7 @@
     [attr.aria-label]="label()"
     [attr.aria-busy]="state() === 'busy' ? 'true' : null"
     [attr.aria-disabled]="state() === 'busy' ? 'true' : null"
-    [attr.aria-describedby]="hasFailed() ? errorId : null"
+    [attr.aria-describedby]="showError() ? errorId : null"
     (click)="play()"
   >
     <zm-artwork
@@ -19,7 +19,7 @@
     <span class="video__play">{{ stampText() }}</span>
   </button>
 }
-@if (state() !== 'idle') {
+@if (hasPlayer()) {
   <video
     #player
     class="video__player"
@@ -27,32 +27,26 @@
     preload="none"
     playsinline
     [hidden]="state() !== 'playing'"
-    [attr.poster]="poster()?.src ?? null"
+    [attr.poster]="poster()?.src"
     [attr.aria-label]="caption()"
     (playing)="onPlaying(player)"
-    (pause)="playback.stopped(player)"
+    (play)="onPlay(player)"
     (error)="fail()"
   >
     @if (captions(); as track) {
       <track
         kind="captions"
-        [src]="track.src"
-        [srclang]="track.srclang"
+        [attr.srclang]="track.srclang"
         [label]="track.label"
+        [src]="track.src"
         default
       />
     }
   </video>
 }
 <span class="video__caption">{{ caption() }}</span>
-<p
-  class="video__error"
-  role="status"
-  [id]="errorId"
-  [class.inline-msg]="hasFailed()"
-  [class.inline-msg--danger]="hasFailed()"
->
-  @if (hasFailed()) {
+<p class="inline-msg inline-msg--danger" role="status" [id]="errorId">
+  @if (showError()) {
     <zm-icon name="warning" size="sm" />{{ errorText() }}
   }
 </p>

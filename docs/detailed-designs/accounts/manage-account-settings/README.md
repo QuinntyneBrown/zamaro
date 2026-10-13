@@ -136,6 +136,95 @@ The device label is derived from the user-agent string. The approximate city com
 from an IP geolocation lookup whose source is `<TO SUPPLY>`. The lifetime of an email
 change link is `<TO SUPPLY>`.
 
+**As built in M2 (S9)**
+
+- **Page:** `pages/account/Account` at `/account`, rendered in the browser only (`RenderMode.Client`,
+  ADR-0017) behind `signedInGuard`, which waits for `/me` and sends a guest to
+  `/sign-in?returnUrl=/account`. The head reads "Account settings" over "Naomi Fraser · Riverside
+  Community Church" ("Abigail Mensah · Artist" for an artist). `zm-settings-nav` ("Settings sections")
+  lists the sections built so far; one reactive form holds Profile ("Your name", help "Artists see it on
+  your requests." or, for an artist, "Your account name. Churches see the display name from Edit
+  profile.") and Church or Contact, with `zm-form-actions` (Discard, Save changes).
+- **Saving:** Save changes checks the sections it will send, then sends each one: the name when it
+  changed (`PUT /api/v1/account/profile`, `AccountProfileController`, answering `CurrentUserResource`,
+  so the initials follow), the church when it was saved before or typed into, the contact phone when it
+  was saved before or typed into. While saving the bar reads "Saving…", fields are read-only and
+  Discard is disabled; after it "Saved just now" and a dismissible "Saved" banner ("Your settings are
+  up to date. Bookings already sent keep the church address they were made with."). A failure keeps
+  every value: "We couldn’t save your changes" and "Not saved · try again". Invalid fields get a
+  summary ("Fix 1 thing before saving") and "1 field to fix · not saved". A failed load shows "We
+  couldn’t load your settings" with Try again and Back to Discover.
+- **Contact phone:** `GET` and `PUT /api/v1/account/contact-phone` (`role:artist`; a booker gets 404,
+  not the design's 403, per L2-074.1) answer `{ data: { contactPhone } }`; the phone is stored in E.164,
+  encrypted (ADR-0020), and never on the public profile.
+- **Status line:** empty until something is saved. The mock's "Saved 2 min ago" needs a saved time the
+  frozen e2e clock cannot give.
+- **Not yet:** Two-step sign-in (S12), Email
+  preferences (S14); Your data and Delete account wait for M9 (M2 D23). The loading state announces
+  "Loading your settings…" without the skeleton sections until `zm-form-section-skeleton` is built.
+
+**As built in M2 (S10)**
+
+- **Change email:** `PUT /api/v1/account/email` (`AccountEmailController@update`, `ChangeEmailRequest`:
+  a full address other than the current one, and `currentPassword`, refused with "That password isn’t
+  right. Check it and try again.") runs `RequestEmailChange` and answers 202 `{ data: { email } }`.
+  Earlier links are used up; the new address gets `ConfirmNewEmailNotification` ("Confirm your new email
+  for Zamaro", a `{web}/account/email/confirm?token=…` link that works once, for 24 hours, M2 D11) and the
+  current one `EmailChangeRequestedNotification` ("Your Zamaro email is changing", with a reset link).
+  An address another account uses gets the same answer and notice, but no link and no pending address.
+  `users.pending_email` holds the new address, which `/me` returns as `pendingEmail`.
+- **Confirm:** `POST /api/v1/account/email/confirm` is public (the token is the proof; it signs no one
+  in), limited like the reset endpoints (30 a minute per address). `ConfirmEmailChange` moves the account
+  once, within 24 hours, while the address is still free: `email` changes, verified, `pending_email`
+  clears, and `account.email_changed` is audited. Otherwise the 410 `link-expired` names the address the
+  account still signs in with when the link existed.
+- **Change password:** `PUT /api/v1/account/password` (`AccountPasswordController`,
+  `ChangePasswordRequest` with `currentPassword`, `PasswordPolicy` and the confirmation) runs
+  `ChangePassword`: the hash changes, `auth.password_changed` is audited, `PasswordChangedNotification`
+  is queued, `SessionRegistry::endAll` ends every session, and this one is regenerated (new ID and CSRF
+  token) and registered again. It answers 204.
+- **Page:** the Email section ("You sign in with {email}. …", New email, Current password with "Needed to
+  change your email.") and the Password section ("Leave these empty to keep your password. A new one signs
+  you out on your other devices.", Current password, New password with "12 to 128 characters. We check it
+  against known leaked passwords.") join the form; Save changes sends them after Profile and Church or
+  Contact, and empties their fields once sent. After a request the Email section's status line reads "We
+  sent a link to {new}. You sign in with {current} until you open it." The page sends the new password as
+  its own confirmation: the form has one field, as in the mock.
+- **Confirm page:** `pages/confirm-email/ConfirmEmail` at `/account/email/confirm` (client-rendered):
+  "Confirming your new email" (busy) with "Switching your sign-in to {new}…" and "Until this finishes you
+  still sign in with {current}." when signed in, "We couldn’t confirm your new email" with Try again and
+  Back to account settings, and "This link has expired" with the stamp, "Nothing changed: you still sign
+  in with {email}. …" and "Change email again" (`/account#email`). On success it goes to `/account`, where
+  the shell shows "Email changed" with "You now sign in with {email}." for one page.
+
+**As built in M2 (S11)**
+
+- **Endpoints:** `GET /api/v1/account/sessions` (`AccountSessionController@index`) answers
+  `SessionResource`s for the sessions whose last activity is within the idle lifetime: this browser's
+  first, then the most recently active. `id` is the registry key (the SHA-256 of the session ID), never
+  the ID itself; no IP address is returned. `DELETE /api/v1/account/sessions/{id}` ends one at once
+  (204; its payload is destroyed, so its next request gets 401); a key that is not the caller's is the
+  same 404 as an unknown one (L2-074.2).
+- **Registry:** `SessionRegistry::register` stores the device label (`App\Support\DeviceLabel`: "Chrome
+  on Windows", "Safari on iPhone", "Firefox on Mac", "Edge on Windows", "Chrome on Android", "Safari on
+  iPad", "Chrome on Linux", else "Unknown device") and the approximate city from the `IpLocator` port
+  (M2 D13: `FakeIpLocator` places loopback, 172.16/12 and 192.168/16 in Burlington, 10/8 in Hamilton,
+  anything else nowhere). `TrackSessionActivity` runs on every `api.php` route and moves
+  `last_active_at` at most every 5 minutes (M2 D12). Times in queries keep their offset.
+- **Page:** the Signed-in devices section follows the form (it acts at once, outside the save bar):
+  `zm-list variant="device"`, this device first with "{city} · This device · active now" and the "This
+  device" badge, the others with "{city} · Last active {just now | n min ago | n hours ago | Tue 6 Oct}"
+  (`FormatService.ago`) and "End session" (named "End session on {device}"), which removes the row with
+  no confirmation. The help line reads "Cities are approximate, from each device’s network. Ending a
+  session signs that device out at once." The Password lead counts the others: "…your other device." or
+  "…your other 2 devices."; a password change reloads the list.
+
+**As built in M2 (S14):** the Email preferences section joins the form after Password: "Email me
+about", "Bookings and payments" ("Requests, bookings and payouts" for an artist), always on and disabled,
+and for a booker "New artists near my church", which Save changes sends as a marketing record
+(`privacy/record-consent`). The event reminder and review prompt boxes wait for M7 (M2 D23). `/account`
+and the setup page are behind `termsGuard`.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

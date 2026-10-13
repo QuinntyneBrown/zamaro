@@ -102,8 +102,12 @@ screens of its own.
   `token`, any key ending in `_token`, `challengeToken`, `authorization`, `cookie`,
   `set-cookie`, `x-xsrf-token`, `session_id`, `recovery_codes`, and message `body`. It
   reduces `processor_payment_id`, `payment_method_id` and any 12–19 digit card-number
-  pattern to the last 4 digits (L2-079). The backend error tracking client applies the
-  same processor before sending.
+  pattern to the last 4 digits, shown as `…4242` (L2-079). Keys match in any case and at
+  any depth. A card number is a run of digits, optionally grouped by spaces or hyphens,
+  that stands alone and passes the Luhn check, so request IDs and order numbers stay
+  readable. The tap pushes the processor last, so it runs before the channel's own
+  processors and no placeholder copies a secret into the message first. The backend error
+  tracking client applies the same processor before sending.
 
 **At-rest encryption (Zamaro Infrastructure)**
 
@@ -127,6 +131,12 @@ encryption is on are `<TO SUPPLY>`.
 
 The slice changes the column type of the encrypted fields to `text`. It adds no
 tables. Secrets never appear in the database, the repository, the image or the logs.
+
+**As built in M2 (S9):** `FieldEncrypter` and `EncryptedField` as described, on `churches.phone` and
+`artists.contact_phone` (ADR-0020). The key settings are `security.field_encryption.{version, key,
+previous_keys}` from `FIELD_ENCRYPTION_KEY_VERSION`, `FIELD_ENCRYPTION_KEY` and
+`FIELD_ENCRYPTION_PREVIOUS_KEYS`; a value under an unknown version fails to decrypt rather than being
+read as text. Rotation stays `<TO SUPPLY>` until M10.
 
 ## Requirements
 

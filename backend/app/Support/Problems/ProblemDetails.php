@@ -11,6 +11,7 @@ final class ProblemDetails
 {
     /**
      * @param  array<string, list<string>>|null  $errors  422 only, keyed by field path
+     * @param  array<string, mixed>  $extensions  members a problem type adds, such as `similarArtists`
      */
     public function __construct(
         public readonly string $type,
@@ -19,14 +20,16 @@ final class ProblemDetails
         public readonly string $detail,
         public readonly ?string $requestId,
         public readonly ?array $errors = null,
+        public readonly array $extensions = [],
     ) {}
 
     /**
      * @param  array<string, list<string>>|null  $errors
+     * @param  array<string, mixed>  $extensions
      */
-    public static function of(ProblemType $type, string $detail, ?string $requestId, ?array $errors = null): self
+    public static function of(ProblemType $type, string $detail, ?string $requestId, ?array $errors = null, array $extensions = []): self
     {
-        return new self($type->uri(), $type->title(), $type->status(), $detail, $requestId, $errors);
+        return new self($type->uri(), $type->title(), $type->status(), $detail, $requestId, $errors, $extensions);
     }
 
     /**
@@ -44,6 +47,7 @@ final class ProblemDetails
         if ($this->errors !== null) {
             $body['errors'] = $this->errors;
         }
+        $body += $this->extensions;
 
         return new JsonResponse(
             $body,

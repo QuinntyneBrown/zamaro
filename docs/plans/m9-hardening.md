@@ -72,11 +72,11 @@ project owner must confirm before the slice that uses them starts.
 | D15 | HSTS preload submission | Do not submit at launch, because preload is hard to undo. Revisit after 3 months of clean HTTPS on every subdomain. | **Yes** |
 | D16 | Header scan tool | `.ci/header-scan.mjs` (Node, `undici`) plus `openssl s_client -tls1`/`-tls1_1`, reading `.ci/security/expected-headers.json`. | No |
 | D17 | Secret scanner, SAST tool and threshold, Composer severity filter (`protect-secrets-and-data`) | gitleaks on pushed commits; Semgrep CE over PHP and TypeScript, failing on `ERROR` (CodeQL has no PHP support); `composer audit --locked --format=json` filtered to high and critical by a small wrapper, keeping ADR-0004's ignore list; `npm audit --audit-level=high` in `frontend/` and `e2e/`. | No |
-| D18 | Laravel 11 (ADR-0004) | Laravel 11 security fixes ended in March 2026. Upgrade to the current supported Laravel major before M10 deploys anything, in a new ADR that supersedes 0004, and update AGENTS.md. | **Yes** (changes the documented stack) |
+| D18 | Laravel 11 (ADR-0004) | Laravel 11 security fixes ended in March 2026. Upgrade to the current supported Laravel major before M10 deploys anything, in a new ADR that supersedes 0004, and update AGENTS.md. | Done early: ADR-0009 (Laravel 13), 2026-10-10 |
 | D19 | Field-key rotation procedure (`protect-secrets-and-data`) | `security:rotate-field-key` re-encrypts the `EncryptedField` columns and VSC objects in id-ordered batches. Older keys stay in `FIELD_ENCRYPTION_PREVIOUS_KEYS` until the command reports zero rows on the old version. | No |
 | D20 | Service worker library | `@angular/service-worker` with `navigationRequestStrategy: "freshness"`, so navigations still get SSR HTML when online. `index.csr.html` serves as the cached shell. No `dataGroups`. | No |
 | D21 | Accessibility issue tracker and release gate (`meet-accessibility-standards`) | GitHub issues labelled `a11y`. The release workflow step (M10) fails while any open issue carries `a11y` and `wcag-aa`. The checklist lives in `docs/runbooks/a11y-release-audit.md`. | No |
-| D22 | Visual diff threshold, and whether every capture runs in both themes (`adapt-layout-to-screens`) | `maxDiffPixelRatio: 0.001`, light and dark, unless M1 already fixed a value. | No |
+| D22 | Visual diff threshold, and whether every capture runs in both themes (`adapt-layout-to-screens`) | `maxDiffPixelRatio: 0.001`, light and dark, unless M1 already fixed a value. | OK (accepted default, 2026-10-10; applied at the M1 close, ADR-0014) |
 
 ## Design conflicts and resolutions
 
@@ -137,10 +137,8 @@ project owner must confirm before the slice that uses them starts.
 Each slice also appends its route states to `e2e/routes.manifest.ts`.
 
 **Test conventions:**
-- e2e runs against the stub API with the clock frozen at Fri 9 Oct 2026 10:00. Naomi has ZAM-0097,
-  Confirmed for Sun 25 Oct.
-- A deletable booker, **Ruth Okafor** (St. Paul's, Burlington), is added to `CastSeeder` and to the stub
-  API's cast in `e2e/fixtures/`. She has one
+- The frozen clock is Fri 9 Oct 2026 10:00. Naomi has ZAM-0097, Confirmed for Sun 25 Oct.
+- A deletable booker, **Ruth Okafor** (St. Paul's, Burlington), is added to `CastSeeder`. She has one
   Requested and one Accepted booking and a review on Abigail, so the deletion paths have data without
   disturbing Naomi.
 
@@ -203,10 +201,10 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
   - Removing `nosniff` from `SetSecurityHeaders` makes `.ci/header-scan.mjs` exit non-zero, and putting
     it back makes it pass.
 - **Verification (infrastructure, outside ATDD, like M1's S0):**
-  - `docker compose --profile edge up -d --wait && node .ci/header-scan.mjs --base https://localhost:8443 --http http://localhost:8080`
+  - `docker compose --profile e2e --profile edge up -d --wait && node .ci/header-scan.mjs --base https://localhost:8443 --http http://localhost:8080`
   - Mutate one header and confirm the exit code is 1.
 - **Build:**
-  - `backend/docker/edge/Caddyfile`: `/api/*`, `/sanctum/*` and `/health/*` go to `api`, and
+  - `backend/docker/edge/Caddyfile`: `/api/*`, `/sanctum/*` and `/health/*` go to `api-e2e`, and
     everything else goes to the SSR server.
   - `.ci/security/expected-headers.json`, `.ci/header-scan.mjs`, `.ci/header-scan.sh`.
   - A `security-headers` job in `.github/workflows/ci.yml`.
@@ -261,10 +259,9 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
   - `tests/Feature/Privacy/PublicExposureTest.php`, which iterates the routes registered from
     `api_public.php` and calls each one; it does not assert the code's shape.
   - `e2e/specs/privacy/minimise-public-exposure.spec.ts`, with `pages/artist-profile.page.ts`
-    extended to read the page's JSON-LD and transfer state. A stub-API sentinel scenario puts the same
-    sentinels in the signed-in booker's own responses, so the spec proves SSR doesn't carry them.
+    extended to read the page's JSON-LD and transfer state.
 - **Build:**
-  - `Database\Seeders\ExposureSentinelSeeder` (test-only, for `PublicExposureTest`).
+  - `Database\Seeders\ExposureSentinelSeeder` (test-only).
   - Any leaks the test finds get fixed.
   - The `ArtistBaseLocation` cast rounds on write, plus a backfill migration (expand-only).
 
@@ -435,7 +432,7 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
   - Any violation found is fixed in this slice, or in a follow-up slice if it is large.
 - **Tests first:**
   - `e2e/a11y/a11y.spec.ts` (manifest × theme) and `e2e/a11y/keyboard.spec.ts`
-  - `fixtures/auth.ts` with a stub-API session per role
+  - `fixtures/auth.ts` with storage states per role
   - `RouteState` gains `as: 'guest' | 'booker' | 'artist' | 'admin'`, `theme` coverage and an optional
     `open` action for dialog states
   - an `admin` Playwright project
@@ -473,7 +470,7 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
 - **Agents never add the `perf-regression-accepted` label.**
 
 ## Verification (end of M9)
-1. `docker compose --profile edge up -d --wait`, then `docker compose exec api php artisan test`:
+1. `docker compose --profile e2e --profile edge up -d --wait`, then `docker compose exec api php artisan test`:
    every Feature test is green, including `PublicExposureTest`.
 2. `docker compose exec api php artisan accounts:erase-due` twice: the second run changes no rows.
    Run `db:seed` twice: the row counts are unchanged.
@@ -486,8 +483,7 @@ Each slice also appends its route states to `e2e/routes.manifest.ts`.
 7. Manual walkthrough:
    - As Ruth, export your data, open the emailed link in Mailpit and download the JSON. Then delete the
      account and confirm you cannot sign in.
-   - The erase job runs a day later, which the dev stack can't fast-forward: `EraseAccountPersonalDataTest`
-     covers it with `travelTo`, and the e2e case shows "A church in Burlington" on Abigail's profile.
+   - Advance the clock a day and run the erase job. Abigail's profile shows "A church in Burlington".
    - As Naomi, see the blocked dialog.
    - Turn the network off in DevTools: you see the banner, then reload and get the offline page. Turn it
      back on and use "Try again".

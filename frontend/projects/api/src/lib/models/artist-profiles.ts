@@ -1,4 +1,5 @@
-import type { ActType, Money, Style } from './discovery';
+import type { ActType, LineupCard, Money, Style } from './discovery';
+import type { ProfileReviews } from './reviews';
 
 /** A setlist song's key: `E`, `B-flat`, `F-sharp-minor`, or `any`. */
 export type MusicalKey = string;
@@ -11,41 +12,39 @@ export interface SetlistSong {
   key: MusicalKey;
 }
 
-/** An image in WebP widths from the media domain (L2-088). */
-export interface MediaImage {
-  /** The 800 px rendition. */
+/** A gallery photo (L2-015). URLs point at the media host. */
+export interface ProfilePhoto {
+  id: string;
+  /** The artist's alt text: "Abigail at the microphone during a Sunday service". */
+  alt: string;
+  /** The 800 px WebP; `width` and `height` are its intrinsic size. */
   src: string;
-  /** Every width, with width descriptors: "…-400.webp 400w, …-800.webp 800w, …". */
-  srcset: string;
-  /** Intrinsic size of `src`. */
   width: number;
   height: number;
+  /** WebP renditions with width descriptors (400, 800, 1200 and 1600 px). */
+  srcset: string;
+  /** The same widths in AVIF. */
+  avifSrcset: string;
 }
 
-/** A gallery photo (L2-015), in the artist's order, with the alt text the artist wrote. */
-export interface ProfilePhoto extends MediaImage {
-  id: string;
-  alt: string;
-  /** AVIF widths; null until uploads produce them (M4). */
-  avifSrcset: string | null;
-}
-
-/** A live video (L2-014): processing and failed videos never reach the public profile. */
+/** A live video (L2-014); processing ones never reach the public profile. */
 export interface ProfileVideo {
   id: string;
   /** Song and setting: "Way Maker — live at Bethel Pentecostal, Hamilton". */
   title: string;
   durationSeconds: number;
-  /** The HLS manifest of the adaptive renditions. */
+  /** The poster frame, or null to keep the halftone placeholder. */
+  poster: { src: string; width: number; height: number } | null;
+  /** The HLS manifest. */
   stream: string;
-  /** The poster frame, or null when there is none yet. */
-  poster: MediaImage | null;
   /** The artist's WebVTT captions, or null when they supplied none. */
-  captions: { src: string; language: string } | null;
+  captions: { src: string; lang: string } | null;
 }
 
 /** `GET /api/v1/artists/{slug}`: public fields only (L2-083). */
 export interface ArtistProfile {
+  /** For the Save button (accounts/save-artist). */
+  id: number;
   slug: string;
   displayName: string;
   /** A solo act's first name, or a group's whole name: "Songs Abigail leads". */
@@ -67,8 +66,31 @@ export interface ArtistProfile {
   reviewCount: number;
   styles: Style[];
   setlist: SetlistSong[];
-  /** Up to 12, in the artist's order. */
+  /** In the artist's order; empty shows the act-type illustration (L2-020.3). */
   photos: ProfilePhoto[];
-  /** Up to 8 live videos, in the artist's order. */
   videos: ProfileVideo[];
+  /** The newest reviews; `GET /artists/{slug}/reviews` pages the rest. */
+  reviews: ProfileReviews;
+}
+
+/**
+ * The Discover search a profile was opened from. It only matters when the artist is missing: the
+ * API suggests similar artists free on that date near that place (L2-021.1).
+ */
+export interface CarriedSearch {
+  /** `YYYY-MM-DD`. */
+  date?: string;
+  kind?: string;
+  lat?: number;
+  lng?: number;
+  radius?: number;
+}
+
+/** The artist-not-found problem's suggestions: free on `date` within `radiusKm`, nearest first. */
+export interface SimilarArtists {
+  /** The carried date, or the first bookable day when none was carried. */
+  date: string;
+  radiusKm: number;
+  /** Up to 3; measured from the carried location, or from Toronto City Hall. */
+  items: LineupCard[];
 }

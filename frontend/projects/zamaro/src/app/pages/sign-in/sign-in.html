@@ -1,0 +1,100 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    <form
+      class="auth-form"
+      aria-labelledby="card-title"
+      novalidate
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+    >
+      <zm-booking-form
+        variant="auth"
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.signIn.title' | transloco"
+        [stamp]="'accounts.signIn.stamp' | transloco"
+        [busy]="busy()"
+      >
+        @switch (status()) {
+          @case ('invalid') {
+            <zm-error-summary
+              summaryId="error-summary"
+              [heading]="'accounts.signIn.invalidTitle' | transloco"
+              [items]="summaryItems()"
+            />
+          }
+          @case ('paused') {
+            <zm-alert
+              variant="danger"
+              compact
+              [heading]="'accounts.signIn.pausedTitle' | transloco"
+            >
+              <p>{{ 'accounts.signIn.pausedText' | transloco: { time: pausedUntil() } }}</p>
+            </zm-alert>
+          }
+          @case ('error') {
+            <zm-alert variant="danger" compact [heading]="'accounts.signIn.errorTitle' | transloco">
+              <p>{{ 'accounts.signIn.errorText' | transloco }}</p>
+            </zm-alert>
+          }
+          @default {
+            @if (sessionEnded) {
+              <div class="message" role="status">
+                <p class="message__meta">{{ 'accounts.signIn.endedTitle' | transloco }}</p>
+                <p>{{ 'accounts.signIn.endedText' | transloco }}</p>
+              </div>
+            } @else {
+              <p class="text-muted">{{ 'accounts.signIn.lead' | transloco }}</p>
+            }
+          }
+        }
+        <zm-form-field
+          #emailField
+          fieldId="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          [label]="'accounts.signIn.email' | transloco"
+          [requiredMarker]="'accounts.required' | transloco"
+          [placeholder]="'accounts.signIn.emailPlaceholder' | transloco"
+          [readonly]="busy()"
+          [invalid]="status() === 'invalid'"
+          [describedBy]="status() === 'invalid' ? 'credentials-error' : undefined"
+        />
+        <zm-form-field
+          #passwordField
+          fieldId="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [label]="'accounts.signIn.password' | transloco"
+          [requiredMarker]="'accounts.required' | transloco"
+          [readonly]="busy()"
+          [invalid]="status() === 'invalid'"
+          [describedBy]="status() === 'invalid' ? 'credentials-error' : undefined"
+        />
+        @if (status() === 'invalid') {
+          <p class="field__error" id="credentials-error">
+            {{ 'accounts.signIn.incorrect' | transloco }}
+          </p>
+        }
+        <zm-button variant="primary" size="lg" block type="submit" [busy]="busy()">
+          {{ (busy() ? 'accounts.signIn.submitting' : 'accounts.signIn.submit') | transloco }}
+        </zm-button>
+        <a slot="links" routerLink="/forgot-password">{{
+          (status() === 'paused'
+            ? 'accounts.signIn.resetPassword'
+            : 'accounts.signIn.forgotPassword'
+          ) | transloco
+        }}</a>
+        <a slot="links" routerLink="/sign-up" [queryParams]="returnQuery">{{
+          'accounts.signIn.createAccount' | transloco
+        }}</a>
+        <span slot="fine">{{
+          (status() === 'paused' ? 'accounts.signIn.pausedFine' : 'accounts.signIn.fine')
+            | transloco
+        }}</span>
+      </zm-booking-form>
+    </form>
+  </div>
+</div>

@@ -1,7 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\HorizonServiceProvider;
+use App\Providers\RateLimitServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\HorizonServiceProvider::class,
-    App\Providers\RateLimitServiceProvider::class,
+    AppServiceProvider::class,
+    HorizonServiceProvider::class,
+    RateLimitServiceProvider::class,
 ];

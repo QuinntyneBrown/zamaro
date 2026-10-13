@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-tour-dates` |
 | Library path | `frontend/projects/components/src/lib/tour-dates/` |
-| Status | planned |
+| Status | built (`public` variant with `loading`, M1 S14); planned (`schedule`, `pickingId`, `pickDisabled` and the body and trail templates, with their screens in M4) |
 | Traces to | L2-017, L2-019, L2-054, L2-056, L2-067, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 |
 | Design system | [`tour-dates.html`](../../design-system/components/tour-dates.html) |
 | Source mocks | [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/artist/empty`](../../mocks/pages/artist/empty.html), [`pages/artist/booked-date`](../../mocks/pages/artist/booked-date.html), [`pages/profile-preview/default`](../../mocks/pages/profile-preview/default.html), [`pages/dashboard/default`](../../mocks/pages/dashboard/default.html), [`pages/dashboard/loading`](../../mocks/pages/dashboard/loading.html), [`pages/availability/default`](../../mocks/pages/availability/default.html), [`pages/request-detail/default`](../../mocks/pages/request-detail/default.html), [`pages/admin-artist/default`](../../mocks/pages/admin-artist/default.html), [`pages/booking-detail/declined`](../../mocks/pages/booking-detail/declined.html), [`pages/booking-detail/artist-cancelled`](../../mocks/pages/booking-detail/artist-cancelled.html), [`dialogs/suspend-artist/busy`](../../mocks/dialogs/suspend-artist/busy.html), [`dialogs/reinstate-artist/busy`](../../mocks/dialogs/reinstate-artist/busy.html) |
@@ -381,6 +381,8 @@ The Pick's own hover lift and busy spinner follow the button and stop under
 - **AC-26** Given the `TourDates` and `TourDatesSchedule` scenarios, when the perf test runs against the base branch with `--fail-on-regression`, then neither is flagged as a possible regression and each renders in its tuned window. (L2-086)
 
 ## Implementation notes
+
+**As built in M1 (S14):** the `public` variant with `labelledBy`, `label`, the three texts, `loading`, `loadingCount`, `loadingLabel` and `picked`, in `tour-dates.ts`. Pick is `zm-button size="sm"` whose `label` is the row's `pickLabel`. The `schedule` variant, `pickingId`, `pickDisabled`, the two templates (and `tour-date-templates.ts`), the dev-mode checks and the `TourDatesSchedule` scenario come with their screens. Below is the full plan.
 
 Planned. Build it as:
 

@@ -106,8 +106,8 @@ export type MenuItem =
 
 export interface MenuWho {
   name: string;   // "Naomi Fraser"
-  detail: string; // "Riverside Community Church"
-  note?: string;  // "naomi.fraser@riversidecc.ca" (muted)
+  detail?: string; // "Riverside Community Church"; absent for a booker with no church yet (D-9)
+  note?: string;   // "naomi.fraser@riversidecc.ca" (muted)
 }
 ```
 
@@ -444,6 +444,12 @@ The menu does not animate. The dialog's entrance obeys
 
 ## Implementation notes
 
+Built in M2 S2: the `action` kind, `activated` (replacing `toggled`; the drawer
+listens to it), optional icons, and `who` / `whoId` with the `.menu__who`
+styles. `MenuAccount.ts` renders Naomi's account menu (without Saved artists,
+which waits for S17). Link `id`s, `current`, counts and the tracking change
+are still to do.
+
 The library has `zm-menu` with `link`, `toggle` and `separator` items and the
 `chosen` and `toggled` outputs. To meet this CRD:
 
@@ -477,3 +483,4 @@ The library has `zm-menu` with `link`, `toggle` and `separator` items and the
 - **D-6** *One output for buttons or one per kind?* One `activated` with the item's `id`, plus `chosen` for links. "Sign out" and "Dark theme" are both buttons the consumer acts on; a single output keeps the API the same when an action is added, and `chosen` stays the opener's signal to close.
 - **D-7** *How is the current item decided?* By an explicit `current` id that the shell reads from route data, not by `routerLinkActive`, the same rule as the [top bar](top-bar.md)'s D-3. Router matching cannot mark "Artists" on `/admin/vulnerable-sector-checks` or keep "Discover" current on `/#how`, and the drawer must mark the same item as the top bar it stands in for below LG. The shell passes one value to both.
 - **D-8** *How does the account menu relate to the avatar that opens it?* The avatar declares `aria-haspopup="dialog"` ([top bar](top-bar.md) D-4, [avatar](avatar.md) D-3), and the account menu is a [dialog](dialog.md) holding this list. `zm-menu` therefore never takes `role="menu"` or arrow-key handling (D-1); it is the list inside the dialog, reached with Tab.
+- **D-9** *Is the who detail line always there?* No. A booker adds a church only when first sending a request (L2-024.1), so until then the account menu shows the name and the email; `detail` is optional and renders nothing when absent (M2 S2).

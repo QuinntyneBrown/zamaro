@@ -1,1 +1,2 @@
 CREATE DATABASE zamaro_test;
+CREATE DATABASE zamaro_e2e;

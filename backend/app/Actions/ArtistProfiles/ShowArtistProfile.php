@@ -2,30 +2,24 @@
 
 namespace App\Actions\ArtistProfiles;
 
-use App\Enums\MediaStatus;
 use App\Models\Artist;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * A visible artist's public profile (L2-012): styles, rating, setlist, and the photos and videos
- * that are live (L2-014.3). It reads no bookings, churches or account records. Renamed slugs and
- * similar artists arrive with S15.
+ * A visible artist's public profile (L2-012): styles, rating, setlist, photos and live videos
+ * (L2-014.3). It reads no bookings, churches or account records.
  */
 class ShowArtistProfile
 {
+    public function __construct(private readonly ResolveArtistSlug $slugs) {}
+
+    /**
+     * @throws ArtistMoved when the slug is the artist's retired one
+     * @throws ArtistNotFound when no visible artist has the slug
+     */
     public function handle(string $slug): Artist
     {
-        return Artist::query()
-            ->visible()
-            ->where('slug', $slug)
-            ->with([
-                'styles',
-                'rating',
-                'setlist',
-                'photos' => fn (HasMany $photos) => $photos->where('status', MediaStatus::Live),
-                'videos' => fn (HasMany $videos) => $videos->where('status', MediaStatus::Live),
-            ])
-            ->first() ?? throw new NotFoundHttpException('No artist has that address.');
+        return $this->slugs->handle($slug)
+            ->load(['styles', 'rating', 'setlist', 'photos', 'videos' => fn (HasMany $videos) => $videos->live()]);
     }
 }

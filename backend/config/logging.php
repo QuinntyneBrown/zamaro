@@ -1,5 +1,6 @@
 <?php
 
+use App\Logging\ApplyRedaction;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
@@ -51,16 +52,19 @@ return [
     |
     */
 
+    // Every channel redacts passwords, tokens, session IDs and card numbers first (L2-079.3).
     'channels' => [
 
         'stack' => [
             'driver' => 'stack',
+            'tap' => [ApplyRedaction::class],
             'channels' => explode(',', env('LOG_STACK', 'single')),
             'ignore_exceptions' => false,
         ],
 
         'single' => [
             'driver' => 'single',
+            'tap' => [ApplyRedaction::class],
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
@@ -68,6 +72,7 @@ return [
 
         'daily' => [
             'driver' => 'daily',
+            'tap' => [ApplyRedaction::class],
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
@@ -76,6 +81,7 @@ return [
 
         'slack' => [
             'driver' => 'slack',
+            'tap' => [ApplyRedaction::class],
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => env('LOG_SLACK_USERNAME', 'Laravel Log'),
             'emoji' => env('LOG_SLACK_EMOJI', ':boom:'),
@@ -85,6 +91,7 @@ return [
 
         'papertrail' => [
             'driver' => 'monolog',
+            'tap' => [ApplyRedaction::class],
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
             'handler_with' => [
@@ -97,6 +104,7 @@ return [
 
         'stderr' => [
             'driver' => 'monolog',
+            'tap' => [ApplyRedaction::class],
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
             // Structured JSON lines (L2-093.1).
@@ -109,6 +117,7 @@ return [
 
         'syslog' => [
             'driver' => 'syslog',
+            'tap' => [ApplyRedaction::class],
             'level' => env('LOG_LEVEL', 'debug'),
             'facility' => env('LOG_SYSLOG_FACILITY', LOG_USER),
             'replace_placeholders' => true,
@@ -116,12 +125,14 @@ return [
 
         'errorlog' => [
             'driver' => 'errorlog',
+            'tap' => [ApplyRedaction::class],
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
         'null' => [
             'driver' => 'monolog',
+            'tap' => [ApplyRedaction::class],
             'handler' => NullHandler::class,
         ],
 

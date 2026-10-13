@@ -181,6 +181,142 @@ TOTP codes from one 30-second step either side are accepted for clock drift, and
 is mandatory for administrators (`administration/secure-admin-access`). The TOTP
 library is `<TO SUPPLY>`. The breached-password service vendor is `<TO SUPPLY>`.
 
+
+**As built in M2 (S1, sign in)**
+
+- **Layout (ADR-0007, ADR-0016):** the page is `pages/sign-in/SignIn` in the zamaro application. The
+  card is the library's `zm-booking-form variant="auth"` (booking-form CRD; the plan's "`zm-auth-card`"
+  is its `AuthCard` perf scenario), with `zm-form-field`s, `zm-error-summary` and a compact `zm-alert`.
+  `AuthService` (the `currentUser` signal), the `AuthApi` contract behind `AUTH_API`, `withApiXsrf()`
+  and `safeReturnUrl()` live in `api/lib/auth/`. A `returnUrl` that is not a path on the site (another
+  host, `//host`) is ignored and the person lands on Discover.
+- **Endpoint:** `POST /api/v1/session` (`SessionController@store`, `SignInRequest`, `AttemptSignIn`,
+  `StartSession`) answers 200 with `CurrentUserResource` and `Cache-Control: private, no-store`
+  (`SetCachePolicy`, L2-089.3). Wrong credentials are 422 with `errors.credentials`: ["Email or password
+  is incorrect."] (M2 D10); an empty field is an ordinary 422 on `email` or `password`, which the page
+  shows with the same one message. Emails match whatever their case or surrounding spaces. An unknown
+  email is checked against a dummy hash made with the current cost and cached.
+- **Hashing (M2 D1):** `config/hashing.php` sets Argon2id with Laravel's defaults (65,536 KiB, 4
+  passes, 1 thread); the test suite lowers it to 1,024 KiB and 1 pass.
+- **Audit (M2 D22):** `RecordAuditEntry` writes `auth.sign_in` (succeeded) and `auth.sign_in_failed`
+  (failed; no actor for an unknown email, the attempted email in `context`) to the append-only
+  `audit_entries` table, whose trigger refuses `UPDATE` and `DELETE`.
+- **Page states:** default, invalid (summary "Couldn’t sign you in", both fields invalid and described
+  by `#credentials-error`, password cleared, focus on the summary), submitting ("Signing in…", fields
+  read-only and faded) and error ("We couldn’t sign you in"). The error state keeps the password as
+  well as the email, as L2-108.3 requires, although the mock shows it empty; focus moves to the
+  password. Focus starts in Email.
+- **Not yet:** the card's "Forgot your password?" and "Create an account" links join when those pages
+  exist (S8, S5); the lockout is S8 and two-step sign-in S12.
+
+**As built in M2 (S2, signed-in header and sign-out)**
+
+- **Endpoint:** `DELETE /api/v1/session` (`SessionController@destroy`, in `routes/api.php` behind
+  `auth:sanctum`) runs `SignOut`: the web guard logs out, the session is invalidated and the CSRF
+  token regenerated, and the answer is 204 with `Cache-Control: private, no-store`. The cookie the
+  browser held then gets 401 from `/me`; a guest gets the 401 problem. `SessionRegistry` joins
+  `SignOut` with S8, and sign-out is not audited (the design lists no entry for it).
+- **Header and footer (ADR-0017):** the server renders every page signed out. In the browser the shell
+  calls `AuthService.load()` after the first render; once `/me` answers, the top bar shows the
+  `zm-avatar-button` "NF", named "Account menu for Naomi Fraser", and the footer's last column is
+  headed with her name (her church joins in S9, "Saved artists (3)" in S15). Guests see "Sign in" in
+  the header, carrying the page as `returnUrl` (top-bar D-14), and a "Your account" footer column
+  with "Sign in". On `/sign-in` the header has no auth link until "Create account" can go to
+  `/sign-up` (S5).
+- **Account menu:** `dialogs/account-menu/AccountMenuDialog`, a CDK dialog (`zm-dialog
+  variant="menu"`, transparent backdrop) under the top bar's right edge. It lists her name and email
+  in the who header (the dialog's description), Account settings (`/account`, built in S9), a
+  separator and Sign out; focus starts on the first item and returns to the avatar. "Your bookings"
+  waits for M5 and "Saved artists" for S17 (M2 D23).
+- **Sign out:** `AuthService.signOut()` calls `DELETE /api/v1/session`, treats a 401 (the session had
+  already ended) as signed out, clears `currentUser` and dismisses every toast; the header then shows
+  "Sign in".
+
+**As built in M2 (S3):** the `expired` state ("Your session ended", `?ended=1`) is built as the sessions
+design describes; see `security/manage-sessions-and-csrf`.
+
+**As built in M2 (S8, lockout and password reset)**
+
+- **Lockout:** `SignInThrottle` counts failures in the cache (Redis) by the SHA-256 of the address in
+  lower case. The 5th failure within 15 minutes clears the count and stores the pause's end for 15
+  minutes. `AttemptSignIn` asks first: while paused, every try (right password or not) is audited
+  `auth.sign_in_failed` (denied, `reason: paused`) and refused with the 429 `sign-in-paused` problem
+  ("Sign-in is paused for 15 minutes", `pausedUntil` in Toronto time, `Retry-After`). The first refusal
+  of a pause queues `AccountLockedNotification` when the address has an account (a cache `add`, so once
+  per pause). A successful sign-in clears the count.
+- **Session registry:** `user_sessions` keys each row by the SHA-256 of the session ID and keeps the ID
+  encrypted only so `endAll` can destroy its payload. `StartSession` registers, `SignOut` forgets.
+  The device label and city columns are filled in S11.
+- **Endpoints (all public, `Cache-Control: private, no-store`):** `POST /password/forgot` (bot
+  challenge `forgot-password`, M2 D6: 5 an hour per address and per email typed) answers 202 `{ data:
+  { email } }` for any address, and a new link marks the earlier ones used. `POST /password/reset/check`
+  answers `{ data: { email, expiresAt } }` without using the link. `POST /password/reset` (both 30 a
+  minute per address) uses it, applies `PasswordPolicy` and the confirmation, ends every session, audits
+  `auth.password_reset`, queues `PasswordChangedNotification` and answers with `CurrentUserResource` for
+  a new session in this browser. A used, run-out or unknown link is the 410 `link-expired` problem; one
+  that existed adds `email` and `sentAt`, which the expired card shows. The two-factor branch joins in
+  S12.
+- **Pages:** `pages/forgot-password/ForgotPassword` (default, invalid, sending, challenge failed, error,
+  "Check your email" with "Send it again") and `pages/reset-password/ResetPassword` at
+  `/reset-password/:token` (checking, form, invalid, saving, error, "Password changed", expired with "Send
+  a new link" when the link named its account). The sign-in card gains "Forgot your password?", and its
+  paused state shows "Sign-in is paused for 15 minutes" with the end time, "Reset your password" and "If
+  this wasn’t you, the account owner has been emailed." The duplicate sign-up email links to
+  `/forgot-password`.
+- **Times** in pages and emails read "10:57 a.m." (`FormatService.time`, `format.time`).
+
+**As built in M2 (S12, two-step sign-in on, and signing in with a code)**
+
+- **Library (ADR-0021):** `pragmarx/google2fa` behind `TotpVerifier` (one step either side, the real
+  clock) and `bacon/bacon-qr-code` for the QR code, served as SVG from `GET
+  /api/v1/account/two-factor/qr`. The TOTP library is no longer `<TO SUPPLY>`.
+- **Turning on:** `POST /api/v1/account/two-factor` (`TwoFactorController@begin`, `EnableTwoFactor`)
+  stores a new key with the field key and answers `{ key, otpauthUri }`, the key in groups of four; a
+  second call replaces it, and with two-step sign-in already on it is the 409 `two-factor-already-on`.
+  `POST …/two-factor/confirm` checks the first code ("That code didn’t match. Codes change every 30
+  seconds; enter the one showing now."), sets `mfa_enabled` and `two_factor_confirmed_at`, replaces the
+  10 recovery codes (`RecoveryCodes`: `xxxx-xxxx`, SHA-256, once each), audits
+  `auth.two_factor_enabled` and queues `TwoStepSignInChangedNotification` ("Two-step sign-in is on for
+  your Zamaro account", M2 D21), answering the codes once. `/me` gains `mfaEnabled`.
+- **Signing in:** with the right password and two-step sign-in on, `POST /session` answers 202 `{
+  twoFactorRequired, email }` and `TwoFactorChallenge` leaves a 10-minute marker in the session instead
+  of signing in. `POST /api/v1/session/two-factor` (public, 30 a minute per address) takes `code` or
+  `recoveryCode` (with or without the dash, any case): right, it signs in with a new session ID and
+  audits `auth.sign_in`; wrong, 422 ("That code is wrong or has expired. Enter the code your app shows
+  now." / "That recovery code is wrong or was used. Enter another of your saved codes.") and a failure
+  for the lockout, which pauses codes and passwords alike (429 `sign-in-paused`); no marker or an old
+  one, 401. A password reset leads to the same code step (202).
+- **Pages:** `pages/mfa-setup/MfaSetup` at `/account/security/mfa` (guarded, client-rendered): loading,
+  the QR code and key, the 6-digit code ("Turn on", "Checking…"), "Check the code", "We couldn’t turn
+  on two-step sign-in", then "Save your recovery codes" with the codes as `zm-list variant="grid"
+  ordered`, Download codes (a text file), Copy codes and "I’ve saved them". `pages/mfa-challenge/
+  MfaChallenge` at `/account/sign-in/verify`: "Enter your code" with "Signing in as {email}." (passed
+  on by the sign-in page), "Use a recovery code instead", "That code didn’t work", "We couldn’t check
+  your code", the pause, and "Sign in as someone else"; success returns to the sign-in page's
+  `returnUrl`. Account settings gains the Two-step sign-in section ("Off" or "On", "Turn on two-step
+  sign-in"); turning off and new codes are S13.
+
+**As built in M2 (S13, turning two-step sign-in off, and new recovery codes)**
+
+- **Endpoints:** `DELETE /api/v1/account/two-factor` (204) and `POST
+  /api/v1/account/two-factor/recovery-codes` (200, the 10 new codes once) both take `code`: a current
+  6-digit code or an unused recovery code, which is used up. `ManageTwoFactor` (the design's
+  `DisableTwoFactor` and `RegenerateRecoveryCodes`, as one action) refuses a wrong one with "That code
+  is wrong or has expired. Enter the code your app shows now, or an unused recovery code." and counts it
+  toward the sign-in pause (429 once paused). Turning off clears the key and every recovery code; new
+  codes replace all ten. Each is audited (`auth.two_factor_disabled`, `auth.recovery_codes_replaced`) and
+  emailed (M2 D21: "Two-step sign-in is off for your Zamaro account", "New recovery codes for your Zamaro
+  account"). With two-step sign-in off, both are 404. The administrators' refusal joins with M3's admin
+  role.
+- **Dialog:** `dialogs/two-step-code/TwoStepCode`, a CDK dialog on `zm-dialog` (danger rule and
+  `lock-open` icon to turn off, `key` icon for codes), described by "Enter a code to show it’s you.":
+  the consequences or "You get 10 new codes. …", the Code field ("The 6 digits your app shows now, or one
+  unused recovery code like 7kq4-m2xd."), "Keep it on" / "Cancel" before "Turn off" / "Get new codes";
+  invalid ("Check the code", "That code didn’t work"), busy ("Turning off…", "Getting codes…", the way
+  back and Escape held), failed (the alert, "Try again", focus on the way back) and, for codes, "Save
+  your new recovery codes" with the grid list, Download, Copy and "I’ve saved them". Focus returns to
+  the button that opened it. Account settings shows "On" with New recovery codes and Turn off.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

@@ -32,10 +32,12 @@ import {
   Headliner,
   HeadlinerSkeleton,
   Icon,
+  SaveToggle,
   Ticket,
   TicketSkeleton,
 } from 'components';
 import { actLine } from '../../../shared/act-line';
+import { SavedArtistsStore } from '../../../shared/saved-artists.store';
 import { SearchStore } from '../search.store';
 import { SoldOut } from '../sold-out/sold-out';
 
@@ -74,6 +76,7 @@ const SKELETON_TICKETS = [0, 1, 2, 3];
     Icon,
     ReactiveFormsModule,
     SoldOut,
+    SaveToggle,
     Ticket,
     TicketSkeleton,
     TranslocoPipe,
@@ -84,6 +87,7 @@ const SKELETON_TICKETS = [0, 1, 2, 3];
 })
 export class Lineup {
   protected readonly store = inject(SearchStore);
+  protected readonly saved = inject(SavedArtistsStore);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -244,5 +248,10 @@ export class Lineup {
 
   protected t(key: string, params?: Record<string, unknown>): string {
     return this.transloco.translate(key, params);
+  }
+
+  /** A heart pressed on a ticket or the headliner (accounts/save-artist). */
+  protected toggle(card: LineupCard, save: boolean): void {
+    this.saved.press({ id: card.id, name: card.name, pronoun: card.pronoun }, save);
   }
 }

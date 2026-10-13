@@ -62,6 +62,36 @@ URLs on one origin.
   render in their signed-out form and the header switches to the signed-in state after
   hydration, when `AuthService` loads `/api/v1/me`.
 
+**As built in M2 (S2)** — the SSR rule is recorded in ADR-0017, with the transfer-cache filter
+(`isTransferCacheable`) that leaves out `/api/v1/me`, `/api/v1/account/**` and
+`/api/v1/saved-artists/**`. `AuthService` loads `/me` once in the browser, after the first render; it
+does not fetch `/sanctum/csrf-cookie` at start-up, because every answer to a signed-in browser carries
+a fresh `XSRF-TOKEN` and sign-in fetches the cookie first. It exposes `signIn`, `signOut`, `clear` and
+`load`.
+
+**As built in M2 (S3)**
+
+- **CSRF (ADR-0018):** `App\Http\Middleware\ValidateCsrfToken` extends Laravel 13's
+  `PreventRequestForgery` without its `Sec-Fetch-Site: same-origin` bypass, so every state-changing
+  request needs the token; Sanctum runs it through `config/sanctum.php`. A refused token is the 419
+  problem `csrf-token-mismatch`, titled "The page’s security token didn’t match", documented on every
+  state-changing operation.
+- **Recovery:** `csrfRecoveryInterceptor` and `sessionExpiredInterceptor` live in `api/lib/auth/` and
+  are registered with `withInterceptors([sessionExpiredInterceptor, csrfRecoveryInterceptor])`.
+  Angular's own XSRF interceptor runs before them, so the retry sets `X-XSRF-TOKEN` from the new cookie
+  itself. A second 419 calls the `CSRF_REFUSED` token, which the zamaro app binds to a danger toast
+  (`app/shared/session-notices.ts`, through the library's `ToastService`): kind "Failed", "That didn’t
+  go through.", "Reload the page and try again.", until dismissed (M2 D8).
+- **Session ended:** a 401 while `AuthService` holds a person clears them and navigates to
+  `/sign-in?returnUrl={page}&ended=1`, passing the email as navigation state. A 401 from signing out is
+  not reported (the session had already ended). The page shows "Your session ended" and, until drafts
+  exist (M5), "Sign in again to carry on. Nothing you typed is lost." (M2 D9); the email is filled in
+  and focus starts in Password. Opened directly, the email is empty and focus starts in Email.
+- **Limits:** `EnforceAbsoluteSessionLifetime` is appended to the `api` group, after Sanctum's stateful
+  stack, and asks `App\Support\SessionLifetimePolicy` (idle 10,080 and absolute 43,200 minutes) whether
+  `auth.started_at` is 30 days old; a session with no start time is ended too. It runs `SignOut` and
+  answers 401 on any route, so the next request is a guest's.
+
 **Mock screens** — the session-ended state is
 [`pages/sign-in/expired`](../../../mocks/pages/sign-in/expired.html).
 

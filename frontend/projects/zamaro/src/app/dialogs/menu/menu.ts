@@ -34,7 +34,7 @@ export function openMenuDialog(injector: Injector, id: string): DialogRef<unknow
     (closed)="dialogRef.close()"
   >
     <nav [attr.aria-label]="navLabel()">
-      <zm-menu [items]="items()" (chosen)="dialogRef.close()" (toggled)="theme.toggle()" />
+      <zm-menu [items]="items()" (chosen)="dialogRef.close()" (activated)="theme.toggle()" />
     </nav>
   </zm-dialog>`,
   changeDetection: ChangeDetectionStrategy.OnPush,

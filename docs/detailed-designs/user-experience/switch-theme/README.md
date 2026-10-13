@@ -70,7 +70,7 @@ design system keep their own surfaces in either theme.
   state rather than a changing label. Both meet the 44 px target size.
 - **`PreferencesApi`** — typed client for `PATCH /api/v1/me/preferences` with body
   `{ "themePreference": "light" | "dark" | null }`.
-- **Sign-in reconciliation** — when `CurrentUserStore` loads `GET /api/v1/me` after
+- **Sign-in reconciliation** — when `AuthService` loads `GET /api/v1/me` after
   sign-in or on start-up, a non-null `themePreference` on the account replaces the
   device preference and is written back to the device. When the account value is null
   and the device holds a preference, `ThemeService` saves the device value to the
@@ -78,7 +78,7 @@ design system keep their own surfaces in either theme.
   signed-in device reaches the other devices at their next load.
 - **Save failure** — when the `PATCH` fails, the device preference still applies and
   the toggle reflects it; the next successful toggle or sign-in reconciles the
-  account. Whether to show an error toast is `<TO SUPPLY>`.
+  account. No toast is shown (M2 D20).
 
 **Mocks and design system**
 
@@ -108,7 +108,7 @@ design system keep their own surfaces in either theme.
   returns 422 problem details.
 - **`UpdateUserPreferences`** — action that writes the column inside a transaction and
   returns the user.
-- **`MeResource`** — includes `themePreference` so every device learns the account
+- **`CurrentUserResource`** (ADR-0016) — includes `themePreference` so every device learns the account
   value through `GET /api/v1/me`. Responses carry `Cache-Control: private, no-store`
   because they hold personal data (L2-089).
 
@@ -116,6 +116,20 @@ design system keep their own surfaces in either theme.
 
 Only `users.theme_preference` is added. The device preference never leaves the
 browser.
+
+**As built in M2 (S18)**
+
+- **API:** `PATCH /api/v1/me/preferences` (`MeController@updatePreferences`, the plan's name for the
+  design's `PreferencesController@update`) takes `{ "themePreference": "light" | "dark" | null }` and
+  answers the signed-in person (`CurrentUserResource`); anything else is 422. Migration `000600` adds
+  `users.theme_preference` with the check constraint; `ThemePreference` is cast on `User`.
+  `UpdateUserPreferences` lives in `Actions/UserExperience`. The route is open to someone the terms
+  gate is holding (L2-080.3), like `/me`, so matching the theme on start-up never meets a 409.
+- **Web:** `PreferencesApi` (`PREFERENCES_API`, `HttpPreferencesApi`) in the `api` library.
+  `ThemeService` matches the device with the account once per signed-in person: when `AuthService`
+  first knows them, a theme on the account replaces the device's (and is written to `localStorage`),
+  or a device theme is saved to an account that has none. A toggle while signed in saves the new
+  theme; a guest's stays on the device. A failed save is silent (D20).
 
 ## Requirements
 

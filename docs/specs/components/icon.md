@@ -458,6 +458,15 @@ rotation) stop or skip the animation under `prefers-reduced-motion: reduce`.
 
 ## Implementation notes
 
+**As built in M2 (S15):** `heart` joins the set for the save toggle, the Saved link and the Save button.
+
+**As built in M2 (S13):** `key` and `lock-open` join the set for the two-step code dialog.
+
+**As built in M2 (S12):** `copy`, `download` and `lock` join the set, with the mocks' paths, for the
+recovery codes and the Two-step sign-in button. `Icon` re-measured against the S11 build: 78.7 → 82.9
+ms, not flagged.
+
+
 The library has `zm-icon` with `name` and `size`, ten icons, `:host { display:
 contents }` and the `--zm-icon-fill` knob. To meet this CRD:
 

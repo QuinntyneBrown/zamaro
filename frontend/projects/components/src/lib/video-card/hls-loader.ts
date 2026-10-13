@@ -1,16 +1,28 @@
 import { InjectionToken } from '@angular/core';
 
-/** Plays an HLS stream in a `<video>` for browsers that cannot play HLS natively. */
+/** Plays an HLS manifest through Media Source Extensions in a browser without native HLS. */
 export interface HlsAttacher {
-  /** Resolves once the manifest is read; rejects when the stream cannot be loaded. */
+  /** Resolves once the manifest is parsed and the video can be played. */
   attach(video: HTMLVideoElement, url: string): Promise<void>;
   destroy(): void;
 }
 
-/** Loads hls.js on the first press, in its own chunk (ADR-0009). */
+export type HlsLoader = () => Promise<HlsAttacher>;
+
+/**
+ * Loads the streaming library on demand (ADR-0010). The default does a dynamic `import('hls.js')`,
+ * so the library sits in its own chunk and is fetched only on the first press in a browser that
+ * cannot play HLS by itself. Tests and the perf-test app bind a fake.
+ */
+export const ZM_HLS_LOADER = new InjectionToken<HlsLoader>('ZM_HLS_LOADER', {
+  providedIn: 'root',
+  factory: () => loadHlsJs,
+});
+
 async function loadHlsJs(): Promise<HlsAttacher> {
   const { default: Hls } = await import('hls.js');
-  const hls = new Hls();
+  // Start on a rendition that fits the frame, so playback starts quickly (L2-088).
+  const hls = new Hls({ capLevelToPlayerSize: true });
   return {
     attach: (video, url) =>
       new Promise<void>((resolve, reject) => {
@@ -24,9 +36,3 @@ async function loadHlsJs(): Promise<HlsAttacher> {
     destroy: () => hls.destroy(),
   };
 }
-
-/** How `zm-video-card` gets an HLS player; tests and the perf-test app bind a fake. */
-export const ZM_HLS_LOADER = new InjectionToken<() => Promise<HlsAttacher>>('ZM_HLS_LOADER', {
-  providedIn: 'root',
-  factory: () => loadHlsJs,
-});

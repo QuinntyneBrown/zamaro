@@ -1,0 +1,92 @@
+// Layout classes for forms (docs/specs/components/form-layout, D-1): pages and dialogs put them on
+// their own elements and on other components' hosts.
+
+.form-stack {
+  display: grid;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.form-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 36rem) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-grid > .field--full,
+  .form-grid > .fieldset {
+    grid-column: 1 / -1;
+  }
+}
+
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fieldset > legend {
+  font: var(--text-h4);
+  text-transform: uppercase;
+  padding: 0;
+  margin-bottom: var(--space-4);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 36rem;
+}
+
+.form--wide {
+  max-width: none;
+}
+
+.form__row {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 48rem) {
+  .form__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form__inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.form__inline > .field {
+  flex: 1 1 12rem;
+}
+
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: var(--border-width-thick) dashed var(--color-border-strong);
+}
+
+.form__actions--start {
+  justify-content: flex-start;
+}
+
+// A focused field is never hidden behind a sticky save bar (WCAG 2.4.11, D-7).
+html:has(.form-actions:not(.form-actions--static)) {
+  scroll-padding-bottom: calc(var(--control-height-lg) * 2);
+}

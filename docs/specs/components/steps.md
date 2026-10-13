@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-steps`, `zm-stepper`, `zm-timeline`, `zm-timeline-skeleton` |
 | Library path | `frontend/projects/components/src/lib/steps/` |
-| Status | planned |
+| Status | built (`zm-steps` without `vertical`, M1 S14); planned (`vertical`, `zm-stepper` with the application in M3, `zm-timeline` and `zm-timeline-skeleton` with bookings in M5) |
 | Traces to | L2-001, L2-029, L2-047, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111, L2-112 |
 | Design system | [`steps.html`](../../design-system/components/steps.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`pages/apply/step-2`](../../mocks/pages/apply/step-2.html), [`pages/apply/invalid`](../../mocks/pages/apply/invalid.html), [`pages/apply/outside-area`](../../mocks/pages/apply/outside-area.html), [`pages/apply/success`](../../mocks/pages/apply/success.html), [`pages/booking-detail/default`](../../mocks/pages/booking-detail/default.html), [`pages/booking-detail/declined`](../../mocks/pages/booking-detail/declined.html), [`pages/booking-detail/loading`](../../mocks/pages/booking-detail/loading.html), [`pages/request-detail/accepted`](../../mocks/pages/request-detail/accepted.html), [`pages/admin-booking/default`](../../mocks/pages/admin-booking/default.html), [`pages/book/success`](../../mocks/pages/book/success.html), [`pages/earnings/setup`](../../mocks/pages/earnings/setup.html), [`dialogs/cancel-booking/default`](../../mocks/dialogs/cancel-booking/default.html) |
@@ -551,6 +551,8 @@ every motion preference; the current bar never slides between steps.
 - **AC-29** Given the `Steps`, `Stepper`, `Timeline` and `TimelineSkeleton` scenarios, when the perf test runs against the base branch with `--fail-on-regression`, then none is flagged as a possible regression and each renders in its tuned window. (L2-086)
 
 ## Implementation notes
+
+**As built in M1 (S14):** `zm-steps` in `steps.ts` with `items`, `label` and `headingLevel`, its types in the same file, and the `Steps` scenario. `vertical`, the stepper, the timeline, the timeline skeleton and their scenarios come with the application (M3) and bookings (M5).
 
 Planned. Build in `frontend/projects/components/src/lib/steps/`:
 

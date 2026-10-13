@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="page-head">
+    <div>
+      <h1 class="page-head__title">{{ 'accounts.saved.pageTitle' | transloco }}</h1>
+      <p class="page-head__sub">
+        @if (subtitle(); as subtitle) {
+          {{ subtitle }}
+        } @else {
+          <zm-skeleton width="medium" />
+        }
+      </p>
+    </div>
+    @if (status() === 'loading' || (status() === 'loaded' && cards().length > 0)) {
+      <form class="saved-date" (submit)="check($event)">
+        <zm-form-field
+          fieldId="saved-date"
+          type="date"
+          [formControl]="dateControl"
+          [label]="'accounts.saved.dateLabel' | transloco"
+          [min]="earliest"
+          [max]="latest"
+        />
+        <zm-button variant="primary" type="submit">{{
+          'accounts.saved.check' | transloco
+        }}</zm-button>
+      </form>
+    }
+  </div>
+  <div class="page-body" [attr.aria-busy]="status() === 'loading' ? 'true' : null">
+    @switch (status()) {
+      @case ('loading') {
+        <p class="visually-hidden" role="status">{{ 'accounts.saved.loading' | transloco }}</p>
+        <ul class="lineup" role="list" aria-hidden="true">
+          @for (index of skeletons; track index) {
+            <li><zm-ticket-skeleton /></li>
+          }
+        </ul>
+      }
+      @case ('error') {
+        <zm-alert variant="danger" [heading]="'accounts.saved.error.title' | transloco">
+          <p>{{ 'accounts.saved.error.text' | transloco }}</p>
+          <zm-button slot="actions" variant="primary" (click)="fetch()"
+            ><zm-icon name="refresh" />{{ 'accounts.saved.error.retry' | transloco }}</zm-button
+          >
+          <zm-button-link slot="actions" link="/">{{
+            'accounts.saved.error.back' | transloco
+          }}</zm-button-link>
+        </zm-alert>
+      }
+      @default {
+        @if (tickets().length) {
+          <ol class="lineup" role="list" [attr.aria-label]="'accounts.saved.listLabel' | transloco">
+            @for (ticket of tickets(); track ticket.card.id) {
+              <li>
+                <zm-ticket
+                  [kicker]="ticket.kicker"
+                  [name]="ticket.card.name"
+                  [headingLevel]="2"
+                  [link]="'/artists/' + ticket.card.slug"
+                  [queryParams]="ticket.queryParams"
+                  [actLine]="ticket.actLine"
+                  [placeLine]="ticket.placeLine"
+                  [priceLabel]="'discover.ticket.from' | transloco"
+                  [price]="ticket.price"
+                  [booked]="ticket.booked"
+                  [artVariant]="ticket.artVariant"
+                >
+                  @if (ticket.availability) {
+                    <zm-badge slot="actions" [variant]="ticket.booked ? 'booked' : 'free'">{{
+                      ticket.availability
+                    }}</zm-badge>
+                  }
+                  @if (ticket.availability && !ticket.booked) {
+                    <zm-button-link
+                      slot="actions"
+                      size="sm"
+                      [link]="'/artists/' + ticket.card.slug"
+                      [queryParams]="ticket.queryParams"
+                      >{{ 'accounts.saved.request' | transloco
+                      }}<span class="visually-hidden">
+                        {{ ticket.requestFor }}</span
+                      ></zm-button-link
+                    >
+                  }
+                  @if (ticket.booked) {
+                    <zm-button-link
+                      slot="actions"
+                      size="sm"
+                      [link]="'/artists/' + ticket.card.slug"
+                      fragment="dates-title"
+                      >{{ 'accounts.saved.freeDates' | transloco
+                      }}<span class="visually-hidden">
+                        {{ ticket.freeDatesFor }}</span
+                      ></zm-button-link
+                    >
+                  }
+                  <zm-save-toggle
+                    [artistName]="ticket.card.name"
+                    [saved]="true"
+                    (savedChange)="remove(ticket.card)"
+                  />
+                </zm-ticket>
+              </li>
+            }
+          </ol>
+          <p class="saved-note">{{ 'accounts.saved.note' | transloco }}</p>
+        } @else {
+          <zm-empty-state
+            [stamp]="'accounts.saved.empty.stamp' | transloco"
+            [heading]="'accounts.saved.empty.title' | transloco"
+          >
+            <p>{{ 'accounts.saved.empty.text' | transloco }}</p>
+            <zm-button-link slot="actions" variant="primary" link="/"
+              >{{ 'accounts.saved.empty.action' | transloco }}<zm-icon name="arrow-right"
+            /></zm-button-link>
+          </zm-empty-state>
+        }
+      }
+    }
+  </div>
+</div>

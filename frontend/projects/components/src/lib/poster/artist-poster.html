@@ -2,11 +2,7 @@
   <div class="container stack stack--lg">
     <div class="artist-poster__crumbs"><ng-content select="[slot=breadcrumb]" /></div>
     <div class="artist-poster">
-      <zm-artwork
-        [variant]="artVariant()"
-        [yellow]="artYellow()"
-        [label]="artLabel() || undefined"
-      />
+      <zm-artwork [variant]="artVariant()" [yellow]="artYellow()" [label]="artLabel()" />
       <div class="stack">
         <p class="overline poster__kicker">{{ kicker() }}</p>
         <h1 class="artist-poster__name" [id]="headingId()">{{ name() }}</h1>

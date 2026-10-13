@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { VideoCard, ZM_HLS_LOADER } from 'components';
 
-/** Abigail's first video, idle: nothing loads until a press (docs/mocks/pages/artist). */
+/** Abigail's first video, idle: the wide group art, the stamp and the caption. */
 @Component({
   selector: 'zm-video-card-scenario',
   imports: [VideoCard],
@@ -12,7 +12,7 @@ import { VideoCard, ZM_HLS_LOADER } from 'components';
     label="Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds"
     artVariant="group"
     artLabel="Abigail leading a full sanctuary, hands raised in the front rows"
-    stream="https://media.zamaro.test/videos/way-maker.m3u8"
+    stream="/media/samples/video/stream.m3u8"
     errorText="This video didn’t load. Press play to try again."
   />`,
   changeDetection: ChangeDetectionStrategy.OnPush,

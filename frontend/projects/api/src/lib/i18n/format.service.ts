@@ -24,6 +24,15 @@ export class FormatService {
         });
   }
 
+  /** "Thu 8 Oct 2026": the short date with its year, whatever the year. */
+  shortDateWithYear(date: CalendarDate): string {
+    const parts = this.parts(date, { weekday: 'short', day: 'numeric', month: 'short' });
+    return this.transloco.translate('common.format.date.shortWithYear', {
+      ...parts,
+      year: date.slice(0, 4),
+    });
+  }
+
   /**
    * A named day when the date has one ("Christmas Eve"), otherwise the short date. The names are
    * catalogue keys `common.namedDay.{MM-DD}`.
@@ -42,9 +51,59 @@ export class FormatService {
     );
   }
 
+  /** "September 2026", from a `YYYY-MM` month. */
+  monthYear(month: string): string {
+    return this.transloco.translate(
+      'common.format.date.monthYear',
+      this.parts(`${month}-01` as CalendarDate, { month: 'long', year: 'numeric' }),
+    );
+  }
+
+  /** A date as a tour-date stamp, the weekday over the day: `{ weekday: 'Sat', day: '14 Nov' }`. */
+  dayStamp(date: CalendarDate): { weekday: string; day: string } {
+    const parts = this.parts(date, { weekday: 'short', day: 'numeric', month: 'short' });
+    return {
+      weekday: parts['weekday'],
+      day: this.transloco.translate('common.format.date.dayMonth', parts),
+    };
+  }
+
   /** "Saturday". */
   weekday(date: CalendarDate): string {
     return this.parts(date, { weekday: 'long' })['weekday'];
+  }
+
+  /** "10:57 a.m.", in Toronto, from an ISO time. */
+  time(instant: string): string {
+    const parts = Object.fromEntries(
+      new Intl.DateTimeFormat(LOCALE, {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        timeZone: 'America/Toronto',
+      })
+        .formatToParts(new Date(instant))
+        .filter((part) => part.type !== 'literal')
+        .map((part) => [part.type, part.value]),
+    );
+    return this.transloco.translate('common.format.time', parts);
+  }
+
+  /**
+   * How long ago an instant was, for "Last active …" (L2-110): "just now" within a minute, "12 min
+   * ago", "2 hours ago" within a day, then the short date ("Tue 6 Oct").
+   */
+  ago(instant: string, now: Date = new Date()): string {
+    const minutes = Math.floor((now.getTime() - new Date(instant).getTime()) / 60_000);
+    if (minutes < 1) return this.transloco.translate('common.format.ago.now');
+    if (minutes < 60)
+      return this.transloco.translate('common.format.ago.minutes', { count: minutes });
+    if (minutes < 24 * 60) {
+      return this.transloco.translate('common.format.ago.hours', {
+        count: Math.floor(minutes / 60),
+      });
+    }
+    return this.shortDate(torontoToday(new Date(instant)));
   }
 
   money(cents: number): string {

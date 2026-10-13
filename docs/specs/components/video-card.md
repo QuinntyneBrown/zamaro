@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-video-card` |
 | Library path | `frontend/projects/components/src/lib/video-card/` |
-| Status | built (play mode; manage mode arrives with Edit profile in M4) |
+| Status | built (`play` mode); planned (`manage` mode, with uploads in M4) |
 | Traces to | L2-014, L2-052, L2-086, L2-087, L2-088, L2-096, L2-098, L2-100, L2-101, L2-103, L2-104, L2-105, L2-111 |
 | Design system | [`video-card.html`](../../design-system/components/video-card.html) |
 | Source mocks | [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/artist/loading`](../../mocks/pages/artist/loading.html), [`pages/artist/empty`](../../mocks/pages/artist/empty.html), [`pages/profile-preview/default`](../../mocks/pages/profile-preview/default.html), [`pages/admin-application/default`](../../mocks/pages/admin-application/default.html), [`pages/edit-profile/default`](../../mocks/pages/edit-profile/default.html), [`pages/edit-profile/video-processing`](../../mocks/pages/edit-profile/video-processing.html), [`pages/edit-profile/submitting`](../../mocks/pages/edit-profile/submitting.html) |

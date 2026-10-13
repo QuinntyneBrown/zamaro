@@ -16,13 +16,14 @@ skinparam package {
 }
 actor "Booker or guest" as actor
 box "Frontend — Zamaro Web (Angular)" #E0F2FE
-  participant "ArtistProfilePage" as page
-  participant "ArtistProfileApi" as client
-  participant "ArtistNotFoundComponent" as notfound
+  participant "ArtistPage" as page
+  participant "ArtistProfileStore" as store
+  participant "HttpArtistProfilesApi" as client
+  participant "ArtistNotFoundPage" as notfound
 end box
 box "Backend — Zamaro API (Laravel HTTP layer)" #D1FADF
   participant "ArtistProfileController" as controller
-  participant "ArtistNotFound" as ex
+  participant "ProblemDetailsRenderer" as renderer
 end box
 box "Backend — Zamaro Application and Domain" #ECFDF3
   participant "ResolveArtistSlug" as resolve
@@ -33,24 +34,26 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Zamaro database" as db
 end box
 
-actor -> page : Open /artists/ruth-adjei?date=2026-11-14
-page -> client : get(slug)
-client -> controller : GET /api/v1/artists/ruth-adjei?date=2026-11-14
+actor -> page : Open /artists/selah-brooks?date=2026-11-14
+page -> store : load(slug, carried search: date, and kind, lat, lng, radius from the last lineup)
+store -> client : get(slug, search)
+client -> controller : GET /api/v1/artists/selah-brooks?date=2026-11-14[&kind&lat&lng&radius]
 controller -> resolve : handle(slug)
-resolve -> db : artists.slug, then slug_histories.old_slug
-db --> resolve : No row, or artist Suspended, Deleted or unpublished
-resolve --> controller : Missing(context: primary style and base, or empty)
-controller -> ex : throw ArtistNotFound
-ex -> finder : forMissingArtist(context, Sat 14 Nov near Burlington within 120 km, 3)
-finder -> db : Viewable artists with the same primary style
+resolve -> db : artists.slug, then slug_histories.slug with retired_at
+db --> resolve : No row, or artist Suspended, Deleted, unpublished or without payout
+resolve --> controller : throw ArtistNotFound(primary style, or none)
+controller -> finder : forMissingArtist(style, carried search or Toronto · first bookable day · 120 km)
+finder -> db : Viewable artists of that style in the bounding box
 db --> finder : Candidates
-finder -> avail : isFree(candidate, date) for each
+finder -> avail : freeArtistIds(candidates, date, kind)
 avail --> finder : Free candidates
-finder -> finder : Travel match and road distance from the church (L2-003),\nnearest first, take 3 (L2-021)
-finder --> ex : Similar artists
-ex --> client : 404 problem details, identical for every cause, no profile content (L2-021)
-client --> page : ArtistNotFoundProblem
-page -> page : Set SSR response status 404
-page -> notfound : Render with up to 3 suggestions
-notfound --> actor : "This artist isn't on Zamaro" with ticket cards carrying the date (L2-021)
+finder -> finder : Travel rule and road distance (L2-003),\nnearest first, take 3 (L2-021)
+finder --> controller : SimilarArtists(date, radiusKm, cards)
+controller -> renderer : throw ArtistNotFound with similarArtists
+renderer --> client : 404 artist-not-found problem, identical for every cause, no profile content (L2-021)
+client --> store : ArtistNotFound (suggestions kept in the transfer state on the server)
+store -> store : HttpStatus.set(404) during the server render
+store --> page : status missing
+page -> notfound : Render with the suggestions, the carried town and Discover's parameters
+notfound --> actor : 404 "This artist isn't on Zamaro" with ticket cards carrying the date (L2-021)
 @enduml

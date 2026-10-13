@@ -101,14 +101,23 @@
           [attribution]="headliner.attribution"
           [badge]="headliner.badge"
           [profileLabel]="headliner.profileLabel"
-        />
+        >
+          @if (saved.shown()) {
+            <zm-save-toggle
+              [artistName]="headliner.card.name"
+              [saved]="saved.has(headliner.card.id)"
+              [busy]="saved.pending(headliner.card.id)"
+              (savedChange)="toggle(headliner.card, $event)"
+            />
+          }
+        </zm-headliner>
       }
       @if (tickets().length) {
         <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
           @for (ticket of tickets(); track ticket.card.slug) {
             <li>
               <zm-ticket
-                [positionLabel]="ticket.positionLabel"
+                [kicker]="ticket.positionLabel"
                 [name]="ticket.card.name"
                 [link]="'/artists/' + ticket.card.slug"
                 [queryParams]="{ date: store.query()!.date }"
@@ -121,7 +130,16 @@
                 [ratingCount]="ticket.ratingCount"
                 [ratingNew]="'common.rating.new' | transloco"
                 [artVariant]="artVariant(ticket.card)"
-              />
+              >
+                @if (saved.shown()) {
+                  <zm-save-toggle
+                    [artistName]="ticket.card.name"
+                    [saved]="saved.has(ticket.card.id)"
+                    [busy]="saved.pending(ticket.card.id)"
+                    (savedChange)="toggle(ticket.card, $event)"
+                  />
+                }
+              </zm-ticket>
             </li>
           }
         </ol>

@@ -43,7 +43,7 @@ through the CDN.
 **Frontend (Zamaro Web, `pages/artist`; locations per ADR-0007)**
 
 Class names follow the workspace convention: no `Component` suffix and no `Zm` prefix.
-Sections are named the same way.
+Sections still to come (videos, photos) are named the same way.
 
 - **`ArtistPage`** — routed page component for `/artists/:slug`. It reads the
   slug and the optional carried date, asks `ArtistProfileStore` to load, and lays out
@@ -79,16 +79,14 @@ Sections are named the same way.
   or "About {first name}" when none is set, and the bio. The bio is split on blank
   lines into paragraphs. Heading and bio are bound through text interpolation, never
   `innerHTML`, so markup appears as literal text (L2-013, L2-075).
-- **Videos** (S12) — a section of `ArtistPage`'s template with one library `zm-video-card` per
-  video: "Watch {pronoun} lead"
+- **`VideosSection`** and **`VideoPlayer`** (S12) — "Watch {pronoun} lead"
   with the first video large and the rest in a grid. Each tile shows its poster frame,
   title and duration. Activating a tile plays an adaptive stream in place with native
   controls, a `<track kind="captions">` when a WebVTT file exists, and no autoplay
-  (L2-014). Safari plays the stream natively. Other browsers load hls.js on the first
-  press, in its own chunk (ADR-0009). With no videos, the section shows "No videos yet" and "Ask {first
+  (L2-014). Browsers with native HLS (Safari, current Chrome) play the stream natively;
+  the others load hls.js on the first press (ADR-0010). With no videos, the section shows "No videos yet" and "Ask {first
   name} for a recording".
-- **Photos** (S12) — a section of `ArtistPage`'s template, and **`PhotoViewerDialog`** in
-  `dialogs/photo-viewer` — a grid of 2 columns
+- **`PhotoGallery`** and **`PhotoViewerDialog`** (S12) — a grid of 2 columns
   below MD and 4 from MD. Each image uses `srcset` with AVIF and WebP widths of 400,
   800, 1200 and 1600 px, explicit dimensions and the artist's alt text (L2-015,
   L2-088). Activating a photo opens a CDK `Dialog` with the full-size image and
@@ -109,8 +107,8 @@ Sections are named the same way.
   404 otherwise. The 301 for a renamed slug, through `ResolveArtistSlug` from
   `artist-profiles/resolve-missing-artist`, arrives with S15.
 - **`ShowArtistProfile`** — action that loads the visible artist with styles, setlist songs
-  in order and the rating aggregate over visible reviews. It also loads live photos in display order
-  and videos with status `Live` only (L2-014). It does not read bookings, churches or user
+  in order and the rating aggregate over visible reviews. Photos in display order and videos
+  with status `Live` only (L2-014) join with S12. It does not read bookings, churches or user
   records.
 - **`ArtistProfileResource`** — API resource that lists public fields explicitly: slug,
   display name, first name, pronoun, act type, headline, About heading (or null), bio,
@@ -123,7 +121,7 @@ Sections are named the same way.
   "Watch her lead" comes from catalogue `select` messages on the serialised value.
 - **`MusicalKey`** — enum for a setlist song's key, serialised as `E`, `B-flat`,
   `F-sharp-minor` or `any`. The page turns it into "Key of B♭" from catalogue templates.
-- **`MediaUrlSigner`** (`Services/ArtistProfiles`) — builds CDN URLs for image renditions, video manifests,
+- **`MediaUrlSigner`** (S12) — builds CDN URLs for image renditions, video manifests,
   poster frames and caption files on the separate media domain (L2-088).
 
 The rule that derives the first name for a solo act is the first word of the display
@@ -154,35 +152,48 @@ name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio
   `index-and-share-profile` (S16).
 - **Base city:** the API returns the city alone ("Brampton"); the page adds the province from
   the catalogue ("Brampton, ON").
-- **Not yet built:** returning to the same scroll position on Back (L2-009.2). The results
-  come back, but scroll restoration waits for Discover to restore its position after the
-  lineup reloads.
+- **Back (L2-009.2, built at the close of M1):** `LastSearch` keeps the lineup as last shown,
+  with every loaded page and the sold-out ways forward. Back to Discover shows it again at once
+  without a request, and the router (`scrollPositionRestoration: 'enabled'`) restores the scroll
+  position. A profile opens at the top.
 
 **As built in M1 (S12)**
 
-- **Media storage:** no object storage or CDN yet (user decision). The API keeps media on a local
-  `media` disk and serves it at `/media/{key}` through `MediaController`, with the server's own
-  `Content-Type`, `nosniff`, `Content-Disposition: inline` and open CORS (the player reads streams
-  across origins). `ZAMARO_MEDIA_URL` sets the public base. Object storage and the CDN replace it
-  with uploads in M4.
-- **Seeded media:** `CastSeeder` writes Abigail's 4 photos and 5 videos (Jireh still processing)
-  and Miriam's 2 photos from small synthetic samples in `database/seeders/media`; every live video
-  plays the same 4-second VP9 HLS sample with English captions, except the Twi medley, which has
-  none.
-- **Response:** `photos` are `{id, alt, src, srcset, width, height, avifSrcset}`, with `src` the
-  800 px WebP and `srcset` every width; `avifSrcset` is null until uploads make AVIF (M4).
-  `videos` are `{id, title, durationSeconds, stream, poster, captions}`, with `poster` an image
-  like a photo's and `captions` `{src, language}` or null.
-- **Gallery:** each photo is a link named "Open photo 1 of 4: {alt}" to its largest rendition, so
-  it works without script; a plain click opens the viewer. With no photos the gallery shows the
-  act-type illustration, "Solo vocalist illustration: Elijah hasn't added photos yet" ("Band",
-  "Duo", "Choir" for groups).
-- **Viewer:** `zm-dialog` with the kicker "Abigail Mensah · Photos" and footer actions; the arrow
-  keys page; when Previous or Next becomes disabled under focus, focus moves to the other button.
-- **Videos:** `zm-video-card` in play mode. Its stamp, label and captions label come from the
-  catalogue. With no videos the section shows the quiet empty state "No videos yet" and "{first
-  name} hasn't added a video yet. Until then, ask {her} for a recording in your request." The "Ask
-  {first name} for a recording" action (L2-020.1) arrives with the booking stub (S14).
+- **Videos:** the library's `zm-video-card` is both the tile and the player (its CRD, D-2 to D-4), so
+  there is no separate `VideoPlayerComponent`. The page passes formatted strings: the stamp "Play ·
+  6:12", the label "Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds" (the
+  title's em dash becomes a comma), and the title as the thumbnail's label, since the API has no
+  poster description. Captions are labelled from the catalogue by language ("English").
+- **No videos:** the section keeps "Watch {pronoun} lead" with a quiet "No videos yet" empty state.
+  "Ask {first name} for a recording" needs the booking stub and arrives with
+  `pick-a-date-and-start-booking` (S14).
+- **Photos:** each grid photo is a `<button>` named "Open photo 1 of 4: {alt text}" rather than the
+  mock's link, because it opens a dialog and there is no photo route. The viewer is
+  `dialogs/photo-viewer/PhotoViewerDialog`, loaded on first use, with the kicker "{name} · Photos",
+  "Photo 2 of 4", previous and next buttons and the arrow keys. At either end the disabled button
+  hands focus to the other one, so focus stays in the dialog.
+- **No photos:** one square of act-type illustration labelled, for example, "Band illustration:
+  Marcus Bell Trio hasn't added photos yet". The poster keeps its placeholder in M1; the primary
+  photo arrives with uploads (M4).
+- **Media URLs:** `App\Support\Media::url()` builds them from the disk named by `zamaro.media.disk`,
+  not a `MediaUrlSigner`: nothing is signed yet. In M1 that is the API's local `media` disk, which
+  Laravel serves under `/media` and which the SSR server and dev proxy forward like `/api`. M4 points
+  the setting at object storage behind the CDN.
+- **API fields:** `photos` carries `id`, `alt`, `src` (the 800 px WebP), `width`, `height`, `srcset`
+  and `avifSrcset`; `videos` carries `id`, `title`, `durationSeconds`, `poster` (`src`, `width`,
+  `height`) or null, `stream` and `captions` (`src`, `lang`) or null. Only `Live` videos are loaded.
+- **Seed:** `CastSeeder` writes the photo and video rows (Abigail's four photos and four live videos
+  plus a processing "Jireh"; Miriam's two photos); `MediaSeeder` writes a stand-in file for each key:
+  GD-drawn photo renditions and posters, and one committed sample HLS stream with WebVTT captions
+  that every live video plays.
+
+**As built in M1 (S14)**
+
+- **Book:** its label follows the stub's date, not only the carried one: "Book for Fri 20 Nov" after
+  a Pick, "Book for Sun 15 Nov" after typing that date, "Check dates" with none. It still moves focus
+  to `#book-date`. The back link keeps the carried date.
+- **No videos:** the empty state has "Ask {first name} for a recording", which writes the request
+  into the stub's message (L2-020.1). See `pick-a-date-and-start-booking`.
 
 **Mocks**
 

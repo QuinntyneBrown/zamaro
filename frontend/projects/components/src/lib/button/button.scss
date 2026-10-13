@@ -68,6 +68,13 @@
   --btn-border: var(--color-bg-inverse);
 }
 
+.btn--danger {
+  --btn-bg: var(--color-danger-solid);
+  --btn-fg: var(--color-fg-on-danger);
+  --btn-border: var(--color-danger-solid);
+  --btn-bg-hover: var(--color-danger-solid-hover);
+}
+
 .btn--ghost {
   --btn-bg: transparent;
   --btn-border: transparent;
@@ -81,6 +88,27 @@
   --btn-height: var(--control-height-lg);
   --btn-padding: var(--space-6);
   --btn-font-size: var(--font-size-md);
+}
+
+.btn--sm {
+  --btn-height: var(--control-height-sm);
+  --btn-padding: var(--space-3);
+  --btn-font-size: var(--font-size-xs);
+}
+
+/* Compact buttons grow to a comfortable target under a coarse pointer (L2-096). */
+@media (pointer: coarse) {
+  .btn--sm {
+    --btn-height: var(--target-comfortable);
+  }
+}
+
+:host:has(> .btn--block) {
+  display: flex;
+}
+
+.btn--block {
+  width: 100%;
 }
 
 .btn--icon {
@@ -134,9 +162,32 @@
   transform: none;
 }
 
+/* On the stage, every button but primary and pressed is a paper outline; hover inverts it. */
+:host-context(.on-stage) .btn:not(.btn--primary):not([aria-pressed='true']) {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-fg-on-stage);
+  --btn-border: var(--color-fg-on-stage);
+  --btn-bg-hover: var(--color-fg-on-stage);
+  --btn-fg-hover: var(--color-bg-stage);
+  --btn-shadow-hover: none;
+  --btn-transform-hover: none;
+}
+
+/* The auth card is paper on the stage, so its secondary buttons keep the paper outline
+   (docs/mocks/pages/verify-email/expired, "Keep browsing artists"). */
+:host-context(.auth-card) .btn:not(.btn--primary):not(.btn--ghost):not([aria-pressed='true']) {
+  --btn-bg: var(--color-bg-surface);
+  --btn-fg: var(--color-fg-default);
+  --btn-border: var(--color-border-strong);
+  --btn-bg-hover: var(--color-bg-surface);
+  --btn-fg-hover: var(--color-fg-default);
+  --btn-shadow-hover: var(--shadow-1);
+  --btn-transform-hover: var(--transform-lift);
+}
+
 /* Ghost buttons in the top bar and on the stage take the surrounding colour. */
 :host-context(.topbar) .btn--ghost,
-:host-context(.on-stage) .btn--ghost {
+:host-context(.on-stage) .btn.btn--ghost:not(.btn--primary):not([aria-pressed='true']) {
   --btn-fg: currentColor;
   --btn-border: transparent;
   --btn-bg: transparent;
@@ -153,4 +204,35 @@
 :host-context(.on-stage) .btn:focus-visible {
   outline-color: var(--color-accent-on-stage);
   box-shadow: 0 0 0 var(--focus-ring-offset) var(--color-bg-stage);
+}
+
+/* In a band every button takes the stage skin, whatever its variant, even on the stage (band D-4). */
+:host-context(.band) .btn {
+  --btn-bg: var(--color-bg-stage);
+  --btn-fg: var(--color-fg-on-stage);
+  --btn-border: var(--color-bg-stage);
+  --btn-bg-hover: var(--color-bg-stage);
+  --btn-fg-hover: var(--color-fg-on-stage);
+  --btn-shadow-hover: var(--size-offset-2) var(--size-offset-2) 0 var(--color-fg-on-stage);
+}
+
+:host-context(.band) .btn:focus-visible {
+  outline-color: var(--color-border-on-accent);
+  box-shadow: none;
+}
+
+/* In a toast: outlined on the inverse slip, in ink on a danger toast (design system, toast). */
+:host-context(.toast) .btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-fg-inverse);
+  --btn-border: var(--color-fg-inverse);
+  --btn-bg-hover: var(--color-bg-inverse);
+  --btn-shadow-hover: none;
+  --btn-transform-hover: none;
+}
+
+:host-context(.toast--danger) .btn {
+  --btn-fg: var(--color-fg-default);
+  --btn-border: var(--color-border-strong);
+  --btn-bg-hover: var(--color-danger-bg);
 }

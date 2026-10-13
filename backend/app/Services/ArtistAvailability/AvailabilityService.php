@@ -5,7 +5,12 @@ namespace App\Services\ArtistAvailability;
 use App\Enums\BookingStatus;
 use App\Enums\GatheringKind;
 use App\Enums\OverrideState;
+use App\Enums\TourDateStatus;
 use App\Enums\VscStatus;
+use App\Models\Artist;
+use App\Models\AvailabilityOverride;
+use App\Models\AvailabilityRule;
+use App\Models\Booking;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 
@@ -16,11 +21,60 @@ use Illuminate\Support\Facades\DB;
  */
 class AvailabilityService
 {
+    /** Free on the date for any kind of gathering but a youth event (the stub's date check, L2-019). */
+    public function isFree(Artist $artist, CarbonImmutable $date): bool
+    {
+        return $this->freeArtistIds([$artist->id], $date) !== [];
+    }
+
+    /**
+     * The artist's free and booked days from `$from` to `$until`, in date order; days marked
+     * unavailable are skipped (L2-017). Reads the weekly rules, the dated overrides and the
+     * Confirmed bookings once each, so callers can stop early without a query per day.
+     *
+     * @return \Generator<int, TourDate>
+     */
+    public function days(Artist $artist, CarbonImmutable $from, CarbonImmutable $until): \Generator
+    {
+        $range = [$from->toDateString(), $until->toDateString()];
+        $unavailableWeekdays = AvailabilityRule::where('artist_id', $artist->id)
+            ->where('unavailable', true)
+            ->pluck('weekday')
+            ->map(fn ($weekday) => (int) $weekday)
+            ->all();
+        $overrides = AvailabilityOverride::where('artist_id', $artist->id)
+            ->whereBetween('date', $range)
+            ->get(['date', 'state'])
+            ->mapWithKeys(fn (AvailabilityOverride $override) => [$override->date->toDateString() => $override->state]);
+        $bookings = Booking::where('artist_id', $artist->id)
+            ->where('status', BookingStatus::Confirmed)
+            ->whereBetween('event_date', $range)
+            ->get(['event_date', 'kind', 'church_city'])
+            ->keyBy(fn (Booking $booking) => $booking->event_date->toDateString());
+
+        for ($date = $from; $date->lte($until); $date = $date->addDay()) {
+            $day = $date->toDateString();
+            if ($booking = $bookings->get($day)) {
+                yield new TourDate($date, TourDateStatus::Booked, $booking->kind, $booking->church_city);
+
+                continue;
+            }
+            $override = $overrides->get($day);
+            $free = $override !== null
+                ? $override === OverrideState::Free
+                : ! in_array($date->isoWeekday(), $unavailableWeekdays, true);
+            if ($free) {
+                yield new TourDate($date, TourDateStatus::Free);
+            }
+        }
+    }
+
     /**
      * @param  list<int>  $artistIds
+     * @param  GatheringKind|null  $kind  null when the kind is not known yet; only a youth event adds a rule
      * @return list<int> the ids among `$artistIds` that are free
      */
-    public function freeArtistIds(array $artistIds, CarbonImmutable $date, GatheringKind $kind): array
+    public function freeArtistIds(array $artistIds, CarbonImmutable $date, ?GatheringKind $kind = null): array
     {
         if ($artistIds === []) {
             return [];

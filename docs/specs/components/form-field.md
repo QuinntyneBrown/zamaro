@@ -549,6 +549,26 @@ Nothing animates. Errors, help and success appear without a transition; under
 
 ## Implementation notes
 
+**Interim additions in M2 (S9), before the split:** account settings needed a phone and a whole
+number, so `type` gained `tel` and `number` (the text-field CRD's types); `number` adds
+`inputmode="numeric"`, and `min` applies to it. The `FormField` scenario was re-measured against the
+S8 build: 138.1 → 142.3 ms, not flagged.
+
+**Interim additions in M2 (S1), before the split:** for the sign-in card the monolithic field gained
+`type="email"` and `type="password"`, `requiredMarker` (renders `.field__required` and sets `required`),
+`readonly` (the dashed sunken look of the design system), `invalid` (ORs `aria-invalid` with `error`,
+text-field CRD D-6) and `describedBy` (IDs appended to `aria-describedby`, "credentials-error"). They
+are the text field's inputs, carried by the field until the split. `.field__optional` keeps its M1 look.
+In S5 the sign-up card added `help` as specified above: one `.field__help` per line after the error,
+IDs `{fieldId}-help`, `-help-2`, …, listed after the error in `aria-describedby` and hidden while a
+slotted message shows. The perf run against S3 flagged no row (FormField 140 ms).
+
+**Interim additions in M1 (S14), before the split:** for the booking stub the monolithic field
+gained `type="textarea"`, `placeholder`, `optionalMarker`, `live` (a visually hidden
+`role="status"` region repeating the error) and `[slot=message]` with a `messageId` input (D-14,
+which replaces the `contentChild` read described under Content slots). The split below is still to
+do.
+
 The library has `zm-form-field`, but it is a different component: a monolithic
 labelled control that renders its own `<input>` or `<select>` (inputs `label`,
 `fieldId`, `type: 'text' | 'date' | 'select'`, `options`, `error`, `min`,
@@ -593,3 +613,4 @@ this CRD:
 - **D-11** *What happens to a field while its form is busy?* It dims to 0.6 opacity with pointer events off, under `form[aria-busy="true"]`, matching `.form[aria-busy="true"] .field` and `.stub[aria-busy="true"] .field`. The page makes the text controls `readonly` (focus and values stay, L2-108) and disables the rest, as the busy mocks do; the design-system textarea page's "disabled while sending" is the older wording.
 - **D-13** *How does the booking stub's availability message ([inline message](inline-message.md) D-3) compose with the field?* Through `[slot=message]`. The stub needs the message's checking (busy) and success states and its own `role="status"`, which a plain `success` string cannot carry; the slot accepts the component and the field lists its `id` first in `aria-describedby`, as the inline-message CRD requires. `success` stays for a static success line, and both render in the same place, replacing the help.
 - **D-12** *The search field in a page head is the `<form role="search">` itself in the mocks (`form.field`). How is it built?* The page writes the `<form role="search" class="page-head__search">` and puts a `zm-form-field` inside it. A component cannot become the page's form, and the visual result is the same.
+- **D-14** *How does the field learn the slotted message's `id`?* From a `messageId` input the page sets while the message is shown, not a `contentChild` query. Built in M1 (S14), the query made every field about 8 % slower to render in the `FormField` perf scenario (127 ms against 137 ms for 200 fields) to serve one field in the product; the input costs nothing when unused. The message still goes in `[slot=message]` and is listed first in `aria-describedby`.

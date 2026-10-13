@@ -1,0 +1,31 @@
+// The QR code beside the key typed by hand (docs/mocks/pages/mfa-setup).
+.key {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.key__qr {
+  flex: none;
+  width: 8rem;
+  height: 8rem;
+  border: var(--border-width-thick) solid var(--color-border-strong);
+}
+
+.key__text {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+code {
+  font: var(--text-stub);
+  letter-spacing: var(--letter-spacing-wide);
+  overflow-wrap: anywhere;
+}
+
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

@@ -55,7 +55,9 @@ class SearchAvailableArtistsTest extends TestCase
             ])
             ->assertJsonPath('data.*.distance.km', [14, 32, 63, 74, 81, 97])
             ->assertJsonPath('data.0', [
+                'id' => Artist::where('slug', 'marcus-bell-trio')->value('id'),
                 'slug' => 'marcus-bell-trio',
+                'pronoun' => 'they',
                 'name' => 'Marcus Bell Trio',
                 'actType' => 'band',
                 'styles' => ['band', 'acoustic', 'hymns'],

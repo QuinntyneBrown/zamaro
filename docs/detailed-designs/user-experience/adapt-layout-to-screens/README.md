@@ -85,7 +85,7 @@ and through the mocked API that the e2e visual suite runs against (AGENTS.md).
   the visible shape is smaller (L2-096). The design system's `components.css` carries
   this `(pointer: coarse)` rule. Links inside running text are exempt, following the
   WCAG 2.5.8 inline exception and the design system's responsive foundation.
-- **`CurrentUserStore`** — signal store fed by `AuthService`. It holds the initials
+- **`AuthService`** (ADR-0016) — holds the signed-in person as a signal: the initials
   and the Saved count that the compact header keeps visible.
 
 **Mocks and design system**
@@ -118,6 +118,28 @@ and through the mocked API that the e2e visual suite runs against (AGENTS.md).
   difference above the threshold fails the build until a reviewer approves the new
   baseline in the same pull request (L2-096). The diff threshold and whether every
   capture also runs in both themes are `<TO SUPPLY>`.
+  - *As built (M1 close, ADR-0014):* `maxDiffPixelRatio: 0.001` (M9 D22; OK, accepted
+    default, 2026-10-10), full-page captures in the light and dark themes at all five widths,
+    animations disabled. Each test opens one state per theme and resizes through the widths.
+    States the seeded API cannot produce (loading, error, rate-limited, the profile's loading
+    and error) are reached by holding or answering the browser's requests through the page
+    objects (`e2e/fixtures/route-states.ts`); no `VisualFixtureSeeder` is needed while M1 is
+    read-only. The rate-limit countdown is masked. Bebas Neue is self-hosted, and baselines are
+    kept per platform: `-win32` from the Windows host and `-linux` from the Playwright image
+    (`npm run test:docker`).
+  - *Not built yet:* `layout.spec.ts` (overflow, 44 px targets and 200 % zoom across the
+    manifest). `adapt-layout-to-screens.spec.ts` already checks 320 px overflow on Discover;
+    the rest moves to the M9 accessibility audit.
+  - *Deliberate differences from the mocks (M1):* headings use the self-hosted Bebas Neue,
+    narrower than the mocks' Impact fallback, so they wrap differently; the signed-out shell has
+    no Saved, account or save toggles (M2), and the footer and drawer only link to screens that
+    exist; the Discover band has no "Apply as an artist" (M3) and the stub no "Request to book"
+    (M5 flag); the profile is opened without a search in the manifest, so it has no "Headliner"
+    kicker and its kind defaults to Sunday service; seeded photos replace the mocks' artwork;
+    the poster's subtitle in the rate-limited and sold-out states keeps the app's intro and
+    count lines rather than the mocks' editorial lines; the Discover loading tickets are
+    `zm-ticket-skeleton`, whose stub holds the price-sized block the Saved mock shows rather
+    than Discover's shorter one, and their status line sits under the filters.
 - **`layout.spec.ts`** — at 320 px it asserts that
   `document.documentElement.scrollWidth` does not exceed the viewport width and that
   no text element with hidden overflow has a `scrollWidth` larger than its
@@ -127,7 +149,7 @@ and through the mocked API that the e2e visual suite runs against (AGENTS.md).
 
 **Backend (Zamaro API)**
 
-- **`MeController`** — `GET /api/v1/me` returns `MeResource` with the user's name,
+- **`MeController`** — `GET /api/v1/me` returns `CurrentUserResource` (ADR-0016) with the user's name,
   initials, roles, Saved count and theme preference. The header reads the initials and
   Saved count from it; a guest receives 401 and sees the signed-out header.
 - **`VisualFixtureSeeder`** — database seeder used only in CI. It loads the fixed
@@ -165,16 +187,15 @@ Zamaro Web backed by the e2e suite's mocked API (AGENTS.md).
 ### Components
 
 Inside Zamaro Web, `Shell` composes the top bar, the footer and the drawer (`MenuDialog`).
-In M1 CSS switches them to their compact variants; `BreakpointService` and
-`CurrentUserStore`, which supplies the initials and Saved count, arrive when behaviour or
-accounts need them.
+In M1 CSS switches them to their compact variants; `BreakpointService` arrives when behaviour
+needs it. `AuthService` supplies the initials and Saved count.
 
 ![C4 component view for adapting layout to screens](diagrams/c4-component.png)
 
 ### Class structure
 
 The shell, header and dialog wrapper depend on `BreakpointService`. The header reads
-`CurrentUserStore`, which mirrors the `MeResource` returned by `MeController`.
+`AuthService.currentUser`, which mirrors the `CurrentUserResource` returned by `MeController`.
 
 ![Class diagram for adapting layout to screens](diagrams/class-structure.png)
 

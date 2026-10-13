@@ -1,0 +1,25 @@
+// What changed, as the mock lists it.
+.changes {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.full-terms {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: var(--font-weight-bold);
+  color: inherit;
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.skeletons {
+  display: grid;
+  gap: var(--space-3);
+}

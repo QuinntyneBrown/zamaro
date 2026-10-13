@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { cast } from '../../fixtures/cast';
 import { ArtistProfilePage } from '../../pages/artist-profile.page';
 import { DiscoverPage } from '../../pages/discover.page';
+import { Ticket } from '../../pages/lineup';
 
 // L2-012, L2-013, L2-016, L2-009.2, L2-105 (profile), L2-107.
 test.describe('An artist’s profile', () => {
@@ -79,6 +80,34 @@ test.describe('An artist’s profile', () => {
     await profile.goBack();
     await expect(discover.lineup.summary()).toHaveText('Sat 14 Nov · 7 free · within 120 km');
     await expect(discover.lineup.headliner().name()).toHaveText(cast.artists.headliner.name);
+  });
+
+  test('from deep in the lineup: the profile opens at the top, and Back restores the same cards and scroll position', async () => {
+    // Barrie has 30 artists, so the lineup needs "Show more artists" to list them all.
+    await discover.openLink({
+      date: cast.search.date,
+      kind: 'worship-night',
+      lat: '44.389',
+      lng: '-79.69',
+      place: 'Barrie',
+      radius: '40',
+    });
+    await discover.lineup.showMore();
+    await expect(discover.lineup.tickets()).toHaveCount(29);
+    const last = Ticket.at(discover.lineup, 28);
+    await last.scrollIntoView();
+    const scrolled = await discover.shell.scrollTop();
+    expect(scrolled).toBeGreaterThan(1000);
+    const searches = discover.searchesSent();
+
+    await last.openProfile();
+    await expect(profile.name()).toBeVisible();
+    await expect.poll(() => profile.shell.scrollTop()).toBe(0);
+
+    await profile.goBack();
+    await expect(discover.lineup.tickets()).toHaveCount(29);
+    await expect.poll(() => discover.shell.scrollTop()).toBe(scrolled);
+    expect(discover.searchesSent()).toBe(searches);
   });
 
   test('markup in a bio is shown as text and never runs', async () => {

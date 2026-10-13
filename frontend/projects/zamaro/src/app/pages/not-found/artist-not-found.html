@@ -1,0 +1,53 @@
+<zm-error-page
+  [overline]="'errors.artist.overline' | transloco"
+  [poster]="'errors.artist.poster' | transloco"
+  [heading]="'errors.artist.title' | transloco"
+  [lead]="lead()"
+>
+  @if (!tickets().length) {
+    <zm-button-link
+      slot="actions"
+      variant="primary"
+      size="lg"
+      link="/"
+      [queryParams]="lineupParams()"
+      >{{ 'errors.notFound.findWhosFree' | transloco }} <zm-icon name="arrow-right"
+    /></zm-button-link>
+  }
+</zm-error-page>
+@if (tickets().length) {
+  <section class="section similar" aria-labelledby="similar-title">
+    <div class="container stack stack--lg">
+      <div class="section__head">
+        <div>
+          <p class="section__kicker">{{ kicker() }}</p>
+          <h2 id="similar-title">{{ 'errors.artist.similarTitle' | transloco }}</h2>
+        </div>
+        <zm-button-link link="/" [queryParams]="lineupParams()"
+          >{{ 'errors.artist.full' | transloco }} <zm-icon name="arrow-right"
+        /></zm-button-link>
+      </div>
+      <ol class="lineup" role="list" [attr.aria-label]="listLabel()">
+        @for (ticket of tickets(); track ticket.card.slug) {
+          <li>
+            <zm-ticket
+              [kicker]="ticket.positionLabel"
+              [name]="ticket.card.name"
+              [link]="'/artists/' + ticket.card.slug"
+              [queryParams]="ticketParams()"
+              [actLine]="ticket.actLine"
+              [placeLine]="ticket.placeLine"
+              [priceLabel]="'discover.ticket.from' | transloco"
+              [price]="ticket.price"
+              [rating]="ticket.card.rating"
+              [ratingLabel]="ticket.ratingLabel"
+              [ratingCount]="ticket.ratingCount"
+              [ratingNew]="'common.rating.new' | transloco"
+              [artVariant]="ticket.artVariant"
+            />
+          </li>
+        }
+      </ol>
+    </div>
+  </section>
+}

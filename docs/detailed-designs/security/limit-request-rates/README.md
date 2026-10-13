@@ -73,22 +73,27 @@ failed bot challenge is
 - **`App\Providers\RateLimitServiceProvider`** — registers the named limiters with
   `RateLimiter::for(...)`:
   - **`api`** — applied to the whole `/api/v1` group. Anonymous traffic receives
-    `Limit::perMinute(120)->by('ip:'.$ip)`. The limit for signed-in users is
-    `<TO SUPPLY>`.
+    `Limit::perMinute(120)->by('ip:'.$ip)`. A signed-in user receives
+    `Limit::perMinute(300)->by('user:'.$userId)` instead, wherever they connect from
+    (M2 D7). `bootstrap/app.php` adds it to the `api` group with `throttleApi()`.
   - **`search`** — applied to `GET /api/v1/search`. It returns two limits,
     `Limit::perMinute(30)->by('search-ip:'.$ip)` and, for a signed-in user,
     `Limit::perMinute(30)->by('search-user:'.$userId)`. Either one refuses the
     request when exceeded.
-- **`ThrottleRequestsWithRedis`** — Laravel throttle middleware enabled with
-  `$middleware->throttleWithRedis()`. It stores counters in Redis, and on refusal
-  throws `ThrottleRequestsException` carrying `Retry-After`, `X-RateLimit-Limit` and
+- **`ThrottleRequests`** — Laravel throttle middleware. It keeps its counters in the
+  cache store, which is Redis (`CACHE_STORE=redis`; the e2e API has its own prefix), so
+  `ThrottleRequestsWithRedis` is not needed. On refusal it throws
+  `ThrottleRequestsException` carrying `Retry-After`, `X-RateLimit-Limit` and
   `X-RateLimit-Remaining`.
 - **`ProblemDetailsRenderer`** — renders `ThrottleRequestsException` as 429 problem
   details and keeps its headers. Its `type` URI is `{problems base}/too-many-requests`
   (`ProblemType::TooManyRequests`). The search limit is `zamaro.rate_limits.search_per_minute`
-  (default 30). The e2e API raises it, because every browser in the suite shares one address.
-  M1 has the `search` limiter only; the `api` limiter and the per-account search limit arrive
-  with sign-in (M2).
+  (default 30), and the `api` limits are `zamaro.rate_limits.api_per_minute` (120) and
+  `api_signed_in_per_minute` (300). The e2e API raises all three, because every browser in
+  the suite, and every server render, shares one address.
+- **Server renders** — Zamaro Web's server-side calls to the API arrive from the web
+  container's address. Until the trusted proxies and a forwarded client address are set up
+  (M9), every server render counts toward one anonymous allowance.
 - **`App\Actions\Bookings\EnsureBookingRequestAllowance`** — called by
   `SendBookingRequest` inside its `DB::transaction`, after locking the booker's
   `users` row with `lockForUpdate()`. It counts the booker's `bookings` created in the
@@ -105,15 +110,19 @@ failed bot challenge is
   `<TO SUPPLY>`.
 - **`App\Http\Middleware\VerifyBotChallenge`** — route middleware on
   `POST /api/v1/register`, `POST /api/v1/password/forgot` and
-  `POST /api/v1/artist-applications`. It reads `challengeToken` from the body and calls
-  `BotChallengeVerifier`. A missing or failed token returns 422 with an error on
-  `challengeToken`: "We couldn't check that you're a person. Try again; if it keeps
-  happening, email hello@zamaro.ca." Behaviour when the provider is
-  unreachable is `<TO SUPPLY>`.
-- **`App\Services\Security\BotChallengeVerifier`** — interface with one adapter for the
-  bot challenge provider (vendor `<TO SUPPLY>`). It sends the token, the client IP and
-  the expected form action with the site secret from the secrets manager, and returns
-  a `ChallengeResult`.
+  `POST /api/v1/artist-applications`, as `bot-challenge:{action}`. It reads
+  `challengeToken` from the body and asks the `BotChallenge` port before validation. A
+  missing or failed token returns 422 with an error on `challengeToken`: "We couldn’t
+  check that you’re a person. Try again; if it keeps happening, email hello@zamaro.ca."
+  A provider that does not answer (`BotChallengeUnavailable`) is reported and gets the
+  same 422: the form fails closed (M2 D3).
+- **`App\Contracts\BotChallenge`** — the port (ADR-0002), with
+  `passes($token, $ip, $action)`. The adapter for the provider (vendor chosen in M10)
+  sends the token, the client IP and the expected form action with the site secret
+  from the secrets manager. Until then `FakeBotChallenge` passes every token but
+  `fail`, and Zamaro Web's `BOT_CHALLENGE` fake yields `pass` (M2 D2).
+- **`register` limiter** — 10 registrations an hour per address (M2 D6); the e2e API
+  raises it with `ZAMARO_REGISTER_LIMIT_PER_HOUR`.
 
 **Data**
 

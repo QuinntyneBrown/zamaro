@@ -60,7 +60,11 @@ export interface Money {
 }
 
 export interface LineupCard {
+  /** For the save toggle (accounts/save-artist). */
+  id: number;
   slug: string;
+  /** For the saved toasts: "He’s off your saved list". */
+  pronoun: 'she' | 'he' | 'they';
   name: string;
   actType: ActType;
   styles: Style[];

@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { type ButtonSize, type ButtonVariant, buttonClasses } from './button';
 
@@ -9,7 +15,11 @@ import { type ButtonSize, type ButtonVariant, buttonClasses } from './button';
 @Component({
   selector: 'zm-button-link',
   imports: [RouterLink],
-  template: `<a [class]="classes()" [routerLink]="link()" [queryParams]="queryParams()"
+  template: `<a
+    [class]="classes()"
+    [routerLink]="link()"
+    [queryParams]="queryParams()"
+    [fragment]="fragment()"
     ><ng-content
   /></a>`,
   styleUrl: './button.scss',
@@ -18,8 +28,14 @@ import { type ButtonSize, type ButtonVariant, buttonClasses } from './button';
 export class ButtonLink {
   readonly link = input.required<string>();
   readonly queryParams = input<Record<string, string>>({});
+  /** An in-page target: `email` for "Change email again" to `/account#email`. */
+  readonly fragment = input<string>();
   readonly variant = input<ButtonVariant>('secondary');
   readonly size = input<ButtonSize>('md');
+  /** Fills its container: "Keep browsing artists" on the sign-up card. */
+  readonly block = input(false, { transform: booleanAttribute });
 
-  protected readonly classes = computed(() => buttonClasses(this.variant(), this.size()));
+  protected readonly classes = computed(() =>
+    buttonClasses(this.variant(), this.size(), false, this.block()),
+  );
 }

@@ -5,10 +5,10 @@ import {
   Component,
   computed,
   input,
-  linkedSignal,
+  signal,
 } from '@angular/core';
 
-/** A photo for the frame, in WebP widths and optionally AVIF (docs/specs/components/artwork.md). */
+/** A photo the artwork prints in its frame (docs/specs/components/artwork.md). */
 export interface ArtworkPhoto {
   /** Fallback rendition (WebP). */
   src: string;
@@ -17,21 +17,19 @@ export interface ArtworkPhoto {
   height: number;
   /** WebP renditions with width descriptors. */
   srcset?: string;
-  /** AVIF renditions with the same widths; when set, a <picture> wraps the img. */
-  avifSrcset?: string | null;
+  /** AVIF renditions; when set, a <picture> with an AVIF <source> wraps the img. */
+  avifSrcset?: string;
   /** The rendered width per breakpoint. Required whenever a srcset is set. */
   sizes?: string;
 }
 
 /**
- * The frame for every picture of an artist (docs/design-system/components/artwork): a singer's
- * silhouette, or a group's, cut out of a halftone until a photo arrives, then the photo in
- * greyscale multiplied onto the paper. A photo that fails to load falls back to the placeholder,
- * never a broken image. Decorative unless it has a `label`.
+ * The halftone artwork placeholder (docs/design-system/components/artwork): a singer's silhouette,
+ * or a group's, cut out of the dots. With a `photo`, the photo is printed over it in greyscale; a
+ * photo that fails to load falls back to the placeholder. Decorative unless it has a `label`.
  */
 @Component({
   selector: 'zm-artwork',
-  imports: [NgTemplateOutlet],
   host: {
     class: 'art',
     '[class.art--group]': "variant() === 'group'",
@@ -39,37 +37,38 @@ export interface ArtworkPhoto {
     '[class.art--wide]': "ratio() === 'wide'",
     '[class.art--tilt]': 'tilt()',
     '[class.art--yellow]': 'yellow()',
-    '[attr.role]': "label() && !shown() ? 'img' : null",
-    '[attr.aria-label]': '(!shown() && label()) || null',
+    '[attr.role]': "hostLabel() ? 'img' : null",
+    '[attr.aria-label]': 'hostLabel() || null',
     '[attr.aria-hidden]': "label() ? null : 'true'",
   },
-  template: `@if (shown(); as photo) {
-      @if (photo.avifSrcset) {
-        <picture
-          ><source type="image/avif" [attr.srcset]="photo.avifSrcset" [attr.sizes]="photo.sizes" />
-          <ng-container *ngTemplateOutlet="img; context: { $implicit: photo }"
-        /></picture>
+  template: `@if (showPhoto()) {
+      @let image = photo()!;
+      @if (image.avifSrcset) {
+        <picture>
+          <source type="image/avif" [attr.srcset]="image.avifSrcset" [attr.sizes]="image.sizes" />
+          <ng-container *ngTemplateOutlet="img" />
+        </picture>
       } @else {
-        <ng-container *ngTemplateOutlet="img; context: { $implicit: photo }" />
+        <ng-container *ngTemplateOutlet="img" />
       }
+      <ng-template #img>
+        <img
+          [src]="image.src"
+          [attr.srcset]="image.srcset"
+          [attr.sizes]="image.sizes"
+          [width]="image.width"
+          [height]="image.height"
+          [alt]="label()"
+          [attr.loading]="priority() ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="priority() ? 'high' : null"
+          decoding="async"
+          (error)="failedSrc.set(image.src)"
+        />
+      </ng-template>
     }
     @if (tag()) {
       <span class="art__tag">{{ tag() }}</span>
-    }
-    <ng-template #img let-photo>
-      <img
-        [src]="photo.src"
-        [attr.srcset]="photo.srcset || null"
-        [attr.sizes]="photo.sizes || null"
-        [width]="photo.width"
-        [height]="photo.height"
-        [alt]="label() ?? ''"
-        [attr.loading]="priority() ? 'eager' : 'lazy'"
-        [attr.fetchpriority]="priority() ? 'high' : null"
-        decoding="async"
-        (error)="failed.set(true)"
-      />
-    </ng-template>`,
+    }`,
   styles: `
     :host {
       position: relative;
@@ -83,6 +82,14 @@ export interface ArtworkPhoto {
         var(--color-halftone-paper);
       color: var(--color-fg-default);
       border: var(--border-width-thick) solid var(--color-border-strong);
+    }
+
+    :host(.art--square) {
+      aspect-ratio: 1;
+    }
+
+    :host(.art--wide) {
+      aspect-ratio: 16 / 9;
     }
 
     /* The silhouette: a singer at a mic. */
@@ -134,30 +141,12 @@ export interface ArtworkPhoto {
       );
     }
 
-    :host(.art--square) {
-      aspect-ratio: 1;
-    }
-
-    :host(.art--wide) {
-      aspect-ratio: 16 / 9;
-    }
-
     :host(.art--wide)::before {
       width: 34%;
     }
 
     :host(.art--wide.art--group)::before {
       width: 60%;
-    }
-
-    img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(1) contrast(1.1);
-      mix-blend-mode: multiply;
     }
 
     :host(.art--tilt) {
@@ -177,6 +166,17 @@ export interface ArtworkPhoto {
       background: var(--color-accent);
     }
 
+    /* The photo is printed onto the paper: greyscale, multiplied. Nothing fades in. */
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.1);
+      mix-blend-mode: multiply;
+    }
+
     .art__tag {
       position: relative;
       z-index: var(--z-raised);
@@ -187,25 +187,36 @@ export interface ArtworkPhoto {
       background: var(--color-bg-inverse);
       color: var(--color-fg-inverse);
     }
+
+    @media (forced-colors: active) {
+      :host {
+        border-color: CanvasText;
+      }
+    }
   `,
+  imports: [NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Artwork {
   readonly variant = input<'solo' | 'group'>('solo');
-  /** Portrait is 4:5; square is 1:1 (the gallery); wide is 16:9 (videos, the photo viewer). */
+  /** Portrait is 4:5; `square` is 1:1 (the photo grid); `wide` is 16:9 (videos, the viewer). */
   readonly ratio = input<'portrait' | 'square' | 'wide'>('portrait');
   readonly tilt = input(false, { transform: booleanAttribute });
   readonly yellow = input(false, { transform: booleanAttribute });
   readonly tag = input<string>();
   /** Describes the picture; without it the artwork is hidden from assistive technology. */
-  readonly label = input<string>();
-  /** The photo; null keeps the placeholder. */
+  readonly label = input('');
+  /** The photo; null shows the placeholder. */
   readonly photo = input<ArtworkPhoto | null>(null);
-  /** Above the fold or the page's largest image: loaded eagerly at high priority. */
+  /** Above the fold or the page's largest image: load eagerly with high priority. */
   readonly priority = input(false, { transform: booleanAttribute });
 
-  /** Set when the photo fails to load; a new photo tries again. */
-  protected readonly failed = linkedSignal({ source: this.photo, computation: () => false });
-  /** The photo to draw, or null for the placeholder. */
-  protected readonly shown = computed(() => (this.failed() ? null : this.photo()));
+  /** The photo that failed to load; a different photo is tried afresh. */
+  protected readonly failedSrc = signal<string | null>(null);
+  protected readonly showPhoto = computed(() => {
+    const photo = this.photo();
+    return photo !== null && photo.src !== this.failedSrc();
+  });
+  /** The host's name while it shows the placeholder; a photo is named by its img's alt. */
+  protected readonly hostLabel = computed(() => (this.showPhoto() ? '' : this.label()));
 }

@@ -1,0 +1,123 @@
+<div class="stage on-stage">
+  <div class="container auth-layout">
+    @if (status() === 'codes') {
+      <zm-booking-form
+        class="auth-form"
+        variant="auth"
+        landmark
+        headingId="card-title"
+        [headingLevel]="1"
+        [heading]="'accounts.mfaSetup.codesTitle' | transloco"
+        [stamp]="'accounts.mfaSetup.codesStamp' | transloco"
+      >
+        <p class="text-muted">{{ 'accounts.mfaSetup.codesLead' | transloco }}</p>
+        <zm-list
+          variant="grid"
+          ordered
+          [label]="'accounts.mfaSetup.codesLabel' | transloco: { count: codes().length }"
+          [items]="codeItems()"
+        />
+        <div class="cluster">
+          <zm-button (click)="download()"
+            ><zm-icon name="download" />{{ 'accounts.mfaSetup.download' | transloco }}</zm-button
+          >
+          <zm-button (click)="copy()"
+            ><zm-icon name="copy" />{{
+              (copied() ? 'accounts.mfaSetup.copied' : 'accounts.mfaSetup.copy') | transloco
+            }}</zm-button
+          >
+        </div>
+        <zm-button-link link="/account" fragment="two-step" variant="primary" size="lg" block>{{
+          'accounts.mfaSetup.saved' | transloco
+        }}</zm-button-link>
+        <span slot="fine">{{ 'accounts.mfaSetup.codesFine' | transloco: { email: email() } }}</span>
+      </zm-booking-form>
+    } @else {
+      <form
+        class="auth-form"
+        aria-labelledby="card-title"
+        novalidate
+        [formGroup]="form"
+        (ngSubmit)="turnOn()"
+      >
+        <zm-booking-form
+          variant="auth"
+          headingId="card-title"
+          [headingLevel]="1"
+          [heading]="'accounts.mfaSetup.title' | transloco"
+          [stamp]="'accounts.mfaSetup.stamp' | transloco"
+          [busy]="busy() || status() === 'loading'"
+        >
+          @switch (status()) {
+            @case ('invalid') {
+              <zm-error-summary
+                summaryId="error-summary"
+                [heading]="'accounts.mfaSetup.invalidTitle' | transloco"
+                [items]="summaryItems()"
+              />
+            }
+            @case ('error') {
+              <zm-alert
+                variant="danger"
+                compact
+                [heading]="'accounts.mfaSetup.errorTitle' | transloco"
+              >
+                <p>{{ 'accounts.mfaSetup.errorText' | transloco }}</p>
+              </zm-alert>
+            }
+            @default {
+              <p class="text-muted">{{ 'accounts.mfaSetup.lead' | transloco }}</p>
+            }
+          }
+          @if (status() === 'loading') {
+            <p class="visually-hidden" role="status">
+              {{ 'accounts.mfaSetup.loading' | transloco }}
+            </p>
+            <div class="key" aria-hidden="true">
+              <zm-skeleton shape="block" class="key__qr" />
+              <span class="key__text"
+                ><zm-skeleton shape="text" width="long" /><zm-skeleton shape="text"
+              /></span>
+            </div>
+            <zm-skeleton shape="control-lg" aria-hidden="true" />
+          } @else {
+            @if (key()) {
+              <div class="key">
+                <img
+                  class="key__qr"
+                  width="128"
+                  height="128"
+                  [src]="qrSrc()"
+                  [alt]="'accounts.mfaSetup.qrLabel' | transloco: { email: email() }"
+                />
+                <div class="key__text">
+                  <p>{{ 'accounts.mfaSetup.cantScan' | transloco }}</p>
+                  <p>
+                    <code>{{ key() }}</code>
+                  </p>
+                </div>
+              </div>
+            }
+            <zm-form-field
+              #codeField
+              fieldId="code"
+              formControlName="code"
+              autocomplete="one-time-code"
+              [label]="'accounts.mfaSetup.code' | transloco"
+              [requiredMarker]="'accounts.required' | transloco"
+              [readonly]="busy()"
+              [error]="status() === 'invalid' ? ('accounts.mfaSetup.codeWrong' | transloco) : null"
+            />
+            <zm-button variant="primary" size="lg" block type="submit" [busy]="busy()">{{
+              (busy() ? 'accounts.mfaSetup.checking' : 'accounts.mfaSetup.turnOn') | transloco
+            }}</zm-button>
+          }
+          <a slot="links" routerLink="/account" fragment="two-step">{{
+            'accounts.mfaSetup.cancel' | transloco
+          }}</a>
+          <span slot="fine">{{ 'accounts.mfaSetup.fine' | transloco }}</span>
+        </zm-booking-form>
+      </form>
+    }
+  </div>
+</div>

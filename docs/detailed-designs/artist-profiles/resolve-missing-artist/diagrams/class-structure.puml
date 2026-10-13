@@ -14,81 +14,91 @@ skinparam class {
 title Class structure — Resolve a missing artist
 
 package "Zamaro Web (Angular)" {
-  class ArtistProfilePage {
-    -responseInit: ResponseInit | null
-    -onMoved(newSlug: string): void
-    -onNotFound(problem: ArtistNotFoundProblem): void
+  class ArtistPage {
+    -carriedSearch(date): CarriedSearch
+    +carriedPlace: Signal<string | null>
   }
-  class ArtistNotFoundComponent {
-    +similar: InputSignal<SimilarArtist[]>
-    +carriedDate: InputSignal<string | null>
+  class ArtistProfileStore {
+    +status: Signal<'loading' | 'loaded' | 'missing' | 'error'>
+    +similarArtists: Signal<SimilarArtists | null>
+    +load(slug, search: CarriedSearch): void
+    -move(slug): void
   }
-  class ArtistNotFoundProblem <<interface>> {
-    +type: string
-    +title: string
-    +status: 404
-    +similarArtists: SimilarArtist[]
+  class HttpStatus <<root service>> {
+    +set(status: number): void
   }
+  class HttpArtistProfilesApi {
+    +get(slug, search): Observable<ArtistProfile>
+  }
+  class "ArtistNotFound" as WebNotFound <<error>> {
+    +similarArtists: SimilarArtists
+  }
+  class ArtistNotFoundPage {
+    +similar: InputSignal<SimilarArtists>
+    +place: InputSignal<string | null>
+    +lineupParams: InputSignal<Params>
+  }
+  class NotFoundPage
+  class ErrorPage <<zm-error-page>>
 }
 
 package "Zamaro API (Laravel)" {
   class ArtistProfileController {
-    +show(slug: string, request: Request): Response
+    +show(request: ShowArtistProfileRequest, slug): JsonResponse
+  }
+  class ShowArtistProfileRequest {
+    +carriedSearch(): SearchCriteria
   }
   class ResolveArtistSlug <<action>> {
-    +handle(slug: string): SlugResolution
+    +handle(slug): Artist
   }
-  interface SlugResolution
-  class Found {
-    +Artist artist
+  class ArtistMoved <<exception, 301>> {
+    +string currentSlug
   }
-  class Moved {
-    +string newSlug
-  }
-  class Missing {
-    +?MissingArtistContext context
-  }
-  class MissingArtistContext <<value object>> {
+  class ArtistNotFound <<exception, 404>> {
     +?Style primaryStyle
-    +?Coordinates base
-  }
-  class ArtistNotFound <<exception>> {
-    +SimilarArtist[] similarArtists
-    +render(request: Request): JsonResponse
+    +?SimilarArtists similarArtists
+    +withSimilarArtists(similar): ArtistNotFound
   }
   class SimilarArtistFinder {
-    +forMissingArtist(context: MissingArtistContext, search: ?SearchCriteria, limit: int = 3): Artist[]
+    +forMissingArtist(style: ?Style, search: SearchCriteria, limit = 3): SimilarArtists
   }
+  class SimilarArtists <<value object>> {
+    +CarbonImmutable date
+    +int radiusKm
+    +LineupCard[] cards
+  }
+  class ProblemDetailsRenderer
   class SlugHistory <<Eloquent>> {
-    +string oldSlug
     +int artistId
-    +CarbonImmutable replacedAt
+    +string slug
+    +?CarbonImmutable retiredAt
   }
   class Artist <<Eloquent>> {
     +string slug
     +ArtistStatus status
-    +?CarbonImmutable publishedAt
-    +isViewable(): bool
-  }
-  enum ArtistStatus {
-    Approved
-    Suspended
-    Deleted
+    +isVisible(): bool
+    +primaryStyle(): ?Style
   }
 }
 
-SlugResolution <|.. Found
-SlugResolution <|.. Moved
-SlugResolution <|.. Missing
-Missing --> MissingArtistContext
-ResolveArtistSlug ..> SlugResolution : returns
-ResolveArtistSlug ..> SlugHistory : reads
+ResolveArtistSlug ..> SlugHistory : reads retired slugs
 ResolveArtistSlug ..> Artist : reads
+ResolveArtistSlug ..> ArtistMoved : throws
+ResolveArtistSlug ..> ArtistNotFound : throws
 SlugHistory "*" --> "1" Artist
-Artist --> ArtistStatus
 ArtistProfileController --> ResolveArtistSlug
-ArtistProfileController ..> ArtistNotFound : throws
-ArtistNotFound ..> SimilarArtistFinder : uses
-ArtistProfilePage ..> ArtistNotFoundProblem : reads
-ArtistProfilePage ..> ArtistNotFoundComponent : renders
+ArtistProfileController --> SimilarArtistFinder
+ArtistProfileController ..> ShowArtistProfileRequest
+SimilarArtistFinder ..> SimilarArtists : returns
+ProblemDetailsRenderer ..> ArtistMoved : 301 Location
+ProblemDetailsRenderer ..> ArtistNotFound : artist-not-found problem
+ArtistPage --> ArtistProfileStore
+ArtistPage ..> ArtistNotFoundPage : renders when missing
+ArtistProfileStore --> HttpArtistProfilesApi
+ArtistProfileStore --> HttpStatus : 404 or 301
+HttpArtistProfilesApi ..> WebNotFound : errors with
+ArtistNotFoundPage --> ErrorPage
+NotFoundPage --> ErrorPage
+NotFoundPage --> HttpStatus : 404
 @enduml

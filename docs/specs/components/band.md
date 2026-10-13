@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-band` |
 | Library path | `frontend/projects/components/src/lib/band/` |
-| Status | planned |
+| Status | built (M1 S14) |
 | Traces to | L2-047, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-108, L2-111, L2-112 |
 | Design system | [`band.html`](../../design-system/components/band.html) |
 | Source mocks | [`pages/discover/default`](../../mocks/pages/discover/default.html), [`pages/discover/loading`](../../mocks/pages/discover/loading.html), [`pages/discover/empty`](../../mocks/pages/discover/empty.html), [`pages/discover/error`](../../mocks/pages/discover/error.html), [`pages/discover/invalid`](../../mocks/pages/discover/invalid.html), [`pages/discover/limited`](../../mocks/pages/discover/limited.html) |
@@ -407,6 +407,8 @@ The action's lift takes `--duration-fast` and drops to near zero under
 - **AC-23** Given the `Band` scenario, when the perf test runs against the base branch with `--fail-on-regression`, then it is not flagged as a possible regression and renders in its tuned window. (L2-086)
 
 ## Implementation notes
+
+**As built in M1 (S14):** as below. The stage re-skin and the ink focus ring are `:host-context(.band)` rules at the end of `button.scss`, after the stage rules. Discover renders the band without "Apply as an artist" until the application page exists (M3); the `Band` scenario includes the action, as a `zm-button-anchor` because the perf-test app has no router.
 
 The component is planned. To build it:
 

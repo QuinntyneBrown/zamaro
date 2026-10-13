@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ErrorSummary } from 'components';
 
-/** The Discover form's error summary with two problems (docs/mocks/pages/discover/invalid.html). */
+/** Account settings after a failed save (form-layout CRD): two problems, one link each. */
 @Component({
   selector: 'zm-error-summary-scenario',
   imports: [ErrorSummary],
   template: `<zm-error-summary
     summaryId="error-summary"
-    heading="Two things before we can search"
-    [headingLevel]="3"
+    heading="Fix 2 things before saving"
     [autoFocus]="false"
     [items]="items"
   />`,
@@ -16,7 +15,7 @@ import { ErrorSummary } from 'components';
 })
 export default class ErrorSummaryScenario {
   protected readonly items = [
-    { fieldId: 'find-date', message: 'Pick your event date.' },
-    { fieldId: 'find-place', message: 'Enter your church’s location.' },
+    { fieldId: 'new-email', message: 'Enter a full new email address' },
+    { fieldId: 'postal', message: 'Enter a full postal code' },
   ];
 }

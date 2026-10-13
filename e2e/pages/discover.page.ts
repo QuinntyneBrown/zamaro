@@ -31,6 +31,11 @@ export class DiscoverPage {
     });
   }
 
+  /** Every search is held and never answered, so the lineup keeps loading. */
+  async holdSearches(): Promise<void> {
+    await this.page.route('**/api/v1/search?*', () => new Promise<void>(() => undefined));
+  }
+
   /** Every search fails as if the network dropped. */
   async failSearches(): Promise<void> {
     await this.page.route('**/api/v1/search?*', (route) => route.abort('connectionfailed'));
@@ -42,7 +47,12 @@ export class DiscoverPage {
       route.fulfill({
         status: 429,
         headers: { 'Content-Type': 'application/problem+json', 'Retry-After': String(seconds) },
-        body: JSON.stringify({ type: 'about:blank', title: 'Too many requests', status: 429, detail: '' }),
+        body: JSON.stringify({
+          type: 'about:blank',
+          title: 'Too many requests',
+          status: 429,
+          detail: '',
+        }),
       }),
     );
   }
@@ -110,6 +120,36 @@ export class DiscoverPage {
     return this.page.locator(':focus');
   }
 
+  /** Saving fails on the server's side until unrouted. */
+  async failSaves(): Promise<void> {
+    await this.page.route('**/api/v1/saved-artists/*', (route) =>
+      route.request().method() === 'PUT'
+        ? route.fulfill({
+            status: 500,
+            headers: { 'Content-Type': 'application/problem+json' },
+            body: JSON.stringify({ title: 'Something went wrong', status: 500 }),
+          })
+        : route.fallback(),
+    );
+  }
+
+  /** Saving is refused as over the 200-artist limit. */
+  async limitSaves(): Promise<void> {
+    await this.page.route('**/api/v1/saved-artists/*', (route) =>
+      route.request().method() === 'PUT'
+        ? route.fulfill({
+            status: 422,
+            headers: { 'Content-Type': 'application/problem+json' },
+            body: JSON.stringify({
+              type: 'https://zamaro.ca/problems/saved-artist-limit',
+              title: 'You can save up to 200 artists',
+              status: 422,
+            }),
+          })
+        : route.fallback(),
+    );
+  }
+
   async open(): Promise<void> {
     await this.page.goto('/');
   }
@@ -122,6 +162,12 @@ export class DiscoverPage {
   /** Opens a shared Discover link with these query parameters. */
   async openLink(params: Record<string, string>): Promise<void> {
     await this.page.goto(`/?${new URLSearchParams(params)}`, { waitUntil: 'networkidle' });
+  }
+
+  /** The path and query in the address bar. */
+  address(): string {
+    const url = new URL(this.page.url());
+    return `${url.pathname}${url.search}`;
   }
 
   /** The query parameters in the address bar. */
@@ -153,6 +199,63 @@ export class DiscoverPage {
   /** As if the person chose `theme` on an earlier visit from this device. */
   async rememberThemeOnDevice(theme: Theme): Promise<void> {
     await this.page.addInitScript((value) => localStorage.setItem('zamaro.theme', value), theme);
+  }
+
+  // How booking works (#how) and the artists' band (#join)
+
+  private howSection(): Locator {
+    return this.page.locator('section#how');
+  }
+
+  howHeading(): Locator {
+    return this.page.locator('#how-title');
+  }
+
+  howNote(): Locator {
+    return this.howSection().locator('.section__head > p');
+  }
+
+  /** Each step's title, in order. */
+  stepTitles(): Locator {
+    return this.howSection().locator('ol.steps > li h3');
+  }
+
+  stepDescriptions(): Locator {
+    return this.howSection().locator('ol.steps > li p');
+  }
+
+  policyHeading(): Locator {
+    return this.page.locator('#policy-title');
+  }
+
+  /** The cancellation policy's terms, in order. */
+  policyTerms(): Locator {
+    return this.page.locator('section#policy dt');
+  }
+
+  policyDetails(): Locator {
+    return this.page.locator('section#policy dd');
+  }
+
+  /** The "For artists" band, a region named by its headline. */
+  band(): Locator {
+    return this.page.getByRole('region', { name: 'Lead worship? Get on the bill.' });
+  }
+
+  bandKicker(): Locator {
+    return this.band().locator('.overline');
+  }
+
+  /** The address bar's fragment, "#how". */
+  hash(): string {
+    return new URL(this.page.url()).hash;
+  }
+
+  async isInViewport(locator: Locator): Promise<boolean> {
+    return locator.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      return box.top >= 0 && box.top < window.innerHeight;
+    });
   }
 
   /** Keeps the Angular app from starting, so only the server HTML and its inline script run. */

@@ -1,77 +1,130 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, Injector } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  Injector,
+  untracked,
+} from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { type CalendarDate, FormatService, type MusicalKey } from 'api';
+import {
+  addDays,
+  addMonths,
+  type CalendarDate,
+  type CarriedSearch,
+  FeatureFlags,
+  FormatService,
+  GATHERING_KINDS,
+  type MusicalKey,
+  torontoToday,
+} from 'api';
 import {
   ArtistPoster,
-  Artwork,
-  type ArtworkPhoto,
   ArtistPosterSkeleton,
+  Artwork,
+  BookingForm,
   Breadcrumb,
   Button,
   ButtonLink,
   type Crumb,
   EmptyState,
   ErrorStage,
+  type FieldOption,
+  FormField,
   Icon,
+  InlineMessage,
   Marquee,
+  Rating,
+  Review,
   Setlist,
   Skeleton,
+  TourDates,
+  type TourDate as TourDateRow,
   VideoCard,
 } from 'components';
 import { map } from 'rxjs';
-import { openPhotoViewer } from '../../dialogs/photo-viewer/photo-viewer';
 import { LastSearch } from '../../shared/last-search';
+import { SavedArtistsStore } from '../../shared/saved-artists.store';
+import { PageMeta } from '../../shared/page-meta';
+import { ShareLink } from '../../shared/share-link';
+import { ArtistNotFoundPage } from '../not-found/artist-not-found';
 import { ArtistProfileStore } from './artist-profile.store';
+import { BookingDateStore } from './booking-date.store';
+import { ProfileReviewsStore } from './profile-reviews.store';
+import { ProfileSeo } from './profile-seo';
 
 /** Songs shown in the strip under the header (L2-012.1). */
 const STRIP_SONGS = 5;
 
-/** The featured video spans the row; the rest are a third of it from MD (artwork CRD sizes). */
-const FEATURED_VIDEO_SIZES = '100vw';
-const VIDEO_SIZES = '(min-width: 48rem) 33vw, 100vw';
-/** The gallery's rendered width per breakpoint: 2 across, 4 from MD. */
-const GALLERY_SIZES = '(min-width: 48rem) 25vw, 50vw';
+/** Reviews each "Show more" adds (L2-018.2). */
+const REVIEWS_PER_PAGE = 10;
 
 /**
  * An artist's public profile at `/artists/{slug}` (docs/mocks/pages/artist): the header, the strip
- * of songs, About, the videos, the photos and the setlist. A `?date=` carried from Discover names
- * the date on the back link and the Book button (L2-012.2). Reviews and the booking stub join later.
+ * of songs, About, videos, photos, the setlist, the upcoming dates, what churches say, and the
+ * booking stub, with the head that crawlers and link previews read (L2-112, L2-113). A `?date=`
+ * carried from Discover names the date on the back link and starts the dates and the stub there
+ * (L2-012.2, L2-017). Sending the request waits behind the `bookingRequests` flag (M5). A missing
+ * or hidden artist shows the not-found page in its place (L2-021).
  */
 @Component({
   selector: 'zm-artist-page',
   imports: [
+    ArtistNotFoundPage,
     ArtistPoster,
-    Artwork,
     ArtistPosterSkeleton,
+    Artwork,
+    BookingForm,
     Breadcrumb,
     Button,
     ButtonLink,
     EmptyState,
     ErrorStage,
+    FormField,
     Icon,
+    InlineMessage,
     Marquee,
+    Rating,
+    ReactiveFormsModule,
+    Review,
+    RouterLink,
     Setlist,
     Skeleton,
+    TourDates,
     TranslocoPipe,
     VideoCard,
   ],
-  providers: [ArtistProfileStore],
+  providers: [ArtistProfileStore, ProfileReviewsStore, BookingDateStore],
   host: { '[attr.aria-busy]': "store.showSkeletons() ? 'true' : null" },
   templateUrl: './artist.html',
   styleUrl: './artist.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistPage {
+  protected readonly saved = inject(SavedArtistsStore);
   protected readonly store = inject(ArtistProfileStore);
+  protected readonly reviewsStore = inject(ProfileReviewsStore);
+  protected readonly dates = inject(BookingDateStore);
+  protected readonly flags = inject(FeatureFlags);
   private readonly lastSearch = inject(LastSearch);
   private readonly format = inject(FormatService);
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
   private readonly route = inject(ActivatedRoute);
   private readonly injector = inject(Injector);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly seo = inject(ProfileSeo);
+  private readonly pageMeta = inject(PageMeta);
+  private readonly title = inject(Title);
+  private readonly shareLink = inject(ShareLink);
 
   /** The search date carried from Discover, when it is a real date. */
   private readonly date = toSignal(
@@ -86,18 +139,78 @@ export class ArtistPage {
     { initialValue: null },
   );
 
+  /** The booking stub's fields; the page owns the form (booking-form CRD D-3). */
+  protected readonly request = new FormGroup({
+    date: new FormControl('', { nonNullable: true }),
+    kind: new FormControl<string>('sunday-service', { nonNullable: true }),
+    church: new FormControl('', { nonNullable: true }),
+    message: new FormControl('', { nonNullable: true }),
+  });
+
+  protected readonly kinds: FieldOption[] = GATHERING_KINDS.map((kind) => ({
+    value: kind,
+    label: this.t(`discover.kind.${kind}`),
+  }));
+
+  /** The booking window: 3 days to 18 months ahead (L2-004). */
+  protected readonly minDate = addDays(torontoToday(), 3);
+  protected readonly maxDate = addMonths(torontoToday(), 18);
+
   constructor() {
     this.route.paramMap
       .pipe(
         map((params) => params.get('slug') ?? ''),
         takeUntilDestroyed(),
       )
-      .subscribe((slug) => this.store.load(slug));
+      .subscribe((slug) => {
+        const date = this.date();
+        const search = this.lastSearch.search();
+        this.store.load(slug, this.carriedSearch(date));
+        this.dates.load(slug, date);
+        this.request.reset({
+          date: date ?? '',
+          kind: search && search.date === date ? search.params['kind'] : 'sunday-service',
+        });
+      });
+    // The missing-artist page sets its own head.
+    effect(() => {
+      const status = this.store.status();
+      const profile = this.store.profile();
+      untracked(() => {
+        if (status === 'loaded' && profile) this.seo.apply(profile);
+        if (status === 'error') {
+          this.pageMeta.set({ title: this.t('artist.error.title'), index: false });
+        }
+      });
+    });
+    this.request.controls.date.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((date) => this.dates.select(date));
   }
 
+  /** The stub's date: carried from Discover, picked or typed (L2-017.3). */
   private readonly shortDate = computed(() => {
-    const date = this.date();
+    const date = this.dates.selectedDate();
     return date ? this.format.shortDate(date) : null;
+  });
+
+  /**
+   * The search to suggest similar artists from if the artist is missing (L2-021.1): the last
+   * lineup's when it was for the carried date, otherwise the date alone.
+   */
+  private carriedSearch(date: CalendarDate | null): CarriedSearch {
+    const search = this.lastSearch.search();
+    if (!date) return {};
+    if (search?.date !== date) return { date };
+    const { kind, lat, lng, radius } = search.params;
+    return { date, kind, lat, lng, radius };
+  }
+
+  /** The town the carried search was near ("Burlington"), for the missing-artist page. */
+  protected readonly carriedPlace = computed(() => {
+    const search = this.lastSearch.search();
+    const place = search && search.date === this.date() ? String(search.params['place'] ?? '') : '';
+    return place.split(',')[0].trim() || null;
   });
 
   /** Back to the last lineup, or to Discover with the carried date (L2-009.2, L2-107). */
@@ -107,7 +220,8 @@ export class ArtistPage {
   });
 
   private readonly back = computed<Crumb>(() => {
-    const date = this.shortDate();
+    const carried = this.date();
+    const date = carried ? this.format.shortDate(carried) : null;
     return {
       label: date
         ? this.t('artist.breadcrumb.discoverOn', { date })
@@ -182,17 +296,13 @@ export class ArtistPage {
       .filter(Boolean),
   );
 
-  protected readonly songs = computed(() =>
-    this.store.profile()!.setlist.map((song) => ({
-      title: song.title,
-      credit: song.writer,
-      key: this.keyLabel(song.key),
-    })),
+  /** The act-type illustration: a singer for a solo act, a group for the rest (L2-020.3). */
+  protected readonly artVariant = computed(() =>
+    this.store.profile()!.actType === 'solo' ? 'solo' : 'group',
   );
 
-  /** The live videos, with the stamp "Play · 6:12" and the label read for the button (L2-014). */
   protected readonly videos = computed(() =>
-    this.store.profile()!.videos.map((video, index) => {
+    this.store.profile()!.videos.map((video) => {
       const minutes = Math.floor(video.durationSeconds / 60);
       const seconds = video.durationSeconds % 60;
       return {
@@ -201,60 +311,214 @@ export class ArtistPage {
         stamp: this.t('artist.videos.stamp', {
           duration: `${minutes}:${String(seconds).padStart(2, '0')}`,
         }),
+        // "Play Way Maker, live at Bethel Pentecostal, Hamilton, 6 minutes 12 seconds".
         label: this.t('artist.videos.label', {
           title: video.title.replace(' — ', ', '),
           minutes,
           seconds,
         }),
-        poster: video.poster && {
-          ...video.poster,
-          sizes: index === 0 ? FEATURED_VIDEO_SIZES : VIDEO_SIZES,
-        },
+        poster: video.poster,
         stream: video.stream,
         captions: video.captions && {
           src: video.captions.src,
-          srclang: video.captions.language,
-          label: this.t('artist.videos.captions', { language: video.captions.language }),
+          srclang: video.captions.lang,
+          label: this.t('artist.videos.captions', { lang: video.captions.lang }),
         },
       };
     }),
   );
 
-  /** Duos, bands and choirs get the group silhouette (L2-020.3). */
-  protected readonly artVariant = computed(() =>
-    this.store.profile()!.actType === 'solo' ? ('solo' as const) : ('group' as const),
-  );
-
-  /** The gallery: each photo opens the viewer, and links to its largest rendition without script. */
   protected readonly photos = computed(() => {
     const photos = this.store.profile()!.photos;
     return photos.map((photo, index) => ({
       id: photo.id,
-      label: this.t('artist.photos.open', {
+      openLabel: this.t('artist.photos.open', {
         position: index + 1,
         total: photos.length,
         alt: photo.alt,
       }),
-      full: photo.srcset.split(', ').at(-1)?.split(' ')[0] ?? photo.src,
-      image: { ...photo, sizes: GALLERY_SIZES } satisfies ArtworkPhoto,
+      image: { ...photo, sizes: '(min-width: 48rem) 25vw, 50vw' },
     }));
   });
 
-  /** Opens the photo viewer at this photo (L2-015.2); a modified click still follows the link. */
-  protected openPhoto(event: MouseEvent, index: number): void {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
-    event.preventDefault();
+  protected readonly noPhotosLabel = computed(() => {
     const profile = this.store.profile()!;
+    return this.t('artist.photos.none', { act: profile.actType, name: profile.displayName });
+  });
+
+  protected readonly songs = computed(() =>
+    this.store.profile()!.setlist.map((song) => ({
+      title: song.title,
+      credit: song.writer,
+      key: this.keyLabel(song.key),
+    })),
+  );
+
+  protected readonly ratingCount = computed(() =>
+    this.t('common.rating.churches', { count: this.store.profile()!.reviewCount }),
+  );
+
+  /** Each review as the card shows it, with the month and reply line formatted (L2-110). */
+  protected readonly reviews = computed(() =>
+    this.reviewsStore.reviews().map((review) => ({
+      id: review.id,
+      quote: review.text,
+      stars: review.stars,
+      starsLabel: this.t('artist.reviews.stars', { n: review.stars }),
+      reviewer: review.attribution.reviewerName,
+      source: this.t('artist.reviews.source', {
+        church: review.attribution.churchName,
+        city: review.attribution.city,
+        month: this.format.monthYear(review.attribution.month),
+      }),
+      reply: review.reply?.text ?? null,
+      replyMeta: review.reply
+        ? this.t('artist.reviews.replyMeta', {
+            name: review.reply.artistName,
+            month: this.format.monthYear(review.reply.month),
+          })
+        : '',
+    })),
+  );
+
+  /** "Show all 38 reviews" from the profile's first few, then "Show 10 more" (or fewer at the end). */
+  protected readonly moreReviewsLabel = computed(() => {
+    const shown = this.reviews().length;
+    const total = this.reviewsStore.total();
+    return shown <= this.store.profile()!.reviews.items.length
+      ? this.t('artist.reviews.showAll', { count: total })
+      : this.t('artist.reviews.more', { count: Math.min(REVIEWS_PER_PAGE, total - shown) });
+  });
+
+  /** Appends the next reviews and moves focus to the first new one (L2-018.2, L2-101). */
+  protected async showMoreReviews(): Promise<void> {
+    const firstNew = this.reviews().length;
+    if (!(await this.reviewsStore.loadMore())) return;
+    afterNextRender(
+      () =>
+        this.host.nativeElement.querySelectorAll<HTMLElement>('.reviews > li')[firstNew]?.focus(),
+      { injector: this.injector },
+    );
+  }
+
+  /** The viewer loads on first use; it returns focus to the photo that opened it (L2-015.2). */
+  protected async openPhoto(index: number): Promise<void> {
+    const profile = this.store.profile()!;
+    const { openPhotoViewer } = await import('../../dialogs/photo-viewer/photo-viewer');
     openPhotoViewer(this.injector, {
       artistName: profile.displayName,
       photos: profile.photos,
-      index,
+      start: index,
     });
   }
 
-  /** Moves focus to the booking stub's date field (L2-012.3); the stub arrives with tour dates. */
+  /** "Upcoming dates" as the list shows them; the stub's date is "Your date" (L2-017). */
+  protected readonly tourRows = computed<TourDateRow[]>(() => {
+    const selected = this.dates.selectedDate();
+    return this.dates.tourDates().map((row) => {
+      const stamp = this.format.dayStamp(row.date);
+      const current = row.date === selected;
+      const booking =
+        row.status === 'booked'
+          ? { kind: this.t(`discover.kind.${row.kind}`), city: row.city }
+          : null;
+      return {
+        id: row.date,
+        dayLabel: stamp.weekday,
+        dayValue: stamp.day,
+        current,
+        status: row.status,
+        note: booking
+          ? this.t(current ? 'artist.dates.yourDateBooked' : 'artist.dates.booking', booking)
+          : this.t(current ? 'artist.dates.yourDate' : 'artist.dates.openAllDay'),
+        pickLabel: this.t('artist.dates.pickLabel', { date: this.format.shortDate(row.date) }),
+      };
+    });
+  });
+
+  /** "Pick a free date…" beside a list with bookings in it; a wide-open calendar says so. */
+  protected readonly datesNote = computed(() => {
+    const rows = this.dates.tourDates();
+    if (!rows.length || rows.some((row) => row.status === 'booked')) {
+      return this.t('artist.dates.note');
+    }
+    const month = Number(rows[0].date.slice(5, 7));
+    const season =
+      month >= 3 && month <= 5
+        ? 'spring'
+        : month >= 6 && month <= 8
+          ? 'summer'
+          : month >= 9 && month <= 11
+            ? 'autumn'
+            : 'winter';
+    return this.t('artist.dates.wideOpen', { name: this.store.profile()!.firstName, season });
+  });
+
+  protected readonly stubPrice = computed(() =>
+    this.t('artist.stub.price', {
+      price: this.format.money(this.store.profile()!.fromPrice.cents),
+    }),
+  );
+
+  /** "Abigail is free Sat 14 Nov" under the date, once the date is known to be free (L2-019.2). */
+  protected readonly dateFree = computed(() =>
+    this.dates.status() === 'free'
+      ? this.t('artist.stub.free', {
+          name: this.store.profile()!.firstName,
+          date: this.shortDate(),
+        })
+      : null,
+  );
+
+  /** The date field's error: the date is taken, or outside the booking window (L2-019.3). */
+  protected readonly dateError = computed(() => {
+    switch (this.dates.status()) {
+      case 'booked':
+        return this.t('artist.stub.booked', {
+          name: this.store.profile()!.firstName,
+          date: this.shortDate(),
+        });
+      case 'refused':
+        return this.dates.refusal();
+      default:
+        return null;
+    }
+  });
+
+  protected readonly submitLabel = computed(() => {
+    const date = this.shortDate();
+    return date ? this.t('artist.stub.submitForDate', { date }) : this.t('artist.stub.submit');
+  });
+
+  /** The share sheet with the profile's title and canonical address, or a copied link (L2-113). */
+  protected share(): void {
+    void this.shareLink.share(this.title.getTitle(), this.seo.canonical(this.store.profile()!));
+  }
+
+  /** Moves focus to the booking stub's date field, scrolling the stub into view (L2-012.3, L2-019.5). */
+  /** "Save" / "Saved" in the header (L2-026). */
+  protected toggleSave(): void {
+    const profile = this.store.profile()!;
+    this.saved.press(
+      { id: profile.id, name: profile.displayName, pronoun: profile.pronoun },
+      !this.saved.has(profile.id),
+    );
+  }
+
   protected book(): void {
     this.document.getElementById('book-date')?.focus();
+  }
+
+  /** A free row's date moves into the stub and the Book button; focus follows it there (L2-017.3). */
+  protected pick(date: CalendarDate): void {
+    this.request.controls.date.setValue(date);
+    afterNextRender(() => this.book(), { injector: this.injector });
+  }
+
+  /** Opens the stub with the message written for them (L2-020.1). */
+  protected askForRecording(): void {
+    this.request.controls.message.setValue(this.t('artist.stub.recording'));
+    this.document.getElementById('book-message')?.focus();
   }
 
   protected t(key: string, params?: Record<string, unknown>): string {

@@ -8,7 +8,7 @@ import { Ticket } from 'components';
   template: `<ol role="list">
     <li>
       <zm-ticket
-        positionLabel="No. 02"
+        kicker="No. 02"
         name="Marcus Bell Trio"
         link="/artists/marcus-bell-trio"
         [queryParams]="{ date: '2026-11-14' }"

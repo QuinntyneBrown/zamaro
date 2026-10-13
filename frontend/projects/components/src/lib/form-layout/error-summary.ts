@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -12,30 +11,34 @@ import {
 } from '@angular/core';
 
 export interface ErrorSummaryItem {
-  /** The id of the invalid field the link moves focus to. */
-  readonly fieldId: string;
-  readonly message: string;
+  /** The `id` of the control the message is about. */
+  fieldId: string;
+  message: string;
 }
 
 /**
- * A form's error summary (docs/specs/components/form-layout.md, `.error-summary`): a danger panel
- * announced as an alert, its heading the count, one link per invalid field in field order. A link
- * focuses its field, then emits `itemActivated`. Hidden while there are no items.
+ * What stopped a submit, at the top of the form (docs/specs/components/form-layout, error summary):
+ * a title that counts or names the problem and one link per field. It takes focus when it first
+ * renders, so it is read once, and has no `role="alert"` (D-2). A link moves focus to its field
+ * instead of following the fragment. With no items the host is hidden.
  */
 @Component({
   selector: 'zm-error-summary',
   host: {
     class: 'error-summary',
-    role: 'alert',
+    role: 'group',
     tabindex: '-1',
-    '[attr.id]': 'summaryId()',
+    '[id]': 'summaryId()',
     '[attr.aria-labelledby]': 'titleId()',
     '[hidden]': '!items().length',
   },
-  template: `@if (headingLevel() === 3) {
-      <h3 class="error-summary__title" [id]="titleId()">{{ heading() }}</h3>
-    } @else {
-      <h2 class="error-summary__title" [id]="titleId()">{{ heading() }}</h2>
+  template: `@switch (headingLevel()) {
+      @case (3) {
+        <h3 class="error-summary__title" [id]="titleId()">{{ heading() }}</h3>
+      }
+      @default {
+        <h2 class="error-summary__title" [id]="titleId()">{{ heading() }}</h2>
+      }
     }
     <ul>
       @for (item of items(); track item.fieldId) {
@@ -75,27 +78,26 @@ export interface ErrorSummaryItem {
     a {
       color: var(--color-danger-fg);
       font-weight: var(--font-weight-bold);
+      text-decoration: underline;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorSummary {
-  /** "Two things before we can search". */
+  /** "Couldn’t sign you in", "Fix 2 things before saving". */
   readonly heading = input.required<string>();
-  /** The host's id; the title is `{summaryId}-title` and labels the host. */
+  /** The host's `id`; the title is `{summaryId}-title` and names the host. */
   readonly summaryId = input.required<string>();
   /** 2 on a page, 3 in a dialog or inside the booking bar. */
   readonly headingLevel = input<2 | 3>(2);
   readonly items = input.required<readonly ErrorSummaryItem[]>();
-  /** Focuses the summary once when it first renders; Discover focuses the first field instead. */
+  /** Takes focus once when first rendered; off where the first invalid field takes it instead. */
   readonly autoFocus = input(true, { transform: booleanAttribute });
-  /** Emits the field id after a link has moved focus to that field. */
+  /** A link was followed, after focus moved to its field. */
   readonly itemActivated = output<string>();
 
   protected readonly titleId = computed(() => `${this.summaryId()}-title`);
-
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly document = inject(DOCUMENT);
 
   constructor() {
     afterNextRender(() => {
@@ -103,14 +105,14 @@ export class ErrorSummary {
     });
   }
 
-  /** Focuses the summary, e.g. after a second failed submit while it is already shown. */
+  /** Moves focus to the summary, for a second failed submit while it is already shown. */
   focus(): void {
     this.host.nativeElement.focus();
   }
 
   protected activate(event: Event, fieldId: string): void {
     event.preventDefault();
-    this.document.getElementById(fieldId)?.focus();
+    this.host.nativeElement.ownerDocument.getElementById(fieldId)?.focus();
     this.itemActivated.emit(fieldId);
   }
 }

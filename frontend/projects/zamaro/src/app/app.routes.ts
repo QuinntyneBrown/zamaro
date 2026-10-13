@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { signedInGuard, termsGuard } from 'api';
 
 export const routes: Routes = [
   {
@@ -8,5 +9,59 @@ export const routes: Routes = [
   {
     path: 'artists/:slug',
     loadComponent: () => import('./pages/artist/artist').then((m) => m.ArtistPage),
+  },
+  {
+    path: 'sign-in',
+    loadComponent: () => import('./pages/sign-in/sign-in').then((m) => m.SignIn),
+  },
+  {
+    path: 'sign-up',
+    loadComponent: () => import('./pages/sign-up/sign-up').then((m) => m.SignUp),
+  },
+  {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+  },
+  {
+    path: 'reset-password/:token',
+    loadComponent: () =>
+      import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
+  },
+  {
+    path: 'verify-email',
+    loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+  },
+  {
+    path: 'account/security/mfa',
+    canActivate: [signedInGuard, termsGuard],
+    loadComponent: () => import('./pages/mfa-setup/mfa-setup').then((m) => m.MfaSetup),
+  },
+  {
+    path: 'account/sign-in/verify',
+    loadComponent: () => import('./pages/mfa-challenge/mfa-challenge').then((m) => m.MfaChallenge),
+  },
+  {
+    path: 'account/email/confirm',
+    loadComponent: () => import('./pages/confirm-email/confirm-email').then((m) => m.ConfirmEmail),
+  },
+  {
+    path: 'account/accept-terms',
+    canActivate: [signedInGuard],
+    loadComponent: () => import('./pages/accept-terms/accept-terms').then((m) => m.AcceptTerms),
+  },
+  {
+    path: 'account',
+    canActivate: [signedInGuard, termsGuard],
+    loadComponent: () => import('./pages/account/account').then((m) => m.Account),
+  },
+  {
+    path: 'saved',
+    canActivate: [signedInGuard, termsGuard],
+    loadComponent: () => import('./pages/saved/saved').then((m) => m.SavedPage),
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFoundPage),
   },
 ];

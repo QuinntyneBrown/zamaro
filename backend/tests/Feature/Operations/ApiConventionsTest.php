@@ -11,6 +11,7 @@ use Tests\TestCase;
 /**
  * L2-093.1: request IDs and structured request logs.
  * L2-095.2: RFC 9457 problem details for every error.
+ * CORS: only Zamaro Web's origins may call the API with credentials (ZAMARO_WEB_ORIGINS, ADR-0015).
  */
 class ApiConventionsTest extends TestCase
 {
@@ -73,6 +74,30 @@ class ApiConventionsTest extends TestCase
             ->assertJsonPath('type', 'about:blank')
             ->assertJsonPath('title', 'Method Not Allowed')
             ->assertJsonPath('status', 405);
+    }
+
+    public function test_a_preflight_from_a_zamaro_web_origin_may_send_credentials(): void
+    {
+        $response = $this->options('/api/v1/session', [], [
+            'Origin' => 'http://localhost:4200',
+            'Access-Control-Request-Method' => 'POST',
+            'Access-Control-Request-Headers' => 'content-type,x-xsrf-token',
+        ]);
+
+        $response->assertHeader('Access-Control-Allow-Origin', 'http://localhost:4200')
+            ->assertHeader('Access-Control-Allow-Credentials', 'true');
+    }
+
+    public function test_another_origin_gets_no_cors_permission(): void
+    {
+        $preflight = $this->options('/api/v1/session', [], [
+            'Origin' => 'https://evil.example',
+            'Access-Control-Request-Method' => 'POST',
+        ]);
+        $read = $this->getJson('/api/v1/features', ['Origin' => 'https://evil.example']);
+
+        $preflight->assertHeaderMissing('Access-Control-Allow-Origin');
+        $read->assertOk()->assertHeaderMissing('Access-Control-Allow-Origin');
     }
 
     public function test_every_request_writes_one_json_log_line_carrying_the_request_id(): void

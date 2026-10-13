@@ -17,10 +17,17 @@
     <!-- compose loads .env into the real environment ($_SERVER, which Laravel reads first), so each
          value is forced into both $_ENV and $_SERVER; otherwise tests would use the dev database. -->
     <php>
+        <!-- Each test class that asserts the contract generates the OpenAPI document once; the whole
+             suite outgrows PHP's default 128 MB. -->
+        <ini name="memory_limit" value="512M"/>
         <env name="APP_ENV" value="testing" force="true"/>
         <server name="APP_ENV" value="testing" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file" force="true"/>
         <server name="APP_MAINTENANCE_DRIVER" value="file" force="true"/>
+        <env name="ARGON_MEMORY" value="1024" force="true"/>
+        <server name="ARGON_MEMORY" value="1024" force="true"/>
+        <env name="ARGON_TIME" value="1" force="true"/>
+        <server name="ARGON_TIME" value="1" force="true"/>
         <env name="BCRYPT_ROUNDS" value="4" force="true"/>
         <server name="BCRYPT_ROUNDS" value="4" force="true"/>
         <env name="CACHE_STORE" value="array" force="true"/>
@@ -41,5 +48,10 @@
         <server name="SESSION_DRIVER" value="array" force="true"/>
         <env name="TELESCOPE_ENABLED" value="false" force="true"/>
         <server name="TELESCOPE_ENABLED" value="false" force="true"/>
+        <env name="ZAMARO_CAST_PASSWORD" value="hosanna-in-the-highest" force="true"/>
+        <!-- The field key for the suite only (ADR-0020). -->
+        <env name="FIELD_ENCRYPTION_KEY" value="base64:3n1c7RXPySRbelDt2owBBGi3g2I969dqn61+xvpPS2s=" force="true"/>
+        <server name="FIELD_ENCRYPTION_KEY" value="base64:3n1c7RXPySRbelDt2owBBGi3g2I969dqn61+xvpPS2s=" force="true"/>
+        <server name="ZAMARO_CAST_PASSWORD" value="hosanna-in-the-highest" force="true"/>
     </php>
 </phpunit>

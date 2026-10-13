@@ -1,11 +1,11 @@
 import type { Locator, Page } from '@playwright/test';
 
-/** The full-size photo viewer the profile's gallery opens (docs/mocks/dialogs/photo-viewer). */
+/** The full-size photo viewer a profile photo opens (docs/mocks/dialogs/photo-viewer). */
 export class PhotoViewerDialog {
   constructor(private readonly page: Page) {}
 
   dialog(): Locator {
-    return this.page.getByRole('dialog');
+    return this.page.getByRole('dialog', { name: /^Photo \d+ of \d+$/ });
   }
 
   title(): Locator {
@@ -16,12 +16,13 @@ export class PhotoViewerDialog {
     return this.dialog().locator('.dialog__kicker');
   }
 
-  image(): Locator {
-    return this.dialog().locator('.dialog__body img');
+  /** The full-size photo, named by the artist's alt text. */
+  photo(): Locator {
+    return this.dialog().getByRole('img');
   }
 
-  closeButton(): Locator {
-    return this.dialog().getByRole('button', { name: 'Close photo viewer' });
+  caption(): Locator {
+    return this.dialog().locator('.dialog__body p');
   }
 
   previousButton(): Locator {
@@ -32,6 +33,10 @@ export class PhotoViewerDialog {
     return this.dialog().getByRole('button', { name: 'Next photo' });
   }
 
+  closeButton(): Locator {
+    return this.dialog().getByRole('button', { name: 'Close photo viewer' });
+  }
+
   async next(): Promise<void> {
     await this.nextButton().click();
   }
@@ -40,7 +45,11 @@ export class PhotoViewerDialog {
     await this.previousButton().click();
   }
 
-  async press(key: 'ArrowLeft' | 'ArrowRight' | 'Escape'): Promise<void> {
-    await this.page.keyboard.press(key);
+  async pressArrow(direction: 'left' | 'right'): Promise<void> {
+    await this.page.keyboard.press(direction === 'left' ? 'ArrowLeft' : 'ArrowRight');
+  }
+
+  async closeWithEscape(): Promise<void> {
+    await this.page.keyboard.press('Escape');
   }
 }

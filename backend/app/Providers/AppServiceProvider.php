@@ -2,10 +2,22 @@
 
 namespace App\Providers;
 
+use App\Contracts\BotChallenge;
+use App\Contracts\BreachedPasswordChecker;
+use App\Contracts\ErrorReporter;
 use App\Contracts\Geocoder;
+use App\Contracts\IpLocator;
+use App\Contracts\OnCallAlerter;
 use App\Contracts\RoutingProvider;
+use App\Integrations\Alerting\FakeOnCallAlerter;
+use App\Integrations\BotChallenge\FakeBotChallenge;
+use App\Integrations\BreachedPasswords\FakeBreachedPasswordChecker;
+use App\Integrations\ErrorTracking\FakeErrorReporter;
 use App\Integrations\Geocoding\FakeGeocoder;
+use App\Integrations\IpLocation\FakeIpLocator;
 use App\Integrations\Routing\FakeRoutingProvider;
+use Carbon\CarbonImmutable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
 
@@ -19,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
     private const FAKES = [
         Geocoder::class => FakeGeocoder::class,
         RoutingProvider::class => FakeRoutingProvider::class,
+        BotChallenge::class => FakeBotChallenge::class,
+        BreachedPasswordChecker::class => FakeBreachedPasswordChecker::class,
+        ErrorReporter::class => FakeErrorReporter::class,
+        OnCallAlerter::class => FakeOnCallAlerter::class,
+        IpLocator::class => FakeIpLocator::class,
     ];
 
     public function register(): void
@@ -32,6 +49,11 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->environment('production')) {
             throw new LogicException('Fake vendor adapters are bound in production: '.implode(', ', array_keys(self::FAKES)));
+        }
+
+        // The e2e API runs on the mocks' "today" so date rules match the frozen browser clock.
+        if ($frozenNow = config('zamaro.frozen_now')) {
+            Carbon::setTestNow(CarbonImmutable::parse($frozenNow));
         }
     }
 }

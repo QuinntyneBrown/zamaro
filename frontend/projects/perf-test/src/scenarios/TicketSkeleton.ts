@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TicketSkeleton } from 'components';
 
-/** One loading ticket in the Discover lineup (docs/mocks/pages/discover/loading.html). */
+/** One loading ticket (docs/mocks/pages/saved/loading.html). */
 @Component({
   selector: 'zm-ticket-skeleton-scenario',
   imports: [TicketSkeleton],

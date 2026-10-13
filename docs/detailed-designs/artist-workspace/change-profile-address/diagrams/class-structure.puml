@@ -29,8 +29,9 @@ package "Zamaro Web (Angular)" {
     +changedAt: string | null
     +nextChangeOn: string | null
   }
-  class artistProfileResolver <<ResolveFn>> {
-    +resolve(slug: string): PublicProfile
+  class ArtistProfileStore <<public profile slice>> {
+    +load(slug: string, search: CarriedSearch): void
+    -move(currentSlug: string): void
   }
 }
 
@@ -53,8 +54,8 @@ package "Zamaro API (Laravel)" {
     +isTaken(slug: string, exceptArtistId: ?int): bool
     +firstFree(base: string): string
   }
-  class ArtistSlugResolver {
-    +resolve(slug: string): ?Artist
+  class ResolveArtistSlug <<action, ADR-0011>> {
+    +handle(slug: string): Artist
   }
   class Artist <<Eloquent>> {
     +int id
@@ -88,7 +89,7 @@ GenerateArtistSlug ..> SlugHistory : creates first
 ChangeArtistSlug --> Artist : updates
 ChangeArtistSlug ..> SlugHistory : retires old, creates new
 ChangeArtistSlug ..> ArtistSlugChanged : dispatches
-ArtistSlugResolver ..> Artist : finds
-ArtistSlugResolver ..> SlugHistory : finds
+ResolveArtistSlug ..> Artist : finds
+ResolveArtistSlug ..> SlugHistory : finds retired
 Artist "1" *-- "1..*" SlugHistory : every slug held
 @enduml

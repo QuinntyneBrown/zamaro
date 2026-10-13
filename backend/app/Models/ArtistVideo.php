@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\MediaStatus;
+use App\Enums\VideoStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * @property list<array{width: int, height: int, format: string, key: string}> $poster_renditions
- */
 class ArtistVideo extends Model
 {
     use HasUuids;
@@ -19,12 +16,7 @@ class ArtistVideo extends Model
 
     protected function casts(): array
     {
-        return [
-            'position' => 'integer',
-            'status' => MediaStatus::class,
-            'poster_renditions' => 'array',
-            'duration_seconds' => 'integer',
-        ];
+        return ['position' => 'integer', 'status' => VideoStatus::class, 'duration_seconds' => 'integer'];
     }
 
     public function artist(): BelongsTo
@@ -32,8 +24,9 @@ class ArtistVideo extends Model
         return $this->belongsTo(Artist::class);
     }
 
+    /** Processed and streamable; the only videos the public sees (L2-014.3). */
     public function scopeLive(Builder $query): void
     {
-        $query->where('status', MediaStatus::Live);
+        $query->where('status', VideoStatus::Live);
     }
 }

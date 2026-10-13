@@ -47,11 +47,14 @@ return [
             'report' => false,
         ],
 
-        // Photos, posters, streams and captions (L2-088). Local in M1, served by MediaController in
-        // place of the CDN; object storage replaces it with uploads in M4.
+        // Profile media in dev and e2e (M1 has no object storage). `serve` lets Laravel answer GET
+        // /media/{path}; the web app's servers proxy /media like /api.
         'media' => [
             'driver' => 'local',
             'root' => storage_path('app/media'),
+            'url' => env('MEDIA_URL', '/media'),
+            'visibility' => 'public',
+            'serve' => true,
             'throw' => false,
             'report' => false,
         ],

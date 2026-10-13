@@ -5,6 +5,9 @@ const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
 const prettier = require('eslint-config-prettier/flat');
 
+// The repository's own rules.
+const zamaro = { rules: { 'no-hardcoded-text': require('./tools/eslint/no-hardcoded-text') } };
+
 module.exports = defineConfig([
   {
     ignores: ['dist/**', '.angular/**', 'node_modules/**'],
@@ -48,10 +51,39 @@ module.exports = defineConfig([
   {
     files: ['projects/{zamaro,admin,components}/**/*.html'],
     ignores: ['**/index.html'],
-    plugins: {
-      zamaro: { rules: { 'no-hardcoded-text': require('./tools/eslint/no-hardcoded-text') } },
-    },
+    plugins: { zamaro },
     rules: { 'zamaro/no-hardcoded-text': 'error' },
+  },
+  // The same rule over the text TypeScript hands to toasts, the document title and the announcer.
+  {
+    files: ['projects/{zamaro,admin,components}/**/*.ts'],
+    plugins: { zamaro },
+    rules: { 'zamaro/no-hardcoded-text': 'error' },
+  },
+  // User text is rendered as text (L2-075.3): no bypassing Angular's sanitiser, no HTML bindings.
+  {
+    files: ['**/*.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'MemberExpression[property.name=/^bypassSecurityTrust/]',
+          message: 'Render user content as text; never bypass Angular sanitisation (L2-075.3).',
+        },
+      ],
+    },
+  },
+  {
+    files: ['**/*.html'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'BoundAttribute[name=/^(innerHTML|outerHTML)$/]',
+          message: 'Bind text with interpolation, not [innerHTML] (L2-075.3).',
+        },
+      ],
+    },
   },
   // Prettier owns formatting: turn off every lint rule that would fight it.
   prettier,

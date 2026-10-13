@@ -93,6 +93,41 @@ Saving does not require a verified email; only booking requests do
 (`accounts/register-booker`). `PendingIntentService` holds one intent at a time, and
 a newer intent replaces an older one.
 
+**As built in M2 (S15)**
+
+- **Endpoints (`role:booker`, private):** `GET /api/v1/saved-artists/ids` answers `{ artistIds, count }`;
+  `PUT` and `DELETE /api/v1/saved-artists/{artistId}` answer `SavedArtistStateResource` (`artistId`,
+  `saved`, `savedCount`, `firstSave`). `SaveArtist` saves only approved, published artists (404
+  otherwise), locks the booker's row, refuses the 201st with the 422 `saved-artist-limit` problem and
+  inserts with `insertOrIgnore` (`ON CONFLICT DO NOTHING`); `UnsaveArtist` deletes if present.
+  `users.first_saved_at` marks the first save, so "Saved artists are private" shows once.
+- **Ids and pronouns:** lineup cards and the profile carry the artist's `id` (the key the API saves by)
+  and cards their `pronoun`, for the toast copy.
+- **Store:** `app/shared/SavedArtistsStore` (the design's `shared/saved`), enabled for bookers who are not
+  artists, loads the ids once `/me` says so, flips a heart at once and then takes the server's count. Its
+  toasts: "Saved {name}" / "Your saved count is now {n}." with Undo; "Removed {name}" / "{She’s | He’s |
+  They’re} off your saved list. Your count is now {n}." with Undo; "Saved artists are private" with "View
+  saved" on the first save; "You can save up to 200 artists." with "Open saved artists"; "Couldn’t save
+  {name}. Try again." / "Your connection dropped, so {her | his | their} heart is empty again." (danger,
+  no timer) with Try again. Undo saves or removes quietly.
+- **Where:** `zm-save-toggle` on each ticket's stub and last in the headliner's cluster for bookers;
+  "Save" / "Saved" (`zm-button` pressed, heart icon) in the profile header; the top bar's Saved link with
+  the count badge, named "Saved 3 artists". Artists browsing see none. Guests' hearts join with S16.
+
+**As built in M2 (S16)**
+
+- Guests see the hearts and the profile's Save (the store's `shown()`); bookers too, artists and
+  administrators not. The header's Saved link stays for signed-in bookers.
+- `app/shared/PendingIntentService` holds `{ kind: 'save-artist', artistId, name, pronoun, returnUrl }`
+  under `zamaro.pending-intent` in `sessionStorage`; a newer press replaces it. The press opens
+  `/sign-in?returnUrl={the page}`; sign-in, the two-step code and the verification link already carry
+  `returnUrl`, so registering, verifying and then signing in comes back to the same page.
+- The replay lives in `SavedArtistsStore`, not `AuthService`: once a booker is signed in and their ids
+  have loaded, it takes the intent and saves (an artist already saved is left as it is), with the usual
+  toasts. Keeping it in the store keeps the `api` library free of the app's saved artists. Someone who
+  signs in and cannot save (an artist) drops the intent. Verifying an email signs no one in
+  (`accounts/register-booker`), so the registration path ends in a sign-in too.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

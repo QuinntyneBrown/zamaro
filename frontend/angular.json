@@ -28,11 +28,17 @@
               {
                 "glob": "**/*",
                 "input": "projects/zamaro/public"
+              },
+              {
+                "glob": "bebas-neue-*-400-normal.woff2",
+                "input": "node_modules/@fontsource/bebas-neue/files",
+                "output": "fonts"
               }
             ],
             "styles": [
               "projects/components/src/styles/tokens.css",
               "projects/components/src/styles/index.scss",
+              "@angular/cdk/a11y-prebuilt.css",
               "@angular/cdk/overlay-prebuilt.css",
               "projects/zamaro/src/styles.scss"
             ],
@@ -114,6 +120,11 @@
               {
                 "glob": "**/*",
                 "input": "projects/admin/public"
+              },
+              {
+                "glob": "bebas-neue-*-400-normal.woff2",
+                "input": "node_modules/@fontsource/bebas-neue/files",
+                "output": "fonts"
               }
             ],
             "styles": [
@@ -187,6 +198,11 @@
               {
                 "glob": "**/*",
                 "input": "projects/perf-test/public"
+              },
+              {
+                "glob": "bebas-neue-*-400-normal.woff2",
+                "input": "node_modules/@fontsource/bebas-neue/files",
+                "output": "fonts"
               }
             ],
             "styles": [

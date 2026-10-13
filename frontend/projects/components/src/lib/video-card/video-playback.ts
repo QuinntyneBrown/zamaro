@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-/** One clip at a time: when a card starts playing, the one that was playing pauses. */
+/** One clip at a time: a video that starts playing pauses whichever was playing (L2-014). */
 @Injectable({ providedIn: 'root' })
 export class VideoPlayback {
   private current: HTMLVideoElement | null = null;

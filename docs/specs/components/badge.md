@@ -375,6 +375,13 @@ None. Nothing animates, so `prefers-reduced-motion` changes nothing.
 
 ## Implementation notes
 
+**As built in M2 (S15):** `variant` gains `count` (the yellow number, no square) for the top bar's Saved link.
+
+**As built in M2 (S12):** `variant` gains `success` (the account's "On"); `neutral` is still spelled
+`default` in the component, and `info`, `warning`, `danger`, `count` and `solid` wait for their first
+screens. The `Badge` scenario was re-measured against the S11 build: 75.8 → 72.3 ms, not flagged.
+
+
 The library has `zm-badge` with `variant: 'default' | 'free'`. To meet this CRD:
 
 - Rename the `default` variant to `neutral` and add `booked`, `info`, `success`,

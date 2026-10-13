@@ -50,8 +50,9 @@ zamaro/
 │   ├── plans/                     # milestone plans with their current status
 │   └── specs/                     # L1.md, L2.md
 │       └── components/            # CRDs: <component>.md + <component>.html, trace to L2
-├── docker-compose.yml             # local dev: postgres, redis, api, worker, scheduler (ADR-0002)
-├── backend/                       # Laravel 11 on PHP 8.3 — Zamaro API and Zamaro Worker
+├── docker-compose.yml             # local dev: postgres, redis, mailpit, api, api-e2e, worker-e2e, worker,
+│                                  # scheduler (ADR-0002, ADR-0019)
+├── backend/                       # Laravel 13 on PHP 8.3 — Zamaro API and Zamaro Worker
 │   ├── app/
 │   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
 │   │   ├── Services/{Subsystem}/  # domain services (AvailabilityService, DistanceService, ...)
@@ -62,7 +63,8 @@ zamaro/
 │   │   ├── Contracts/             # ports for outside services (PaymentGateway, MediaScanner, ...)
 │   │   ├── Integrations/          # adapters that implement Contracts/
 │   │   ├── Policies/              # ownership and role authorisation
-│   │   ├── Notifications/         # transactional email
+│   │   ├── Notifications/         # transactional email (TransactionalNotification, ADR-0019)
+│   │   ├── Rules/                 # validation rules shared by FormRequests (PasswordPolicy)
 │   │   ├── Console/Commands/      # artisan commands (i18n:check, ...)
 │   │   ├── Support/               # cross-cutting code with no subsystem (Problems/ for RFC 9457)
 │   │   └── Http/
@@ -77,6 +79,7 @@ zamaro/
 │   │   ├── factories/
 │   │   ├── migrations/            # expand–contract only; never run on startup
 │   │   └── seeders/               # idempotent, safe to re-run
+│   │       └── media/             # sample files MediaSeeder copies to the media disk (M1 has no uploads)
 │   ├── resources/
 │   │   ├── i18n/{locale}/         # translation catalogues served at /api/v1/i18n/{locale}
 │   │   └── views/emails/
@@ -89,7 +92,8 @@ zamaro/
 │   │   ├── Feature/{Subsystem}/   # integration tests against the API
 │   │   ├── Feature/Security/      # cross-user access suite and route-ownership fixtures
 │   │   └── load/                  # load scenarios for the response-time budgets
-│   ├── composer.json
+│   ├── tools/phpstan/             # Zamaro's own Larastan rules (the raw-SQL rule, L2-075.2)
+│   ├── composer.json  phpstan.neon
 │   ├── docker/                    # backend container assets (postgres init script); see ADR-0002
 │   └── Dockerfile                 # zamaro-api image (API and Worker)
 ├── frontend/                      # Angular workspace — Zamaro Web; angular.json declares every project
@@ -102,7 +106,8 @@ zamaro/
 │   │   │       │   ├── shell/     # header, footer, navigation menu, theme switch
 │   │   │       │   ├── pages/     # routed screens, one folder per docs/mocks/pages entry
 │   │   │       │   │   ├── discover/  artist/  book/  saved/  bookings/  booking-detail/
-│   │   │       │   │   ├── sign-in/  sign-up/  forgot-password/  reset-password/  account/
+│   │   │       │   │   ├── sign-in/  sign-up/  verify-email/  forgot-password/  reset-password/  account/
+│   │   │       │   │   ├── confirm-email/  mfa-setup/  mfa-challenge/  accept-terms/
 │   │   │       │   │   ├── apply/  dashboard/  requests/  request-detail/  availability/
 │   │   │       │   │   ├── edit-profile/  earnings/
 │   │   │       │   │   └── not-found/  server-error/  offline/
@@ -135,12 +140,13 @@ zamaro/
 │   │           ├── renderer.ts    # reads ?scenario=&iterations=&renderType=, measures the render
 │   │           └── main.ts
 │   └── Dockerfile                 # zamaro-web image: serves zamaro (SSR) and admin under /admin
-└── e2e/                           # Playwright, Chromium only, backend mocked; one project per application
+└── e2e/                           # Playwright, Chromium only; one Playwright project per application
     ├── playwright.config.ts
+    ├── run-in-docker.mjs          # npm run test:docker: Playwright in the official Linux image (ADR-0014)
     ├── routes.manifest.ts         # every route in every state, shared by visual, a11y, and perf
     ├── pages/                     # page objects, one per screen; they own every selector
     │   └── admin/                 # page objects for the admin application
-    ├── fixtures/                  # API mocks, the stub API server for SSR, and test helpers
+    ├── fixtures/                  # seeded data and test helpers
     ├── specs/{subsystem}/         # acceptance tests for the L2 criteria; no selectors
     ├── visual/                    # visual parity with docs/mocks at every breakpoint, light and dark
     ├── a11y/                      # axe WCAG 2.2 AA checks per route and theme
@@ -182,14 +188,6 @@ Back end tests are integration tests against the API. Follow the existing test p
 
 - Run the relevant Playwright tests for UI changes; update visual baselines only for intentional design changes.
 - Run frontend tests in Chromium only. Do not configure or run Firefox, WebKit, or any other browser for frontend testing.
-- **The backend is mocked in e2e.** Playwright tests MUST NOT require the API, the worker, the
-  database, or Docker to be running. Every `/api/v1` response comes from a mock the test suite
-  owns: `page.route` for requests the browser makes, and a stub HTTP server that Playwright
-  starts (set as the SSR server's `API_ORIGIN`) for requests the server makes while rendering.
-  Mock responses follow the OpenAPI contract and use the cast and copy from `docs/mocks/README.md`;
-  shared fixtures live in `e2e/fixtures/`. A test sets up the API state it needs (results, empty,
-  error, rate limit, slow response) through those fixtures, never by seeding a database. The
-  backend's own behaviour is proven by its integration tests in `backend/tests/Feature/`.
 
 ## Incremental Implementation and ATDD - mandatory
 

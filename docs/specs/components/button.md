@@ -482,6 +482,11 @@ as a static ring).
 
 ## Implementation notes
 
+**As built in M2 (S7):** inside the auth card (`.auth-card`, paper on the stage) secondary buttons
+keep the paper outline instead of the stage's light outline, as `pages/verify-email/expired` shows
+"Keep browsing artists". The rule adds about 360 bytes to `button.scss`, which was already over the
+4 kB component-style warning.
+
 The library has `zm-button`, `zm-button-link` and `zm-button-anchor`. To meet
 this CRD:
 
@@ -489,10 +494,13 @@ this CRD:
   `.btn--danger:disabled` and `.btn--ghost:disabled, .btn--link:disabled`).
 - Add the `sm` size and its coarse-pointer rule.
 - Add `block`, with `:host` becoming `display: flex`, to all three components.
+  `zm-button` and (M2 S5, for the sign-up card's "Keep browsing artists")
+  `zm-button-link` have it; `zm-button-anchor` still needs it.
 - Add `iconOnly`, `label` and `describedBy` to `zm-button-link` and
   `zm-button-anchor`; add `describedBy` to `zm-button`.
 - Accept `type="reset"`.
-- Add `fragment` and `disabled` to `zm-button-link`; add `newTab` and `disabled`
+- Add the `danger` variant (built in M2 S13, for "Turn off"; Button 143.4 → 153.4 ms, not flagged).
+- Add `fragment` (built in M2 S10, for "Change email again") and `disabled` to `zm-button-link`; add `newTab` and `disabled`
   to `zm-button-anchor`.
 - Make `disabled` lose to `busy`: `[disabled]="disabled() && !busy()"`.
 - Add the activation guard. A capture-phase click listener on the native
@@ -504,6 +512,9 @@ this CRD:
   `.on-stage`. Also map the expanded fill on the stage.
 - Make the `.band` mapping beat `.on-stage` when a band sits on the stage. Use
   `:host-context(.on-stage .band)` or a later, more specific rule (D-9).
+  *Built at the close of M1:* the `.on-stage` outline for every variant but primary and pressed
+  (the profile header's Share). No band sits on the stage yet, so D-9's ordering is still to do:
+  the outline rule is more specific than the band rule.
 - Stop the spinner under reduced motion.
 - Log a dev-mode console error when `iconOnly` is set without `label`.
 - Add perf-test cases to the existing scenarios only if the scenario's rendered

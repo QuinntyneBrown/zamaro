@@ -32,6 +32,14 @@ trait AssertsOpenApiContract
         $this->assertNotNull($documented, "OpenAPI documents no {$status} response for {$method} {$path}.");
         $pointer = $this->responsePointer($path, $method, $status, $documented);
 
+        // A bodiless answer (204) is documented by its status alone.
+        if ($response->getContent() === '' && $contentType === false) {
+            $this->assertObjectNotHasProperty('content', $this->resolve($pointer),
+                "OpenAPI documents a body for the bodiless {$status} on {$method} {$path}.");
+
+            return;
+        }
+
         $this->assertObjectHasProperty($contentType, $this->resolve($pointer)->content ?? (object) [],
             "OpenAPI documents no {$contentType} body for {$status} on {$method} {$path}.");
 
