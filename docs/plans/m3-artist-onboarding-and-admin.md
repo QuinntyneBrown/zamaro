@@ -20,7 +20,8 @@
 | S10 | Application video upload | Done | see below |
 | S11 | Apply as an artist: the form and a sent application | Done | `453ab1f` (API), see below (web) |
 | S12 | Apply: refusals and retries | Done | see below |
-| S13–S14 | | Not started | |
+| S13 | Application queue, review screen and reference verification | Done | see below |
+| S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -55,6 +56,38 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S13.**
+  - API: `GET /api/v1/admin/artist-applications` (Submitted, oldest first, `meta.waiting` and
+    `meta.lastDecidedAt` for the empty state's "The last one was decided Mon 5 Oct"), `GET …/{id}`
+    (everything, the decrypted contacts, the videos' stream URLs, the applicant's latest check summary,
+    `decision`; audited as `application.viewed`) and `PUT …/{id}/references/{ref}/verification`
+    `{verified}` (answers the reference with who and when; audited as `application_reference.verified`
+    with `verified` in the context; 404 for a reference of another application; 409
+    `application-already-decided` once the application is decided). The admin middleware stack gates
+    them; no `ArtistApplicationPolicy` was added, since the three admin controllers before this one
+    rely on `EnsureAdministrator` the same way. Phone contacts render as "647 555 0192" (the mock),
+    not the dashed form `NorthAmericanPhone::format` gives churches.
+  - Seed: `CastSeeder::applications()` writes A-0217 (Ebenezer Brass Band, Oshawa), A-0218 (Kezia &
+    Mark Thompson, Pickering, at fixed coordinates since Pickering is not a cast town) and A-0219 (Tobi,
+    with his live "Way Maker — live at Cornerstone" on the sample stream), references unticked on every
+    run. The apply API's numbering therefore continues from A-0220 on a seeded database.
+  - Web: `pages/applications/` (the stub became the real queue) and `pages/application/` with
+    `application-review.store.ts` (`canApprove`). The review screen's "Reference verified" box is the
+    checkbox CRD's `check` variant, built here with `indeterminate`, `controls`, `label`, `indent` and
+    `optionalMarker`, plus the `dash` icon and a `CheckboxCheck` scenario; `zm-button` gained
+    `describedBy` for "Approve Tobi"'s help text. "Reject…" renders and does nothing until S14.
+    While loading from a direct address the head reads "Application" (the number is not known yet),
+    not the mock's "Application A-0219".
+  - e2e: `review-artist-application.spec.ts` (queue, empty, loading, error, the review screen) and
+    `review-artist-application.mutation.spec.ts` (ticks) with `applications.page.ts` and
+    `application.page.ts`; route states `admin-applications` and `admin-application` (application 3).
+    The queue page object and the route state keep the API's answer to the three seeded numbers, so
+    applications the public-site specs send in the same run never change the rows.
+  - **Perf note for the maintainer.** The `Checkbox` scenario (one choice row) mounts about 50 ms on the
+    base branch and 72–86 ms here, within the base's spread on both runs (not flagged). The choice row
+    itself gained one `@if` (the text element is left out when `label` names the box, CRD AC-29) and a
+    few class bindings; the rest is the `check` variant's stylesheet, added and removed on every mount
+    as for `DescriptionList` above. The same "intended cost" case applies if the pipeline flags it.
 - **S12.**
   - Most refusals were already in S11's code; S12 added their acceptance tests (six API cases, four
     e2e cases) and fixed what they found:

@@ -278,6 +278,18 @@ return [
         $test->as($intruder)->getJson('/api/v1/admin/vulnerable-sector-checks/1/document-link')->assertNotFound();
     },
 
+    'GET api/v1/admin/artist-applications' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/artist-applications')->assertNotFound();
+    },
+
+    'GET api/v1/admin/artist-applications/{application}' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/artist-applications/1')->assertNotFound();
+    },
+
+    'PUT api/v1/admin/artist-applications/{application}/references/{reference}/verification' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->putJson('/api/v1/admin/artist-applications/1/references/1/verification', ['verified' => true])->assertNotFound();
+    },
+
     'GET api/v1/admin/artists' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
         $test->as($intruder)->getJson('/api/v1/admin/artists')->assertNotFound();
     },

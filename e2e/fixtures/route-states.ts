@@ -3,6 +3,8 @@ import { AcceptTermsPage } from '../pages/accept-terms.page';
 import { ArtistPage } from '../pages/admin/artist.page';
 import { ArtistsPage } from '../pages/admin/artists.page';
 import { AuditLogPage } from '../pages/admin/audit-log.page';
+import { ApplicationPage } from '../pages/admin/application.page';
+import { ApplicationsPage } from '../pages/admin/applications.page';
 import { ChecksPage } from '../pages/admin/checks.page';
 import { AccountPage } from '../pages/account.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
@@ -28,6 +30,9 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   const slug = new URL(state.path, 'http://zamaro').pathname.split('/')[2] ?? '';
   await freezeClock(page);
   if (state.signedInAs) await signInAs(page.context(), state.signedInAs);
+  // The queue shows the seed alone, whatever the public-site specs sent in the same run.
+  if (state.shows === 'applications-rows')
+    await new ApplicationsPage(page).showOnlyTheSeededApplications();
 
   switch (state.setup) {
     case 'search-pending':
@@ -99,6 +104,11 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
   if (state.shows === 'audit-rows') await new AuditLogPage(page).waitForRows();
   if (state.shows === 'checks-rows') await new ChecksPage(page).waitForRows();
+  if (state.shows === 'applications-rows') await new ApplicationsPage(page).waitForRows();
+  if (state.shows === 'application-details') {
+    const application = new ApplicationPage(page);
+    await expect(application.approveButton()).toBeDisabled();
+  }
   if (state.shows === 'artists-rows') await new ArtistsPage(page).waitForRows();
   if (state.shows === 'artist-details') {
     const artist = new ArtistPage(page);

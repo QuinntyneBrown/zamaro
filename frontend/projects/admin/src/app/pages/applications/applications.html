@@ -1,0 +1,76 @@
+<div class="container">
+  <header class="page-head">
+    <div>
+      <p class="overline">{{ 'admin.applications.overline' | transloco }}</p>
+      <h1 class="page-head__title">{{ 'admin.applications.title' | transloco }}</h1>
+      @if (status() === 'loading') {
+        <p class="page-head__sub" role="status">
+          <span class="visually-hidden">{{ 'admin.applications.loading' | transloco }}</span
+          ><zm-skeleton width="medium" />
+        </p>
+      } @else {
+        <p class="page-head__sub">{{ subtitle() }}</p>
+      }
+    </div>
+  </header>
+  <div class="page-body">
+    @switch (status()) {
+      @case ('error') {
+        <zm-alert variant="danger" [heading]="'admin.applications.error.title' | transloco">
+          {{ 'admin.applications.error.body' | transloco }}
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'admin.tryAgain' | transloco }}</zm-button
+          >
+        </zm-alert>
+      }
+      @default {
+        @if (status() === 'loaded' && applications().length === 0) {
+          <zm-empty-state
+            [stamp]="'admin.applications.empty.stamp' | transloco"
+            [heading]="'admin.applications.empty.title' | transloco"
+          >
+            {{ emptyBody() }}
+            <zm-button-link slot="actions" variant="primary" link="/artists">{{
+              'admin.applications.empty.openArtists' | transloco
+            }}</zm-button-link>
+          </zm-empty-state>
+        } @else {
+          <zm-table
+            [caption]="'admin.applications.caption' | transloco"
+            [columns]="columns"
+            [rows]="applications()"
+            rowHeader="applicant"
+            [loading]="status() === 'loading'"
+            [loadingRows]="3"
+            [loadingLabel]="'admin.applications.loading' | transloco"
+          >
+            <ng-template zmTableCell="applicant" let-application
+              ><a [routerLink]="['/applications', application.id]">{{
+                application.name
+              }}</a></ng-template
+            >
+            <ng-template zmTableCell="act" let-application>{{
+              'common.act.' + application.actType | transloco
+            }}</ng-template>
+            <ng-template zmTableCell="city" let-application>{{
+              'admin.cityProvince' | transloco: { city: application.baseCity }
+            }}</ng-template>
+            <ng-template zmTableCell="submitted" let-application>{{
+              submitted(application)
+            }}</ng-template>
+            <ng-template zmTableCell="actions" let-application
+              ><zm-button-link size="sm" [link]="'/applications/' + application.id"
+                >{{ 'admin.applications.review' | transloco
+                }}<span class="visually-hidden">
+                  {{
+                    'admin.applications.reviewWhose' | transloco: { name: application.name }
+                  }}</span
+                ></zm-button-link
+              ></ng-template
+            >
+          </zm-table>
+        }
+      }
+    }
+  </div>
+</div>

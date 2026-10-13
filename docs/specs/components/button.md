@@ -501,7 +501,8 @@ this CRD:
   `zm-button` and (M2 S5, for the sign-up card's "Keep browsing artists")
   `zm-button-link` have it; `zm-button-anchor` still needs it.
 - Add `iconOnly`, `label` and `describedBy` to `zm-button-link` and
-  `zm-button-anchor`; add `describedBy` to `zm-button`.
+  `zm-button-anchor`. `describedBy` on `zm-button` was built in M3 S13, for "Approve Tobi"
+  described by "Verify both references before you approve."
 - Accept `type="reset"`.
 - Add the `danger` variant (built in M2 S13, for "Turn off"; Button 143.4 → 153.4 ms, not flagged).
 - Add `fragment` (built in M2 S10, for "Change email again") and `disabled` to `zm-button-link`; add `newTab` and `disabled`

@@ -1,0 +1,206 @@
+<div class="container">
+  <div class="page-crumbs">
+    <zm-breadcrumb [crumbs]="crumbs()" [label]="'admin.breadcrumb' | transloco" />
+  </div>
+  <div class="page-head page-head--after-breadcrumb">
+    <div>
+      <p class="overline">{{ overline() }}</p>
+      @if (application(); as application) {
+        <h1 class="page-head__title">{{ application.name }}</h1>
+        <p class="page-head__sub">{{ subtitle() }}</p>
+      } @else {
+        <h1 class="page-head__title">{{ 'admin.application.loading.title' | transloco }}</h1>
+        @if (status() === 'loading') {
+          <p class="page-head__sub" role="status">
+            <span class="visually-hidden">{{ 'admin.application.loading.status' | transloco }}</span
+            ><zm-skeleton width="long" />
+          </p>
+        }
+      }
+    </div>
+    @if (application(); as application) {
+      <zm-badge [variant]="statusVariant()">{{
+        'admin.application.status.' + application.status | transloco
+      }}</zm-badge>
+    }
+  </div>
+
+  @switch (status()) {
+    @case ('error') {
+      <div class="page-body">
+        <zm-alert variant="danger" [heading]="'admin.application.error.title' | transloco">
+          {{ 'admin.application.error.body' | transloco }}
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'admin.tryAgain' | transloco }}</zm-button
+          >
+          <zm-button-link slot="actions" link="/applications">{{
+            'admin.application.error.back' | transloco
+          }}</zm-button-link>
+        </zm-alert>
+      </div>
+    }
+    @case ('loading') {
+      <div class="detail-layout detail-layout--flush" aria-hidden="true">
+        <div class="stack stack--lg">
+          @for (panel of [1, 2, 3]; track panel) {
+            <div class="panel">
+              <zm-skeleton shape="title" />
+              <zm-skeleton width="long" />
+              <zm-skeleton width="medium" />
+              <zm-skeleton width="long" />
+            </div>
+          }
+        </div>
+        <aside>
+          <div class="panel panel--raised">
+            <zm-skeleton shape="title" />
+            <zm-skeleton shape="control-lg" />
+            <zm-skeleton shape="control" />
+          </div>
+        </aside>
+      </div>
+    }
+    @default {
+      @if (application(); as application) {
+        <div class="detail-layout detail-layout--flush">
+          <div class="stack stack--lg">
+            <section class="panel" aria-labelledby="applicant-title">
+              <div class="panel__head">
+                <h2 id="applicant-title" class="panel__title">
+                  {{ 'admin.application.applicant.title' | transloco }}
+                </h2>
+              </div>
+              <zm-description-list [columns]="2" [items]="applicant()" />
+            </section>
+            <section class="panel" aria-labelledby="bio-title">
+              <div class="panel__head">
+                <h2 id="bio-title" class="panel__title">
+                  {{ 'admin.application.bio.title' | transloco }}
+                </h2>
+                <span class="text-caption">{{
+                  'admin.application.bio.count' | transloco: { count: bioLength() }
+                }}</span>
+              </div>
+              <p>{{ application.bio }}</p>
+            </section>
+            <section class="panel" aria-labelledby="videos-title">
+              <div class="panel__head">
+                <h2 id="videos-title" class="panel__title">
+                  {{ 'admin.application.videos.title' | transloco }}
+                </h2>
+                <span class="text-caption">{{
+                  'admin.application.videos.count' | transloco: { count: videos().length }
+                }}</span>
+              </div>
+              @if (videos().length > 0) {
+                <ul class="media-grid" role="list">
+                  @for (video of videos(); track video.id; let i = $index) {
+                    <li>
+                      <zm-video-card
+                        [caption]="video.title"
+                        [stampText]="video.stamp"
+                        [label]="video.label"
+                        [artVariant]="artVariant()"
+                        [artTilt]="i % 4 === 2"
+                        [artYellow]="i % 4 === 3"
+                        [artLabel]="video.title"
+                        [poster]="video.poster"
+                        [stream]="video.stream"
+                        [errorText]="'admin.application.videos.failed' | transloco"
+                      />
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p class="text-muted">{{ 'admin.application.videos.none' | transloco }}</p>
+              }
+            </section>
+            <section class="panel" aria-labelledby="refs-title">
+              <div class="panel__head">
+                <h2 id="refs-title" class="panel__title">
+                  {{ 'admin.application.references.title' | transloco }}
+                </h2>
+                <span class="text-caption">{{
+                  'admin.application.references.count'
+                    | transloco
+                      : { verified: store.verifiedCount(), total: application.references.length }
+                }}</span>
+              </div>
+              <p class="text-muted">{{ 'admin.application.references.lead' | transloco }}</p>
+              @for (reference of references(); track reference.id; let last = $last) {
+                <div class="stack stack--sm reference">
+                  <zm-description-list [columns]="2" [items]="reference.items" />
+                  <zm-checkbox
+                    variant="check"
+                    [id]="'ref-' + reference.id"
+                    [name]="'ref-' + reference.id"
+                    [ngModel]="reference.verified"
+                    [disabled]="store.saving() !== null || application.status !== 'submitted'"
+                    [description]="reference.description"
+                    (ngModelChange)="tick(reference.id, $event)"
+                    >{{ 'admin.application.references.tick' | transloco }}</zm-checkbox
+                  >
+                </div>
+                @if (!last) {
+                  <hr class="divider" />
+                }
+              }
+            </section>
+            <section class="panel" aria-labelledby="vsc-title">
+              <div class="panel__head">
+                <h2 id="vsc-title" class="panel__title">
+                  {{ 'admin.application.vsc.title' | transloco }}
+                </h2>
+              </div>
+              @if (application.vulnerableSectorCheck; as check) {
+                <p>{{ checkSummary() }}</p>
+              } @else {
+                <p>{{ 'admin.application.vsc.none' | transloco }}</p>
+                <p class="text-caption">
+                  {{ 'admin.application.vsc.noneNote' | transloco: { name: firstName() } }}
+                </p>
+              }
+            </section>
+          </div>
+          <aside aria-labelledby="decision-title">
+            <div class="panel panel--raised">
+              <div class="panel__head">
+                <h2 id="decision-title" class="panel__title">
+                  {{ 'admin.application.decision.title' | transloco }}
+                </h2>
+                <span class="stub__code">{{ application.number }}</span>
+              </div>
+              <p
+                class="inline-msg"
+                [class.inline-msg--info]="!store.canApprove()"
+                [class.inline-msg--success]="store.canApprove()"
+                id="approve-help"
+              >
+                {{
+                  (store.canApprove()
+                    ? 'admin.application.decision.bothVerified'
+                    : 'admin.application.decision.verifyFirst'
+                  ) | transloco
+                }}
+              </p>
+              <zm-button
+                variant="primary"
+                size="lg"
+                block
+                [disabled]="!store.canApprove()"
+                describedBy="approve-help"
+                >{{
+                  'admin.application.decision.approve' | transloco: { name: firstName() }
+                }}</zm-button
+              >
+              <zm-button block>{{ 'admin.application.decision.reject' | transloco }}</zm-button>
+              <p class="stub__fine">
+                {{ 'admin.application.decision.fine' | transloco: { name: firstName() } }}
+              </p>
+            </div>
+          </aside>
+        </div>
+      }
+    }
+  }
+</div>

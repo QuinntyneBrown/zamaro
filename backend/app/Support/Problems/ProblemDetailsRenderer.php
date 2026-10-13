@@ -7,6 +7,7 @@ use App\Actions\Accounts\SavedArtistLimit;
 use App\Actions\Accounts\SignInPaused;
 use App\Actions\Accounts\TwoFactorAlreadyOn;
 use App\Actions\Accounts\TwoFactorRequired;
+use App\Actions\ArtistOnboarding\ApplicationAlreadyDecided;
 use App\Actions\ArtistOnboarding\ApplicationInReview;
 use App\Actions\ArtistOnboarding\UploadOffsetMismatch;
 use App\Actions\ArtistOnboarding\VscAlreadyDecided;
@@ -100,6 +101,10 @@ class ProblemDetailsRenderer
 
         if ($e instanceof VscAlreadyDecided) {
             return ProblemDetails::of(ProblemType::VscAlreadyDecided, 'Another administrator decided this check first. Reload the queue.', $requestId)->toResponse();
+        }
+
+        if ($e instanceof ApplicationAlreadyDecided) {
+            return ProblemDetails::of(ProblemType::ApplicationAlreadyDecided, 'This application was approved or rejected already. Reload it to see the decision.', $requestId)->toResponse();
         }
 
         if ($e instanceof ApplicationInReview) {

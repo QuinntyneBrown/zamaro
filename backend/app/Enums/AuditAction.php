@@ -17,4 +17,6 @@ enum AuditAction: string
     case RoleChanged = 'user.role_changed';
     case VscDocumentViewed = 'vsc_document.viewed';
     case VscVerified = 'vsc.verified';
+    case ApplicationViewed = 'application.viewed';
+    case ReferenceVerified = 'application_reference.verified';
 }

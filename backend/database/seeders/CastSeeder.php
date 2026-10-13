@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\ActType;
+use App\Enums\ApplicationStatus;
 use App\Enums\ArtistStatus;
 use App\Enums\BookingStatus;
 use App\Enums\ConsentKind;
@@ -17,7 +18,9 @@ use App\Enums\VideoStatus;
 use App\Enums\VscStatus;
 use App\Integrations\Routing\CastRoutes;
 use App\Jobs\Reviews\RecalculateArtistRating;
+use App\Models\ApplicationReference;
 use App\Models\Artist;
+use App\Models\ArtistApplication;
 use App\Models\ArtistPhoto;
 use App\Models\ArtistRating;
 use App\Models\ArtistVideo;
@@ -32,6 +35,7 @@ use App\Models\SetlistSong;
 use App\Models\SlugHistory;
 use App\Models\User;
 use App\Models\VulnerableSectorCheck;
+use App\Rules\NorthAmericanPhone;
 use App\Services\ArtistOnboarding\DocumentVault;
 use App\Services\Discovery\Coordinates;
 use Illuminate\Database\Seeder;
@@ -295,6 +299,7 @@ class CastSeeder extends Seeder
             $this->accounts();
             $this->administrators();
             $this->pendingChecks();
+            $this->applications();
             $this->consents();
             $this->churches();
             $this->savedArtists();
@@ -733,6 +738,79 @@ class CastSeeder extends Seeder
      * suite verifies Elijah's) goes back to waiting, so the queue reads as the mocks show it after
      * every run.
      */
+    /**
+     * The three applications waiting in the admin queue (pages/admin-applications, pages/admin-application):
+     * A-0217 to A-0219, oldest first, with their references unticked. Tobi's is the one the mocks review.
+     * Re-seeding puts the ticks back as they were, so the admin mutation specs start from the same place.
+     */
+    private function applications(): void
+    {
+        $pickering = new Coordinates(43.8384, -79.0868);
+        $applications = [
+            ['A-0217', 'Ebenezer Brass Band', 'band@ebenezerbrass.ca', ActType::Band, 'Oshawa', CastRoutes::anchor('Oshawa'), [Style::Band, Style::Hymns],
+                'Ebenezer Brass Band is eleven players from Oshawa who have led Sunday worship together since 2014. We play hymns with full brass arrangements and newer songs with a horn section, and we bring our own charts, stands and a sound tech. We suit anniversary services, Easter and Christmas, and we travel across Durham and the east end.',
+                900, 120, '2026-10-06 16:20', 'c0ffee00-0000-4000-8000-000000000217',
+                [['Rev. Daniel Achebe', 'Ebenezer Methodist, Oshawa', '905 555 0144'], ['Grace Oduya', 'Durham Gospel Assembly', 'grace.oduya@durhamgospel.ca']], []],
+            ['A-0218', 'Kezia & Mark Thompson', 'kezia@thethompsonsmusic.ca', ActType::Duo, 'Pickering', $pickering, [Style::Acoustic, Style::Hymns],
+                'We are a husband-and-wife duo from Pickering. Kezia sings and plays keys, Mark plays acoustic guitar, and together we lead quiet, reflective worship: hymns rearranged for two voices and the songs your congregation already knows. We have led at Mount Zion for five years and at retreats across Durham, and we are happy to learn your list.',
+                500, 60, '2026-10-08 21:05', 'c0ffee00-0000-4000-8000-000000000218',
+                [['Joseph Mensah', 'Mount Zion Church, Pickering', 'joseph.mensah@mountzionpickering.ca'], ['Pastor Grace Lee', 'New Hope Fellowship, Vaughan', '905 555 0171']], []],
+            ['A-0219', 'Tobi Adeyemi', 'tobi@tobiadeyemi.ca', ActType::Solo, 'Scarborough', CastRoutes::anchor('Scarborough'), [Style::SoloVocalist, Style::Acoustic, Style::Hymns],
+                'I’m a vocalist and keys player from Scarborough, and I’ve led Sunday worship at Cornerstone Baptist for six years. I lead from the piano, so I can carry a service on my own or slot in with your band. My sets mix the hymns your seniors love with newer songs your youth know, and I’m happy to send charts to your volunteers ahead of time.',
+                400, 80, '2026-10-09 10:42', 'c0ffee00-0000-4000-8000-000000000219',
+                [['Pastor Samuel Osei', 'Cornerstone Baptist, Scarborough', 'samuel.osei@cornerstonebaptist.ca'], ['Ruth Kim', 'Agincourt Community Church', '647 555 0192']],
+                [['Way Maker — live at Cornerstone', 348, 'way-maker.mp4', 31_457_280, str_repeat('ab', 32)]]],
+        ];
+
+        foreach ($applications as [$number, $name, $email, $act, $city, $at, $styles, $bio, $dollars, $km, $submitted, $key, $references, $videos]) {
+            $application = ArtistApplication::updateOrCreate(['number' => $number], [
+                'user_id' => null,
+                'name' => $name,
+                'email' => $email,
+                'act_type' => $act,
+                'base_city' => $city,
+                'base_latitude' => $at->latitude,
+                'base_longitude' => $at->longitude,
+                'styles' => array_map(fn (Style $style) => $style->value, $styles),
+                'bio' => $bio,
+                'from_price_cents' => $dollars * 100,
+                'max_drive_km' => $km,
+                'status' => ApplicationStatus::Submitted,
+                'idempotency_key' => $key,
+                'submitted_at' => Carbon::parse($submitted, 'America/Toronto')->utc(),
+                'decided_at' => null,
+                'decided_by' => null,
+                'rejection_reason' => null,
+            ]);
+            ApplicationReference::where('artist_application_id', $application->id)->delete();
+            foreach ($references as [$referenceName, $church, $contact]) {
+                $phone = NorthAmericanPhone::toE164($contact);
+                ApplicationReference::create([
+                    'artist_application_id' => $application->id,
+                    'name' => $referenceName,
+                    'church' => $church,
+                    'phone' => $phone,
+                    'email' => $phone === null ? $contact : null,
+                ]);
+            }
+            foreach ($videos as $index => [$title, $seconds, $fileName, $bytes, $token]) {
+                ArtistVideo::updateOrCreate(['artist_application_id' => $application->id, 'position' => $index + 1], [
+                    'artist_id' => null,
+                    'title' => $title,
+                    'status' => VideoStatus::Live,
+                    'duration_seconds' => $seconds,
+                    'upload_token' => $token,
+                    'file_name' => $fileName,
+                    'size_bytes' => $bytes,
+                    'uploaded_bytes' => $bytes,
+                    'manifest_key' => MediaSeeder::SAMPLE_STREAM,
+                    'captions_key' => null,
+                    'poster_key' => null,
+                ]);
+            }
+        }
+    }
+
     private function pendingChecks(): void
     {
         $vault = app(DocumentVault::class);

@@ -141,6 +141,24 @@ The slice writes `artist_applications` (`status`, `decided_at`, `decided_by`,
 application to artist) and `audit_entries`. It reads `vulnerable_sector_checks` for
 the applicant's user.
 
+**As built in M3 S13 (the queue, the review screen and reference verification)**
+
+- `AdminArtistApplicationsController` serves the queue (Submitted, oldest first, with `meta.waiting`
+  and `meta.lastDecidedAt`) and the review screen (`AdminArtistApplicationResource`: every detail,
+  the references' decrypted contacts, the videos with their stream URLs, the applicant's latest
+  Vulnerable Sector Check summary and the decision), and audits every opening as
+  `application.viewed`. The cursor pagination of the design is not needed yet: the queue is the
+  handful waiting, and `meta.waiting` counts it.
+- `AdminApplicationReferencesController` and `SetReferenceVerification` save each tick at once with
+  `verified_at` and `verified_by`, audited as `application_reference.verified`; the application is
+  locked and must still be Submitted (409 `application-already-decided`).
+- The admin middleware stack (`EnsureAdministrator`, MFA, idle timeout) gates the endpoints; no
+  `ArtistApplicationPolicy` class exists, as for the other admin controllers.
+- Web: `pages/applications/` and `pages/application/` in the admin application, with
+  `ApplicationReviewStore` (`canApprove`). The "Reference verified" box is `zm-checkbox`'s `check`
+  variant; the VSC panel reads the summary only (the document link stays on the checks queue).
+  Approve and reject follow in S14.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirements, quoted from

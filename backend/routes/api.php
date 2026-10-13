@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\V1\Accounts\MeController;
 use App\Http\Controllers\Api\V1\Accounts\SavedArtistController;
 use App\Http\Controllers\Api\V1\Accounts\SessionController;
 use App\Http\Controllers\Api\V1\Accounts\TwoFactorController;
+use App\Http\Controllers\Api\V1\Administration\AdminApplicationReferencesController;
+use App\Http\Controllers\Api\V1\Administration\AdminArtistApplicationsController;
 use App\Http\Controllers\Api\V1\Administration\AdminArtistsController;
 use App\Http\Controllers\Api\V1\Administration\AdminOverviewController;
 use App\Http\Controllers\Api\V1\Administration\AdminVulnerableSectorChecksController;
@@ -84,6 +86,11 @@ Route::prefix('admin')->name('admin.')
         Route::post('vulnerable-sector-checks/{check}/verification', [AdminVulnerableSectorChecksController::class, 'verify'])->whereNumber('check')->name('vulnerable-sector-checks.verify');
         // The admin application's copy of the document link: the same controller, outside the terms gate (L2-080.3).
         Route::get('vulnerable-sector-checks/{check}/document-link', [DocumentLinksController::class, 'show'])->whereNumber('check')->name('vulnerable-sector-checks.document-link');
+        // The application queue, the review screen and each reference's tick (review-artist-application, L2-067.1).
+        Route::get('artist-applications', [AdminArtistApplicationsController::class, 'index'])->name('artist-applications.index');
+        Route::get('artist-applications/{application}', [AdminArtistApplicationsController::class, 'show'])->whereNumber('application')->name('artist-applications.show');
+        Route::put('artist-applications/{application}/references/{reference}/verification', [AdminApplicationReferencesController::class, 'update'])
+            ->whereNumber('application')->whereNumber('reference')->name('artist-applications.references.verification');
         Route::get('artists', [AdminArtistsController::class, 'index'])->name('artists.index');
         Route::get('artists/{artist}', [AdminArtistsController::class, 'show'])->whereNumber('artist')->name('artists.show');
     });

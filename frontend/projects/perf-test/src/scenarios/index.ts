@@ -22,6 +22,7 @@ export const scenarios: Record<string, Scenario> = {
   ButtonAnchor: () => import('./ButtonAnchor'),
   ButtonLink: () => import('./ButtonLink'),
   Checkbox: () => import('./Checkbox'),
+  CheckboxCheck: () => import('./CheckboxCheck'),
   CheckboxGroup: () => import('./CheckboxGroup'),
   Chip: () => import('./Chip'),
   ChipGroup: () => import('./ChipGroup'),

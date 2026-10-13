@@ -23,6 +23,12 @@ class ApplicationReference extends Model
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
+    public function verifier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
     /** @return BelongsTo<ArtistApplication, $this> */
     public function application(): BelongsTo
     {

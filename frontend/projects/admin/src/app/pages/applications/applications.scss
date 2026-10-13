@@ -1,0 +1,9 @@
+@use '../../shared/page';
+
+/* The actions cell keeps View document and Verify on one line; the table scrolls sideways on phones. */
+.cluster {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--space-2);
+}

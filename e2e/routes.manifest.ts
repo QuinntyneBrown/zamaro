@@ -53,7 +53,9 @@ export interface RouteState {
     | 'audit-rows'
     | 'checks-rows'
     | 'artists-rows'
-    | 'artist-details';
+    | 'artist-details'
+    | 'applications-rows'
+    | 'application-details';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
    * devices (only this device is shown) with the Password lead's count of the others, which every spec
@@ -358,6 +360,26 @@ export const routes: RouteState[] = [
     mock: 'admin-checks/default.html',
     signedInAs: 'priya',
     shows: 'checks-rows',
+  },
+  // The applications queue: the three seeded applications, oldest first (M3 S13). The route state
+  // keeps the API's answer to the seed, so applications sent by the public-site specs never show.
+  {
+    name: 'admin-applications',
+    path: '/admin/applications',
+    app: 'admin',
+    mock: 'admin-applications/default.html',
+    signedInAs: 'priya',
+    shows: 'applications-rows',
+  },
+  // Tobi Adeyemi's application under review, no reference ticked, Approve disabled. Application 3 in
+  // the seed.
+  {
+    name: 'admin-application',
+    path: '/admin/applications/3',
+    app: 'admin',
+    mock: 'admin-application/default.html',
+    signedInAs: 'priya',
+    shows: 'application-details',
   },
   // The Artists list: the whole seeded cast A to Z, so the counts are the seed's (M3 S8).
   {
