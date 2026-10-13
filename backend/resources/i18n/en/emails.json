@@ -51,5 +51,11 @@
   "verify.greeting": "Hi {name},",
   "verify.ignore": "If you didn’t sign up for Zamaro, ignore this email and nothing will happen.",
   "verify.intro": "Confirm this is your address to finish signing up. Until you do, you can browse and save artists, but you can’t send a booking request.",
-  "verify.subject": "Verify your email for Zamaro"
+  "verify.subject": "Verify your email for Zamaro",
+  "vscRenewal.action": "Upload a newer check",
+  "vscRenewal.after": "Upload the new check from the check section of your profile editor and we’ll verify it. A verified check counts for 3 years from its issue date.",
+  "vscRenewal.greeting": "Hi {name},",
+  "vscRenewal.intro": "Your verified Vulnerable Sector Check counts for Youth event searches until {date}. After that, churches planning a youth event will no longer see you.",
+  "vscRenewal.renewBy": "Renew by {date}",
+  "vscRenewal.subject": "Renew your Vulnerable Sector Check by {date}"
 }

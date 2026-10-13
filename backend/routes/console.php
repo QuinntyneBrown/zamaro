@@ -6,3 +6,7 @@ use Illuminate\Support\Facades\Schedule;
 
 // Audit entries older than 2 years go daily, in batches of 1,000 (L2-069.3, M3 D14).
 Schedule::command('audit:prune')->dailyAt('03:30');
+
+// Artists whose verified Vulnerable Sector Check runs out within 60 days are reminded, once each
+// (L2-049.3); a missed morning is caught the next (L2-092.3).
+Schedule::command('vsc:send-renewal-reminders')->dailyAt('09:00');

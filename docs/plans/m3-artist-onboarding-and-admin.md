@@ -16,7 +16,8 @@
 | S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | `dea2b67` (ADR-0024, ADR-0025) |
 | S7 | Signed links to private documents | Done | `fafb6fe` |
 | S8 | Admin VSC queue, verification and the Artists list | Done | see below |
-| S9–S14 | | Not started | |
+| S9 | VSC renewal reminders | Done | see below |
+| S10–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
 is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
@@ -51,6 +52,18 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S9.**
+  - `vsc:send-renewal-reminders` (`Console/Commands/SendVscRenewalRemindersCommand`) runs daily at
+    09:00 Toronto. It picks verified checks with no reminder stamp whose expiry is between today and
+    60 days out, skips a check the artist has since replaced with a newer verified one, claims each
+    with a conditional update of `renewal_reminder_sent_at` inside a transaction, and queues
+    `VscRenewalReminderNotification` after commit. An expired check gets no reminder: the editor reads
+    "Expired" and the artist is already out of Youth event searches.
+  - The email (`emails.vscRenewal.*`, view `emails/vsc-renewal`) reads "Renew your Vulnerable Sector
+    Check by Mon 30 Nov 2026", explains what the check counts for and until when, and links to
+    `/artist/profile#check` with "Upload a newer check".
+  - The seed gives Daniel & Ruth Okonkwo a check verified until Mon 30 Nov 2026, so they now appear
+    in a Youth event search on Sat 14 Nov beside Abigail; the Discovery test expects both.
 - **S8 (admin pages).**
   - `zm-tour-dates` gained the CRD's `schedule` variant (`variant`, `title`, `titleLink`, the
     `zmTourDateTrail` template, `.tour-dates--schedule` with its two-row phone layout) for the artist

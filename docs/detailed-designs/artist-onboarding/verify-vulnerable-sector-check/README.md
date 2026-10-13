@@ -197,6 +197,14 @@ exposes its existence beyond Youth event eligibility.
 - `VulnerableSectorChecksApi` is `AdminVulnerableSectorChecksApi` (`api/lib/services/admin`) for the
   admin side; the artist's upload client joins with the profile editor (M4).
 
+**As built in M3 S9**
+
+- `SendVscRenewalReminders` is `vsc:send-renewal-reminders`, scheduled daily at 09:00 Toronto in
+  `routes/console.php`. It reminds once per check (conditional update of `renewal_reminder_sent_at`
+  in a transaction, then the queued notification after commit), skips a check replaced by a newer
+  verified one, and leaves an expired check alone. `VscRenewalReminderNotification` is Markdown mail
+  (HTML and text) from the `emails.vscRenewal.*` catalogue, linking to `/artist/profile#check`.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

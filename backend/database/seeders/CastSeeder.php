@@ -716,6 +716,14 @@ class CastSeeder extends Seeder
             ['user_id' => $abigail->user_id, 'issued_on' => '2025-03-03'],
             ['expires_on' => '2028-03-03', 'status' => VscStatus::Verified, 'verified_at' => '2025-03-05 11:00:00'],
         );
+
+        // Daniel & Ruth Okonkwo's check runs out Mon 30 Nov 2026, 52 days from today: inside the
+        // renewal window, so the daily run has someone to remind (L2-049.3, M3 S9).
+        $daniel = Artist::where('slug', 'daniel-and-ruth-okonkwo')->firstOrFail();
+        VulnerableSectorCheck::updateOrCreate(
+            ['user_id' => $daniel->user_id, 'issued_on' => '2023-11-30'],
+            ['expires_on' => '2026-11-30', 'status' => VscStatus::Verified, 'verified_at' => '2023-12-04 15:00:00'],
+        );
     }
 
     /**
