@@ -26,6 +26,8 @@ if (apiOrigin) {
     createProxyMiddleware({
       target: apiOrigin,
       changeOrigin: true,
+      // X-Forwarded-For carries the browser's address; the API trusts it only from this server.
+      xfwd: true,
       pathFilter: ['/api', '/sanctum', '/media'],
     }),
   );

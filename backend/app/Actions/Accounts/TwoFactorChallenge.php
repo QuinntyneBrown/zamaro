@@ -72,7 +72,7 @@ class TwoFactorChallenge
             ? $this->recoveryCodes->use($user, $answer['recoveryCode'])
             : $this->totp->verify((string) $user->two_factor_secret, $answer['code'] ?? '');
         if (! $right) {
-            $this->audit->handle($user, AuditAction::SignInFailed, $user, AuditOutcome::Failed, ['email' => $email, 'reason' => $recovery ? 'recovery_code' : 'code']);
+            $this->audit->handle($user, AuditAction::MfaChallenge, $user, AuditOutcome::Failed, ['email' => $email, 'method' => $recovery ? 'recovery_code' : 'code']);
             $this->throttle->recordFailure($email);
             throw ValidationException::withMessages($recovery
                 ? ['recoveryCode' => 'That recovery code is wrong or was used. Enter another of your saved codes.']
@@ -81,6 +81,7 @@ class TwoFactorChallenge
 
         $request->session()->forget(self::KEY);
         $this->throttle->clear($email);
+        $this->audit->handle($user, AuditAction::MfaChallenge, $user, AuditOutcome::Succeeded, ['method' => $recovery ? 'recovery_code' : 'code']);
         $this->audit->handle($user, AuditAction::SignIn, $user, AuditOutcome::Succeeded, ['two_factor' => $recovery ? 'recovery_code' : 'code']);
 
         return $this->startSession->handle($user, $request);

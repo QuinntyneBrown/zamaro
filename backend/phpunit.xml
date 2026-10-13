@@ -50,6 +50,7 @@
         <server name="TELESCOPE_ENABLED" value="false" force="true"/>
         <env name="ZAMARO_CAST_PASSWORD" value="hosanna-in-the-highest" force="true"/>
         <!-- The field key for the suite only (ADR-0020). -->
+        <env name="TRUSTED_PROXIES" value="10.0.0.0/8" force="true"/>
         <env name="FIELD_ENCRYPTION_KEY" value="base64:3n1c7RXPySRbelDt2owBBGi3g2I969dqn61+xvpPS2s=" force="true"/>
         <server name="FIELD_ENCRYPTION_KEY" value="base64:3n1c7RXPySRbelDt2owBBGi3g2I969dqn61+xvpPS2s=" force="true"/>
         <server name="ZAMARO_CAST_PASSWORD" value="hosanna-in-the-highest" force="true"/>

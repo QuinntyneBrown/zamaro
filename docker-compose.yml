@@ -28,6 +28,8 @@ x-e2e-environment: &e2e-environment
   # Every browser in the suite searches from one address; the limit itself is covered by
   # SearchRateLimitTest and the limited state by intercepting the response.
   ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
+  # The web app's server reaches the API through Docker's network and forwards the browser's address.
+  TRUSTED_PROXIES: "127.0.0.1,172.16.0.0/12,192.168.0.0/16"
   # The same for every API call (L2-077.1): the suite and its server renders share one address.
   # AnonymousRateLimitTest proves the 120 and 300 a minute.
   ZAMARO_API_LIMIT_PER_MINUTE: "100000"

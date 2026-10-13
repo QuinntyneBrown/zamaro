@@ -1,8 +1,49 @@
 # Milestone 3 plan: artist onboarding and admin app
 
-**Status:** Not started.
+**Status:** In progress on `feat/m3-artist-onboarding-and-admin`, cut from `main` at `1cbaf6f` (2026-10-13).
 **Depends on:** M1 (all slices, S12 and S15 in particular) and M2 (accounts, sessions, CSRF, auth, BotChallenge, encrypted fields, email, background jobs).
 **Unblocks:** M4 (the artist workspace hosts the VSC section), M6 (payout setup publishes approved artists), M7 (review moderation joins the admin app), M8 (admin support).
+
+## Current status (2026-10-13)
+
+| Slice | Scope | Status | Commits |
+|---|---|---|---|
+| S1 | Audit entries: record them, refuse changes | In progress | (ADR-0022) |
+| S2–S14 | | Not started | |
+
+**Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
+is **OK (accepted default, 2026-10-13)**; the others go ahead with their recommended defaults.
+
+## Changes made while implementing
+
+- **Entry check against the code as built (2026-10-13).** Several M2 names differ from this plan's:
+  - Audit already exists from M2 D22: `audit_entries` with an append-only trigger, `AuditEntry`,
+    `App\Actions\Audit\RecordAuditEntry` (not `Actions/Administration`), `AuditAction` and
+    `AuditOutcome`. S1 adds only the guard, the retention role, redaction, the code-step and role
+    entries, and trusted proxies.
+  - There is no `LogRedactor`; it is `App\Logging\RedactSensitiveData`. There is no `RoleChanged`
+    event, `app/Events` or `app/Policies` yet.
+  - `TotpVerifier` is a concrete `Services/Accounts` class (ADR-0021); the code step is
+    `Actions/Accounts/TwoFactorChallenge` (`begin`, `complete`), and `SessionController` answers
+    `twoFactorRequired: true`. There is no `TwoFactorRequired` result or `CompleteTwoFactorChallenge`.
+  - The visible-artist scope is `Artist::scopeVisible`. `CastRoutes` has Oshawa and Ottawa but not
+    Pickering. The VSC youth rule is inline in `AvailabilityService::freeArtistIds()`.
+  - e2e's `RouteState` carries `signedInAs?: CastMember`, not `as`; `fixtures/totp.ts` computes codes,
+    so no `otpauth` package is needed.
+  - Frontend: `zm-badge` already has `count`, `zm-dialog` already has `danger`, `zm-error-summary`
+    exists (in `form-layout`), `zm-checkbox` exists; `provideI18n()` takes no namespace, so admin copy
+    goes in `backend/resources/i18n/en/admin.json`.
+- **Local environment.** The compose host ports for Postgres and the dev API come from
+  `ZAMARO_POSTGRES_PORT` and `ZAMARO_API_PORT` (a git-ignored root `.env`), because another local stack
+  held 5432 and 8000. The `api-vendor` volume predated M2 and needed `composer install`.
+- **S1 (ADR-0022).**
+  - The retention role is made by a migration, not the init script, so existing databases get it.
+    It holds `SELECT` and `DELETE` but no `UPDATE`; `audit:prune` will `SET LOCAL ROLE` to it.
+  - `GrantRole` (`Actions/Accounts`) grants a role and writes `user.role_changed`; it replaces the
+    design's `RoleChanged` event and subscriber, since M2's actions call `RecordAuditEntry` directly.
+  - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
+  - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
+  - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
 
 ## Context
 
