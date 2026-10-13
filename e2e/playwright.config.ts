@@ -3,8 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 const WEB_PORT = 4000;
 
 // Chromium only (AGENTS.md). One Playwright project per application: `zamaro` for the public site
-// and `admin` for the admin application, whose specs sign Priya in with a code (M3 S3). The
-// `admin-mutations` project joins with the first admin spec that changes data (M3 S8).
+// and `admin` for the admin application, whose specs sign Priya in with a code (M3 S3). The admin
+// specs that change the seed (`*.mutation.spec.ts`) run one at a time in `admin-mutations`, after
+// the read-only admin suite, and its teardown seeds the database again (M3 S8).
 export default defineConfig({
   testDir: '.',
   fullyParallel: true,
@@ -50,10 +51,26 @@ export default defineConfig({
         'visual/admin.spec.ts',
         'a11y/admin.spec.ts',
       ],
+      testIgnore: '**/*.mutation.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
         baseURL: `http://localhost:${WEB_PORT}/admin/`,
       },
+    },
+    {
+      name: 'admin-mutations',
+      testMatch: 'specs/**/*.mutation.spec.ts',
+      dependencies: ['admin'],
+      teardown: 'reseed',
+      fullyParallel: false,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: `http://localhost:${WEB_PORT}/admin/`,
+      },
+    },
+    {
+      name: 'reseed',
+      testMatch: 'fixtures/reseed.teardown.ts',
     },
   ],
   webServer: {

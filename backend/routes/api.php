@@ -82,6 +82,8 @@ Route::prefix('admin')->name('admin.')
         // The Vulnerable Sector Check queue (L2-049.2) and the read-only Artists section (L2-067, M3 D18).
         Route::get('vulnerable-sector-checks', [AdminVulnerableSectorChecksController::class, 'index'])->name('vulnerable-sector-checks.index');
         Route::post('vulnerable-sector-checks/{check}/verification', [AdminVulnerableSectorChecksController::class, 'verify'])->whereNumber('check')->name('vulnerable-sector-checks.verify');
+        // The admin application's copy of the document link: the same controller, outside the terms gate (L2-080.3).
+        Route::get('vulnerable-sector-checks/{check}/document-link', [DocumentLinksController::class, 'show'])->whereNumber('check')->name('vulnerable-sector-checks.document-link');
         Route::get('artists', [AdminArtistsController::class, 'index'])->name('artists.index');
         Route::get('artists/{artist}', [AdminArtistsController::class, 'show'])->whereNumber('artist')->name('artists.show');
     });

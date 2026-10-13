@@ -1,0 +1,88 @@
+<div class="container">
+  <header class="page-head">
+    <div>
+      <zm-breadcrumb [crumbs]="crumbs" [label]="'admin.breadcrumb' | transloco" />
+      <h1 class="page-head__title">{{ 'admin.checks.title' | transloco }}</h1>
+      @if (status() === 'loading') {
+        <p class="page-head__sub" role="status">
+          <span class="visually-hidden">{{ 'admin.checks.loading' | transloco }}</span
+          ><zm-skeleton width="medium" />
+        </p>
+      } @else {
+        <p class="page-head__sub">{{ subtitle() }}</p>
+      }
+    </div>
+  </header>
+  <div class="page-body">
+    @switch (status()) {
+      @case ('error') {
+        <zm-alert variant="danger" [heading]="'admin.checks.error.title' | transloco">
+          {{ 'admin.checks.error.body' | transloco }}
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'admin.tryAgain' | transloco }}</zm-button
+          >
+        </zm-alert>
+      }
+      @default {
+        @if (status() === 'loaded' && checks().length === 0) {
+          <zm-empty-state
+            [stamp]="'admin.checks.empty.stamp' | transloco"
+            [heading]="'admin.checks.empty.title' | transloco"
+          >
+            {{ 'admin.checks.empty.body' | transloco }}
+            <zm-button-link slot="actions" variant="primary" link="/artists">{{
+              'admin.checks.empty.openArtists' | transloco
+            }}</zm-button-link>
+          </zm-empty-state>
+        } @else {
+          <zm-table
+            [caption]="caption()"
+            [columns]="columns"
+            [rows]="checks()"
+            rowHeader="artist"
+            [loading]="status() === 'loading'"
+            [loadingRows]="2"
+            [loadingLabel]="'admin.checks.loading' | transloco"
+          >
+            <ng-template zmTableCell="artist" let-check>
+              @if (check.artist.id !== null) {
+                <a [routerLink]="['/artists', check.artist.id]">{{ check.artist.name }}</a>
+              } @else {
+                {{ check.artist.name }}
+              }
+            </ng-template>
+            <ng-template zmTableCell="issued" let-check>{{ issued(check) }}</ng-template>
+            <ng-template zmTableCell="uploaded" let-check>{{ uploaded(check) }}</ng-template>
+            <ng-template zmTableCell="check" let-check>
+              @if (check.status === 'verified') {
+                <zm-badge variant="success">{{ 'admin.checks.verified' | transloco }}</zm-badge>
+                {{ verifiedUntil(check) }}
+              } @else {
+                {{ replaces(check) }}
+              }
+            </ng-template>
+            <ng-template zmTableCell="actions" let-check>
+              <div class="cluster">
+                <zm-vsc-document-link [checkId]="check.id" [artistName]="check.artist.name" />
+                @if (check.status === 'pending') {
+                  <zm-button
+                    size="sm"
+                    variant="primary"
+                    [busy]="verifying() === check.id"
+                    (click)="verify(check)"
+                    ><zm-icon name="check" />{{ 'admin.checks.verify' | transloco
+                    }}<span class="visually-hidden">
+                      {{
+                        'admin.checks.verifyWhose' | transloco: { name: check.artist.name }
+                      }}</span
+                    ></zm-button
+                  >
+                }
+              </div>
+            </ng-template>
+          </zm-table>
+        }
+      }
+    }
+  </div>
+</div>

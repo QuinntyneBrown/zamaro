@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\VulnerableSectorCheck;
 use App\Services\ArtistOnboarding\DocumentVault;
 use Database\Seeders\CastSeeder;
+use Database\Seeders\LegalDocumentSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -68,6 +69,27 @@ class VscDocumentLinkTest extends TestCase
         $this->assertSame(User::where('email', CastSeeder::PRIYA_EMAIL)->sole()->id, $entry->actor_id);
         $this->assertSame($this->check->id, $entry->target_id);
         $this->assertSame('media.localhost', parse_url($response->json('data.url'), PHP_URL_HOST));
+    }
+
+    /**
+     * The admin application takes the link from the admin API, which, like every admin route, does not
+     * stop at the terms gate: administrators are the Zamaro team (secure-admin-access, L2-080.3).
+     */
+    public function test_an_administrator_who_has_not_accepted_the_current_terms_takes_the_link_from_the_admin_api(): void
+    {
+        $this->seed(LegalDocumentSeeder::class);
+        $priya = $this->signInPriya();
+
+        $this->as($priya)->getJson($this->linkPath())->assertStatus(409)
+            ->assertJsonPath('type', config('zamaro.problems.base_uri').'/terms-acceptance-required');
+
+        $response = $this->as($priya)->getJson("/api/v1/admin/vulnerable-sector-checks/{$this->check->id}/document-link");
+
+        $response->assertOk()->assertHeader('Cache-Control', 'no-store, private');
+        $this->assertMatchesContract($response);
+        $this->assertSame('media.localhost', parse_url($response->json('data.url'), PHP_URL_HOST));
+        $this->assertSame($this->check->id, AuditEntry::where('action', AuditAction::VscDocumentViewed)->sole()->target_id);
+        $this->asANewRequest()->withoutCookies()->get($response->json('data.url'))->assertOk();
     }
 
     public function test_the_link_streams_the_document_with_server_set_headers(): void

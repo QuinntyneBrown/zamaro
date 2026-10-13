@@ -9,8 +9,11 @@ export class PageTitle {
   private readonly transloco = inject(TranslocoService);
 
   set(key: string): void {
-    this.title.setTitle(
-      this.transloco.translate('admin.pageTitle', { page: this.transloco.translate(key) }),
-    );
+    this.setText(this.transloco.translate(key));
+  }
+
+  /** A title that is data, not copy: an artist's name. */
+  setText(page: string): void {
+    this.title.setTitle(this.transloco.translate('admin.pageTitle', { page }));
   }
 }

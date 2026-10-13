@@ -721,7 +721,9 @@ class CastSeeder extends Seeder
     /**
      * The admin verification queue (pages/admin-checks): Elijah's first check and a newer one from
      * Abigail, each with a stand-in document on the documents disk under a fixed name, so running the
-     * seeder again rewrites the same two objects.
+     * seeder again rewrites the same two objects. A seeded check that was verified since (the e2e
+     * suite verifies Elijah's) goes back to waiting, so the queue reads as the mocks show it after
+     * every run.
      */
     private function pendingChecks(): void
     {
@@ -733,12 +735,12 @@ class CastSeeder extends Seeder
         foreach ($pending as [$slug, $issuedOn, $uploadedAt]) {
             $artist = Artist::where('slug', $slug)->firstOrFail();
             $check = VulnerableSectorCheck::firstOrNew(['user_id' => $artist->user_id, 'issued_on' => $issuedOn]);
-            if ($check->exists && $check->status !== VscStatus::Pending) {
-                continue;
-            }
             $stored = $vault->store("%PDF-1.4\n% Stand-in Vulnerable Sector Check for {$artist->display_name}\n%%EOF\n", md5("vsc-{$slug}"));
             $check->forceFill([
                 'status' => VscStatus::Pending,
+                'verified_at' => null,
+                'verified_by' => null,
+                'expires_on' => null,
                 'storage_key' => $stored['key'],
                 'wrapped_data_key' => $stored['wrappedDataKey'],
                 'mime_type' => 'application/pdf',

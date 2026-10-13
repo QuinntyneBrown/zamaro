@@ -22,4 +22,5 @@ export const scenarioIterations = {
   TopBar: 120,
   TopBarSignedIn: 110,
   TopBarWorkspace: 100,
+  TourDatesSchedule: 150,
 };

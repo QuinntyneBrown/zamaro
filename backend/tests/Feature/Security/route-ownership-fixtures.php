@@ -274,6 +274,10 @@ return [
         $test->as($intruder)->postJson('/api/v1/admin/vulnerable-sector-checks/1/verification')->assertNotFound();
     },
 
+    'GET api/v1/admin/vulnerable-sector-checks/{check}/document-link' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
+        $test->as($intruder)->getJson('/api/v1/admin/vulnerable-sector-checks/1/document-link')->assertNotFound();
+    },
+
     'GET api/v1/admin/artists' => function (CrossUserAccessTest $test, User $owner, User $intruder): void {
         $test->as($intruder)->getJson('/api/v1/admin/artists')->assertNotFound();
     },

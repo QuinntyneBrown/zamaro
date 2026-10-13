@@ -28,7 +28,7 @@ class VerifyVulnerableSectorCheck
      */
     public function handle(VulnerableSectorCheck $check, User $administrator): VulnerableSectorCheck
     {
-        return DB::transaction(function () use ($check, $administrator) {
+        return DB::transaction(function () use ($check, $administrator): VulnerableSectorCheck {
             $check = VulnerableSectorCheck::whereKey($check->id)->lockForUpdate()->firstOrFail();
             if ($check->status !== VscStatus::Pending) {
                 throw new VscAlreadyDecided;

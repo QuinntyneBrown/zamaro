@@ -7,6 +7,7 @@ const ICONS = {
   check: 'M5 12l5 5L20 7',
   close: 'M6 6l12 12M18 6 6 18',
   copy: 'M8 8h12v12H8zM4 16V4h12',
+  document: 'M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5',
   compass: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M15 9l-2 5-4 1 2-5z',
   download: 'M12 4v11M7 10l5 5 5-5M5 20h14',
   heart: 'M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z',

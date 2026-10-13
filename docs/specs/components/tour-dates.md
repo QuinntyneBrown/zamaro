@@ -4,7 +4,7 @@
 |---|---|
 | Selector | `zm-tour-dates` |
 | Library path | `frontend/projects/components/src/lib/tour-dates/` |
-| Status | built (`public` variant with `loading`, M1 S14); planned (`schedule`, `pickingId`, `pickDisabled` and the body and trail templates, with their screens in M4) |
+| Status | built (`public` variant with `loading`, M1 S14; `schedule` with `title`, `titleLink` and the trail template, M3 S8); planned (`pickingId`, `pickDisabled` and the body template, with their screens in M4) |
 | Traces to | L2-017, L2-019, L2-054, L2-056, L2-067, L2-086, L2-096, L2-100, L2-101, L2-102, L2-103, L2-104, L2-105, L2-110, L2-111 |
 | Design system | [`tour-dates.html`](../../design-system/components/tour-dates.html) |
 | Source mocks | [`pages/artist/default`](../../mocks/pages/artist/default.html), [`pages/artist/empty`](../../mocks/pages/artist/empty.html), [`pages/artist/booked-date`](../../mocks/pages/artist/booked-date.html), [`pages/profile-preview/default`](../../mocks/pages/profile-preview/default.html), [`pages/dashboard/default`](../../mocks/pages/dashboard/default.html), [`pages/dashboard/loading`](../../mocks/pages/dashboard/loading.html), [`pages/availability/default`](../../mocks/pages/availability/default.html), [`pages/request-detail/default`](../../mocks/pages/request-detail/default.html), [`pages/admin-artist/default`](../../mocks/pages/admin-artist/default.html), [`pages/booking-detail/declined`](../../mocks/pages/booking-detail/declined.html), [`pages/booking-detail/artist-cancelled`](../../mocks/pages/booking-detail/artist-cancelled.html), [`dialogs/suspend-artist/busy`](../../mocks/dialogs/suspend-artist/busy.html), [`dialogs/reinstate-artist/busy`](../../mocks/dialogs/reinstate-artist/busy.html) |

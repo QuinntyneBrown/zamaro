@@ -17,6 +17,18 @@ export const routes: Routes = [
           import('./pages/applications/applications').then((m) => m.ApplicationsPage),
       },
       {
+        path: 'artists',
+        loadComponent: () => import('./pages/artists/artists').then((m) => m.ArtistsPage),
+      },
+      {
+        path: 'artists/:id',
+        loadComponent: () => import('./pages/artist/artist').then((m) => m.ArtistPage),
+      },
+      {
+        path: 'vulnerable-sector-checks',
+        loadComponent: () => import('./pages/checks/checks').then((m) => m.ChecksPage),
+      },
+      {
         path: 'audit',
         loadComponent: () => import('./pages/audit-log/audit-log').then((m) => m.AuditLogPage),
       },

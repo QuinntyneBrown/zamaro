@@ -131,6 +131,16 @@ states default, busy and failed. The application screens are listed in
   `artist-onboarding/verify-vulnerable-sector-check`.
 - `bookings`, `booking_transitions` — written for each declined request.
 
+**As built in M3 S8 (read-only pages, D18)**
+
+- `AdminArtistsPage` (`pages/artists`, `/admin/artists?q=`) and `AdminArtistPage` (`pages/artist`,
+  `/admin/artists/{id}`) exist in the admin application with `AdminArtistsApi` behind them. The search
+  is in the address; the counts cover every artist. The artist page shows the details, the upcoming
+  bookings as a `zm-tour-dates` schedule with booking stamps, the suspension history ("Never
+  suspended." until `artist_suspensions` exists) and a Standing panel with the badge and one sentence.
+  Suspend, Reinstate, their dialogs and `BookingsToResolveComponent` come with M8, when the API gains
+  `suspensions` with content.
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement. It refines the level-1

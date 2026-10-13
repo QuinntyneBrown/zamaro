@@ -184,6 +184,19 @@ exposes its existence beyond Youth event eligibility.
   decision. `VulnerableSectorCheck::isCurrentOn()` exists; the search's youth rule compares the event date
   with `expires_on` in SQL.
 
+**As built in M3 S8 (admin pages)**
+
+- `VscQueuePage` is the admin application's `pages/checks` at `/admin/vulnerable-sector-checks`; the
+  Artists list links to it with the overview's count. A verified row stays on the page with "Verified
+  until {expiry} · by {name}", and the caption becomes "Checks uploaded since {date}, oldest first".
+- `VscDocumentComponent` is `shell/vsc-document-link` in the admin application. It opens the tab on the
+  click and sends it to the signed link once the API answers. The admin application reads the link from
+  `GET /api/v1/admin/vulnerable-sector-checks/{check}/document-link`, the same controller on the admin
+  group, because the signed-in route sits behind the terms gate (L2-080.3) and administrators are not
+  asked to accept the terms. The owner keeps the signed-in route.
+- `VulnerableSectorChecksApi` is `AdminVulnerableSectorChecksApi` (`api/lib/services/admin`) for the
+  admin side; the artist's upload client joins with the profile editor (M4).
+
 ## Requirements
 
 The feature realises the following level-2 (L2) requirement, quoted from

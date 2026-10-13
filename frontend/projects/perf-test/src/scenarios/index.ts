@@ -70,5 +70,6 @@ export const scenarios: Record<string, Scenario> = {
   TopBarSignedIn: () => import('./TopBarSignedIn'),
   TopBarWorkspace: () => import('./TopBarWorkspace'),
   TourDates: () => import('./TourDates'),
+  TourDatesSchedule: () => import('./TourDatesSchedule'),
   VideoCard: () => import('./VideoCard'),
 };

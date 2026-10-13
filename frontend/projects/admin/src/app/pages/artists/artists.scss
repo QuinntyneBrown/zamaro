@@ -1,0 +1,25 @@
+@use '../../shared/page';
+
+/* The standalone link to the check queue (design-system link--standalone). */
+.link--standalone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--target-min);
+  font: var(--text-label);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+}
+
+.link--standalone zm-icon {
+  transition: translate var(--duration-fast) var(--ease-standard);
+}
+
+.link--standalone:hover zm-icon {
+  translate: var(--space-1) 0;
+}
+
+/* The search field in the page head (design-system page-head__search). */
+.page-head__search {
+  min-width: min(100%, 18rem);
+}

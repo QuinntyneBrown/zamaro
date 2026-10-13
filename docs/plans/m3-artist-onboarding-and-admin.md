@@ -15,7 +15,7 @@
 | S5 | Audit log viewer and retention | Done | `2557169` |
 | S6 | Upload intake, scan and encrypted storage (VSC upload API) | Done | `dea2b67` (ADR-0024, ADR-0025) |
 | S7 | Signed links to private documents | Done | `fafb6fe` |
-| S8 | Admin VSC queue, verification and the Artists list | In progress: API and seed done, admin pages next | see below |
+| S8 | Admin VSC queue, verification and the Artists list | Done | see below |
 | S9–S14 | | Not started | |
 
 **Decisions (user, 2026-10-13):** every decision below marked **Needs your OK** (D1–D6, D11–D13, D18)
@@ -51,6 +51,34 @@ is **OK (accepted default, 2026-10-13)**; the others go ahead with their recomme
   - A wrong code now writes `auth.mfa_challenge` (failed) instead of `auth.sign_in_failed`.
   - The failed sign-in keeps M2's `context.email` rather than `context.attempted_email`.
   - `TRUSTED_PROXIES` feeds `TrustProxies`; the SSR proxy sends `X-Forwarded-For`.
+- **S8 (admin pages).**
+  - `zm-tour-dates` gained the CRD's `schedule` variant (`variant`, `title`, `titleLink`, the
+    `zmTourDateTrail` template, `.tour-dates--schedule` with its two-row phone layout) for the artist
+    page's "Upcoming bookings"; `pickingId`, `pickDisabled` and the body template wait for their M4
+    screens. `TourDatesSchedule` is its perf scenario. The `document` icon joined the icon set.
+  - `zm-button`'s `.btn` sets `text-wrap-style: balance` and `text-wrap-mode: inherit` instead of
+    `text-wrap: balance` (which forced the wrap mode back on), so in the table's `nowrap` actions cell
+    "View document" and "Verify" keep to one line as the mock shows, while a label in the booking stub
+    still wraps onto a balanced second line (button CRD).
+  - The admin application takes a check's document link from
+    `GET /api/v1/admin/vulnerable-sector-checks/{check}/document-link` (the same controller as the
+    signed-in route): the signed-in route sits behind the terms gate (L2-080.3), which stopped Priya,
+    who has accepted no terms, with 409; admin routes never do. `VscDocumentLink` opens the tab on the
+    click and sends it to the signed link once it arrives, so no popup rule stops it.
+  - The Artists list reads the whole seeded cast, so its subtitle is the seed's counts; its search
+    lives in the address (`/admin/artists?q=Tobi`). The no-results copy cannot name Tobi Adeyemi as an
+    applicant until applications exist (S11–S13), so it reads "Only approved and suspended artists are
+    listed here. Someone who has applied and is not approved yet is under Applications."
+  - The artist page's Standing panel is the badge and one sentence, with no Suspend or Reinstate
+    (D18); the subtitle lists the styles that add to the act type ("Band · Acoustic, Hymns"). Marcus
+    has one upcoming booking in the seed (ZAM-0097), not the mock's three.
+  - The check queue's caption turns to "Checks uploaded since {date}, oldest first" once a verified
+    row is on the page; a failed Verify or document link is a danger toast with the problem's detail.
+  - E2E: the Verify spec runs in the `admin-mutations` Playwright project (serial, after `admin`,
+    teardown `reseed` runs `db:seed`); `CastSeeder::pendingChecks()` now puts a seeded check that was
+    verified back to waiting, so the seed is the queue's fixture. Specs read the API through
+    `fixtures/api.ts`. Route states `admin-checks`, `admin-artists` and `admin-artist` (artist 2) joined
+    the manifest; their Linux baselines were captured here, the win32 ones need the Windows host.
 - **S8 (API and seed).**
   - The seed adds Elijah's first check (issued Fri 25 Sep, uploaded Wed 7 Oct 4:10 p.m.) and
     Abigail's newer one (issued Mon 5 Oct, uploaded Fri 9 Oct 9:52 a.m.), each with a stand-in PDF

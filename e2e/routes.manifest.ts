@@ -50,7 +50,10 @@ export interface RouteState {
     | 'accept-terms'
     | 'saved-list'
     | 'saved-empty'
-    | 'audit-rows';
+    | 'audit-rows'
+    | 'checks-rows'
+    | 'artists-rows'
+    | 'artist-details';
   /**
    * Parts masked in captures: the session-ended line, which changes with M5's drafts, and the signed-in
    * devices (only this device is shown) with the Password lead's count of the others, which every spec
@@ -339,5 +342,33 @@ export const routes: RouteState[] = [
     signedInAs: 'priya',
     shows: 'audit-rows',
     masks: 'audit-times',
+  },
+  // Priya's Vulnerable Sector Check queue: Elijah's first check and Abigail's newer one (M3 S8).
+  {
+    name: 'admin-checks',
+    path: '/admin/vulnerable-sector-checks',
+    app: 'admin',
+    mock: 'admin-checks/default.html',
+    signedInAs: 'priya',
+    shows: 'checks-rows',
+  },
+  // The Artists list: the whole seeded cast A to Z, so the counts are the seed's (M3 S8).
+  {
+    name: 'admin-artists',
+    path: '/admin/artists',
+    app: 'admin',
+    mock: 'admin-artists/default.html',
+    signedInAs: 'priya',
+    shows: 'artists-rows',
+  },
+  // Marcus Bell Trio as Priya sees him: details, his confirmed booking, and a read-only standing
+  // until suspend and reinstate (M8, D18). Artist 2 in the seed.
+  {
+    name: 'admin-artist',
+    path: '/admin/artists/2',
+    app: 'admin',
+    mock: 'admin-artist/default.html',
+    signedInAs: 'priya',
+    shows: 'artist-details',
   },
 ];
