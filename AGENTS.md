@@ -2,7 +2,7 @@
 
 Zamaro is a full-stack platform for booking Christian praise and worship artists in Toronto and the surrounding area (within reasonable driving distance). Artists have profiles with bios, images, and videos.
 
-- **Backend:** PHP / Laravel — owns booking, persistence, and authentication
+- **Backend:** Next.js (TypeScript on Node.js) — owns booking, persistence, and authentication; serves the API only (ADR-0027)
 - **Frontend:** Angular — provides the app
 - **E2E:** Playwright — covers behavior and visual parity with the design reference
 
@@ -22,7 +22,7 @@ Zamaro is a full-stack platform for booking Christian praise and worship artists
 This is the layout the repository grows into once the whole solution is built. Folders appear slice by
 slice as features land; create new code where this tree says it belongs. The three runtime containers
 from the detailed designs map to two applications: `backend/` builds the `zamaro-api` image, which runs
-as both the Zamaro API and the Zamaro Worker (Horizon and the scheduler), and `frontend/` is an Angular
+as both the Zamaro API and the Zamaro Worker (BullMQ workers and the scheduler), and `frontend/` is an Angular
 workspace that builds the `zamaro-web` image. The workspace holds two applications (`zamaro` and
 `admin`), two libraries they share (`components` and `api`), and the `perf-test` scenario application.
 Keeping `admin` a separate application keeps administrator code out of the public bundle; the
@@ -52,51 +52,52 @@ zamaro/
 │       └── components/            # CRDs: <component>.md + <component>.html, trace to L2
 ├── docker-compose.yml             # local dev: postgres, redis, mailpit, api, api-e2e, worker-e2e, worker,
 │                                  # scheduler (ADR-0002, ADR-0019)
-├── backend/                       # Laravel 13 on PHP 8.3 — Zamaro API and Zamaro Worker
-│   ├── app/
-│   │   ├── Actions/{Subsystem}/   # one use case per class; business rules live here
-│   │   ├── Services/{Subsystem}/  # domain services (AvailabilityService, DistanceService, ...)
-│   │   ├── Jobs/{Subsystem}/      # queued work (expiry, reminders, payouts, rating recalculation)
-│   │   ├── Events/  Listeners/
-│   │   ├── Models/                # Eloquent models (Booking, Artist, Church, Review, ...)
-│   │   ├── Enums/                 # BookingStatus and other closed vocabularies
-│   │   ├── Contracts/             # ports for outside services (PaymentGateway, MediaScanner, ...)
-│   │   ├── Integrations/          # adapters that implement Contracts/
-│   │   ├── Policies/              # ownership and role authorisation
-│   │   ├── Notifications/         # transactional email (TransactionalNotification, ADR-0019)
-│   │   ├── Rules/                 # validation rules shared by FormRequests (PasswordPolicy)
-│   │   ├── Console/Commands/      # artisan commands (i18n:check, ...)
-│   │   ├── Support/               # cross-cutting code with no subsystem (Problems/ for RFC 9457)
-│   │   └── Http/
-│   │       ├── Controllers/Api/V1/{Subsystem}/   # thin: validate, call an action, return a resource
-│   │       ├── Controllers/Health/               # /health/live, /health/ready
-│   │       ├── Middleware/
-│   │       ├── Requests/{Subsystem}/             # FormRequest validation
-│   │       └── Resources/{Subsystem}/            # JSON response shapes
-│   ├── bootstrap/                 # app.php: middleware order, exception handling, routing
-│   ├── config/                    # Laravel config plus zamaro.php and security.php
+├── backend/                       # Next.js 16 on Node.js 24, TypeScript — Zamaro API and Zamaro Worker (ADR-0027)
+│   ├── src/
+│   │   ├── app/                   # Next.js routing: route handlers only, no pages
+│   │   │   ├── api/v1/            # /api/v1/**/route.ts: thin — validate, call an action, return a resource;
+│   │   │   │                      # authenticated by default, anonymous routes listed in public.ts
+│   │   │   ├── health/            # live/route.ts and ready/route.ts, outside /api/v1 (ADR-0005)
+│   │   │   └── media/             # signed links to private documents, on the media host (ADR-0024)
+│   │   ├── server/
+│   │   │   ├── actions/{subsystem}/   # one use case per class; business rules live here
+│   │   │   ├── services/{subsystem}/  # domain services (AvailabilityService, DistanceService, ...)
+│   │   │   ├── jobs/{subsystem}/      # BullMQ jobs (expiry, reminders, payouts, rating recalculation)
+│   │   │   ├── events/  listeners/    # EventBus; listeners run after commit
+│   │   │   ├── db/                # client.ts and schema/: Drizzle tables (Booking, Artist, Church, Review, ...)
+│   │   │   ├── enums/             # BookingStatus and other closed vocabularies
+│   │   │   ├── contracts/         # ports for outside services (PaymentGateway, MediaScanner, ...)
+│   │   │   ├── integrations/      # adapters that implement contracts/
+│   │   │   ├── policies/          # ownership and role authorisation
+│   │   │   ├── notifications/     # transactional email (TransactionalNotification, ADR-0019)
+│   │   │   ├── rules/             # validation rules shared by request schemas (PasswordPolicy)
+│   │   │   ├── support/           # cross-cutting code with no subsystem (problems/ for RFC 9457)
+│   │   │   └── http/
+│   │   │       ├── pipeline.ts    # request pipeline: the middleware order for every route
+│   │   │       ├── rate-limits.ts # named rate limiters
+│   │   │       ├── requests/{subsystem}/   # Zod request schemas
+│   │   │       └── resources/{subsystem}/  # JSON response shapes
+│   │   ├── cli/                   # npm run scripts (i18n:check, db:seed, ...)
+│   │   ├── worker.ts              # Zamaro Worker: BullMQ queues high, notifications, default
+│   │   ├── scheduler.ts           # registers the BullMQ job schedulers
+│   │   └── instrumentation.ts     # boot-time configuration checks and error tracking
+│   ├── config/                    # zamaro.ts and security.ts: typed, validated environment
 │   ├── database/
 │   │   ├── factories/
-│   │   ├── migrations/            # expand–contract only; never run on startup
+│   │   ├── migrations/            # Drizzle Kit SQL; expand–contract only; never run on startup
 │   │   └── seeders/               # idempotent, safe to re-run
-│   │       └── media/             # sample files MediaSeeder copies to the media disk (M1 has no uploads)
+│   │       └── media/             # sample files the media seeder copies to the media disk (M1 has no uploads)
 │   ├── resources/
 │   │   ├── i18n/{locale}/         # translation catalogues served at /api/v1/i18n/{locale}
-│   │   └── views/emails/
-│   ├── routes/
-│   │   ├── api.php                # /api/v1, authenticated by default
-│   │   ├── api_public.php         # intentional anonymous routes
-│   │   ├── health.php             # /health/live and /health/ready, outside /api/v1 (ADR-0005)
-│   │   ├── media.php              # signed links to private documents, on the media host (ADR-0024)
-│   │   └── console.php            # scheduled commands
+│   │   └── emails/
 │   ├── tests/
-│   │   ├── Feature/{Subsystem}/   # integration tests against the API
-│   │   ├── Feature/Security/      # cross-user access suite and route-ownership fixtures
+│   │   ├── feature/{subsystem}/   # Vitest integration tests against the running API
+│   │   ├── feature/security/      # cross-user access suite and route-ownership fixtures
 │   │   └── load/                  # load scenarios for the response-time budgets
-│   ├── tools/phpstan/             # Zamaro's own Larastan rules (the raw-SQL rule, L2-075.2)
-│   ├── composer.json  phpstan.neon
+│   ├── tools/eslint/              # Zamaro's own ESLint rules (no-raw-sql, L2-075.2)
+│   ├── next.config.ts  drizzle.config.ts  vitest.config.ts  eslint.config.js  tsconfig.json  package.json
 │   ├── docker/                    # backend container assets (postgres init script); see ADR-0002
-│   └── Dockerfile                 # zamaro-api image (API and Worker)
+│   └── Dockerfile                 # zamaro-api image (API, Worker and Scheduler)
 ├── frontend/                      # Angular workspace — Zamaro Web; angular.json declares every project
 │   ├── angular.json  package.json  tsconfig.json  eslint.config.js  .prettierrc
 │   ├── projects/
@@ -162,16 +163,20 @@ zamaro/
 
 ## Backend conventions
 
-- Business rules live in domain services, actions, and jobs — not controllers.
+- The backend is a Next.js application of route handlers only; it renders no pages (ADR-0027). Use the
+  libraries ADR-0027 names (Drizzle, Zod, BullMQ, and the rest) rather than adding alternatives.
+- Business rules live in domain services, actions, and jobs — not route handlers.
 - The API does **not** run database migrations on startup. Run them explicitly.
 - Seed data is idempotent and safe to re-run.
-- Endpoints require authentication by default. Preserve intentional anonymous access and middleware ordering when changing API auth.
-- Keep request logging outside the exception-handling middleware so handled response statuses are logged correctly.
+- Endpoints require authentication by default. Preserve intentional anonymous access and the request pipeline's step order when changing API auth.
+- Keep request logging outside the pipeline's error-handling step so handled response statuses are logged correctly.
 - User-owned data must remain scoped to the current user; resources belonging to other users or artists should never be exposed.
 
 ### Tests
 
-Back end tests are integration tests against the API. Follow the existing test patterns when adding coverage.
+Back end tests are Vitest integration tests against the running API, with real Postgres and Redis. Follow
+the existing test patterns when adding coverage. Run `npm run lint`, `npm run format:check`,
+`npm run typecheck` and `npm test` in `backend/`.
 
 ## Frontend conventions
 
@@ -226,7 +231,7 @@ no tests added afterward, and no weakening tests to manufacture a pass. Keep
 the requirement, detailed design, mock, criteria, tests, and implementation
 aligned until the entire feature or behavior change is complete.
 
-Back end: integration tests against the API. Front end: Playwright, using the
+Back end: Vitest integration tests against the API. Front end: Playwright, using the
 Page Object Model - one page object per screen, owning the selectors and the
 interactions. Tests state intent; page objects know the DOM. Never put a
 selector in a test.

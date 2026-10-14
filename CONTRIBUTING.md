@@ -89,11 +89,13 @@ make it pass.
 
 [`AGENTS.md`](AGENTS.md) is the source of truth for conventions. The most important ones:
 
-### Backend (PHP / Laravel)
+### Backend (Next.js)
 
-- Business rules live in domain services, actions and jobs, not in controllers.
+- The backend is a Next.js application of route handlers on Node.js; it renders no pages
+  (ADR-0027).
+- Business rules live in domain services, actions and jobs, not in route handlers.
 - Endpoints require authentication by default. Keep intentional anonymous access and
-  middleware ordering when you change API auth.
+  the request pipeline's step order when you change API auth.
 - User-owned data stays scoped to the current user.
 - The API never runs database migrations on startup. Run them explicitly.
 - Seed data is idempotent and safe to run more than once.
@@ -120,7 +122,7 @@ make it pass.
 
 | Layer | Tool | Style |
 |---|---|---|
-| Backend | Laravel / PHPUnit | Integration tests against the API |
+| Backend | Vitest | Integration tests against the running API |
 | Frontend and end to end | Playwright, Chromium only | Page Object Model: one page object per screen owns the selectors and interactions |
 
 - Tests describe behaviour. Never put a selector in a test; keep it in the page object.

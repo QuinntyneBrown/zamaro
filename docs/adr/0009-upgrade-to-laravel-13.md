@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-10
 **Category:** backend
-**Status:** Accepted (supersedes [ADR-0004](0004-stay-on-laravel-11-with-ignored-advisories.md))
+**Status:** Superseded by [ADR-0027](0027-nextjs-backend.md) (superseded [ADR-0004](0004-stay-on-laravel-11-with-ignored-advisories.md))
 **Deciders:** Project owner
 
 ## Context

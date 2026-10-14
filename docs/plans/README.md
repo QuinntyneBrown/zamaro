@@ -29,3 +29,9 @@ changes in the plan as you go, the way M1's "Changes made while implementing" se
 | M10 | [Production readiness](m10-production-readiness.md) | Not started |
 
 The roadmap and the reasons behind this order are in the M1 plan.
+
+The backend is now a Next.js application ([ADR-0027](../adr/0027-nextjs-backend.md)). The Laravel code that
+M1–M3 built was removed, so the backend parts of their done slices have to be rebuilt; the plans still name
+the Laravel classes, files and commands as they were when written. Before a milestone's backend work starts
+or restarts, re-read its plan against ADR-0027 and the updated detailed designs, and record the changes in
+the plan.

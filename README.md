@@ -43,7 +43,7 @@ Implementation starts from these artifacts, one thin vertical slice at a time.
 | Detailed designs (C4, class and sequence diagrams) | [`docs/detailed-designs/`](docs/detailed-designs/README.md) | Draft complete |
 | HTML mocks for every page, dialog and state | [`docs/mocks/`](docs/mocks/README.md) | Draft complete |
 | Design system (tokens, components, patterns) | [`docs/design-system/`](docs/design-system/README.md) | Draft complete |
-| Laravel API, worker and scheduler | `backend/` (planned) | Not started |
+| Next.js API, worker and scheduler | `backend/` (planned) | Not started |
 | Angular web app | [`frontend/`](frontend/README.md) | Scaffolded: empty workspace with lint, format and pre-commit hook |
 | Playwright end-to-end suite | `e2e/` (planned) | Not started |
 
@@ -89,8 +89,8 @@ The planned scope is set out in [`docs/specs/L1.md`](docs/specs/L1.md). In summa
 | Container | Technology | Responsibility |
 |---|---|---|
 | Zamaro Web | Angular with server-side rendering | The booker, artist and admin user interface |
-| Zamaro API | PHP 8.3, Laravel 13 | REST API; owns booking rules, persistence and authentication |
-| Zamaro Worker | Laravel queue worker and scheduler | Email, payment events, deadlines and other background jobs |
+| Zamaro API | Next.js 16 on Node.js 24 (TypeScript) | REST API; owns booking rules, persistence and authentication |
+| Zamaro Worker | BullMQ worker and scheduler from the same Next.js application | Email, payment events, deadlines and other background jobs |
 | Database | PostgreSQL 16 | System of record |
 | Cache | Redis | Sessions, cached distances and profiles, rate limits |
 | Object storage | Object storage behind a CDN | Artist photos and videos |
@@ -123,7 +123,7 @@ container and component diagrams for its slice of this system.
 - A modern browser
 - Optional: Python 3 or Node.js, to serve the docs over HTTP
 
-The application toolchain (PHP, Composer, Node.js, the Angular CLI and Playwright)
+The application toolchain (Node.js, npm, the Angular CLI and Playwright)
 will be documented here when the first slice of code lands.
 
 ### Browse the design artifacts

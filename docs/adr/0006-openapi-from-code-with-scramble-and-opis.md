@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-09
 **Category:** backend
-**Status:** Accepted
+**Status:** Accepted; amended by [ADR-0027](0027-nextjs-backend.md), which replaces the Laravel mechanisms named here
 **Deciders:** Project owner, Claude
 
 ## Context

@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-10
 **Category:** frontend
-**Status:** Accepted
+**Status:** Accepted; amended by [ADR-0027](0027-nextjs-backend.md), which replaces the Laravel mechanisms named here
 **Deciders:** Claude (M1 S16, index-and-share-profile)
 
 ## Context
