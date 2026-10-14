@@ -3,6 +3,8 @@
 **Status:** Not started. Depends on M9, which includes the Laravel decision D18 and the header scan.
 S1–S4 depend only on M2 and are recommended to move forward (see "Staging earlier").
 
+**Decisions (user, 2026-10-14):** every decision below marked **Needs your OK** is **OK (accepted default, 2026-10-14)**; the others go ahead with their recommended defaults. The vendor choices still need real accounts and credentials before their adapters can be built.
+
 ## Context
 
 After M9 the product is complete and hardened, but it has never left Docker Compose:
