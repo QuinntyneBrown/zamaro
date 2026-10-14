@@ -8,7 +8,7 @@
 - [ ] Detailed design (`docs/detailed-designs`)
 - [ ] Mocks (`docs/mocks`)
 - [ ] Design system (`docs/design-system`)
-- [ ] API (Laravel)
+- [ ] API (Next.js)
 - [ ] Web app (Angular)
 - [ ] End-to-end tests (Playwright)
 - [ ] Documentation or tooling
