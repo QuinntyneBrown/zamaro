@@ -5,6 +5,8 @@ background jobs), M3 (admin app, audit log, upload scanning), M4 (object storage
 requests and messages), M6 (payments, refunds, payouts), M7 (reviews) and M8 (admin support). It can
 start once M8 is merged; S1–S5 and S11–S12 only need M2 and can run earlier if capacity allows.
 
+**Decisions (user, 2026-10-14):** every decision below marked **Needs your OK** is **OK (accepted default, 2026-10-14)**; the others go ahead with their recommended defaults.
+
 ## Context
 
 By the end of M8 the product is feature-complete against fakes: every page in `docs/mocks/pages`

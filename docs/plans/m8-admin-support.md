@@ -3,6 +3,8 @@
 **Status:** Not started.
 **Depends on:** M3 (admin app, audit log, read-only Artists screens, `admin-mutations` project), M5 (booking lifecycle and messages), M6 (payments, refunds, holds, payouts) and M7 (the Reviews section of the admin shell). M4 supplies profile cache invalidation.
 
+**Decisions (user, 2026-10-14):** every decision below marked **Needs your OK** is **OK (accepted default, 2026-10-14)**; the others go ahead with their recommended defaults.
+
 ## Context
 
 **What exists before M8:**

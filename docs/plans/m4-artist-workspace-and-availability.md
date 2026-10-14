@@ -2,6 +2,8 @@
 
 **Status:** Not started; depends on M1–M3.
 
+**Decisions (user, 2026-10-14):** every decision below marked **Needs your OK** is **OK (accepted default, 2026-10-14)**; the others go ahead with their recommended defaults.
+
 ## Context
 
 **What exists after M3:**
