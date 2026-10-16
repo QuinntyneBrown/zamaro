@@ -12,9 +12,71 @@ export interface ProblemTypeDefinition {
   title: string;
 }
 
+/** The problem types the API returns; a type is added only when a slice answers it. */
 export const ProblemType = {
+  Unauthenticated: { slug: 'unauthenticated', status: 401, title: 'Sign in to continue' },
+  CsrfTokenMismatch: {
+    slug: 'csrf-token-mismatch',
+    status: 419,
+    title: 'The page’s security token didn’t match',
+  },
   NotFound: { slug: 'not-found', status: 404, title: 'Not found' },
-  ServerError: { slug: 'server-error', status: 500, title: 'Something went wrong on our side' },
+  ArtistNotFound: { slug: 'artist-not-found', status: 404, title: 'This artist isn’t on Zamaro' },
+  ValidationFailed: {
+    slug: 'validation-failed',
+    status: 422,
+    title: 'Check the highlighted fields',
+  },
+  PayloadTooLarge: { slug: 'payload-too-large', status: 413, title: 'The request is too large' },
+  UnsupportedMediaType: {
+    slug: 'unsupported-media-type',
+    status: 415,
+    title: 'Send the request as JSON',
+  },
+  LegalDocumentOutdated: {
+    slug: 'legal-document-outdated',
+    status: 409,
+    title: 'The terms have changed',
+  },
+  TermsAcceptanceRequired: {
+    slug: 'terms-acceptance-required',
+    status: 409,
+    title: 'Accept the updated terms',
+  },
+  LinkExpired: { slug: 'link-expired', status: 410, title: 'This link has expired' },
+  TwoFactorAlreadyOn: {
+    slug: 'two-factor-already-on',
+    status: 409,
+    title: 'Two-step sign-in is already on',
+  },
+  TwoFactorRequired: {
+    slug: 'two-factor-required',
+    status: 409,
+    title: 'Administrators keep two-step sign-in on',
+  },
+  VscAlreadyDecided: {
+    slug: 'vsc-already-decided',
+    status: 409,
+    title: 'This check was already decided',
+  },
+  UploadOffsetMismatch: {
+    slug: 'upload-offset-mismatch',
+    status: 409,
+    title: 'The upload is further along than this chunk',
+  },
+  ApplicationInReview: {
+    slug: 'application-in-review',
+    status: 409,
+    title: 'You already have an application in review',
+  },
+  SavedArtistLimit: {
+    slug: 'saved-artist-limit',
+    status: 422,
+    title: 'You can save up to 200 artists',
+  },
+  TooManyRequests: { slug: 'too-many-requests', status: 429, title: 'Too many requests' },
+  SignInPaused: { slug: 'sign-in-paused', status: 429, title: 'Sign-in is paused for 15 minutes' },
+  ServerError: { slug: 'server-error', status: 500, title: 'Something went wrong' },
 } as const satisfies Record<string, ProblemTypeDefinition>;
 
 export interface ProblemOptions {
@@ -35,6 +97,17 @@ export class HttpProblem extends Error {
 
   toResponse(): Response {
     return problemResponse(this.type, this.options);
+  }
+}
+
+/** A 422 problem whose `errors` are keyed by field, each with the copy the form shows (L2-095.2). */
+export class ValidationProblem extends HttpProblem {
+  constructor(readonly errors: Record<string, string[]>) {
+    super(ProblemType.ValidationFailed, {
+      detail: 'Some fields need attention.',
+      extensions: { errors },
+    });
+    this.name = 'ValidationProblem';
   }
 }
 
