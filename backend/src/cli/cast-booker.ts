@@ -21,7 +21,9 @@ export async function castBooker(
 ): Promise<void> {
   const password = config().castPassword;
   if (config().env === 'production' || password === undefined) {
-    throw new Error('cast:booker runs only in local, test and e2e, with ZAMARO_CAST_PASSWORD set.');
+    throw new Error(
+      'cast:booker never runs in production; it needs ZAMARO_CAST_PASSWORD in local, test or e2e.',
+    );
   }
   const address = email.trim().toLowerCase();
   await db().transaction(async (tx) => {

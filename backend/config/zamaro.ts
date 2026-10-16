@@ -44,6 +44,13 @@ const schema = z.object({
   ZAMARO_STORAGE_ROOT: z.preprocess(blankToUndefined, z.string().default('storage/app')),
   // The password Naomi, Abigail and Tomi sign in with (M2 D28), outside production only.
   ZAMARO_CAST_PASSWORD: optional,
+  // One directory per locale, one JSON file per namespace (L2-111).
+  ZAMARO_I18N_PATH: z.preprocess(blankToUndefined, z.string().default('resources/i18n')),
+  // Unfinished features, off unless the environment turns them on (ADR-0012).
+  ZAMARO_FEATURE_BOOKING_REQUESTS: z.preprocess(
+    blankToUndefined,
+    z.enum(['true', 'false', '1', '0']).default('false'),
+  ),
 });
 
 export interface ZamaroConfig {
@@ -60,6 +67,8 @@ export interface ZamaroConfig {
   storageRoot: string;
   /** Set only where the cast can sign in: local, test and e2e. */
   castPassword: string | undefined;
+  i18nPath: string;
+  features: { bookingRequests: boolean };
   // Base of the RFC 9457 problem `type` URIs, e.g. {base}/not-found (ADR-0005).
   problemsBaseUri: string;
 }
@@ -69,6 +78,11 @@ let cached: ZamaroConfig | undefined;
 export function config(): ZamaroConfig {
   cached ??= load();
   return cached;
+}
+
+/** Reads the environment again on the next call; tests use it after changing `process.env`. */
+export function reloadConfig(): void {
+  cached = undefined;
 }
 
 function load(): ZamaroConfig {
@@ -92,6 +106,12 @@ function load(): ZamaroConfig {
     trustedProxies: env.TRUSTED_PROXIES,
     storageRoot: resolve(env.ZAMARO_STORAGE_ROOT),
     castPassword: env.ZAMARO_ENV === 'production' ? undefined : env.ZAMARO_CAST_PASSWORD,
+    i18nPath: resolve(env.ZAMARO_I18N_PATH),
+    features: {
+      bookingRequests:
+        env.ZAMARO_FEATURE_BOOKING_REQUESTS === 'true' ||
+        env.ZAMARO_FEATURE_BOOKING_REQUESTS === '1',
+    },
     problemsBaseUri: `${appUrl}/problems`,
   };
 }

@@ -1,23 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { describe, expect, inject, it } from 'vitest';
-import { api, UUID } from '../../support/api';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { api, UUID } from '../../support/app';
+import { captureLogs } from '../../support/logs';
 
 const PROBLEM = 'application/problem+json';
-
-/** The API's `request` log lines for one request ID, waiting briefly for the pipe to the log file. */
-async function requestLogLines(requestId: string | null): Promise<Record<string, unknown>[]> {
-  for (let attempt = 0; attempt < 20; attempt++) {
-    const lines = readFileSync(inject('apiLogFile'), 'utf8')
-      .split('\n')
-      .filter((line) => line.startsWith('{'))
-      .map((line) => JSON.parse(line) as Record<string, unknown>)
-      .filter((line) => line.msg === 'request' && line.requestId === requestId);
-    if (lines.length > 0) return lines;
-    await new Promise((resolve) => setTimeout(resolve, 50));
-  }
-  return [];
-}
 
 /**
  * L2-093.1: request IDs and structured request logs.
@@ -25,6 +11,16 @@ async function requestLogLines(requestId: string | null): Promise<Record<string,
  * CORS: only Zamaro Web's origins may call the API with credentials (ZAMARO_WEB_ORIGINS, ADR-0015).
  */
 describe('API conventions', () => {
+  let logs: ReturnType<typeof captureLogs>;
+
+  beforeAll(() => {
+    logs = captureLogs();
+  });
+
+  afterAll(() => {
+    logs.restore();
+  });
+
   it('a request without an id gets a generated uuid', async () => {
     const response = await api('/health/live');
 
@@ -132,7 +128,9 @@ describe('API conventions', () => {
     const response = await api('/api/v1/does-not-exist');
     const requestId = response.headers.get('x-request-id');
 
-    const lines = await requestLogLines(requestId);
+    const lines = logs
+      .lines()
+      .filter((line) => line.msg === 'request' && line.requestId === requestId);
 
     expect(lines).toHaveLength(1);
     const line = lines[0] ?? {};

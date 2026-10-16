@@ -3,7 +3,8 @@
 **Date:** 2026-10-14
 **Category:** backend
 **Status:** Accepted (supersedes [ADR-0009](0009-upgrade-to-laravel-13.md); amends ADR-0002, 0005, 0006, 0011, 0012,
-0013, 0015, 0018, 0019, 0020, 0021, 0022, 0023, 0024 and 0026 as described below)
+0013, 0015, 0018, 0019, 0020, 0021, 0022, 0023, 0024 and 0026 as described below; its testing row and backend
+checks are amended by [ADR-0028](0028-backend-tests-in-process-on-pglite.md))
 **Deciders:** Project owner
 
 ## Context

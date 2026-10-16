@@ -1,8 +1,9 @@
-import pino, { type Logger } from 'pino';
+import pino, { type DestinationStream, type Logger } from 'pino';
 import { config } from '@config/zamaro';
 import { currentRequestId } from './request-context';
 
 let instance: Logger | undefined;
+let destination: DestinationStream | undefined;
 
 /**
  * JSON lines on stderr, one object per line, each carrying the release and the current request ID
@@ -19,7 +20,13 @@ export function logger(): Logger {
         return requestId === undefined ? {} : { requestId };
       },
     },
-    pino.destination({ fd: 2, sync: true }),
+    destination ?? pino.destination({ fd: 2, sync: true }),
   );
   return instance;
+}
+
+/** Sends the log lines somewhere else (tests capture them); `undefined` returns to stderr. */
+export function useLogDestination(next: DestinationStream | undefined): void {
+  destination = next;
+  instance = undefined;
 }

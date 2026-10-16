@@ -19,7 +19,9 @@
     "db:migrate": "tsx src/cli/db-migrate.ts",
     "db:seed": "tsx src/cli/db-seed.ts",
     "db:reset": "tsx src/cli/db-reset.ts",
-    "cast:booker": "tsx src/cli/cast-booker.ts"
+    "cast:booker": "tsx src/cli/cast-booker.ts",
+    "openapi:export": "tsx src/cli/openapi-export.ts",
+    "openapi:check": "tsx src/cli/openapi-export.ts --check"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
@@ -34,11 +36,14 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.3.16",
     "@eslint/js": "^10.0.1",
     "@types/luxon": "^3.7.6",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "drizzle-kit": "^0.31.11",
     "eslint": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",

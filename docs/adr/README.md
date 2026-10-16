@@ -35,4 +35,5 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0024](0024-upload-storage-on-local-disks-until-object-storage.md) | Upload storage on local disks behind Laravel's filesystem ports until object storage | Accepted (amended by 0027) |
 | [0025](0025-private-document-envelope-encryption.md) | Private documents are encrypted per file with a wrapped data key | Accepted |
 | [0026](0026-resumable-application-video-uploads.md) | Application videos are uploaded in chunks with a small tus-style protocol | Accepted (amended by 0027) |
-| [0027](0027-nextjs-backend.md) | The backend is a Next.js application on Node.js | Accepted |
+| [0027](0027-nextjs-backend.md) | The backend is a Next.js application on Node.js | Accepted (amended by 0028) |
+| [0028](0028-backend-tests-in-process-on-pglite.md) | Backend tests run in-process on PGlite with in-memory fakes | Accepted |

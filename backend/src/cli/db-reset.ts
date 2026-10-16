@@ -1,7 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { config } from '@config/zamaro';
-import { db } from '@/server/db/client';
-import { migrateDatabase } from './db-migrate';
+import { db, migrateDatabase } from '@/server/db/client';
 import { seedDatabase } from './db-seed';
 import { run } from './run';
 

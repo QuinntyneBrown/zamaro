@@ -1,39 +1,42 @@
+import { sql } from 'drizzle-orm';
 import Redis from 'ioredis';
-import postgres from 'postgres';
 import { config } from '@config/zamaro';
+import type { HealthCheck } from '@/server/contracts/health-check';
+import { db } from '@/server/db/client';
 
 /**
  * Readiness (L2-090.2, ADR-0005): the database answers `SELECT 1`, and the cache and queue Redis
  * connections answer PING. A refused connection fails at once; a hung one fails after two seconds.
+ * The checks are a port (ADR-0028): tests bind checks that pass or fail by name.
  */
 export type Readiness = { status: 'ready' } | { status: 'not ready'; failed: string[] };
 
-interface Check {
-  name: string;
-  run: () => Promise<void>;
+let bound: HealthCheck[] | undefined;
+
+export function useHealthChecks(checks: HealthCheck[] | undefined): void {
+  bound = checks;
 }
 
 export async function checkReadiness(): Promise<Readiness> {
-  const { databaseUrl, redis } = config();
-  const checks: Check[] = [
-    { name: 'database', run: () => pingDatabase(databaseUrl) },
-    { name: 'cache', run: () => pingRedis(redis.cacheUrl) },
-    { name: 'queue', run: () => pingRedis(redis.queueUrl) },
-  ];
+  const checks = bound ?? defaultChecks();
   const results = await Promise.allSettled(checks.map((check) => check.run()));
   const failed = checks
     .filter((_, index) => results[index]?.status === 'rejected')
-    .map((c) => c.name);
+    .map((check) => check.name);
   return failed.length === 0 ? { status: 'ready' } : { status: 'not ready', failed };
 }
 
-async function pingDatabase(url: string): Promise<void> {
-  const sql = postgres(url, { max: 1, connect_timeout: 2, idle_timeout: 1 });
-  try {
-    await sql`SELECT 1`;
-  } finally {
-    await sql.end({ timeout: 1 });
-  }
+function defaultChecks(): HealthCheck[] {
+  const { redis } = config();
+  return [
+    { name: 'database', run: pingDatabase },
+    { name: 'cache', run: () => pingRedis(redis.cacheUrl) },
+    { name: 'queue', run: () => pingRedis(redis.queueUrl) },
+  ];
+}
+
+async function pingDatabase(): Promise<void> {
+  await Promise.race([db().execute(sql`SELECT 1`), timeout(2000)]);
 }
 
 async function pingRedis(url: string): Promise<void> {
@@ -50,4 +53,12 @@ async function pingRedis(url: string): Promise<void> {
   } finally {
     client.disconnect();
   }
+}
+
+function timeout(ms: number): Promise<never> {
+  return new Promise((_, reject) => {
+    setTimeout(() => {
+      reject(new Error(`no answer within ${String(ms)} ms`));
+    }, ms);
+  });
 }

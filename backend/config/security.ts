@@ -27,6 +27,10 @@ export function securityConfig(): SecurityConfig {
   return cached;
 }
 
+export function reloadSecurityConfig(): void {
+  cached = undefined;
+}
+
 function load(): SecurityConfig {
   const env = schema.parse(process.env);
   const keys = new Map<string, Buffer>();
