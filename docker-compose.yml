@@ -1,5 +1,32 @@
 name: zamaro
 
+# The Zamaro API image (backend/Dockerfile, ADR-0027). In development backend/ is bind-mounted and
+# node_modules lives in a named volume, which the image's entrypoint fills on first start.
+x-api: &api
+  build:
+    context: ./backend
+    target: dev
+  volumes:
+    - ./backend:/app
+    - api-node-modules:/app/node_modules
+    - api-next:/app/.next
+  env_file: ./backend/.env
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+    mailpit: { condition: service_started }
+
+# The e2e API: its own database, Redis keys and the mocks' frozen clock (ADR-0002).
+x-e2e-environment: &e2e-environment
+  ZAMARO_ENV: e2e
+  DATABASE_URL: postgres://zamaro:zamaro@postgres:5432/zamaro_e2e
+  REDIS_PREFIX: zamaro-e2e-
+  ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
+  # The web app's server reaches the API through Docker's network and forwards the browser's address.
+  TRUSTED_PROXIES: "127.0.0.1,172.16.0.0/12,192.168.0.0/16"
+  # Links in emails point at the site the suite drives (playwright.config.ts).
+  ZAMARO_WEB_URL: http://localhost:4000
+
 services:
   postgres:
     image: postgres:16
@@ -30,5 +57,28 @@ services:
     image: axllent/mailpit:v1.27.11
     ports: ["1026:1025", "8026:8025"]
 
+  api:
+    <<: *api
+    ports: ["${ZAMARO_API_PORT:-8000}:8000"]
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8000/health/ready"]
+      interval: 5s
+      retries: 30
+
+  api-e2e:
+    <<: *api
+    profiles: [e2e]
+    command: ["npm", "run", "dev", "--", "--port", "8001"]
+    volumes:
+      - ./backend:/app
+      - api-node-modules:/app/node_modules
+      - api-e2e-next:/app/.next
+    environment:
+      <<: *e2e-environment
+    ports: ["8001:8001"]
+
 volumes:
   pg-data:
+  api-node-modules:
+  api-next:
+  api-e2e-next:

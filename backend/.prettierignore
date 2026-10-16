@@ -1,0 +1,6 @@
+.next
+dist
+node_modules
+next-env.d.ts
+resources/i18n
+database/seeders/media
