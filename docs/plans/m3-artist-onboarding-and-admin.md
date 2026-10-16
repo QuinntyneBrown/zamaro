@@ -1,6 +1,6 @@
 # Milestone 3 plan: artist onboarding and admin app
 
-**Status:** In progress on `feat/m3-artist-onboarding-and-admin`, cut from `main` at `1cbaf6f` (2026-10-13).
+**Status:** Done (2026-10-13). S1–S2 merged from `feat/m3-artist-onboarding-and-admin` in PR #20 and S3–S12 in PR #21. The Laravel backend was removed the same day (PR #22) and ADR-0027 moves the backend to Next.js, so the API slices below are rebuilt under that ADR before M4 starts.
 **Depends on:** M1 (all slices, S12 and S15 in particular) and M2 (accounts, sessions, CSRF, auth, BotChallenge, encrypted fields, email, background jobs).
 **Unblocks:** M4 (the artist workspace hosts the VSC section), M6 (payout setup publishes approved artists), M7 (review moderation joins the admin app), M8 (admin support).
 

@@ -19,7 +19,7 @@ changes in the plan as you go, the way M1's "Changes made while implementing" se
 |---|---|---|
 | M1 | [Foundations and public browse](m1-foundations-and-browse.md) | Done (2026-10-10): S0–S16, scroll restoration, visual and axe suites |
 | M2 | [Accounts and sessions](m2-accounts-and-sessions.md) | Done (2026-10-11): S0–S18, the end-of-milestone checks and the walkthrough |
-| M3 | [Artist onboarding and admin app](m3-artist-onboarding-and-admin.md) | In progress (2026-10-13): S1–S12 done |
+| M3 | [Artist onboarding and admin app](m3-artist-onboarding-and-admin.md) | Done (2026-10-13): S1–S12, merged in PRs #20 and #21 |
 | M4 | [Artist workspace and availability](m4-artist-workspace-and-availability.md) | Not started |
 | M5 | [Booking requests](m5-booking-requests.md) | Not started |
 | M6 | [Payments and cancellations](m6-payments-and-cancellations.md) | Not started |
