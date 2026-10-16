@@ -14,10 +14,16 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/cli/db-migrate.ts",
+    "db:seed": "tsx src/cli/db-seed.ts",
+    "db:reset": "tsx src/cli/db-reset.ts"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.4",
     "ioredis": "^6.0.0",
+    "luxon": "^3.7.2",
     "next": "^16.4.2",
     "pino": "^10.4.0",
     "postgres": "^3.4.9",
@@ -27,12 +33,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/luxon": "^3.7.6",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^10.0.1",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.71.2",
     "vitest": "^5.0.5"
