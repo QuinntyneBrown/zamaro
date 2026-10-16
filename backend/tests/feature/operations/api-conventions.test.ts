@@ -5,6 +5,20 @@ import { api, UUID } from '../../support/api';
 
 const PROBLEM = 'application/problem+json';
 
+/** The API's `request` log lines for one request ID, waiting briefly for the pipe to the log file. */
+async function requestLogLines(requestId: string | null): Promise<Record<string, unknown>[]> {
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const lines = readFileSync(inject('apiLogFile'), 'utf8')
+      .split('\n')
+      .filter((line) => line.startsWith('{'))
+      .map((line) => JSON.parse(line) as Record<string, unknown>)
+      .filter((line) => line.msg === 'request' && line.requestId === requestId);
+    if (lines.length > 0) return lines;
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+  return [];
+}
+
 /**
  * L2-093.1: request IDs and structured request logs.
  * L2-095.2: RFC 9457 problem details for every error.
@@ -47,7 +61,7 @@ describe('API conventions', () => {
   });
 
   it('an unhandled exception returns a generic 500 problem without internals', async () => {
-    const response = await api('/api/v1/__boom');
+    const response = await api('/api/v1/test-boom');
 
     expect(response.status).toBe(500);
     expect(response.headers.get('content-type')).toBe(PROBLEM);
@@ -118,11 +132,7 @@ describe('API conventions', () => {
     const response = await api('/api/v1/does-not-exist');
     const requestId = response.headers.get('x-request-id');
 
-    const lines = readFileSync(inject('apiLogFile'), 'utf8')
-      .split('\n')
-      .filter((line) => line.startsWith('{'))
-      .map((line) => JSON.parse(line) as Record<string, unknown>)
-      .filter((line) => line.msg === 'request' && line.requestId === requestId);
+    const lines = await requestLogLines(requestId);
 
     expect(lines).toHaveLength(1);
     const line = lines[0] ?? {};
