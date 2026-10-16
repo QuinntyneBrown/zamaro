@@ -31,6 +31,13 @@ export function testEnvironment(overrides: Record<string, string> = {}): NodeJS.
     REDIS_PREFIX: 'zamaro-test-',
     ZAMARO_WEB_ORIGINS: 'http://localhost:4200',
     ZAMARO_WEB_URL: 'http://localhost:4200',
+    ZAMARO_FROZEN_NOW: '2026-10-09T10:00:00-04:00',
+    ZAMARO_STORAGE_ROOT: fileURLToPath(new URL('storage/test', backend)),
+    ZAMARO_CAST_PASSWORD: 'hosanna-in-the-highest',
+    // The suite's own field key (ADR-0020), never a real one.
+    FIELD_ENCRYPTION_KEY_VERSION: 'v1',
+    FIELD_ENCRYPTION_KEY: 'base64:dGVzdC1maWVsZC1rZXktZm9yLXphbWFyby1zdWl0ZSE=',
+    FIELD_ENCRYPTION_PREVIOUS_KEYS: '',
     ...overrides,
   };
 }
