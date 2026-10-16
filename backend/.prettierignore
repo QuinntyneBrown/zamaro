@@ -1,5 +1,6 @@
 .next
 dist
+storage
 node_modules
 next-env.d.ts
 resources/i18n

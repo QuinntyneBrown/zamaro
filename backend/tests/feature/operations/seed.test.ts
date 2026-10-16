@@ -12,7 +12,7 @@ import { testDb } from '../../support/db';
 describe('the seeded cast', () => {
   it('has the artists the mocks show, with their ratings', async () => {
     const artists = await testDb()`
-      SELECT a.slug, a.ticket_number, a.base_city, a.max_drive_km, a.from_price_cents, r.rating, r.review_count
+      SELECT a.slug, a.ticket_number, a.base_city, a.max_drive_km, a.from_price_cents, r.rating::float AS rating, r.review_count
       FROM artists a JOIN artist_ratings r ON r.artist_id = a.id
       WHERE a.slug IN ('abigail-mensah', 'miriam-haile', 'marcus-bell-trio')
       ORDER BY a.slug`;
@@ -102,11 +102,12 @@ describe('the seeded cast', () => {
     expect(existsSync(join(media, 'samples/video/stream.m3u8'))).toBe(true);
   });
 
+  // Bookers that cast:booker makes while this file runs are not the seed's, so they are left out.
   it('seeds the same rows again: a second db:seed changes no count and no rating', async () => {
     const counts = () => testDb()`
-      SELECT (SELECT count(*) FROM users)::int AS users, (SELECT count(*) FROM artists)::int AS artists,
+      SELECT (SELECT count(*) FROM users WHERE email NOT LIKE '%@e2e.zamaro.test')::int AS users, (SELECT count(*) FROM artists)::int AS artists,
              (SELECT count(*) FROM bookings)::int AS bookings, (SELECT count(*) FROM reviews)::int AS reviews,
-             (SELECT count(*) FROM consent_records)::int AS consents, (SELECT count(*) FROM artist_photos)::int AS photos,
+             (SELECT count(*) FROM consent_records c JOIN users u ON u.id = c.user_id WHERE u.email NOT LIKE '%@e2e.zamaro.test')::int AS consents, (SELECT count(*) FROM artist_photos)::int AS photos,
              (SELECT count(*) FROM artist_videos)::int AS videos, (SELECT count(*) FROM vulnerable_sector_checks)::int AS checks,
              (SELECT count(*) FROM saved_artists)::int AS saved, (SELECT count(*) FROM slug_histories)::int AS slugs`;
     const [before] = await counts();

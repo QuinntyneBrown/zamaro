@@ -1,3 +1,4 @@
+import { resolve } from 'node:path';
 import { z } from 'zod';
 
 // The API's configuration, read from the environment once and validated (ADR-0027). Read it inside
@@ -39,6 +40,10 @@ const schema = z.object({
   ZAMARO_WEB_URL: z.preprocess(blankToUndefined, z.string().default('http://localhost:4200')),
   ZAMARO_FROZEN_NOW: optional,
   TRUSTED_PROXIES: list,
+  // Folder holding the media, quarantine, documents and originals disks (ADR-0024).
+  ZAMARO_STORAGE_ROOT: z.preprocess(blankToUndefined, z.string().default('storage/app')),
+  // The password Naomi, Abigail and Tomi sign in with (M2 D28), outside production only.
+  ZAMARO_CAST_PASSWORD: optional,
 });
 
 export interface ZamaroConfig {
@@ -52,6 +57,9 @@ export interface ZamaroConfig {
   webUrl: string;
   frozenNow: string | undefined;
   trustedProxies: string[];
+  storageRoot: string;
+  /** Set only where the cast can sign in: local, test and e2e. */
+  castPassword: string | undefined;
   // Base of the RFC 9457 problem `type` URIs, e.g. {base}/not-found (ADR-0005).
   problemsBaseUri: string;
 }
@@ -82,6 +90,8 @@ function load(): ZamaroConfig {
     webUrl: env.ZAMARO_WEB_URL.replace(/\/+$/, ''),
     frozenNow: env.ZAMARO_FROZEN_NOW,
     trustedProxies: env.TRUSTED_PROXIES,
+    storageRoot: resolve(env.ZAMARO_STORAGE_ROOT),
+    castPassword: env.ZAMARO_ENV === 'production' ? undefined : env.ZAMARO_CAST_PASSWORD,
     problemsBaseUri: `${appUrl}/problems`,
   };
 }

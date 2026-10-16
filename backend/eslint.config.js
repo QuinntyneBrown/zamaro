@@ -13,6 +13,7 @@ export default tseslint.config(
       'node_modules/**',
       'next-env.d.ts',
       'database/seeders/media/**',
+      'storage/**',
     ],
   },
   eslint.configs.recommended,
