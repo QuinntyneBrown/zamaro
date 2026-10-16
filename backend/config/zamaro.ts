@@ -46,6 +46,15 @@ const schema = z.object({
   ZAMARO_CAST_PASSWORD: optional,
   // One directory per locale, one JSON file per namespace (L2-111).
   ZAMARO_I18N_PATH: z.preprocess(blankToUndefined, z.string().default('resources/i18n')),
+  // L2-077: requests a minute per address (and per account once signed in), searches a minute, and
+  // the account flows' limits (M2 D6). The e2e API raises them: every browser in the suite shares one address.
+  ZAMARO_API_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(120),
+  ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(300),
+  ZAMARO_SEARCH_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(30),
+  ZAMARO_REGISTER_LIMIT_PER_HOUR: z.coerce.number().int().positive().default(10),
+  ZAMARO_RESEND_VERIFICATION_LIMIT: z.coerce.number().int().positive().default(3),
+  ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR: z.coerce.number().int().positive().default(5),
+  ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(30),
   // Unfinished features, off unless the environment turns them on (ADR-0012).
   ZAMARO_FEATURE_BOOKING_REQUESTS: z.preprocess(
     blankToUndefined,
@@ -69,6 +78,15 @@ export interface ZamaroConfig {
   castPassword: string | undefined;
   i18nPath: string;
   features: { bookingRequests: boolean };
+  rateLimits: {
+    apiPerMinute: number;
+    apiSignedInPerMinute: number;
+    searchPerMinute: number;
+    registerPerHour: number;
+    resendVerificationPer15Minutes: number;
+    forgotPasswordPerHour: number;
+    passwordResetPerMinute: number;
+  };
   // Base of the RFC 9457 problem `type` URIs, e.g. {base}/not-found (ADR-0005).
   problemsBaseUri: string;
 }
@@ -107,6 +125,15 @@ function load(): ZamaroConfig {
     storageRoot: resolve(env.ZAMARO_STORAGE_ROOT),
     castPassword: env.ZAMARO_ENV === 'production' ? undefined : env.ZAMARO_CAST_PASSWORD,
     i18nPath: resolve(env.ZAMARO_I18N_PATH),
+    rateLimits: {
+      apiPerMinute: env.ZAMARO_API_LIMIT_PER_MINUTE,
+      apiSignedInPerMinute: env.ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE,
+      searchPerMinute: env.ZAMARO_SEARCH_LIMIT_PER_MINUTE,
+      registerPerHour: env.ZAMARO_REGISTER_LIMIT_PER_HOUR,
+      resendVerificationPer15Minutes: env.ZAMARO_RESEND_VERIFICATION_LIMIT,
+      forgotPasswordPerHour: env.ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR,
+      passwordResetPerMinute: env.ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE,
+    },
     features: {
       bookingRequests:
         env.ZAMARO_FEATURE_BOOKING_REQUESTS === 'true' ||

@@ -16,5 +16,5 @@ export const { GET, POST, PUT, PATCH, DELETE, OPTIONS } = routes(
       return Response.json(toLineupResource(lineup, criteria));
     },
   },
-  { name: 'search' },
+  { name: 'search', rateLimit: 'search' },
 );

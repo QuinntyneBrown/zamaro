@@ -1,10 +1,13 @@
 import { config } from '@config/zamaro';
 import type { Cache } from '@/server/contracts/cache';
+import type { RateLimiter } from '@/server/contracts/rate-limiter';
 import type { Geocoder } from '@/server/contracts/geocoder';
 import type { RoutingProvider } from '@/server/contracts/routing-provider';
 import { InMemoryCache } from './cache/in-memory-cache';
 import { RedisCache } from './cache/redis-cache';
 import { FakeGeocoder } from './geocoding/fake-geocoder';
+import { InMemoryRateLimiter } from './rate-limiting/in-memory-rate-limiter';
+import { RedisRateLimiter } from './rate-limiting/redis-rate-limiter';
 import { FakeRoutingProvider } from './routing/fake-routing-provider';
 
 /**
@@ -16,6 +19,7 @@ import { FakeRoutingProvider } from './routing/fake-routing-provider';
 let geocoderInstance: Geocoder | undefined;
 let routingInstance: RoutingProvider | undefined;
 let cacheInstance: Cache | undefined;
+let rateLimiterInstance: RateLimiter | undefined;
 
 export function geocoder(): Geocoder {
   geocoderInstance ??= fake('Geocoder', () => new FakeGeocoder());
@@ -44,11 +48,22 @@ export function useCache(next: Cache | undefined): void {
   cacheInstance = next;
 }
 
+export function rateLimiter(): RateLimiter {
+  rateLimiterInstance ??=
+    config().env === 'test' ? new InMemoryRateLimiter() : new RedisRateLimiter();
+  return rateLimiterInstance;
+}
+
+export function useRateLimiter(next: RateLimiter | undefined): void {
+  rateLimiterInstance = next;
+}
+
 /** Forgets every bound adapter, so the next access makes a fresh one (tests, per database). */
 export function resetBindings(): void {
   geocoderInstance = undefined;
   routingInstance = undefined;
   cacheInstance = undefined;
+  rateLimiterInstance = undefined;
 }
 
 function fake<T>(port: string, make: () => T): T {

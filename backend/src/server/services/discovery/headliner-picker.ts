@@ -54,7 +54,7 @@ export async function quoteFor(headliner: LineupCard): Promise<HeadlinerQuote | 
 
 /** The first 160 characters, cut at a word boundary, with an ellipsis. */
 export function excerpt(text: string): string {
-  const characters = [...text];
+  const characters = Array.from(text);
   if (characters.length <= QUOTE_MAX_LENGTH) return text;
   const cut = characters.slice(0, QUOTE_MAX_LENGTH).join('');
   const lastSpace = cut.lastIndexOf(' ');

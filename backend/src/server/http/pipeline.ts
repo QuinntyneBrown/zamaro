@@ -2,12 +2,13 @@ import { randomUUID } from 'node:crypto';
 import type { NextRequest } from 'next/server';
 import { config } from '@config/zamaro';
 import { logger } from '../support/logger';
+import { enforceRateLimit, type RateLimitName } from './rate-limits';
 import { HttpProblem, httpError, problemResponse, ProblemType } from '../support/problems';
 import { runWithRequestContext } from '../support/request-context';
 
 /**
  * The request pipeline (ADR-0027): the one place that fixes what happens around every route handler.
- * Order: request ID → request logging → problem-details error handling → CORS → the handler.
+ * Order: request ID → request logging → problem-details error handling → CORS → rate limit → the handler.
  * Logging wraps error handling, so handled statuses are logged (AGENTS.md).
  */
 
@@ -19,6 +20,8 @@ export type Handler = (request: NextRequest, context: RouteContext) => Promise<R
 export interface RouteOptions {
   /** The route's name in the request log, e.g. `health.live`. */
   name: string;
+  /** The named rate limit the route is behind (L2-077); over it, a 429 problem. */
+  rateLimit?: RateLimitName;
 }
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
@@ -34,6 +37,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
     return runWithRequestContext({ requestId }, async () => {
       let response: Response;
       try {
+        if (options.rateLimit !== undefined) await enforceRateLimit(options.rateLimit, request);
         response = await handler(request, context);
       } catch (error) {
         response = responseForError(error);
@@ -61,7 +65,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
  */
 export function routes(
   handlers: Partial<Record<Exclude<Method, 'OPTIONS'>, Handler>>,
-  options: { name: string },
+  options: RouteOptions,
 ): Record<Method, Handler> {
   const allowed = METHODS.filter((method) => method === 'OPTIONS' || method in handlers);
   const allow = allowed.join(', ');
@@ -69,7 +73,7 @@ export function routes(
   for (const method of METHODS) {
     const handler = method === 'OPTIONS' ? preflight(allow) : handlers[method];
     result[method] = route(
-      { name: handler ? options.name : `${options.name}.method-not-allowed` },
+      handler ? options : { name: `${options.name}.method-not-allowed` },
       handler ?? methodNotAllowed(allow),
     );
   }

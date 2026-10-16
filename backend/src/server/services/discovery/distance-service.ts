@@ -38,7 +38,9 @@ export async function distancesFromOrigin(
   if (misses.length > 0) {
     const routed = await route(
       origin,
-      misses.map((index) => destinations[index] as Coordinates),
+      misses
+        .map((index) => destinations[index])
+        .filter((destination): destination is Coordinates => destination !== undefined),
     );
     for (const [position, index] of misses.entries()) {
       distances[index] = routed[position];

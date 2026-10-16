@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { GatheringKind, SearchSort, valuesOf } from '@/server/enums';
+import { AlternativesResource } from '../resources/discovery/alternatives';
 import { LineupResource } from '../resources/discovery/lineup';
 import { PlaceResource } from '../resources/discovery/place';
 import { FeaturesResource } from '../resources/operations/features';
@@ -56,6 +57,28 @@ export const operations: Operation[] = [
     ],
     responses: {
       200: { description: 'One page of the lineup', content: LineupResource },
+      422: { description: 'The search cannot run; errors are keyed by field', content: 'problem' },
+      429: { description: 'More than 30 searches a minute', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/search/alternatives',
+    summary: 'Ways forward when a search finds nobody',
+    parameters: [
+      { name: 'date', in: 'query', schema: z.string(), required: true },
+      { name: 'kind', in: 'query', schema: z.enum(valuesOf(GatheringKind)), required: true },
+      { name: 'lat', in: 'query', schema: z.number(), required: true },
+      { name: 'lng', in: 'query', schema: z.number(), required: true },
+      { name: 'radius', in: 'query', schema: z.number().int(), required: true },
+      { name: 'styles', in: 'query', schema: z.string() },
+      { name: 'price', in: 'query', schema: z.literal('under-800') },
+    ],
+    responses: {
+      200: {
+        description: 'Nearby dates, a wider radius and whether filters apply',
+        content: AlternativesResource,
+      },
       422: { description: 'The search cannot run; errors are keyed by field', content: 'problem' },
       429: { description: 'More than 30 searches a minute', content: 'problem' },
     },

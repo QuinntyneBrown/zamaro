@@ -29,6 +29,15 @@ x-e2e-environment: &e2e-environment
   # e2e/fixtures/accounts.ts signs the cast in with the same value (M2 D28).
   ZAMARO_CAST_PASSWORD: hosanna-in-the-highest
   ZAMARO_STORAGE_ROOT: storage/e2e
+  # Every browser in the suite searches from one address; the limit itself is covered by the backend
+  # tests and the limited state by intercepting the response (L2-077).
+  ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
+  ZAMARO_API_LIMIT_PER_MINUTE: "100000"
+  ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: "100000"
+  ZAMARO_REGISTER_LIMIT_PER_HOUR: "100000"
+  ZAMARO_RESEND_VERIFICATION_LIMIT: "100000"
+  ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR: "100000"
+  ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE: "100000"
 
 services:
   postgres:
