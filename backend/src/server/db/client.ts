@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 import type { ExtractTablesWithRelations } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT, PgTransaction } from 'drizzle-orm/pg-core';
 import { drizzle } from 'drizzle-orm/postgres-js';
@@ -23,9 +23,8 @@ export interface DatabaseProvider {
   close: () => Promise<void>;
 }
 
-export const MIGRATIONS_FOLDER = fileURLToPath(
-  new URL('../../../database/migrations', import.meta.url),
-);
+/** Resolved from the working directory: the CLI, the tests and the API all run from backend/. */
+export const MIGRATIONS_FOLDER = resolve(process.cwd(), 'database/migrations');
 
 let provider: DatabaseProvider | undefined;
 
