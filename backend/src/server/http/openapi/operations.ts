@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { GatheringKind, SearchSort, valuesOf } from '@/server/enums';
+import { LineupResource } from '../resources/discovery/lineup';
 import { PlaceResource } from '../resources/discovery/place';
 import { FeaturesResource } from '../resources/operations/features';
 import { CatalogueResource } from '../resources/user-experience/catalogue';
@@ -18,6 +20,44 @@ export const operations: Operation[] = [
       },
       304: { description: 'The catalogue has not changed', content: null },
       404: { description: 'No catalogue for the locale', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/search',
+    summary: 'Artists free on the date who will drive to the event location',
+    parameters: [
+      {
+        name: 'date',
+        in: 'query',
+        schema: z.string(),
+        required: true,
+        description: 'YYYY-MM-DD, 3 days to 18 months ahead',
+      },
+      { name: 'kind', in: 'query', schema: z.enum(valuesOf(GatheringKind)), required: true },
+      { name: 'lat', in: 'query', schema: z.number(), required: true },
+      { name: 'lng', in: 'query', schema: z.number(), required: true },
+      {
+        name: 'radius',
+        in: 'query',
+        schema: z.number().int(),
+        required: true,
+        description: '40, 80, 120 or 200',
+      },
+      { name: 'sort', in: 'query', schema: z.enum(valuesOf(SearchSort)) },
+      {
+        name: 'styles',
+        in: 'query',
+        schema: z.string(),
+        description: 'Comma-separated style slugs',
+      },
+      { name: 'price', in: 'query', schema: z.literal('under-800') },
+      { name: 'cursor', in: 'query', schema: z.string() },
+    ],
+    responses: {
+      200: { description: 'One page of the lineup', content: LineupResource },
+      422: { description: 'The search cannot run; errors are keyed by field', content: 'problem' },
+      429: { description: 'More than 30 searches a minute', content: 'problem' },
     },
   },
   {

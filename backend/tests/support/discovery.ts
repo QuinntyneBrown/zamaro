@@ -53,7 +53,11 @@ export function search(
   overrides: Record<string, string | number | null | undefined> = {},
 ): Promise<Response> {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries({ ...REFERENCE_SEARCH, ...overrides })) {
+  const merged: Record<string, string | number | null | undefined> = {
+    ...REFERENCE_SEARCH,
+    ...overrides,
+  };
+  for (const [key, value] of Object.entries(merged)) {
     if (value !== null && value !== undefined) params.set(key, String(value));
   }
   return api(`/api/v1/search?${params.toString()}`);

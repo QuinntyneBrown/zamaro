@@ -6,7 +6,7 @@ import { now, ZONE } from '@/server/support/clock';
 export function travelTo(local: string): void {
   const at = DateTime.fromSQL(local, { zone: ZONE });
   if (!at.isValid) throw new Error(`Not a Toronto time: ${local}`);
-  process.env.ZAMARO_FROZEN_NOW = at.toISO() ?? '';
+  process.env.ZAMARO_FROZEN_NOW = at.toISO();
   reloadConfig();
 }
 

@@ -52,13 +52,15 @@ describe('result paging', () => {
       const tickets = [...first.data, ...next.data];
 
       expect(new Set(tickets.map((card) => card.slug)).size, `${sort}: every ticket once`).toBe(29);
-      for (let i = 1; i < tickets.length; i++) {
-        const previous = tickets[i - 1] as LineupCard;
-        const current = tickets[i] as LineupCard;
-        expect(
-          compare(sortKey(previous, sort), sortKey(current, sort)),
-          `${sort}: ${previous.slug} should not follow ${current.slug}`,
-        ).toBeLessThanOrEqual(0);
+      let previous: LineupCard | undefined;
+      for (const current of tickets) {
+        if (previous !== undefined) {
+          expect(
+            compare(sortKey(previous, sort), sortKey(current, sort)),
+            `${sort}: ${previous.slug} should not follow ${current.slug}`,
+          ).toBeLessThanOrEqual(0);
+        }
+        previous = current;
       }
     }
   });

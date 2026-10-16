@@ -118,7 +118,7 @@ describe('the headliner', () => {
 
     const quote = (await lineup()).headliner?.quote?.text ?? '';
 
-    expect([...quote].length).toBeLessThanOrEqual(161);
+    expect(quote.length).toBeLessThanOrEqual(161);
     expect(quote.endsWith('…')).toBe(true);
     expect(long.startsWith(quote.slice(0, -1))).toBe(true);
     expect(long.charAt(quote.length - 1)).toBe(' ');
