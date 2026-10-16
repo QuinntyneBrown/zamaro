@@ -5,7 +5,7 @@ import {
   request,
 } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
-import { artisan } from './artisan';
+import { cli } from './cli';
 import { totp } from './totp';
 
 /**
@@ -53,7 +53,7 @@ export function uniqueEmail(label = 'booker'): string {
 }
 
 /**
- * Signs in through the web server's /sanctum and /api proxy, as the browser would, so the session
+ * Signs in through the web server's /api proxy, as the browser would, so the session
  * and XSRF-TOKEN cookies land on the site's origin. A request context taken from a browser context
  * (`page.request`) shares its cookies, so the page is signed in afterwards.
  */
@@ -62,9 +62,9 @@ export async function signIn(
   email: string,
   password: string = CAST_PASSWORD,
 ): Promise<void> {
-  // Sanctum only starts a session for requests that come from a web origin (ADR-0015).
+  // The API only starts a session for requests that come from a web origin (ADR-0015).
   const fromSite = { Referer: `${SITE}/` };
-  await request.get('/sanctum/csrf-cookie', { headers: fromSite });
+  await request.get('/api/v1/csrf-cookie', { headers: fromSite });
   const token = await xsrfToken(request);
   const response = await request.post('/api/v1/session', {
     headers: { ...fromSite, Accept: 'application/json', 'X-XSRF-TOKEN': token },
@@ -103,7 +103,7 @@ export async function failSignIns(
   times: number,
 ): Promise<void> {
   const fromSite = { Referer: `${SITE}/` };
-  await request.get('/sanctum/csrf-cookie', { headers: fromSite });
+  await request.get('/api/v1/csrf-cookie', { headers: fromSite });
   const token = await xsrfToken(request);
   for (let i = 0; i < times; i++) {
     const response = await request.post('/api/v1/session', {
@@ -126,7 +126,7 @@ export async function signInAs(context: BrowserContext, member: CastMember): Pro
 }
 
 /**
- * A fresh booker in the e2e database, made with the `cast:booker` artisan helper (D19). Registration
+ * A fresh booker in the e2e database, made with the backend's `cast:booker` script (D19, ADR-0027). Registration
  * itself is tested through the sign-up page; this is for specs that need an account to change.
  * `verified: false` leaves the address waiting for its link; `terms` is the terms version they last
  * accepted (the current one unless given).
@@ -135,7 +135,7 @@ export function createBooker(
   email: string = uniqueEmail(),
   { verified = true, terms }: { verified?: boolean; terms?: string } = {},
 ): { email: string; password: string } {
-  artisan([
+  cli([
     'cast:booker',
     email,
     ...(verified ? [] : ['--unverified']),

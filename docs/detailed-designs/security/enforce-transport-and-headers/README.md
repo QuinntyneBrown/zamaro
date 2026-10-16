@@ -44,7 +44,7 @@ from the CI pipeline to a preview deployment. It stores no data.
   (L2-070).
 - **HTTPS listener (port 443)** — TLS policy that accepts TLS 1.2 and TLS 1.3 only.
   The cipher suite list and the certificate authority are `<TO SUPPLY>`.
-- **Path routing** — sends `/api/*`, `/sanctum/*` and `/health/*` to the Zamaro API
+- **Path routing** — sends `/api/*` and `/health/*` to the Zamaro API
   and every other path to Zamaro Web. Zamaro Web and the API therefore share one
   origin, which the CSRF cookie flow in `security/manage-sessions-and-csrf` relies on.
 - **Response header rule** — adds

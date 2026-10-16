@@ -18,7 +18,7 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Browser calls to /api and /sanctum go to the Zamaro API. In production the load balancer routes
+ * Browser calls to /api go to the Zamaro API. In production the load balancer routes
  * them before requests reach this server; locally and in e2e this proxy stands in for it, so the
  * session cookie stays on the site's own origin (ADR-0015). /media is the API's local media disk,
  * which stands in for the CDN until M4 (no object storage in M1).
@@ -31,7 +31,7 @@ if (apiOrigin) {
       changeOrigin: true,
       // X-Forwarded-For carries the browser's address; the API trusts it only from this server.
       xfwd: true,
-      pathFilter: ['/api', '/sanctum', '/media'],
+      pathFilter: ['/api', '/media'],
     }),
   );
 }
@@ -58,7 +58,7 @@ app.use('/admin', async (req, res, next) => {
   try {
     const headers: Record<string, string> = {
       accept: 'application/json',
-      // Sanctum starts the cookie session only for requests from the site's own origin (ADR-0015).
+      // The API starts the cookie session only for requests from the site's own origin (ADR-0015).
       referer: `${siteOrigin(req)}/`,
       'x-forwarded-for': req.ip ?? '',
     };

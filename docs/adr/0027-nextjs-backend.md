@@ -70,7 +70,7 @@ TypeScript classes.
 | `Log`, Context | `pino` JSON logs with the request ID in `AsyncLocalStorage`; jobs carry the request ID in their data |
 | `spatie/icalendar-generator` | `ical-generator` |
 | Image handling (Imagick) | `sharp` |
-| `php artisan …` commands | `npm run …` scripts backed by `src/cli/*.ts` (`i18n:check`, `db:migrate`, `db:seed`) |
+| `php artisan …` commands | `npm run …` scripts backed by `src/cli/*.ts` (`i18n:check`, `db:migrate`, `db:seed`, `db:reset` to drop, migrate and seed the e2e database, `cast:booker`) |
 | Scramble OpenAPI, opis contract checks (ADR-0006) | `@asteasolutions/zod-to-openapi` builds OpenAPI 3.1 from the Zod schemas; integration tests validate responses with `ajv` against it |
 | PHPUnit Feature tests | Vitest integration tests in `tests/feature/{subsystem}/` that call the running API over HTTP against a real Postgres and Redis |
 | Pint, Larastan with the raw-SQL rule (L2-075.2) | Prettier, ESLint with `typescript-eslint` strict type-checked rules, `tsc --noEmit`, and the `zamaro/no-raw-sql` rule in `tools/eslint/` against non-literal `sql.raw` and string-built SQL |
@@ -144,8 +144,9 @@ by the row above. ADR-0002's Compose services keep their roles: `api`, `api-e2e`
 
 ### Negative
 - Every detailed design, the AGENTS.md tree and the README are updated to the new names in this change.
-- The frontend's session code calls `/sanctum/csrf-cookie`; it moves to `/api/v1/csrf-cookie` when the
-  accounts slices are rebuilt, together with `proxy.conf.json` and the SSR proxy.
+- The frontend's session code, the SSR proxy, `proxy.conf.json` and the e2e fixtures no longer name
+  `/sanctum/csrf-cookie` or `php artisan` (moved 2026-10-16); they call `/api/v1/csrf-cookie` and the
+  `npm run` scripts above. Their acceptance tests run again once the accounts slices are rebuilt.
 - The milestone plans record Laravel work that has to be redone; each plan is re-read against this ADR when
   its milestone restarts.
 

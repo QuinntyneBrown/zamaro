@@ -35,9 +35,9 @@ administration subsystem.
 
 ## Description
 
-The slice runs from the HTTP layer of Zamaro Web through the edge to the Laravel
-middleware stack and the session store in Redis. The edge routes `/api/*` and
-`/sanctum/*` on the same host as the pages, so Zamaro Web calls the API with relative
+The slice runs from the HTTP layer of Zamaro Web through the edge to the API's
+request pipeline and the session store in Redis. The edge routes `/api/*` on the
+same host as the pages, so Zamaro Web calls the API with relative
 URLs on one origin.
 
 **Frontend (Zamaro Web)**
@@ -46,9 +46,9 @@ URLs on one origin.
   XSRF interceptor with cookie `XSRF-TOKEN` and header `X-XSRF-TOKEN`. The interceptor
   copies the cookie into the header on every mutating request to a relative URL.
 - **`AuthService`** — holds the current user as a signal. At start-up it calls
-  `GET /sanctum/csrf-cookie` once to obtain the token cookie, then `GET /api/v1/me` to
+  `GET /api/v1/csrf-cookie` once to obtain the token cookie, then `GET /api/v1/me` to
   load the user. It exposes `signIn`, `signOut` and `clear`.
-- **`CsrfRecoveryInterceptor`** — on a 419 response, calls `GET /sanctum/csrf-cookie`
+- **`CsrfRecoveryInterceptor`** — on a 419 response, calls `GET /api/v1/csrf-cookie`
   and retries the original request once. A second 419 surfaces an error toast through
   `ToastService`; its copy is `<TO SUPPLY>`. The retry is safe because the rejected
   request changed nothing.
@@ -65,7 +65,7 @@ URLs on one origin.
 **As built in M2 (S2)** — the SSR rule is recorded in ADR-0017, with the transfer-cache filter
 (`isTransferCacheable`) that leaves out `/api/v1/me`, `/api/v1/account/**` and
 `/api/v1/saved-artists/**`. `AuthService` loads `/me` once in the browser, after the first render; it
-does not fetch `/sanctum/csrf-cookie` at start-up, because every answer to a signed-in browser carries
+does not fetch `/api/v1/csrf-cookie` at start-up, because every answer to a signed-in browser carries
 a fresh `XSRF-TOKEN` and sign-in fetches the cookie first. It exposes `signIn`, `signOut`, `clear` and
 `load`.
 

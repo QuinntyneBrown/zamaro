@@ -36,7 +36,7 @@ end box
 
 actor -> page : Enter email and password, activate Sign in
 page -> auth : signIn(email, password, returnUrl)
-auth -> client : GET /sanctum/csrf-cookie, then signIn()
+auth -> client : GET /api/v1/csrf-cookie, then signIn()
 client -> controller : POST /api/v1/session
 controller -> action : handle(email, password, ip)
 action -> db : Find user by email

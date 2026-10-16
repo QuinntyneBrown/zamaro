@@ -38,7 +38,7 @@ export class Session {
               type: 'https://zamaro.ca/problems/csrf-token-mismatch',
               title: 'The page’s security token didn’t match',
               status: 419,
-              detail: 'Fetch /sanctum/csrf-cookie, then repeat the request with X-XSRF-TOKEN.',
+              detail: 'Fetch /api/v1/csrf-cookie, then repeat the request with X-XSRF-TOKEN.',
             }),
           })
         : route.fallback(),

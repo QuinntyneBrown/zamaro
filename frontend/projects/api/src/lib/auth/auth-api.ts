@@ -54,7 +54,7 @@ export class HttpAuthApi implements AuthApi {
    * `X-XSRF-TOKEN`, which Angular's XSRF interceptor adds (ADR-0015).
    */
   signIn(credentials: SignInCredentials): Observable<SignInResult> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() => this.http.post<{ data: SignInResult }>('/api/v1/session', credentials)),
       map((response) => response.data),
     );
@@ -72,7 +72,7 @@ export class HttpAuthApi implements AuthApi {
 
   /** Fetches the CSRF cookie first, as signing in does. */
   register(registration: Registration): Observable<void> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() => this.http.post('/api/v1/register', registration)),
       map(() => undefined),
     );
@@ -80,14 +80,14 @@ export class HttpAuthApi implements AuthApi {
 
   /** Fetches the CSRF cookie first: the link is often opened in a browser that has none yet. */
   verifyEmail(token: string): Observable<VerifiedEmail> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() => this.http.post<{ data: VerifiedEmail }>('/api/v1/email/verify', { token })),
       map((response) => response.data),
     );
   }
 
   resendVerification(request: VerificationResend): Observable<void> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() => this.http.post('/api/v1/email/verification-notification', request)),
       map(() => undefined),
     );
@@ -95,14 +95,14 @@ export class HttpAuthApi implements AuthApi {
 
   /** The reset endpoints fetch the CSRF cookie first, as the link is often opened in a new browser. */
   forgotPassword(request: PasswordResetRequest): Observable<void> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() => this.http.post('/api/v1/password/forgot', request)),
       map(() => undefined),
     );
   }
 
   checkPasswordReset(token: string): Observable<PasswordResetLink> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() =>
         this.http.post<{ data: PasswordResetLink }>('/api/v1/password/reset/check', { token }),
       ),
@@ -111,7 +111,7 @@ export class HttpAuthApi implements AuthApi {
   }
 
   resetPassword(reset: PasswordReset): Observable<SignInResult> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() => this.http.post<{ data: SignInResult }>('/api/v1/password/reset', reset)),
       map((response) => response.data),
     );
