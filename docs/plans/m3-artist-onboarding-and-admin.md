@@ -4,6 +4,20 @@
 **Depends on:** M1 (all slices, S12 and S15 in particular) and M2 (accounts, sessions, CSRF, auth, BotChallenge, encrypted fields, email, background jobs).
 **Unblocks:** M4 (the artist workspace hosts the VSC section), M6 (payout setup publishes approved artists), M7 (review moderation joins the admin app), M8 (admin support).
 
+## Node.js port (2026-10-17)
+
+S1–S12 were ported to Next.js on Node.js (ADR-0027) on branch `claude/nextjs-backend-port`, slice by
+slice under the same acceptance criteria: the audit log (redacted context, viewer, `npm run
+audit:prune`), secure admin access (the `admin` gate in the request pipeline, the 30-minute idle limit,
+`npm run admin:grant`), upload intake with the content-type detector and the scan job on the `uploads`
+queue, the document vault and 5-minute signed links served at `/media/documents/{key}` on the media
+host, the admin VSC queue and verification, the Artists list, `npm run vsc:send-renewal-reminders`,
+the resumable application video upload with the fake transcoder and `npm run uploads:prune-unattached`,
+and applying as an artist with the business-day calendar. S13–S14 remain open. The old PHP Feature
+tests became Vitest tests under `backend/tests/feature/{administration,artist-onboarding,security}`,
+run in-process on PGlite (ADR-0028). Below, Laravel names map to the modules ADR-0027's table and the
+AGENTS.md tree name.
+
 ## Current status (2026-10-13)
 
 | Slice | Scope | Status | Commits |
