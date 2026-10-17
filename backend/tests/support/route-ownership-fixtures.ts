@@ -171,4 +171,50 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     expect(response.status).toBe(404);
     expect((await (await owner.as()).json('/api/v1/me', 'GET')).status).toBe(200);
   },
+
+  // Two-step sign-in acts on the caller alone: the intruder's key, codes and state never touch the owner's.
+  'POST /account/two-factor': async (owner, intruder) => {
+    const response = await (await intruder.as()).json('/api/v1/account/two-factor', 'POST');
+    expect(response.status).toBe(200);
+    await expectHoldsNothingOf(owner, response);
+
+    const me = (await (await (await owner.as()).json('/api/v1/me', 'GET')).json()) as {
+      data: { mfaEnabled: boolean };
+    };
+    expect(me.data.mfaEnabled).toBe(false);
+  },
+
+  'GET /account/two-factor/qr': async (owner, intruder) => {
+    expect((await (await owner.as()).json('/api/v1/account/two-factor', 'POST')).status).toBe(200);
+
+    const response = await (await intruder.as()).request('/api/v1/account/two-factor/qr');
+    expect(response.status).toBe(404);
+  },
+
+  'POST /account/two-factor/confirm': async (owner, intruder) => {
+    expect((await (await owner.as()).json('/api/v1/account/two-factor', 'POST')).status).toBe(200);
+
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/two-factor/confirm', 'POST', {
+      code: '000000',
+    });
+    expect(response.status).toBe(422);
+  },
+
+  'DELETE /account/two-factor': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/two-factor', 'DELETE', {
+      code: '000000',
+    });
+    expect(response.status).toBe(404);
+  },
+
+  'POST /account/two-factor/recovery-codes': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/two-factor/recovery-codes', 'POST', { code: '000000' });
+    expect(response.status).toBe(404);
+  },
 };
