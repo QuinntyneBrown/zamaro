@@ -44,6 +44,8 @@ const schema = z.object({
   ZAMARO_STORAGE_ROOT: z.preprocess(blankToUndefined, z.string().default('storage/app')),
   // The password Naomi, Abigail and Tomi sign in with (M2 D28), outside production only.
   ZAMARO_CAST_PASSWORD: optional,
+  // Where the media disk is served from: /media on the API until object storage (ADR-0024).
+  ZAMARO_MEDIA_URL: z.preprocess(blankToUndefined, z.string().default('/media')),
   // One directory per locale, one JSON file per namespace (L2-111).
   ZAMARO_I18N_PATH: z.preprocess(blankToUndefined, z.string().default('resources/i18n')),
   // L2-077: requests a minute per address (and per account once signed in), searches a minute, and
@@ -77,6 +79,7 @@ export interface ZamaroConfig {
   /** Set only where the cast can sign in: local, test and e2e. */
   castPassword: string | undefined;
   i18nPath: string;
+  mediaUrl: string;
   features: { bookingRequests: boolean };
   rateLimits: {
     apiPerMinute: number;
@@ -125,6 +128,7 @@ function load(): ZamaroConfig {
     storageRoot: resolve(env.ZAMARO_STORAGE_ROOT),
     castPassword: env.ZAMARO_ENV === 'production' ? undefined : env.ZAMARO_CAST_PASSWORD,
     i18nPath: resolve(env.ZAMARO_I18N_PATH),
+    mediaUrl: env.ZAMARO_MEDIA_URL.replace(/\/+$/, ''),
     rateLimits: {
       apiPerMinute: env.ZAMARO_API_LIMIT_PER_MINUTE,
       apiSignedInPerMinute: env.ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE,

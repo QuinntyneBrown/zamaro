@@ -3,7 +3,13 @@ import type { NextRequest } from 'next/server';
 import { config } from '@config/zamaro';
 import { logger } from '../support/logger';
 import { enforceRateLimit, type RateLimitName } from './rate-limits';
-import { HttpProblem, httpError, problemResponse, ProblemType } from '../support/problems';
+import {
+  HttpProblem,
+  HttpRedirect,
+  httpError,
+  problemResponse,
+  ProblemType,
+} from '../support/problems';
 import { runWithRequestContext } from '../support/request-context';
 
 /**
@@ -86,7 +92,7 @@ function requestIdFor(request: NextRequest): string {
 }
 
 function responseForError(error: unknown): Response {
-  if (error instanceof HttpProblem) return error.toResponse();
+  if (error instanceof HttpProblem || error instanceof HttpRedirect) return error.toResponse();
   logger().error({ err: error }, 'unhandled error');
   return problemResponse(ProblemType.ServerError, {
     detail:

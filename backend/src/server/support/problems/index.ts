@@ -111,6 +111,21 @@ export class ValidationProblem extends HttpProblem {
   }
 }
 
+/** Thrown by handlers to answer a redirect; the pipeline renders it with the Location header. */
+export class HttpRedirect extends Error {
+  constructor(
+    readonly status: 301 | 302 | 303 | 307 | 308,
+    readonly location: string,
+  ) {
+    super(`Redirect to ${location}`);
+    this.name = 'HttpRedirect';
+  }
+
+  toResponse(): Response {
+    return new Response(null, { status: this.status, headers: { Location: this.location } });
+  }
+}
+
 /** An HTTP error with no Zamaro meaning (405 and similar): `about:blank` and the reason phrase. */
 export function httpError(status: number, reasonPhrase: string): ProblemTypeDefinition {
   return { slug: 'about:blank', status, title: reasonPhrase };

@@ -1,4 +1,4 @@
-import { and, eq, exists, gte, inArray, isNull, not, or, sql } from 'drizzle-orm';
+import { and, between, eq, exists, gte, inArray, isNull, not, or, sql } from 'drizzle-orm';
 import type { DateTime } from 'luxon';
 import { db, type Database, type Transaction } from '@/server/db/client';
 import {
@@ -8,7 +8,7 @@ import {
   bookings,
   vulnerableSectorChecks,
 } from '@/server/db/schema';
-import { GatheringKind } from '@/server/enums';
+import { GatheringKind, type TourDateStatus } from '@/server/enums';
 
 /**
  * Free on a date (L2-005): the artist has not marked the date unavailable (a dated override beats the
@@ -76,4 +76,76 @@ export async function freeArtistIds(
     )
     .where(and(...conditions));
   return rows.map((row) => row.id);
+}
+
+/** One row of the "On tour" list (L2-017). A booked date names only the gathering and the church's city. */
+export interface TourDate {
+  date: string;
+  status: TourDateStatus;
+  kind: GatheringKind | null;
+  city: string | null;
+}
+
+/**
+ * The artist's free and booked days from `from` to `until`, in date order; days marked unavailable
+ * are skipped (L2-017). Reads the weekly rules, the dated overrides and the Confirmed bookings once
+ * each, so callers can stop early without a query per day.
+ */
+export async function* tourDays(
+  artistId: number,
+  from: DateTime,
+  until: DateTime,
+  database: Database | Transaction = db(),
+): AsyncGenerator<TourDate> {
+  const range: [string, string] = [from.toISODate() ?? '', until.toISODate() ?? ''];
+  const unavailableWeekdays = new Set(
+    (
+      await database
+        .select({ weekday: availabilityRules.weekday })
+        .from(availabilityRules)
+        .where(
+          and(eq(availabilityRules.artistId, artistId), eq(availabilityRules.unavailable, true)),
+        )
+    ).map((row) => row.weekday),
+  );
+  const overrides = new Map(
+    (
+      await database
+        .select({ date: availabilityOverrides.date, state: availabilityOverrides.state })
+        .from(availabilityOverrides)
+        .where(
+          and(
+            eq(availabilityOverrides.artistId, artistId),
+            between(availabilityOverrides.date, range[0], range[1]),
+          ),
+        )
+    ).map((row) => [row.date, row.state]),
+  );
+  const booked = new Map(
+    (
+      await database
+        .select({ date: bookings.eventDate, kind: bookings.kind, city: bookings.churchCity })
+        .from(bookings)
+        .where(
+          and(
+            eq(bookings.artistId, artistId),
+            eq(bookings.status, 'confirmed'),
+            between(bookings.eventDate, range[0], range[1]),
+          ),
+        )
+    ).map((row) => [row.date, row]),
+  );
+
+  for (let date = from; date <= until; date = date.plus({ days: 1 })) {
+    const day = date.toISODate() ?? '';
+    const booking = booked.get(day);
+    if (booking !== undefined) {
+      yield { date: day, status: 'booked', kind: booking.kind, city: booking.city };
+      continue;
+    }
+    const override = overrides.get(day);
+    const free =
+      override !== undefined ? override === 'free' : !unavailableWeekdays.has(date.weekday);
+    if (free) yield { date: day, status: 'free', kind: null, city: null };
+  }
 }
