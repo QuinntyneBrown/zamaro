@@ -14,7 +14,7 @@ System_Boundary(zamaro, "Zamaro") {
 Rel(guest, edge, "Requests pages and API", "HTTP 80 then HTTPS 443")
 Rel(guest, cdn, "Loads assets", "HTTPS")
 Rel(edge, web, "Forwards all other paths", "HTTP, private network")
-Rel(edge, api, "Forwards /api, /sanctum, /health", "HTTP, private network")
+Rel(edge, api, "Forwards /api, /health", "HTTP, private network")
 Rel(web, edge, "Fetches API data while server-rendering", "HTTPS")
 Rel(ci, edge, "Probes headers and TLS versions", "HTTP/HTTPS")
 @enduml

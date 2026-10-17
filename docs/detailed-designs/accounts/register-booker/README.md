@@ -57,7 +57,7 @@ cannot send a booking request until the email is verified.
   for verification instead of sending (L2-022).
 - **`AuthApi`** — typed client for `POST /api/v1/register`,
   `POST /api/v1/email/verify` and `POST /api/v1/email/verification-notification`.
-  It first calls `GET /sanctum/csrf-cookie` so the XSRF interceptor can attach the
+  It first calls `GET /api/v1/csrf-cookie` so the XSRF interceptor can attach the
   token (L2-073).
 - **`AuthService`** — shared signal-based service holding the current user. It
   exposes `isVerified` so the booking stub can ask for verification before a request

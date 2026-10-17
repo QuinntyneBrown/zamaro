@@ -33,7 +33,7 @@ box "Backend — Zamaro Infrastructure" #FFF4E5
   database "Cache and queue" as cache
 end box
 
-auth -> start : GET /sanctum/csrf-cookie
+auth -> start : GET /api/v1/csrf-cookie
 start -> cache : Create guest session
 start --> auth : Set-Cookie zamaro_session (HttpOnly, Secure, SameSite=Lax) and XSRF-TOKEN (L2-073)
 actor -> auth : Submit email and password
@@ -57,7 +57,7 @@ else token missing or stale
   xsrf -> start : Without valid header
   start -> csrf : Session loaded
   csrf --> recover : 419 problem details, controller not reached, nothing changes (L2-073)
-  recover -> start : GET /sanctum/csrf-cookie
+  recover -> start : GET /api/v1/csrf-cookie
   start --> recover : Fresh XSRF-TOKEN
   recover -> csrf : Retry PUT once with new header
   csrf -> saved : Proceed

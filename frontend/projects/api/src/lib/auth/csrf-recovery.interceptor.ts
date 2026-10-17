@@ -18,7 +18,7 @@ const STATE_CHANGING = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
 /**
  * A 419 means the API refused the request's CSRF token and changed nothing (L2-073.2). The token is
- * fetched again from `/sanctum/csrf-cookie` and the request repeated once; a second 419 is reported
+ * fetched again from `/api/v1/csrf-cookie` and the request repeated once; a second 419 is reported
  * through `CSRF_REFUSED` (security/manage-sessions-and-csrf).
  */
 export const csrfRecoveryInterceptor: HttpInterceptorFn = (request, next) => {
@@ -28,7 +28,7 @@ export const csrfRecoveryInterceptor: HttpInterceptorFn = (request, next) => {
   return next(request).pipe(
     catchError((error: unknown) => {
       if (!isCsrfMismatch(error)) return throwError(() => error);
-      return next(new HttpRequest('GET', '/sanctum/csrf-cookie')).pipe(
+      return next(new HttpRequest('GET', '/api/v1/csrf-cookie')).pipe(
         filter((event) => event instanceof HttpResponse),
         take(1),
         // Angular's XSRF interceptor runs before this one, so the retry sets the new token itself.

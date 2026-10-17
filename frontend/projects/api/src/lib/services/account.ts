@@ -88,7 +88,7 @@ export class HttpAccountApi implements AccountApi {
 
   /** The link is often opened in another browser, so the CSRF cookie is fetched first. */
   confirmEmailChange(token: string): Observable<string> {
-    return this.http.get('/sanctum/csrf-cookie').pipe(
+    return this.http.get('/api/v1/csrf-cookie').pipe(
       switchMap(() =>
         this.http.post<{ data: { email: string } }>('/api/v1/account/email/confirm', { token }),
       ),

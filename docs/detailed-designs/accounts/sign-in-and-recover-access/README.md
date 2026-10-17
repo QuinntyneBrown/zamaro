@@ -74,7 +74,7 @@ session, so a stolen session cannot outlive a recovered account.
 - **`authGuard`** — route guard for private routes that redirects a guest to
   `/sign-in?returnUrl=…`.
 - **`AuthApi`** — typed client for the session, password and two-factor endpoints.
-  It calls `GET /sanctum/csrf-cookie` before the first state-changing request.
+  It calls `GET /api/v1/csrf-cookie` before the first state-changing request.
 
 **Mock screens** — sign-in is
 [`pages/sign-in`](../../../mocks/pages/sign-in/default.html) in states default,
