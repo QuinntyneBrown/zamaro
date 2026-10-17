@@ -2,9 +2,14 @@ import { randomUUID } from 'node:crypto';
 import type { NextRequest } from 'next/server';
 import { config } from '@config/zamaro';
 import { PUBLIC_ROUTES } from '@/app/api/v1/public';
-import type { Role } from '@/server/enums';
+import { Role } from '@/server/enums';
 import { loadCurrentUser, type CurrentUser } from '@/server/services/accounts/current-user';
 import { forgetSession, touchSession } from '@/server/services/accounts/session-registry';
+import {
+  adminIdledOut,
+  isMfaVerified,
+  touchAdminActivity,
+} from '@/server/services/administration/admin-session';
 import { termsAcceptanceRequired } from '@/server/services/privacy/legal-document-registry';
 import { logger } from '../support/logger';
 import {
@@ -49,6 +54,12 @@ export interface RouteOptions {
   roles?: Role[];
   /** The answer may hold personal data: `private, no-store`, never cached (L2-089.3). */
   cache?: 'private';
+  /**
+   * An admin route (administration/secure-admin-access): a guest, anyone without the Administrator
+   * role and an administrator who has not passed the code step all get the same 404 as an unknown
+   * address, never 401 or 403 (L2-066.1, L2-074.1). The terms gate does not apply.
+   */
+  admin?: true;
 }
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
@@ -81,6 +92,22 @@ export function route(options: RouteOptions, handler: Handler): Handler {
         if (session !== undefined && ctx.user !== null) await touchSession(session);
         if (
           session !== undefined &&
+          ctx.user !== null &&
+          ctx.user.roles.includes(Role.Administrator)
+        ) {
+          // An administrator's session ends after 30 minutes without a request, on any route (L2-066.2).
+          if (adminIdledOut(session)) {
+            await forgetSession(session.id);
+            await session.invalidate();
+            ctx.user = null;
+            throw new HttpProblem(ProblemType.Unauthenticated, {
+              detail: 'The administrator session was idle for 30 minutes.',
+            });
+          }
+          touchAdminActivity(session);
+        }
+        if (
+          session !== undefined &&
           MUTATING.has(request.method) &&
           !session.tokenMatches(request.headers.get(XSRF_HEADER))
         ) {
@@ -90,6 +117,17 @@ export function route(options: RouteOptions, handler: Handler): Handler {
         }
         const admitted = await gateBody(request);
         if (api) await enforceRateLimit('api', request, ctx.user);
+        if (
+          options.admin === true &&
+          (session === undefined ||
+            ctx.user === null ||
+            !ctx.user.roles.includes(Role.Administrator) ||
+            !isMfaVerified(session))
+        ) {
+          throw new HttpProblem(ProblemType.NotFound, {
+            detail: 'No route matches this address.',
+          });
+        }
         if (api && ctx.user === null && !PUBLIC_ROUTES.has(options.name)) {
           throw new HttpProblem(ProblemType.Unauthenticated, {
             detail: 'This needs a signed-in account.',
@@ -102,6 +140,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
         }
         if (
           api &&
+          options.admin !== true &&
           ctx.user !== null &&
           !OPEN_WHILE_TERMS_UNACCEPTED.has(options.name) &&
           (await termsAcceptanceRequired(ctx.user.id))

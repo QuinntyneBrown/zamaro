@@ -777,4 +777,16 @@ export const operations: Operation[] = [
       422: { description: 'Not light, dark or null', content: 'problem' },
     },
   },
+  {
+    method: 'get',
+    path: '/admin/overview',
+    name: 'admin.overview',
+    summary: 'What is waiting for the Zamaro team; calling it counts as activity',
+    responses: {
+      200: {
+        description: 'The counts beside the admin sections',
+        content: z.object({ data: z.object({ checksWaiting: z.number().int() }) }),
+      },
+    },
+  },
 ];

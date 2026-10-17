@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server';
 import { AuditAction, AuditOutcome } from '@/server/enums';
 import type { Session } from '@/server/http/session';
 import { loadCurrentUser, type CurrentUser } from '@/server/services/accounts/current-user';
+import { markMfaVerified } from '@/server/services/administration/admin-session';
 import { now } from '@/server/support/clock';
 import { HttpProblem, ProblemType, ValidationProblem } from '@/server/support/problems';
 import { recordAuditEntry } from '../audit/record-audit-entry';
@@ -85,7 +86,7 @@ export async function completeTwoFactorChallenge(
   });
   await startSession(user, session, request);
   // The new session passed the code step; the administrator area requires that mark (L2-066.2).
-  session.data.mfaVerifiedAt = now().toSeconds();
+  markMfaVerified(session);
   return user;
 }
 

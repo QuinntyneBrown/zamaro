@@ -63,7 +63,12 @@ function pipelineResponses(operation: Operation): Record<number, ResponseSpec> {
     429: { description: 'Over the API rate limit; Retry-After says when', content: 'problem' },
     500: { description: 'Something went wrong on our side', content: 'problem' },
   };
-  if (!PUBLIC_ROUTES.has(operation.name)) {
+  if (operation.name.startsWith('admin.')) {
+    responses[404] = {
+      description: 'Not an administrator signed in with a code: the same 404 as an unknown address',
+      content: 'problem',
+    };
+  } else if (!PUBLIC_ROUTES.has(operation.name)) {
     responses[401] = { description: 'No one is signed in', content: 'problem' };
     responses[409] = {
       description: 'The current terms must be accepted first (terms-acceptance-required)',

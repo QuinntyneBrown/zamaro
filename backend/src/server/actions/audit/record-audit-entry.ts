@@ -5,6 +5,7 @@ import type { AuditAction, AuditOutcome } from '@/server/enums';
 import { clientAddress } from '@/server/http/client-address';
 import type { CurrentUser } from '@/server/services/accounts/current-user';
 import { now } from '@/server/support/clock';
+import { redact } from '@/server/support/redaction';
 
 export interface AuditTarget {
   type: string;
@@ -15,7 +16,8 @@ export interface AuditTarget {
  * Appends one entry to the audit log (administration/record-audit-log, L2-069). Called inside a
  * business transaction, it commits or rolls back with the change it describes. The time is the
  * API's clock (frozen in the e2e API and the tests, so the viewer shows what the mocks show); the
- * address is the client's as the trusted proxies report it, or none for a queued job.
+ * address is the client's as the trusted proxies report it, or none for a queued job. The context
+ * is redacted as log lines are, so no secret reaches an entry (L2-079.3).
  */
 export async function recordAuditEntry(
   entry: {
@@ -37,6 +39,7 @@ export async function recordAuditEntry(
     occurredAt: now().toJSDate(),
     ipAddress: entry.request === undefined ? null : clientAddress(entry.request),
     outcome: entry.outcome,
-    context: entry.context ?? {},
+    // Redacted as log lines are, so no secret reaches an entry (L2-079.3).
+    context: redact(entry.context ?? {}) as Record<string, unknown>,
   });
 }

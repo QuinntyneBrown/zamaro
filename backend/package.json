@@ -21,6 +21,7 @@
     "db:reset": "tsx src/cli/db-reset.ts",
     "cast:booker": "tsx src/cli/cast-booker.ts",
     "worker": "tsx src/worker.ts",
+    "admin:grant": "tsx src/cli/admin-grant.ts",
     "openapi:export": "tsx src/cli/openapi-export.ts",
     "openapi:check": "tsx src/cli/openapi-export.ts --check"
   },

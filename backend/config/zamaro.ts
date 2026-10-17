@@ -62,6 +62,8 @@ const schema = z.object({
   ZAMARO_SEARCH_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(30),
   ZAMARO_REGISTER_LIMIT_PER_HOUR: z.coerce.number().int().positive().default(10),
   APP_NAME: z.preprocess(blankToUndefined, z.string().default('Zamaro')),
+  // An administrator's session ends after this long without a request (L2-066.2).
+  ZAMARO_ADMIN_IDLE_TIMEOUT_MINUTES: z.coerce.number().int().positive().default(30),
   // Every email is from Zamaro <hello@zamaro.ca> (M2 D16).
   MAIL_FROM_NAME: z.preprocess(blankToUndefined, z.string().default('Zamaro')),
   MAIL_FROM_ADDRESS: z.preprocess(blankToUndefined, z.string().default('hello@zamaro.ca')),
@@ -100,6 +102,7 @@ export interface ZamaroConfig {
   secureCookies: boolean;
   features: { bookingRequests: boolean };
   appName: string;
+  admin: { idleTimeoutMinutes: number };
   mail: { fromName: string; fromAddress: string };
   /** What the vendor fakes answer (ADR-0002). */
   fakes: { breachedPasswords: string[] };
@@ -163,6 +166,7 @@ function load(): ZamaroConfig {
       passwordResetPerMinute: env.ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE,
     },
     appName: env.APP_NAME,
+    admin: { idleTimeoutMinutes: env.ZAMARO_ADMIN_IDLE_TIMEOUT_MINUTES },
     mail: { fromName: env.MAIL_FROM_NAME, fromAddress: env.MAIL_FROM_ADDRESS },
     fakes: {
       breachedPasswords: env.ZAMARO_FAKE_BREACHED_PASSWORDS.split(',')

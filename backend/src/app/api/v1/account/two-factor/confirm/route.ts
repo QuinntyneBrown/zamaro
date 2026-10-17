@@ -2,7 +2,8 @@ import { confirmTwoFactor } from '@/server/actions/accounts/enable-two-factor';
 import { routes } from '@/server/http/pipeline';
 import { TwoFactorCodeRequest } from '@/server/http/requests/accounts/two-factor';
 import { validateBody } from '@/server/http/validation';
-import { requireUser } from '@/server/support/request-context';
+import { markMfaVerified } from '@/server/services/administration/admin-session';
+import { requireSession, requireUser } from '@/server/support/request-context';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -15,6 +16,8 @@ export const { GET, POST, PUT, PATCH, DELETE, OPTIONS } = routes(
       const user = requireUser();
       const { code } = await validateBody(request, TwoFactorCodeRequest);
       const recoveryCodes = await confirmTwoFactor(user, code);
+      // The first code proved the app on this session, so an administrator may go on (L2-066.2).
+      markMfaVerified(requireSession());
       return Response.json({ data: { recoveryCodes } });
     },
   },
