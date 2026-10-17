@@ -28,6 +28,7 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   const slug = new URL(state.path, 'http://zamaro').pathname.split('/')[2] ?? '';
   await freezeClock(page);
   if (state.signedInAs) await signInAs(page.context(), state.signedInAs);
+  if (state.masks === 'audit-times') await new AuditLogPage(page).withOlderEntries();
 
   switch (state.setup) {
     case 'search-pending':

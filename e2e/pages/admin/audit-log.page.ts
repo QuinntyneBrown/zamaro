@@ -18,6 +18,19 @@ export class AuditLogPage {
     await expect(this.heading()).toHaveText('Audit log');
   }
 
+  /**
+   * For captures: the first page always has older entries behind it, as in the mock, however many
+   * the suite has written so far.
+   */
+  async withOlderEntries(): Promise<void> {
+    await this.page.route('**/api/v1/admin/audit-entries**', async (route) => {
+      const response = await route.fetch();
+      const body = (await response.json()) as { meta: { nextCursor: string | null } };
+      body.meta.nextCursor ??= 'older';
+      await route.fulfill({ response, json: body });
+    });
+  }
+
   /** The entries never answer, so the table stays loading. */
   async holdEntries(): Promise<void> {
     await this.page.route(
