@@ -3,6 +3,8 @@ name: zamaro
 # The Zamaro API image (backend/Dockerfile, ADR-0027). In development backend/ is bind-mounted and
 # node_modules lives in a named volume, which the image's entrypoint fills on first start.
 x-api: &api
+  # One image for every service: api, api-e2e, worker, worker-e2e share this build.
+  image: zamaro-api:dev
   build:
     context: ./backend
     target: dev
@@ -28,8 +30,9 @@ x-e2e-environment: &e2e-environment
   SESSION_LIFETIME: "525600"
   # The web app's server reaches the API through Docker's network and forwards the browser's address.
   TRUSTED_PROXIES: "127.0.0.1,172.16.0.0/12,192.168.0.0/16"
-  # Links in emails point at the site the suite drives (playwright.config.ts).
+  # Links in emails point at the site the suite drives (playwright.config.ts); Mailpit catches them.
   ZAMARO_WEB_URL: http://localhost:4000
+  MAIL_URL: smtp://mailpit:1025
   # e2e/fixtures/accounts.ts signs the cast in with the same value (M2 D28).
   ZAMARO_CAST_PASSWORD: hosanna-in-the-highest
   ZAMARO_STORAGE_ROOT: storage/e2e
@@ -81,6 +84,13 @@ services:
       interval: 5s
       retries: 30
 
+  # The Zamaro Worker (ADR-0027): the BullMQ workers on the dev keys and database.
+  worker:
+    <<: *api
+    command: ["npm", "run", "worker"]
+    depends_on:
+      api: { condition: service_healthy }
+
   api-e2e:
     <<: *api
     profiles: [e2e]
@@ -92,6 +102,20 @@ services:
     environment:
       <<: *e2e-environment
     ports: ["8001:8001"]
+
+  # The e2e worker (ADR-0019): reads the e2e prefix with the frozen clock, so mail the e2e API queues
+  # reaches Mailpit. It shares node_modules with api-e2e, so start it once api-e2e is up.
+  worker-e2e:
+    <<: *api
+    profiles: [e2e]
+    command: ["npm", "run", "worker"]
+    volumes:
+      - ./backend:/app
+      - api-node-modules:/app/node_modules
+    environment:
+      <<: *e2e-environment
+    depends_on:
+      api-e2e: { condition: service_started }
 
 volumes:
   pg-data:

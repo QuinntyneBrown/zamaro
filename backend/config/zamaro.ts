@@ -69,6 +69,8 @@ const schema = z.object({
   // Every email is from Zamaro <hello@zamaro.ca> (M2 D16).
   MAIL_FROM_NAME: z.preprocess(blankToUndefined, z.string().default('Zamaro')),
   MAIL_FROM_ADDRESS: z.preprocess(blankToUndefined, z.string().default('hello@zamaro.ca')),
+  // The SMTP server (ADR-0019): smtp://mailpit:1025 in compose. Unset, emails go to the fake mailer.
+  MAIL_URL: z.preprocess(blankToUndefined, z.string().optional()),
   // The fake breach checker's list (ADR-0002): comma-separated.
   ZAMARO_FAKE_BREACHED_PASSWORDS: z.preprocess(
     blankToUndefined,
@@ -109,7 +111,7 @@ export interface ZamaroConfig {
   features: { bookingRequests: boolean };
   appName: string;
   admin: { idleTimeoutMinutes: number };
-  mail: { fromName: string; fromAddress: string };
+  mail: { fromName: string; fromAddress: string; url: string | undefined };
   /** What the vendor fakes answer (ADR-0002). */
   fakes: { breachedPasswords: string[] };
   rateLimits: {
@@ -175,7 +177,7 @@ function load(): ZamaroConfig {
     },
     appName: env.APP_NAME,
     admin: { idleTimeoutMinutes: env.ZAMARO_ADMIN_IDLE_TIMEOUT_MINUTES },
-    mail: { fromName: env.MAIL_FROM_NAME, fromAddress: env.MAIL_FROM_ADDRESS },
+    mail: { fromName: env.MAIL_FROM_NAME, fromAddress: env.MAIL_FROM_ADDRESS, url: env.MAIL_URL },
     fakes: {
       breachedPasswords: env.ZAMARO_FAKE_BREACHED_PASSWORDS.split(',')
         .map((password) => password.trim())

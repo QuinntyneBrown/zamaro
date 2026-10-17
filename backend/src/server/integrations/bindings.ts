@@ -21,6 +21,7 @@ import { InMemoryJobQueue } from './queue/in-memory-job-queue';
 import { FakeBreachedPasswordChecker } from './breached-passwords/fake-breached-password-checker';
 import { InMemoryCache } from './cache/in-memory-cache';
 import { FakeMailer } from './mail/fake-mailer';
+import { SmtpMailer } from './mail/smtp-mailer';
 import { RedisCache } from './cache/redis-cache';
 import { FakeGeocoder } from './geocoding/fake-geocoder';
 import { FakeIpLocator } from './ip-location/fake-ip-locator';
@@ -110,7 +111,7 @@ export function useIpLocator(next: IpLocator | undefined): void {
 }
 
 export function mailer(): Mailer {
-  mailerInstance ??= fake('Mailer', () => new FakeMailer());
+  mailerInstance ??= smtpMailer() ?? fake('Mailer', () => new FakeMailer());
   return mailerInstance;
 }
 
@@ -200,6 +201,12 @@ export function resetBindings(): void {
   rateLimiterInstance = undefined;
   sessionStoreInstance = undefined;
   ipLocatorInstance = undefined;
+}
+
+/** The SMTP adapter when `MAIL_URL` names a server; tests leave it unset (ADR-0028). */
+function smtpMailer(): Mailer | undefined {
+  const url = config().mail.url;
+  return url === undefined || config().env === 'test' ? undefined : new SmtpMailer(url);
 }
 
 function fake<T>(port: string, make: () => T): T {
