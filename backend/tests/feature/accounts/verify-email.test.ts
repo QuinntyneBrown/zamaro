@@ -1,13 +1,11 @@
-import { sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
+import { castBooker } from '@/cli/cast-booker';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { config } from '@config/zamaro';
 import { issueEmailVerificationToken } from '@/server/actions/accounts/issue-email-verification-token';
 import { db } from '@/server/db/client';
 import { users } from '@/server/db/schema';
-import { Role } from '@/server/enums';
-import { grantRoles } from '@/server/services/accounts/roles';
-import { hashPassword } from '@/server/support/passwords';
-import { Browser, CAST_PASSWORD, NAOMI } from '../../support/accounts';
+import { Browser, NAOMI } from '../../support/accounts';
 import { resetClock, travel } from '../../support/clock';
 import { expectContract } from '../../support/contract';
 import { closeDatabase, freshDatabase, query } from '../../support/database';
@@ -36,12 +34,10 @@ describe('verify the email address', () => {
   beforeEach(async () => {
     await freshDatabase();
     resetClock();
-    const [row] = await db()
-      .insert(users)
-      .values({ name: 'Ruth Adeyemi', email: RUTH, password: await hashPassword(CAST_PASSWORD) })
-      .returning({ id: users.id });
+    await castBooker(RUTH, { unverified: true });
+    const [row] = await db().select({ id: users.id }).from(users).where(eq(users.email, RUTH));
     ruthId = row?.id ?? 0;
-    await grantRoles(db(), ruthId, [Role.Booker]);
+    await db().update(users).set({ name: 'Ruth Adeyemi' }).where(eq(users.id, ruthId));
     browser = new Browser();
     await browser.request('/api/v1/csrf-cookie');
   });

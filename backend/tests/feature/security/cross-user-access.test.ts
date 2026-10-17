@@ -4,10 +4,11 @@ import { PUBLIC_ROUTES } from '@/app/api/v1/public';
 import { db } from '@/server/db/client';
 import { users } from '@/server/db/schema';
 import { Role } from '@/server/enums';
+import { eq } from 'drizzle-orm';
+import { castBooker } from '@/cli/cast-booker';
 import { operations } from '@/server/http/openapi/operations';
 import { grantRoles } from '@/server/services/accounts/roles';
-import { hashPassword } from '@/server/support/passwords';
-import { Browser, CAST_PASSWORD } from '../../support/accounts';
+import { Browser } from '../../support/accounts';
 import { closeDatabase, freshDatabase } from '../../support/database';
 import { ROUTE_OWNERSHIP_CASES, type Person } from '../../support/route-ownership-fixtures';
 
@@ -18,13 +19,13 @@ import { ROUTE_OWNERSHIP_CASES, type Person } from '../../support/route-ownershi
  */
 describe('cross-user access', () => {
   beforeAll(async () => {
-    await freshDatabase({ seed: false });
+    await freshDatabase();
   });
 
   afterAll(closeDatabase);
 
   beforeEach(async () => {
-    await freshDatabase({ seed: false });
+    await freshDatabase();
   });
 
   // One case per authenticated route, each with two fresh people: the loop grows with the API.
@@ -85,24 +86,18 @@ describe('cross-user access', () => {
 });
 
 let people = 0;
-let castHash: Promise<string> | undefined;
 
 /** A signed-up booker of their own, who signs in from a browser holding no one else's cookie. */
 async function booker(): Promise<Person> {
   people++;
   const email = `person-${String(people)}-${String(Math.random()).slice(2, 8)}@example.test`;
-  const name = `Person ${String(people)}`;
+  await castBooker(email);
   const [row] = await db()
-    .insert(users)
-    .values({
-      name,
-      email,
-      password: await (castHash ??= hashPassword(CAST_PASSWORD)),
-      emailVerifiedAt: new Date(),
-    })
-    .returning({ id: users.id });
+    .select({ id: users.id, name: users.name })
+    .from(users)
+    .where(eq(users.email, email));
   const id = row?.id ?? 0;
-  await grantRoles(db(), id, [Role.Booker]);
+  const name = row?.name ?? '';
   let browser: Browser | undefined;
   return {
     id,
