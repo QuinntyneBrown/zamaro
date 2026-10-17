@@ -23,6 +23,7 @@
     "worker": "tsx src/worker.ts",
     "admin:grant": "tsx src/cli/admin-grant.ts",
     "audit:prune": "tsx src/cli/audit-prune.ts",
+    "vsc:send-renewal-reminders": "tsx src/cli/vsc-renewal-reminders.ts",
     "openapi:export": "tsx src/cli/openapi-export.ts",
     "openapi:check": "tsx src/cli/openapi-export.ts --check"
   },
