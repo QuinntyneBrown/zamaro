@@ -334,6 +334,18 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
   'GET /admin/overview': async (_owner, intruder) => {
     expect((await (await intruder.as()).json('/api/v1/admin/overview', 'GET')).status).toBe(404);
   },
+
+  'GET /admin/audit-entries': async (_owner, intruder) => {
+    expect((await (await intruder.as()).json('/api/v1/admin/audit-entries', 'GET')).status).toBe(
+      404,
+    );
+  },
+
+  'GET /admin/audit-entries/{entry}': async (_owner, intruder) => {
+    expect((await (await intruder.as()).json('/api/v1/admin/audit-entries/1', 'GET')).status).toBe(
+      404,
+    );
+  },
 };
 
 async function artistId(slug: string): Promise<number> {
