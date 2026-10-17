@@ -23,6 +23,11 @@ import {
 } from '../requests/accounts/password-reset';
 import { RegisterBookerRequest } from '../requests/accounts/register-booker';
 import {
+  TwoFactorChallengeRequest,
+  TwoFactorCodeRequest,
+  TwoFactorProofRequest,
+} from '../requests/accounts/two-factor';
+import {
   SaveChurchRequest,
   UpdateContactPhoneRequest,
   UpdateProfileRequest,
@@ -560,6 +565,100 @@ export const operations: Operation[] = [
       204: { description: 'Ended', content: null },
       404: {
         description: "Not one of the caller's sessions, or none by that id",
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/session/two-factor',
+    name: 'session.two-factor',
+    summary: 'Complete sign-in with a code from the app, or an unused recovery code once',
+    requestBody: TwoFactorChallengeRequest,
+    responses: {
+      200: { description: 'Signed in with a new session', content: CurrentUserResource },
+      401: {
+        description: 'No password step is waiting, or it is over 10 minutes old',
+        content: 'problem',
+      },
+      422: { description: 'The code or recovery code is wrong', content: 'problem' },
+      429: {
+        description: 'Sign-in is paused after 5 wrong passwords or codes in 15 minutes',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/account/two-factor',
+    name: 'account.two-factor.begin',
+    summary: 'Begin two-step sign-in: a new key for an authenticator app, confirmed by a code',
+    responses: {
+      200: {
+        description: 'The key in groups of four and what the QR code holds',
+        content: z.object({ data: z.object({ key: z.string(), otpauthUri: z.string() }) }),
+      },
+      409: { description: 'Two-step sign-in is already on', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/account/two-factor/qr',
+    name: 'account.two-factor.qr',
+    summary: 'The QR code of the key begun, as SVG',
+    responses: {
+      200: { description: 'The image', content: 'svg' },
+      404: { description: 'No key is waiting', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/account/two-factor/confirm',
+    name: 'account.two-factor.confirm',
+    summary: 'Turn two-step sign-in on with the first code; the recovery codes are answered once',
+    requestBody: TwoFactorCodeRequest,
+    responses: {
+      200: {
+        description: 'On; 10 single-use recovery codes',
+        content: z.object({ data: z.object({ recoveryCodes: z.array(z.string()) }) }),
+      },
+      409: { description: 'Two-step sign-in is already on', content: 'problem' },
+      422: { description: 'The code does not match the key begun', content: 'problem' },
+    },
+  },
+  {
+    method: 'delete',
+    path: '/account/two-factor',
+    name: 'account.two-factor.destroy',
+    summary: 'Turn two-step sign-in off with a current code or an unused recovery code',
+    requestBody: TwoFactorProofRequest,
+    responses: {
+      204: { description: 'Off; the owner is emailed', content: null },
+      404: { description: 'Two-step sign-in is not on', content: 'problem' },
+      409: { description: 'An administrator keeps two-step sign-in on', content: 'problem' },
+      422: { description: 'The code is wrong', content: 'problem' },
+      429: {
+        description: 'Sign-in is paused after 5 wrong codes or passwords in 15 minutes',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/account/two-factor/recovery-codes',
+    name: 'account.two-factor.recovery-codes',
+    summary:
+      'New recovery codes, replacing every earlier one, given a current code or an unused recovery code',
+    requestBody: TwoFactorProofRequest,
+    responses: {
+      200: {
+        description: 'The 10 new codes, answered once',
+        content: z.object({ data: z.object({ recoveryCodes: z.array(z.string()) }) }),
+      },
+      404: { description: 'Two-step sign-in is not on', content: 'problem' },
+      422: { description: 'The code is wrong', content: 'problem' },
+      429: {
+        description: 'Sign-in is paused after 5 wrong codes or passwords in 15 minutes',
         content: 'problem',
       },
     },

@@ -68,7 +68,8 @@ describe('the two-step sign-in challenge', () => {
     );
     expect((await browser.json('/api/v1/me', 'GET')).status).toBe(200);
     const audit = await query(
-      sql`select id from audit_entries where action = 'auth.sign_in' and actor_id = ${userId}`,
+      sql`select id from audit_entries where action = 'auth.sign_in' and actor_id = ${userId}
+          and context->>'two_factor' = 'code'`,
     );
     expect(audit).toHaveLength(1);
   });

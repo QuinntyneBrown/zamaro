@@ -18,8 +18,8 @@ export interface Parameter {
 
 export interface ResponseSpec {
   description: string;
-  /** The JSON body, `'problem'` for application/problem+json, or `null` for no body. */
-  content: ZodType | 'problem' | null;
+  /** The JSON body, `'problem'` for application/problem+json, `'svg'` for an image, or `null` for no body. */
+  content: ZodType | 'problem' | 'svg' | null;
 }
 
 export interface Operation {
@@ -90,10 +90,15 @@ export function buildDocument(operations: Operation[]): OpenApiDocument {
                 description: spec.description,
                 content: { [PROBLEM]: { schema: { $ref: '#/components/schemas/Problem' } } },
               }
-            : {
-                description: spec.description,
-                content: { 'application/json': { schema: jsonSchema(spec.content) } },
-              };
+            : spec.content === 'svg'
+              ? {
+                  description: spec.description,
+                  content: { 'image/svg+xml': { schema: { type: 'string' } } },
+                }
+              : {
+                  description: spec.description,
+                  content: { 'application/json': { schema: jsonSchema(spec.content) } },
+                };
     }
     const entry: Record<string, unknown> = { summary: operation.summary, responses };
     if (operation.parameters !== undefined) {

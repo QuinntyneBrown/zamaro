@@ -65,7 +65,8 @@ describe('the anonymous rate limit', () => {
     expect((await api('/api/v1/features')).status).toBe(200);
   });
 
-  it('counts a signed-in booker by account from any address', async () => {
+  // 300 signed-in requests, each loading the account: a long test by nature.
+  it('counts a signed-in booker by account from any address', { timeout: 120_000 }, async () => {
     await freshDatabase();
     const browser = await signedIn(NAOMI);
     const asNaomiFrom = (address: string): Promise<Response> => {

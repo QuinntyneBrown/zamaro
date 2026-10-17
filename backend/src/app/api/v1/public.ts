@@ -27,4 +27,5 @@ export const PUBLIC_ROUTES: ReadonlySet<string> = new Set([
   'password.reset.check',
   'password.reset',
   'account.email.confirm',
+  'session.two-factor',
 ]);

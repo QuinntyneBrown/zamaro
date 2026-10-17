@@ -27,21 +27,26 @@ describe('cross-user access', () => {
     await freshDatabase({ seed: false });
   });
 
-  it("refuses another user's resource on every authenticated route", async () => {
-    const routes = operations
-      .filter((operation) => !PUBLIC_ROUTES.has(operation.name))
-      .map((operation) => `${operation.method.toUpperCase()} ${operation.path}`);
-    expect(routes.length).toBeGreaterThan(0);
+  // One case per authenticated route, each with two fresh people: the loop grows with the API.
+  it(
+    "refuses another user's resource on every authenticated route",
+    { timeout: 180_000 },
+    async () => {
+      const routes = operations
+        .filter((operation) => !PUBLIC_ROUTES.has(operation.name))
+        .map((operation) => `${operation.method.toUpperCase()} ${operation.path}`);
+      expect(routes.length).toBeGreaterThan(0);
 
-    for (const route of routes) {
-      const ownershipCase = ROUTE_OWNERSHIP_CASES[route];
-      expect(
-        ownershipCase,
-        `${route} needs a case in route-ownership-fixtures.ts (L2-074.3).`,
-      ).toBeDefined();
-      await ownershipCase?.(await booker(), await booker());
-    }
-  });
+      for (const route of routes) {
+        const ownershipCase = ROUTE_OWNERSHIP_CASES[route];
+        expect(
+          ownershipCase,
+          `${route} needs a case in route-ownership-fixtures.ts (L2-074.3).`,
+        ).toBeDefined();
+        await ownershipCase?.(await booker(), await booker());
+      }
+    },
+  );
 
   it('gives a booker on an artist-only route the same 404 as an unknown address', async () => {
     const browser = await (await booker()).as();
@@ -80,6 +85,7 @@ describe('cross-user access', () => {
 });
 
 let people = 0;
+let castHash: Promise<string> | undefined;
 
 /** A signed-up booker of their own, who signs in from a browser holding no one else's cookie. */
 async function booker(): Promise<Person> {
@@ -91,7 +97,7 @@ async function booker(): Promise<Person> {
     .values({
       name,
       email,
-      password: await hashPassword(CAST_PASSWORD),
+      password: await (castHash ??= hashPassword(CAST_PASSWORD)),
       emailVerifiedAt: new Date(),
     })
     .returning({ id: users.id });
