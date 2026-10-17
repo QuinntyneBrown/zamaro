@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
+    "bullmq": "^5.81.5",
     "drizzle-orm": "^0.45.4",
     "ioredis": "^6.0.0",
     "luxon": "^3.7.2",
