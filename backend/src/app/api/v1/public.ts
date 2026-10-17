@@ -21,4 +21,6 @@ export const PUBLIC_ROUTES: ReadonlySet<string> = new Set([
   'session.store',
   'register',
   'legal-documents.current',
+  'email.verify',
+  'email.resend-verification',
 ]);

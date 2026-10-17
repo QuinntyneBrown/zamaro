@@ -6,7 +6,7 @@ import { HttpProblem, ProblemType } from '@/server/support/problems';
 import { clientAddress } from './client-address';
 
 /** Named rate limiters (L2-077, security/limit-request-rates); each route names the one it is behind. */
-export type RateLimitName = 'api' | 'search' | 'register';
+export type RateLimitName = 'api' | 'search' | 'register' | 'resend-verification';
 
 interface Limit {
   key: string;
@@ -34,6 +34,23 @@ function limitsFor(name: RateLimitName, request: NextRequest, user: CurrentUser 
     // L2-077.3: 10 registrations an hour per address.
     register: [
       { key: `register-ip:${address}`, max: rateLimits.registerPerHour, windowSeconds: 3600 },
+    ],
+    // M2 D6: 3 new verification links in 15 minutes per address and, once signed in, per account.
+    'resend-verification': [
+      {
+        key: `resend-verification-ip:${address}`,
+        max: rateLimits.resendVerificationPer15Minutes,
+        windowSeconds: 900,
+      },
+      ...(user === null
+        ? []
+        : [
+            {
+              key: `resend-verification-user:${String(user.id)}`,
+              max: rateLimits.resendVerificationPer15Minutes,
+              windowSeconds: 900,
+            },
+          ]),
     ],
     // L2-077.2: 30 searches a minute per address and, once signed in, per account as well.
     search: [

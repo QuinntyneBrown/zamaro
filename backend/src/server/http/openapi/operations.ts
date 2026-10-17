@@ -7,6 +7,10 @@ import {
 } from '../resources/artist-profiles/dates';
 import { ArtistProfileResource } from '../resources/artist-profiles/profile';
 import { CurrentUserResource, TwoFactorRequiredResource } from '../resources/accounts/current-user';
+import {
+  ResendVerificationEmailRequest,
+  VerifyEmailRequest,
+} from '../requests/accounts/email-verification';
 import { RegisterBookerRequest } from '../requests/accounts/register-booker';
 import { CurrentLegalDocumentsResource } from '../resources/privacy/legal-document';
 import { AlternativesResource } from '../resources/discovery/alternatives';
@@ -293,6 +297,39 @@ export const operations: Operation[] = [
     summary: 'The current terms of use and privacy policy',
     responses: {
       200: { description: 'The two documents', content: CurrentLegalDocumentsResource },
+    },
+  },
+  {
+    method: 'post',
+    path: '/email/verify',
+    name: 'email.verify',
+    summary: 'Verify an email address from its emailed link; the person is not signed in',
+    requestBody: VerifyEmailRequest,
+    responses: {
+      200: {
+        description: 'The address is verified; the owner, for the thanks',
+        content: z.object({ data: z.object({ name: z.string() }) }),
+      },
+      410: {
+        description: 'The link was used, is over 24 hours old or is unknown',
+        content: 'problem',
+      },
+      422: { description: 'No token', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/email/verification-notification',
+    name: 'email.resend-verification',
+    summary: 'Send a new verification link; the answer is the same whether or not one was due',
+    requestBody: ResendVerificationEmailRequest,
+    responses: {
+      202: {
+        description: 'The request was taken',
+        content: z.object({ data: z.object({ accepted: z.literal(true) }) }),
+      },
+      422: { description: 'A field needs attention', content: 'problem' },
+      429: { description: 'More than 3 links in 15 minutes', content: 'problem' },
     },
   },
 ];
