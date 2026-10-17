@@ -192,8 +192,11 @@ export function routes(
     }
     const handler = handlers[method];
     const name = options.names?.[method] ?? options.name;
+    // A method the route lacks keeps the admin gate, so an admin route stays concealed on every method.
     result[method] = route(
-      handler ? { ...options, name } : { name: `${name}.method-not-allowed` },
+      handler
+        ? { ...options, name }
+        : { name: `${name}.method-not-allowed`, ...(options.admin === true && { admin: true }) },
       handler ?? methodNotAllowed(allow),
     );
   }

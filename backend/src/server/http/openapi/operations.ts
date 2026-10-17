@@ -48,6 +48,11 @@ import {
   SavedArtistListResource,
   SavedArtistStateResource,
 } from '../resources/accounts/saved-artist';
+import { ListAuditEntriesRequest } from '../requests/administration/audit-entries';
+import {
+  AuditEntryEnvelope,
+  AuditEntryPageResource,
+} from '../resources/administration/audit-entry';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -787,6 +792,32 @@ export const operations: Operation[] = [
         description: 'The counts beside the admin sections',
         content: z.object({ data: z.object({ checksWaiting: z.number().int() }) }),
       },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/audit-entries',
+    name: 'admin.audit-entries.index',
+    summary:
+      'The audit log, newest first, 50 at a time, narrowed by actor, action, target, outcome and dates',
+    parameters: Object.entries(ListAuditEntriesRequest.shape).map(([name, schema]) => ({
+      name,
+      in: 'query' as const,
+      schema,
+    })),
+    responses: {
+      200: { description: 'One page of the log', content: AuditEntryPageResource },
+      422: { description: 'A filter is not valid', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/audit-entries/{entry}',
+    name: 'admin.audit-entries.show',
+    summary: 'One audit entry; PATCH, PUT and DELETE answer 405',
+    parameters: [{ name: 'entry', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The entry', content: AuditEntryEnvelope },
     },
   },
 ];
