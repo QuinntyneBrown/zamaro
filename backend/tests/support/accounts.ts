@@ -19,6 +19,8 @@ export class Browser {
   readonly cookies = new Map<string, string>();
   /** The address the request comes from, as the trusted proxy reports it. */
   address: string | undefined;
+  /** The browser's user agent, for the signed-in devices list. */
+  userAgent: string | undefined;
 
   cookie(name: string): string | undefined {
     return this.cookies.get(name);
@@ -29,6 +31,7 @@ export class Browser {
     const headers = new Headers(init.headers);
     headers.set('Referer', `${WEB_ORIGIN}/`);
     if (this.address !== undefined) headers.set('X-Forwarded-For', this.address);
+    if (this.userAgent !== undefined) headers.set('User-Agent', this.userAgent);
     const cookie = [...this.cookies].map(([name, value]) => `${name}=${value}`).join('; ');
     if (cookie !== '') headers.set('Cookie', cookie);
     const token = this.cookies.get('XSRF-TOKEN');

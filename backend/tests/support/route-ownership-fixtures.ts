@@ -146,4 +146,29 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
 
     expect((await (await owner.as()).json('/api/v1/me', 'GET')).status).toBe(200);
   },
+
+  'GET /account/sessions': async (owner, intruder) => {
+    await owner.as();
+    const response = await (await intruder.as()).json('/api/v1/account/sessions', 'GET');
+    expect(response.status).toBe(200);
+
+    const body = (await response.json()) as { data: { isCurrent: boolean }[] };
+    expect(body.data).toHaveLength(1);
+    expect(body.data[0]?.isCurrent).toBe(true);
+    await expectHoldsNothingOf(owner, response);
+  },
+
+  'DELETE /account/sessions/{session}': async (owner, intruder) => {
+    const theirs = (await (
+      await (await owner.as()).json('/api/v1/account/sessions', 'GET')
+    ).json()) as {
+      data: { id: string }[];
+    };
+    const id = theirs.data[0]?.id ?? 'none';
+
+    const response = await (await intruder.as()).json(`/api/v1/account/sessions/${id}`, 'DELETE');
+
+    expect(response.status).toBe(404);
+    expect((await (await owner.as()).json('/api/v1/me', 'GET')).status).toBe(200);
+  },
 };
