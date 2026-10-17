@@ -69,6 +69,8 @@ import {
 } from '../resources/administration/vulnerable-sector-check';
 import { StartApplicationVideoUploadRequest } from '../requests/artist-onboarding/application-video';
 import { ApplicationVideoEnvelope } from '../resources/artist-onboarding/application-video';
+import { SubmitArtistApplicationRequest } from '../requests/artist-onboarding/application';
+import { ArtistApplicationResource } from '../resources/artist-onboarding/application';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -1005,6 +1007,42 @@ export const operations: Operation[] = [
       413: { description: 'A chunk over 8 MB', content: 'problem' },
       415: { description: 'Not application/offset+octet-stream', content: 'problem' },
       422: { description: 'The chunk runs past the declared size', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/artist-applications',
+    name: 'artist-applications.store',
+    summary:
+      'Send an application; a retry with the same Idempotency-Key answers the one it created',
+    parameters: [
+      {
+        name: 'Idempotency-Key',
+        in: 'header',
+        schema: z.string(),
+        required: true,
+        description: 'A UUID minted once per application, repeated on a retry',
+      },
+    ],
+    requestBody: SubmitArtistApplicationRequest.omit({ idempotencyKey: true }),
+    responses: {
+      200: {
+        description: 'The application a retry already created',
+        content: ArtistApplicationResource,
+      },
+      201: {
+        description: 'Sent: the number and the reply-by date',
+        content: ArtistApplicationResource,
+      },
+      409: {
+        description: 'The email already has an application in review (application-in-review)',
+        content: 'problem',
+      },
+      422: {
+        description: 'A field needs attention, or the bot challenge failed',
+        content: 'problem',
+      },
+      429: { description: 'More than 10 in an hour from one address', content: 'problem' },
     },
   },
 ];

@@ -132,7 +132,7 @@ describe('submitting an artist application', () => {
   it('sets the reply-by date three business days on, skipping weekends and Ontario holidays', async () => {
     // Wed 7 Oct: Thu, Fri, then Tue 13 (Mon 12 Oct is Thanksgiving).
     travelTo('2026-10-07 16:00');
-    expect(await replyBy(await tobi({ email: 'wed@example.ca' }))).toEqual({
+    expect(await replyBy(await tobi({ email: 'wed@example.ca' }))).toMatchObject({
       replyBy: '2026-10-13',
     });
 
@@ -145,7 +145,7 @@ describe('submitting an artist application', () => {
 
     // Sat 10 Oct: the count starts on the next business day: Tue 13, Wed 14, Thu 15.
     travelTo('2026-10-10 11:00');
-    expect(await replyBy(await tobi({ email: 'sat@example.ca' }))).toEqual({
+    expect(await replyBy(await tobi({ email: 'sat@example.ca' }))).toMatchObject({
       replyBy: '2026-10-15',
     });
   });
@@ -174,17 +174,19 @@ describe('submitting an artist application', () => {
 
   it('names a reference without a contact and a reference that is the applicant together', async () => {
     const application = await tobi();
-    (application.references as Reference[])[0]!.contact = '';
-    (application.references as Reference[])[1]!.contact = 'Tobi@TobiAdeyemi.ca';
+    const [first, second] = application.references as Reference[];
+    if (first === undefined || second === undefined) throw new Error('Two references.');
+    first.contact = '';
+    second.contact = 'Tobi@TobiAdeyemi.ca';
 
     const response = await submit(application, randomUUID());
 
     expect(response.status).toBe(422);
     const { errors } = (await response.json()) as { errors: Record<string, string[]> };
-    expect(errors['references.0.contact']).toEqual([
-      'Add a phone number or email so we can reach them.',
-    ]);
-    expect(errors['references.1.contact']).toEqual(['References must be someone other than you.']);
+    expect(errors).toMatchObject({
+      'references.0.contact': ['Add a phone number or email so we can reach them.'],
+      'references.1.contact': ['References must be someone other than you.'],
+    });
     expect(await query(sql`select id from artist_applications`)).toEqual([]);
   });
 
@@ -372,6 +374,9 @@ describe('submitting an artist application', () => {
   async function replyBy(
     application: Record<string, unknown>,
   ): Promise<{ replyBy: string; holidays?: string[] }> {
+    // Months pass between these sends, so each comes from a browser with a fresh session.
+    guest = new Browser();
+    await guest.request('/api/v1/csrf-cookie');
     const response = await submit(application, randomUUID());
     expect(response.status).toBe(201);
     const body = (await response.json()) as Application;

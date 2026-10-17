@@ -31,4 +31,5 @@ export const PUBLIC_ROUTES: ReadonlySet<string> = new Set([
   'artist-applications.videos.store',
   'artist-applications.videos.show',
   'artist-applications.videos.append',
+  'artist-applications.store',
 ]);

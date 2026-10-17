@@ -44,7 +44,7 @@ export function errorsOf(
 ): Record<string, string[]> {
   const errors: Record<string, string[]> = {};
   for (const issue of error.issues) {
-    const field = String(issue.path[0] ?? '');
+    const field = issue.path.map(String).join('.');
     const name = rename[field] ?? field;
     const messages = (errors[name] ??= []);
     if (!messages.includes(issue.message)) messages.push(issue.message);
