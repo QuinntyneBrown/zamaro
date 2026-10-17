@@ -217,4 +217,42 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     ).json('/api/v1/account/two-factor/recovery-codes', 'POST', { code: '000000' });
     expect(response.status).toBe(404);
   },
+
+  'POST /account/consents/terms': async (owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/consents/terms', 'POST', {
+      termsVersion: '2026-10',
+    });
+    expect(response.status).toBe(200);
+    await expectHoldsNothingOf(owner, response);
+  },
+
+  'GET /account/consents/marketing': async (owner, intruder) => {
+    expect(
+      (
+        await (
+          await owner.as()
+        ).json('/api/v1/account/consents/marketing', 'POST', {
+          granted: true,
+        })
+      ).status,
+    ).toBe(200);
+
+    const response = await (await intruder.as()).json('/api/v1/account/consents/marketing', 'GET');
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ data: { granted: false } });
+  },
+
+  'POST /account/consents/marketing': async (owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/consents/marketing', 'POST', {
+      granted: true,
+    });
+    expect(response.status).toBe(200);
+
+    const owners = await (await owner.as()).json('/api/v1/account/consents/marketing', 'GET');
+    expect(await owners.json()).toEqual({ data: { granted: false } });
+  },
 };
