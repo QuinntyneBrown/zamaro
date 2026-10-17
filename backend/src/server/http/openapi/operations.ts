@@ -58,6 +58,15 @@ import {
   CheckEnvelope,
   CurrentChecksResource,
 } from '../resources/artist-onboarding/vulnerable-sector-check';
+import { ListAdminArtistsRequest } from '@/app/api/v1/admin/artists/route';
+import {
+  AdminArtistDetailEnvelope,
+  AdminArtistListResource,
+} from '../resources/administration/artist';
+import {
+  AdminCheckEnvelope,
+  AdminCheckQueueResource,
+} from '../resources/administration/vulnerable-sector-check';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -888,6 +897,57 @@ export const operations: Operation[] = [
         description: 'The link on the media host and when it stops working',
         content: z.object({ data: z.object({ url: z.string(), expiresAt: z.string() }) }),
       },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/vulnerable-sector-checks',
+    name: 'admin.vulnerable-sector-checks.index',
+    summary: 'The checks waiting for verification, oldest upload first',
+    responses: {
+      200: { description: 'The queue and how many are waiting', content: AdminCheckQueueResource },
+    },
+  },
+  {
+    method: 'post',
+    path: '/admin/vulnerable-sector-checks/{check}/verification',
+    name: 'admin.vulnerable-sector-checks.verify',
+    summary:
+      'Verify a check: it counts for three years from its issue date, and the decision is audited',
+    parameters: [{ name: 'check', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The check, verified', content: AdminCheckEnvelope },
+      409: {
+        description: 'The check was already decided (vsc-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'Issued more than 3 years ago', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/artists',
+    name: 'admin.artists.index',
+    summary: 'Every approved and suspended artist, A to Z, with the counts',
+    parameters: Object.entries(ListAdminArtistsRequest.shape).map(([name, schema]) => ({
+      name,
+      in: 'query' as const,
+      schema,
+      description: 'A word start in the name, base city or account email',
+    })),
+    responses: {
+      200: { description: 'The list and the counts', content: AdminArtistListResource },
+      422: { description: 'The search is too long', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/artists/{artist}',
+    name: 'admin.artists.show',
+    summary: 'One artist: the account, the profile, the upcoming bookings and the standing',
+    parameters: [{ name: 'artist', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The artist', content: AdminArtistDetailEnvelope },
     },
   },
 ];
