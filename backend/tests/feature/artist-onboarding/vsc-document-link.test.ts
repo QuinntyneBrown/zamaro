@@ -75,7 +75,7 @@ describe('the signed link to a check document', () => {
     expectContract(response, LINK, body);
     const url = new URL(body.data.url);
     expect(url.host).toBe(config().mediaHost);
-    expect(url.pathname.startsWith(`/media/documents/${storageKey}`)).toBe(true);
+    expect(url.pathname).toBe(`/documents/${storageKey}`);
     expect(new Date(body.data.expiresAt).toISOString()).toBe(
       now().plus({ minutes: 5 }).toUTC().toISO(),
     );
