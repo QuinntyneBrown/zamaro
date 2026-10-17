@@ -58,7 +58,8 @@ zamaro/
 │   │   │   ├── api/v1/            # /api/v1/**/route.ts: thin — validate, call an action, return a resource;
 │   │   │   │                      # authenticated by default, anonymous routes listed in public.ts
 │   │   │   ├── health/            # live/route.ts and ready/route.ts, outside /api/v1 (ADR-0005)
-│   │   │   └── media/             # signed links to private documents, on the media host (ADR-0024)
+│   │   │   ├── documents/         # signed links to private documents, on the media host (ADR-0024)
+│   │   │   └── media/             # public media files from the media disk, on the media host
 │   │   ├── server/
 │   │   │   ├── actions/{subsystem}/   # one use case per class; business rules live here
 │   │   │   ├── services/{subsystem}/  # domain services (AvailabilityService, DistanceService, ...)
@@ -91,7 +92,7 @@ zamaro/
 │   │   ├── i18n/{locale}/         # translation catalogues served at /api/v1/i18n/{locale}
 │   │   └── emails/
 │   ├── tests/
-│   │   ├── feature/{subsystem}/   # Vitest integration tests against the running API
+│   │   ├── feature/{subsystem}/   # Vitest tests through the route handlers on PGlite (ADR-0028)
 │   │   ├── feature/security/      # cross-user access suite and route-ownership fixtures
 │   │   └── load/                  # load scenarios for the response-time budgets
 │   ├── tools/eslint/              # Zamaro's own ESLint rules (no-raw-sql, L2-075.2)
@@ -174,9 +175,12 @@ zamaro/
 
 ### Tests
 
-Back end tests are Vitest integration tests against the running API, with real Postgres and Redis. Follow
-the existing test patterns when adding coverage. Run `npm run lint`, `npm run format:check`,
-`npm run typecheck` and `npm test` in `backend/`.
+Back end tests run the route handlers in-process against an in-memory PGlite database migrated from
+`database/migrations`, with Redis-backed services and outside vendors replaced by in-memory fakes bound
+through the same ports the application uses (ADR-0028). No test needs Docker, Postgres or Redis. Tests
+state intent through `tests/support/app.ts` (the request) and `tests/support/database.ts` (the data);
+follow the existing test patterns when adding coverage. Run `npm run lint`, `npm run format:check`,
+`npm run typecheck`, `npm test` and `npm run openapi:check` in `backend/`.
 
 ## Frontend conventions
 
@@ -231,7 +235,8 @@ no tests added afterward, and no weakening tests to manufacture a pass. Keep
 the requirement, detailed design, mock, criteria, tests, and implementation
 aligned until the entire feature or behavior change is complete.
 
-Back end: Vitest integration tests against the API. Front end: Playwright, using the
+Back end: Vitest tests through the route handlers on an in-memory database (ADR-0028).
+Front end: Playwright, using the
 Page Object Model - one page object per screen, owning the selectors and the
 interactions. Tests state intent; page objects know the DOM. Never put a
 selector in a test.

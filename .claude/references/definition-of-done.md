@@ -4,8 +4,8 @@ The standing bar every increment clears before it is committed as done.
 
 - [ ] The change has a requirement, a detailed design and (for UI) a mock, and they agree with the code.
 - [ ] Its acceptance test was written first and seen to fail for the expected reason.
-- [ ] Backend: `docker compose exec api npm test` passes, and `npm run lint`, `npm run format:check` and
-  `npm run typecheck` are clean in `backend/`.
+- [ ] Backend: `npm test`, `npm run lint`, `npm run format:check`, `npm run typecheck` and
+  `npm run openapi:check` are clean in `backend/` (no Docker needed, ADR-0028).
 - [ ] Frontend: `npm run lint`, `npm run format:check` and `npx ng build zamaro` pass in `frontend/`.
 - [ ] E2E: `npx playwright test` passes in `e2e/` (Chromium only); visual baselines changed only for an
       intentional design change.

@@ -2,6 +2,21 @@
 
 **Status:** Done (2026-10-11) on `feat/m2-accounts-and-sessions`, cut from `main` after M1 merged (PR #13): S0–S18, the end-of-milestone checks and the walkthrough below. Not pushed; no pull request yet.
 
+## Node.js port (2026-10-17)
+
+S1–S18 were ported to Next.js on Node.js (ADR-0027) on branch `claude/nextjs-backend-port`, slice by
+slice under the same acceptance criteria: sessions and CSRF in the request pipeline
+(`src/server/http/pipeline.ts`), the request gate, registration with consent and the bot challenge,
+the BullMQ job queue with email retries and failed-job reporting (`src/worker.ts`, `src/server/jobs`),
+email verification, lockout and password reset, account settings, the church and contact phone, field
+encryption, change email and password, signed-in devices, two-step sign-in (otplib and qrcode), the
+terms gate and marketing choice, saved artists and the theme. Every email is built from
+`resources/i18n/en/emails.json` and sent through the Mailer port. The old PHP Feature tests became
+Vitest tests under `backend/tests/feature/{accounts,privacy,security,notifications,operations,
+user-experience}`, run in-process on PGlite (ADR-0028). Below, `php artisan cast:booker` is
+`npm run cast:booker`, `zamaro:admin:grant` is `npm run admin:grant`, and the Laravel class names map
+to the modules ADR-0027's table and the AGENTS.md tree name.
+
 ## Current status (2026-10-11)
 
 | Slice | Scope | Status | Commits |

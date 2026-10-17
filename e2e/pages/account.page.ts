@@ -162,14 +162,13 @@ export class AccountPage {
 
   /**
    * For captures: the Password lead as if there were two other devices, since how many there are
-   * depends on which other specs signed in as the same cast member.
+   * depends on which other specs signed in as the same cast member; with none, the lead is the
+   * one-sentence form, so the whole text is replaced rather than only the count.
    */
   async fixPasswordLeadCount(): Promise<void> {
     await this.sectionLead('Password').evaluate((lead) => {
-      lead.textContent = (lead.textContent ?? '').replace(
-        /A new one signs you out on your other.*$/,
-        'A new one signs you out on your other 2 devices.',
-      );
+      lead.textContent =
+        'Leave these empty to keep your password. A new one signs you out on your other 2 devices.';
     });
   }
 

@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.png binary
+*.webp binary
+*.avif binary
+*.mp4 binary
+database/seeders/media/**/*.ts binary

@@ -1,5 +1,51 @@
 name: zamaro
 
+# The Zamaro API image (backend/Dockerfile, ADR-0027). In development backend/ is bind-mounted and
+# node_modules lives in a named volume, which the image's entrypoint fills on first start.
+x-api: &api
+  # One image for every service: api, api-e2e, worker, worker-e2e share this build.
+  image: zamaro-api:dev
+  build:
+    context: ./backend
+    target: dev
+  volumes:
+    - ./backend:/app
+    - api-node-modules:/app/node_modules
+    - api-next:/app/.next
+  env_file: ./backend/.env
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+    mailpit: { condition: service_started }
+
+# The e2e API: its own database, Redis keys and the mocks' frozen clock (ADR-0002).
+x-e2e-environment: &e2e-environment
+  ZAMARO_ENV: e2e
+  DATABASE_URL: postgres://zamaro:zamaro@postgres:5432/zamaro_e2e
+  REDIS_PREFIX: zamaro-e2e-
+  ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
+  # Cookie expiry dates are computed from the frozen clock, so with the 7-day lifetime the browser
+  # would drop the session and XSRF cookies once the real date is a week past it. The idle and
+  # absolute limits are proven in the backend tests with time travel.
+  SESSION_LIFETIME: "525600"
+  # The web app's server reaches the API through Docker's network and forwards the browser's address.
+  TRUSTED_PROXIES: "127.0.0.1,172.16.0.0/12,192.168.0.0/16"
+  # Links in emails point at the site the suite drives (playwright.config.ts); Mailpit catches them.
+  ZAMARO_WEB_URL: http://localhost:4000
+  MAIL_URL: smtp://mailpit:1025
+  # e2e/fixtures/accounts.ts signs the cast in with the same value (M2 D28).
+  ZAMARO_CAST_PASSWORD: hosanna-in-the-highest
+  ZAMARO_STORAGE_ROOT: storage/e2e
+  # Every browser in the suite searches from one address; the limit itself is covered by the backend
+  # tests and the limited state by intercepting the response (L2-077).
+  ZAMARO_SEARCH_LIMIT_PER_MINUTE: "600"
+  ZAMARO_API_LIMIT_PER_MINUTE: "100000"
+  ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: "100000"
+  ZAMARO_REGISTER_LIMIT_PER_HOUR: "100000"
+  ZAMARO_RESEND_VERIFICATION_LIMIT: "100000"
+  ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR: "100000"
+  ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE: "100000"
+
 services:
   postgres:
     image: postgres:16
@@ -30,5 +76,49 @@ services:
     image: axllent/mailpit:v1.27.11
     ports: ["1026:1025", "8026:8025"]
 
+  api:
+    <<: *api
+    ports: ["${ZAMARO_API_PORT:-8000}:8000"]
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8000/health/ready"]
+      interval: 5s
+      retries: 30
+
+  # The Zamaro Worker (ADR-0027): the BullMQ workers on the dev keys and database.
+  worker:
+    <<: *api
+    command: ["npm", "run", "worker"]
+    depends_on:
+      api: { condition: service_healthy }
+
+  api-e2e:
+    <<: *api
+    profiles: [e2e]
+    command: ["npm", "run", "dev", "--", "--port", "8001"]
+    volumes:
+      - ./backend:/app
+      - api-node-modules:/app/node_modules
+      - api-e2e-next:/app/.next
+    environment:
+      <<: *e2e-environment
+    ports: ["8001:8001"]
+
+  # The e2e worker (ADR-0019): reads the e2e prefix with the frozen clock, so mail the e2e API queues
+  # reaches Mailpit. It shares node_modules with api-e2e, so start it once api-e2e is up.
+  worker-e2e:
+    <<: *api
+    profiles: [e2e]
+    command: ["npm", "run", "worker"]
+    volumes:
+      - ./backend:/app
+      - api-node-modules:/app/node_modules
+    environment:
+      <<: *e2e-environment
+    depends_on:
+      api-e2e: { condition: service_started }
+
 volumes:
   pg-data:
+  api-node-modules:
+  api-next:
+  api-e2e-next:

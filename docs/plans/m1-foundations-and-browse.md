@@ -4,6 +4,18 @@ This is the working plan for building Zamaro, with Milestone 1 in detail. The cu
 first; the full plan follows, including the notes on what changed while implementing. Later
 milestones get their own plan in this folder when they start.
 
+## Node.js port (2026-10-17)
+
+The backend this plan built in Laravel was ported to Next.js on Node.js (ADR-0027) on branch
+`claude/nextjs-backend-port`. Every M1 behaviour below now lives in `backend/src/`: route handlers under
+`src/app/api/v1`, actions and services under `src/server/`, Drizzle migrations under
+`database/migrations`, the cast seeder under `database/seeders`, and the catalogues under
+`resources/i18n`. The Feature suite became Vitest tests in `backend/tests/feature`, run in-process on
+PGlite with in-memory fakes (ADR-0028); the console commands became npm scripts (`db:migrate`,
+`db:seed`, `db:reset`, `cast:booker`, `openapi:export`, `openapi:check`). Wherever the text below
+names `php artisan`, Pint, Larastan, Scramble, Sanctum or Horizon, read the Node.js equivalent from
+ADR-0027's table; the behaviour, the acceptance criteria and the route contracts are unchanged.
+
 ## Current status (2026-10-10)
 
 **Status: Done (2026-10-10).** Branch `feat/m1-foundations-and-browse`, opened as a pull request
