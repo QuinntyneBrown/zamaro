@@ -54,6 +54,14 @@ describe('accepting new terms', () => {
     expect((await tomi.json('/api/v1/session', 'DELETE')).status).toBe(204);
   });
 
+  it('leaves the anonymous routes open, so the terms page can load its catalogue', async () => {
+    const tomi = await signedIn(TOMI);
+
+    expect((await tomi.json('/api/v1/i18n/en', 'GET')).status).toBe(200);
+    expect((await tomi.json('/api/v1/legal-documents/current', 'GET')).status).toBe(200);
+    expect((await tomi.json('/api/v1/features', 'GET')).status).toBe(200);
+  });
+
   it('records the version seen and opens the account again', async () => {
     const tomi = await signedIn(TOMI);
     const tomiId = await idOf(TOMI);
