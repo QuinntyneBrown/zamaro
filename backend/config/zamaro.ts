@@ -53,6 +53,8 @@ const schema = z.object({
   ),
   // Where the media disk is served from: /media on the API until object storage (ADR-0024).
   ZAMARO_MEDIA_URL: z.preprocess(blankToUndefined, z.string().default('/media')),
+  // The media host serves signed links to private documents (L2-076.3, M3 D10); nothing else does.
+  ZAMARO_MEDIA_ORIGIN: z.preprocess(blankToUndefined, z.string().default('http://media.localhost')),
   // One directory per locale, one JSON file per namespace (L2-111).
   ZAMARO_I18N_PATH: z.preprocess(blankToUndefined, z.string().default('resources/i18n')),
   // L2-077: requests a minute per address (and per account once signed in), searches a minute, and
@@ -98,6 +100,10 @@ export interface ZamaroConfig {
   castPassword: string | undefined;
   i18nPath: string;
   mediaUrl: string;
+  /** Where signed links to private documents point: "http://media.localhost". */
+  mediaOrigin: string;
+  /** Its host, which the documents route demands: "media.localhost". */
+  mediaHost: string;
   sessionLifetimeMinutes: number;
   secureCookies: boolean;
   features: { bookingRequests: boolean };
@@ -154,6 +160,8 @@ function load(): ZamaroConfig {
     castPassword: env.ZAMARO_ENV === 'production' ? undefined : env.ZAMARO_CAST_PASSWORD,
     i18nPath: resolve(env.ZAMARO_I18N_PATH),
     mediaUrl: env.ZAMARO_MEDIA_URL.replace(/\/+$/, ''),
+    mediaOrigin: env.ZAMARO_MEDIA_ORIGIN.replace(/\/+$/, ''),
+    mediaHost: new URL(env.ZAMARO_MEDIA_ORIGIN).host,
     sessionLifetimeMinutes: env.SESSION_LIFETIME,
     secureCookies: env.SESSION_SECURE_COOKIE === 'true' || env.SESSION_SECURE_COOKIE === '1',
     rateLimits: {

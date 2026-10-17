@@ -2,14 +2,19 @@ import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { config } from '@config/zamaro';
 import { db } from '@/server/db/client';
-import { consentRecords, vulnerableSectorChecks } from '@/server/db/schema';
+import { legalDocuments, vulnerableSectorChecks } from '@/server/db/schema';
 import { AuditAction, ConsentKind, VscStatus } from '@/server/enums';
 import { storeDocument } from '@/server/services/artist-onboarding/document-vault';
 import { now } from '@/server/support/clock';
-import { ABIGAIL, Browser, signedIn } from '../../support/accounts';
-import { PRIYA_EMAIL, PRIYA_TOTP_SECRET, signInWithCode } from '../../support/admin';
+import { ABIGAIL, Browser, freshBooker, signedIn } from '../../support/accounts';
+import {
+  makeAdministratorWithTwoStep,
+  PRIYA_EMAIL,
+  PRIYA_TOTP_SECRET,
+  signInWithCode,
+} from '../../support/admin';
 import { api } from '../../support/app';
-import { resetClock, travel } from '../../support/clock';
+import { resetClock, travel, travelTo } from '../../support/clock';
 import { expectContract } from '../../support/contract';
 import { closeDatabase, freshDatabase, query } from '../../support/database';
 
@@ -100,16 +105,28 @@ describe('the signed link to a check document', () => {
   });
 
   it('lets an administrator who has not accepted the current terms take the link from the admin API', async () => {
-    await forgetPriyasTerms();
-    const priya = await signInWithCode(PRIYA_EMAIL, PRIYA_TOTP_SECRET);
+    // An administrator who accepted the October terms; then November's take effect without them.
+    const email = await freshBooker();
+    const secret = await makeAdministratorWithTwoStep(email);
+    await db()
+      .insert(legalDocuments)
+      .values({
+        kind: ConsentKind.Terms,
+        version: '2026-11',
+        effectiveFrom: '2026-11-01',
+        url: 'https://zamaro.ca/legal/terms',
+        summaryOfChanges: ['A newer clause.'],
+      });
+    travelTo('2026-11-02 10:00');
+    const admin = await signInWithCode(email, secret);
 
-    const stopped = await priya.json(linkPath(), 'GET');
+    const stopped = await admin.json(linkPath(), 'GET');
     expect(stopped.status).toBe(409);
     expect(((await stopped.json()) as { type: string }).type).toBe(
       `${config().problemsBaseUri}/terms-acceptance-required`,
     );
 
-    const response = await priya.json(
+    const response = await admin.json(
       `/api/v1/admin/vulnerable-sector-checks/${String(checkId)}/document-link`,
       'GET',
     );
@@ -170,24 +187,6 @@ describe('the signed link to a check document', () => {
     const response = await abigail.json(linkPath(), 'GET');
     expect(response.status).toBe(200);
     return ((await response.json()) as Link).data.url;
-  }
-
-  /** Priya, like Tomi, has not accepted the October terms: her consent records are removed. */
-  async function forgetPriyasTerms(): Promise<void> {
-    const [priya] = await query<{ id: number }>(
-      sql`select id from users where email = ${PRIYA_EMAIL}`,
-    );
-    await db()
-      .insert(consentRecords)
-      .values({
-        userId: priya?.id ?? 0,
-        kind: ConsentKind.Terms,
-        documentVersion: '2026-03',
-        granted: true,
-        recordedAt: now().minus({ days: 100 }).toJSDate(),
-        source: 'registration',
-      })
-      .onConflictDoNothing();
   }
 });
 

@@ -860,4 +860,34 @@ export const operations: Operation[] = [
       404: { description: 'Not an artist', content: 'problem' },
     },
   },
+  {
+    method: 'get',
+    path: '/vulnerable-sector-checks/{check}/document-link',
+    name: 'vulnerable-sector-checks.document-link',
+    summary: "A five-minute signed link to the check's document, for its owner and administrators",
+    parameters: [{ name: 'check', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: {
+        description: 'The link on the media host and when it stops working',
+        content: z.object({ data: z.object({ url: z.string(), expiresAt: z.string() }) }),
+      },
+      404: {
+        description: 'Not the owner or an administrator, an unknown check, or no document yet',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/vulnerable-sector-checks/{check}/document-link',
+    name: 'admin.vulnerable-sector-checks.document-link',
+    summary: "The admin application's copy of the document link, outside the terms gate",
+    parameters: [{ name: 'check', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: {
+        description: 'The link on the media host and when it stops working',
+        content: z.object({ data: z.object({ url: z.string(), expiresAt: z.string() }) }),
+      },
+    },
+  },
 ];

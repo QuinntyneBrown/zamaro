@@ -12,12 +12,16 @@ export interface SecurityConfig {
     /** Raw 32-byte keys by version, the current one included. */
     keys: Map<string, Buffer>;
   };
+  /** Signs temporary links (L2-076.3); any length, never shared with the field key. */
+  urlSigningKey: Buffer;
 }
 
 const schema = z.object({
   FIELD_ENCRYPTION_KEY_VERSION: z.string().default('v1'),
   FIELD_ENCRYPTION_KEY: z.string().min(1, 'FIELD_ENCRYPTION_KEY is not set.'),
   FIELD_ENCRYPTION_PREVIOUS_KEYS: z.string().default(''),
+  // A dev default outside production; instrumentation refuses to boot production without one.
+  URL_SIGNING_KEY: z.string().default('zamaro-dev-url-signing-key'),
 });
 
 let cached: SecurityConfig | undefined;
@@ -41,7 +45,10 @@ function load(): SecurityConfig {
     keys.set(trimmed.slice(0, separator).trim(), decodeKey(trimmed.slice(separator + 1).trim()));
   }
   keys.set(env.FIELD_ENCRYPTION_KEY_VERSION, decodeKey(env.FIELD_ENCRYPTION_KEY));
-  return { fieldEncryption: { version: env.FIELD_ENCRYPTION_KEY_VERSION, keys } };
+  return {
+    fieldEncryption: { version: env.FIELD_ENCRYPTION_KEY_VERSION, keys },
+    urlSigningKey: Buffer.from(env.URL_SIGNING_KEY),
+  };
 }
 
 function decodeKey(key: string): Buffer {

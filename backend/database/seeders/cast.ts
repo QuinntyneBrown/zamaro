@@ -724,6 +724,15 @@ class CastSeeder {
           [ConsentKind.MarketingEmail, null, false],
         ],
       ],
+      // Priya, on the Zamaro team, accepted the October terms the day they took effect.
+      [PRIYA_EMAIL]: [
+        '2026-10-08 08:00:00',
+        [
+          [ConsentKind.Terms, '2026-10', true],
+          [ConsentKind.PrivacyPolicy, '2026-10', true],
+          [ConsentKind.MarketingEmail, null, false],
+        ],
+      ],
     };
     for (const [email, [at, items]] of Object.entries(consents)) {
       const userId = await this.userId(email);
