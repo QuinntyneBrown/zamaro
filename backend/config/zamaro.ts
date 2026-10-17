@@ -61,6 +61,11 @@ const schema = z.object({
   ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(300),
   ZAMARO_SEARCH_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(30),
   ZAMARO_REGISTER_LIMIT_PER_HOUR: z.coerce.number().int().positive().default(10),
+  // The fake breach checker's list (ADR-0002): comma-separated.
+  ZAMARO_FAKE_BREACHED_PASSWORDS: z.preprocess(
+    blankToUndefined,
+    z.string().default('password1234,Password12345,qwertyuiop123'),
+  ),
   ZAMARO_RESEND_VERIFICATION_LIMIT: z.coerce.number().int().positive().default(3),
   ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR: z.coerce.number().int().positive().default(5),
   ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(30),
@@ -90,6 +95,8 @@ export interface ZamaroConfig {
   sessionLifetimeMinutes: number;
   secureCookies: boolean;
   features: { bookingRequests: boolean };
+  /** What the vendor fakes answer (ADR-0002). */
+  fakes: { breachedPasswords: string[] };
   rateLimits: {
     apiPerMinute: number;
     apiSignedInPerMinute: number;
@@ -148,6 +155,11 @@ function load(): ZamaroConfig {
       resendVerificationPer15Minutes: env.ZAMARO_RESEND_VERIFICATION_LIMIT,
       forgotPasswordPerHour: env.ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR,
       passwordResetPerMinute: env.ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE,
+    },
+    fakes: {
+      breachedPasswords: env.ZAMARO_FAKE_BREACHED_PASSWORDS.split(',')
+        .map((password) => password.trim())
+        .filter((password) => password !== ''),
     },
     features: {
       bookingRequests:

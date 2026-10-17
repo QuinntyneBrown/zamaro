@@ -1,11 +1,17 @@
 import { config } from '@config/zamaro';
+import type { BotChallenge } from '@/server/contracts/bot-challenge';
+import type { BreachedPasswordChecker } from '@/server/contracts/breached-password-checker';
 import type { Cache } from '@/server/contracts/cache';
+import type { Mailer } from '@/server/contracts/mailer';
 import type { RateLimiter } from '@/server/contracts/rate-limiter';
 import type { Geocoder } from '@/server/contracts/geocoder';
 import type { IpLocator } from '@/server/contracts/ip-locator';
 import type { RoutingProvider } from '@/server/contracts/routing-provider';
 import type { SessionStore } from '@/server/contracts/session-store';
+import { FakeBotChallenge } from './bot-challenge/fake-bot-challenge';
+import { FakeBreachedPasswordChecker } from './breached-passwords/fake-breached-password-checker';
 import { InMemoryCache } from './cache/in-memory-cache';
+import { FakeMailer } from './mail/fake-mailer';
 import { RedisCache } from './cache/redis-cache';
 import { FakeGeocoder } from './geocoding/fake-geocoder';
 import { FakeIpLocator } from './ip-location/fake-ip-locator';
@@ -27,6 +33,9 @@ let cacheInstance: Cache | undefined;
 let rateLimiterInstance: RateLimiter | undefined;
 let sessionStoreInstance: SessionStore | undefined;
 let ipLocatorInstance: IpLocator | undefined;
+let mailerInstance: Mailer | undefined;
+let botChallengeInstance: BotChallenge | undefined;
+let breachedPasswordsInstance: BreachedPasswordChecker | undefined;
 
 export function geocoder(): Geocoder {
   geocoderInstance ??= fake('Geocoder', () => new FakeGeocoder());
@@ -84,8 +93,41 @@ export function useIpLocator(next: IpLocator | undefined): void {
   ipLocatorInstance = next;
 }
 
+export function mailer(): Mailer {
+  mailerInstance ??= fake('Mailer', () => new FakeMailer());
+  return mailerInstance;
+}
+
+export function useMailer(next: Mailer | undefined): void {
+  mailerInstance = next;
+}
+
+export function botChallenge(): BotChallenge {
+  botChallengeInstance ??= fake('BotChallenge', () => new FakeBotChallenge());
+  return botChallengeInstance;
+}
+
+export function useBotChallenge(next: BotChallenge | undefined): void {
+  botChallengeInstance = next;
+}
+
+export function breachedPasswordChecker(): BreachedPasswordChecker {
+  breachedPasswordsInstance ??= fake(
+    'BreachedPasswordChecker',
+    () => new FakeBreachedPasswordChecker(),
+  );
+  return breachedPasswordsInstance;
+}
+
+export function useBreachedPasswordChecker(next: BreachedPasswordChecker | undefined): void {
+  breachedPasswordsInstance = next;
+}
+
 /** Forgets every bound adapter, so the next access makes a fresh one (tests, per database). */
 export function resetBindings(): void {
+  mailerInstance = undefined;
+  botChallengeInstance = undefined;
+  breachedPasswordsInstance = undefined;
   geocoderInstance = undefined;
   routingInstance = undefined;
   cacheInstance = undefined;
