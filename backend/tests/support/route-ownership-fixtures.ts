@@ -1,5 +1,7 @@
 import { expect } from 'vitest';
+import { eq } from 'drizzle-orm';
 import { db } from '@/server/db/client';
+import { artists } from '@/server/db/schema';
 import { Role } from '@/server/enums';
 import { grantRoles } from '@/server/services/accounts/roles';
 import { CAST_PASSWORD, type Browser } from './accounts';
@@ -255,4 +257,81 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     const owners = await (await owner.as()).json('/api/v1/account/consents/marketing', 'GET');
     expect(await owners.json()).toEqual({ data: { granted: false } });
   },
+
+  // Saved artists: the intruder's list, saves and removals never reach the owner's.
+  'GET /saved-artists/ids': async (owner, intruder) => {
+    const elijah = await artistId('elijah-park');
+    expect(
+      (await (await owner.as()).json(`/api/v1/saved-artists/${String(elijah)}`, 'PUT')).status,
+    ).toBe(200);
+
+    const response = await (await intruder.as()).json('/api/v1/saved-artists/ids', 'GET');
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ data: { artistIds: [], count: 0 } });
+  },
+
+  'GET /saved-artists': async (owner, intruder) => {
+    const elijah = await artistId('elijah-park');
+    expect(
+      (await (await owner.as()).json(`/api/v1/saved-artists/${String(elijah)}`, 'PUT')).status,
+    ).toBe(200);
+
+    const response = await (await intruder.as()).json('/api/v1/saved-artists', 'GET');
+    expect(response.status).toBe(200);
+    expect(((await response.json()) as { data: { total: number } }).data.total).toBe(0);
+  },
+
+  'PUT /saved-artists/{artist}': async (owner, intruder) => {
+    const elijah = await artistId('elijah-park');
+    const response = await (
+      await intruder.as()
+    ).json(`/api/v1/saved-artists/${String(elijah)}`, 'PUT');
+    expect(response.status).toBe(200);
+
+    const owners = (await (
+      await (await owner.as()).json('/api/v1/saved-artists/ids', 'GET')
+    ).json()) as {
+      data: { count: number };
+    };
+    expect(owners.data.count).toBe(0);
+  },
+
+  'DELETE /saved-artists/{artist}': async (owner, intruder) => {
+    const elijah = await artistId('elijah-park');
+    expect(
+      (await (await owner.as()).json(`/api/v1/saved-artists/${String(elijah)}`, 'PUT')).status,
+    ).toBe(200);
+
+    const response = await (
+      await intruder.as()
+    ).json(`/api/v1/saved-artists/${String(elijah)}`, 'DELETE');
+    expect(response.status).toBe(200);
+
+    const owners = (await (
+      await (await owner.as()).json('/api/v1/saved-artists/ids', 'GET')
+    ).json()) as {
+      data: { count: number };
+    };
+    expect(owners.data.count).toBe(1);
+  },
+
+  'PATCH /me/preferences': async (owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/me/preferences', 'PATCH', {
+      themePreference: 'dark',
+    });
+    expect(response.status).toBe(200);
+    await expectHoldsNothingOf(owner, response);
+
+    const me = (await (await (await owner.as()).json('/api/v1/me', 'GET')).json()) as {
+      data: { themePreference: string | null };
+    };
+    expect(me.data.themePreference).toBeNull();
+  },
 };
+
+async function artistId(slug: string): Promise<number> {
+  const [row] = await db().select({ id: artists.id }).from(artists).where(eq(artists.slug, slug));
+  return row?.id ?? 0;
+}
