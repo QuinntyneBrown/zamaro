@@ -42,6 +42,12 @@ import { FeaturesResource } from '../resources/operations/features';
 import { ReviewPageResource } from '../resources/reviews/review';
 import { CatalogueResource } from '../resources/user-experience/catalogue';
 import { AcceptTermsRequest, MarketingChoiceRequest } from '../requests/privacy/consents';
+import { UpdatePreferencesRequest } from '../requests/user-experience/preferences';
+import {
+  SavedArtistIdsResource,
+  SavedArtistListResource,
+  SavedArtistStateResource,
+} from '../resources/accounts/saved-artist';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -703,6 +709,72 @@ export const operations: Operation[] = [
         content: z.object({ data: z.object({ granted: z.boolean() }) }),
       },
       422: { description: 'Not a yes or a no', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/saved-artists',
+    name: 'saved-artists.index',
+    summary: 'The saved artists, newest first, each free or booked on the date when one is given',
+    parameters: [
+      {
+        name: 'date',
+        in: 'query',
+        schema: z.string(),
+        description: 'YYYY-MM-DD; without it no artist is marked',
+      },
+    ],
+    responses: {
+      200: { description: 'The visible saved artists', content: SavedArtistListResource },
+      404: { description: 'Not a booker', content: 'problem' },
+      422: { description: 'Not a calendar date', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/saved-artists/ids',
+    name: 'saved-artists.ids',
+    summary: 'The ids of the saved artists and their count',
+    responses: {
+      200: { description: 'The ids', content: SavedArtistIdsResource },
+      404: { description: 'Not a booker', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/saved-artists/{artist}',
+    name: 'saved-artists.save',
+    summary: 'Save an artist; saving twice is the same as once',
+    parameters: [{ name: 'artist', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'Saved, with the count', content: SavedArtistStateResource },
+      404: {
+        description: 'Not a booker, or an artist not approved and published',
+        content: 'problem',
+      },
+      422: { description: '200 are saved already (saved-artist-limit)', content: 'problem' },
+    },
+  },
+  {
+    method: 'delete',
+    path: '/saved-artists/{artist}',
+    name: 'saved-artists.unsave',
+    summary: 'Remove a saved artist; removing one not saved changes nothing',
+    parameters: [{ name: 'artist', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'Removed, with the count', content: SavedArtistStateResource },
+      404: { description: 'Not a booker', content: 'problem' },
+    },
+  },
+  {
+    method: 'patch',
+    path: '/me/preferences',
+    name: 'me.preferences',
+    summary: 'Save preferences: the theme every signed-in device follows',
+    requestBody: UpdatePreferencesRequest,
+    responses: {
+      200: { description: 'The signed-in person', content: CurrentUserResource },
+      422: { description: 'Not light, dark or null', content: 'problem' },
     },
   },
 ];
