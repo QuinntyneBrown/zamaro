@@ -1,5 +1,16 @@
 import { expect } from 'vitest';
+import { db } from '@/server/db/client';
+import { Role } from '@/server/enums';
+import { grantRoles } from '@/server/services/accounts/roles';
 import type { Browser } from './accounts';
+
+const RIVERSIDE = {
+  name: 'Riverside Community Church',
+  streetAddress: '2150 Lakeshore Road',
+  city: 'Burlington',
+  postalCode: 'L7R 1A3',
+  phone: '905-555-0123',
+};
 
 export interface Person {
   id: number;
@@ -42,5 +53,67 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     const response = await (await owner.as()).json('/api/v1/me', 'GET');
     expect(response.status).toBe(200);
     expect(((await response.json()) as { data: { email: string } }).data.email).toBe(owner.email);
+  },
+
+  'PUT /account/profile': async (owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/profile', 'PUT', {
+      name: 'Someone Else',
+    });
+    expect(response.status).toBe(200);
+    await expectHoldsNothingOf(owner, response);
+
+    const me = (await (await (await owner.as()).json('/api/v1/me', 'GET')).json()) as {
+      data: { name: string };
+    };
+    expect(me.data.name).toBe(owner.name);
+  },
+
+  'GET /account/church': async (owner, intruder) => {
+    expect((await (await owner.as()).json('/api/v1/account/church', 'PUT', RIVERSIDE)).status).toBe(
+      200,
+    );
+
+    const response = await (await intruder.as()).json('/api/v1/account/church', 'GET');
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ data: null });
+  },
+
+  'PUT /account/church': async (owner, intruder) => {
+    expect((await (await owner.as()).json('/api/v1/account/church', 'PUT', RIVERSIDE)).status).toBe(
+      200,
+    );
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/church', 'PUT', {
+      ...RIVERSIDE,
+      name: 'Another Church',
+    });
+    expect(response.status).toBe(200);
+
+    const owners = (await (
+      await (await owner.as()).json('/api/v1/account/church', 'GET')
+    ).json()) as {
+      data: { name: string };
+    };
+    expect(owners.data.name).toBe(RIVERSIDE.name);
+  },
+
+  // A booker has no contact-phone route: the intruder gets the unknown-address 404 (L2-074.1).
+  'GET /account/contact-phone': async (_owner, intruder) => {
+    expect((await (await intruder.as()).json('/api/v1/account/contact-phone', 'GET')).status).toBe(
+      404,
+    );
+  },
+
+  'PUT /account/contact-phone': async (owner, intruder) => {
+    await grantRoles(db(), owner.id, [Role.Artist]);
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/contact-phone', 'PUT', {
+      contactPhone: '905-555-0100',
+    });
+    expect(response.status).toBe(404);
   },
 };

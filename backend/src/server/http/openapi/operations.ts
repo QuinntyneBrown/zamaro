@@ -17,6 +17,12 @@ import {
   ResetPasswordRequest,
 } from '../requests/accounts/password-reset';
 import { RegisterBookerRequest } from '../requests/accounts/register-booker';
+import {
+  SaveChurchRequest,
+  UpdateContactPhoneRequest,
+  UpdateProfileRequest,
+} from '../requests/accounts/settings';
+import { ChurchEnvelope, ChurchResource } from '../resources/accounts/church';
 import { CurrentLegalDocumentsResource } from '../resources/privacy/legal-document';
 import { AlternativesResource } from '../resources/discovery/alternatives';
 import { LineupResource } from '../resources/discovery/lineup';
@@ -403,6 +409,71 @@ export const operations: Operation[] = [
         description: 'More than 30 checks and resets a minute from one address',
         content: 'problem',
       },
+    },
+  },
+  {
+    method: 'put',
+    path: '/account/profile',
+    name: 'account.profile.update',
+    summary: 'Change the account name; the initials follow it',
+    requestBody: UpdateProfileRequest,
+    responses: {
+      200: { description: 'The signed-in person', content: CurrentUserResource },
+      422: { description: 'The name is blank or over 120 characters', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/account/church',
+    name: 'account.church.show',
+    summary: "The signed-in booker's church; data is null until they save one",
+    responses: {
+      200: { description: 'The church, or null', content: ChurchEnvelope },
+      404: { description: 'Not a booker', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/account/church',
+    name: 'account.church.update',
+    summary: 'Save the church: the address must be found and within 200 km of Toronto by road',
+    requestBody: SaveChurchRequest,
+    responses: {
+      200: { description: 'The church as saved', content: z.object({ data: ChurchResource }) },
+      404: { description: 'Not a booker', content: 'problem' },
+      422: {
+        description:
+          'A field needs attention; streetAddress when the address cannot be found, serviceArea when it is outside the service area',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/account/contact-phone',
+    name: 'account.contact-phone.show',
+    summary: "The signed-in artist's private contact phone",
+    responses: {
+      200: {
+        description: '"905-555-0148", or null until one is saved',
+        content: z.object({ data: z.object({ contactPhone: z.string().nullable() }) }),
+      },
+      404: { description: 'Not an artist', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/account/contact-phone',
+    name: 'account.contact-phone.update',
+    summary: 'Save the contact phone, stored encrypted in E.164',
+    requestBody: UpdateContactPhoneRequest,
+    responses: {
+      200: {
+        description: 'The number as shown',
+        content: z.object({ data: z.object({ contactPhone: z.string() }) }),
+      },
+      404: { description: 'Not an artist', content: 'problem' },
+      422: { description: 'Not a North American number', content: 'problem' },
     },
   },
 ];

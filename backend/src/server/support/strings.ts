@@ -17,3 +17,8 @@ export function headline(text: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 }
+
+/** Trims and collapses runs of whitespace to one space: "  Ruth   Okafor " to "Ruth Okafor". */
+export function squish(text: string): string {
+  return text.trim().replace(/\s+/g, ' ');
+}
