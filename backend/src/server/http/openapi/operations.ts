@@ -12,6 +12,11 @@ import {
   VerifyEmailRequest,
 } from '../requests/accounts/email-verification';
 import {
+  ChangeEmailRequest,
+  ChangePasswordRequest,
+  ConfirmEmailChangeRequest,
+} from '../requests/accounts/account-security';
+import {
   CheckPasswordResetRequest,
   ForgotPasswordRequest,
   ResetPasswordRequest,
@@ -474,6 +479,58 @@ export const operations: Operation[] = [
       },
       404: { description: 'Not an artist', content: 'problem' },
       422: { description: 'Not a North American number', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/account/email',
+    name: 'account.email.update',
+    summary: 'Ask for a new email, confirmed with the current password; the link decides',
+    requestBody: ChangeEmailRequest,
+    responses: {
+      202: {
+        description:
+          'The new address, in lower case; the account email stays until the link is opened',
+        content: z.object({ data: z.object({ email: z.string() }) }),
+      },
+      422: {
+        description: 'A bad address, the current one, or a wrong password',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/account/email/confirm',
+    name: 'account.email.confirm',
+    summary: 'Open an email change link: the account moves to the new address, verified',
+    requestBody: ConfirmEmailChangeRequest,
+    responses: {
+      200: {
+        description: 'The address the account now signs in with',
+        content: z.object({ data: z.object({ email: z.string() }) }),
+      },
+      410: {
+        description:
+          'Used, over 24 hours old, unknown, or the address was taken meanwhile; one that existed names the address the account still signs in with (email)',
+        content: 'problem',
+      },
+      422: { description: 'No token', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/account/password',
+    name: 'account.password.update',
+    summary: 'Change the password: every other session ends and this one continues with a new ID',
+    requestBody: ChangePasswordRequest,
+    responses: {
+      204: { description: 'Changed; the owner is emailed', content: null },
+      422: {
+        description:
+          'A wrong current password, or a new one that fails the policy or its confirmation',
+        content: 'problem',
+      },
     },
   },
 ];

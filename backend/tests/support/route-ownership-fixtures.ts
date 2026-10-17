@@ -2,7 +2,7 @@ import { expect } from 'vitest';
 import { db } from '@/server/db/client';
 import { Role } from '@/server/enums';
 import { grantRoles } from '@/server/services/accounts/roles';
-import type { Browser } from './accounts';
+import { CAST_PASSWORD, type Browser } from './accounts';
 
 const RIVERSIDE = {
   name: 'Riverside Community Church',
@@ -115,5 +115,35 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
       contactPhone: '905-555-0100',
     });
     expect(response.status).toBe(404);
+  },
+
+  'PUT /account/email': async (owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/email', 'PUT', {
+      email: `new-${intruder.email}`,
+      currentPassword: CAST_PASSWORD,
+    });
+    expect(response.status).toBe(202);
+    await expectHoldsNothingOf(owner, response);
+
+    const me = (await (await (await owner.as()).json('/api/v1/me', 'GET')).json()) as {
+      data: { email: string; pendingEmail: string | null };
+    };
+    expect(me.data.email).toBe(owner.email);
+    expect(me.data.pendingEmail).toBeNull();
+  },
+
+  'PUT /account/password': async (owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/account/password', 'PUT', {
+      currentPassword: CAST_PASSWORD,
+      password: 'a-song-of-ascents-121',
+      passwordConfirmation: 'a-song-of-ascents-121',
+    });
+    expect(response.status).toBe(204);
+
+    expect((await (await owner.as()).json('/api/v1/me', 'GET')).status).toBe(200);
   },
 };
