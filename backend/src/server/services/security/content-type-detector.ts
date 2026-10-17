@@ -5,6 +5,9 @@ import { UploadPurpose } from '@/server/enums';
  * declared type. SVG, HTML and XHTML are refused in any form, and so is any file whose first bytes
  * look like XML or HTML, whatever it is called or meant for.
  */
+/** A UTF-8 byte order mark, which a text file may start with. */
+const BOM = new RegExp(`^${String.fromCharCode(0xfeff)}`);
+
 const SIGNATURES: [(head: Buffer) => boolean, string][] = [
   [(head) => head.subarray(0, 4).toString('latin1') === '%PDF', 'application/pdf'],
   [
@@ -34,7 +37,7 @@ const SIGNATURES: [(head: Buffer) => boolean, string][] = [
   [(head) => head.subarray(4, 8).toString('latin1') === 'ftyp', 'video/mp4'],
   [(head) => head.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3])), 'video/webm'],
   [
-    (head) => head.subarray(0, 6).toString('utf8').replace(/^﻿/, '').startsWith('WEBVTT'),
+    (head) => head.subarray(0, 6).toString('utf8').replace(BOM, '').startsWith('WEBVTT'),
     'text/vtt',
   ],
 ];
@@ -51,7 +54,7 @@ export function detectContentType(bytes: Buffer): string | null {
 
 /** The first bytes, past any BOM and whitespace, open a tag. */
 function looksLikeMarkup(head: Buffer): boolean {
-  const text = head.toString('utf8').replace(/^﻿/, '').trimStart();
+  const text = head.toString('utf8').replace(BOM, '').trimStart();
   return text.startsWith('<');
 }
 
