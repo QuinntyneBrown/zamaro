@@ -329,6 +329,11 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     };
     expect(me.data.themePreference).toBeNull();
   },
+
+  // Admin routes: a signed-in booker gets the same 404 as an unknown address (L2-066.1).
+  'GET /admin/overview': async (_owner, intruder) => {
+    expect((await (await intruder.as()).json('/api/v1/admin/overview', 'GET')).status).toBe(404);
+  },
 };
 
 async function artistId(slug: string): Promise<number> {
