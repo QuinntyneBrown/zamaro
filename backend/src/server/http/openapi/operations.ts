@@ -41,6 +41,7 @@ import { PlaceResource } from '../resources/discovery/place';
 import { FeaturesResource } from '../resources/operations/features';
 import { ReviewPageResource } from '../resources/reviews/review';
 import { CatalogueResource } from '../resources/user-experience/catalogue';
+import { AcceptTermsRequest, MarketingChoiceRequest } from '../requests/privacy/consents';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -661,6 +662,47 @@ export const operations: Operation[] = [
         description: 'Sign-in is paused after 5 wrong codes or passwords in 15 minutes',
         content: 'problem',
       },
+    },
+  },
+  {
+    method: 'post',
+    path: '/account/consents/terms',
+    name: 'account.consents.terms',
+    summary: 'Accept the current terms; the answer is the person, no longer stopped',
+    requestBody: AcceptTermsRequest,
+    responses: {
+      200: { description: 'Accepted and recorded', content: CurrentUserResource },
+      409: {
+        description: 'The version shown is no longer current (legal-document-outdated)',
+        content: 'problem',
+      },
+      422: { description: 'No version', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/account/consents/marketing',
+    name: 'account.consents.marketing.show',
+    summary: 'The marketing choice: the latest marketing record',
+    responses: {
+      200: {
+        description: 'The choice',
+        content: z.object({ data: z.object({ granted: z.boolean() }) }),
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/account/consents/marketing',
+    name: 'account.consents.marketing.save',
+    summary: 'Change the marketing choice; a settings record is appended and the earlier ones stay',
+    requestBody: MarketingChoiceRequest,
+    responses: {
+      200: {
+        description: 'The choice as saved',
+        content: z.object({ data: z.object({ granted: z.boolean() }) }),
+      },
+      422: { description: 'Not a yes or a no', content: 'problem' },
     },
   },
 ];

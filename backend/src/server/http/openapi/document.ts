@@ -65,6 +65,10 @@ function pipelineResponses(operation: Operation): Record<number, ResponseSpec> {
   };
   if (!PUBLIC_ROUTES.has(operation.name)) {
     responses[401] = { description: 'No one is signed in', content: 'problem' };
+    responses[409] = {
+      description: 'The current terms must be accepted first (terms-acceptance-required)',
+      content: 'problem',
+    };
   }
   if (MUTATING.includes(operation.method)) {
     responses[419] = { description: 'The CSRF token is missing or stale', content: 'problem' };

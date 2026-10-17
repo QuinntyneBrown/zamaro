@@ -8,7 +8,7 @@ import { closeDatabase, freshDatabase, query } from '../../support/database';
 const SHOW = { method: 'get', path: '/account/consents/marketing' };
 const SAVE = { method: 'post', path: '/account/consents/marketing' };
 
-interface MarketingRecord {
+interface MarketingRecord extends Record<string, unknown> {
   id: number;
   granted: boolean;
   source: string;

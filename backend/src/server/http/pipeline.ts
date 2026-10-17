@@ -5,6 +5,7 @@ import { PUBLIC_ROUTES } from '@/app/api/v1/public';
 import type { Role } from '@/server/enums';
 import { loadCurrentUser, type CurrentUser } from '@/server/services/accounts/current-user';
 import { forgetSession, touchSession } from '@/server/services/accounts/session-registry';
+import { termsAcceptanceRequired } from '@/server/services/privacy/legal-document-registry';
 import { logger } from '../support/logger';
 import {
   HttpProblem,
@@ -28,8 +29,8 @@ import {
 /**
  * The request pipeline (ADR-0027): the one place that fixes what happens around every route handler.
  * Order: request ID → request logging → problem-details error handling → session → CSRF → the
- * body gate → the API rate limit → authentication → roles → the route's own rate limit → the
- * handler → CORS and cookies. Logging wraps error handling, so handled statuses are logged (AGENTS.md).
+ * body gate → the API rate limit → authentication → roles → the terms gate → the route's own rate
+ * limit → the handler → CORS and cookies. Logging wraps error handling, so handled statuses are logged (AGENTS.md).
  */
 
 export interface RouteContext {
@@ -55,6 +56,16 @@ const METHODS: readonly Method[] = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OP
 const MUTATING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const CORS_HEADERS = 'Content-Type, Accept, X-Requested-With, X-XSRF-TOKEN, X-Request-Id';
+/**
+ * The routes a person who has not accepted the current terms may still use (L2-080.3): who is
+ * signed in and their theme, signing out, and accepting the terms. Everything else answers 409.
+ */
+const OPEN_WHILE_TERMS_UNACCEPTED = new Set([
+  'me.show',
+  'me.preferences',
+  'session.destroy',
+  'account.consents.terms',
+]);
 
 /** Wraps one handler in the pipeline. */
 export function route(options: RouteOptions, handler: Handler): Handler {
@@ -87,6 +98,16 @@ export function route(options: RouteOptions, handler: Handler): Handler {
         if (options.roles !== undefined && !holdsOneOf(ctx.user, options.roles)) {
           throw new HttpProblem(ProblemType.NotFound, {
             detail: 'No route matches this address.',
+          });
+        }
+        if (
+          api &&
+          ctx.user !== null &&
+          !OPEN_WHILE_TERMS_UNACCEPTED.has(options.name) &&
+          (await termsAcceptanceRequired(ctx.user.id))
+        ) {
+          throw new HttpProblem(ProblemType.TermsAcceptanceRequired, {
+            detail: 'Accept the current terms first.',
           });
         }
         if (options.rateLimit !== undefined) {
