@@ -90,11 +90,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
       try {
         if (session !== undefined) ctx.user = await signedInUser(session);
         if (session !== undefined && ctx.user !== null) await touchSession(session);
-        if (
-          session !== undefined &&
-          ctx.user !== null &&
-          ctx.user.roles.includes(Role.Administrator)
-        ) {
+        if (session !== undefined && ctx.user?.roles.includes(Role.Administrator) === true) {
           // An administrator's session ends after 30 minutes without a request, on any route (L2-066.2).
           if (adminIdledOut(session)) {
             await forgetSession(session.id);
