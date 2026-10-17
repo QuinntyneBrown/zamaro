@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { db } from '@/server/db/client';
+import { db, type Database, type Transaction } from '@/server/db/client';
 import { churches, roles, roleUser, users } from '@/server/db/schema';
 import type { Role } from '@/server/enums';
 
@@ -14,16 +14,19 @@ export interface CurrentUser {
   church: { name: string; city: string; latitude: number; longitude: number } | null;
 }
 
-export async function loadCurrentUser(userId: number): Promise<CurrentUser | null> {
-  const [row] = await db().select().from(users).where(eq(users.id, userId));
+export async function loadCurrentUser(
+  userId: number,
+  database: Database | Transaction = db(),
+): Promise<CurrentUser | null> {
+  const [row] = await database.select().from(users).where(eq(users.id, userId));
   if (row === undefined) return null;
   const [held, [church]] = await Promise.all([
-    db()
+    database
       .select({ name: roles.name })
       .from(roleUser)
       .innerJoin(roles, eq(roles.id, roleUser.roleId))
       .where(eq(roleUser.userId, userId)),
-    db()
+    database
       .select({
         name: churches.name,
         city: churches.city,

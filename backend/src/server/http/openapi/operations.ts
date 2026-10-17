@@ -11,6 +11,11 @@ import {
   ResendVerificationEmailRequest,
   VerifyEmailRequest,
 } from '../requests/accounts/email-verification';
+import {
+  CheckPasswordResetRequest,
+  ForgotPasswordRequest,
+  ResetPasswordRequest,
+} from '../requests/accounts/password-reset';
 import { RegisterBookerRequest } from '../requests/accounts/register-booker';
 import { CurrentLegalDocumentsResource } from '../resources/privacy/legal-document';
 import { AlternativesResource } from '../resources/discovery/alternatives';
@@ -330,6 +335,74 @@ export const operations: Operation[] = [
       },
       422: { description: 'A field needs attention', content: 'problem' },
       429: { description: 'More than 3 links in 15 minutes', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/password/forgot',
+    name: 'password.forgot',
+    summary: 'Ask for a reset link; every valid request gets the same 202',
+    requestBody: ForgotPasswordRequest,
+    responses: {
+      202: {
+        description: 'The address typed, in lower case',
+        content: z.object({ data: z.object({ email: z.string() }) }),
+      },
+      422: {
+        description: 'A field needs attention, or the bot challenge failed',
+        content: 'problem',
+      },
+      429: {
+        description: 'More than 5 links an hour from one address or for one email',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/password/reset/check',
+    name: 'password.reset.check',
+    summary: 'Check a reset link without using it',
+    requestBody: CheckPasswordResetRequest,
+    responses: {
+      200: {
+        description: 'The account the link resets and when the link stops working',
+        content: z.object({ data: z.object({ email: z.string(), expiresAt: z.string() }) }),
+      },
+      410: {
+        description:
+          'Used, over 60 minutes old or unknown; one that existed names its account (email) and when it was sent (sentAt)',
+        content: 'problem',
+      },
+      422: { description: 'No token', content: 'problem' },
+      429: {
+        description: 'More than 30 checks and resets a minute from one address',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'post',
+    path: '/password/reset',
+    name: 'password.reset',
+    summary:
+      'Choose a new password with the link; every other session ends and this browser signs in',
+    requestBody: ResetPasswordRequest,
+    responses: {
+      200: { description: 'Signed in', content: CurrentUserResource },
+      202: {
+        description: 'The password changed; the code step signs this browser in',
+        content: TwoFactorRequiredResource,
+      },
+      410: {
+        description: 'The link was used, is over 60 minutes old or is unknown',
+        content: 'problem',
+      },
+      422: { description: 'A field needs attention', content: 'problem' },
+      429: {
+        description: 'More than 30 checks and resets a minute from one address',
+        content: 'problem',
+      },
     },
   },
 ];

@@ -6,7 +6,8 @@ import { HttpProblem, ProblemType } from '@/server/support/problems';
 import { clientAddress } from './client-address';
 
 /** Named rate limiters (L2-077, security/limit-request-rates); each route names the one it is behind. */
-export type RateLimitName = 'api' | 'search' | 'register' | 'resend-verification';
+export type RateLimitName =
+  'api' | 'search' | 'register' | 'resend-verification' | 'forgot-password' | 'password-reset';
 
 interface Limit {
   key: string;
@@ -34,6 +35,22 @@ function limitsFor(name: RateLimitName, request: NextRequest, user: CurrentUser 
     // L2-077.3: 10 registrations an hour per address.
     register: [
       { key: `register-ip:${address}`, max: rateLimits.registerPerHour, windowSeconds: 3600 },
+    ],
+    // M2 D6: 5 reset links an hour per address (the per-email limit is the handler's, by the address typed).
+    'forgot-password': [
+      {
+        key: `forgot-password-ip:${address}`,
+        max: rateLimits.forgotPasswordPerHour,
+        windowSeconds: 3600,
+      },
+    ],
+    // M2 D6: 30 reset checks and resets a minute per address, shared between the two routes.
+    'password-reset': [
+      {
+        key: `password-reset-ip:${address}`,
+        max: rateLimits.passwordResetPerMinute,
+        windowSeconds: 60,
+      },
     ],
     // M2 D6: 3 new verification links in 15 minutes per address and, once signed in, per account.
     'resend-verification': [
@@ -67,6 +84,21 @@ function limitsFor(name: RateLimitName, request: NextRequest, user: CurrentUser 
     ],
   };
   return limits[name];
+}
+
+/** Counts one hit against a limit of the handler's own, such as per email typed; over it, a 429 problem. */
+export async function enforceKeyedLimit(
+  key: string,
+  max: number,
+  windowSeconds: number,
+): Promise<void> {
+  const decision = await rateLimiter().hit(key, max, windowSeconds);
+  if (!decision.allowed) {
+    throw new HttpProblem(ProblemType.TooManyRequests, {
+      detail: `Try again in ${String(decision.retryAfterSeconds)} seconds.`,
+      headers: { 'Retry-After': String(decision.retryAfterSeconds) },
+    });
+  }
 }
 
 /** Counts the request against every limit under the name; over any of them, a 429 problem. */

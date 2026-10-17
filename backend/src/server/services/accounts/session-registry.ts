@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { eq } from 'drizzle-orm';
 import type { NextRequest } from 'next/server';
-import { db } from '@/server/db/client';
+import { db, type Database, type Transaction } from '@/server/db/client';
 import { userSessions } from '@/server/db/schema';
 import { clientAddress } from '@/server/http/client-address';
 import type { Session } from '@/server/http/session';
@@ -47,10 +47,13 @@ export async function forgetSession(sessionId: string): Promise<void> {
 }
 
 /** Ends every session of the account: each one's payload is destroyed, so its cookie is worth nothing. */
-export async function endAllSessions(userId: number): Promise<void> {
-  const rows = await db().select().from(userSessions).where(eq(userSessions.userId, userId));
+export async function endAllSessions(
+  userId: number,
+  database: Database | Transaction = db(),
+): Promise<void> {
+  const rows = await database.select().from(userSessions).where(eq(userSessions.userId, userId));
   for (const row of rows) {
     await sessionStore().destroy(decryptField(row.encryptedSessionId));
   }
-  await db().delete(userSessions).where(eq(userSessions.userId, userId));
+  await database.delete(userSessions).where(eq(userSessions.userId, userId));
 }

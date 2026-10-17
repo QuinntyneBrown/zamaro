@@ -4,6 +4,7 @@ import { db } from '@/server/db/client';
 import { users } from '@/server/db/schema';
 import { AuditAction, AuditOutcome } from '@/server/enums';
 import type { Session } from '@/server/http/session';
+import { sendAccountLocked } from '@/server/notifications/accounts/account-locked';
 import { loadCurrentUser, type CurrentUser } from '@/server/services/accounts/current-user';
 import { forgetSession, registerSession } from '@/server/services/accounts/session-registry';
 import {
@@ -52,11 +53,13 @@ export async function attemptSignIn(
       request,
     });
     if (user !== null && (await firstRefusal(email, paused))) {
-      // The owner is emailed once per pause; the email arrives with the notifications slice.
+      await sendAccountLocked({ name: user.row.name, email: user.row.email }, paused);
     }
+    const seconds = Math.max(1, Math.ceil(paused.diff(now(), 'seconds').seconds));
     throw new HttpProblem(ProblemType.SignInPaused, {
       detail: 'There were too many tries for this email. Try again later, or reset the password.',
       extensions: { pausedUntil: paused.setZone(ZONE).toISO() },
+      headers: { 'Retry-After': String(seconds) },
     });
   }
 
