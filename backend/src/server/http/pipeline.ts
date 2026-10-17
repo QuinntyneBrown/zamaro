@@ -14,6 +14,7 @@ import {
   ProblemType,
 } from '../support/problems';
 import { runWithRequestContext } from '../support/request-context';
+import { gateBody } from './body-gate';
 import { enforceRateLimit, type RateLimitName } from './rate-limits';
 import {
   absoluteLimitReached,
@@ -27,8 +28,8 @@ import {
 /**
  * The request pipeline (ADR-0027): the one place that fixes what happens around every route handler.
  * Order: request ID → request logging → problem-details error handling → session → CSRF → the
- * API rate limit → authentication → roles → the route's own rate limit → the handler → CORS and
- * cookies. Logging wraps error handling, so handled statuses are logged (AGENTS.md).
+ * body gate → the API rate limit → authentication → roles → the route's own rate limit → the
+ * handler → CORS and cookies. Logging wraps error handling, so handled statuses are logged (AGENTS.md).
  */
 
 export interface RouteContext {
@@ -39,6 +40,8 @@ export type Handler = (request: NextRequest, context: RouteContext) => Promise<R
 export interface RouteOptions {
   /** The route's name in the request log and in src/app/api/v1/public.ts, e.g. `health.live`. */
   name: string;
+  /** A method's own name where one file serves routes with different names (`session.destroy`). */
+  names?: Partial<Record<Exclude<Method, 'OPTIONS'>, string>>;
   /** The named rate limit the route is behind (L2-077); over it, a 429 problem. */
   rateLimit?: RateLimitName;
   /** Roles that may use the route; anyone else gets the same 404 as an unknown address (L2-074.1). */
@@ -73,6 +76,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
             detail: 'Fetch /api/v1/csrf-cookie, then repeat the request with X-XSRF-TOKEN.',
           });
         }
+        const admitted = await gateBody(request);
         if (api) await enforceRateLimit('api', request, ctx.user);
         if (api && ctx.user === null && !PUBLIC_ROUTES.has(options.name)) {
           throw new HttpProblem(ProblemType.Unauthenticated, {
@@ -81,13 +85,13 @@ export function route(options: RouteOptions, handler: Handler): Handler {
         }
         if (options.roles !== undefined && !holdsOneOf(ctx.user, options.roles)) {
           throw new HttpProblem(ProblemType.NotFound, {
-            detail: 'Nothing exists at this address.',
+            detail: 'No route matches this address.',
           });
         }
         if (options.rateLimit !== undefined) {
           await enforceRateLimit(options.rateLimit, request, ctx.user);
         }
-        response = await handler(request, context);
+        response = await handler(admitted, context);
       } catch (error) {
         response = responseForError(error);
       }
@@ -130,8 +134,9 @@ export function routes(
       continue;
     }
     const handler = handlers[method];
+    const name = options.names?.[method] ?? options.name;
     result[method] = route(
-      handler ? options : { name: `${options.name}.method-not-allowed` },
+      handler ? { ...options, name } : { name: `${name}.method-not-allowed` },
       handler ?? methodNotAllowed(allow),
     );
   }

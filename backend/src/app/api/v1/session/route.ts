@@ -35,5 +35,5 @@ export const { GET, POST, PUT, PATCH, DELETE, OPTIONS } = routes(
       return new Response(null, { status: 204 });
     },
   },
-  { name: 'session.store', cache: 'private' },
+  { name: 'session.store', names: { DELETE: 'session.destroy' }, cache: 'private' },
 );
