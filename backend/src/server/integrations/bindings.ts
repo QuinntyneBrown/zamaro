@@ -2,13 +2,20 @@ import { config } from '@config/zamaro';
 import type { BotChallenge } from '@/server/contracts/bot-challenge';
 import type { BreachedPasswordChecker } from '@/server/contracts/breached-password-checker';
 import type { Cache } from '@/server/contracts/cache';
+import type { ErrorReporter } from '@/server/contracts/error-reporter';
+import type { JobQueue } from '@/server/contracts/job-queue';
+import type { OnCallAlerter } from '@/server/contracts/on-call-alerter';
 import type { Mailer } from '@/server/contracts/mailer';
 import type { RateLimiter } from '@/server/contracts/rate-limiter';
 import type { Geocoder } from '@/server/contracts/geocoder';
 import type { IpLocator } from '@/server/contracts/ip-locator';
 import type { RoutingProvider } from '@/server/contracts/routing-provider';
 import type { SessionStore } from '@/server/contracts/session-store';
+import { FakeOnCallAlerter } from './alerting/fake-on-call-alerter';
 import { FakeBotChallenge } from './bot-challenge/fake-bot-challenge';
+import { FakeErrorReporter } from './error-tracking/fake-error-reporter';
+import { BullMqJobQueue } from './queue/bullmq-job-queue';
+import { InMemoryJobQueue } from './queue/in-memory-job-queue';
 import { FakeBreachedPasswordChecker } from './breached-passwords/fake-breached-password-checker';
 import { InMemoryCache } from './cache/in-memory-cache';
 import { FakeMailer } from './mail/fake-mailer';
@@ -36,6 +43,9 @@ let ipLocatorInstance: IpLocator | undefined;
 let mailerInstance: Mailer | undefined;
 let botChallengeInstance: BotChallenge | undefined;
 let breachedPasswordsInstance: BreachedPasswordChecker | undefined;
+let jobQueueInstance: JobQueue | undefined;
+let errorReporterInstance: ErrorReporter | undefined;
+let onCallAlerterInstance: OnCallAlerter | undefined;
 
 export function geocoder(): Geocoder {
   geocoderInstance ??= fake('Geocoder', () => new FakeGeocoder());
@@ -123,8 +133,38 @@ export function useBreachedPasswordChecker(next: BreachedPasswordChecker | undef
   breachedPasswordsInstance = next;
 }
 
+export function jobQueue(): JobQueue {
+  jobQueueInstance ??= config().env === 'test' ? new InMemoryJobQueue() : new BullMqJobQueue();
+  return jobQueueInstance;
+}
+
+export function useJobQueue(next: JobQueue | undefined): void {
+  jobQueueInstance = next;
+}
+
+export function errorReporter(): ErrorReporter {
+  errorReporterInstance ??= fake('ErrorReporter', () => new FakeErrorReporter());
+  return errorReporterInstance;
+}
+
+export function useErrorReporter(next: ErrorReporter | undefined): void {
+  errorReporterInstance = next;
+}
+
+export function onCallAlerter(): OnCallAlerter {
+  onCallAlerterInstance ??= fake('OnCallAlerter', () => new FakeOnCallAlerter());
+  return onCallAlerterInstance;
+}
+
+export function useOnCallAlerter(next: OnCallAlerter | undefined): void {
+  onCallAlerterInstance = next;
+}
+
 /** Forgets every bound adapter, so the next access makes a fresh one (tests, per database). */
 export function resetBindings(): void {
+  jobQueueInstance = undefined;
+  errorReporterInstance = undefined;
+  onCallAlerterInstance = undefined;
   mailerInstance = undefined;
   botChallengeInstance = undefined;
   breachedPasswordsInstance = undefined;

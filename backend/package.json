@@ -20,6 +20,7 @@
     "db:seed": "tsx src/cli/db-seed.ts",
     "db:reset": "tsx src/cli/db-reset.ts",
     "cast:booker": "tsx src/cli/cast-booker.ts",
+    "worker": "tsx src/worker.ts",
     "openapi:export": "tsx src/cli/openapi-export.ts",
     "openapi:check": "tsx src/cli/openapi-export.ts --check"
   },
