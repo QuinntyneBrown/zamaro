@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
-import { eq } from 'drizzle-orm';
+import { and, desc, eq, gte, sql } from 'drizzle-orm';
 import type { NextRequest } from 'next/server';
+import { config } from '@config/zamaro';
 import { db, type Database, type Transaction } from '@/server/db/client';
 import { userSessions } from '@/server/db/schema';
 import { clientAddress } from '@/server/http/client-address';
@@ -37,6 +38,68 @@ export async function registerSession(
       ipAddress: address,
       lastActiveAt: now().toJSDate(),
     });
+  session.data.lastActiveAt = now().toSeconds();
+}
+
+/** Activity is written at most this often, so a busy session does not write on every request (M2 D12). */
+export const TOUCH_EVERY_MINUTES = 5;
+
+export interface ActiveSession {
+  id: string;
+  deviceLabel: string | null;
+  approximateCity: string | null;
+  lastActiveAt: Date;
+  isCurrent: boolean;
+}
+
+/**
+ * The account's sessions still within their idle lifetime: this browser's first, then the most
+ * recently active (L2-025.3).
+ */
+export async function activeSessions(
+  userId: number,
+  currentSessionId: string,
+): Promise<ActiveSession[]> {
+  const current = sessionKey(currentSessionId);
+  const since = now().minus({ minutes: config().sessionLifetimeMinutes }).toJSDate();
+  const rows = await db()
+    .select({
+      id: userSessions.id,
+      deviceLabel: userSessions.deviceLabel,
+      approximateCity: userSessions.approximateCity,
+      lastActiveAt: userSessions.lastActiveAt,
+    })
+    .from(userSessions)
+    .where(and(eq(userSessions.userId, userId), gte(userSessions.lastActiveAt, since)))
+    .orderBy(sql`${userSessions.id} = ${current} desc`, desc(userSessions.lastActiveAt));
+  return rows.map((row) => ({ ...row, isCurrent: row.id === current }));
+}
+
+/** Ends one of the account's sessions at once; false when they hold no session by that key (L2-074.2). */
+export async function endSession(userId: number, key: string): Promise<boolean> {
+  const [row] = await db()
+    .select({ encryptedSessionId: userSessions.encryptedSessionId })
+    .from(userSessions)
+    .where(and(eq(userSessions.userId, userId), eq(userSessions.id, key)));
+  if (row === undefined) return false;
+  await sessionStore().destroy(decryptField(row.encryptedSessionId));
+  await db().delete(userSessions).where(eq(userSessions.id, key));
+  return true;
+}
+
+/**
+ * Records that the browser's session is in use, at most every 5 minutes (M2 D12). The session
+ * remembers when it last wrote, so a busy session costs no query between writes.
+ */
+export async function touchSession(session: Session): Promise<void> {
+  const at = now();
+  const last = session.data.lastActiveAt;
+  if (typeof last === 'number' && at.toSeconds() - last < TOUCH_EVERY_MINUTES * 60) return;
+  await db()
+    .update(userSessions)
+    .set({ lastActiveAt: at.toJSDate() })
+    .where(eq(userSessions.id, sessionKey(session.id)));
+  session.data.lastActiveAt = at.toSeconds();
 }
 
 /** The browser's session is ending. */

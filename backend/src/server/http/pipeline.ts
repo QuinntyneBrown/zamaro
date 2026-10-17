@@ -4,7 +4,7 @@ import { config } from '@config/zamaro';
 import { PUBLIC_ROUTES } from '@/app/api/v1/public';
 import type { Role } from '@/server/enums';
 import { loadCurrentUser, type CurrentUser } from '@/server/services/accounts/current-user';
-import { forgetSession } from '@/server/services/accounts/session-registry';
+import { forgetSession, touchSession } from '@/server/services/accounts/session-registry';
 import { logger } from '../support/logger';
 import {
   HttpProblem,
@@ -67,6 +67,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
       let response: Response;
       try {
         if (session !== undefined) ctx.user = await signedInUser(session);
+        if (session !== undefined && ctx.user !== null) await touchSession(session);
         if (
           session !== undefined &&
           MUTATING.has(request.method) &&

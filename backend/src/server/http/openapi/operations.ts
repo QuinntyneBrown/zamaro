@@ -28,6 +28,7 @@ import {
   UpdateProfileRequest,
 } from '../requests/accounts/settings';
 import { ChurchEnvelope, ChurchResource } from '../resources/accounts/church';
+import { SessionListResource } from '../resources/accounts/session';
 import { CurrentLegalDocumentsResource } from '../resources/privacy/legal-document';
 import { AlternativesResource } from '../resources/discovery/alternatives';
 import { LineupResource } from '../resources/discovery/lineup';
@@ -529,6 +530,36 @@ export const operations: Operation[] = [
       422: {
         description:
           'A wrong current password, or a new one that fails the policy or its confirmation',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/account/sessions',
+    name: 'account.sessions.index',
+    summary: 'The signed-in devices: this browser first, then the most recently active',
+    responses: {
+      200: { description: 'Every session within its idle lifetime', content: SessionListResource },
+    },
+  },
+  {
+    method: 'delete',
+    path: '/account/sessions/{session}',
+    name: 'account.sessions.destroy',
+    summary: 'End a session: that device is signed out at once',
+    parameters: [
+      {
+        name: 'session',
+        in: 'path',
+        schema: z.string(),
+        description: 'The id from the list, not a session ID',
+      },
+    ],
+    responses: {
+      204: { description: 'Ended', content: null },
+      404: {
+        description: "Not one of the caller's sessions, or none by that id",
         content: 'problem',
       },
     },

@@ -151,11 +151,11 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     await owner.as();
     const response = await (await intruder.as()).json('/api/v1/account/sessions', 'GET');
     expect(response.status).toBe(200);
+    await expectHoldsNothingOf(owner, response);
 
     const body = (await response.json()) as { data: { isCurrent: boolean }[] };
     expect(body.data).toHaveLength(1);
     expect(body.data[0]?.isCurrent).toBe(true);
-    await expectHoldsNothingOf(owner, response);
   },
 
   'DELETE /account/sessions/{session}': async (owner, intruder) => {
