@@ -55,7 +55,7 @@ export async function documentLinkFor(
   return {
     url: signedUrl(
       config().mediaOrigin,
-      `/media/documents/${check.storageKey}`,
+      `/documents/${check.storageKey}`,
       Math.floor(expiresAt.toSeconds()),
     ),
     expiresAt: expiresAt.toISO() ?? '',

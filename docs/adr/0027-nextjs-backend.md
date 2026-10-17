@@ -41,7 +41,7 @@ TypeScript classes.
 | Laravel (as the designs used it) | Next.js backend |
 |---|---|
 | Laravel 13 on PHP 8.3 | Next.js 16 on Node.js 24 LTS, TypeScript strict |
-| `routes/api.php`, `api_public.php`, `health.php`, `media.php` | Route handlers under `src/app/api/v1/**/route.ts`, `src/app/health/{live,ready}/route.ts`, `src/app/media/**/route.ts` |
+| `routes/api.php`, `api_public.php`, `health.php`, `media.php` | Route handlers under `src/app/api/v1/**/route.ts`, `src/app/health/{live,ready}/route.ts`, `src/app/documents/**/route.ts` and `src/app/media/**/route.ts` on the media host |
 | Controller method (`BookingsController@store`) | Exported HTTP-method function of a route handler (`POST` in `src/app/api/v1/bookings/route.ts`) |
 | Middleware and its order in `bootstrap/app.php` | The request pipeline, `src/server/http/pipeline.ts`: each route declares its steps with `route({ auth, verified, roles, rateLimit, csrf }, handler)`. Fixed order: request ID → request logging → problem-details error handling → security headers → session → CSRF → authentication → role and verified checks → rate limit → validation. Logging wraps error handling, so handled statuses are logged (AGENTS.md). |
 | `auth:sanctum` by default, anonymous routes opt out | `route()` requires a session unless the route passes `auth: 'anonymous'`; anonymous routes are listed in `src/app/api/v1/public.ts` |
@@ -86,7 +86,8 @@ backend/
 │   ├── app/                       # Next.js routing: route handlers only, no pages
 │   │   ├── api/v1/                # /api/v1/**/route.ts, authenticated by default
 │   │   ├── health/                # live/route.ts, ready/route.ts (ADR-0005)
-│   │   └── media/                 # signed links to private documents (ADR-0024)
+│   │   ├── documents/             # signed links to private documents (ADR-0024)
+│   │   └── media/                 # public media files on the media host
 │   ├── server/
 │   │   ├── actions/{subsystem}/   # one use case per class
 │   │   ├── services/{subsystem}/  # domain services

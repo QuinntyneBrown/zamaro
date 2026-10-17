@@ -58,7 +58,8 @@ zamaro/
 │   │   │   ├── api/v1/            # /api/v1/**/route.ts: thin — validate, call an action, return a resource;
 │   │   │   │                      # authenticated by default, anonymous routes listed in public.ts
 │   │   │   ├── health/            # live/route.ts and ready/route.ts, outside /api/v1 (ADR-0005)
-│   │   │   └── media/             # signed links to private documents, on the media host (ADR-0024)
+│   │   │   ├── documents/         # signed links to private documents, on the media host (ADR-0024)
+│   │   │   └── media/             # public media files from the media disk, on the media host
 │   │   ├── server/
 │   │   │   ├── actions/{subsystem}/   # one use case per class; business rules live here
 │   │   │   ├── services/{subsystem}/  # domain services (AvailabilityService, DistanceService, ...)
