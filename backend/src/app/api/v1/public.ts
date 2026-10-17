@@ -19,4 +19,6 @@ export const PUBLIC_ROUTES: ReadonlySet<string> = new Set([
   // The CSRF cookie and signing in: anonymous, answered privately (L2-089.3).
   'csrf-cookie',
   'session.store',
+  'register',
+  'legal-documents.current',
 ]);

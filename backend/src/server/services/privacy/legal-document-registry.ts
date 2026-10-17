@@ -4,6 +4,7 @@ import type { Database, Transaction } from '@/server/db/client';
 import { consentRecords, legalDocuments } from '@/server/db/schema';
 import { ConsentKind } from '@/server/enums';
 import { today } from '@/server/support/clock';
+import { HttpProblem, ProblemType } from '@/server/support/problems';
 
 export type LegalDocument = typeof legalDocuments.$inferSelect;
 
@@ -23,6 +24,36 @@ export async function currentLegalDocumentOrNull(
     .orderBy(desc(legalDocuments.effectiveFrom))
     .limit(1);
   return document ?? null;
+}
+
+/** The current version, which every environment publishes; none is a server error. */
+export async function currentLegalDocument(
+  db: Database | Transaction,
+  kind: ConsentKind,
+): Promise<LegalDocument> {
+  const document = await currentLegalDocumentOrNull(db, kind);
+  if (document === null) throw new Error(`No current ${kind} document is published.`);
+  return document;
+}
+
+/**
+ * The versions a form showed must still be current, so the version stored is the one the person
+ * saw; otherwise the 409 problem (L2-080.1).
+ */
+export async function assertCurrentVersions(
+  db: Database | Transaction,
+  termsVersion: string,
+  privacyPolicyVersion: string,
+): Promise<void> {
+  const [terms, privacyPolicy] = await Promise.all([
+    currentLegalDocument(db, ConsentKind.Terms),
+    currentLegalDocument(db, ConsentKind.PrivacyPolicy),
+  ]);
+  if (terms.version !== termsVersion || privacyPolicy.version !== privacyPolicyVersion) {
+    throw new HttpProblem(ProblemType.LegalDocumentOutdated, {
+      detail: 'The terms or privacy policy changed since the form was shown.',
+    });
+  }
 }
 
 /**

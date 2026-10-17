@@ -78,7 +78,7 @@ describe('register a booker', () => {
     ).exec(email.text);
     expect(link, 'The text part holds the verification link.').not.toBeNull();
     expect(decodeURIComponent(link?.[2] ?? '')).toBe('/artists/abigail-mensah?date=2026-11-14');
-    expect(email.html).toContain(link?.[0] ?? 'the link');
+    expect(email.html).toContain((link?.[0] ?? 'the link').replace(/&/g, '&amp;'));
     const hash = await sha256(link?.[1] ?? '');
     const [token] = await query<{ user_id: number; expires_at: string; used_at: string | null }>(
       sql`select user_id, expires_at, used_at from email_verification_tokens where token_hash = ${hash}`,

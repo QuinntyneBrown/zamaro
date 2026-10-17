@@ -11,7 +11,7 @@ const REGISTER = { method: 'post', path: '/register' };
 const CURRENT = { method: 'get', path: '/legal-documents/current' };
 const EMAIL = 'ruth.adeyemi@gracepoint.ca';
 
-interface ConsentRecord {
+interface ConsentRecord extends Record<string, unknown> {
   id: number;
   kind: string;
   document_version: string | null;
@@ -89,10 +89,11 @@ describe('record consent', () => {
 
     await expect(
       query(sql`update consent_records set granted = false where id = ${id}`),
-    ).rejects.toThrow(/append-only/);
-    await expect(query(sql`delete from consent_records where id = ${id}`)).rejects.toThrow(
-      /append-only/,
-    );
+    ).rejects.toThrow();
+    await expect(query(sql`delete from consent_records where id = ${id}`)).rejects.toThrow();
+
+    const [after] = await consentRecords();
+    expect(after).toEqual(record);
   });
 
   it('publishes the current versions', async () => {

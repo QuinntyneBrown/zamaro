@@ -7,6 +7,8 @@ import {
 } from '../resources/artist-profiles/dates';
 import { ArtistProfileResource } from '../resources/artist-profiles/profile';
 import { CurrentUserResource, TwoFactorRequiredResource } from '../resources/accounts/current-user';
+import { RegisterBookerRequest } from '../requests/accounts/register-booker';
+import { CurrentLegalDocumentsResource } from '../resources/privacy/legal-document';
 import { AlternativesResource } from '../resources/discovery/alternatives';
 import { LineupResource } from '../resources/discovery/lineup';
 import { PlaceResource } from '../resources/discovery/place';
@@ -257,6 +259,40 @@ export const operations: Operation[] = [
     summary: 'Which unfinished features this environment has turned on',
     responses: {
       200: { description: 'The flags', content: FeaturesResource },
+    },
+  },
+  {
+    method: 'post',
+    path: '/register',
+    name: 'register',
+    summary: 'Register as a booker; every valid submission gets the same 202',
+    requestBody: RegisterBookerRequest,
+    responses: {
+      202: {
+        description: 'A verification link was sent, or the existing owner was told',
+        content: z.object({ data: z.object({ email: z.string() }) }),
+      },
+      409: {
+        description: 'The terms or privacy policy shown are no longer current',
+        content: 'problem',
+      },
+      422: {
+        description: 'A field needs attention, or the bot challenge failed',
+        content: 'problem',
+      },
+      429: {
+        description: 'More than 10 registrations an hour from one address',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/legal-documents/current',
+    name: 'legal-documents.current',
+    summary: 'The current terms of use and privacy policy',
+    responses: {
+      200: { description: 'The two documents', content: CurrentLegalDocumentsResource },
     },
   },
 ];

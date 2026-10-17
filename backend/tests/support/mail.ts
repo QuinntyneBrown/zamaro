@@ -11,9 +11,10 @@ export function sentEmails(): EmailMessage[] {
 }
 
 export function onlySentEmail(): EmailMessage {
-  const sent = sentEmails();
-  expect(sent, 'one email was sent').toHaveLength(1);
-  return sent[0] as EmailMessage;
+  const [first, ...rest] = sentEmails();
+  expect(rest, 'one email was sent').toHaveLength(0);
+  if (first === undefined) throw new Error('No email was sent.');
+  return first;
 }
 
 export function emailsTo(address: string): EmailMessage[] {

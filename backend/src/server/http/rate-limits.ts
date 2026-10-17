@@ -6,7 +6,7 @@ import { HttpProblem, ProblemType } from '@/server/support/problems';
 import { clientAddress } from './client-address';
 
 /** Named rate limiters (L2-077, security/limit-request-rates); each route names the one it is behind. */
-export type RateLimitName = 'api' | 'search';
+export type RateLimitName = 'api' | 'search' | 'register';
 
 interface Limit {
   key: string;
@@ -31,6 +31,10 @@ function limitsFor(name: RateLimitName, request: NextRequest, user: CurrentUser 
               windowSeconds: 60,
             },
           ],
+    // L2-077.3: 10 registrations an hour per address.
+    register: [
+      { key: `register-ip:${address}`, max: rateLimits.registerPerHour, windowSeconds: 3600 },
+    ],
     // L2-077.2: 30 searches a minute per address and, once signed in, per account as well.
     search: [
       { key: `search-ip:${address}`, max: rateLimits.searchPerMinute, windowSeconds: 60 },

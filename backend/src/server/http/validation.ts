@@ -66,16 +66,18 @@ export async function validateBody<T>(
   schema: ZodType<T>,
   options: ValidationOptions = {},
 ): Promise<T> {
-  let input: unknown = {};
+  return validate(await jsonBody(request), schema, options);
+}
+
+/** The JSON body as parsed, `{}` when there is none; a body that is not JSON is a 400 problem. */
+export async function jsonBody(request: NextRequest): Promise<unknown> {
   const text = await request.text();
-  if (text.trim() !== '') {
-    try {
-      input = JSON.parse(text);
-    } catch {
-      throw new HttpProblem(httpError(400, 'Bad Request'), {
-        detail: 'The body is not valid JSON.',
-      });
-    }
+  if (text.trim() === '') return {};
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    throw new HttpProblem(httpError(400, 'Bad Request'), {
+      detail: 'The body is not valid JSON.',
+    });
   }
-  return validate(input, schema, options);
 }

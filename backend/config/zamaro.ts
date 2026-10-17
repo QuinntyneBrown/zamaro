@@ -61,6 +61,10 @@ const schema = z.object({
   ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(300),
   ZAMARO_SEARCH_LIMIT_PER_MINUTE: z.coerce.number().int().positive().default(30),
   ZAMARO_REGISTER_LIMIT_PER_HOUR: z.coerce.number().int().positive().default(10),
+  APP_NAME: z.preprocess(blankToUndefined, z.string().default('Zamaro')),
+  // Every email is from Zamaro <hello@zamaro.ca> (M2 D16).
+  MAIL_FROM_NAME: z.preprocess(blankToUndefined, z.string().default('Zamaro')),
+  MAIL_FROM_ADDRESS: z.preprocess(blankToUndefined, z.string().default('hello@zamaro.ca')),
   // The fake breach checker's list (ADR-0002): comma-separated.
   ZAMARO_FAKE_BREACHED_PASSWORDS: z.preprocess(
     blankToUndefined,
@@ -95,6 +99,8 @@ export interface ZamaroConfig {
   sessionLifetimeMinutes: number;
   secureCookies: boolean;
   features: { bookingRequests: boolean };
+  appName: string;
+  mail: { fromName: string; fromAddress: string };
   /** What the vendor fakes answer (ADR-0002). */
   fakes: { breachedPasswords: string[] };
   rateLimits: {
@@ -156,6 +162,8 @@ function load(): ZamaroConfig {
       forgotPasswordPerHour: env.ZAMARO_FORGOT_PASSWORD_LIMIT_PER_HOUR,
       passwordResetPerMinute: env.ZAMARO_PASSWORD_RESET_LIMIT_PER_MINUTE,
     },
+    appName: env.APP_NAME,
+    mail: { fromName: env.MAIL_FROM_NAME, fromAddress: env.MAIL_FROM_ADDRESS },
     fakes: {
       breachedPasswords: env.ZAMARO_FAKE_BREACHED_PASSWORDS.split(',')
         .map((password) => password.trim())
