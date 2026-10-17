@@ -1,4 +1,5 @@
 import { api } from './app';
+import { castBooker } from '@/cli/cast-booker';
 
 /** Where Zamaro Web runs in tests; only its origin gets a session (ADR-0015). */
 export const WEB_ORIGIN = 'http://localhost:4200';
@@ -79,4 +80,14 @@ export async function signedIn(email: string, password: string = CAST_PASSWORD):
     throw new Error(`sign-in answered ${String(response.status)}: ${await response.text()}`);
   }
   return browser;
+}
+
+let freshBookers = 0;
+
+/** A verified booker of their own (cast:booker), so the seeded cast stays as the mocks show it. */
+export async function freshBooker(): Promise<string> {
+  freshBookers++;
+  const email = `fresh-${String(freshBookers)}-${String(Math.random()).slice(2, 8)}@example.ca`;
+  await castBooker(email);
+  return email;
 }
