@@ -7,6 +7,7 @@ import type { JobQueue } from '@/server/contracts/job-queue';
 import type { OnCallAlerter } from '@/server/contracts/on-call-alerter';
 import type { Mailer } from '@/server/contracts/mailer';
 import type { MediaScanner } from '@/server/contracts/media-scanner';
+import type { VideoTranscoder } from '@/server/contracts/video-transcoder';
 import type { RateLimiter } from '@/server/contracts/rate-limiter';
 import type { Geocoder } from '@/server/contracts/geocoder';
 import type { IpLocator } from '@/server/contracts/ip-locator';
@@ -29,6 +30,7 @@ import { InMemorySessionStore } from './sessions/in-memory-session-store';
 import { RedisSessionStore } from './sessions/redis-session-store';
 import { FakeRoutingProvider } from './routing/fake-routing-provider';
 import { FakeMediaScanner } from './scanning/fake-media-scanner';
+import { FakeVideoTranscoder } from './video/fake-video-transcoder';
 
 /**
  * The composition root (ADR-0002, ADR-0028): each port resolves to its adapter. Outside vendors are
@@ -49,6 +51,7 @@ let jobQueueInstance: JobQueue | undefined;
 let errorReporterInstance: ErrorReporter | undefined;
 let onCallAlerterInstance: OnCallAlerter | undefined;
 let mediaScannerInstance: MediaScanner | undefined;
+let videoTranscoderInstance: VideoTranscoder | undefined;
 
 export function geocoder(): Geocoder {
   geocoderInstance ??= fake('Geocoder', () => new FakeGeocoder());
@@ -172,8 +175,18 @@ export function useMediaScanner(next: MediaScanner | undefined): void {
   mediaScannerInstance = next;
 }
 
+export function videoTranscoder(): VideoTranscoder {
+  videoTranscoderInstance ??= fake('VideoTranscoder', () => new FakeVideoTranscoder());
+  return videoTranscoderInstance;
+}
+
+export function useVideoTranscoder(next: VideoTranscoder | undefined): void {
+  videoTranscoderInstance = next;
+}
+
 /** Forgets every bound adapter, so the next access makes a fresh one (tests, per database). */
 export function resetBindings(): void {
+  videoTranscoderInstance = undefined;
   mediaScannerInstance = undefined;
   jobQueueInstance = undefined;
   errorReporterInstance = undefined;

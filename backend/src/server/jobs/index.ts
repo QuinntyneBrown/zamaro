@@ -3,6 +3,7 @@
  * this file so each job name resolves to its handler.
  */
 import './notifications/send-email';
+import './artist-onboarding/process-application-video';
 import './security/scan-upload';
 
 export { jobHandler, registerJob, type JobHandler, type RunningJob } from './registry';

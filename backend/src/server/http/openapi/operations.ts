@@ -67,6 +67,8 @@ import {
   AdminCheckEnvelope,
   AdminCheckQueueResource,
 } from '../resources/administration/vulnerable-sector-check';
+import { StartApplicationVideoUploadRequest } from '../requests/artist-onboarding/application-video';
+import { ApplicationVideoEnvelope } from '../resources/artist-onboarding/application-video';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -948,6 +950,61 @@ export const operations: Operation[] = [
     parameters: [{ name: 'artist', in: 'path', schema: z.number().int() }],
     responses: {
       200: { description: 'The artist', content: AdminArtistDetailEnvelope },
+    },
+  },
+  {
+    method: 'post',
+    path: '/artist-applications/videos',
+    name: 'artist-applications.videos.store',
+    summary: 'Start a video upload for an application; the token names every later call',
+    requestBody: StartApplicationVideoUploadRequest,
+    responses: {
+      201: {
+        description: 'Started; Location is where the chunks go',
+        content: ApplicationVideoEnvelope,
+      },
+      422: {
+        description: 'A short title, a missing file name or a file over 1 GB',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/artist-applications/videos/{token}',
+    name: 'artist-applications.videos.show',
+    summary: "The upload's state; Upload-Offset and Upload-Length say where it is (also on HEAD)",
+    parameters: [{ name: 'token', in: 'path', schema: z.string() }],
+    responses: {
+      200: {
+        description: 'Uploading, processing, live or failed',
+        content: ApplicationVideoEnvelope,
+      },
+      404: { description: 'No upload has the token', content: 'problem' },
+    },
+  },
+  {
+    method: 'patch',
+    path: '/artist-applications/videos/{token}',
+    name: 'artist-applications.videos.append',
+    summary: 'Append a chunk from Upload-Offset, which must be where the upload ends',
+    parameters: [
+      { name: 'token', in: 'path', schema: z.string() },
+      { name: 'Upload-Offset', in: 'header', schema: z.number().int(), required: true },
+    ],
+    requestBody: z.string().describe('binary'),
+    requestBodyType: 'application/offset+octet-stream',
+    responses: {
+      204: { description: 'Appended; Upload-Offset is where the next chunk starts', content: null },
+      404: { description: 'No upload has the token', content: 'problem' },
+      409: {
+        description:
+          'The chunk does not start where the upload ends (upload-offset-mismatch); Upload-Offset says where',
+        content: 'problem',
+      },
+      413: { description: 'A chunk over 8 MB', content: 'problem' },
+      415: { description: 'Not application/offset+octet-stream', content: 'problem' },
+      422: { description: 'The chunk runs past the declared size', content: 'problem' },
     },
   },
 ];

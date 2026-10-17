@@ -15,6 +15,8 @@ export interface BodyRule {
   maxBytes: number;
   /** An upload route takes `multipart/form-data` as well as JSON (L2-075.4). */
   multipart: boolean;
+  /** Other body types the route takes, such as a chunk's `application/offset+octet-stream`. */
+  types?: string[];
 }
 
 export const JSON_BODY_RULE: BodyRule = { maxBytes: MAX_BODY_BYTES, multipart: false };
@@ -32,7 +34,8 @@ export async function gateBody(
   if (bytes.byteLength === 0) return request;
   const contentType = request.headers.get('content-type') ?? '';
   const multipart = rule.multipart && contentType.startsWith('multipart/form-data');
-  if (!multipart && !JSON_TYPES.test(contentType)) {
+  const named = (rule.types ?? []).some((type) => contentType.toLowerCase().startsWith(type));
+  if (!multipart && !named && !JSON_TYPES.test(contentType)) {
     throw new HttpProblem(ProblemType.UnsupportedMediaType, {
       detail: 'Send the body as application/json.',
     });

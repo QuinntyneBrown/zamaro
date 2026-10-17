@@ -28,4 +28,7 @@ export const PUBLIC_ROUTES: ReadonlySet<string> = new Set([
   'password.reset',
   'account.email.confirm',
   'session.two-factor',
+  'artist-applications.videos.store',
+  'artist-applications.videos.show',
+  'artist-applications.videos.append',
 ]);

@@ -31,8 +31,8 @@ export interface Operation {
   summary: string;
   parameters?: Parameter[];
   requestBody?: ZodType;
-  /** `multipart/form-data` for an upload route; JSON otherwise. */
-  requestBodyType?: 'multipart/form-data';
+  /** `multipart/form-data` or a chunk type for an upload route; JSON otherwise. */
+  requestBodyType?: string;
   responses: Record<number, ResponseSpec>;
 }
 

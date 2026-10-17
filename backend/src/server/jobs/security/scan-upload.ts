@@ -3,9 +3,11 @@ import { promoteUpload } from '@/server/actions/security/promote-upload';
 import { rejectInfectedUpload } from '@/server/actions/security/reject-infected-upload';
 import { db } from '@/server/db/client';
 import { uploads } from '@/server/db/schema';
-import { ScanVerdict, UploadStatus } from '@/server/enums';
+import { UploadPurpose, ScanVerdict, UploadStatus } from '@/server/enums';
 import { mediaScanner } from '@/server/integrations/bindings';
 import { disk } from '@/server/integrations/storage/disks';
+import { PROCESS_APPLICATION_VIDEO_JOB } from '../artist-onboarding/process-application-video';
+import { dispatchJob } from '../dispatch';
 import { registerJob } from '../registry';
 
 /**
@@ -31,6 +33,10 @@ registerJob(SCAN_UPLOAD_JOB, async (payload) => {
   switch (result.verdict) {
     case ScanVerdict.Clean:
       await promoteUpload(upload, bytes);
+      // An application video goes on to the transcoder (apply-as-artist, L2-052.1).
+      if (upload.purpose === UploadPurpose.Video) {
+        await dispatchJob('uploads', PROCESS_APPLICATION_VIDEO_JOB, { uploadId: upload.id });
+      }
       return;
     case ScanVerdict.Infected:
       await rejectInfectedUpload(upload, result.signature ?? 'unknown');
