@@ -70,8 +70,10 @@ const MUTATING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const CORS_HEADERS = 'Content-Type, Accept, X-Requested-With, X-XSRF-TOKEN, X-Request-Id';
 /**
- * The routes a person who has not accepted the current terms may still use (L2-080.3): who is
- * signed in and their theme, signing out, and accepting the terms. Everything else answers 409.
+ * The signed-in routes a person who has not accepted the current terms may still use (L2-080.3):
+ * who is signed in and their theme, signing out, and accepting the terms. Every other signed-in
+ * route answers 409; the anonymous routes answer as they would a guest, so the terms page can load
+ * its catalogue and the documents.
  */
 const OPEN_WHILE_TERMS_UNACCEPTED = new Set([
   'me.show',
@@ -150,6 +152,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
           options.admin !== true &&
           ctx.user !== null &&
           !OPEN_WHILE_TERMS_UNACCEPTED.has(options.name) &&
+          !PUBLIC_ROUTES.has(options.name) &&
           (await termsAcceptanceRequired(ctx.user.id))
         ) {
           throw new HttpProblem(ProblemType.TermsAcceptanceRequired, {

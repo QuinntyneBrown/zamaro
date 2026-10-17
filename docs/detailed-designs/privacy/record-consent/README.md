@@ -119,9 +119,11 @@ retention period for consent records after account deletion is `<TO SUPPLY>`.
 
 - **The gate:** `LegalDocumentRegistry::termsAcceptanceRequired()` compares the person's latest granted
   terms record with the current version (no terms published: nothing to accept).
-  `EnsureCurrentTermsAccepted` runs on every `api.php` route except `/me`, sign-out and the accept
-  endpoint and answers the 409 `terms-acceptance-required` problem; the OpenAPI document lists it on
-  each gated operation. `/me` reports `termsAcceptanceRequired`.
+  `EnsureCurrentTermsAccepted` runs on every signed-in `api.php` route except `/me`, sign-out and the
+  accept endpoint and answers the 409 `terms-acceptance-required` problem; the anonymous routes (the
+  catalogue, the current documents, features, Discover) answer as they would a guest, so the terms
+  page can render. The OpenAPI document lists the 409 on each gated operation. `/me` reports
+  `termsAcceptanceRequired`.
 - **Endpoints:** `POST /api/v1/account/consents/terms` (`ConsentController@acceptTerms`,
   `AcceptCurrentTerms`) takes `termsVersion`; a version no longer current is the 409
   `legal-document-outdated` and nothing is written; otherwise one terms record with source
