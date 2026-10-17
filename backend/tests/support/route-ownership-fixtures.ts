@@ -1,8 +1,9 @@
 import { expect } from 'vitest';
 import { eq } from 'drizzle-orm';
 import { db } from '@/server/db/client';
-import { artists } from '@/server/db/schema';
-import { Role } from '@/server/enums';
+import { artists, vulnerableSectorChecks } from '@/server/db/schema';
+import { storeDocument } from '@/server/services/artist-onboarding/document-vault';
+import { Role, VscStatus } from '@/server/enums';
 import { grantRoles } from '@/server/services/accounts/roles';
 import { CAST_PASSWORD, type Browser } from './accounts';
 
@@ -345,6 +346,55 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     expect((await (await intruder.as()).json('/api/v1/admin/audit-entries/1', 'GET')).status).toBe(
       404,
     );
+  },
+
+  // Artist-only upload routes: a booker gets the unknown-address 404 (L2-074.1).
+  'POST /artist/vulnerable-sector-checks': async (_owner, intruder) => {
+    const form = new FormData();
+    form.set('file', new File(['%PDF-1.4'], 'check.pdf'));
+    form.set('issuedOn', '2026-10-05');
+    const response = await (
+      await intruder.as()
+    ).request('/api/v1/artist/vulnerable-sector-checks', {
+      method: 'POST',
+      body: form,
+    });
+    expect(response.status).toBe(404);
+  },
+
+  'GET /artist/vulnerable-sector-checks/current': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/artist/vulnerable-sector-checks/current', 'GET');
+    expect(response.status).toBe(404);
+  },
+
+  // A check's document link: the owner and administrators only; everyone else learns nothing (L2-074.2).
+  'GET /vulnerable-sector-checks/{check}/document-link': async (owner, intruder) => {
+    const stored = await storeDocument(Buffer.from('%PDF-1.4'));
+    const [check] = await db()
+      .insert(vulnerableSectorChecks)
+      .values({
+        userId: owner.id,
+        issuedOn: '2026-10-05',
+        status: VscStatus.Pending,
+        storageKey: stored.key,
+        wrappedDataKey: stored.wrappedDataKey,
+        mimeType: 'application/pdf',
+      })
+      .returning({ id: vulnerableSectorChecks.id });
+
+    const response = await (
+      await intruder.as()
+    ).json(`/api/v1/vulnerable-sector-checks/${String(check?.id ?? 0)}/document-link`, 'GET');
+    expect(response.status).toBe(404);
+  },
+
+  'GET /admin/vulnerable-sector-checks/{check}/document-link': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/admin/vulnerable-sector-checks/1/document-link', 'GET');
+    expect(response.status).toBe(404);
   },
 };
 
