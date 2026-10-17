@@ -20,7 +20,7 @@ import {
   ProblemType,
 } from '../support/problems';
 import { runWithRequestContext } from '../support/request-context';
-import { gateBody } from './body-gate';
+import { gateBody, JSON_BODY_RULE } from './body-gate';
 import { enforceRateLimit, type RateLimitName } from './rate-limits';
 import {
   absoluteLimitReached,
@@ -60,6 +60,8 @@ export interface RouteOptions {
    * address, never 401 or 403 (L2-066.1, L2-074.1). The terms gate does not apply.
    */
   admin?: true;
+  /** An upload route: a multipart body up to this many bytes instead of the 1 MB JSON limit (L2-075.4). */
+  upload?: { maxBytes: number };
 }
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
@@ -111,7 +113,12 @@ export function route(options: RouteOptions, handler: Handler): Handler {
             detail: 'Fetch /api/v1/csrf-cookie, then repeat the request with X-XSRF-TOKEN.',
           });
         }
-        const admitted = await gateBody(request);
+        const admitted = await gateBody(
+          request,
+          options.upload === undefined
+            ? JSON_BODY_RULE
+            : { maxBytes: options.upload.maxBytes, multipart: true },
+        );
         if (api) await enforceRateLimit('api', request, ctx.user);
         if (
           options.admin === true &&

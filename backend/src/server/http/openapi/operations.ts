@@ -53,6 +53,11 @@ import {
   AuditEntryEnvelope,
   AuditEntryPageResource,
 } from '../resources/administration/audit-entry';
+import { UploadVulnerableSectorCheckRequest } from '../requests/artist-onboarding/vulnerable-sector-check';
+import {
+  CheckEnvelope,
+  CurrentChecksResource,
+} from '../resources/artist-onboarding/vulnerable-sector-check';
 import type { Operation } from './document';
 
 /** Every documented operation, one entry per route handler; each slice adds its own here. */
@@ -818,6 +823,41 @@ export const operations: Operation[] = [
     parameters: [{ name: 'entry', in: 'path', schema: z.number().int() }],
     responses: {
       200: { description: 'The entry', content: AuditEntryEnvelope },
+    },
+  },
+  {
+    method: 'post',
+    path: '/artist/vulnerable-sector-checks',
+    name: 'artist.vulnerable-sector-checks.store',
+    summary:
+      'Upload a Vulnerable Sector Check: the scan and its issue date, as multipart/form-data',
+    requestBody: UploadVulnerableSectorCheckRequest,
+    requestBodyType: 'multipart/form-data',
+    responses: {
+      202: {
+        description: 'Taken; scanning until the malware scan passes, then pending',
+        content: CheckEnvelope,
+      },
+      404: { description: 'Not an artist', content: 'problem' },
+      413: { description: 'The body is over 32 MB', content: 'problem' },
+      422: {
+        description: 'Not a PDF, JPEG or PNG; over 10 MB; or no valid issue date',
+        content: 'problem',
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/artist/vulnerable-sector-checks/current',
+    name: 'artist.vulnerable-sector-checks.current',
+    summary:
+      "Where the artist's checks stand: the latest verified one and the newest of any status",
+    responses: {
+      200: {
+        description: 'The checks, each null when there is none',
+        content: CurrentChecksResource,
+      },
+      404: { description: 'Not an artist', content: 'problem' },
     },
   },
 ];

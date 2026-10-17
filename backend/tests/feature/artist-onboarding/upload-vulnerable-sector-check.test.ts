@@ -245,16 +245,20 @@ describe('uploading a vulnerable sector check', () => {
     const rows = await query<UploadRow>(
       sql`select id, status::text as status, detected_mime, size_bytes::int as size_bytes, quarantine_key, rejection_reason, scanner_signature from uploads`,
     );
+    const [row] = rows;
     expect(rows).toHaveLength(1);
-    return rows[0] as UploadRow;
+    if (row === undefined) throw new Error('No upload was recorded.');
+    return row;
   }
 
   async function checkOf(uploadId: string): Promise<CheckRow> {
     const rows = await query<CheckRow>(
       sql`select status::text as status, storage_key, wrapped_data_key, mime_type from vulnerable_sector_checks where upload_id = ${uploadId}`,
     );
+    const [row] = rows;
     expect(rows).toHaveLength(1);
-    return rows[0] as CheckRow;
+    if (row === undefined) throw new Error('No check was recorded.');
+    return row;
   }
 
   async function abigailId(): Promise<number> {

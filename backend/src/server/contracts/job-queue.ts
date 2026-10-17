@@ -3,7 +3,7 @@
  * queues, which the Zamaro Worker runs. BullMQ on Redis in the application; the in-memory queue in
  * tests, where each attempt is run by hand (ADR-0028).
  */
-export type QueueName = 'high' | 'notifications' | 'default';
+export type QueueName = 'high' | 'notifications' | 'uploads' | 'default';
 
 export interface JobDescription {
   /** The handler's name in src/server/jobs, e.g. `notifications.send-email`. */

@@ -6,6 +6,7 @@ import type { ErrorReporter } from '@/server/contracts/error-reporter';
 import type { JobQueue } from '@/server/contracts/job-queue';
 import type { OnCallAlerter } from '@/server/contracts/on-call-alerter';
 import type { Mailer } from '@/server/contracts/mailer';
+import type { MediaScanner } from '@/server/contracts/media-scanner';
 import type { RateLimiter } from '@/server/contracts/rate-limiter';
 import type { Geocoder } from '@/server/contracts/geocoder';
 import type { IpLocator } from '@/server/contracts/ip-locator';
@@ -27,6 +28,7 @@ import { RedisRateLimiter } from './rate-limiting/redis-rate-limiter';
 import { InMemorySessionStore } from './sessions/in-memory-session-store';
 import { RedisSessionStore } from './sessions/redis-session-store';
 import { FakeRoutingProvider } from './routing/fake-routing-provider';
+import { FakeMediaScanner } from './scanning/fake-media-scanner';
 
 /**
  * The composition root (ADR-0002, ADR-0028): each port resolves to its adapter. Outside vendors are
@@ -46,6 +48,7 @@ let breachedPasswordsInstance: BreachedPasswordChecker | undefined;
 let jobQueueInstance: JobQueue | undefined;
 let errorReporterInstance: ErrorReporter | undefined;
 let onCallAlerterInstance: OnCallAlerter | undefined;
+let mediaScannerInstance: MediaScanner | undefined;
 
 export function geocoder(): Geocoder {
   geocoderInstance ??= fake('Geocoder', () => new FakeGeocoder());
@@ -160,8 +163,18 @@ export function useOnCallAlerter(next: OnCallAlerter | undefined): void {
   onCallAlerterInstance = next;
 }
 
+export function mediaScanner(): MediaScanner {
+  mediaScannerInstance ??= fake('MediaScanner', () => new FakeMediaScanner());
+  return mediaScannerInstance;
+}
+
+export function useMediaScanner(next: MediaScanner | undefined): void {
+  mediaScannerInstance = next;
+}
+
 /** Forgets every bound adapter, so the next access makes a fresh one (tests, per database). */
 export function resetBindings(): void {
+  mediaScannerInstance = undefined;
   jobQueueInstance = undefined;
   errorReporterInstance = undefined;
   onCallAlerterInstance = undefined;

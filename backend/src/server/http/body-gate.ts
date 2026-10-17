@@ -10,16 +10,29 @@ export const MAX_BODY_BYTES = 1_048_576;
 
 const JSON_TYPES = /^application\/(?:[\w.+-]+\+)?json(?:\s*;.*)?$/i;
 
+export interface BodyRule {
+  /** The most bytes the route takes; the JSON limit unless it is an upload route. */
+  maxBytes: number;
+  /** An upload route takes `multipart/form-data` as well as JSON (L2-075.4). */
+  multipart: boolean;
+}
+
+export const JSON_BODY_RULE: BodyRule = { maxBytes: MAX_BODY_BYTES, multipart: false };
+
 /** The request with its body read and admitted, or the problem that refuses it. */
-export async function gateBody(request: NextRequest): Promise<NextRequest> {
+export async function gateBody(
+  request: NextRequest,
+  rule: BodyRule = JSON_BODY_RULE,
+): Promise<NextRequest> {
   if (request.body === null) return request;
   const declared = Number(request.headers.get('content-length') ?? '0');
-  if (declared > MAX_BODY_BYTES) throw tooLarge();
-  const bytes = await readUpTo(request.body, MAX_BODY_BYTES);
-  if (bytes === undefined) throw tooLarge();
+  if (declared > rule.maxBytes) throw tooLarge(rule);
+  const bytes = await readUpTo(request.body, rule.maxBytes);
+  if (bytes === undefined) throw tooLarge(rule);
   if (bytes.byteLength === 0) return request;
   const contentType = request.headers.get('content-type') ?? '';
-  if (!JSON_TYPES.test(contentType)) {
+  const multipart = rule.multipart && contentType.startsWith('multipart/form-data');
+  if (!multipart && !JSON_TYPES.test(contentType)) {
     throw new HttpProblem(ProblemType.UnsupportedMediaType, {
       detail: 'Send the body as application/json.',
     });
@@ -59,8 +72,8 @@ async function readUpTo(
   return bytes;
 }
 
-function tooLarge(): HttpProblem {
+function tooLarge(rule: BodyRule): HttpProblem {
   return new HttpProblem(ProblemType.PayloadTooLarge, {
-    detail: 'The body may be at most 1 MB.',
+    detail: `The body may be at most ${String(Math.round(rule.maxBytes / 1_048_576))} MB.`,
   });
 }

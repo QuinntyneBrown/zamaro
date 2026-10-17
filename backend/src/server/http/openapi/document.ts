@@ -31,6 +31,8 @@ export interface Operation {
   summary: string;
   parameters?: Parameter[];
   requestBody?: ZodType;
+  /** `multipart/form-data` for an upload route; JSON otherwise. */
+  requestBodyType?: 'multipart/form-data';
   responses: Record<number, ResponseSpec>;
 }
 
@@ -122,7 +124,11 @@ export function buildDocument(operations: Operation[]): OpenApiDocument {
     if (operation.requestBody !== undefined) {
       entry.requestBody = {
         required: true,
-        content: { 'application/json': { schema: jsonSchema(operation.requestBody) } },
+        content: {
+          [operation.requestBodyType ?? 'application/json']: {
+            schema: jsonSchema(operation.requestBody),
+          },
+        },
       };
     }
     paths[operation.path] = { ...paths[operation.path], [operation.method]: entry };

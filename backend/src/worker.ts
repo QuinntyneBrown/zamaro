@@ -15,7 +15,7 @@ import { runWithRequestContext } from '@/server/support/request-context';
  * retried on the policy every job follows, and the 6th failure stays in the failed set and is
  * reported (L2-092.1).
  */
-const QUEUES: QueueName[] = ['high', 'notifications', 'default'];
+const QUEUES: QueueName[] = ['high', 'notifications', 'uploads', 'default'];
 
 export function startWorkers(): Worker[] {
   return QUEUES.map((queue) =>
