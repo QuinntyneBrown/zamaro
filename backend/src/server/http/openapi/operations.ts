@@ -20,6 +20,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/i18n/{locale}',
+    name: 'i18n.show',
     summary: 'The translation catalogue for one locale, with English filling any missing key',
     parameters: [{ name: 'locale', in: 'path', schema: z.string() }],
     responses: {
@@ -34,6 +35,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/search',
+    name: 'search',
     summary: 'Artists free on the date who will drive to the event location',
     parameters: [
       {
@@ -72,6 +74,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/search/alternatives',
+    name: 'search.alternatives',
     summary: 'Ways forward when a search finds nobody',
     parameters: [
       { name: 'date', in: 'query', schema: z.string(), required: true },
@@ -94,6 +97,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/places',
+    name: 'places',
     summary: 'The centre point of a typed town or a quick-pick city',
     parameters: [{ name: 'q', in: 'query', schema: z.string(), required: true }],
     responses: {
@@ -105,6 +109,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/artists/{slug}',
+    name: 'artists.show',
     summary:
       "An artist's public profile; 301 for a retired slug, 404 with similar artists when missing",
     parameters: [
@@ -132,6 +137,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/artists/{slug}/reviews',
+    name: 'artists.reviews',
     summary: "An artist's visible reviews, newest first, 10 at a time",
     parameters: [
       { name: 'slug', in: 'path', schema: z.string() },
@@ -147,6 +153,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/artists/{slug}/tour-dates',
+    name: 'artists.tour-dates',
     summary: "The artist's next 6 free or booked dates",
     parameters: [
       { name: 'slug', in: 'path', schema: z.string() },
@@ -168,6 +175,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/artists/{slug}/availability',
+    name: 'artists.availability',
     summary: 'Whether the artist is free on one date',
     parameters: [
       { name: 'slug', in: 'path', schema: z.string() },
@@ -187,6 +195,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/sitemap',
+    name: 'sitemap',
     summary: 'Every published profile and when it last changed',
     responses: {
       200: { description: 'The profiles', content: SitemapResource },
@@ -196,12 +205,14 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/csrf-cookie',
+    name: 'csrf-cookie',
     summary: 'Starts a guest session and writes the XSRF-TOKEN cookie',
     responses: { 204: { description: 'The cookies are set', content: null } },
   },
   {
     method: 'post',
     path: '/session',
+    name: 'session.store',
     summary: 'Sign in: starts a session for Zamaro Web',
     requestBody: z.object({ email: z.string(), password: z.string() }),
     responses: {
@@ -221,6 +232,7 @@ export const operations: Operation[] = [
   {
     method: 'delete',
     path: '/session',
+    name: 'session.destroy',
     summary: 'Sign out: ends the session on the server',
     responses: {
       204: { description: 'Signed out; a new session and CSRF token are set', content: null },
@@ -231,6 +243,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/me',
+    name: 'me.show',
     summary: 'The signed-in person',
     responses: {
       200: { description: 'The person', content: CurrentUserResource },
@@ -240,6 +253,7 @@ export const operations: Operation[] = [
   {
     method: 'get',
     path: '/features',
+    name: 'features',
     summary: 'Which unfinished features this environment has turned on',
     responses: {
       200: { description: 'The flags', content: FeaturesResource },

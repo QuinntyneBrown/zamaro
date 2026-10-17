@@ -1,4 +1,5 @@
 import { z, type ZodType } from 'zod';
+import { PUBLIC_ROUTES } from '@/app/api/v1/public';
 
 /**
  * The OpenAPI 3.1 document, built from the Zod schemas the route handlers use (L2-095.3, ADR-0006 as
@@ -25,6 +26,8 @@ export interface Operation {
   method: Method;
   /** Under the `/api/v1` server, e.g. `/i18n/{locale}`. */
   path: string;
+  /** The route's name, as its route file gives the pipeline and src/app/api/v1/public.ts lists it. */
+  name: string;
   summary: string;
   parameters?: Parameter[];
   requestBody?: ZodType;
@@ -52,12 +55,33 @@ export interface OpenApiDocument {
 }
 
 const PROBLEM = 'application/problem+json';
+const MUTATING: Method[] = ['post', 'put', 'patch', 'delete'];
+
+/** The answers the request pipeline gives on every route (ADR-0027), unless the operation says otherwise. */
+function pipelineResponses(operation: Operation): Record<number, ResponseSpec> {
+  const responses: Record<number, ResponseSpec> = {
+    429: { description: 'Over the API rate limit; Retry-After says when', content: 'problem' },
+    500: { description: 'Something went wrong on our side', content: 'problem' },
+  };
+  if (!PUBLIC_ROUTES.has(operation.name)) {
+    responses[401] = { description: 'No one is signed in', content: 'problem' };
+  }
+  if (MUTATING.includes(operation.method)) {
+    responses[419] = { description: 'The CSRF token is missing or stale', content: 'problem' };
+  }
+  if (operation.requestBody !== undefined) {
+    responses[413] = { description: 'The body is over 1 MB', content: 'problem' };
+    responses[415] = { description: 'The body is not JSON', content: 'problem' };
+  }
+  return responses;
+}
 
 export function buildDocument(operations: Operation[]): OpenApiDocument {
   const paths: Record<string, Record<string, unknown>> = {};
   for (const operation of operations) {
     const responses: Record<string, unknown> = {};
-    for (const [status, spec] of Object.entries(operation.responses)) {
+    const specs = { ...pipelineResponses(operation), ...operation.responses };
+    for (const [status, spec] of Object.entries(specs)) {
       responses[status] =
         spec.content === null
           ? { description: spec.description }
