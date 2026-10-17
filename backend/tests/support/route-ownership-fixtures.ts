@@ -396,6 +396,28 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     ).json('/api/v1/admin/vulnerable-sector-checks/1/document-link', 'GET');
     expect(response.status).toBe(404);
   },
+
+  'GET /admin/vulnerable-sector-checks': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/admin/vulnerable-sector-checks', 'GET');
+    expect(response.status).toBe(404);
+  },
+
+  'POST /admin/vulnerable-sector-checks/{check}/verification': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/admin/vulnerable-sector-checks/1/verification', 'POST');
+    expect(response.status).toBe(404);
+  },
+
+  'GET /admin/artists': async (_owner, intruder) => {
+    expect((await (await intruder.as()).json('/api/v1/admin/artists', 'GET')).status).toBe(404);
+  },
+
+  'GET /admin/artists/{artist}': async (_owner, intruder) => {
+    expect((await (await intruder.as()).json('/api/v1/admin/artists/1', 'GET')).status).toBe(404);
+  },
 };
 
 async function artistId(slug: string): Promise<number> {
