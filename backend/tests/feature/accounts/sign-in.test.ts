@@ -3,7 +3,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from
 import { db } from '@/server/db/client';
 import { auditEntries, users, userSessions } from '@/server/db/schema';
 import { now } from '@/server/support/clock';
-import { usePasswordVerifier, verifyPassword } from '@/server/support/passwords';
+import { verify } from '@node-rs/argon2';
+import { usePasswordVerifier } from '@/server/support/passwords';
 import { Browser, CAST_PASSWORD, NAOMI, signedIn } from '../../support/accounts';
 import { expectContract } from '../../support/contract';
 import { closeDatabase, freshDatabase } from '../../support/database';
@@ -129,9 +130,9 @@ describe('signing in', () => {
 
   it('checks an unknown email against a dummy hash so it takes as long', async () => {
     let checks = 0;
-    usePasswordVerifier(async (hashed, password) => {
+    usePasswordVerifier((hashed, password) => {
       checks++;
-      return verifyPassword(hashed, password);
+      return verify(hashed, password).catch(() => false);
     });
 
     const response = await new Browser().signIn('nobody@riversidecc.ca', 'not-her-password-at-all');

@@ -2,12 +2,17 @@ import { config } from '@config/zamaro';
 import type { Cache } from '@/server/contracts/cache';
 import type { RateLimiter } from '@/server/contracts/rate-limiter';
 import type { Geocoder } from '@/server/contracts/geocoder';
+import type { IpLocator } from '@/server/contracts/ip-locator';
 import type { RoutingProvider } from '@/server/contracts/routing-provider';
+import type { SessionStore } from '@/server/contracts/session-store';
 import { InMemoryCache } from './cache/in-memory-cache';
 import { RedisCache } from './cache/redis-cache';
 import { FakeGeocoder } from './geocoding/fake-geocoder';
+import { FakeIpLocator } from './ip-location/fake-ip-locator';
 import { InMemoryRateLimiter } from './rate-limiting/in-memory-rate-limiter';
 import { RedisRateLimiter } from './rate-limiting/redis-rate-limiter';
+import { InMemorySessionStore } from './sessions/in-memory-session-store';
+import { RedisSessionStore } from './sessions/redis-session-store';
 import { FakeRoutingProvider } from './routing/fake-routing-provider';
 
 /**
@@ -20,6 +25,8 @@ let geocoderInstance: Geocoder | undefined;
 let routingInstance: RoutingProvider | undefined;
 let cacheInstance: Cache | undefined;
 let rateLimiterInstance: RateLimiter | undefined;
+let sessionStoreInstance: SessionStore | undefined;
+let ipLocatorInstance: IpLocator | undefined;
 
 export function geocoder(): Geocoder {
   geocoderInstance ??= fake('Geocoder', () => new FakeGeocoder());
@@ -58,12 +65,33 @@ export function useRateLimiter(next: RateLimiter | undefined): void {
   rateLimiterInstance = next;
 }
 
+export function sessionStore(): SessionStore {
+  sessionStoreInstance ??=
+    config().env === 'test' ? new InMemorySessionStore() : new RedisSessionStore();
+  return sessionStoreInstance;
+}
+
+export function useSessionStore(next: SessionStore | undefined): void {
+  sessionStoreInstance = next;
+}
+
+export function ipLocator(): IpLocator {
+  ipLocatorInstance ??= fake('IpLocator', () => new FakeIpLocator());
+  return ipLocatorInstance;
+}
+
+export function useIpLocator(next: IpLocator | undefined): void {
+  ipLocatorInstance = next;
+}
+
 /** Forgets every bound adapter, so the next access makes a fresh one (tests, per database). */
 export function resetBindings(): void {
   geocoderInstance = undefined;
   routingInstance = undefined;
   cacheInstance = undefined;
   rateLimiterInstance = undefined;
+  sessionStoreInstance = undefined;
+  ipLocatorInstance = undefined;
 }
 
 function fake<T>(port: string, make: () => T): T {

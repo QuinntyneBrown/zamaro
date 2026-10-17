@@ -44,6 +44,13 @@ const schema = z.object({
   ZAMARO_STORAGE_ROOT: z.preprocess(blankToUndefined, z.string().default('storage/app')),
   // The password Naomi, Abigail and Tomi sign in with (M2 D28), outside production only.
   ZAMARO_CAST_PASSWORD: optional,
+  // Sessions (ADR-0015): minutes without a request before a session ends (the idle limit), and whether
+  // the cookies carry Secure (off only for plain-HTTP tooling). The e2e API raises the lifetime.
+  SESSION_LIFETIME: z.coerce.number().int().positive().default(10080),
+  SESSION_SECURE_COOKIE: z.preprocess(
+    blankToUndefined,
+    z.enum(['true', 'false', '1', '0']).default('true'),
+  ),
   // Where the media disk is served from: /media on the API until object storage (ADR-0024).
   ZAMARO_MEDIA_URL: z.preprocess(blankToUndefined, z.string().default('/media')),
   // One directory per locale, one JSON file per namespace (L2-111).
@@ -80,6 +87,8 @@ export interface ZamaroConfig {
   castPassword: string | undefined;
   i18nPath: string;
   mediaUrl: string;
+  sessionLifetimeMinutes: number;
+  secureCookies: boolean;
   features: { bookingRequests: boolean };
   rateLimits: {
     apiPerMinute: number;
@@ -129,6 +138,8 @@ function load(): ZamaroConfig {
     castPassword: env.ZAMARO_ENV === 'production' ? undefined : env.ZAMARO_CAST_PASSWORD,
     i18nPath: resolve(env.ZAMARO_I18N_PATH),
     mediaUrl: env.ZAMARO_MEDIA_URL.replace(/\/+$/, ''),
+    sessionLifetimeMinutes: env.SESSION_LIFETIME,
+    secureCookies: env.SESSION_SECURE_COOKIE === 'true' || env.SESSION_SECURE_COOKIE === '1',
     rateLimits: {
       apiPerMinute: env.ZAMARO_API_LIMIT_PER_MINUTE,
       apiSignedInPerMinute: env.ZAMARO_API_SIGNED_IN_LIMIT_PER_MINUTE,

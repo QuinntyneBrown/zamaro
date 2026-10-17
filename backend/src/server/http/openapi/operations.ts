@@ -6,6 +6,7 @@ import {
   TourDatesResource,
 } from '../resources/artist-profiles/dates';
 import { ArtistProfileResource } from '../resources/artist-profiles/profile';
+import { CurrentUserResource, TwoFactorRequiredResource } from '../resources/accounts/current-user';
 import { AlternativesResource } from '../resources/discovery/alternatives';
 import { LineupResource } from '../resources/discovery/lineup';
 import { PlaceResource } from '../resources/discovery/place';
@@ -190,6 +191,50 @@ export const operations: Operation[] = [
     responses: {
       200: { description: 'The profiles', content: SitemapResource },
       304: { description: 'The list has not changed', content: null },
+    },
+  },
+  {
+    method: 'get',
+    path: '/csrf-cookie',
+    summary: 'Starts a guest session and writes the XSRF-TOKEN cookie',
+    responses: { 204: { description: 'The cookies are set', content: null } },
+  },
+  {
+    method: 'post',
+    path: '/session',
+    summary: 'Sign in: starts a session for Zamaro Web',
+    requestBody: z.object({ email: z.string(), password: z.string() }),
+    responses: {
+      200: { description: 'The signed-in person', content: CurrentUserResource },
+      202: {
+        description: 'The password was right; a code comes next',
+        content: TwoFactorRequiredResource,
+      },
+      419: { description: 'The CSRF token is missing or wrong', content: 'problem' },
+      422: {
+        description: 'Wrong credentials (errors.credentials) or missing fields',
+        content: 'problem',
+      },
+      429: { description: 'Sign-in is paused for the address', content: 'problem' },
+    },
+  },
+  {
+    method: 'delete',
+    path: '/session',
+    summary: 'Sign out: ends the session on the server',
+    responses: {
+      204: { description: 'Signed out; a new session and CSRF token are set', content: null },
+      401: { description: 'No one is signed in', content: 'problem' },
+      419: { description: 'The CSRF token is missing or wrong', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/me',
+    summary: 'The signed-in person',
+    responses: {
+      200: { description: 'The person', content: CurrentUserResource },
+      401: { description: 'A guest', content: 'problem' },
     },
   },
   {

@@ -22,6 +22,10 @@ x-e2e-environment: &e2e-environment
   DATABASE_URL: postgres://zamaro:zamaro@postgres:5432/zamaro_e2e
   REDIS_PREFIX: zamaro-e2e-
   ZAMARO_FROZEN_NOW: "2026-10-09T10:00:00-04:00"
+  # Cookie expiry dates are computed from the frozen clock, so with the 7-day lifetime the browser
+  # would drop the session and XSRF cookies once the real date is a week past it. The idle and
+  # absolute limits are proven in the backend tests with time travel.
+  SESSION_LIFETIME: "525600"
   # The web app's server reaches the API through Docker's network and forwards the browser's address.
   TRUSTED_PROXIES: "127.0.0.1,172.16.0.0/12,192.168.0.0/16"
   # Links in emails point at the site the suite drives (playwright.config.ts).

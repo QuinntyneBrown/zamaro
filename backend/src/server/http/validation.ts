@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { z, type ZodType } from 'zod';
-import { ValidationProblem } from '../support/problems';
+import { httpError, HttpProblem, ValidationProblem } from '../support/problems';
 
 /**
  * Request validation (ADR-0027): a Zod schema in the role FormRequests had. A failure is a 422
@@ -58,4 +58,24 @@ export function optionalQuery<T extends ZodType>(schema: T): z.ZodOptional<T> {
     (value) => (value === '' ? undefined : value),
     schema.optional(),
   ) as unknown as z.ZodOptional<T>;
+}
+
+/** The JSON body validated by the schema; a body that is not JSON is a 400 problem. */
+export async function validateBody<T>(
+  request: NextRequest,
+  schema: ZodType<T>,
+  options: ValidationOptions = {},
+): Promise<T> {
+  let input: unknown = {};
+  const text = await request.text();
+  if (text.trim() !== '') {
+    try {
+      input = JSON.parse(text);
+    } catch {
+      throw new HttpProblem(httpError(400, 'Bad Request'), {
+        detail: 'The body is not valid JSON.',
+      });
+    }
+  }
+  return validate(input, schema, options);
 }
