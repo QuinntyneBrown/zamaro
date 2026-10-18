@@ -95,7 +95,11 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       if (state.setup === 'application-fails') await application.failApplication(id);
       if (state.setup === 'application-verified') await application.answerVerified(id);
       if (state.setup === 'application-approved') await application.answerApproved(id);
-      await page.goto(state.path, { waitUntil: 'networkidle' });
+      // A held request never goes idle, so the loading state does not wait for the network.
+      await page.goto(
+        state.path,
+        state.setup === 'application-pending' ? undefined : { waitUntil: 'networkidle' },
+      );
       if (state.setup === 'application-pending') {
         await expect(application.loadingStatus()).toBeVisible();
       } else if (state.setup === 'application-fails') {

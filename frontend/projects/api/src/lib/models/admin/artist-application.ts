@@ -42,8 +42,10 @@ export interface AdminApplicationVideo {
   title: string;
   status: 'uploading' | 'processing' | 'live' | 'failed';
   durationSeconds: number | null;
-  posterUrl: string | null;
-  manifestUrl: string | null;
+  /** The poster frame, or null to keep the halftone placeholder. */
+  poster: { src: string; width: number; height: number } | null;
+  /** The HLS manifest once the video is Live. */
+  stream: string | null;
 }
 
 /** The review screen (pages/admin-application): every detail the administrator needs to decide. */

@@ -11,7 +11,7 @@ import {
   valuesOf,
 } from '@/server/enums';
 import { ZONE } from '@/server/support/clock';
-import { mediaUrl } from '@/server/support/media';
+import { mediaUrl, videoPoster } from '@/server/support/media';
 
 /** A row of the application queue (pages/admin-applications). */
 export const AdminApplicationRowResource = z.object({
@@ -80,8 +80,12 @@ export const AdminApplicationVideoResource = z.object({
   title: z.string(),
   status: z.enum(valuesOf(VideoStatus)),
   durationSeconds: z.number().int().nullable(),
-  posterUrl: z.string().nullable(),
-  manifestUrl: z.string().nullable(),
+  /** The poster frame, or null to keep the halftone placeholder. */
+  poster: z
+    .object({ src: z.string(), width: z.number().int(), height: z.number().int() })
+    .nullable(),
+  /** The HLS manifest once the video is Live. */
+  stream: z.string().nullable(),
 });
 
 /** The review screen (pages/admin-application): every detail the administrator needs to decide. */
@@ -127,8 +131,8 @@ export function toAdminApplication(
       title: video.title,
       status: video.status,
       durationSeconds: video.durationSeconds,
-      posterUrl: video.posterKey === null ? null : mediaUrl(video.posterKey),
-      manifestUrl: video.manifestKey === null ? null : mediaUrl(video.manifestKey),
+      poster: videoPoster(video.posterKey),
+      stream: video.manifestKey === null ? null : mediaUrl(video.manifestKey),
     })),
     decidedAt:
       application.decidedAt === null

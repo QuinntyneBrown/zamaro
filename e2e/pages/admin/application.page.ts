@@ -255,7 +255,7 @@ export class ReferenceBlock {
   detail(term: string): Locator {
     return this.root
       .locator('.definition__row')
-      .filter({ has: this.root.locator('dt', { hasText: term }) })
+      .filter({ has: this.root.page().locator('dt', { hasText: term }) })
       .locator('dd');
   }
 

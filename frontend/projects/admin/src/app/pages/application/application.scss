@@ -1,0 +1,55 @@
+@use '../../shared/page';
+@use '../../shared/detail-page';
+
+/* The approved notice sits between the head and the two columns. */
+.page-notice {
+  padding-bottom: var(--space-8);
+}
+
+/* The videos, one per column from SM (design-system media-grid). */
+.media-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 36rem) {
+  .media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Each reference: its details, then the tick; a dashed rule between references. */
+.reference {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.divider {
+  margin: 0;
+  border: 0;
+  border-top: var(--border-width-thick) dashed var(--color-border-strong);
+}
+
+/* The decision panel: the number as a stub code beside the title, the fine print under the buttons. */
+.stub__code {
+  font: var(--text-overline);
+  letter-spacing: var(--letter-spacing-stamp);
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+.stub__fine {
+  font: var(--text-caption);
+  color: var(--color-fg-muted);
+}
+
+.decision__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
