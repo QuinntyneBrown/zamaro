@@ -63,6 +63,7 @@ import {
   AdminArtistDetailEnvelope,
   AdminArtistListResource,
 } from '../resources/administration/artist';
+import { AdminApplicationQueueResource } from '../resources/administration/artist-application';
 import {
   AdminCheckEnvelope,
   AdminCheckQueueResource,
@@ -900,6 +901,18 @@ export const operations: Operation[] = [
       200: {
         description: 'The link on the media host and when it stops working',
         content: z.object({ data: z.object({ url: z.string(), expiresAt: z.string() }) }),
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/artist-applications',
+    name: 'admin.artist-applications.index',
+    summary: 'The Submitted artist applications, oldest first',
+    responses: {
+      200: {
+        description: 'The queue and how many are waiting',
+        content: AdminApplicationQueueResource,
       },
     },
   },
