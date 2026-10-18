@@ -45,7 +45,7 @@ public response is therefore identical for every viewer and is safe for a shared
   the server and in the browser. It sets the following tags:
   - the `Title` "{name} · Worship artist in {city} · Zamaro";
   - the `Meta` description, built from the headline and the opening of the bio, with
-    a length of `<TO SUPPLY>`;
+    a length of 160 characters (accepted default);
   - `<link rel="canonical">`;
   - Open Graph `og:title`, `og:description`, `og:image` (the primary photo's 1200 px
     rendition), `og:url` and `og:type`;
@@ -66,7 +66,7 @@ public response is therefore identical for every viewer and is safe for a shared
 **Backend (Zamaro API)**
 
 - **Profile HTTP caching** — the routes `GET /api/v1/artists/{slug}`, `/tour-dates` and
-  `/availability` use Laravel's `cache.headers` middleware with `etag`. It adds an
+  `/availability` use the `cachedJson` helper (`backend/src/server/http/caching.ts`). It adds an
   `ETag` computed from the response body and answers a matching `If-None-Match` with
   304 (L2-089). The profile response carries `Cache-Control: public, max-age=0,
   s-maxage=60`. Browsers therefore revalidate every time, and the CDN keeps a copy for
@@ -81,7 +81,7 @@ public response is therefore identical for every viewer and is safe for a shared
   profile page and profile API paths from the CDN, so edits normally appear well inside
   the 60-second bound. If the purge fails, the `s-maxage` expiry still keeps the bound
   (L2-089, L2-092). The CDN purge interface, `CdnPurger`, has one adapter for the CDN
-  vendor, which is `<TO SUPPLY>`.
+  vendor, which is chosen with the CDN (deferred, ADR-0029).
 - **`PrivateNoStore`** — middleware in the authenticated API group and on every
   response that holds personal data. It sets `Cache-Control: private, no-store`
   (L2-089). A response test asserts the header on each route tagged as personal in the
@@ -106,7 +106,7 @@ public response is therefore identical for every viewer and is safe for a shared
 - **Site origin (ADR-0013):** absolute URLs use the origin the request arrived at (Angular's
   `REQUEST` on the server, `document.location` in the browser), not a configured `https://zamaro.ca`.
   e2e therefore sees `http://localhost:4000/artists/abigail-mensah` as the canonical URL.
-- **`<TO SUPPLY>` description length (accepted default, 2026-10-10):** 160 characters.
+- **Description length (accepted default, 2026-10-10):** 160 characters.
   `artist.meta.description` is "{headline}. {bio}", collapsed to one line and cut at the last whole
   word that fits, with "…".
 - **Tags:** `og:title` and `twitter:title` are the page title; `og:site_name` is Zamaro; `og:type` is
@@ -129,8 +129,8 @@ public response is therefore identical for every viewer and is safe for a shared
   `{ data: [{ slug, lastModified }] }` from the visible scope (approved, payout ready, published) and
   the SSR server writes the XML with `/` first; it is not cached in Redis in M1, since nothing edits
   a profile yet.
-- **Caching:** `cache.headers:etag` on the profile, tour-dates and availability routes, with the hash
-  Laravel computes (xxh128, strong). The tour-dates and availability responses keep S14's `public,
+- **Caching:** `cachedJson` on the profile, tour-dates and availability routes, with the hash
+  it computes (SHA-256, strong). The tour-dates and availability responses keep S14's `public,
   max-age=0, s-maxage=60` rather than `public, no-cache`; the ETag makes them revalidate all the same.
   Not built in M1: the SSR server's `Cache-Control` and `ETag` on profile HTML (with the CDN, M10);
   `PurgeProfileCache`, `CdnPurger` and `ArtistProfileUpdated` (with profile editing, M4); and
@@ -182,7 +182,7 @@ Worker purges CDN copies after each profile change.
 ### Components
 
 `ProfileSeoService` and `ProfileJsonLdBuilder` decorate the rendered profile, and
-`ShareButtonComponent` handles sharing. On the backend, `cache.headers` adds ETags,
+`ShareButtonComponent` handles sharing. On the backend, `cachedJson` adds ETags,
 `PrivateNoStore` guards personal data, and `PurgeProfileCache` invalidates copies.
 
 ![C4 component view for indexing and sharing a profile](diagrams/c4-component.png)

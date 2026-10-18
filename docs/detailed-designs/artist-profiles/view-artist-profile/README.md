@@ -175,9 +175,9 @@ name. Duos, bands and choirs use the whole display name ("About Marcus Bell Trio
 - **No photos:** one square of act-type illustration labelled, for example, "Band illustration:
   Marcus Bell Trio hasn't added photos yet". The poster keeps its placeholder in M1; the primary
   photo arrives with uploads (M4).
-- **Media URLs:** `App\Support\Media::url()` builds them from the disk named by `zamaro.media.disk`,
+- **Media URLs:** `mediaUrl()` (`backend/src/server/support/media.ts`) builds them from `ZAMARO_MEDIA_URL`,
   not a `MediaUrlSigner`: nothing is signed yet. In M1 that is the API's local `media` disk, which
-  Laravel serves under `/media` and which the SSR server and dev proxy forward like `/api`. M4 points
+  the API serves under `/media` (`backend/src/app/media/[...path]/route.ts`) and which the SSR server and dev proxy forward like `/api`. M4 points
   the setting at object storage behind the CDN.
 - **API fields:** `photos` carries `id`, `alt`, `src` (the 800 px WebP), `width`, `height`, `srcset`
   and `avifSrcset`; `videos` carries `id`, `title`, `durationSeconds`, `poster` (`src`, `width`,

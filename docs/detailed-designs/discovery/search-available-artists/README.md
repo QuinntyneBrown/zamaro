@@ -154,7 +154,7 @@ row from LG.
   estimated drive time at 80 km/h, logs a `routing.unavailable` warning, and caches
   nothing. Distances below 1 km render as "Under 1 km".
 - **`RoutingProvider`** — interface with one adapter for the routing provider
-  (vendor `<TO SUPPLY>`). Until then `FakeRoutingProvider` reproduces the mocks' road
+  (vendor not yet chosen, see ADR-0029). Until then `FakeRoutingProvider` reproduces the mocks' road
   distances from `CastRoutes` (ADR-0002).
 - **`LineupCardResource`** and **`HeadlinerResource`** — API resources that `SearchController`
   assembles into the cards, the headliner, the total and the next cursor: `{"data":[card…],"meta":{"total":7}}`. Each card is

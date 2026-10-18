@@ -84,7 +84,7 @@ Zamaro database and the Redis cache.
   and `ReviewHidden`. It dispatches `RecalculateArtistRating` on the high-priority
   queue so a hidden review leaves the rating within 60 seconds (L2-060). Queue lag
   above 5 minutes already alerts (L2-093); a tighter alert for this queue is
-  `<TO SUPPLY>`.
+  a lag of 2 minutes (accepted default, set when the queue is built in M7).
 
 **Mocks**
 
@@ -114,7 +114,7 @@ Zamaro database and the Redis cache.
   so a new profile starts the list again; it has no `status`. `ArtistReviewsApi` is
   `ReviewsApi` behind the `REVIEWS_API` token in the `api` library.
 - **API fields:** the profile carries `reviews: { total, items, nextCursor }`, with up to 4
-  items and the cursor to continue from (Laravel's cursor over `created_at` and `id`).
+  items and the cursor to continue from (a cursor over `created_at` and `id`).
   `GET /api/v1/artists/{slug}/reviews?cursor=` returns `{ data, meta: { perPage, nextCursor } }`;
   a cursor that does not decode is a 422 ("These reviews have changed. Reload the page.").
   Each review is `id`, `stars`, `text`, `attribution { reviewerName, churchName, city, month }`
@@ -123,8 +123,8 @@ Zamaro database and the Redis cache.
   strings. There is no `ReviewAttribution` value object or `ReviewReplyResource` yet.
 - **Church count:** bookings have no `church_id` until churches have records (M2), so a church is
   the booking's `church_name` and `church_city`.
-- **Recalculation:** `App\Jobs\Reviews\RecalculateArtistRating` is unique per artist and runs on
-  the `high` queue, which Horizon now works before `default`. `QueueRatingRecalculation` and the
+- **Recalculation:** `recalculateArtistRating` (`backend/src/server/services/reviews/recalculate-artist-rating.ts`) runs today from the seeder only. The BullMQ job that calls it (ADR-0027) is unique per artist and runs on
+  the `high` queue, which the worker drains before `default`. `QueueRatingRecalculation` and the
   review events arrive with leaving and moderating reviews (M7). Nothing caches the profile or
   search results on the server yet, so the job forgets no cache entries.
 - **Paging:** the button reads "Show all 38 reviews" while only the profile's 4 are shown, then

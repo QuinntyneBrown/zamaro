@@ -6,7 +6,7 @@ import { ChecksPage } from '../../../pages/admin/checks.page';
 /** Burlington, as the Discover quick-pick chip sends it. */
 const BURLINGTON = { lat: '43.325', lng: '-79.799' };
 
-// L2-049.2, L2-069.1, L2-005.4 (verify-vulnerable-sector-check): Priya verifies Elijah Park's first
+// L2-049.2, L2-069.1, L2-005.5 (verify-vulnerable-sector-check): Priya verifies Elijah Park's first
 // check. This changes the seed, so it runs in the admin-mutations project, after the read-only admin
 // suite, and the project's teardown seeds the database again.
 test.describe('Verifying a check', () => {
@@ -43,7 +43,7 @@ test.describe('Verifying a check', () => {
     expect(audit.data[0]?.actor.name).toBe('Priya Nair');
     expect(audit.data[0]?.outcome).toBe('succeeded');
 
-    // ...and Elijah now appears in a Youth event search on Sat 14 Nov (L2-005.4).
+    // ...and Elijah now appears in a Youth event search on Sat 14 Nov (L2-005.5).
     const search = await apiJson<{ headliner: { name: string } | null; data: { name: string }[] }>(
       page.request,
       `/api/v1/search?date=2026-11-14&kind=youth-event&radius=120&lat=${BURLINGTON.lat}&lng=${BURLINGTON.lng}`,
