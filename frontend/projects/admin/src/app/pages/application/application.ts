@@ -4,6 +4,7 @@ import {
   computed,
   DestroyRef,
   inject,
+  Injector,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -35,6 +36,7 @@ import {
   VideoCard,
 } from 'components';
 import { map } from 'rxjs';
+import { openRejectApplicationDialog } from '../../dialogs/reject-application/reject-application';
 import { PageTitle } from '../../shared/page-title';
 import { VscDocumentLink } from '../../shell/vsc-document-link';
 
@@ -95,6 +97,7 @@ export class ApplicationPage {
   private readonly toasts = inject(ToastService);
   private readonly announcer = inject(LiveAnnouncer);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
   private readonly pageTitle = inject(PageTitle);
 
   private readonly id = toSignal(
@@ -292,6 +295,24 @@ export class ApplicationPage {
           this.load();
         },
       });
+  }
+
+  /** "Reject…": the dialog asks for the reason and the note, and the page shows the decision. */
+  protected reject(): void {
+    const application = this.application();
+    if (!application || application.status !== 'submitted') return;
+    openRejectApplicationDialog(this.injector, {
+      id: application.id,
+      number: application.number,
+      name: application.name,
+      submittedAt: application.submittedAt,
+    }).closed.subscribe((rejected) => {
+      if (!rejected) return;
+      this.show(rejected);
+      void this.announcer.announce(
+        this.transloco.translate('admin.application.rejected.announce', { name: rejected.name }),
+      );
+    });
   }
 
   /** "Issued Mon 5 Oct 2026 · Pending" for the applicant's latest check. */

@@ -221,7 +221,9 @@
                       'admin.application.decision.approve' | transloco: { name: firstName() }
                     }}</zm-button
                   >
-                  <zm-button block>{{ 'admin.application.decision.reject' | transloco }}</zm-button>
+                  <zm-button block id="reject-application" (click)="reject()">{{
+                    'admin.application.decision.reject' | transloco
+                  }}</zm-button>
                 </div>
                 <p class="stub__fine">
                   {{ 'admin.application.decision.fine' | transloco: { name: firstName() } }}
