@@ -1,9 +1,11 @@
 import { sql } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { Browser } from '../../support/accounts';
+import { api } from '../../support/app';
 import { PRIYA_EMAIL, PRIYA_TOTP_SECRET, signInWithCode } from '../../support/admin';
 import { resetClock } from '../../support/clock';
 import { expectContract } from '../../support/contract';
+import { emailsTo } from '../../support/mail';
 import { closeDatabase, freshDatabase, query } from '../../support/database';
 
 const QUEUE = '/api/v1/admin/artist-applications';
@@ -270,5 +272,130 @@ describe('verifying a reference', () => {
     });
 
     expect(response.status).toBe(404);
+  });
+});
+
+const APPROVE = { method: 'post', path: '/admin/artist-applications/{application}/approval' };
+
+/**
+ * L2-048.1, L2-048.3, L2-063, L2-069.1 (review-artist-application): approval needs both references
+ * verified, grants the Artist role, creates an artist who stays hidden until payout setup, moves the
+ * video to the artist, emails the next step and is audited.
+ */
+describe('approving an application', () => {
+  let priya: Browser;
+
+  beforeAll(async () => {
+    await freshDatabase();
+  });
+
+  afterAll(closeDatabase);
+
+  beforeEach(async () => {
+    await freshDatabase();
+    resetClock();
+    priya = await signInWithCode(PRIYA_EMAIL, PRIYA_TOTP_SECRET);
+  });
+
+  async function tobi(): Promise<Detail> {
+    const queue = (await (await priya.json(QUEUE, 'GET')).json()) as QueuePage;
+    const row = queue.data.find((candidate) => candidate.number === 'A-0219');
+    const shown = await priya.json(`${QUEUE}/${String(row?.id)}`, 'GET');
+    return ((await shown.json()) as { data: Detail }).data;
+  }
+
+  async function verifyBoth(application: Detail): Promise<void> {
+    for (const reference of application.references) {
+      const path = `${QUEUE}/${String(application.id)}/references/${String(reference.id)}/verification`;
+      expect((await priya.json(path, 'PUT', { verified: true })).status).toBe(200);
+    }
+  }
+
+  const approval = (application: Detail): string => `${QUEUE}/${String(application.id)}/approval`;
+
+  it('is refused until both references are verified', async () => {
+    const application = await tobi();
+
+    const response = await priya.json(approval(application), 'POST');
+
+    expect(response.status).toBe(422);
+    const problem = (await response.json()) as { detail: string };
+    expect(problem.detail).toBe('Verify both references before you approve.');
+    expect((await tobi()).status).toBe('submitted');
+  });
+
+  it('makes Tobi an unpublished artist with the Artist role', async () => {
+    const application = await tobi();
+    await verifyBoth(application);
+
+    const response = await priya.json(approval(application), 'POST');
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as {
+      data: Detail & { decidedBy: { name: string } | null; decidedAt: string | null };
+    };
+    expectContract(response, APPROVE, body);
+    expect(body.data.status).toBe('approved');
+    expect(body.data.decidedBy).toEqual({ name: 'Priya Nair' });
+    expect(new Date(body.data.decidedAt ?? 0).toISOString()).toBe('2026-10-09T14:00:00.000Z');
+    const artists = await query(
+      sql`select a.slug, a.ticket_number, a.status, a.payout_ready, a.published_at, a.display_name
+          from artists a join users u on u.id = a.user_id where lower(u.email) = 'tobi@tobiadeyemi.ca'`,
+    );
+    expect(artists).toEqual([
+      {
+        slug: 'tobi-adeyemi',
+        ticket_number: 'ACT-0155',
+        status: 'approved',
+        payout_ready: false,
+        published_at: null,
+        display_name: 'Tobi Adeyemi',
+      },
+    ]);
+    const roles = await query(
+      sql`select r.name from roles r join role_user ru on ru.role_id = r.id
+          join users u on u.id = ru.user_id where lower(u.email) = 'tobi@tobiadeyemi.ca'`,
+    );
+    expect(roles).toEqual([{ name: 'artist' }]);
+    const videos = await query(
+      sql`select artist_id from artist_videos where artist_application_id = ${application.id}`,
+    );
+    expect(videos).toHaveLength(1);
+    expect(videos[0]?.artist_id).not.toBeNull();
+  });
+
+  it('keeps the artist out of the public profile until payout setup', async () => {
+    const application = await tobi();
+    await verifyBoth(application);
+
+    await priya.json(approval(application), 'POST');
+
+    expect((await api('/api/v1/artists/tobi-adeyemi')).status).toBe(404);
+  });
+
+  it('emails Tobi the next step with a link to set a password, and audits it', async () => {
+    const application = await tobi();
+    await verifyBoth(application);
+
+    await priya.json(approval(application), 'POST');
+
+    const [email] = emailsTo('tobi@tobiadeyemi.ca');
+    expect(email?.text).toContain('payout');
+    expect(email?.text).toContain('/reset-password/');
+    const entries = await query(
+      sql`select action from audit_entries
+          where action in ('application.approved', 'user.role_changed') order by action`,
+    );
+    expect(entries).toEqual([{ action: 'application.approved' }, { action: 'user.role_changed' }]);
+  });
+
+  it('answers 409 to a second approval', async () => {
+    const application = await tobi();
+    await verifyBoth(application);
+    await priya.json(approval(application), 'POST');
+
+    const response = await priya.json(approval(application), 'POST');
+
+    expect(response.status).toBe(409);
   });
 });
