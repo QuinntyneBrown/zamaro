@@ -24,6 +24,8 @@ export interface ApplicationReview {
   /** Each reference with its contact decrypted (L2-079.2) and who verified it. */
   references: { row: ReferenceRow; contact: string; verifiedBy: string | null }[];
   videos: ApplicationVideo[];
+  /** The administrator who approved or rejected it, once decided. */
+  decidedBy: string | null;
   /** The applicant's latest Vulnerable Sector Check, when they have an account and uploaded one. */
   check: typeof vulnerableSectorChecks.$inferSelect | null;
 }
@@ -80,8 +82,16 @@ export async function describeApplication(applicationId: number): Promise<Applic
           .where(eq(vulnerableSectorChecks.userId, application.userId))
           .orderBy(desc(vulnerableSectorChecks.createdAt))
           .limit(1);
+  const [decider] =
+    application.decidedBy === null
+      ? []
+      : await db()
+          .select({ name: users.name })
+          .from(users)
+          .where(eq(users.id, application.decidedBy));
   return {
     application,
+    decidedBy: decider?.name ?? null,
     references: references.map(({ row, verifier }) => ({
       row,
       contact: contactOf(row),

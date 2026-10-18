@@ -87,6 +87,9 @@ export const AdminApplicationResource = AdminApplicationRowResource.extend({
   bio: z.string(),
   references: z.array(AdminReferenceResource),
   videos: z.array(AdminApplicationVideoResource),
+  /** When it was decided, and by whom; null while Submitted. */
+  decidedAt: z.string().nullable(),
+  decidedBy: z.object({ name: z.string() }).nullable(),
   /** The applicant's latest Vulnerable Sector Check, or null when none is uploaded. */
   vsc: z
     .object({ id: z.number().int(), issuedOn: z.iso.date(), status: z.enum(valuesOf(VscStatus)) })
@@ -116,6 +119,11 @@ export function toAdminApplication(
       posterUrl: video.posterKey === null ? null : mediaUrl(video.posterKey),
       manifestUrl: video.manifestKey === null ? null : mediaUrl(video.manifestKey),
     })),
+    decidedAt:
+      application.decidedAt === null
+        ? null
+        : (DateTime.fromJSDate(application.decidedAt, { zone: ZONE }).toISO() ?? null),
+    decidedBy: review.decidedBy === null ? null : { name: review.decidedBy },
     vsc:
       review.check === null
         ? null

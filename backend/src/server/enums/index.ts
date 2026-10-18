@@ -182,6 +182,7 @@ export const AuditAction = {
   VscVerified: 'vsc.verified',
   ApplicationViewed: 'application.viewed',
   ReferenceVerified: 'application_reference.verified',
+  ApplicationApproved: 'application.approved',
 } as const;
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];
 

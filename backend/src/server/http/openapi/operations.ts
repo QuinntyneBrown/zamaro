@@ -933,6 +933,23 @@ export const operations: Operation[] = [
     },
   },
   {
+    method: 'post',
+    path: '/admin/artist-applications/{application}/approval',
+    name: 'admin.artist-applications.approve',
+    summary:
+      'Approve: both references must be verified; grants the Artist role and creates a hidden artist',
+    parameters: [{ name: 'application', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The application, approved', content: AdminApplicationEnvelope },
+      404: { description: 'No such application', content: 'problem' },
+      409: {
+        description: 'Already decided (application-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'A reference is not verified yet', content: 'problem' },
+    },
+  },
+  {
     method: 'put',
     path: '/admin/artist-applications/{application}/references/{reference}/verification',
     name: 'admin.artist-applications.references.verify',

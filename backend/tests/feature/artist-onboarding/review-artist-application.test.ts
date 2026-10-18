@@ -345,7 +345,7 @@ describe('approving an application', () => {
     expect(artists).toEqual([
       {
         slug: 'tobi-adeyemi',
-        ticket_number: 'ACT-0155',
+        ticket_number: 'ACT-1031',
         status: 'approved',
         payout_ready: false,
         published_at: null,
