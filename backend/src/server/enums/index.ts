@@ -180,6 +180,7 @@ export const AuditAction = {
   RoleChanged: 'user.role_changed',
   VscDocumentViewed: 'vsc_document.viewed',
   VscVerified: 'vsc.verified',
+  ApplicationViewed: 'application.viewed',
 } as const;
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];
 

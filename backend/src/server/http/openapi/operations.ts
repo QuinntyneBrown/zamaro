@@ -63,7 +63,10 @@ import {
   AdminArtistDetailEnvelope,
   AdminArtistListResource,
 } from '../resources/administration/artist';
-import { AdminApplicationQueueResource } from '../resources/administration/artist-application';
+import {
+  AdminApplicationEnvelope,
+  AdminApplicationQueueResource,
+} from '../resources/administration/artist-application';
 import {
   AdminCheckEnvelope,
   AdminCheckQueueResource,
@@ -914,6 +917,17 @@ export const operations: Operation[] = [
         description: 'The queue and how many are waiting',
         content: AdminApplicationQueueResource,
       },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/artist-applications/{application}',
+    name: 'admin.artist-applications.show',
+    summary: 'One application for review: the applicant, references, videos and check; audited',
+    parameters: [{ name: 'application', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The application', content: AdminApplicationEnvelope },
+      404: { description: 'No such application', content: 'problem' },
     },
   },
   {

@@ -1524,6 +1524,7 @@ class CastSeeder {
       await this.tx
         .delete(applicationReferences)
         .where(eq(applicationReferences.artistApplicationId, row.id));
+      if (fields.number === 'A-0219') await this.tobiVideo(row.id, at);
       for (const [name = '', church = '', contact = ''] of references) {
         const isEmail = contact.includes('@');
         await this.tx.insert(applicationReferences).values({
@@ -1537,6 +1538,25 @@ class CastSeeder {
         });
       }
     }
+  }
+
+  /** The one video Tobi attached to A-0219 (pages/admin-application), Live with its sample stream. */
+  private async tobiVideo(applicationId: number, at: Date): Promise<void> {
+    const values = {
+      artistApplicationId: applicationId,
+      position: 1,
+      title: 'Way Maker — live at Cornerstone',
+      status: VideoStatus.Live,
+      durationSeconds: 348,
+      manifestKey: SAMPLE_STREAM,
+      fileName: 'way-maker-cornerstone.mp4',
+      createdAt: at,
+      updatedAt: at,
+    };
+    await this.tx
+      .insert(artistVideos)
+      .values({ ...values, uploadToken: 'seed-a-0219-way-maker' })
+      .onConflictDoUpdate({ target: artistVideos.uploadToken, set: values });
   }
 
   /** Upserts a check on (user, issued on), which has no unique constraint. */
