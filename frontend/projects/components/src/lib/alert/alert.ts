@@ -3,7 +3,7 @@ import { Icon } from '../icon/icon';
 
 /**
  * An inline alert (docs/design-system/components/alert). A danger alert is `role="alert"` and is
- * never dismissible while the problem lasts. Project the message as content and the buttons into
+ * never dismissible while the problem lasts; a success alert is `role="status"`, read politely. Project the message as content and the buttons into
  * `[slot=actions]`; wrap each slotted node in its own `@if` (NG8011).
  */
 @Component({
@@ -12,11 +12,12 @@ import { Icon } from '../icon/icon';
   template: `<div
     class="alert"
     [class.alert--danger]="variant() === 'danger'"
+    [class.alert--success]="variant() === 'success'"
     [class.alert--compact]="compact()"
-    role="alert"
+    [attr.role]="variant() === 'success' ? 'status' : 'alert'"
   >
     <zm-icon
-      [name]="variant() === 'danger' ? 'warning' : 'info'"
+      [name]="variant() === 'danger' ? 'warning' : variant() === 'success' ? 'check' : 'info'"
       [size]="compact() ? 'md' : 'lg'"
     />
     <div class="stack stack--sm">
@@ -44,6 +45,12 @@ import { Icon } from '../icon/icon';
       --alert-bg: var(--color-danger-bg);
       --alert-border: var(--color-danger-border);
       --alert-icon: var(--color-danger-icon);
+    }
+
+    .alert--success {
+      --alert-bg: var(--color-success-bg);
+      --alert-border: var(--color-success-border);
+      --alert-icon: var(--color-success-icon);
     }
 
     .alert--compact {
@@ -86,7 +93,7 @@ import { Icon } from '../icon/icon';
 })
 export class Alert {
   readonly heading = input.required<string>();
-  readonly variant = input<'info' | 'danger'>('info');
+  readonly variant = input<'info' | 'success' | 'danger'>('info');
   /** Tighter padding and a smaller title: inside auth cards, dialogs, forms and cards. */
   readonly compact = input(false, { transform: booleanAttribute });
 }
