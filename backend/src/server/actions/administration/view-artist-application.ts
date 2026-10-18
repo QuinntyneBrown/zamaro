@@ -50,7 +50,7 @@ export async function viewArtistApplication(
   return review;
 }
 
-async function describeApplication(applicationId: number): Promise<ApplicationReview> {
+export async function describeApplication(applicationId: number): Promise<ApplicationReview> {
   const [application] = await db()
     .select()
     .from(artistApplications)

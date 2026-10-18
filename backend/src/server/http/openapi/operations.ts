@@ -66,11 +66,13 @@ import {
 import {
   AdminApplicationEnvelope,
   AdminApplicationQueueResource,
+  AdminReferenceEnvelope,
 } from '../resources/administration/artist-application';
 import {
   AdminCheckEnvelope,
   AdminCheckQueueResource,
 } from '../resources/administration/vulnerable-sector-check';
+import { SetReferenceVerificationRequest } from '../requests/administration/reference-verification';
 import { StartApplicationVideoUploadRequest } from '../requests/artist-onboarding/application-video';
 import { ApplicationVideoEnvelope } from '../resources/artist-onboarding/application-video';
 import { SubmitArtistApplicationRequest } from '../requests/artist-onboarding/application';
@@ -928,6 +930,29 @@ export const operations: Operation[] = [
     responses: {
       200: { description: 'The application', content: AdminApplicationEnvelope },
       404: { description: 'No such application', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/admin/artist-applications/{application}/references/{reference}/verification',
+    name: 'admin.artist-applications.references.verify',
+    summary: 'Tick or untick a reference: saved at once with who and when, and audited',
+    parameters: [
+      { name: 'application', in: 'path', schema: z.number().int() },
+      { name: 'reference', in: 'path', schema: z.number().int() },
+    ],
+    requestBody: SetReferenceVerificationRequest,
+    responses: {
+      200: { description: 'The reference, as it now stands', content: AdminReferenceEnvelope },
+      404: {
+        description: 'No such application, or a reference of another one',
+        content: 'problem',
+      },
+      409: {
+        description: 'The application was already decided (application-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'verified is missing', content: 'problem' },
     },
   },
   {

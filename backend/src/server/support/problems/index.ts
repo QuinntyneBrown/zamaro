@@ -54,6 +54,11 @@ export const ProblemType = {
     status: 409,
     title: 'Administrators keep two-step sign-in on',
   },
+  ApplicationAlreadyDecided: {
+    slug: 'application-already-decided',
+    status: 409,
+    title: 'This application was already decided',
+  },
   VscAlreadyDecided: {
     slug: 'vsc-already-decided',
     status: 409,

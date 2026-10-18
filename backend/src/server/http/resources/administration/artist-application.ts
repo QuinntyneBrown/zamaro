@@ -48,6 +48,26 @@ export const AdminReferenceResource = z.object({
   verifiedBy: z.object({ name: z.string() }).nullable(),
 });
 
+export const AdminReferenceEnvelope = z.object({ data: AdminReferenceResource });
+
+export function toAdminReference({
+  row,
+  contact,
+  verifiedBy,
+}: ApplicationReview['references'][number]): z.infer<typeof AdminReferenceResource> {
+  return {
+    id: row.id,
+    name: row.name,
+    church: row.church,
+    contact,
+    verifiedAt:
+      row.verifiedAt === null
+        ? null
+        : (DateTime.fromJSDate(row.verifiedAt, { zone: ZONE }).toISO() ?? null),
+    verifiedBy: verifiedBy === null ? null : { name: verifiedBy },
+  };
+}
+
 export const AdminApplicationVideoResource = z.object({
   id: z.string(),
   title: z.string(),
@@ -87,17 +107,7 @@ export function toAdminApplication(
     fromPriceCents: application.fromPriceCents,
     maxDriveKm: application.maxDriveKm,
     bio: application.bio,
-    references: review.references.map(({ row, contact, verifiedBy }) => ({
-      id: row.id,
-      name: row.name,
-      church: row.church,
-      contact,
-      verifiedAt:
-        row.verifiedAt === null
-          ? null
-          : (DateTime.fromJSDate(row.verifiedAt, { zone: ZONE }).toISO() ?? null),
-      verifiedBy: verifiedBy === null ? null : { name: verifiedBy },
-    })),
+    references: review.references.map(toAdminReference),
     videos: review.videos.map((video) => ({
       id: video.id,
       title: video.title,
