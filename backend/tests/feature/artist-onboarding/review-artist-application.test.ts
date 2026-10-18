@@ -174,3 +174,101 @@ describe('the application review screen', () => {
     expect(response.status).toBe(404);
   });
 });
+
+const VERIFY = {
+  method: 'put',
+  path: '/admin/artist-applications/{application}/references/{reference}/verification',
+};
+
+/**
+ * L2-048.1, L2-069.1 (review-artist-application): ticking a reference saves at once, records who and
+ * when, and is audited as `application_reference.verified`; unticking clears it. Only a Submitted
+ * application's own references can change.
+ */
+describe('verifying a reference', () => {
+  let priya: Browser;
+
+  beforeAll(async () => {
+    await freshDatabase();
+  });
+
+  afterAll(closeDatabase);
+
+  beforeEach(async () => {
+    await freshDatabase();
+    resetClock();
+    priya = await signInWithCode(PRIYA_EMAIL, PRIYA_TOTP_SECRET);
+  });
+
+  async function tobi(): Promise<Detail> {
+    const queue = (await (await priya.json(QUEUE, 'GET')).json()) as QueuePage;
+    const row = queue.data.find((candidate) => candidate.number === 'A-0219');
+    const shown = await priya.json(`${QUEUE}/${String(row?.id)}`, 'GET');
+    return ((await shown.json()) as { data: Detail }).data;
+  }
+
+  function verification(application: Detail, reference: number): string {
+    return `${QUEUE}/${String(application.id)}/references/${String(reference)}/verification`;
+  }
+
+  it('records who verified the reference and when, and audits it', async () => {
+    const application = await tobi();
+    const first = application.references[0];
+
+    const response = await priya.json(verification(application, first?.id ?? 0), 'PUT', {
+      verified: true,
+    });
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as { data: Detail['references'][number] };
+    expectContract(response, VERIFY, body);
+    expect(body.data.verifiedBy).toEqual({ name: 'Priya Nair' });
+    expect(new Date(body.data.verifiedAt ?? 0).toISOString()).toBe('2026-10-09T14:00:00.000Z');
+    const reopened = await tobi();
+    expect(reopened.references.map((reference) => reference.verifiedAt !== null)).toEqual([
+      true,
+      false,
+    ]);
+    const entries = await query(
+      sql`select target_type, target_id from audit_entries where action = 'application_reference.verified'`,
+    );
+    expect(entries).toEqual([{ target_type: 'application_reference', target_id: first?.id }]);
+  });
+
+  it('clears the verification when it is unticked', async () => {
+    const application = await tobi();
+    const first = application.references[0]?.id ?? 0;
+    await priya.json(verification(application, first), 'PUT', { verified: true });
+
+    const response = await priya.json(verification(application, first), 'PUT', {
+      verified: false,
+    });
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as { data: Detail['references'][number] };
+    expect(body.data.verifiedAt).toBeNull();
+    expect(body.data.verifiedBy).toBeNull();
+  });
+
+  it('refuses a body without verified', async () => {
+    const application = await tobi();
+
+    const response = await priya.json(
+      verification(application, application.references[0]?.id ?? 0),
+      'PUT',
+      {},
+    );
+
+    expect(response.status).toBe(422);
+  });
+
+  it("answers 404 for a reference that is not on this application's list", async () => {
+    const application = await tobi();
+
+    const response = await priya.json(verification(application, 999999), 'PUT', {
+      verified: true,
+    });
+
+    expect(response.status).toBe(404);
+  });
+});
