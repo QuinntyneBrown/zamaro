@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { AcceptTermsPage } from '../pages/accept-terms.page';
+import { ApplicationsPage } from '../pages/admin/applications.page';
 import { ArtistPage } from '../pages/admin/artist.page';
 import { ArtistsPage } from '../pages/admin/artists.page';
 import { AuditLogPage } from '../pages/admin/audit-log.page';
@@ -67,8 +68,13 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     case 'two-step-on':
       await page.route('**/api/v1/me', async (route) => {
         const response = await route.fetch();
-        const body = (await response.json()) as { data: Record<string, unknown> };
-        await route.fulfill({ response, json: { data: { ...body.data, mfaEnabled: true } } });
+        const body = (await response.json()) as {
+          data: Record<string, unknown>;
+        };
+        await route.fulfill({
+          response,
+          json: { data: { ...body.data, mfaEnabled: true } },
+        });
       });
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();
@@ -77,6 +83,10 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       await page.addInitScript(() => localStorage.setItem('zamaro.lastSearchDate', '2026-11-14'));
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();
+      break;
+    case 'no-applications':
+      await new ApplicationsPage(page).answerNoApplications();
+      await page.goto(state.path, { waitUntil: 'networkidle' });
       break;
     case 'fresh-booker':
       await signIn(page.context().request, RUTH);
@@ -105,6 +115,7 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
     await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
   if (state.shows === 'audit-rows') await new AuditLogPage(page).waitForRows();
   if (state.shows === 'checks-rows') await new ChecksPage(page).waitForRows();
+  if (state.shows === 'applications-rows') await new ApplicationsPage(page).waitForRows();
   if (state.shows === 'artists-rows') await new ArtistsPage(page).waitForRows();
   if (state.shows === 'artist-details') {
     const artist = new ArtistPage(page);

@@ -12,6 +12,7 @@ import type { CastMember } from './fixtures/accounts';
  * - `two-step-on`: `/me` says two-step sign-in is on, as no seeded cast member has it on.
  * - `last-search`: this browser's most recent search was Naomi's, Sat 14 Nov (D14).
  * - `fresh-booker`: Ruth Adeyemi, a booker with no church and nothing saved, is signed in.
+ * - `no-applications`: the application queue answers empty.
  */
 export type RouteSetup =
   | 'search-pending'
@@ -22,7 +23,8 @@ export type RouteSetup =
   | 'profile-fails'
   | 'two-step-on'
   | 'last-search'
-  | 'fresh-booker';
+  | 'fresh-booker'
+  | 'no-applications';
 
 export interface RouteState {
   /** Names the state in screenshots and test titles. */
@@ -54,6 +56,7 @@ export interface RouteState {
     | 'saved-empty'
     | 'audit-rows'
     | 'checks-rows'
+    | 'applications-rows'
     | 'artists-rows'
     | 'artist-details';
   /**
@@ -356,6 +359,24 @@ export const routes: RouteState[] = [
     app: 'admin',
     mock: 'not-found/default.html',
     signedInAs: 'naomi',
+  },
+  // Priya's application queue: the three seeded applications, oldest first (J8-S2), and the queue
+  // with nothing waiting.
+  {
+    name: 'admin-applications',
+    path: '/admin/applications',
+    app: 'admin',
+    mock: 'admin-applications/default.html',
+    signedInAs: 'priya',
+    shows: 'applications-rows',
+  },
+  {
+    name: 'admin-applications-empty',
+    path: '/admin/applications',
+    app: 'admin',
+    mock: 'admin-applications/empty.html',
+    signedInAs: 'priya',
+    setup: 'no-applications',
   },
   // Priya's audit log: the week to Fri 9 Oct, newest first; her own sign-in heads it (M3 S5). The
   // times and addresses are the suite's own, so they are masked.
