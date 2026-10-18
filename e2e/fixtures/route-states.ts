@@ -36,6 +36,11 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       await page.goto(state.path);
       await expect(discover.lineup.skeletons().first()).toBeVisible();
       break;
+    case 'submit-empty':
+      await discover.openAndHydrate();
+      await discover.form.showTheLineup();
+      await expect(discover.form.errorSummary()).toBeVisible();
+      break;
     case 'search-fails':
       await discover.failSearches();
       await page.goto(state.path);
