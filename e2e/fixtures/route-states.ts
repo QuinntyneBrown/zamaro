@@ -1,5 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import { AcceptTermsPage } from '../pages/accept-terms.page';
+import { ApplicationPage } from '../pages/admin/application.page';
 import { ApplicationsPage } from '../pages/admin/applications.page';
 import { ArtistPage } from '../pages/admin/artist.page';
 import { ArtistsPage } from '../pages/admin/artists.page';
@@ -84,6 +85,24 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       await page.goto(state.path, { waitUntil: 'networkidle' });
       await expect(discover.shell.main()).toBeVisible();
       break;
+    case 'application-pending':
+    case 'application-fails':
+    case 'application-verified':
+    case 'application-approved': {
+      const application = new ApplicationPage(page);
+      const id = Number(state.path.split('/').pop());
+      if (state.setup === 'application-pending') await application.holdApplication(id);
+      if (state.setup === 'application-fails') await application.failApplication(id);
+      if (state.setup === 'application-verified') await application.answerVerified(id);
+      if (state.setup === 'application-approved') await application.answerApproved(id);
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      if (state.setup === 'application-pending') {
+        await expect(application.loadingStatus()).toBeVisible();
+      } else if (state.setup === 'application-fails') {
+        await expect(application.errorAlert()).toBeVisible();
+      }
+      break;
+    }
     case 'no-applications':
       await new ApplicationsPage(page).answerNoApplications();
       await page.goto(state.path, { waitUntil: 'networkidle' });
@@ -116,6 +135,11 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.shows === 'audit-rows') await new AuditLogPage(page).waitForRows();
   if (state.shows === 'checks-rows') await new ChecksPage(page).waitForRows();
   if (state.shows === 'applications-rows') await new ApplicationsPage(page).waitForRows();
+  if (state.shows === 'application-details') {
+    const application = new ApplicationPage(page);
+    await expect(application.reference(1).verifiedBox()).toBeVisible();
+    await expect(application.decision()).toBeVisible();
+  }
   if (state.shows === 'artists-rows') await new ArtistsPage(page).waitForRows();
   if (state.shows === 'artist-details') {
     const artist = new ArtistPage(page);

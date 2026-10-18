@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { signInAsAdministrator } from '../../../fixtures/admin-session';
+import { ApplicationPage } from '../../../pages/admin/application.page';
 import { ApplicationsPage } from '../../../pages/admin/applications.page';
 
 // L2-048.1, L2-066, L2-067.1, L2-105 (review-artist-application): the queue of Submitted
@@ -97,5 +98,138 @@ test.describe('The application queue', () => {
 
     await applications.waitForRows();
     await expect(applications.rows()).toHaveCount(3);
+  });
+});
+
+/** Tobi Adeyemi's A-0219: the third seeded application. */
+const TOBI_ID = 3;
+
+// L2-067.1, L2-048.1, L2-079.2, L2-105 (review-artist-application): the review screen shows every
+// applicant detail, the references with their contacts and ticks, the video, the check, and the
+// decision panel with Approve locked until both references are verified.
+test.describe('The application review screen', () => {
+  test.beforeEach(async ({ page }) => {
+    await signInAsAdministrator(page.context());
+  });
+
+  test("shows Tobi's details, bio, video, references and check, with Approve locked", async ({
+    page,
+  }) => {
+    const application = new ApplicationPage(page);
+
+    await application.open(TOBI_ID);
+
+    await expect(application.crumbs()).toHaveText(['Applications', 'Tobi Adeyemi']);
+    await expect(application.applicationsCrumb()).toHaveAttribute('href', '/admin/applications');
+    await expect(application.overline()).toHaveText('Application A-0219');
+    await expect(application.heading()).toHaveText('Tobi Adeyemi');
+    await expect(application.subtitle()).toHaveText(
+      'Solo vocalist · Acoustic, Hymns · Scarborough, ON · submitted Fri 9 Oct, 10:42 a.m.',
+    );
+    await expect(application.headBadge()).toHaveText('Submitted');
+
+    await expect(application.detailTerms()).toHaveText([
+      'Name',
+      'Email',
+      'Act type',
+      'Base city',
+      'Styles',
+      '“From” price',
+      'Drives up to',
+      'Submitted',
+    ]);
+    await expect(application.detail('Email')).toHaveText('tobi@tobiadeyemi.ca');
+    await expect(application.detail('Act type')).toHaveText('Solo');
+    await expect(application.detail('Styles')).toHaveText('Solo vocalist, Acoustic, Hymns');
+    await expect(application.detail('“From” price')).toHaveText('$400 per service');
+    await expect(application.detail('Drives up to')).toHaveText('80 km');
+    await expect(application.detail('Submitted')).toHaveText('Fri 9 Oct 2026, 10:42 a.m.');
+
+    await expect(application.bioCaption()).toHaveText('336 characters');
+    await expect(application.bio()).toContainText('vocalist and keys player from Scarborough');
+    await expect(application.videosCaption()).toHaveText('1 uploaded');
+    await expect(application.videos()).toHaveCount(1);
+    await expect(application.videos().first()).toContainText('Way Maker — live at Cornerstone');
+    await expect(application.videos().first().getByRole('button')).toHaveAccessibleName(
+      'Play Way Maker, live at Cornerstone, 5 minutes 48 seconds',
+    );
+
+    await expect(application.referencesCaption()).toHaveText('0 of 2 verified');
+    const samuel = application.reference(0);
+    await expect(samuel.detail('Name')).toHaveText('Pastor Samuel Osei');
+    await expect(samuel.detail('Church')).toHaveText('Cornerstone Baptist, Scarborough');
+    await expect(samuel.detail('Phone or email')).toHaveText('samuel.osei@cornerstonebaptist.ca');
+    await expect(samuel.verifiedBox()).not.toBeChecked();
+    await expect(samuel.description()).toHaveText(
+      'Call or email them, then tick when they vouch for Tobi.',
+    );
+    const ruth = application.reference(1);
+    await expect(ruth.detail('Name')).toHaveText('Ruth Kim');
+    await expect(ruth.detail('Phone or email')).toHaveText('647 555 0192');
+
+    await expect(application.check()).toContainText('No Vulnerable Sector Check uploaded.');
+    await expect(application.check()).toContainText(
+      'Not needed to approve. Tobi can upload one later; without a verified check Tobi is left out of Youth event searches.',
+    );
+
+    await expect(application.approveHelp()).toHaveText(
+      'Verify both references before you approve.',
+    );
+    await expect(application.approveButton()).toHaveText('Approve Tobi');
+    await expect(application.approveButton()).toBeDisabled();
+    await expect(application.approveButton()).toHaveAttribute('aria-describedby', /.+/);
+    await expect(application.rejectButton()).toBeVisible();
+    await expect(application.decision()).toContainText(
+      'Tobi is emailed either way. Approval grants the Artist role; the profile goes live after payout setup.',
+    );
+  });
+
+  test('with both references verified, Approve is unlocked', async ({ page }) => {
+    const application = new ApplicationPage(page);
+    await application.answerVerified(TOBI_ID);
+
+    await application.open(TOBI_ID);
+
+    await expect(application.referencesCaption()).toHaveText('2 of 2 verified');
+    await expect(application.reference(0).verifiedBox()).toBeChecked();
+    await expect(application.reference(0).description()).toHaveText(
+      'Verified by Priya Nair, Fri 9 Oct, 1:50 p.m.',
+    );
+    await expect(application.reference(1).description()).toHaveText(
+      'Verified by Priya Nair, Fri 9 Oct, 2:05 p.m.',
+    );
+    await expect(application.approveHelp()).toHaveText('Both references verified.');
+    await expect(application.approveButton()).toBeEnabled();
+  });
+
+  test('while loading it shows skeleton panels; a failure offers Try again and the way back', async ({
+    page,
+  }) => {
+    const application = new ApplicationPage(page);
+    await application.holdApplication(TOBI_ID);
+    await application.open(TOBI_ID);
+
+    expect(await application.isBusy()).toBe(true);
+    await expect(application.heading()).toHaveText('Application');
+    await expect(application.crumbs()).toHaveText(['Applications', 'Loading']);
+    await expect(application.loadingStatus()).toContainText('Loading the application');
+
+    await application.failApplication(TOBI_ID);
+    await application.open(TOBI_ID);
+
+    await expect(application.errorTitle()).toHaveText('We couldn’t load this application');
+    await expect(application.errorAlert()).toContainText(
+      'The application and its reference ticks are safe. Try again, or go back to the queue.',
+    );
+    await expect(application.backToApplicationsLink()).toHaveAttribute(
+      'href',
+      '/admin/applications',
+    );
+
+    await application.answerNormally();
+    await application.tryAgainButton().click();
+
+    await expect(application.heading()).toHaveText('Tobi Adeyemi');
+    await expect(application.headBadge()).toHaveText('Submitted');
   });
 });

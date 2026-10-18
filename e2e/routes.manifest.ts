@@ -13,6 +13,9 @@ import type { CastMember } from './fixtures/accounts';
  * - `last-search`: this browser's most recent search was Naomi's, Sat 14 Nov (D14).
  * - `fresh-booker`: Ruth Adeyemi, a booker with no church and nothing saved, is signed in.
  * - `no-applications`: the application queue answers empty.
+ * - `application-pending` / `application-fails`: Tobi's application never answers, or fails.
+ * - `application-verified` / `application-approved`: Tobi's application with both references
+ *   verified, or approved, as the API's answer rewritten in the browser.
  */
 export type RouteSetup =
   | 'search-pending'
@@ -24,7 +27,11 @@ export type RouteSetup =
   | 'two-step-on'
   | 'last-search'
   | 'fresh-booker'
-  | 'no-applications';
+  | 'no-applications'
+  | 'application-pending'
+  | 'application-fails'
+  | 'application-verified'
+  | 'application-approved';
 
 export interface RouteState {
   /** Names the state in screenshots and test titles. */
@@ -57,6 +64,7 @@ export interface RouteState {
     | 'audit-rows'
     | 'checks-rows'
     | 'applications-rows'
+    | 'application-details'
     | 'artists-rows'
     | 'artist-details';
   /**
@@ -377,6 +385,50 @@ export const routes: RouteState[] = [
     mock: 'admin-applications/empty.html',
     signedInAs: 'priya',
     setup: 'no-applications',
+  },
+  // Tobi Adeyemi's application (A-0219, the third seeded) as Priya reviews it: unverified, both
+  // references verified, approved, loading and failed (J8-S3).
+  {
+    name: 'admin-application',
+    path: '/admin/applications/3',
+    app: 'admin',
+    mock: 'admin-application/default.html',
+    signedInAs: 'priya',
+    shows: 'application-details',
+  },
+  {
+    name: 'admin-application-verified',
+    path: '/admin/applications/3',
+    app: 'admin',
+    mock: 'admin-application/verified.html',
+    signedInAs: 'priya',
+    setup: 'application-verified',
+    shows: 'application-details',
+  },
+  {
+    name: 'admin-application-approved',
+    path: '/admin/applications/3',
+    app: 'admin',
+    mock: 'admin-application/approved.html',
+    signedInAs: 'priya',
+    setup: 'application-approved',
+    shows: 'application-details',
+  },
+  {
+    name: 'admin-application-loading',
+    path: '/admin/applications/3',
+    app: 'admin',
+    mock: 'admin-application/loading.html',
+    signedInAs: 'priya',
+    setup: 'application-pending',
+  },
+  {
+    name: 'admin-application-error',
+    path: '/admin/applications/3',
+    app: 'admin',
+    mock: 'admin-application/error.html',
+    signedInAs: 'priya',
+    setup: 'application-fails',
   },
   // Priya's audit log: the week to Fri 9 Oct, newest first; her own sign-in heads it (M3 S5). The
   // times and addresses are the suite's own, so they are masked.
