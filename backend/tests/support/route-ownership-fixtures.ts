@@ -411,6 +411,45 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     expect(response.status).toBe(404);
   },
 
+  // The application queue and review screen: administrators only; a booker learns nothing (L2-066, L2-074).
+  'GET /admin/artist-applications': async (_owner, intruder) => {
+    expect(
+      (await (await intruder.as()).json('/api/v1/admin/artist-applications', 'GET')).status,
+    ).toBe(404);
+  },
+
+  'GET /admin/artist-applications/{application}': async (_owner, intruder) => {
+    expect(
+      (await (await intruder.as()).json('/api/v1/admin/artist-applications/1', 'GET')).status,
+    ).toBe(404);
+  },
+
+  'POST /admin/artist-applications/{application}/approval': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/admin/artist-applications/1/approval', 'POST');
+    expect(response.status).toBe(404);
+  },
+
+  'POST /admin/artist-applications/{application}/rejection': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/admin/artist-applications/1/rejection', 'POST', { reason: 'other' });
+    expect(response.status).toBe(404);
+  },
+
+  'PUT /admin/artist-applications/{application}/references/{reference}/verification': async (
+    _owner,
+    intruder,
+  ) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/admin/artist-applications/1/references/1/verification', 'PUT', {
+      verified: true,
+    });
+    expect(response.status).toBe(404);
+  },
+
   'GET /admin/artists': async (_owner, intruder) => {
     expect((await (await intruder.as()).json('/api/v1/admin/artists', 'GET')).status).toBe(404);
   },

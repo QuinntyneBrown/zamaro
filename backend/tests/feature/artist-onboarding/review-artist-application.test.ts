@@ -399,3 +399,116 @@ describe('approving an application', () => {
     expect(response.status).toBe(409);
   });
 });
+
+const REJECT = { method: 'post', path: '/admin/artist-applications/{application}/rejection' };
+
+/**
+ * L2-048.2, L2-063, L2-069.1 (review-artist-application): rejection needs a reason from the fixed
+ * list, takes an optional note of up to 1,000 characters, emails the applicant both, and is audited.
+ * Only a Submitted application can be rejected.
+ */
+describe('rejecting an application', () => {
+  let priya: Browser;
+
+  beforeAll(async () => {
+    await freshDatabase();
+  });
+
+  afterAll(closeDatabase);
+
+  beforeEach(async () => {
+    await freshDatabase();
+    resetClock();
+    priya = await signInWithCode(PRIYA_EMAIL, PRIYA_TOTP_SECRET);
+  });
+
+  async function kezia(): Promise<Detail> {
+    const queue = (await (await priya.json(QUEUE, 'GET')).json()) as QueuePage;
+    const row = queue.data.find((candidate) => candidate.number === 'A-0218');
+    const shown = await priya.json(`${QUEUE}/${String(row?.id)}`, 'GET');
+    return ((await shown.json()) as { data: Detail }).data;
+  }
+
+  const rejection = (application: Detail): string => `${QUEUE}/${String(application.id)}/rejection`;
+
+  it('rejects with a reason and a note, emails both to the applicant, and audits it', async () => {
+    const application = await kezia();
+
+    const response = await priya.json(rejection(application), 'POST', {
+      reason: 'other',
+      note: 'Please apply again once you have a video from a Sunday service.',
+    });
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as {
+      data: Detail & {
+        decidedBy: { name: string } | null;
+        decidedAt: string | null;
+        rejection: { reason: string; note: string | null } | null;
+      };
+    };
+    expectContract(response, REJECT, body);
+    expect(body.data.status).toBe('rejected');
+    expect(body.data.decidedBy).toEqual({ name: 'Priya Nair' });
+    expect(new Date(body.data.decidedAt ?? 0).toISOString()).toBe('2026-10-09T14:00:00.000Z');
+    expect(body.data.rejection).toEqual({
+      reason: 'other',
+      note: 'Please apply again once you have a video from a Sunday service.',
+    });
+    const [email] = emailsTo(application.email);
+    expect(email?.subject).toContain('application');
+    expect(email?.text).toContain('Other');
+    expect(email?.text).toContain('Please apply again once you have a video from a Sunday service.');
+    const entries = await query(
+      sql`select target_type, target_id from audit_entries where action = 'application.rejected'`,
+    );
+    expect(entries).toEqual([{ target_type: 'artist_application', target_id: application.id }]);
+    const queue = (await (await priya.json(QUEUE, 'GET')).json()) as QueuePage;
+    expect(queue.data.map((row) => row.number)).toEqual(['A-0217', 'A-0219']);
+  });
+
+  it('names the reason in the email when there is no note', async () => {
+    const application = await kezia();
+
+    const response = await priya.json(rejection(application), 'POST', {
+      reason: 'videos-not-leading-worship',
+    });
+
+    expect(response.status).toBe(200);
+    const [email] = emailsTo(application.email);
+    expect(email?.text).toContain("Videos don't show you leading worship");
+  });
+
+  it('refuses a missing reason, one outside the list, and a note over 1,000 characters', async () => {
+    const application = await kezia();
+
+    const missing = await priya.json(rejection(application), 'POST', {});
+    const unknown = await priya.json(rejection(application), 'POST', { reason: 'too-loud' });
+    const long = await priya.json(rejection(application), 'POST', {
+      reason: 'other',
+      note: 'x'.repeat(1001),
+    });
+
+    expect([missing.status, unknown.status, long.status]).toEqual([422, 422, 422]);
+    const problem = (await long.json()) as { errors: Record<string, string[]> };
+    expect(problem.errors.note?.[0]).toContain('1,000');
+    expect((await kezia()).status).toBe('submitted');
+    expect(emailsTo(application.email)).toHaveLength(0);
+  });
+
+  it('answers 409 once the application is decided', async () => {
+    const application = await kezia();
+    await priya.json(rejection(application), 'POST', { reason: 'other' });
+
+    const response = await priya.json(rejection(application), 'POST', { reason: 'other' });
+
+    expect(response.status).toBe(409);
+    expect(emailsTo(application.email)).toHaveLength(1);
+  });
+
+  it('answers 404 for an application that does not exist', async () => {
+    const response = await priya.json(`${QUEUE}/999999/rejection`, 'POST', { reason: 'other' });
+
+    expect(response.status).toBe(404);
+  });
+});
