@@ -103,4 +103,33 @@ test.describe('Sorting, filtering and sharing the lineup', () => {
     expect(params.get('place')).toBe('Burlington');
     expect([...params.keys()].sort()).toEqual(['date', 'kind', 'lat', 'lng', 'place', 'radius']);
   });
+
+  // L2-007.4
+  test('changing the sort keeps the location, radius and filters', async () => {
+    await searchBurlington();
+    await discover.lineup.toggleStyle('Band');
+
+    await discover.lineup.sortBy('Price, low to high');
+
+    await expect(discover.form.dateField()).toHaveValue(cast.search.date);
+    await expect(discover.form.locationField()).toHaveValue('Burlington, ON');
+    expect(await discover.form.selectedText(discover.form.radiusField())).toBe('120 km · 1.5 hr');
+    await expect(discover.lineup.styleChip('Band')).toHaveAttribute('aria-pressed', 'true');
+    await expect(discover.lineup.summary()).toHaveText('Sat 14 Nov · 3 free · within 120 km');
+  });
+
+  // L2-009.4
+  test('a typed street address stays out of the address bar', async () => {
+    await discover.openAndHydrate();
+    await discover.form.fill({ date: cast.search.date, kind: cast.search.kind });
+    await discover.form.typeLocation('2150 Lakeshore Road, Burlington, ON');
+
+    await discover.form.showTheLineup();
+
+    await expect(discover.lineup.headliner().name()).toHaveText(cast.artists.headliner.name);
+    const params = discover.urlParams();
+    expect(params.get('place')).toBe('Burlington');
+    expect(params.get('lat')).toBe('43.325');
+    expect(params.toString()).not.toMatch(/lakeshore/i);
+  });
 });
