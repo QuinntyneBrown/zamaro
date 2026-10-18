@@ -1,7 +1,12 @@
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { db } from '@/server/db/client';
-import { artists, availabilityOverrides, vulnerableSectorChecks } from '@/server/db/schema';
+import {
+  artists,
+  availabilityOverrides,
+  bookings,
+  vulnerableSectorChecks,
+} from '@/server/db/schema';
 import { anchor } from '@/server/integrations/routing/cast-routes';
 import { expectContract } from '../../support/contract';
 import { closeDatabase, freshDatabase } from '../../support/database';
@@ -98,6 +103,22 @@ describe('searching for available artists', () => {
     expect(lineupNames(await lineup())).toContain('Abigail Mensah');
   });
 
+  it('keeps an artist with only an accepted booking on the date', async () => {
+    await db()
+      .insert(bookings)
+      .values({
+        number: 'ZM-ACCEPTED-1',
+        artistId: await artistId('abigail-mensah'),
+        status: 'accepted',
+        eventDate: '2026-12-05',
+        kind: 'sunday-service',
+        churchName: 'Harvest Point',
+        churchCity: 'Milton',
+      });
+
+    expect(lineupNames(await lineup({ date: '2026-12-05' }))).toContain('Abigail Mensah');
+  });
+
   it('leaves out an artist on a date they marked unavailable', async () => {
     expect(lineupNames(await lineup({ date: '2026-11-26' }))).not.toContain('Abigail Mensah');
   });
@@ -129,6 +150,15 @@ describe('searching for available artists', () => {
       'Grace Tabernacle Mass Choir',
       'Daniel & Ruth Okonkwo',
     ]);
+  });
+
+  it('leaves out a deleted artist', async () => {
+    await db()
+      .update(artists)
+      .set({ status: 'deleted' })
+      .where(eq(artists.slug, 'marcus-bell-trio'));
+
+    expect(lineupNames(await lineup())).not.toContain('Marcus Bell Trio');
   });
 
   it('needs a verified check still valid on the event date for a youth event', async () => {
