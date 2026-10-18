@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { signInAsAdministrator } from '../../../fixtures/admin-session';
 import { ApplicationPage } from '../../../pages/admin/application.page';
 import { ApplicationsPage } from '../../../pages/admin/applications.page';
+import { RejectApplicationDialog } from '../../../pages/admin/reject-application.dialog';
 
 // L2-048.1, L2-066, L2-067.1, L2-105 (review-artist-application): the queue of Submitted
 // applications, oldest first, as Priya sees it. Deciding an application changes the seed, so that
@@ -230,6 +231,62 @@ test.describe('The application review screen', () => {
     await application.tryAgainButton().click();
 
     await expect(application.heading()).toHaveText('Tobi Adeyemi');
+    await expect(application.headBadge()).toHaveText('Submitted');
+  });
+});
+
+// L2-048.2, L2-101 (review-artist-application): the reject dialog needs a reason before anything
+// is sent, counts the note, and gives focus back to Reject when it closes. Rejecting lives in the
+// mutation suite.
+test.describe('The reject dialog', () => {
+  test.beforeEach(async ({ page }) => {
+    await signInAsAdministrator(page.context());
+  });
+
+  test('asks for a reason first, counts the note, and returns focus to Reject on Cancel', async ({
+    page,
+  }) => {
+    const application = new ApplicationPage(page);
+    const dialog = new RejectApplicationDialog(page);
+    await application.open(TOBI_ID);
+
+    await application.rejectButton().click();
+
+    await expect(dialog.heading()).toHaveText('Reject Tobi Adeyemi’s application?');
+    await expect(dialog.kicker()).toHaveText('A-0219 · Submitted · Fri 9 Oct');
+    await expect(dialog.description()).toHaveText(
+      'Tobi is emailed the reason and your note. The application closes as Rejected.',
+    );
+    await expect(dialog.reason()).toBeFocused();
+    await expect(dialog.reason().locator('option')).toHaveText([
+      'Choose a reason',
+      'References could not be confirmed',
+      'Videos don’t show you leading worship',
+      'Outside the Zamaro service area',
+      'Application incomplete or inaccurate',
+      'Other',
+    ]);
+    await expect(dialog.noteCounter()).toHaveText('0 / 1,000');
+
+    await dialog.note().fill('Please apply again with a Sunday service video.');
+    await expect(dialog.noteCounter()).toHaveText('47 / 1,000');
+
+    // Nothing is sent without a reason: the summary names the field and links to it.
+    const requests: string[] = [];
+    page.on('request', (request) => {
+      if (request.method() === 'POST') requests.push(request.url());
+    });
+    await dialog.rejectButton().click();
+    await expect(dialog.errorSummaryTitle()).toHaveText('Choose a reason first');
+    await expect(dialog.errorSummaryLinks()).toHaveText(['Choose the reason Tobi will read']);
+    await expect(dialog.reasonError()).toHaveText('Choose a reason from the list.');
+    await expect(dialog.reason()).toHaveAttribute('aria-invalid', 'true');
+    expect(requests.filter((url) => url.endsWith('/rejection'))).toHaveLength(0);
+
+    await dialog.cancelButton().click();
+
+    await expect(dialog.dialog()).toHaveCount(0);
+    await expect(application.rejectButton()).toBeFocused();
     await expect(application.headBadge()).toHaveText('Submitted');
   });
 });
