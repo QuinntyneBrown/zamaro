@@ -230,6 +230,11 @@ export class Ticket {
     return this.card.locator('.ticket__price');
   }
 
+  /** "New" in place of the stars for an artist with no reviews (L2-006.1). */
+  newLabel(): Locator {
+    return this.card.getByText('New', { exact: true });
+  }
+
   /** The rating, read as one labelled image ("Rated 4.6 out of 5 by 17 churches"). */
   rating(): Locator {
     return this.card.getByRole('img', { name: /^Rated / });

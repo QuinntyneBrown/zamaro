@@ -262,4 +262,31 @@ export class DiscoverPage {
   async withoutTheApp(): Promise<void> {
     await this.page.route('**/*.js', (route) => route.abort());
   }
+
+  /** Whether the form sits beside the poster headline rather than under it (L2-097.3). */
+  async formBesidePoster(): Promise<boolean> {
+    const poster = await this.posterHeadline().boundingBox();
+    const form = await this.form.fieldsBox();
+    return poster !== null && form !== null && form.x >= poster.x + poster.width / 2;
+  }
+
+  /** How many ticket cards share the first row of the lineup (L2-097.1, .3). */
+  async ticketsPerRow(): Promise<number> {
+    return this.lineup
+      .tickets()
+      .evaluateAll(
+        (cards) =>
+          cards.filter(
+            (card) => Math.abs(card.getBoundingClientRect().top - cards[0]!.getBoundingClientRect().top) < 4,
+          ).length,
+      );
+  }
+
+  /** Whether a ticket's price stub sits to the right of its body instead of below it (L2-097.1, .2). */
+  async stubBesideBody(name: string): Promise<boolean> {
+    const ticket = this.lineup.ticket(name);
+    const body = await ticket.meta().boundingBox();
+    const stub = await ticket.price().boundingBox();
+    return body !== null && stub !== null && stub.x >= body.x + body.width - 1;
+  }
 }

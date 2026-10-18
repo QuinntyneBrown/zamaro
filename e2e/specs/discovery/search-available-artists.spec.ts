@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { cast } from '../../fixtures/cast';
 import { DiscoverPage } from '../../pages/discover.page';
 
-// L2-004.2, .5, .6, .7; L2-006.1, .3; L2-102.3, .4; L2-110.1, .3, .5; L2-002.4.
+// L2-004.2, .4, .5, .6, .7; L2-006.1, .3; L2-102.3, .4; L2-110.1, .3, .5; L2-002.4.
 test.describe('Searching for who is free', () => {
   let discover: DiscoverPage;
 
@@ -111,5 +111,28 @@ test.describe('Searching for who is free', () => {
     await expect(discover.lineup.ticket(cast.artists.closest.name).meta()).toContainText(
       'Hamilton · Under 1 km from you',
     );
+  });
+
+  // L2-004.4
+  test('a date more than 18 months away is refused before searching', async () => {
+    await discover.form.fill({ date: '2028-06-01' });
+    await discover.form.pickCity('Burlington');
+
+    await discover.form.showTheLineup();
+
+    await expect(await discover.form.errorFor(discover.form.dateField())).toHaveText(
+      'We take bookings up to 18 months ahead.',
+    );
+    expect(discover.searchesSent()).toBe(0);
+  });
+
+  // L2-006.1
+  test('an artist with no reviews shows New on their ticket', async () => {
+    await discover.form.fill({ date: cast.search.date, kind: cast.search.kind });
+    await discover.form.typeLocation('Etobicoke');
+
+    await discover.form.showTheLineup();
+
+    await expect(discover.lineup.ticket(cast.artists.empty.name).newLabel()).toBeVisible();
   });
 });

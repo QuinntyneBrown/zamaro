@@ -160,6 +160,13 @@ export class Shell {
     await this.page.keyboard.press('Enter');
   }
 
+  /** Whether the page scrolls sideways (L2-097.4). */
+  async scrollsSideways(): Promise<boolean> {
+    return this.page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+  }
+
   async useWidth(width: number): Promise<void> {
     await this.page.setViewportSize({ width, height: 800 });
   }

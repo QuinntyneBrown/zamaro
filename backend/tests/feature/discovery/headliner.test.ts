@@ -9,10 +9,11 @@ import {
   reviews,
   users,
 } from '@/server/db/schema';
+import { anchor } from '@/server/integrations/routing/cast-routes';
 import { torontoTime } from '@/server/support/clock';
 import { expectContract } from '../../support/contract';
 import { closeDatabase, freshDatabase } from '../../support/database';
-import { artistId, lineup, search } from '../../support/discovery';
+import { artistId, lineup, routing, search } from '../../support/discovery';
 
 const SEARCH = { method: 'get', path: '/search' };
 
@@ -92,6 +93,26 @@ describe('the headliner', () => {
       .set({ rating: 4.6 })
       .where(eq(artistRatings.artistId, hosanna));
     expect((await lineup()).headliner?.slug).toBe('marcus-bell-trio');
+  });
+
+  it('gives a tie on rating and distance to the lower artist ID', async () => {
+    await db()
+      .update(bookings)
+      .set({ status: 'cancelled' })
+      .where(inArray(bookings.id, await bookingIds('abigail-mensah')));
+    const marcus = await artistId('marcus-bell-trio');
+    const hosanna = await artistId('hosanna-collective');
+    await confirmThisSeason(marcus, 'ZAM-0302');
+    await confirmThisSeason(hosanna, 'ZAM-0303');
+    await db()
+      .update(artistRatings)
+      .set({ rating: 4.6 })
+      .where(eq(artistRatings.artistId, hosanna));
+    routing().override(anchor('Burlington'), anchor('Mississauga'), 14);
+
+    const page = await lineup();
+
+    expect(page.headliner?.slug).toBe(marcus < hosanna ? 'marcus-bell-trio' : 'hosanna-collective');
   });
 
   it('makes a single result the headliner with no tickets', async () => {

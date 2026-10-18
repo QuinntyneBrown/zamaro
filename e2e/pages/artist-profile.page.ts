@@ -174,6 +174,18 @@ export class ArtistProfilePage {
     return this.page.locator('[aria-labelledby="songs-title"] .section__head > p');
   }
 
+  /** The decorative strip of five songs under the header (L2-012.1). */
+  strip(): Locator {
+    return this.page.locator('zm-marquee span');
+  }
+
+  /** How many columns the setlist lays out (L2-098.2). */
+  async setlistColumns(): Promise<number> {
+    return this.page
+      .locator('[aria-labelledby="songs-title"] .setlist')
+      .evaluate((list) => getComputedStyle(list).gridTemplateColumns.split(' ').length);
+  }
+
   songs(): Locator {
     return this.page.locator('[aria-labelledby="songs-title"]').getByRole('listitem');
   }

@@ -4,6 +4,7 @@ import type { CastMember } from './fixtures/accounts';
  * How a state that the seeded API cannot produce on its own is reached. The browser's requests are
  * held or answered in Playwright and never reach the API (adapt-layout-to-screens).
  * - `search-pending`: the search never answers, so the lineup shows its skeletons.
+ * - `submit-empty`: "Show the lineup" is pressed on the empty form, so the field errors show.
  * - `search-fails`: the search fails as if the network dropped.
  * - `search-limited`: the search is refused as over the rate limit.
  * - `profile-pending` and `profile-fails`: the profile is opened from `from` in the browser, since
@@ -14,6 +15,7 @@ import type { CastMember } from './fixtures/accounts';
  */
 export type RouteSetup =
   | 'search-pending'
+  | 'submit-empty'
   | 'search-fails'
   | 'search-limited'
   | 'profile-pending'
@@ -77,6 +79,14 @@ export const routes: RouteState[] = [
     app: 'zamaro',
     mock: 'discover/invalid.html',
   },
+  // The empty form submitted: the error summary and an inline error under each field.
+  {
+    name: 'discover-invalid',
+    path: '/',
+    app: 'zamaro',
+    mock: 'discover/invalid.html',
+    setup: 'submit-empty',
+  },
   // Naomi's search: the headliner and six tickets, Closest first.
   {
     name: 'discover-results',
@@ -118,12 +128,20 @@ export const routes: RouteState[] = [
     shows: 'sold-out',
   },
   // Abigail’s profile opened from that search: videos, photos, her dates from Sat 14 Nov, reviews and
-  // the booking stub. The booked-date mock needs a typed date, so it has no route state of its own.
+  // the booking stub.
   {
     name: 'artist-default',
     path: '/artists/abigail-mensah?date=2026-11-14',
     app: 'zamaro',
     mock: 'artist/default.html',
+  },
+  // The same profile opened on Sun 15 Nov, when Abigail has a confirmed booking: the stub says she
+  // is booked and the Book button follows the date.
+  {
+    name: 'artist-booked-date',
+    path: '/artists/abigail-mensah?date=2026-11-15',
+    app: 'zamaro',
+    mock: 'artist/booked-date.html',
   },
   // Miriam, new to Zamaro, opened without a date: "Check dates", six free dates from Mon 12 Oct,
   // no videos and "No church reviews yet".

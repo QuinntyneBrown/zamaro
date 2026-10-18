@@ -24,6 +24,18 @@ export class SearchForm {
     return this.form().getByLabel('How far can they drive?');
   }
 
+  /** The form's box, for layout checks. */
+  async fieldsBox(): Promise<{ x: number; y: number; width: number; height: number } | null> {
+    return this.form().boundingBox();
+  }
+
+  /** Whether two fields share a row (L2-097.2). */
+  async shareARow(a: Locator, b: Locator): Promise<boolean> {
+    const first = await a.boundingBox();
+    const second = await b.boundingBox();
+    return first !== null && second !== null && Math.abs(first.y - second.y) < 4;
+  }
+
   /** The selected option's visible text. */
   async selectedText(field: Locator): Promise<string> {
     return field.evaluate((select: HTMLSelectElement) => select.selectedOptions[0]?.text ?? '');

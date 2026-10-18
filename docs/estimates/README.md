@@ -1,7 +1,7 @@
 # Estimates
 
 - Overall effort: 307 days
-- Complete: 0%
+- Complete: 10%
 
 | Subsystem | Effort | Complete |
 |---|---|---|
@@ -10,8 +10,8 @@
 | [accounts](accounts.md) | 24 days | 0% |
 | [privacy](privacy.md) | 15 days | 0% |
 | [user-experience](user-experience.md) | 21 days | 0% |
-| [artist-profiles](artist-profiles.md) | 17 days | 0% |
-| [discovery](discovery.md) | 12 days | 0% |
+| [artist-profiles](artist-profiles.md) | 17 days | 97% |
+| [discovery](discovery.md) | 12 days | 100% |
 | [artist-onboarding](artist-onboarding.md) | 19 days | 0% |
 | [administration](administration.md) | 22 days | 0% |
 | [artist-workspace](artist-workspace.md) | 27 days | 0% |
@@ -19,12 +19,12 @@
 | [bookings](bookings.md) | 35 days | 0% |
 | [payments](payments.md) | 26 days | 0% |
 | [notifications](notifications.md) | 11 days | 0% |
-| [reviews](reviews.md) | 17 days | 0% |
+| [reviews](reviews.md) | 17 days | 21% |
 
 ## Roadmap
 
 1. Rebuild the backend foundations: operations and security
-2. Accounts, privacy, user-experience, artist-profiles and discovery
+2. Accounts, privacy and user-experience, then the artist-profiles remainder (CDN purge, ADR-0029)
 3. Artist-onboarding and administration
 4. Artist-workspace and artist-availability
 5. Bookings, payments, notifications and reviews

@@ -2,8 +2,8 @@
 
 | # | Name | Description | Effort | Complete |
 |---|---|---|---|---|
-| 1 | Find an artist | Search by date and place, sort and filter results, and see alternatives when everyone is booked. | 12 days | 0% |
-| 2 | Choose an artist | Read an artist's profile, reviews and rating, share it, and pick a free date to book. | 21 days | 0% |
+| 1 | Find an artist | Search by date and place, sort and filter results, and see alternatives when everyone is booked. | 12 days | 100% |
+| 2 | Choose an artist | Read an artist's profile, reviews and rating, share it, and pick a free date to book. | 21 days | 96% |
 | 3 | Request a booking | Send a booking request, track it, message the artist, and withdraw it if plans change. | 16 days | 0% |
 | 4 | Respond to a request | Accept or decline a booking request and follow the booking through to the event. | 13 days | 0% |
 | 5 | Pay for a booking | Pay the deposit and the balance online and receive a receipt for each payment. | 21 days | 0% |
