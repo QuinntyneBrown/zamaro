@@ -16,6 +16,9 @@ PGlite with in-memory fakes (ADR-0028); the console commands became npm scripts 
 names `php artisan`, Pint, Larastan, Scramble, Sanctum or Horizon, read the Node.js equivalent from
 ADR-0027's table; the behaviour, the acceptance criteria and the route contracts are unchanged.
 
+Journeys 1 and 2 were audited against every L2 criterion on 2026-10-18; see
+[journeys-1-2-close-out.md](journeys-1-2-close-out.md).
+
 ## Current status (2026-10-10)
 
 **Status: Done (2026-10-10).** Branch `feat/m1-foundations-and-browse`, opened as a pull request
