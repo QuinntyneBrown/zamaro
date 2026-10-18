@@ -458,7 +458,9 @@ describe('rejecting an application', () => {
     const [email] = emailsTo(application.email);
     expect(email?.subject).toContain('application');
     expect(email?.text).toContain('Other');
-    expect(email?.text).toContain('Please apply again once you have a video from a Sunday service.');
+    expect(email?.text).toContain(
+      'Please apply again once you have a video from a Sunday service.',
+    );
     const entries = await query(
       sql`select target_type, target_id from audit_entries where action = 'application.rejected'`,
     );

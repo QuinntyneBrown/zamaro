@@ -2,7 +2,14 @@ import { DateTime } from 'luxon';
 import { z } from 'zod';
 import type { ApplicationRow } from '@/server/actions/administration/list-artist-applications';
 import type { ApplicationReview } from '@/server/actions/administration/view-artist-application';
-import { ActType, ApplicationStatus, VideoStatus, VscStatus, valuesOf } from '@/server/enums';
+import {
+  ActType,
+  ApplicationRejectionReason,
+  ApplicationStatus,
+  VideoStatus,
+  VscStatus,
+  valuesOf,
+} from '@/server/enums';
 import { ZONE } from '@/server/support/clock';
 import { mediaUrl } from '@/server/support/media';
 
@@ -90,6 +97,10 @@ export const AdminApplicationResource = AdminApplicationRowResource.extend({
   /** When it was decided, and by whom; null while Submitted. */
   decidedAt: z.string().nullable(),
   decidedBy: z.object({ name: z.string() }).nullable(),
+  /** The reason and note of a rejection; null unless Rejected (L2-048.2). */
+  rejection: z
+    .object({ reason: z.enum(valuesOf(ApplicationRejectionReason)), note: z.string().nullable() })
+    .nullable(),
   /** The applicant's latest Vulnerable Sector Check, or null when none is uploaded. */
   vsc: z
     .object({ id: z.number().int(), issuedOn: z.iso.date(), status: z.enum(valuesOf(VscStatus)) })
@@ -124,6 +135,13 @@ export function toAdminApplication(
         ? null
         : (DateTime.fromJSDate(application.decidedAt, { zone: ZONE }).toISO() ?? null),
     decidedBy: review.decidedBy === null ? null : { name: review.decidedBy },
+    rejection:
+      application.status === ApplicationStatus.Rejected && application.rejectionReason !== null
+        ? {
+            reason: application.rejectionReason as ApplicationRejectionReason,
+            note: application.rejectionNote,
+          }
+        : null,
     vsc:
       review.check === null
         ? null

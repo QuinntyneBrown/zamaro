@@ -72,6 +72,7 @@ import {
   AdminCheckEnvelope,
   AdminCheckQueueResource,
 } from '../resources/administration/vulnerable-sector-check';
+import { RejectArtistApplicationRequest } from '../requests/administration/application-rejection';
 import { SetReferenceVerificationRequest } from '../requests/administration/reference-verification';
 import { StartApplicationVideoUploadRequest } from '../requests/artist-onboarding/application-video';
 import { ApplicationVideoEnvelope } from '../resources/artist-onboarding/application-video';
@@ -947,6 +948,24 @@ export const operations: Operation[] = [
         content: 'problem',
       },
       422: { description: 'A reference is not verified yet', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/admin/artist-applications/{application}/rejection',
+    name: 'admin.artist-applications.reject',
+    summary:
+      'Reject: a reason from the fixed list and an optional note, both emailed to the applicant',
+    parameters: [{ name: 'application', in: 'path', schema: z.number().int() }],
+    requestBody: RejectArtistApplicationRequest,
+    responses: {
+      200: { description: 'The application, rejected', content: AdminApplicationEnvelope },
+      404: { description: 'No such application', content: 'problem' },
+      409: {
+        description: 'Already decided (application-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'The reason is missing or the note is too long', content: 'problem' },
     },
   },
   {
