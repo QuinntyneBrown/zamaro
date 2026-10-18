@@ -166,6 +166,25 @@ export const ApplicationStatus = {
 } as const;
 export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus];
 
+/** Why an application was rejected: the fixed list of L2-048.2, as the applicant reads it. */
+export const ApplicationRejectionReason = {
+  ReferencesUnconfirmed: 'references-unconfirmed',
+  VideosNotLeadingWorship: 'videos-not-leading-worship',
+  OutsideServiceArea: 'outside-service-area',
+  IncompleteOrInaccurate: 'incomplete-or-inaccurate',
+  Other: 'other',
+} as const;
+export type ApplicationRejectionReason =
+  (typeof ApplicationRejectionReason)[keyof typeof ApplicationRejectionReason];
+
+export const APPLICATION_REJECTION_REASON_LABELS: Record<ApplicationRejectionReason, string> = {
+  'references-unconfirmed': 'References could not be confirmed',
+  'videos-not-leading-worship': "Videos don't show you leading worship",
+  'outside-service-area': 'Outside the Zamaro service area',
+  'incomplete-or-inaccurate': 'Application incomplete or inaccurate',
+  other: 'Other',
+};
+
 /** Every audited action (administration/record-audit-log); the list grows with each slice. */
 export const AuditAction = {
   SignIn: 'auth.sign_in',
@@ -180,6 +199,10 @@ export const AuditAction = {
   RoleChanged: 'user.role_changed',
   VscDocumentViewed: 'vsc_document.viewed',
   VscVerified: 'vsc.verified',
+  ApplicationViewed: 'application.viewed',
+  ReferenceVerified: 'application_reference.verified',
+  ApplicationApproved: 'application.approved',
+  ApplicationRejected: 'application.rejected',
 } as const;
 export type AuditAction = (typeof AuditAction)[keyof typeof AuditAction];
 

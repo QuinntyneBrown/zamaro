@@ -4,6 +4,8 @@ import { DateTime } from 'luxon';
 import { config } from '@config/zamaro';
 import type { Database, Transaction } from '@/server/db/client';
 import {
+  applicationReferences,
+  artistApplications,
   artistPhotos,
   artistRatings,
   artists,
@@ -28,6 +30,7 @@ import {
 } from '@/server/db/schema';
 import {
   ActType,
+  ApplicationStatus,
   ArtistStatus,
   BookingStatus,
   ConsentKind,
@@ -627,6 +630,7 @@ class CastSeeder {
     await this.accounts();
     await this.administrators();
     await this.pendingChecks();
+    await this.pendingApplications();
     await this.consents();
     await this.churches();
     await this.savedArtists();
@@ -1427,6 +1431,132 @@ class CastSeeder {
         updatedAt: torontoTime(uploadedAt),
       });
     }
+  }
+
+  /**
+   * The admin application queue (pages/admin-applications): three Submitted applications, each with
+   * two church references. Tobi's A-0219 is the one the review mocks open.
+   */
+  private async pendingApplications(): Promise<void> {
+    const applications = [
+      {
+        number: 'A-0217',
+        key: '6f1c0d52-3a1e-4d1b-9a55-0d7e2d9c1a17',
+        name: 'Ebenezer Brass Band',
+        email: 'ebenezer.brass@example.com',
+        actType: ActType.Band,
+        baseCity: 'Oshawa, ON',
+        baseLatitude: 43.8971,
+        baseLongitude: -78.8658,
+        styles: [Style.Band, Style.Hymns],
+        bio: 'A brass band of nine players from Oshawa. We play for Sunday services, carol nights and church anniversaries, and we bring our own stands and sound.',
+        fromPriceCents: 90000,
+        maxDriveKm: 100,
+        submittedAt: '2026-10-06 16:20:00',
+        references: [
+          ['Pastor Grace Adu', 'Oshawa Gospel Chapel', 'grace.adu@oshawagospel.example'],
+          ['Daniel Mensah', 'Harvest Fellowship Oshawa', '905 555 0141'],
+        ],
+      },
+      {
+        number: 'A-0218',
+        key: '0b6f6a41-7c4f-4b0e-8f3a-6e4c5a2d9b18',
+        name: 'Kezia & Mark Thompson',
+        email: 'kezia.mark@example.com',
+        actType: ActType.Duo,
+        baseCity: 'Pickering, ON',
+        baseLatitude: 43.8384,
+        baseLongitude: -79.0868,
+        styles: [Style.Acoustic, Style.Hymns],
+        bio: 'A husband and wife duo leading worship from guitar and piano. We have served small and mid-sized congregations across Durham Region for eight years.',
+        fromPriceCents: 50000,
+        maxDriveKm: 80,
+        submittedAt: '2026-10-08 21:05:00',
+        references: [
+          ['Rev. Paul Ncube', 'Pickering Community Church', 'paul.ncube@pickering.example'],
+          ['Sarah Whitlock', 'Ajax Alliance Church', '289 555 0166'],
+        ],
+      },
+      {
+        number: 'A-0219',
+        key: '9d3e8b0a-52c1-4e6f-b7a4-1f2a3c4d5e19',
+        name: 'Tobi Adeyemi',
+        email: 'tobi@tobiadeyemi.ca',
+        actType: ActType.Solo,
+        baseCity: 'Scarborough, ON',
+        baseLatitude: 43.7731,
+        baseLongitude: -79.2578,
+        styles: [Style.SoloVocalist, Style.Acoustic, Style.Hymns],
+        bio: "I'm a vocalist and keys player from Scarborough, and I've led Sunday worship at Cornerstone Baptist for six years. I lead from the piano, so I can carry a service on my own or slot in with your band. My sets mix the hymns your seniors love with newer songs your youth know, and I'm happy to send charts to your volunteers ahead of time.",
+        fromPriceCents: 40000,
+        maxDriveKm: 80,
+        submittedAt: '2026-10-09 10:42:00',
+        references: [
+          [
+            'Pastor Samuel Osei',
+            'Cornerstone Baptist, Scarborough',
+            'samuel.osei@cornerstonebaptist.ca',
+          ],
+          ['Ruth Kim', 'Agincourt Community Church', '647 555 0192'],
+        ],
+      },
+    ];
+    for (const application of applications) {
+      const { references, key, submittedAt, ...fields } = application;
+      const at = torontoTime(submittedAt);
+      const values = {
+        ...fields,
+        idempotencyKey: key,
+        status: ApplicationStatus.Submitted,
+        submittedAt: at,
+        decidedAt: null,
+        decidedBy: null,
+        rejectionReason: null,
+        createdAt: at,
+        updatedAt: at,
+      };
+      const [row] = await this.tx
+        .insert(artistApplications)
+        .values(values)
+        .onConflictDoUpdate({ target: artistApplications.number, set: values })
+        .returning({ id: artistApplications.id });
+      if (row === undefined) throw new Error(`${fields.number} could not be seeded.`);
+      await this.tx
+        .delete(applicationReferences)
+        .where(eq(applicationReferences.artistApplicationId, row.id));
+      if (fields.number === 'A-0219') await this.tobiVideo(row.id, at);
+      for (const [name = '', church = '', contact = ''] of references) {
+        const isEmail = contact.includes('@');
+        await this.tx.insert(applicationReferences).values({
+          artistApplicationId: row.id,
+          name,
+          church,
+          phone: isEmail ? null : encryptField(`+1${contact.replace(/\D/g, '')}`),
+          email: isEmail ? encryptField(contact) : null,
+          createdAt: at,
+          updatedAt: at,
+        });
+      }
+    }
+  }
+
+  /** The one video Tobi attached to A-0219 (pages/admin-application), Live with its sample stream. */
+  private async tobiVideo(applicationId: number, at: Date): Promise<void> {
+    const values = {
+      artistApplicationId: applicationId,
+      position: 1,
+      title: 'Way Maker — live at Cornerstone',
+      status: VideoStatus.Live,
+      durationSeconds: 348,
+      manifestKey: SAMPLE_STREAM,
+      fileName: 'way-maker-cornerstone.mp4',
+      createdAt: at,
+      updatedAt: at,
+    };
+    await this.tx
+      .insert(artistVideos)
+      .values({ ...values, uploadToken: 'seed-a-0219-way-maker' })
+      .onConflictDoUpdate({ target: artistVideos.uploadToken, set: values });
   }
 
   /** Upserts a check on (user, issued on), which has no unique constraint. */

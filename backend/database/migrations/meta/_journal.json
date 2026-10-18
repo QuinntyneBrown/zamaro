@@ -15,6 +15,13 @@
       "when": 1792191578121,
       "tag": "0001_constraints_triggers_and_roles",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792359745203,
+      "tag": "0002_application_rejection_note",
+      "breakpoints": true
     }
   ]
 }

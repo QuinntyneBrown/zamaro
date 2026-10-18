@@ -1,0 +1,59 @@
+<form class="dialog__form" novalidate [formGroup]="form" (ngSubmit)="submit()">
+  <zm-dialog
+    danger
+    icon="warning"
+    iconTone="danger"
+    [kicker]="kicker"
+    [heading]="t('title', { name: data.name })"
+    [titleId]="titleId"
+    [description]="t('description', { name: firstName })"
+    [descriptionId]="descriptionId"
+    [closeLabel]="t('close')"
+    [busy]="busy()"
+    (closed)="close()"
+  >
+    @if (status() === 'invalid' && summaryItems().length > 0) {
+      <zm-error-summary
+        summaryId="reject-summary"
+        [headingLevel]="3"
+        [heading]="t('invalidTitle')"
+        [items]="summaryItems()"
+      />
+    }
+    @if (status() === 'failed') {
+      <zm-alert variant="danger" compact [heading]="t('failedTitle')">
+        <p>{{ t('failedText') }}</p>
+      </zm-alert>
+    }
+    <zm-form-field
+      #reasonField
+      fieldId="reject-reason"
+      type="select"
+      formControlName="reason"
+      [label]="t('reason')"
+      [requiredMarker]="'accounts.required' | transloco"
+      [options]="reasonOptions"
+      [help]="t('reasonHelp', { name: firstName })"
+      [error]="reasonMissing() ? t('reasonError') : null"
+      [readonly]="busy()"
+    />
+    <zm-form-field
+      fieldId="reject-note"
+      type="textarea"
+      formControlName="note"
+      [label]="t('note', { name: firstName })"
+      [optionalMarker]="t('optional')"
+      [maxLength]="noteMax"
+      [help]="t('noteHelp')"
+      [error]="noteTooLong() ? t('noteError', { max: max() }) : null"
+      [readonly]="busy()"
+    />
+    <zm-button slot="footer" [disabled]="busy()" (click)="close()">{{ t('cancel') }}</zm-button>
+    <zm-button slot="footer" type="submit" variant="danger" [busy]="busy()">
+      @if (status() === 'failed') {
+        <zm-icon name="refresh" />
+      }
+      {{ busy() ? t('rejecting') : status() === 'failed' ? t('tryAgain') : t('reject') }}</zm-button
+    >
+  </zm-dialog>
+</form>

@@ -9,16 +9,16 @@
 | 5 | Pay for a booking | Pay the deposit and the balance online and receive a receipt for each payment. | 21 days | 0% |
 | 6 | Get paid | Receive the payout for a completed booking, less the platform fee. | 5 days | 0% |
 | 7 | Manage availability | Mark free and busy dates, and publish a calendar feed to a personal calendar. | 10 days | 0% |
-| 8 | Become an artist | Apply as an artist, upload a Vulnerable Sector Check, and be approved by the Zamaro team. | 19 days | 0% |
-| 9 | Join and sign in | Create a church account, sign in, recover access, and manage church and account settings. | 23 days | 0% |
+| 8 | Become an artist | Apply as an artist, upload a Vulnerable Sector Check, and be approved by the Zamaro team. | 19 days | 66% |
+| 9 | Join and sign in | Create a church account, sign in, recover access, and manage church and account settings. | 23 days | 92% |
 | 10 | Build a profile | Edit profile details, address and setlist, and upload photos and videos from the artist dashboard. | 27 days | 0% |
-| 11 | Stay informed | Receive emails and event reminders about bookings, and choose which emails to get. | 11 days | 0% |
+| 11 | Stay informed | Receive emails and event reminders about bookings, and choose which emails to get. | 11 days | 16% |
 | 12 | Cancel a booking | Cancel a booking and receive the refund the cancellation policy allows. | 6 days | 0% |
 | 13 | Review an artist | Review an artist after the event; artists reply, and anyone can report a review. | 13 days | 0% |
-| 14 | Save artists | Save artists to a shortlist and come back to them later. | 5 days | 0% |
-| 15 | Control my data | Export personal data, delete the account, and keep private details out of public view. | 11 days | 0% |
-| 16 | Administer the platform | Administrators sign in securely, support bookings and payments, suspend artists, and audit actions. | 22 days | 0% |
-| 17 | Use a fast, secure site | Fast, secure, accessible pages that work on any screen, in light or dark theme. | 72 days | 0% |
+| 14 | Save artists | Save artists to a shortlist and come back to them later. | 5 days | 100% |
+| 15 | Control my data | Export personal data, delete the account, and keep private details out of public view. | 11 days | 25% |
+| 16 | Administer the platform | Administrators sign in securely, support bookings and payments, suspend artists, and audit actions. | 22 days | 44% |
+| 17 | Use a fast, secure site | Fast, secure, accessible pages that work on any screen, in light or dark theme. | 72 days | 53% |
 
 ## Why this order
 

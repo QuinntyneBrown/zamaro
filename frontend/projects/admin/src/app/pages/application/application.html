@@ -1,0 +1,247 @@
+<div class="container">
+  <div class="page-crumbs">
+    <zm-breadcrumb [crumbs]="crumbs()" [label]="'admin.breadcrumb' | transloco" />
+  </div>
+  <div class="page-head page-head--after-breadcrumb">
+    <div>
+      <p class="overline">{{ overline() }}</p>
+      @if (application(); as application) {
+        <h1 class="page-head__title">{{ application.name }}</h1>
+        <p class="page-head__sub">{{ subtitle() }}</p>
+      } @else {
+        <h1 class="page-head__title">{{ 'admin.application.loading.title' | transloco }}</h1>
+        @if (status() === 'loading') {
+          <p class="page-head__sub" role="status">
+            <span class="visually-hidden">{{ 'admin.application.loading.status' | transloco }}</span
+            ><zm-skeleton width="long" />
+          </p>
+        }
+      }
+    </div>
+    @if (application(); as application) {
+      <zm-badge [variant]="statusVariant()">{{
+        'admin.application.status.' + application.status | transloco
+      }}</zm-badge>
+    }
+  </div>
+
+  @switch (status()) {
+    @case ('error') {
+      <div class="page-body">
+        <zm-alert variant="danger" [heading]="'admin.application.error.title' | transloco">
+          {{ 'admin.application.error.body' | transloco }}
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'admin.tryAgain' | transloco }}</zm-button
+          >
+          <zm-button-link slot="actions" link="/applications">{{
+            'admin.application.error.back' | transloco
+          }}</zm-button-link>
+        </zm-alert>
+      </div>
+    }
+    @case ('loading') {
+      <div class="detail-layout detail-layout--flush" aria-hidden="true">
+        <div class="stack stack--lg">
+          @for (panel of [1, 2, 3]; track panel) {
+            <div class="panel">
+              <zm-skeleton shape="title" />
+              <zm-skeleton width="long" />
+              <zm-skeleton width="medium" />
+              <zm-skeleton width="long" />
+            </div>
+          }
+        </div>
+        <aside>
+          <div class="panel panel--raised">
+            <zm-skeleton shape="title" />
+            <zm-skeleton shape="control-lg" />
+            <zm-skeleton shape="control" />
+          </div>
+        </aside>
+      </div>
+    }
+    @default {
+      @if (application(); as application) {
+        @if (application.status === 'approved') {
+          <div class="page-notice">
+            <zm-alert
+              variant="success"
+              [heading]="'admin.application.approved.title' | transloco: { name: application.name }"
+            >
+              {{ 'admin.application.approved.body' | transloco: { email: application.email } }}
+            </zm-alert>
+          </div>
+        }
+        <div class="detail-layout detail-layout--flush">
+          <div class="stack stack--lg">
+            <section class="panel" aria-labelledby="applicant-title">
+              <div class="panel__head">
+                <h2 id="applicant-title" class="panel__title">
+                  {{ 'admin.application.applicant.title' | transloco }}
+                </h2>
+              </div>
+              <dl class="definition definition--two">
+                @for (item of details(); track item.id) {
+                  <div class="definition__row">
+                    <dt>{{ item.term }}</dt>
+                    <dd>{{ item.value }}</dd>
+                  </div>
+                }
+              </dl>
+            </section>
+            <section class="panel" aria-labelledby="bio-title">
+              <div class="panel__head">
+                <h2 id="bio-title" class="panel__title">
+                  {{ 'admin.application.bio.title' | transloco }}
+                </h2>
+                <span class="text-caption">{{
+                  'admin.application.bio.count' | transloco: { count: application.bio.length }
+                }}</span>
+              </div>
+              <p>{{ application.bio }}</p>
+            </section>
+            <section class="panel" aria-labelledby="videos-title">
+              <div class="panel__head">
+                <h2 id="videos-title" class="panel__title">
+                  {{ 'admin.application.videos.title' | transloco }}
+                </h2>
+                <span class="text-caption">{{
+                  'admin.application.videos.count' | transloco: { count: videos().length }
+                }}</span>
+              </div>
+              @if (videos().length > 0) {
+                <ul class="media-grid" role="list">
+                  @for (video of videos(); track video.id) {
+                    <li>
+                      <zm-video-card
+                        [caption]="video.title"
+                        [stampText]="video.stamp"
+                        [label]="video.label"
+                        [artVariant]="artVariant()"
+                        [artLabel]="video.title"
+                        [poster]="video.poster"
+                        [stream]="video.stream"
+                        [errorText]="'artist.videos.failed' | transloco"
+                      />
+                    </li>
+                  }
+                </ul>
+              } @else {
+                <p class="text-muted">{{ 'admin.application.videos.none' | transloco }}</p>
+              }
+            </section>
+            <section class="panel" aria-labelledby="refs-title">
+              <div class="panel__head">
+                <h2 id="refs-title" class="panel__title">
+                  {{ 'admin.application.references.title' | transloco }}
+                </h2>
+                <span class="text-caption">{{
+                  'admin.application.references.count'
+                    | transloco: { verified: verifiedCount(), total: references().length }
+                }}</span>
+              </div>
+              <p class="text-muted">{{ 'admin.application.references.intro' | transloco }}</p>
+              @for (row of references(); track row.reference.id; let last = $last) {
+                <div class="reference">
+                  <dl class="definition definition--two">
+                    <div class="definition__row">
+                      <dt>{{ 'admin.application.references.name' | transloco }}</dt>
+                      <dd>{{ row.reference.name }}</dd>
+                    </div>
+                    <div class="definition__row">
+                      <dt>{{ 'admin.application.references.church' | transloco }}</dt>
+                      <dd>{{ row.reference.church }}</dd>
+                    </div>
+                    <div class="definition__row">
+                      <dt>{{ 'admin.application.references.contact' | transloco }}</dt>
+                      <dd>{{ row.reference.contact }}</dd>
+                    </div>
+                  </dl>
+                  <zm-checkbox
+                    [formControl]="row.control"
+                    [id]="'ref-' + row.reference.id"
+                    [description]="row.description"
+                    >{{ 'admin.application.references.verified' | transloco }}</zm-checkbox
+                  >
+                </div>
+                @if (!last) {
+                  <hr class="divider" />
+                }
+              }
+            </section>
+            <section class="panel" aria-labelledby="vsc-title">
+              <div class="panel__head">
+                <h2 id="vsc-title" class="panel__title">
+                  {{ 'admin.application.check.title' | transloco }}
+                </h2>
+              </div>
+              @if (application.vsc; as check) {
+                <p>{{ checkLine(check) }}</p>
+                <div>
+                  <zm-vsc-document-link [checkId]="check.id" [artistName]="application.name" />
+                </div>
+              } @else {
+                <p>{{ 'admin.application.check.none' | transloco }}</p>
+                <p class="text-caption">
+                  {{ 'admin.application.check.notNeeded' | transloco: { name: firstName() } }}
+                </p>
+              }
+            </section>
+          </div>
+          <aside aria-labelledby="decision-title">
+            <div class="panel panel--raised">
+              <div class="panel__head">
+                <h2 id="decision-title" class="panel__title">
+                  {{ 'admin.application.decision.title' | transloco }}
+                </h2>
+                <span class="stub__code">{{ application.number }}</span>
+              </div>
+              @if (application.status === 'submitted') {
+                <zm-inline-message
+                  id="approve-help"
+                  block
+                  [variant]="canApprove() ? 'success' : 'info'"
+                  >{{
+                    (canApprove()
+                      ? 'admin.application.decision.bothVerified'
+                      : 'admin.application.decision.verifyFirst'
+                    ) | transloco
+                  }}</zm-inline-message
+                >
+                <div class="decision__actions">
+                  <zm-button
+                    variant="primary"
+                    size="lg"
+                    block
+                    describedBy="approve-help"
+                    [disabled]="!canApprove()"
+                    [busy]="approving()"
+                    (click)="approve()"
+                    ><zm-icon name="check" />{{
+                      'admin.application.decision.approve' | transloco: { name: firstName() }
+                    }}</zm-button
+                  >
+                  <zm-button block id="reject-application" (click)="reject()">{{
+                    'admin.application.decision.reject' | transloco
+                  }}</zm-button>
+                </div>
+                <p class="stub__fine">
+                  {{ 'admin.application.decision.fine' | transloco: { name: firstName() } }}
+                </p>
+              } @else {
+                <dl class="definition">
+                  @for (item of decided(); track item.id) {
+                    <div class="definition__row">
+                      <dt>{{ item.term }}</dt>
+                      <dd>{{ item.value }}</dd>
+                    </div>
+                  }
+                </dl>
+              }
+            </div>
+          </aside>
+        </div>
+      }
+    }
+  }
+</div>

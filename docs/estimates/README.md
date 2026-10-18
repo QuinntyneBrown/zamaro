@@ -1,30 +1,30 @@
 # Estimates
 
 - Overall effort: 307 days
-- Complete: 10%
+- Complete: 40%
 
 | Subsystem | Effort | Complete |
 |---|---|---|
-| [operations](operations.md) | 26 days | 0% |
-| [security](security.md) | 25 days | 0% |
-| [accounts](accounts.md) | 24 days | 0% |
-| [privacy](privacy.md) | 15 days | 0% |
-| [user-experience](user-experience.md) | 21 days | 0% |
+| [operations](operations.md) | 26 days | 43% |
+| [security](security.md) | 25 days | 64% |
+| [accounts](accounts.md) | 24 days | 93% |
+| [privacy](privacy.md) | 15 days | 45% |
+| [user-experience](user-experience.md) | 21 days | 53% |
 | [artist-profiles](artist-profiles.md) | 17 days | 97% |
 | [discovery](discovery.md) | 12 days | 100% |
-| [artist-onboarding](artist-onboarding.md) | 19 days | 0% |
-| [administration](administration.md) | 22 days | 0% |
+| [artist-onboarding](artist-onboarding.md) | 19 days | 66% |
+| [administration](administration.md) | 22 days | 44% |
 | [artist-workspace](artist-workspace.md) | 27 days | 0% |
 | [artist-availability](artist-availability.md) | 10 days | 0% |
 | [bookings](bookings.md) | 35 days | 0% |
 | [payments](payments.md) | 26 days | 0% |
-| [notifications](notifications.md) | 11 days | 0% |
+| [notifications](notifications.md) | 11 days | 16% |
 | [reviews](reviews.md) | 17 days | 21% |
 
 ## Roadmap
 
-1. Rebuild the backend foundations: operations and security
-2. Accounts, privacy and user-experience, then the artist-profiles remainder (CDN purge, ADR-0029)
-3. Artist-onboarding and administration
-4. Artist-workspace and artist-availability
-5. Bookings, payments, notifications and reviews
+1. Finish the foundations: security headers and HSTS, the scheduler, `instrumentation.ts`, the frontend image and the pipeline (operations and security)
+2. Finish onboarding and administration: application review, then suspend and reinstate
+3. Artist-workspace and artist-availability
+4. Bookings, payments, notifications and reviews
+5. Privacy export and deletion, then the user-experience remainder (offline, loading states, formatting tests)

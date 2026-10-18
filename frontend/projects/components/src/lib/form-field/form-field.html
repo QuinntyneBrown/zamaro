@@ -1,12 +1,31 @@
 <div class="field">
-  <label class="field__label" [for]="fieldId()"
-    >{{ label() }}
-    @if (requiredMarker()) {
-      <span class="field__required">{{ requiredMarker() }}</span>
-    } @else if (optionalMarker()) {
-      <span class="field__optional">{{ optionalMarker() }}</span>
-    }
-  </label>
+  @if (counter(); as counter) {
+    <div class="field__row">
+      <label class="field__label" [for]="fieldId()"
+        >{{ label() }}
+        @if (requiredMarker()) {
+          <span class="field__required">{{ requiredMarker() }}</span>
+        } @else if (optionalMarker()) {
+          <span class="field__optional">{{ optionalMarker() }}</span>
+        }
+      </label>
+      <span
+        class="field__counter"
+        [id]="counterId()"
+        [attr.data-over]="counter.over ? 'true' : null"
+        >{{ counter.text }}</span
+      >
+    </div>
+  } @else {
+    <label class="field__label" [for]="fieldId()"
+      >{{ label() }}
+      @if (requiredMarker()) {
+        <span class="field__required">{{ requiredMarker() }}</span>
+      } @else if (optionalMarker()) {
+        <span class="field__optional">{{ optionalMarker() }}</span>
+      }
+    </label>
+  }
   @switch (type()) {
     @case ('select') {
       <select

@@ -68,10 +68,27 @@ export class FormField implements ControlValueAccessor {
   readonly live = input(false, { transform: booleanAttribute });
   /** Sits in a row beside other content, such as the lineup's sort, at a usable minimum width. */
   readonly inline = input(false);
+  /**
+   * The limit a counter on the label row counts towards: "47 / 1,000", in danger once over
+   * (design-system textarea, "With counter"). The counter's ID is {fieldId}-count and describes
+   * the control. The value is not cut off, so the error can name the excess.
+   */
+  readonly maxLength = input<number>();
 
   protected readonly value = signal('');
   protected readonly disabled = signal(false);
   protected readonly errorId = computed(() => `${this.fieldId()}-error`);
+  protected readonly counterId = computed(() => `${this.fieldId()}-count`);
+  /** "47 / 1,000", with en-CA grouping. */
+  protected readonly counter = computed(() => {
+    const max = this.maxLength();
+    if (max === undefined) return null;
+    const format = (count: number) => count.toLocaleString('en-CA');
+    return {
+      text: `${format(this.value().length)} / ${format(max)}`,
+      over: this.value().length > max,
+    };
+  });
 
   /**
    * The `id` of the message in `[slot=message]` while it is shown. An input rather than a content
@@ -96,6 +113,7 @@ export class FormField implements ControlValueAccessor {
         this.messageId(),
         this.error() ? this.errorId() : null,
         ...this.helpLines().map((line) => line.id),
+        this.counter() ? this.counterId() : null,
         this.describedBy(),
       ]
         .filter(Boolean)

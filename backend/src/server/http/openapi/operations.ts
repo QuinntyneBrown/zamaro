@@ -64,9 +64,16 @@ import {
   AdminArtistListResource,
 } from '../resources/administration/artist';
 import {
+  AdminApplicationEnvelope,
+  AdminApplicationQueueResource,
+  AdminReferenceEnvelope,
+} from '../resources/administration/artist-application';
+import {
   AdminCheckEnvelope,
   AdminCheckQueueResource,
 } from '../resources/administration/vulnerable-sector-check';
+import { RejectArtistApplicationRequest } from '../requests/administration/application-rejection';
+import { SetReferenceVerificationRequest } from '../requests/administration/reference-verification';
 import { StartApplicationVideoUploadRequest } from '../requests/artist-onboarding/application-video';
 import { ApplicationVideoEnvelope } from '../resources/artist-onboarding/application-video';
 import { SubmitArtistApplicationRequest } from '../requests/artist-onboarding/application';
@@ -901,6 +908,87 @@ export const operations: Operation[] = [
         description: 'The link on the media host and when it stops working',
         content: z.object({ data: z.object({ url: z.string(), expiresAt: z.string() }) }),
       },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/artist-applications',
+    name: 'admin.artist-applications.index',
+    summary: 'The Submitted artist applications, oldest first',
+    responses: {
+      200: {
+        description: 'The queue and how many are waiting',
+        content: AdminApplicationQueueResource,
+      },
+    },
+  },
+  {
+    method: 'get',
+    path: '/admin/artist-applications/{application}',
+    name: 'admin.artist-applications.show',
+    summary: 'One application for review: the applicant, references, videos and check; audited',
+    parameters: [{ name: 'application', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The application', content: AdminApplicationEnvelope },
+      404: { description: 'No such application', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/admin/artist-applications/{application}/approval',
+    name: 'admin.artist-applications.approve',
+    summary:
+      'Approve: both references must be verified; grants the Artist role and creates a hidden artist',
+    parameters: [{ name: 'application', in: 'path', schema: z.number().int() }],
+    responses: {
+      200: { description: 'The application, approved', content: AdminApplicationEnvelope },
+      404: { description: 'No such application', content: 'problem' },
+      409: {
+        description: 'Already decided (application-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'A reference is not verified yet', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/admin/artist-applications/{application}/rejection',
+    name: 'admin.artist-applications.reject',
+    summary:
+      'Reject: a reason from the fixed list and an optional note, both emailed to the applicant',
+    parameters: [{ name: 'application', in: 'path', schema: z.number().int() }],
+    requestBody: RejectArtistApplicationRequest,
+    responses: {
+      200: { description: 'The application, rejected', content: AdminApplicationEnvelope },
+      404: { description: 'No such application', content: 'problem' },
+      409: {
+        description: 'Already decided (application-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'The reason is missing or the note is too long', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/admin/artist-applications/{application}/references/{reference}/verification',
+    name: 'admin.artist-applications.references.verify',
+    summary: 'Tick or untick a reference: saved at once with who and when, and audited',
+    parameters: [
+      { name: 'application', in: 'path', schema: z.number().int() },
+      { name: 'reference', in: 'path', schema: z.number().int() },
+    ],
+    requestBody: SetReferenceVerificationRequest,
+    responses: {
+      200: { description: 'The reference, as it now stands', content: AdminReferenceEnvelope },
+      404: {
+        description: 'No such application, or a reference of another one',
+        content: 'problem',
+      },
+      409: {
+        description: 'The application was already decided (application-already-decided)',
+        content: 'problem',
+      },
+      422: { description: 'verified is missing', content: 'problem' },
     },
   },
   {

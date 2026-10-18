@@ -1,0 +1,1 @@
+ALTER TABLE "artist_applications" ADD COLUMN "rejection_note" varchar(1000);

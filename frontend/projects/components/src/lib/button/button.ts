@@ -36,6 +36,7 @@ export function buttonClasses(
     [attr.aria-pressed]="pressed()"
     [attr.aria-expanded]="expanded()"
     [attr.aria-controls]="controls()"
+    [attr.aria-describedby]="describedBy()"
   >
     <ng-content />
   </button>`,
@@ -55,6 +56,8 @@ export class Button {
   readonly pressed = input<boolean>();
   readonly expanded = input<boolean>();
   readonly controls = input<string>();
+  /** IDs of the text that explains the button, such as why it is disabled. */
+  readonly describedBy = input<string>();
   /** Waiting on the action it started: a spinner, and a second press is ignored by the owner. */
   readonly busy = input(false);
   readonly disabled = input(false);

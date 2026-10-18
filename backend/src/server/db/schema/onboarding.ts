@@ -94,7 +94,10 @@ export const artistApplications = pgTable(
     submittedAt: timestamptz().notNull(),
     decidedAt: timestamptz(),
     decidedBy: foreignId().references(() => users.id, { onDelete: 'set null' }),
+    /** One of ApplicationRejectionReason once rejected (L2-048.2). */
     rejectionReason: text(),
+    /** The administrator's optional note to the applicant, at most 1,000 characters (L2-048.2). */
+    rejectionNote: varchar({ length: 1000 }),
     ...timestamps(),
   },
   (table) => [

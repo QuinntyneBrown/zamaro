@@ -3,14 +3,11 @@ import type { ArtistProfile } from '@/server/actions/artist-profiles/show-artist
 import { encodeReviewCursor, type ReviewPage } from '@/server/actions/reviews/list-artist-reviews';
 import type { PhotoRendition } from '@/server/db/schema';
 import { ActType, MusicalKey, Pronoun, Style, valuesOf } from '@/server/enums';
-import { mediaUrl } from '@/server/support/media';
+import { mediaUrl, videoPoster } from '@/server/support/media';
 import { ReviewResource, toReviewResource } from '../reviews/review';
 
 /** The photo rendition used as `src`; browsers pick from the srcsets. */
 const PHOTO_SRC_WIDTH = 800;
-/** Poster frames are stored as one 16:9 WebP. */
-const POSTER_WIDTH = 800;
-const POSTER_HEIGHT = 450;
 
 /**
  * The public profile. Every field is listed here on purpose: coordinates, the account email, phone
@@ -142,10 +139,7 @@ export function toArtistProfileResource(
         id: video.id,
         title: video.title,
         durationSeconds: video.durationSeconds ?? 0,
-        poster:
-          video.posterKey === null
-            ? null
-            : { src: mediaUrl(video.posterKey), width: POSTER_WIDTH, height: POSTER_HEIGHT },
+        poster: videoPoster(video.posterKey),
         stream: mediaUrl(video.manifestKey ?? ''),
         captions:
           video.captionsKey === null ? null : { src: mediaUrl(video.captionsKey), lang: 'en' },
