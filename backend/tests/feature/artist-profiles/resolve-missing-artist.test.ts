@@ -88,6 +88,17 @@ describe('resolving a missing artist', () => {
     expect(text).not.toContain('ACT-0044');
   });
 
+  it('treats a deleted artist as missing like any other', async () => {
+    await db().update(artists).set({ status: 'deleted' }).where(eq(artists.slug, 'elijah-park'));
+
+    const response = await profile('elijah-park', BURLINGTON);
+
+    expect(response.status).toBe(404);
+    const body = (await response.json()) as Missing;
+    expect(body.title).toBe('This artist isn’t on Zamaro');
+    expect(JSON.stringify(body).toLowerCase()).not.toContain('elijah');
+  });
+
   it('treats an unpublished artist as missing like any other', async () => {
     await db().update(artists).set({ publishedAt: null }).where(eq(artists.slug, 'elijah-park'));
 
