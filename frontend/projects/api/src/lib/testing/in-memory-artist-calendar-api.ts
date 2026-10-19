@@ -3,6 +3,7 @@ import { addMonths, type CalendarDate } from '../i18n/calendar-date';
 import type {
   ArtistCalendar,
   ArtistCalendarDay,
+  CalendarFeed,
   DateRange,
   RangeResult,
   RangeWarning,
@@ -54,5 +55,29 @@ export class InMemoryArtistCalendarApi implements ArtistCalendarApi {
 
   setWeekly(unavailableWeekdays: number[]): Observable<number[]> {
     return of([...unavailableWeekdays].sort((a, b) => a - b));
+  }
+
+  private calendarFeed: CalendarFeed | null = null;
+
+  feed(): Observable<CalendarFeed | null> {
+    return of(this.calendarFeed);
+  }
+
+  enableFeed(): Observable<CalendarFeed> {
+    this.calendarFeed ??= {
+      url: 'http://localhost:8000/api/v1/calendar-feeds/in-memory-token.ics',
+      enabledAt: `${this.today}T14:00:00.000Z`,
+      regeneratedAt: null,
+    };
+    return of(this.calendarFeed);
+  }
+
+  regenerateFeed(): Observable<CalendarFeed> {
+    this.calendarFeed = {
+      url: 'http://localhost:8000/api/v1/calendar-feeds/in-memory-token-2.ics',
+      enabledAt: this.calendarFeed?.enabledAt ?? `${this.today}T14:00:00.000Z`,
+      regeneratedAt: `${this.today}T14:00:00.000Z`,
+    };
+    return of(this.calendarFeed);
   }
 }

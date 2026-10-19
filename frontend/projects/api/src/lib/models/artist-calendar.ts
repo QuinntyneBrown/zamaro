@@ -66,3 +66,10 @@ export interface AffectedRequest {
 export interface RangeWarning {
   affectedRequests: AffectedRequest[];
 }
+
+/** The artist's secret calendar feed, once it is on (L2-058). */
+export interface CalendarFeed {
+  url: string;
+  enabledAt: string;
+  regeneratedAt: string | null;
+}

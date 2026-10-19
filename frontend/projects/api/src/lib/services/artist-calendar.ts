@@ -4,6 +4,7 @@ import { catchError, map, type Observable, of, throwError } from 'rxjs';
 import type {
   ArtistCalendar,
   ArtistCalendarDay,
+  CalendarFeed,
   DateRange,
   RangeResult,
   RangeWarning,
@@ -20,6 +21,12 @@ export interface ArtistCalendarApi {
   setDates(range: DateRange): Observable<RangeResult | RangeWarning>;
   /** Replaces the weekly default: the ISO weekdays (1 is Monday) the artist is unavailable. */
   setWeekly(unavailableWeekdays: number[]): Observable<number[]>;
+  /** The secret calendar feed, or null before it is turned on (L2-058). */
+  feed(): Observable<CalendarFeed | null>;
+  /** Turns the feed on, or answers the current link. */
+  enableFeed(): Observable<CalendarFeed>;
+  /** A new secret link; the old one stops working at once (L2-058.2). */
+  regenerateFeed(): Observable<CalendarFeed>;
 }
 
 export const ARTIST_CALENDAR_API = new InjectionToken<ArtistCalendarApi>('ArtistCalendarApi');
@@ -86,5 +93,28 @@ export class HttpArtistCalendarApi implements ArtistCalendarApi {
         data: { unavailableWeekdays: number[] };
       }>('/api/v1/artist/availability/weekly', { unavailableWeekdays })
       .pipe(map((response) => response.data.unavailableWeekdays));
+  }
+
+  feed(): Observable<CalendarFeed | null> {
+    return this.http.get<{ data: CalendarFeed }>('/api/v1/artist/calendar-feed').pipe(
+      map((response): CalendarFeed | null => response.data),
+      catchError((error: unknown) =>
+        error instanceof HttpErrorResponse && error.status === 404
+          ? of(null)
+          : throwError(() => error),
+      ),
+    );
+  }
+
+  enableFeed(): Observable<CalendarFeed> {
+    return this.http
+      .post<{ data: CalendarFeed }>('/api/v1/artist/calendar-feed', {})
+      .pipe(map((response) => response.data));
+  }
+
+  regenerateFeed(): Observable<CalendarFeed> {
+    return this.http
+      .post<{ data: CalendarFeed }>('/api/v1/artist/calendar-feed/regeneration', {})
+      .pipe(map((response) => response.data));
   }
 }

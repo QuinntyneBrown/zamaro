@@ -41,6 +41,7 @@ import {
   TourDateTrail,
 } from 'components';
 import { openBlockDatesDialog } from '../../dialogs/block-dates/block-dates';
+import { openCalendarFeedDialog } from '../../dialogs/calendar-feed/calendar-feed';
 import { openWeeklyDefaultDialog } from '../../dialogs/weekly-default/weekly-default';
 import { dayList, dayRange, shortDay } from '../../shared/day-list';
 import { PageMeta } from '../../shared/page-meta';
@@ -221,6 +222,11 @@ export class AvailabilityPage {
       this.store.reload();
       this.announce(result.range, result);
     });
+  }
+
+  /** "Subscribe in your calendar": the feed dialog (L2-058). */
+  protected openCalendarFeed(): void {
+    openCalendarFeedDialog(this.injector);
   }
 
   /** "Change weekly default" / "Set a weekly default". */

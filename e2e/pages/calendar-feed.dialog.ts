@@ -36,6 +36,15 @@ export class CalendarFeedDialog {
     return this.dialog().getByRole('textbox', { name: 'Your secret calendar link' });
   }
 
+  /** Lets the test write to and read the clipboard, as the Copy link button does. */
+  async allowClipboard(): Promise<void> {
+    await this.page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  }
+
+  async clipboardText(): Promise<string> {
+    return this.page.evaluate(() => navigator.clipboard.readText());
+  }
+
   copyButton(): Locator {
     return this.dialog().getByRole('button', { name: /^(Copy link|Copied)$/ });
   }

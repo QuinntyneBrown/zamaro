@@ -5,6 +5,11 @@ import { CalendarFeedDialog } from '../../pages/calendar-feed.dialog';
 
 const LINK = /^http:\/\/.+\/api\/v1\/calendar-feeds\/[A-Za-z0-9_-]{43}\.ics$/;
 
+/** The link names the API's own origin; the suite reaches the API through the site's /api proxy. */
+function feedPath(url: string): string {
+  return new URL(url).pathname;
+}
+
 // L2-058 (publish-calendar-feed): Abigail turns on her secret calendar link, subscribes a calendar
 // to it, and makes a new one, which retires the old one at once. This changes the seed, so it runs
 // in the zamaro-mutations project.
@@ -20,6 +25,7 @@ test.describe('Publishing a calendar feed', () => {
   }) => {
     const availability = new AvailabilityPage(page);
     const dialog = new CalendarFeedDialog(page);
+    await dialog.allowClipboard();
     await availability.open('2026-11');
 
     await availability.subscribeButton().click();
@@ -32,11 +38,12 @@ test.describe('Publishing a calendar feed', () => {
     const link = await dialog.link().inputValue();
     await dialog.copyButton().click();
     await expect(dialog.copyButton()).toHaveText('Copied');
+    expect(await dialog.clipboardText()).toBe(link);
     await expect(dialog.dialog()).toContainText(
       'Anyone with this link can see your Confirmed bookings, so keep it to yourself.',
     );
 
-    const feed = await page.request.get(link);
+    const feed = await page.request.get(feedPath(link));
     expect(feed.status()).toBe(200);
     expect(feed.headers()['content-type']).toBe('text/calendar; charset=utf-8');
     const ics = await feed.text();
@@ -79,8 +86,8 @@ test.describe('Publishing a calendar feed', () => {
     const fresh = await dialog.link().inputValue();
     expect(fresh).toMatch(LINK);
     expect(fresh).not.toBe(old);
-    expect((await page.request.get(old)).status()).toBe(404);
-    expect((await page.request.get(fresh)).status()).toBe(200);
+    expect((await page.request.get(feedPath(old))).status()).toBe(404);
+    expect((await page.request.get(feedPath(fresh))).status()).toBe(200);
   });
 
   test('a new link that fails keeps the current one working and offers Try again', async ({
@@ -102,6 +109,6 @@ test.describe('Publishing a calendar feed', () => {
     );
     await expect(dialog.link()).toHaveValue(current);
     await expect(dialog.actionButton()).toHaveText('Try again');
-    expect((await page.request.get(current)).status()).toBe(200);
+    expect((await page.request.get(feedPath(current))).status()).toBe(200);
   });
 });

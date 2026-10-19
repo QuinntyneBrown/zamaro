@@ -1,0 +1,142 @@
+<zm-dialog
+  icon="rss"
+  [iconTone]="confirming() ? 'danger' : 'info'"
+  [danger]="confirming()"
+  [kicker]="'availability.feed.kicker' | transloco"
+  [heading]="
+    (confirming() ? 'availability.feed.confirm.title' : 'availability.feed.title') | transloco
+  "
+  [titleId]="titleId"
+  [description]="
+    (confirming() ? 'availability.feed.confirm.description' : 'availability.feed.description')
+      | transloco
+  "
+  [descriptionId]="descriptionId"
+  [closeLabel]="'availability.feed.close' | transloco"
+  [busy]="busy()"
+  (closed)="close()"
+>
+  @switch (status()) {
+    @case ('loading') {
+      <p class="visually-hidden" role="status">{{ 'availability.feed.loading' | transloco }}</p>
+      <zm-skeleton width="full" aria-hidden="true" />
+      <zm-skeleton width="long" aria-hidden="true" />
+    }
+    @case ('load-failed') {
+      <zm-alert
+        variant="danger"
+        compact
+        [heading]="'availability.feed.loadFailed.title' | transloco"
+      >
+        <p>{{ 'availability.feed.loadFailed.text' | transloco }}</p>
+      </zm-alert>
+    }
+    @case ('confirm') {
+      <p>{{ 'availability.feed.confirm.text' | transloco }}</p>
+    }
+    @case ('making') {
+      <p>{{ 'availability.feed.confirm.text' | transloco }}</p>
+    }
+    @default {
+      @if (status() === 'new-failed') {
+        <zm-alert
+          variant="danger"
+          compact
+          [heading]="'availability.feed.failed.newTitle' | transloco"
+        >
+          <p>{{ 'availability.feed.failed.newText' | transloco }}</p>
+        </zm-alert>
+      }
+      @if (status() === 'on-failed') {
+        <zm-alert
+          variant="danger"
+          compact
+          [heading]="'availability.feed.failed.onTitle' | transloco"
+        >
+          <p>{{ 'availability.feed.failed.onText' | transloco }}</p>
+        </zm-alert>
+      }
+      @if (feed(); as feed) {
+        <div class="feed-link">
+          <zm-form-field
+            #linkField
+            fieldId="calendar-feed-link"
+            [label]="'availability.feed.link' | transloco"
+            [formControl]="link"
+            readonly
+          />
+          <zm-button (click)="copy()"
+            ><zm-icon name="copy" />{{
+              (copied() ? 'availability.feed.copied' : 'availability.feed.copy') | transloco
+            }}</zm-button
+          >
+        </div>
+        <zm-alert variant="warning" compact [heading]="'availability.feed.warning' | transloco" />
+        <p>{{ 'availability.feed.paste' | transloco }}</p>
+        <p class="text-muted">{{ 'availability.feed.lists' | transloco }}</p>
+        <div>
+          <zm-button (click)="askForNewLink()"
+            ><zm-icon name="refresh" />{{ 'availability.feed.makeNew' | transloco }}</zm-button
+          >
+        </div>
+      } @else {
+        <p>{{ 'availability.feed.off.text' | transloco }}</p>
+        <p class="text-muted">{{ 'availability.feed.off.note' | transloco }}</p>
+      }
+    }
+  }
+  @if (confirming()) {
+    <zm-button #keepButton slot="footer" [disabled]="busy()" (click)="keepCurrentLink()">{{
+      'availability.feed.confirm.keep' | transloco
+    }}</zm-button>
+  }
+  @if (confirming()) {
+    <zm-button slot="footer" variant="danger" [busy]="busy()" (click)="makeNewLink()"
+      ><zm-icon [name]="status() === 'new-failed' ? 'refresh' : 'rss'" />{{
+        (busy()
+          ? 'availability.feed.confirm.making'
+          : status() === 'new-failed'
+            ? 'availability.feed.tryAgain'
+            : 'availability.feed.makeNew'
+        ) | transloco
+      }}</zm-button
+    >
+  }
+  @if (status() === 'new-failed') {
+    <zm-button slot="footer" (click)="keepCurrentLink()">{{
+      'availability.feed.cancel' | transloco
+    }}</zm-button>
+  }
+  @if (status() === 'new-failed') {
+    <zm-button slot="footer" variant="danger" (click)="makeNewLink()"
+      ><zm-icon name="refresh" />{{ 'availability.feed.tryAgain' | transloco }}</zm-button
+    >
+  }
+  @if (status() === 'on') {
+    <zm-button slot="footer" variant="primary" (click)="close()">{{
+      'availability.feed.done' | transloco
+    }}</zm-button>
+  }
+  @if (!confirming() && !linkShown()) {
+    <zm-button slot="footer" [disabled]="busy()" (click)="close()">{{
+      'availability.feed.cancel' | transloco
+    }}</zm-button>
+  }
+  @if (!confirming() && !linkShown() && status() !== 'loading' && status() !== 'load-failed') {
+    <zm-button slot="footer" variant="primary" [busy]="busy()" (click)="turnOn()"
+      ><zm-icon [name]="status() === 'on-failed' ? 'refresh' : 'rss'" />{{
+        (busy()
+          ? 'availability.feed.off.turningOn'
+          : status() === 'on-failed'
+            ? 'availability.feed.tryAgain'
+            : 'availability.feed.off.turnOn'
+        ) | transloco
+      }}</zm-button
+    >
+  }
+  @if (status() === 'load-failed') {
+    <zm-button slot="footer" variant="primary" (click)="load()"
+      ><zm-icon name="refresh" />{{ 'availability.feed.tryAgain' | transloco }}</zm-button
+    >
+  }
+</zm-dialog>
