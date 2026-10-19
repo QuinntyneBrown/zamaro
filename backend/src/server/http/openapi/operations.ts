@@ -59,6 +59,8 @@ import {
   CurrentChecksResource,
 } from '../resources/artist-onboarding/vulnerable-sector-check';
 import { CalendarResource } from '../resources/artist-availability/calendar';
+import { SetDateAvailabilityRequest } from '../requests/artist-availability/dates';
+import { DateRangeResource } from '../resources/artist-availability/dates';
 import { SetWeeklyAvailabilityRequest } from '../requests/artist-availability/weekly';
 import { WeeklyAvailabilityResource } from '../resources/artist-availability/weekly';
 import { ListAdminArtistsRequest } from '@/app/api/v1/admin/artists/route';
@@ -892,6 +894,22 @@ export const operations: Operation[] = [
       200: { description: 'The new weekly default', content: WeeklyAvailabilityResource },
       404: { description: 'Not an artist', content: 'problem' },
       422: { description: 'The weekdays are not 1 to 7 without repeats', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/artist/availability/dates',
+    name: 'artist.availability.dates',
+    summary: 'Mark a range of dates unavailable or free; open requests are declined on confirm',
+    requestBody: SetDateAvailabilityRequest,
+    responses: {
+      200: { description: 'The dates saved, the Booked ones skipped', content: DateRangeResource },
+      404: { description: 'Not an artist', content: 'problem' },
+      409: {
+        description: 'Churches have asked about these dates; resend with confirm to decline them',
+        content: 'problem',
+      },
+      422: { description: 'The range or note cannot be saved', content: 'problem' },
     },
   },
   {

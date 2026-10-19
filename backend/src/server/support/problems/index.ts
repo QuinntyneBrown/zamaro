@@ -64,6 +64,11 @@ export const ProblemType = {
     status: 409,
     title: 'This check was already decided',
   },
+  OpenRequestsAffected: {
+    slug: 'open-requests-affected',
+    status: 409,
+    title: 'Churches have asked about these dates',
+  },
   UploadOffsetMismatch: {
     slug: 'upload-offset-mismatch',
     status: 409,

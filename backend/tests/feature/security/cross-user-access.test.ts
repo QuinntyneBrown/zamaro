@@ -106,6 +106,9 @@ async function booker(): Promise<Person> {
     as: async () => {
       if (browser === undefined) {
         browser = new Browser();
+        // Each person connects from an address of their own, so the suite's growing sign-ins never
+        // share one address's anonymous request limit.
+        browser.address = `198.51.100.${String(id % 250)}`;
         const response = await browser.signIn(email);
         expect(response.status, `${email} signs in`).toBe(200);
       }
