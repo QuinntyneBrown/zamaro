@@ -60,7 +60,7 @@ describe('setting availability for a range of dates', () => {
       '1 church has asked about these dates. They’ll be told you’re not available.',
     );
     expect(body.affectedRequests).toEqual([
-      { booking: 'ZAM-0120', date: '2026-11-22', church: 'Harvest Point Church' },
+      { booking: 'ZAM-0120', date: '2026-11-22', church: 'St. Brendan�s Anglican' },
     ]);
     expect(await overrideDates()).not.toContain('2026-11-20');
     expect(await statusOf('ZAM-0120')).toBe('requested');

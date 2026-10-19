@@ -15,6 +15,10 @@ interface Day {
   requestCount: number;
   editable: boolean;
   church: string | null;
+  kind: string | null;
+  city: string | null;
+  cause: 'weekly-default' | 'chosen' | null;
+  note: string | null;
 }
 
 interface CalendarBody {
@@ -63,10 +67,29 @@ describe('reading the artist calendar', () => {
     expect(day(body, '2026-11-15')).toMatchObject({
       status: 'booked',
       editable: false,
-      church: 'Lakeshore Alliance',
+      church: 'Lakeshore Alliance Church',
+      kind: 'sunday-service',
+      city: 'Oakville',
     });
-    expect(day(body, '2026-11-22')).toMatchObject({ status: 'requested', requestCount: 1 });
-    expect(day(body, '2026-11-26')).toMatchObject({ status: 'unavailable', editable: true });
+    expect(day(body, '2026-11-14')).toMatchObject({ kind: 'worship-night', city: 'Burlington' });
+    expect(day(body, '2026-11-22')).toMatchObject({
+      status: 'requested',
+      requestCount: 1,
+      church: 'St. Brendan�s Anglican',
+      kind: 'sunday-service',
+      city: 'Oshawa',
+    });
+    expect(day(body, '2026-11-26')).toMatchObject({
+      status: 'unavailable',
+      editable: true,
+      cause: 'chosen',
+      note: 'Studio',
+    });
+    expect(day(body, '2026-11-02')).toMatchObject({
+      status: 'unavailable',
+      cause: 'weekly-default',
+      note: null,
+    });
     expect(day(body, '2026-11-27').status).toBe('unavailable');
   });
 
