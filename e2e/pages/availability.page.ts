@@ -76,7 +76,9 @@ export class AvailabilityPage {
   }
 
   subscribeButton(): Locator {
-    return this.main().getByRole('button', { name: 'Subscribe in your calendar' });
+    return this.main().getByRole('button', {
+      name: 'Subscribe in your calendar',
+    });
   }
 
   /** "Weekly default: Unavailable every Monday" with its button. */
@@ -90,7 +92,10 @@ export class AvailabilityPage {
 
   /** The "Every date is Free" state of a calendar with nothing set. */
   emptyTitle(): Locator {
-    return this.main().getByRole('heading', { level: 2, name: 'Every date is Free' });
+    return this.main().getByRole('heading', {
+      level: 2,
+      name: 'Every date is Free',
+    });
   }
 
   /** The month heading over the grid: "November 2026". */
@@ -128,7 +133,14 @@ export class AvailabilityPage {
 
   /** The gridcell holding a day, whose `aria-selected` says whether it is selected. */
   cellOf(name: string | RegExp): Locator {
-    return this.grid().getByRole('gridcell').filter({ has: this.day(name) });
+    return this.grid()
+      .getByRole('gridcell')
+      .filter({ has: this.page.getByRole('button', { name }) });
+  }
+
+  /** Activates a day the pointer way. A Booked day is `aria-disabled`, which the click goes past. */
+  async activateDay(name: string | RegExp): Promise<void> {
+    await this.day(name).click({ force: true });
   }
 
   legend(): Locator {
@@ -173,7 +185,9 @@ export class AvailabilityPage {
   }
 
   private calendar(): Locator {
-    return this.main().getByRole('region', { name: 'Calendar, next 18 months' });
+    return this.main().getByRole('region', {
+      name: 'Calendar, next 18 months',
+    });
   }
 
   private main(): Locator {

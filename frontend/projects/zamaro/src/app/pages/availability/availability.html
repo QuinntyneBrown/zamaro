@@ -1,0 +1,149 @@
+<div class="container">
+  <header class="page-head">
+    <div>
+      <h1 class="page-head__title">{{ 'availability.pageTitle' | transloco }}</h1>
+      @if (store.status() === 'loading') {
+        <p class="page-head__sub" role="status">
+          <span class="visually-hidden">{{ 'availability.loading' | transloco }}</span
+          ><zm-skeleton width="medium" aria-hidden="true" />
+        </p>
+      } @else {
+        <p class="page-head__sub">{{ subtitle() }}</p>
+      }
+    </div>
+    @switch (store.status()) {
+      @case ('loading') {
+        <zm-skeleton shape="control" width="medium" aria-hidden="true" />
+      }
+      @case ('loaded') {
+        @if (!store.untouched()) {
+          <div class="cluster">
+            <zm-button variant="primary"
+              ><zm-icon name="ban" />{{ 'availability.actions.markDates' | transloco }}</zm-button
+            >
+            <zm-button
+              ><zm-icon name="rss" />{{ 'availability.actions.subscribe' | transloco }}</zm-button
+            >
+          </div>
+        }
+      }
+    }
+  </header>
+  <div class="page-body" [attr.aria-busy]="store.status() === 'loading' ? 'true' : null">
+    @switch (store.status()) {
+      @case ('error') {
+        <zm-alert variant="danger" [heading]="'availability.error.title' | transloco">
+          <p>{{ 'availability.error.text' | transloco }}</p>
+          <zm-button slot="actions" variant="primary" (click)="retry()"
+            ><zm-icon name="refresh" />{{ 'availability.error.retry' | transloco }}</zm-button
+          >
+          <zm-button-link slot="actions" link="/artist">{{
+            'availability.error.back' | transloco
+          }}</zm-button-link>
+        </zm-alert>
+      }
+      @case ('loading') {
+        <zm-skeleton width="medium" aria-hidden="true" />
+        <zm-calendar
+          [label]="'availability.calendar.label' | transloco"
+          [month]="month()"
+          [monthTitle]="monthTitle()"
+          [days]="[]"
+          [weekdays]="weekdays"
+          [legend]="legend"
+          [legendLabel]="'availability.calendar.legend' | transloco"
+          [previousLabel]="previousLabel()"
+          [nextLabel]="nextLabel()"
+          [canGoBack]="false"
+          [canGoForward]="false"
+          loading
+        />
+      }
+      @default {
+        @if (store.untouched()) {
+          <zm-empty-state
+            [quiet]="true"
+            [headingLevel]="2"
+            [heading]="'availability.empty.title' | transloco"
+          >
+            <p>{{ 'availability.empty.text' | transloco }}</p>
+            <zm-button slot="actions" variant="primary"
+              ><zm-icon name="ban" />{{ 'availability.actions.markDates' | transloco }}</zm-button
+            >
+          </zm-empty-state>
+        } @else {
+          <p class="text-muted">{{ 'availability.intro' | transloco }}</p>
+        }
+        <p class="cluster availability__weekly">
+          <span
+            >{{ 'availability.weekly.label' | transloco }}
+            <strong>{{ weeklyDefault() }}</strong></span
+          >
+          <zm-button size="sm"
+            ><zm-icon name="swap" />{{
+              (store.unavailableWeekdays().length
+                ? 'availability.weekly.change'
+                : 'availability.weekly.set'
+              ) | transloco
+            }}</zm-button
+          >
+        </p>
+        <zm-calendar
+          [label]="'availability.calendar.label' | transloco"
+          [month]="month()"
+          [monthTitle]="monthTitle()"
+          [days]="gridDays()"
+          [weekdays]="weekdays"
+          [legend]="legend"
+          [legendLabel]="'availability.calendar.legend' | transloco"
+          [previousLabel]="previousLabel()"
+          [nextLabel]="nextLabel()"
+          [canGoBack]="store.canGoBack()"
+          [canGoForward]="store.canGoForward()"
+          [today]="today"
+          [selected]="store.selected()"
+          (monthChange)="turnPage($event)"
+          (selectedChange)="select($event)"
+          (dayActivated)="explain($event)"
+        >
+          <p class="calendar__caption">{{ caption() }}</p>
+        </zm-calendar>
+        @if (store.selected().length) {
+          <zm-bulk-bar
+            sticky
+            [label]="'availability.bulk.label' | transloco"
+            [count]="selectionCount()"
+          >
+            <zm-button variant="primary" size="sm">{{
+              (selectionHasUnavailable()
+                ? 'availability.bulk.markFree'
+                : 'availability.bulk.markUnavailable'
+              ) | transloco
+            }}</zm-button>
+            <zm-button size="sm" (click)="clearSelection()">{{
+              'availability.bulk.clear' | transloco
+            }}</zm-button>
+          </zm-bulk-bar>
+        }
+        @if (rows().length) {
+          <section class="stack" aria-labelledby="month-title">
+            <h2 id="month-title">
+              {{ 'availability.schedule.title' | transloco: { month: monthName() } }}
+            </h2>
+            <zm-tour-dates variant="schedule" labelledBy="month-title" [dates]="rows()">
+              <ng-template zmTourDateTrail let-row>
+                @if (row.stamp) {
+                  <zm-stamp [status]="row.stamp">{{
+                    'availability.schedule.' + row.stamp | transloco
+                  }}</zm-stamp>
+                } @else {
+                  <zm-badge>{{ 'availability.schedule.unavailable' | transloco }}</zm-badge>
+                }
+              </ng-template>
+            </zm-tour-dates>
+          </section>
+        }
+      }
+    }
+  </div>
+</div>

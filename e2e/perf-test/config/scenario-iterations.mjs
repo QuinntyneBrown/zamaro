@@ -6,6 +6,9 @@ export const defaultIterations = 200;
 export const scenarioIterations = {
   AuditLogTable: 12,
   BookingStub: 150,
+  BulkBar: 1200,
+  CalendarMonth: 60,
+  CalendarMonthDark: 60,
   DarkTheme: 60,
   DateSwap: 400,
   ErrorSummary: 450,

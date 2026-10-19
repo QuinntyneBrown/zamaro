@@ -1,0 +1,112 @@
+<div class="calendar__head">
+  <h2 class="calendar__month" [id]="monthId()">{{ monthTitle() }}</h2>
+  <div class="calendar__tools">
+    <div class="calendar__pager">
+      <zm-button
+        iconOnly
+        [label]="previousLabel()"
+        [disabled]="!canGoBack()"
+        (click)="turnPage('previous')"
+        ><zm-icon name="chevron-left"
+      /></zm-button>
+      <zm-button
+        iconOnly
+        [label]="nextLabel()"
+        [disabled]="!canGoForward()"
+        (click)="turnPage('next')"
+        ><zm-icon name="chevron-right"
+      /></zm-button>
+    </div>
+    @if (legend().length) {
+      <ul class="calendar__legend" [attr.aria-label]="legendLabel() || null">
+        @for (item of legend(); track item.status) {
+          <li>
+            <span
+              class="calendar__swatch"
+              [attr.data-status]="item.status === 'free' ? null : item.status"
+              aria-hidden="true"
+            ></span
+            >{{ item.label }}
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>
+@if (loading()) {
+  @if (loadingLabel()) {
+    <p class="visually-hidden" role="status">{{ loadingLabel() }}</p>
+  }
+  <div class="calendar__grid" aria-hidden="true">
+    <div class="calendar__row">
+      @for (weekday of weekdays(); track weekday.short) {
+        <div class="calendar__weekday">{{ weekday.short }}</div>
+      }
+    </div>
+    @for (week of loadingWeeks(); track $index) {
+      <div class="calendar__row">
+        @for (cell of week; track cell) {
+          <div class="calendar__cell">
+            <span class="calendar__day"><zm-skeleton class="calendar__skeleton" /></span>
+          </div>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <div
+    class="calendar__grid"
+    role="grid"
+    [attr.aria-labelledby]="monthId()"
+    aria-multiselectable="true"
+  >
+    <div class="calendar__row" role="row">
+      @for (weekday of weekdays(); track weekday.short) {
+        <div class="calendar__weekday" role="columnheader">
+          <span aria-hidden="true">{{ weekday.short }}</span
+          ><span class="visually-hidden">{{ weekday.long }}</span>
+        </div>
+      }
+    </div>
+    @for (week of weeks(); track $index) {
+      <div class="calendar__row" role="row">
+        @for (cell of week; track cell.key) {
+          @if (cell.day; as day) {
+            <div
+              class="calendar__cell"
+              role="gridcell"
+              [attr.aria-selected]="isSelected(day.date) ? 'true' : 'false'"
+            >
+              <button
+                class="calendar__day"
+                type="button"
+                [attr.data-status]="day.status"
+                [attr.data-date]="day.date"
+                [tabindex]="tabbable() === day.date ? 0 : -1"
+                [attr.aria-label]="day.label"
+                [attr.aria-disabled]="day.selectable === false ? 'true' : null"
+                [attr.aria-current]="day.date === today() ? 'date' : null"
+                (click)="activate(day)"
+                (focus)="onFocus(day)"
+                (keydown)="onKeydown($event, day)"
+              >
+                <span class="calendar__num" aria-hidden="true">{{ number(day.date) }}</span>
+                @if (day.event) {
+                  <span class="calendar__event">{{ day.event }}</span
+                  ><span class="calendar__dot" aria-hidden="true"></span>
+                }
+              </button>
+            </div>
+          } @else {
+            <div class="calendar__cell" role="gridcell">
+              <span class="calendar__day" data-status="outside" aria-hidden="true"
+                ><span class="calendar__num">{{ cell.number }}</span></span
+              >
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+}
+<ng-content />

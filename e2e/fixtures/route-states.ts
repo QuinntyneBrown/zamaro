@@ -8,6 +8,7 @@ import { AuditLogPage } from '../pages/admin/audit-log.page';
 import { ChecksPage } from '../pages/admin/checks.page';
 import { AccountPage } from '../pages/account.page';
 import { ArtistWorkspacePage } from '../pages/artist-workspace.page';
+import { AvailabilityPage } from '../pages/availability.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
 import { MfaSetupPage } from '../pages/mfa-setup.page';
@@ -108,6 +109,22 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       }
       break;
     }
+    case 'calendar-pending':
+    case 'calendar-fails': {
+      const availability = new AvailabilityPage(page);
+      if (state.setup === 'calendar-pending') await availability.holdCalendar();
+      else await availability.failCalendar();
+      await page.goto(
+        state.path,
+        state.setup === 'calendar-pending' ? undefined : { waitUntil: 'networkidle' },
+      );
+      await expect(
+        state.setup === 'calendar-pending'
+          ? availability.loadingStatus()
+          : availability.errorAlert(),
+      ).toBeVisible();
+      break;
+    }
     case 'no-applications':
       await new ApplicationsPage(page).answerNoApplications();
       await page.goto(state.path, { waitUntil: 'networkidle' });
@@ -135,6 +152,10 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.shows === 'mfa-key') await expect(new MfaSetupPage(page).key()).toBeVisible();
   if (state.shows === 'saved-list') await expect(new SavedPage(page).cards()).toHaveCount(3);
   if (state.shows === 'saved-empty') await expect(new SavedPage(page).emptyTitle()).toBeVisible();
+  if (state.shows === 'calendar')
+    await expect(new AvailabilityPage(page).scheduleRows()).toHaveCount(6);
+  if (state.shows === 'calendar-empty')
+    await expect(new AvailabilityPage(page).emptyTitle()).toBeVisible();
   if (state.shows === 'artist-forbidden')
     await expect(new ArtistWorkspacePage(page).heading()).toBeVisible();
   if (state.shows === 'accept-terms')

@@ -61,12 +61,12 @@ test.describe('Viewing the availability calendar', () => {
 
     await expect(availability.scheduleHeading()).toHaveText('In November');
     await expect(availability.scheduleRows()).toHaveText([
-      /Sun1 NovHarvest Point ChurchSunday service, MiltonConfirmed/,
-      /Sat14 NovRiverside Community ChurchRequested · 1 · Worship night · reply by Mon 12 OctRequested/,
-      /Sun15 NovLakeshore Alliance ChurchSunday service, OakvilleConfirmed/,
-      /Sat21 NovKingdom Life CentreConference or retreat, MississaugaConfirmed/,
-      /Sun22 NovSt. Brendan’s AnglicanRequested · 1 · Sunday service · reply by Sun 11 OctRequested/,
-      /Thu26 NovStudioThrough Fri 27 NovUnavailable/,
+      'Sun1 Nov Harvest Point Church Sunday service, MiltonConfirmed',
+      'Sat14 Nov Riverside Community Church Requested · 1 · Worship nightRequested',
+      'Sun15 Nov Lakeshore Alliance Church Sunday service, OakvilleConfirmed',
+      'Sat21 Nov Kingdom Life Centre Worship night, MississaugaConfirmed',
+      'Sun22 Nov St. Brendan’s Anglican Requested · 1 · Sunday serviceRequested',
+      'Thu26 Nov Studio Through Fri 27 NovUnavailable',
     ]);
   });
 
@@ -84,9 +84,7 @@ test.describe('Viewing the availability calendar', () => {
     await expect(availability.previousMonthButton()).toHaveAccessibleName(
       'Previous month, October 2026',
     );
-    await expect(availability.nextMonthButton()).toHaveAccessibleName(
-      'Next month, December 2026',
-    );
+    await expect(availability.nextMonthButton()).toHaveAccessibleName('Next month, December 2026');
   });
 
   test('selecting two Free days with the keyboard shows the bulk bar; Clear empties it', async ({
@@ -116,12 +114,13 @@ test.describe('Viewing the availability calendar', () => {
     await signInAs(page.context(), 'abigail');
     await availability.open('2026-11');
 
-    await availability
-      .day('Sun 15 Nov, Booked, Lakeshore Alliance Church. Booked dates can’t be changed')
-      .click();
+    await availability.activateDay(
+      'Sun 15 Nov, Booked, Lakeshore Alliance Church. Booked dates can’t be changed',
+    );
 
+    await expect(availability.shell.toasts()).toContainText('Sun 15 Nov is Booked');
     await expect(availability.shell.toasts()).toContainText(
-      'Sun 15 Nov is a Confirmed booking with Lakeshore Alliance Church',
+      'It’s a Confirmed booking with Lakeshore Alliance Church, so it can’t be changed here.',
     );
     await expect(availability.bulkBar()).toHaveCount(0);
   });

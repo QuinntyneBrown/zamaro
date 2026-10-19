@@ -4,6 +4,9 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 const ICONS = {
   'arrow-left': 'M20 12H5M11 6l-6 6 6 6',
   'arrow-right': 'M4 12h15M13 6l6 6-6 6',
+  ban: 'M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0M5.6 5.6l12.8 12.8',
+  'chevron-left': 'm15 6-6 6 6 6',
+  'chevron-right': 'm9 6 6 6-6 6',
   check: 'M5 12l5 5L20 7',
   close: 'M6 6l12 12M18 6 6 18',
   copy: 'M8 8h12v12H8zM4 16V4h12',
@@ -21,9 +24,11 @@ const ICONS = {
   mic: 'M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3zM6 11a6 6 0 0 0 12 0M12 17v4M8 21h8',
   moon: 'M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z',
   search: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4',
+  rss: 'M5 5a14 14 0 0 1 14 14M5 11a8 8 0 0 1 8 8M6 18.5v.5',
   refresh: 'M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5',
   share: 'M12 3v13M7 8l5-5 5 5M5 14v7h14v-7',
   'sign-out': 'M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11',
+  swap: 'M4 9h13l-3-3M20 15H7l3 3',
   sliders: 'M4 7h10M18 7h2M4 17h4M12 17h8M14 5v4M8 15v4',
   warning: 'M12 3 2 21h20zM12 10v5M12 18v.5',
 } as const;

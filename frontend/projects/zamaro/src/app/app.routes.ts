@@ -25,13 +25,20 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/artist/artist').then((m) => m.ArtistPage),
   },
   // The artist workspace. A church account gets "This page is for artists" here instead of a
-  // redirect (L2-074); the calendar and the other screens join as children when they are built, and
-  // `/artist` redirects to the calendar with the first of them (J7-S5).
+  // redirect (L2-074); the other screens join as children when they are built, and `/artist`
+  // opens the calendar until the dashboard lands (J10-S2).
   {
     path: 'artist',
     canActivate: [signedInGuard, termsGuard],
     loadComponent: () => import('./pages/workspace/workspace').then((m) => m.Workspace),
-    children: [],
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'calendar' },
+      {
+        path: 'calendar',
+        loadComponent: () =>
+          import('./pages/availability/availability').then((m) => m.AvailabilityPage),
+      },
+    ],
   },
   {
     path: 'sign-in',

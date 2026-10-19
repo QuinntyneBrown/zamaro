@@ -16,6 +16,7 @@ import type { CastMember } from './fixtures/accounts';
  * - `application-pending` / `application-fails`: Tobi's application never answers, or fails.
  * - `application-verified` / `application-approved`: Tobi's application with both references
  *   verified, or approved, as the API's answer rewritten in the browser.
+ * - `calendar-pending` / `calendar-fails`: the artist's calendar never answers, or fails.
  */
 export type RouteSetup =
   | 'search-pending'
@@ -31,7 +32,9 @@ export type RouteSetup =
   | 'application-pending'
   | 'application-fails'
   | 'application-verified'
-  | 'application-approved';
+  | 'application-approved'
+  | 'calendar-pending'
+  | 'calendar-fails';
 
 export interface RouteState {
   /** Names the state in screenshots and test titles. */
@@ -62,6 +65,8 @@ export interface RouteState {
     | 'saved-list'
     | 'saved-empty'
     | 'artist-forbidden'
+    | 'calendar'
+    | 'calendar-empty'
     | 'audit-rows'
     | 'checks-rows'
     | 'applications-rows'
@@ -359,6 +364,40 @@ export const routes: RouteState[] = [
     mock: 'saved/empty.html',
     setup: 'fresh-booker',
     shows: 'saved-empty',
+  },
+  // Abigail's November 2026 (manage-availability-calendar): Free, Requested with counts, Booked and
+  // Unavailable days, the weekly default and the "In November" list; Miriam's calendar with nothing set.
+  {
+    name: 'availability-default',
+    path: '/artist/calendar?month=2026-11',
+    app: 'zamaro',
+    mock: 'availability/default.html',
+    signedInAs: 'abigail',
+    shows: 'calendar',
+  },
+  {
+    name: 'availability-loading',
+    path: '/artist/calendar?month=2026-11',
+    app: 'zamaro',
+    mock: 'availability/loading.html',
+    signedInAs: 'abigail',
+    setup: 'calendar-pending',
+  },
+  {
+    name: 'availability-empty',
+    path: '/artist/calendar?month=2026-11',
+    app: 'zamaro',
+    mock: 'availability/empty.html',
+    signedInAs: 'miriam',
+    shows: 'calendar-empty',
+  },
+  {
+    name: 'availability-error',
+    path: '/artist/calendar?month=2026-11',
+    app: 'zamaro',
+    mock: 'availability/error.html',
+    signedInAs: 'abigail',
+    setup: 'calendar-fails',
   },
   // A church account opening /artist: its own header stays and the page says it is for artists
   // (L2-074); the artist API answers it 404.

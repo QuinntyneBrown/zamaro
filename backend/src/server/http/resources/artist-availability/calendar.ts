@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import { GatheringKind, valuesOf } from '@/server/enums';
-import type { ArtistCalendar } from '@/server/actions/artist-availability/build-artist-calendar';
+import type {
+  ArtistCalendar,
+  CalendarWindow,
+} from '@/server/actions/artist-availability/build-artist-calendar';
 
 const Month = z.string().regex(/^\d{4}-\d{2}$/);
 
@@ -24,12 +27,17 @@ export const CalendarDayResource = z.object({
 
 export const CalendarResource = z.object({
   data: z.object({ month: Month, days: z.array(CalendarDayResource) }),
-  meta: z.object({ window: z.object({ from: Month, to: Month }) }),
+  meta: z.object({
+    /** The pager's first and last month, and the last date a church can ask for. */
+    window: z.object({ from: Month, to: Month, until: z.iso.date() }),
+    /** The ISO weekdays (1 is Monday) the artist is unavailable by default (L2-056.2). */
+    weeklyDefault: z.object({ unavailableWeekdays: z.array(z.number().int().min(1).max(7)) }),
+  }),
 });
 
 export function toCalendarResource(
   calendar: ArtistCalendar,
-  window: { from: string; to: string },
+  window: CalendarWindow,
 ): z.infer<typeof CalendarResource> {
   return {
     data: {
@@ -46,6 +54,6 @@ export function toCalendarResource(
         note: day.note,
       })),
     },
-    meta: { window },
+    meta: { window, weeklyDefault: { unavailableWeekdays: calendar.unavailableWeekdays } },
   };
 }

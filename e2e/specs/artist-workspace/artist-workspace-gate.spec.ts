@@ -38,7 +38,8 @@ test.describe('Artist workspace access', () => {
 
     await workspace.open();
 
-    expect(workspace.location()).toBe('/sign-in?returnUrl=%2Fartist');
+    // `/artist` opens the calendar, so that is where the sign-in leads back to.
+    expect(workspace.location()).toBe('/sign-in?returnUrl=%2Fartist%2Fcalendar');
     await signIn.signIn('abigail@abigailmensah.ca', 'hosanna-in-the-highest');
     await expect(workspace.roleTag()).toHaveText('Artists');
   });
