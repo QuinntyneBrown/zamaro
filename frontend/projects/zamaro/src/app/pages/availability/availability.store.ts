@@ -1,6 +1,13 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
-import { ARTIST_CALENDAR_API, type ArtistCalendar, type ArtistCalendarDay } from 'api';
-import type { Subscription } from 'rxjs';
+import {
+  ARTIST_CALENDAR_API,
+  type ArtistCalendar,
+  type ArtistCalendarDay,
+  type DateRange,
+  type RangeResult,
+  type RangeWarning,
+} from 'api';
+import { type Observable, type Subscription, tap } from 'rxjs';
 
 /** Consecutive dates the artist chose to be unavailable, with their note. */
 export interface UnavailableRun {
@@ -88,6 +95,46 @@ export class AvailabilityStore {
       },
       error: () => this.status.set('error'),
     });
+  }
+
+  /** Reads the month again after a save, keeping the page as it is until the answer lands. */
+  reload(): void {
+    this.request?.unsubscribe();
+    this.selected.set([]);
+    this.request = this.api.month(this.month()).subscribe({
+      next: (calendar) => {
+        this.calendar.set(calendar);
+        this.status.set('loaded');
+      },
+      error: () => this.status.set('error'),
+    });
+  }
+
+  /** Saves a range; the page reloads the month once a result, not a warning, comes back. */
+  saveRange(range: DateRange): Observable<RangeResult | RangeWarning> {
+    return this.api.setDates(range).pipe(
+      tap((result) => {
+        if (!('affectedRequests' in result)) this.reload();
+      }),
+    );
+  }
+
+  /** Replaces the weekly default on the calendar once the dialog saved it. */
+  weeklyDefaultSaved(unavailableWeekdays: number[]): void {
+    const calendar = this.calendar();
+    if (calendar) this.calendar.set({ ...calendar, unavailableWeekdays });
+    this.reload();
+  }
+
+  /** The selected dates as runs of consecutive days, each one range to save. */
+  selectedRuns(): { from: string; to: string }[] {
+    const runs: { from: string; to: string }[] = [];
+    for (const date of this.selected()) {
+      const last = runs[runs.length - 1];
+      if (last && nextDate(last.to) === date) last.to = date;
+      else runs.push({ from: date, to: date });
+    }
+    return runs;
   }
 
   /** The month `steps` months away from the one on show, clamped to the window. */

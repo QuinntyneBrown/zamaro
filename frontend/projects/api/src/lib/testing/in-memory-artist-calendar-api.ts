@@ -1,6 +1,12 @@
 import { type Observable, of } from 'rxjs';
 import { addMonths, type CalendarDate } from '../i18n/calendar-date';
-import type { ArtistCalendar, ArtistCalendarDay } from '../models/artist-calendar';
+import type {
+  ArtistCalendar,
+  ArtistCalendarDay,
+  DateRange,
+  RangeResult,
+  RangeWarning,
+} from '../models/artist-calendar';
 import type { ArtistCalendarApi } from '../services/artist-calendar';
 
 /** The days of a month that nothing has touched: every one Free. */
@@ -40,5 +46,13 @@ export class InMemoryArtistCalendarApi implements ArtistCalendarApi {
       window: { from: this.today.slice(0, 7), to: until.slice(0, 7), until },
       unavailableWeekdays: [...this.unavailableWeekdays],
     });
+  }
+
+  setDates(range: DateRange): Observable<RangeResult | RangeWarning> {
+    return of({ changedDates: [range.from, range.to], skippedDates: [], declinedCount: 0 });
+  }
+
+  setWeekly(unavailableWeekdays: number[]): Observable<number[]> {
+    return of([...unavailableWeekdays].sort((a, b) => a - b));
   }
 }

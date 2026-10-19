@@ -13,11 +13,18 @@ import { Icon } from '../icon/icon';
     class="alert"
     [class.alert--danger]="variant() === 'danger'"
     [class.alert--success]="variant() === 'success'"
+    [class.alert--warning]="variant() === 'warning'"
     [class.alert--compact]="compact()"
     [attr.role]="variant() === 'success' ? 'status' : 'alert'"
   >
     <zm-icon
-      [name]="variant() === 'danger' ? 'warning' : variant() === 'success' ? 'check' : 'info'"
+      [name]="
+        variant() === 'danger' || variant() === 'warning'
+          ? 'warning'
+          : variant() === 'success'
+            ? 'check'
+            : 'info'
+      "
       [size]="compact() ? 'md' : 'lg'"
     />
     <div class="stack stack--sm">
@@ -45,6 +52,12 @@ import { Icon } from '../icon/icon';
       --alert-bg: var(--color-danger-bg);
       --alert-border: var(--color-danger-border);
       --alert-icon: var(--color-danger-icon);
+    }
+
+    .alert--warning {
+      --alert-bg: var(--color-warning-bg);
+      --alert-border: var(--color-warning-icon);
+      --alert-icon: var(--color-warning-icon);
     }
 
     .alert--success {
@@ -93,7 +106,8 @@ import { Icon } from '../icon/icon';
 })
 export class Alert {
   readonly heading = input.required<string>();
-  readonly variant = input<'info' | 'success' | 'danger'>('info');
+  /** A warning (the calendar's "a church has asked about this date") is `role="alert"` like danger. */
+  readonly variant = input<'info' | 'success' | 'warning' | 'danger'>('info');
   /** Tighter padding and a smaller title: inside auth cards, dialogs, forms and cards. */
   readonly compact = input(false, { transform: booleanAttribute });
 }

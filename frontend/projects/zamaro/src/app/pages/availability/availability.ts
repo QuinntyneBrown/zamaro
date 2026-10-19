@@ -1,12 +1,23 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  Injector,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import {
+  type AffectedRequest,
   type ArtistCalendarDay,
   type CalendarDate,
+  type DateRange,
   FormatService,
   type GatheringKind,
+  isRangeWarning,
+  type RangeResult,
   torontoToday,
 } from 'api';
 import {
@@ -29,6 +40,9 @@ import {
   TourDates,
   TourDateTrail,
 } from 'components';
+import { openBlockDatesDialog } from '../../dialogs/block-dates/block-dates';
+import { openWeeklyDefaultDialog } from '../../dialogs/weekly-default/weekly-default';
+import { dayList, dayRange, shortDay } from '../../shared/day-list';
 import { PageMeta } from '../../shared/page-meta';
 import { AvailabilityStore, type UnavailableRun } from './availability.store';
 
@@ -72,6 +86,9 @@ export class AvailabilityPage {
   private readonly transloco = inject(TranslocoService);
   private readonly toasts = inject(ToastService);
   private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
+  /** A bulk-bar save in flight: the bar's buttons wait for it. */
+  protected readonly saving = signal(false);
 
   protected readonly today: CalendarDate = torontoToday();
   protected readonly weekdays: CalendarWeekday[] = WEEKDAY_KEYS.map((key) => ({
@@ -148,7 +165,7 @@ export class AvailabilityPage {
       first === last
         ? this.format.shortDate(first)
         : this.t('bulk.range', {
-            from: this.shortDay(first),
+            from: shortDay(first, this.format),
             to: this.format.shortDate(last),
           });
     return this.t('bulk.count', { count: selected.length, range });
@@ -186,6 +203,204 @@ export class AvailabilityPage {
 
   protected clearSelection(): void {
     this.store.clearSelection();
+  }
+
+  /** "Mark dates unavailable": the dialog, then the toasts for what it changed. */
+  protected openBlockDates(from?: string, to?: string, warning?: AffectedRequest[]): void {
+    const window = this.store.window();
+    openBlockDatesDialog(this.injector, {
+      month: this.month(),
+      days: this.store.days(),
+      earliest: this.today,
+      latest: window?.until ?? this.today,
+      from,
+      to,
+      warning,
+    }).closed.subscribe((result) => {
+      if (!result) return;
+      this.store.reload();
+      this.announce(result.range, result);
+    });
+  }
+
+  /** "Change weekly default" / "Set a weekly default". */
+  protected openWeeklyDefault(): void {
+    openWeeklyDefaultDialog(this.injector, {
+      unavailableWeekdays: this.store.unavailableWeekdays(),
+      current: this.weeklyDefault(),
+    }).closed.subscribe((saved) => {
+      if (saved) this.store.weeklyDefaultSaved(saved);
+    });
+  }
+
+  /** The bulk bar's Mark unavailable or Mark free: each run of selected days saved as one range. */
+  protected saveSelection(): void {
+    if (this.saving()) return;
+    const state = this.selectionHasUnavailable() ? 'free' : 'unavailable';
+    const runs = this.store.selectedRuns();
+    this.saving.set(true);
+    const next = (index: number): void => {
+      const run = runs[index];
+      if (!run) {
+        this.saving.set(false);
+        return;
+      }
+      const range: DateRange = { from: run.from, to: run.to, state };
+      this.store.saveRange(range).subscribe({
+        next: (result) => {
+          if (isRangeWarning(result)) {
+            this.saving.set(false);
+            this.openBlockDates(run.from, run.to, result.affectedRequests);
+            return;
+          }
+          this.announce(range, result);
+          next(index + 1);
+        },
+        error: () => {
+          this.saving.set(false);
+          this.failed(range);
+        },
+      });
+    };
+    next(0);
+  }
+
+  /** The toasts for a saved range: Saved with Undo, and Heads up for Booked days that stayed. */
+  private announce(range: DateRange, result: RangeResult): void {
+    const changed = result.changedDates;
+    if (changed.length) {
+      const first = changed[0];
+      const last = changed[changed.length - 1];
+      const unavailable = range.state === 'unavailable';
+      const title = this.t(unavailable ? 'toast.saved.unavailableTitle' : 'toast.saved.freeTitle', {
+        range: dayRange(first, last, this.format),
+      });
+      this.toasts.show({
+        variant: 'success',
+        kind: this.t('toast.saved.kind'),
+        title,
+        text: this.t(unavailable ? 'toast.saved.unavailableText' : 'toast.saved.freeText', {
+          days: dayList(changed, 'or', this.format),
+        }),
+        actions: [
+          {
+            label: this.t('toast.saved.undo'),
+            ariaLabel: this.t('toast.saved.undoLabel', { title }),
+            run: () => this.undo(range, changed),
+          },
+        ],
+        dismissLabel: this.transloco.translate('common.toast.dismiss', { title }),
+        key: `range-${first}`,
+      });
+    }
+    if (result.skippedDates.length) {
+      const skipped = result.skippedDates;
+      const church =
+        skipped.length === 1
+          ? (this.store.days().find((day) => day.date === skipped[0])?.church ?? 'none')
+          : 'none';
+      const title = this.t('toast.booked.stillTitle', {
+        days: dayList(skipped, 'and', this.format),
+        count: skipped.length,
+      });
+      this.toasts.show({
+        variant: 'warning',
+        kind: this.t('toast.booked.stillKind'),
+        title,
+        text: this.t('toast.booked.stillText', {
+          changed: dayList(changed, 'and', this.format),
+          changedCount: changed.length,
+          skipped: dayList(skipped, 'and', this.format),
+          count: skipped.length,
+          church,
+        }),
+        dismissLabel: this.transloco.translate('common.toast.dismiss', { title }),
+        key: `skipped-${skipped[0]}`,
+      });
+    }
+  }
+
+  /** Undo: the same days back the other way, then its own Saved toast without an Undo. */
+  private undo(range: DateRange, dates: CalendarDate[]): Promise<unknown> {
+    const reverse: DateRange = {
+      from: dates[0],
+      to: dates[dates.length - 1],
+      state: range.state === 'unavailable' ? 'free' : 'unavailable',
+    };
+    return new Promise((resolve, reject) => {
+      this.store.saveRange(reverse).subscribe({
+        next: (result) => {
+          if (!isRangeWarning(result)) this.announceUndo(reverse, result);
+          resolve(result);
+        },
+        error: (error: unknown) => {
+          this.failed(reverse);
+          reject(error instanceof Error ? error : new Error('The undo did not reach the server.'));
+        },
+      });
+    });
+  }
+
+  private announceUndo(range: DateRange, result: RangeResult): void {
+    const changed = result.changedDates;
+    if (!changed.length) return;
+    const free = range.state === 'free';
+    const title = this.t(free ? 'toast.saved.freeTitle' : 'toast.saved.unavailableTitle', {
+      range: dayRange(changed[0], changed[changed.length - 1], this.format),
+    });
+    this.toasts.show({
+      variant: 'success',
+      kind: this.t('toast.saved.kind'),
+      title,
+      text: this.t(free ? 'toast.saved.freeText' : 'toast.saved.unavailableText', {
+        days: dayList(changed, 'or', this.format),
+      }),
+      dismissLabel: this.transloco.translate('common.toast.dismiss', { title }),
+      key: `range-${changed[0]}`,
+    });
+  }
+
+  /** A save that never reached the server: nothing changed, and Try again sends it again. */
+  private failed(range: DateRange): void {
+    const title = this.t('toast.failed.title');
+    this.toasts.show({
+      variant: 'danger',
+      kind: this.t('toast.failed.kind'),
+      title,
+      text: this.t(range.state === 'unavailable' ? 'toast.failed.text' : 'toast.failed.freeText', {
+        days: dayList(this.datesIn(range), 'and', this.format),
+      }),
+      actions: [
+        {
+          label: this.t('toast.failed.tryAgain'),
+          run: () =>
+            new Promise((resolve, reject) => {
+              this.store.saveRange(range).subscribe({
+                next: (result) => {
+                  if (!isRangeWarning(result)) this.announce(range, result);
+                  resolve(result);
+                },
+                error: (error: unknown) =>
+                  reject(
+                    error instanceof Error
+                      ? error
+                      : new Error('The save did not reach the server.'),
+                  ),
+              });
+            }),
+        },
+      ],
+      dismissLabel: this.transloco.translate('common.toast.dismiss', { title }),
+      key: `failed-${range.from}`,
+    });
+  }
+
+  private datesIn(range: DateRange): CalendarDate[] {
+    const dates: CalendarDate[] = [];
+    for (let date = range.from; date <= range.to && dates.length < 600; date = addDay(date)) {
+      dates.push(date);
+    }
+    return dates;
   }
 
   /** A Booked day cannot change here; a Requested day names the church that asked (L2-057.1). */
@@ -298,12 +513,6 @@ export class AvailabilityPage {
     return kind ? this.transloco.translate(`discover.kind.${kind}`) : '';
   }
 
-  /** "Sat 28": the weekday and day without the month, for the start of a range. */
-  private shortDay(date: CalendarDate): string {
-    const stamp = this.format.dayStamp(date);
-    return `${stamp.weekday} ${Number(date.slice(8))}`;
-  }
-
   private monthNameOf(month: string): string {
     return new Intl.DateTimeFormat('en-CA', { month: 'long', timeZone: 'UTC' }).format(
       new Date(`${month}-01T00:00:00Z`),
@@ -317,6 +526,12 @@ export class AvailabilityPage {
   private t(key: string, params: Record<string, unknown> = {}): string {
     return this.transloco.translate(`availability.${key}`, params);
   }
+}
+
+function addDay(date: CalendarDate): CalendarDate {
+  const next = new Date(`${date}T00:00:00Z`);
+  next.setUTCDate(next.getUTCDate() + 1);
+  return next.toISOString().slice(0, 10);
 }
 
 /** "Harvest Point" from "Harvest Point Church": the name without its last word, when it has several. */

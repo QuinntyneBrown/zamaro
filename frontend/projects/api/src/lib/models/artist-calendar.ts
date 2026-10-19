@@ -33,3 +33,36 @@ export interface ArtistCalendar {
   /** The ISO weekdays (1 is Monday) the artist is unavailable by default, ascending (L2-056.2). */
   unavailableWeekdays: number[];
 }
+
+/** A range of dates to mark Unavailable or Free (L2-056.3). */
+export interface DateRange {
+  from: CalendarDate;
+  to: CalendarDate;
+  state: 'unavailable' | 'free';
+  /** The artist's private note, up to 100 characters. */
+  note?: string | null;
+  /** True once the artist has seen the warning about open requests (L2-057.2). */
+  confirm?: boolean;
+}
+
+/** What a saved range changed. */
+export interface RangeResult {
+  /** The dates saved, in order. */
+  changedDates: CalendarDate[];
+  /** Confirmed dates in the range, which stay Booked (L2-057.1). */
+  skippedDates: CalendarDate[];
+  /** Open requests declined because the artist confirmed. */
+  declinedCount: number;
+}
+
+/** An open request on a date in the range the artist is marking Unavailable. */
+export interface AffectedRequest {
+  booking: string;
+  date: CalendarDate;
+  church: string;
+}
+
+/** The API's refusal to mark the range until the artist confirms: churches have asked (L2-057.2). */
+export interface RangeWarning {
+  affectedRequests: AffectedRequest[];
+}

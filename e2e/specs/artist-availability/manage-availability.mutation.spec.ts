@@ -172,7 +172,7 @@ test.describe('Managing availability', () => {
     );
     await expect(availability.scheduleRows().filter({ hasText: 'St. Brendan’s' })).toHaveCount(0);
     await expect(availability.subtitle()).toHaveText(
-      'November 2026 · 3 booked · 1 requested · 1 free Saturday',
+      'November 2026 · 3 booked · 1 requested · 2 free Saturdays',
     );
   });
 

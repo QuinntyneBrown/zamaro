@@ -18,7 +18,7 @@
       @case ('loaded') {
         @if (!store.untouched()) {
           <div class="cluster">
-            <zm-button variant="primary"
+            <zm-button variant="primary" (click)="openBlockDates()"
               ><zm-icon name="ban" />{{ 'availability.actions.markDates' | transloco }}</zm-button
             >
             <zm-button
@@ -67,7 +67,7 @@
             [heading]="'availability.empty.title' | transloco"
           >
             <p>{{ 'availability.empty.text' | transloco }}</p>
-            <zm-button slot="actions" variant="primary"
+            <zm-button slot="actions" variant="primary" (click)="openBlockDates()"
               ><zm-icon name="ban" />{{ 'availability.actions.markDates' | transloco }}</zm-button
             >
           </zm-empty-state>
@@ -79,7 +79,7 @@
             >{{ 'availability.weekly.label' | transloco }}
             <strong>{{ weeklyDefault() }}</strong></span
           >
-          <zm-button size="sm"
+          <zm-button size="sm" (click)="openWeeklyDefault()"
             ><zm-icon name="swap" />{{
               (store.unavailableWeekdays().length
                 ? 'availability.weekly.change'
@@ -114,13 +114,13 @@
             [label]="'availability.bulk.label' | transloco"
             [count]="selectionCount()"
           >
-            <zm-button variant="primary" size="sm">{{
+            <zm-button variant="primary" size="sm" [busy]="saving()" (click)="saveSelection()">{{
               (selectionHasUnavailable()
                 ? 'availability.bulk.markFree'
                 : 'availability.bulk.markUnavailable'
               ) | transloco
             }}</zm-button>
-            <zm-button size="sm" (click)="clearSelection()">{{
+            <zm-button size="sm" [disabled]="saving()" (click)="clearSelection()">{{
               'availability.bulk.clear' | transloco
             }}</zm-button>
           </zm-bulk-bar>

@@ -1,0 +1,100 @@
+<form class="dialog__form" novalidate [formGroup]="form" (ngSubmit)="submit()">
+  <zm-dialog
+    icon="ban"
+    [iconTone]="status() === 'warning' ? 'danger' : 'info'"
+    [danger]="status() === 'warning'"
+    [kicker]="kicker()"
+    [heading]="'availability.blockDates.title' | transloco"
+    [titleId]="titleId"
+    [description]="'availability.blockDates.description' | transloco"
+    [descriptionId]="descriptionId"
+    [closeLabel]="'availability.blockDates.close' | transloco"
+    [busy]="busy()"
+    (closed)="close()"
+  >
+    @if (status() === 'invalid') {
+      <zm-error-summary
+        summaryId="block-dates-summary"
+        [headingLevel]="3"
+        [heading]="'availability.blockDates.errors.title' | transloco"
+        [items]="summaryItems()"
+        (itemActivated)="focusField($event)"
+      />
+    }
+    @if (status() === 'failed') {
+      <zm-alert
+        variant="danger"
+        compact
+        [heading]="'availability.blockDates.failed.title' | transloco"
+      >
+        <p>{{ failedText() }}</p>
+      </zm-alert>
+    }
+    @if (status() === 'warning') {
+      <zm-alert variant="warning" compact [heading]="warningTitle()">
+        @for (line of warningLines(); track line) {
+          <p>{{ line }}</p>
+        }
+      </zm-alert>
+    }
+    <div class="form-grid">
+      <zm-form-field
+        #startField
+        fieldId="block-from"
+        type="date"
+        formControlName="from"
+        [label]="'availability.blockDates.start' | transloco"
+        [requiredMarker]="'availability.blockDates.required' | transloco"
+        [min]="data.earliest"
+        [max]="data.latest"
+        [error]="error('from')"
+        [readonly]="busy()"
+      />
+      <zm-form-field
+        #endField
+        fieldId="block-to"
+        type="date"
+        formControlName="to"
+        [label]="'availability.blockDates.end' | transloco"
+        [requiredMarker]="'availability.blockDates.required' | transloco"
+        [min]="data.earliest"
+        [max]="data.latest"
+        [error]="error('to')"
+        [readonly]="busy()"
+      />
+      <zm-form-field
+        #noteField
+        class="field--full"
+        fieldId="block-note"
+        formControlName="note"
+        [maxLength]="100"
+        [label]="'availability.blockDates.note' | transloco"
+        [optionalMarker]="'availability.blockDates.optional' | transloco"
+        [help]="'availability.blockDates.noteHelp' | transloco"
+        [error]="error('note')"
+        [readonly]="busy()"
+      />
+    </div>
+    @if (summary(); as summary) {
+      <p class="block-dates__summary">{{ summary }}</p>
+    }
+    <zm-button #keepButton slot="footer" [disabled]="busy()" (click)="close()">{{
+      status() === 'warning' ? keepLabel() : ('availability.blockDates.cancel' | transloco)
+    }}</zm-button>
+    <zm-button
+      slot="footer"
+      type="submit"
+      [variant]="status() === 'warning' ? 'danger' : 'primary'"
+      [busy]="busy()"
+      ><zm-icon [name]="status() === 'failed' ? 'refresh' : 'ban'" />{{
+        busy()
+          ? ('availability.blockDates.saving' | transloco)
+          : status() === 'failed'
+            ? ('availability.blockDates.tryAgain' | transloco)
+            : status() === 'warning'
+              ? ('availability.blockDates.decline' | transloco)
+              : actionLabel()
+      }}</zm-button
+    >
+  </zm-dialog>
+</form>
