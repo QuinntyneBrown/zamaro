@@ -15,7 +15,17 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   template: `@if (stamp()) {
       <p class="empty__stamp" aria-hidden="true">{{ stamp() }}</p>
     }
-    <h3 class="empty__title">{{ heading() }}</h3>
+    @switch (headingLevel()) {
+      @case (1) {
+        <h1 class="empty__title">{{ heading() }}</h1>
+      }
+      @case (2) {
+        <h2 class="empty__title">{{ heading() }}</h2>
+      }
+      @default {
+        <h3 class="empty__title">{{ heading() }}</h3>
+      }
+    }
     <ng-content />
     <div class="empty__actions"><ng-content select="[slot=actions]" /></div>`,
   styles: `
@@ -76,6 +86,8 @@ export class EmptyState {
   readonly heading = input.required<string>();
   /** "Sold out"; decorative and hidden from assistive technology. */
   readonly stamp = input<string>();
+  /** The heading's level: 3 inside a page; 1 when the state is the page itself. */
+  readonly headingLevel = input<1 | 2 | 3>(3);
   /** The compact form, inside a section, a stub or a dialog. */
   readonly quiet = input(false);
 }

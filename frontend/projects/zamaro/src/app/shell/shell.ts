@@ -199,11 +199,35 @@ export class Shell {
     return { label: this.signIn(), link: '/sign-in', queryParams: { returnUrl: url } };
   });
 
-  protected readonly links = computed<TopBarLink[]>(() => [
-    { label: this.discover(), link: '/' },
-    { label: this.how(), link: '/', fragment: 'how' },
-    { label: this.forArtists(), link: '/', fragment: 'join' },
-  ]);
+  /** An artist on a workspace screen gets the workspace bar; everyone else the public one. */
+  protected readonly inWorkspace = computed(() => {
+    const [path] = this.url().split('#')[0].split('?');
+    const underArtist = path === '/artist' || path.startsWith('/artist/');
+    return underArtist && (this.auth.currentUser()?.roles.includes('artist') ?? false);
+  });
+
+  private readonly workspaceDashboard = translateSignal('workspace.nav.dashboard');
+  private readonly workspaceRequests = translateSignal('workspace.nav.requests');
+  private readonly workspaceAvailability = translateSignal('workspace.nav.availability');
+  private readonly workspaceEarnings = translateSignal('workspace.nav.earnings');
+  private readonly workspaceProfile = translateSignal('workspace.nav.profile');
+  protected readonly workspaceRole = translateSignal('workspace.nav.role');
+
+  protected readonly links = computed<TopBarLink[]>(() =>
+    this.inWorkspace()
+      ? [
+          { label: this.workspaceDashboard(), link: '/artist' },
+          { label: this.workspaceRequests(), link: '/artist/requests' },
+          { label: this.workspaceAvailability(), link: '/artist/calendar' },
+          { label: this.workspaceEarnings(), link: '/artist/earnings' },
+          { label: this.workspaceProfile(), link: '/artist/profile' },
+        ]
+      : [
+          { label: this.discover(), link: '/' },
+          { label: this.how(), link: '/', fragment: 'how' },
+          { label: this.forArtists(), link: '/', fragment: 'join' },
+        ],
+  );
 
   // Links to screens built in later milestones join these columns when the screens exist.
   protected readonly footerColumns = computed<FooterColumn[]>(() => [

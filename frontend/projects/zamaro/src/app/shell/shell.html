@@ -1,6 +1,8 @@
 <zm-skip-link>{{ 'common.skipToContent' | transloco }}</zm-skip-link>
 <zm-top-bar
   brand="Zamaro"
+  [variant]="inWorkspace() ? 'workspace' : 'public'"
+  [role]="inWorkspace() ? workspaceRole() : ''"
   [navLabel]="'common.nav.label' | transloco"
   [links]="links()"
   [menuLabel]="'common.menu.open' | transloco"

@@ -1,0 +1,15 @@
+{
+  "forbidden.action": "Back to Discover",
+  "forbidden.apply": "Lead worship yourself? Apply as an artist",
+  "forbidden.pageTitle": "For artists only",
+  "forbidden.stamp": "Artists only",
+  "forbidden.text": "You’re signed in as {name}, a church account for {church}. Requests and availability belong to artist accounts.",
+  "forbidden.textNoChurch": "You’re signed in as {name}, a church account. Requests and availability belong to artist accounts.",
+  "forbidden.title": "This page is for artists",
+  "nav.availability": "Availability",
+  "nav.dashboard": "Dashboard",
+  "nav.earnings": "Earnings",
+  "nav.profile": "Profile",
+  "nav.requests": "Requests",
+  "nav.role": "Artists"
+}

@@ -38,3 +38,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0027](0027-nextjs-backend.md) | The backend is a Next.js application on Node.js | Accepted (amended by 0028) |
 | [0028](0028-backend-tests-in-process-on-pglite.md) | Backend tests run in-process on PGlite with in-memory fakes | Accepted |
 | [0029](0029-profile-cache-bound-without-a-cdn.md) | The 60-second profile freshness bound rests on `s-maxage` until a CDN exists | Accepted |
+| [0030](0030-artist-workspace-gate.md) | The artist workspace explains itself to church accounts instead of redirecting | Accepted |

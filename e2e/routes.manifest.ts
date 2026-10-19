@@ -61,6 +61,7 @@ export interface RouteState {
     | 'accept-terms'
     | 'saved-list'
     | 'saved-empty'
+    | 'artist-forbidden'
     | 'audit-rows'
     | 'checks-rows'
     | 'applications-rows'
@@ -358,6 +359,16 @@ export const routes: RouteState[] = [
     mock: 'saved/empty.html',
     setup: 'fresh-booker',
     shows: 'saved-empty',
+  },
+  // A church account opening /artist: its own header stays and the page says it is for artists
+  // (L2-074); the artist API answers it 404.
+  {
+    name: 'artist-forbidden',
+    path: '/artist',
+    app: 'zamaro',
+    mock: 'dashboard/forbidden.html',
+    signedInAs: 'naomi',
+    shows: 'artist-forbidden',
   },
   // The admin area hidden from a booker (L2-066.1): Naomi opens /admin/applications and the web
   // server answers the public not-found page with a real 404 (M3 S3, ADR-0023).

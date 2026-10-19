@@ -7,6 +7,7 @@ import { ArtistsPage } from '../pages/admin/artists.page';
 import { AuditLogPage } from '../pages/admin/audit-log.page';
 import { ChecksPage } from '../pages/admin/checks.page';
 import { AccountPage } from '../pages/account.page';
+import { ArtistWorkspacePage } from '../pages/artist-workspace.page';
 import { ArtistProfilePage } from '../pages/artist-profile.page';
 import { DiscoverPage } from '../pages/discover.page';
 import { MfaSetupPage } from '../pages/mfa-setup.page';
@@ -134,6 +135,8 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
   if (state.shows === 'mfa-key') await expect(new MfaSetupPage(page).key()).toBeVisible();
   if (state.shows === 'saved-list') await expect(new SavedPage(page).cards()).toHaveCount(3);
   if (state.shows === 'saved-empty') await expect(new SavedPage(page).emptyTitle()).toBeVisible();
+  if (state.shows === 'artist-forbidden')
+    await expect(new ArtistWorkspacePage(page).heading()).toBeVisible();
   if (state.shows === 'accept-terms')
     await expect(new AcceptTermsPage(page).changes()).toHaveCount(3);
   if (state.shows === 'audit-rows') await new AuditLogPage(page).waitForRows();
