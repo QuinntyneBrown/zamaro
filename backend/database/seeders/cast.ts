@@ -202,7 +202,7 @@ const BOOKINGS: Record<
     BookingStatus.Confirmed,
     '2026-11-15',
     GatheringKind.SundayService,
-    'Lakeshore Alliance',
+    'Lakeshore Alliance Church',
     'Oakville',
     '2026-09-22 16:05',
   ],
@@ -229,7 +229,7 @@ const BOOKINGS: Record<
     BookingStatus.Confirmed,
     '2026-12-20',
     GatheringKind.SundayService,
-    'Lakeshore Alliance',
+    'Lakeshore Alliance Church',
     'Oakville',
     '2026-10-06 09:30',
   ],
@@ -247,8 +247,8 @@ const BOOKINGS: Record<
     BookingStatus.Requested,
     '2026-11-22',
     GatheringKind.SundayService,
-    'Harvest Point Church',
-    'Milton',
+    'St. Brendan’s Anglican',
+    'Oshawa',
     null,
   ],
   'ZAM-0121': [
@@ -585,14 +585,15 @@ const SUPPORTING_CAST = [
   'Lampman Lane Worship',
 ];
 
-const ABIGAIL_UNAVAILABLE = [
-  '2026-11-26',
-  '2026-11-27',
-  '2026-12-24',
-  '2026-12-25',
-  '2026-12-26',
-  '2026-12-31',
-];
+/** date => her private note; "Studio" is the recording block on the availability mock. */
+const ABIGAIL_UNAVAILABLE: Record<string, string | null> = {
+  '2026-11-26': 'Studio',
+  '2026-11-27': 'Studio',
+  '2026-12-24': null,
+  '2026-12-25': null,
+  '2026-12-26': null,
+  '2026-12-31': null,
+};
 
 /** retired slug => [artist, retired at]: old addresses that answer 301 (L2-021.3, L2-055.3). */
 const RETIRED_SLUGS: Record<string, [string, string]> = {
@@ -1381,13 +1382,13 @@ class CastSeeder {
         target: [availabilityRules.artistId, availabilityRules.weekday],
         set: { unavailable: true },
       });
-    for (const date of ABIGAIL_UNAVAILABLE) {
+    for (const [date, note] of Object.entries(ABIGAIL_UNAVAILABLE)) {
       await this.tx
         .insert(availabilityOverrides)
-        .values({ artistId: abigail, date, state: OverrideState.Unavailable })
+        .values({ artistId: abigail, date, state: OverrideState.Unavailable, note })
         .onConflictDoUpdate({
           target: [availabilityOverrides.artistId, availabilityOverrides.date],
-          set: { state: OverrideState.Unavailable },
+          set: { state: OverrideState.Unavailable, note },
         });
     }
 

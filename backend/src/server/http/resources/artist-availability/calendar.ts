@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { GatheringKind, valuesOf } from '@/server/enums';
 import type { ArtistCalendar } from '@/server/actions/artist-availability/build-artist-calendar';
 
 const Month = z.string().regex(/^\d{4}-\d{2}$/);
@@ -12,6 +13,13 @@ export const CalendarDayResource = z.object({
   editable: z.boolean(),
   /** The church of the booking or first request; private to the artist. */
   church: z.string().nullable(),
+  /** The gathering and the church's city of that booking or request. */
+  kind: z.enum(valuesOf(GatheringKind)).nullable(),
+  city: z.string().nullable(),
+  /** For an Unavailable day: the weekly default, or her own choice of that date. */
+  cause: z.enum(['weekly-default', 'chosen']).nullable(),
+  /** Her private note on a date she chose. */
+  note: z.string().nullable(),
 });
 
 export const CalendarResource = z.object({
@@ -32,6 +40,10 @@ export function toCalendarResource(
         requestCount: day.requestCount,
         editable: day.status !== 'booked',
         church: day.church,
+        kind: day.kind,
+        city: day.city,
+        cause: day.cause,
+        note: day.note,
       })),
     },
     meta: { window },

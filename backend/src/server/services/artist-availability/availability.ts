@@ -160,6 +160,13 @@ export interface CalendarDay {
   requestCount: number;
   /** The Confirmed booking's church, else the first open request's; null on a bare day. */
   church: string | null;
+  /** The gathering and the church's city of that booking or request; null on a bare day. */
+  kind: GatheringKind | null;
+  city: string | null;
+  /** For an Unavailable day: the weekly default, or her own choice of that date. */
+  cause: 'weekly-default' | 'chosen' | null;
+  /** Her private note on a date she chose; never shown to anyone else. */
+  note: string | null;
 }
 
 /**
@@ -188,7 +195,11 @@ export async function dayStatuses(
   const overrides = new Map(
     (
       await database
-        .select({ date: availabilityOverrides.date, state: availabilityOverrides.state })
+        .select({
+          date: availabilityOverrides.date,
+          state: availabilityOverrides.state,
+          note: availabilityOverrides.note,
+        })
         .from(availabilityOverrides)
         .where(
           and(
@@ -196,10 +207,21 @@ export async function dayStatuses(
             between(availabilityOverrides.date, range[0], range[1]),
           ),
         )
-    ).map((row) => [row.date, row.state]),
+    ).map((row) => [row.date, row]),
   );
+  interface Held {
+    church: string;
+    kind: GatheringKind;
+    city: string;
+  }
   const held = await database
-    .select({ date: bookings.eventDate, status: bookings.status, church: bookings.churchName })
+    .select({
+      date: bookings.eventDate,
+      status: bookings.status,
+      church: bookings.churchName,
+      kind: bookings.kind,
+      city: bookings.churchCity,
+    })
     .from(bookings)
     .where(
       and(
@@ -209,37 +231,44 @@ export async function dayStatuses(
       ),
     )
     .orderBy(bookings.id);
-  const confirmed = new Map<string, string>();
-  const open = new Map<string, { count: number; church: string }>();
-  for (const booking of held) {
-    if (booking.status === 'confirmed') {
-      confirmed.set(booking.date, booking.church);
+  const confirmed = new Map<string, Held>();
+  const open = new Map<string, { count: number; first: Held }>();
+  for (const { date, status, ...booking } of held) {
+    if (status === 'confirmed') {
+      confirmed.set(date, booking);
       continue;
     }
-    const entry = open.get(booking.date);
-    open.set(booking.date, {
-      count: (entry?.count ?? 0) + 1,
-      church: entry?.church ?? booking.church,
-    });
+    const entry = open.get(date);
+    open.set(date, { count: (entry?.count ?? 0) + 1, first: entry?.first ?? booking });
   }
 
   const days: CalendarDay[] = [];
   for (let date = from; date <= until; date = date.plus({ days: 1 })) {
     const day = date.toISODate() ?? '';
-    const church = confirmed.get(day);
+    const booked = confirmed.get(day);
     const requests = open.get(day);
     const requestCount = requests?.count ?? 0;
     const override = overrides.get(day);
     const unavailable =
-      override !== undefined ? override === 'unavailable' : unavailableWeekdays.has(date.weekday);
-    if (church !== undefined) {
-      days.push({ date: day, status: 'booked', requestCount, church });
+      override !== undefined
+        ? override.state === 'unavailable'
+        : unavailableWeekdays.has(date.weekday);
+    const bare = { church: null, kind: null, city: null, cause: null, note: null };
+    if (booked !== undefined) {
+      days.push({ date: day, status: 'booked', requestCount, ...bare, ...booked });
     } else if (unavailable) {
-      days.push({ date: day, status: 'unavailable', requestCount, church: null });
+      days.push({
+        date: day,
+        status: 'unavailable',
+        requestCount,
+        ...bare,
+        cause: override === undefined ? 'weekly-default' : 'chosen',
+        note: override?.note ?? null,
+      });
     } else if (requests !== undefined) {
-      days.push({ date: day, status: 'requested', requestCount, church: requests.church });
+      days.push({ date: day, status: 'requested', requestCount, ...bare, ...requests.first });
     } else {
-      days.push({ date: day, status: 'free', requestCount: 0, church: null });
+      days.push({ date: day, status: 'free', requestCount: 0, ...bare });
     }
   }
   return days;

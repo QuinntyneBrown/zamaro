@@ -75,7 +75,7 @@ describe('reading the artist calendar', () => {
     expect(day(body, '2026-11-22')).toMatchObject({
       status: 'requested',
       requestCount: 1,
-      church: 'St. Brendan�s Anglican',
+      church: 'St. Brendan’s Anglican',
       kind: 'sunday-service',
       city: 'Oshawa',
     });
