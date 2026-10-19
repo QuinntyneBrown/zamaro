@@ -386,6 +386,23 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     expect(response.status).toBe(404);
   },
 
+  'GET /artist/calendar-feed': async (_owner, intruder) => {
+    const response = await (await intruder.as()).json('/api/v1/artist/calendar-feed', 'GET');
+    expect(response.status).toBe(404);
+  },
+
+  'POST /artist/calendar-feed': async (_owner, intruder) => {
+    const response = await (await intruder.as()).json('/api/v1/artist/calendar-feed', 'POST');
+    expect(response.status).toBe(404);
+  },
+
+  'POST /artist/calendar-feed/regeneration': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/artist/calendar-feed/regeneration', 'POST');
+    expect(response.status).toBe(404);
+  },
+
   'GET /artist/vulnerable-sector-checks/current': async (_owner, intruder) => {
     const response = await (
       await intruder.as()
