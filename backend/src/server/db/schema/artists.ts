@@ -124,6 +124,22 @@ export const availabilityOverrides = pgTable(
   (table) => [unique().on(table.artistId, table.date)],
 );
 
+/**
+ * The artist's secret calendar feed (L2-058): the token's SHA-256 hash for lookup and an encrypted
+ * copy so the dialog can show the link again. Making a new link replaces both in one update.
+ */
+export const calendarFeeds = pgTable('calendar_feeds', {
+  id: id(),
+  artistId: foreignId()
+    .notNull()
+    .unique()
+    .references(() => artists.id, { onDelete: 'cascade' }),
+  tokenHash: varchar({ length: 64 }).notNull().unique(),
+  tokenEncrypted: text().notNull(),
+  enabledAt: timestamptz().notNull(),
+  regeneratedAt: timestamptz(),
+});
+
 /** The setlist (L2-016). (artist, position) is unique and deferrable; see the migration. */
 export const setlistSongs = pgTable(
   'setlist_songs',

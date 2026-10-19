@@ -37,8 +37,9 @@ describe('publishing a calendar feed', () => {
   it('turning it on gives a secret link, and turning it on again gives the same link (L2-058.1)', async () => {
     const first = await abigail.json('/api/v1/artist/calendar-feed', 'POST');
     expect(first.status).toBe(201);
-    await expectContract(first, ENABLE, undefined);
-    const feed = ((await first.json()) as FeedBody).data;
+    const body = (await first.json()) as FeedBody;
+    expectContract(first, ENABLE, body);
+    const feed = body.data;
 
     expect(feed.url).toMatch(/^https?:\/\/.+\/api\/v1\/calendar-feeds\/[A-Za-z0-9_-]{43}\.ics$/);
     expect(feed.enabledAt).toBe('2026-10-09T14:00:00.000Z');
@@ -51,8 +52,9 @@ describe('publishing a calendar feed', () => {
 
     const shown = await abigail.json('/api/v1/artist/calendar-feed', 'GET');
     expect(shown.status).toBe(200);
-    await expectContract(shown, FEED, undefined);
-    expect(((await shown.json()) as FeedBody).data.url).toBe(feed.url);
+    const shownBody = (await shown.json()) as FeedBody;
+    expectContract(shown, FEED, shownBody);
+    expect(shownBody.data.url).toBe(feed.url);
   });
 
   it('the link lists her Confirmed and Completed bookings as calendar events, without a session (L2-058.1)', async () => {
@@ -87,17 +89,17 @@ describe('publishing a calendar feed', () => {
     const response = await abigail.json('/api/v1/artist/calendar-feed/regeneration', 'POST');
 
     expect(response.status).toBe(200);
-    await expectContract(response, REGENERATE, undefined);
-    const feed = ((await response.json()) as FeedBody).data;
+    const body = (await response.json()) as FeedBody;
+    expectContract(response, REGENERATE, body);
+    const feed = body.data;
     expect(feed.url).not.toBe(old);
     expect(feed.regeneratedAt).toBe('2026-10-09T14:00:00.000Z');
     expect((await api(feedPath(old))).status).toBe(404);
     expect((await api(feedPath(feed.url))).status).toBe(200);
-    expect(
-      (
-        (await abigail.json('/api/v1/artist/calendar-feed', 'GET')).json() as Promise<FeedBody>
-      ).then((b) => b.data.url),
-    ).resolves.toBe(feed.url);
+    const shown = (await (
+      await abigail.json('/api/v1/artist/calendar-feed', 'GET')
+    ).json()) as FeedBody;
+    expect(shown.data.url).toBe(feed.url);
   });
 
   it('an unknown or malformed token answers 404', async () => {

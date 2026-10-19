@@ -62,6 +62,8 @@ export interface RouteOptions {
   admin?: true;
   /** An upload route: a body up to this many bytes instead of the 1 MB JSON limit (L2-075.4), as multipart or the named types. */
   upload?: { maxBytes: number; types?: string[] };
+  /** What the request log shows as the path when the real one carries a secret (L2-079.3). */
+  logPath?: string;
 }
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
@@ -175,7 +177,7 @@ export function route(options: RouteOptions, handler: Handler): Handler {
         {
           method: request.method,
           route: options.name,
-          path: request.nextUrl.pathname,
+          path: options.logPath ?? request.nextUrl.pathname,
           status: response.status,
           durationMs: Math.round(performance.now() - startedAt),
           ...(ctx.user !== null && { userId: ctx.user.id }),

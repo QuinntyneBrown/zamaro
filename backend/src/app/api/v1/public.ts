@@ -15,6 +15,8 @@ export const PUBLIC_ROUTES: ReadonlySet<string> = new Set([
   'artists.reviews',
   'artists.tour-dates',
   'artists.availability',
+  // The secret calendar feed: the token in the link is the only key (L2-058).
+  'calendar-feeds.show',
   'sitemap',
   // The CSRF cookie and signing in: anonymous, answered privately (L2-089.3).
   'csrf-cookie',

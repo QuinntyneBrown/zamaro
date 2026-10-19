@@ -59,6 +59,7 @@ import {
   CurrentChecksResource,
 } from '../resources/artist-onboarding/vulnerable-sector-check';
 import { CalendarResource } from '../resources/artist-availability/calendar';
+import { CalendarFeedResource } from '../resources/artist-availability/calendar-feed';
 import { SetDateAvailabilityRequest } from '../requests/artist-availability/dates';
 import { DateRangeResource } from '../resources/artist-availability/dates';
 import { SetWeeklyAvailabilityRequest } from '../requests/artist-availability/weekly';
@@ -882,6 +883,51 @@ export const operations: Operation[] = [
       200: { description: 'The month and the pager window', content: CalendarResource },
       404: { description: 'Not an artist', content: 'problem' },
       422: { description: 'The month is not inside the calendar window', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/artist/calendar-feed',
+    name: 'artist.calendar-feed.show',
+    summary: "The artist's secret calendar link, once the feed is on",
+    responses: {
+      200: { description: 'The link and when it was made', content: CalendarFeedResource },
+      404: { description: 'Not an artist, or the feed is not on', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/artist/calendar-feed',
+    name: 'artist.calendar-feed.store',
+    summary: 'Turns the calendar feed on with a secret link',
+    responses: {
+      201: { description: 'The feed is on', content: CalendarFeedResource },
+      200: {
+        description: 'The feed was already on; the current link',
+        content: CalendarFeedResource,
+      },
+      404: { description: 'Not an artist', content: 'problem' },
+    },
+  },
+  {
+    method: 'post',
+    path: '/artist/calendar-feed/regeneration',
+    name: 'artist.calendar-feed.regenerate',
+    summary: 'Makes a new secret link; the old one stops working at once',
+    responses: {
+      200: { description: 'The new link', content: CalendarFeedResource },
+      404: { description: 'Not an artist, or the feed is not on', content: 'problem' },
+    },
+  },
+  {
+    method: 'get',
+    path: '/calendar-feeds/{token}.ics',
+    name: 'calendar-feeds.show',
+    summary: "An artist's Confirmed and Completed bookings as an iCalendar feed",
+    parameters: [{ name: 'token', in: 'path', schema: z.string() }],
+    responses: {
+      200: { description: 'The feed, as text/calendar', content: null },
+      404: { description: 'No feed answers this link', content: 'problem' },
     },
   },
   {

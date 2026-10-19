@@ -22,6 +22,13 @@
       "when": 1792359745203,
       "tag": "0002_application_rejection_note",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792399312808,
+      "tag": "0003_calendar_feeds",
+      "breakpoints": true
     }
   ]
 }
