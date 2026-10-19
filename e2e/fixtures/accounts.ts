@@ -20,6 +20,7 @@ const SITE = 'http://localhost:4000';
 export const accounts = {
   naomi: { name: 'Naomi Fraser', email: 'naomi.fraser@riversidecc.ca' },
   abigail: { name: 'Abigail Mensah', email: 'abigail@abigailmensah.ca' },
+  miriam: { name: 'Miriam Haile', email: 'miriam@miriamhaile.ca' },
   tomi: { name: 'Tomi Oduya', email: 'tomi.oduya@harvestpointchurch.ca' },
   priya: { name: 'Priya Nair', email: 'priya@zamaro.ca' },
 } as const;

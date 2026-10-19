@@ -23,7 +23,10 @@ interface Day {
 
 interface CalendarBody {
   data: { month: string; days: Day[] };
-  meta: { window: { from: string; to: string } };
+  meta: {
+    window: { from: string; to: string; until: string };
+    weeklyDefault: { unavailableWeekdays: number[] };
+  };
 }
 
 /**
@@ -93,11 +96,12 @@ describe('reading the artist calendar', () => {
     expect(day(body, '2026-11-27').status).toBe('unavailable');
   });
 
-  it('answers the window and, without a month, the current one', async () => {
+  it('answers the window, the weekly default and, without a month, the current one', async () => {
     const body = (await (await calendar(abigail)).json()) as CalendarBody;
 
     expect(body.data.month).toBe('2026-10');
-    expect(body.meta.window).toEqual({ from: '2026-10', to: '2028-04' });
+    expect(body.meta.window).toEqual({ from: '2026-10', to: '2028-04', until: '2028-04-09' });
+    expect(body.meta.weeklyDefault).toEqual({ unavailableWeekdays: [1] });
   });
 
   it('shows every date Free for an artist who has set nothing (L2-056.4)', async () => {
@@ -106,9 +110,10 @@ describe('reading the artist calendar', () => {
     const body = (await (await calendar(miriam, '2026-11')).json()) as CalendarBody;
 
     expect(body.data.days.every((d) => d.status === 'free' && d.requestCount === 0)).toBe(true);
+    expect(body.meta.weeklyDefault).toEqual({ unavailableWeekdays: [] });
   });
 
-  it('greys the weekdays of Abigail�s Monday default unless a date is overridden Free (L2-056.2)', async () => {
+  it('greys the weekdays of Abigail’s Monday default unless a date is overridden Free (L2-056.2)', async () => {
     await db()
       .insert(availabilityOverrides)
       .values({ artistId: await abigailsId(), date: '2026-11-09', state: 'free' });
