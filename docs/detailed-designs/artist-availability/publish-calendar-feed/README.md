@@ -58,8 +58,8 @@ read the Zamaro database.
   - `POST /api/v1/artist/calendar-feed` — enable
   - `POST /api/v1/artist/calendar-feed/regeneration` — regenerate
 
-  Responses carry `Cache-Control: private, no-store` (L2-089). Whether an artist may
-  also turn the feed off is `<TO SUPPLY>`.
+  Responses carry `Cache-Control: private, no-store` (L2-089). An artist cannot turn
+  the feed off; making a new link is the remedy for a leaked one (ADR-0032).
 - **`FeedTokenGenerator`** — service that creates a 32-byte random token encoded as
   base64url, its SHA-256 hash for lookup, and an application-encrypted copy so the
   dialog can show the URL again.
@@ -74,18 +74,17 @@ read the Zamaro database.
   IP (L2-077). The log redaction rules treat the path token as a secret (L2-079). The
   response has `Content-Type: text/calendar; charset=utf-8`,
   `Cache-Control: private, no-store` (L2-089) and `X-Robots-Tag: noindex`. This is the
-  one non-JSON response under `/api/v1`; serving it from a separate host instead is
-  `<TO SUPPLY>`.
+  one non-JSON response under `/api/v1`; it stays on the API host (ADR-0032).
 - **`BuildCalendarFeed`** — action that selects the artist's bookings with status
   Confirmed and maps each to a `FeedEvent`. Each event carries the event date, start
   time in `America/Toronto`, kind of gathering, church name and church address from
-  the booking's snapshot (L2-058). The `UID` is derived from the booking number. Event
-  duration is `<TO SUPPLY>`, because a booking stores a start time and no end time.
-  Whether Completed bookings stay in the feed is `<TO SUPPLY>`; this design lists
-  Confirmed bookings only, so a Cancelled booking disappears on the next poll.
+  the booking's snapshot (L2-058). The `UID` is derived from the booking number. An event
+  runs two hours from the start time, and all day when the booking has none (ADR-0032).
+  Completed bookings stay in the feed beside Confirmed ones; a Cancelled booking
+  disappears on the next poll.
 - **`ICalendarWriter`** — service that writes RFC 5545 text with a `VTIMEZONE` for
-  `America/Toronto`, line folding and escaping. The library behind it is
-  `<TO SUPPLY>`.
+  `America/Toronto`, line folding and escaping. It is written by hand; no
+  library (ADR-0032).
 
 **Mock screens** — "Subscribe in your calendar" on
 [`pages/availability`](../../../mocks/pages/availability/default.html) opens
@@ -101,6 +100,20 @@ failed.
   `token_encrypted`, `enabled_at`, `regenerated_at`.
 - `bookings` — read for status Confirmed with the church name and address snapshot,
   using the index on `(artist_id, status, event_date)`.
+
+**As built in journey 7 (J7-S7 and S8)**
+
+- **Backend (ADR-0027, ADR-0032):** `calendar_feeds` (migration `0003_calendar_feeds`),
+  `services/artist-availability/feed-token.ts` (32 random bytes as base64url, SHA-256 for lookup, an
+  encrypted copy for the dialog), `services/artist-availability/icalendar.ts` (the writer) and
+  `actions/artist-availability/calendar-feed.ts`. Routes `artist/calendar-feed` (GET, POST),
+  `artist/calendar-feed/regeneration` (POST) and the anonymous `calendar-feeds/[token]` (listed in
+  `public.ts`, logged as `/api/v1/calendar-feeds/[token]`). Bookings carry no start time or address
+  yet, so events are all-day and `LOCATION` is the church name and city until journey 3.
+- **Frontend:** `dialogs/calendar-feed` over `pages/availability`, through
+  `api/lib/services/artist-calendar.ts` (`feed`, `enableFeed`, `regenerateFeed`).
+- **Tests:** `backend/tests/feature/artist-availability/publish-calendar-feed.test.ts`;
+  `e2e/specs/artist-availability/publish-calendar-feed.mutation.spec.ts`.
 
 ## Requirements
 

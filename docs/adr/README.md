@@ -39,3 +39,4 @@ decision, write a new ADR that supersedes the old one and update the affected de
 | [0028](0028-backend-tests-in-process-on-pglite.md) | Backend tests run in-process on PGlite with in-memory fakes | Accepted |
 | [0029](0029-profile-cache-bound-without-a-cdn.md) | The 60-second profile freshness bound rests on `s-maxage` until a CDN exists | Accepted |
 | [0030](0030-artist-workspace-gate.md) | The artist workspace explains itself to church accounts instead of redirecting | Accepted |
+| [0032](0032-calendar-feed.md) | The calendar feed is a secret link with no off switch, written by hand | Accepted |

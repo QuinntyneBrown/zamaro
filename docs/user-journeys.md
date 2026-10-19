@@ -8,7 +8,7 @@
 | 4 | Respond to a request | Accept or decline a booking request and follow the booking through to the event. | 13 days | 0% |
 | 5 | Pay for a booking | Pay the deposit and the balance online and receive a receipt for each payment. | 21 days | 0% |
 | 6 | Get paid | Receive the payout for a completed booking, less the platform fee. | 5 days | 0% |
-| 7 | Manage availability | Mark free and busy dates, and publish a calendar feed to a personal calendar. | 10 days | 0% |
+| 7 | Manage availability | Mark free and busy dates, and publish a calendar feed to a personal calendar. | 10 days | 100% |
 | 8 | Become an artist | Apply as an artist, upload a Vulnerable Sector Check, and be approved by the Zamaro team. | 19 days | 93% |
 | 9 | Join and sign in | Create a church account, sign in, recover access, and manage church and account settings. | 23 days | 92% |
 | 10 | Build a profile | Edit profile details, address and setlist, and upload photos and videos from the artist dashboard. | 27 days | 0% |

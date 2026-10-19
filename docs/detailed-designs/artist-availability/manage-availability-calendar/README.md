@@ -100,8 +100,9 @@ sends emails for any requests declined on the way.
   to 100 characters (L2-075).
 - **`SetWeeklyAvailability`** — action that replaces the artist's
   `availability_rules` in one transaction and dispatches `ArtistAvailabilityChanged`.
-  Whether a new weekly default that covers dates with open requests also warns and
-  declines them, as a range change does, is `<TO SUPPLY>`.
+  A new weekly default that covers dates with open requests does not warn and does
+  not decline them: they stay Requested, since the default is a standing preference
+  rather than a decision about a date (J7 D1).
 - **`SetDateAvailability`** — action that runs inside `DB::transaction` with the
   artist row locked, so a concurrent request or confirmation sees a consistent state.
   For an Unavailable change it counts open requests in the range. Without `confirm`
@@ -152,6 +153,34 @@ in states info, success, warning, danger and with-action.
   partial unique index on `(artist_id, event_date)` where `status = 'Confirmed'`
   (L2-032) keeps Booked days single.
 - `booking_transitions` — written for each declined request.
+
+**As built in journey 7 (J7-S1 to S6)**
+
+- **Backend (ADR-0027):** `GET /api/v1/artist/calendar?month=YYYY-MM` answers one month inside the
+  18-month window with `meta.window` (`from`, `to`, `until`, the last bookable date) and
+  `meta.weeklyDefault`; each day carries `status`, `requestCount`, `editable`, `church`, `kind`,
+  `city`, `cause` (`weekly-default` or `chosen`) and the artist's private `note`
+  (`actions/artist-availability/build-artist-calendar.ts`, `services/artist-availability/availability.ts`).
+  `PUT artist/availability/weekly` and `PUT artist/availability/dates` are
+  `set-weekly-availability.ts` and `set-date-availability.ts`; the 409 is the `open-requests-affected`
+  problem with `affectedRequests`. Declining an open request goes through
+  `services/bookings/state-machine.ts`; the email to the booker belongs to journey 4.
+- **Frontend:** `pages/availability` under the `artist` route (ADR-0030; `/artist` opens it until the
+  dashboard lands), with `zm-calendar` (the month grid, roving tabindex, arrow keys, Home/End,
+  Page Up/Down, Space, Shift+arrow ranges, Escape) and `zm-bulk-bar` in the components library,
+  `dialogs/block-dates` and `dialogs/weekly-default`, and `api/lib/services/artist-calendar.ts`.
+  The month is in the address (`?month=2026-11`), so the pager is a navigation.
+- **Defaults chosen:** (J7 D1) the weekly default never declines open requests. (J7 D2) the bulk
+  bar saves each run of consecutive selected days as one range, and Undo writes the opposite state
+  over the same days rather than deleting the overrides. (J7 D3) the "In {month}" list shows
+  "Requested · 1 · Worship night" without a reply-by time until bookings carry `respond_by`
+  (journey 3), and names the church without a link until the requests screens exist (journey 4).
+  (J7 D4) the seeded statuses of Abigail's November win where `docs/mocks/README.md` contradicts
+  itself; Sat 21 Nov is her Worship night with Kingdom Life Centre.
+- **Tests:** `backend/tests/feature/artist-availability/*.test.ts`;
+  `e2e/specs/artist-availability/view-availability-calendar.spec.ts` and
+  `manage-availability.mutation.spec.ts` (the `zamaro-mutations` project, whose teardown resets the
+  database); visual and a11y states `availability-default/selected/loading/empty/error`.
 
 ## Requirements
 
