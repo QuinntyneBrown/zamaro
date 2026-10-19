@@ -125,6 +125,16 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       ).toBeVisible();
       break;
     }
+    case 'calendar-selected': {
+      const availability = new AvailabilityPage(page);
+      await page.goto(state.path, { waitUntil: 'networkidle' });
+      await expect(availability.scheduleRows()).toHaveCount(6);
+      await availability.selectDay('Sat 28 Nov, Free');
+      await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('Space');
+      await expect(availability.bulkBarCount()).toHaveText('2 days selected · Sat 28 – Sun 29 Nov');
+      break;
+    }
     case 'no-applications':
       await new ApplicationsPage(page).answerNoApplications();
       await page.goto(state.path, { waitUntil: 'networkidle' });

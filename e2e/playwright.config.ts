@@ -4,8 +4,8 @@ const WEB_PORT = 4000;
 
 // Chromium only (AGENTS.md). One Playwright project per application: `zamaro` for the public site
 // and `admin` for the admin application, whose specs sign Priya in with a code (M3 S3). The admin
-// specs that change the seed (`*.mutation.spec.ts`) run one at a time in `admin-mutations`, after
-// the read-only admin suite, and its teardown seeds the database again (M3 S8).
+// specs that change the seed (`*.mutation.spec.ts`) run one at a time in `admin-mutations` and
+// `zamaro-mutations`, after the read-only suites, and their teardown resets the database (M3 S8).
 export default defineConfig({
   testDir: '.',
   fullyParallel: true,
@@ -61,7 +61,7 @@ export default defineConfig({
     },
     {
       name: 'admin-mutations',
-      testMatch: 'specs/**/*.mutation.spec.ts',
+      testMatch: 'specs/*/admin/**/*.mutation.spec.ts',
       dependencies: ['admin'],
       teardown: 'reseed',
       fullyParallel: false,
@@ -69,6 +69,18 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         baseURL: `http://localhost:${WEB_PORT}/admin/`,
       },
+    },
+    // The public site's specs that change the seed (an artist's availability) run one at a time
+    // after every read-only project, so nothing reads a changed calendar; the same teardown resets
+    // the database afterwards.
+    {
+      name: 'zamaro-mutations',
+      testMatch: 'specs/!(administration)/**/*.mutation.spec.ts',
+      testIgnore: 'specs/*/admin/**',
+      dependencies: ['zamaro', 'admin-mutations'],
+      teardown: 'reseed',
+      fullyParallel: false,
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'reseed',

@@ -17,6 +17,7 @@ import type { CastMember } from './fixtures/accounts';
  * - `application-verified` / `application-approved`: Tobi's application with both references
  *   verified, or approved, as the API's answer rewritten in the browser.
  * - `calendar-pending` / `calendar-fails`: the artist's calendar never answers, or fails.
+ * - `calendar-selected`: Sat 28 and Sun 29 Nov are selected, so the bulk bar shows.
  */
 export type RouteSetup =
   | 'search-pending'
@@ -34,7 +35,8 @@ export type RouteSetup =
   | 'application-verified'
   | 'application-approved'
   | 'calendar-pending'
-  | 'calendar-fails';
+  | 'calendar-fails'
+  | 'calendar-selected';
 
 export interface RouteState {
   /** Names the state in screenshots and test titles. */
@@ -374,6 +376,14 @@ export const routes: RouteState[] = [
     mock: 'availability/default.html',
     signedInAs: 'abigail',
     shows: 'calendar',
+  },
+  {
+    name: 'availability-selected',
+    path: '/artist/calendar?month=2026-11',
+    app: 'zamaro',
+    mock: 'availability/selected.html',
+    signedInAs: 'abigail',
+    setup: 'calendar-selected',
   },
   {
     name: 'availability-loading',
