@@ -7,6 +7,7 @@ export const CAST_PASSWORD = 'hosanna-in-the-highest';
 export const NAOMI = 'naomi.fraser@riversidecc.ca';
 export const ABIGAIL = 'abigail@abigailmensah.ca';
 export const TOMI = 'tomi.oduya@harvestpointchurch.ca';
+export const MIRIAM = 'miriam@miriamhaile.ca';
 
 const MUTATING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
