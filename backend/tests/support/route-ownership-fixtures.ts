@@ -368,6 +368,13 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     expect(response.status).toBe(404);
   },
 
+  'PUT /artist/availability/weekly': async (_owner, intruder) => {
+    const response = await (
+      await intruder.as()
+    ).json('/api/v1/artist/availability/weekly', 'PUT', { unavailableWeekdays: [1] });
+    expect(response.status).toBe(404);
+  },
+
   'GET /artist/vulnerable-sector-checks/current': async (_owner, intruder) => {
     const response = await (
       await intruder.as()

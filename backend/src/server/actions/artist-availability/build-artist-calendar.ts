@@ -1,11 +1,8 @@
-import { eq } from 'drizzle-orm';
 import { DateTime } from 'luxon';
-import { db } from '@/server/db/client';
-import { artists } from '@/server/db/schema';
 import { dayStatuses, type CalendarDay } from '@/server/services/artist-availability/availability';
 import { latestBookable } from '@/server/services/artist-availability/booking-window';
+import { ownArtistId } from '@/server/services/artist-availability/own-artist';
 import { now, ZONE } from '@/server/support/clock';
-import { HttpProblem, ProblemType } from '@/server/support/problems';
 
 export interface ArtistCalendar {
   month: string;
@@ -24,13 +21,7 @@ export function calendarWindow(): { from: string; to: string } {
 
 /** One month of the signed-in artist's own calendar (L2-056.1); anyone else has no calendar (L2-074). */
 export async function buildArtistCalendar(userId: number, month: string): Promise<ArtistCalendar> {
-  const [artist] = await db()
-    .select({ id: artists.id })
-    .from(artists)
-    .where(eq(artists.userId, userId));
-  if (artist === undefined) {
-    throw new HttpProblem(ProblemType.NotFound, { detail: 'No route matches this address.' });
-  }
+  const artistId = await ownArtistId(userId);
   const first = DateTime.fromFormat(month, 'yyyy-MM', { zone: ZONE });
-  return { month, days: await dayStatuses(artist.id, first, first.endOf('month').startOf('day')) };
+  return { month, days: await dayStatuses(artistId, first, first.endOf('month').startOf('day')) };
 }

@@ -59,6 +59,8 @@ import {
   CurrentChecksResource,
 } from '../resources/artist-onboarding/vulnerable-sector-check';
 import { CalendarResource } from '../resources/artist-availability/calendar';
+import { SetWeeklyAvailabilityRequest } from '../requests/artist-availability/weekly';
+import { WeeklyAvailabilityResource } from '../resources/artist-availability/weekly';
 import { ListAdminArtistsRequest } from '@/app/api/v1/admin/artists/route';
 import {
   AdminArtistDetailEnvelope,
@@ -878,6 +880,18 @@ export const operations: Operation[] = [
       200: { description: 'The month and the pager window', content: CalendarResource },
       404: { description: 'Not an artist', content: 'problem' },
       422: { description: 'The month is not inside the calendar window', content: 'problem' },
+    },
+  },
+  {
+    method: 'put',
+    path: '/artist/availability/weekly',
+    name: 'artist.availability.weekly',
+    summary: 'Replace the weekdays the artist is unavailable unless a date says otherwise',
+    requestBody: SetWeeklyAvailabilityRequest,
+    responses: {
+      200: { description: 'The new weekly default', content: WeeklyAvailabilityResource },
+      404: { description: 'Not an artist', content: 'problem' },
+      422: { description: 'The weekdays are not 1 to 7 without repeats', content: 'problem' },
     },
   },
   {
