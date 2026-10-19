@@ -133,6 +133,8 @@ export async function openRouteState(page: Page, state: RouteState): Promise<Loc
       await page.keyboard.press('ArrowRight');
       await page.keyboard.press('Space');
       await expect(availability.bulkBarCount()).toHaveText('2 days selected · Sat 28 – Sun 29 Nov');
+      // Selecting from the keyboard scrolled the grid into view; the capture starts at the top.
+      await page.evaluate(() => window.scrollTo(0, 0));
       break;
     }
     case 'no-applications':
