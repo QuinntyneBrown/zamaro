@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { db } from '@/server/db/client';
-import { artists, availabilityOverrides, availabilityRules, bookings } from '@/server/db/schema';
+import { artists, availabilityOverrides, bookings } from '@/server/db/schema';
 import { ABIGAIL, Browser, MIRIAM, NAOMI, signedIn } from '../../support/accounts';
 import { resetClock } from '../../support/clock';
 import { expectContract } from '../../support/contract';
@@ -48,7 +48,7 @@ describe('reading the artist calendar', () => {
     expect(body.data.month).toBe('2026-11');
     expect(body.data.days).toHaveLength(30);
     expect(day(body, '2026-11-01')).toMatchObject({ status: 'booked', editable: false });
-    expect(day(body, '2026-11-02')).toMatchObject({
+    expect(day(body, '2026-11-03')).toMatchObject({
       status: 'free',
       requestCount: 0,
       editable: true,
@@ -85,12 +85,10 @@ describe('reading the artist calendar', () => {
     expect(body.data.days.every((d) => d.status === 'free' && d.requestCount === 0)).toBe(true);
   });
 
-  it('greys the weekdays of the weekly default unless a date is overridden Free (L2-056.2)', async () => {
-    const artistId = await abigailsId();
-    await db().insert(availabilityRules).values({ artistId, weekday: 1, unavailable: true });
+  it('greys the weekdays of Abigail�s Monday default unless a date is overridden Free (L2-056.2)', async () => {
     await db()
       .insert(availabilityOverrides)
-      .values({ artistId, date: '2026-11-09', state: 'free' });
+      .values({ artistId: await abigailsId(), date: '2026-11-09', state: 'free' });
 
     const body = (await (await calendar(abigail, '2026-11')).json()) as CalendarBody;
 

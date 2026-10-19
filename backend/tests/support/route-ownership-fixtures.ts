@@ -362,6 +362,12 @@ export const ROUTE_OWNERSHIP_CASES: Record<string, OwnershipCase> = {
     expect(response.status).toBe(404);
   },
 
+  // The artist's own calendar: a booker gets the unknown-address 404 (L2-074.1).
+  'GET /artist/calendar': async (_owner, intruder) => {
+    const response = await (await intruder.as()).json('/api/v1/artist/calendar', 'GET');
+    expect(response.status).toBe(404);
+  },
+
   'GET /artist/vulnerable-sector-checks/current': async (_owner, intruder) => {
     const response = await (
       await intruder.as()

@@ -149,3 +149,98 @@ export async function* tourDays(
     if (free) yield { date: day, status: 'free', kind: null, city: null };
   }
 }
+
+/** What a calendar day shows (L2-056.1); never stored, always derived. */
+export type DayStatus = 'free' | 'unavailable' | 'requested' | 'booked';
+
+export interface CalendarDay {
+  date: string;
+  status: DayStatus;
+  /** Open requests (Requested or Accepted) for the date. */
+  requestCount: number;
+  /** The Confirmed booking's church, else the first open request's; null on a bare day. */
+  church: string | null;
+}
+
+/**
+ * Each day from `from` to `until` for the artist, in date order (L2-056, L2-057): Booked when a
+ * Confirmed booking exists, else Unavailable when a dated override or the weekly default says so
+ * (an override beats the rule), else Requested with a count, else Free. Cancelled, Declined and
+ * the other closed bookings drop out. Three queries, however long the range.
+ */
+export async function dayStatuses(
+  artistId: number,
+  from: DateTime,
+  until: DateTime,
+  database: Database | Transaction = db(),
+): Promise<CalendarDay[]> {
+  const range: [string, string] = [from.toISODate() ?? '', until.toISODate() ?? ''];
+  const unavailableWeekdays = new Set(
+    (
+      await database
+        .select({ weekday: availabilityRules.weekday })
+        .from(availabilityRules)
+        .where(
+          and(eq(availabilityRules.artistId, artistId), eq(availabilityRules.unavailable, true)),
+        )
+    ).map((row) => row.weekday),
+  );
+  const overrides = new Map(
+    (
+      await database
+        .select({ date: availabilityOverrides.date, state: availabilityOverrides.state })
+        .from(availabilityOverrides)
+        .where(
+          and(
+            eq(availabilityOverrides.artistId, artistId),
+            between(availabilityOverrides.date, range[0], range[1]),
+          ),
+        )
+    ).map((row) => [row.date, row.state]),
+  );
+  const held = await database
+    .select({ date: bookings.eventDate, status: bookings.status, church: bookings.churchName })
+    .from(bookings)
+    .where(
+      and(
+        eq(bookings.artistId, artistId),
+        inArray(bookings.status, ['requested', 'accepted', 'confirmed']),
+        between(bookings.eventDate, range[0], range[1]),
+      ),
+    )
+    .orderBy(bookings.id);
+  const confirmed = new Map<string, string>();
+  const open = new Map<string, { count: number; church: string }>();
+  for (const booking of held) {
+    if (booking.status === 'confirmed') {
+      confirmed.set(booking.date, booking.church);
+      continue;
+    }
+    const entry = open.get(booking.date);
+    open.set(booking.date, {
+      count: (entry?.count ?? 0) + 1,
+      church: entry?.church ?? booking.church,
+    });
+  }
+
+  const days: CalendarDay[] = [];
+  for (let date = from; date <= until; date = date.plus({ days: 1 })) {
+    const day = date.toISODate() ?? '';
+    const church = confirmed.get(day);
+    const requests = open.get(day);
+    const requestCount = requests?.count ?? 0;
+    const override = overrides.get(day);
+    const unavailable =
+      override !== undefined ? override === 'unavailable' : unavailableWeekdays.has(date.weekday);
+    if (church !== undefined) {
+      days.push({ date: day, status: 'booked', requestCount, church });
+    } else if (unavailable) {
+      days.push({ date: day, status: 'unavailable', requestCount, church: null });
+    } else if (requests !== undefined) {
+      days.push({ date: day, status: 'requested', requestCount, church: requests.church });
+    } else {
+      days.push({ date: day, status: 'free', requestCount: 0, church: null });
+    }
+  }
+  return days;
+}

@@ -345,6 +345,7 @@ const SIGN_IN: Record<string, string> = {
   'naomi-fraser': 'naomi.fraser@riversidecc.ca',
   'abigail-mensah': 'abigail@abigailmensah.ca',
   'tomi-oduya': 'tomi.oduya@harvestpointchurch.ca',
+  'miriam-haile': 'miriam@miriamhaile.ca',
 };
 
 /** Artists whose account address the admin mocks show (pages/admin-artist). */
@@ -714,6 +715,14 @@ class CastSeeder {
       ],
       'abigail@abigailmensah.ca': [
         '2026-10-08 12:00:00',
+        [
+          [ConsentKind.Terms, '2026-10', true],
+          [ConsentKind.PrivacyPolicy, '2026-10', true],
+          [ConsentKind.MarketingEmail, null, false],
+        ],
+      ],
+      'miriam@miriamhaile.ca': [
+        '2026-10-05 18:00:00',
         [
           [ConsentKind.Terms, '2026-10', true],
           [ConsentKind.PrivacyPolicy, '2026-10', true],

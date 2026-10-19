@@ -58,6 +58,7 @@ import {
   CheckEnvelope,
   CurrentChecksResource,
 } from '../resources/artist-onboarding/vulnerable-sector-check';
+import { CalendarResource } from '../resources/artist-availability/calendar';
 import { ListAdminArtistsRequest } from '@/app/api/v1/admin/artists/route';
 import {
   AdminArtistDetailEnvelope,
@@ -864,6 +865,19 @@ export const operations: Operation[] = [
         description: 'Not a PDF, JPEG or PNG; over 10 MB; or no valid issue date',
         content: 'problem',
       },
+    },
+  },
+  {
+    method: 'get',
+    path: '/artist/calendar',
+    name: 'artist.calendar',
+    summary:
+      "One month of the artist's own calendar: each day Free, Unavailable, Requested or Booked",
+    parameters: [{ name: 'month', in: 'query', schema: z.string().optional() }],
+    responses: {
+      200: { description: 'The month and the pager window', content: CalendarResource },
+      404: { description: 'Not an artist', content: 'problem' },
+      422: { description: 'The month is not inside the calendar window', content: 'problem' },
     },
   },
   {
