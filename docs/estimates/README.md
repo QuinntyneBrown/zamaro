@@ -1,7 +1,7 @@
 # Estimates
 
 - Overall effort: 307 days
-- Complete: 40%
+- Complete: 42%
 
 | Subsystem | Effort | Complete |
 |---|---|---|
@@ -12,7 +12,7 @@
 | [user-experience](user-experience.md) | 21 days | 53% |
 | [artist-profiles](artist-profiles.md) | 17 days | 97% |
 | [discovery](discovery.md) | 12 days | 100% |
-| [artist-onboarding](artist-onboarding.md) | 19 days | 66% |
+| [artist-onboarding](artist-onboarding.md) | 19 days | 93% |
 | [administration](administration.md) | 22 days | 44% |
 | [artist-workspace](artist-workspace.md) | 27 days | 0% |
 | [artist-availability](artist-availability.md) | 10 days | 0% |
@@ -24,7 +24,7 @@
 ## Roadmap
 
 1. Finish the foundations: security headers and HSTS, the scheduler, `instrumentation.ts`, the frontend image and the pipeline (operations and security)
-2. Finish onboarding and administration: application review, then suspend and reinstate
+2. Finish administration: suspend and reinstate, then support for bookings and payments
 3. Artist-workspace and artist-availability
 4. Bookings, payments, notifications and reviews
 5. Privacy export and deletion, then the user-experience remainder (offline, loading states, formatting tests)
